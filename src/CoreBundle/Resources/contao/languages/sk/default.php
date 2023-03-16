@@ -2,7 +2,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,9 +12,9 @@
  * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * Last-updated: 2019-05-03T19:20:55+02:00
+ * Last-updated: 2023-02-01T15:42:39+00:00
  *
- * @copyright 2012-2019 The MetaModels team.
+ * @copyright 2012-2023 The MetaModels team.
  * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @link      https://www.transifex.com/metamodels/public/
  * @link      https://www.transifex.com/signup/?join_project=metamodels
@@ -22,7 +22,6 @@
 
 
 $GLOBALS['TL_LANG']['BRD']['metamodel']                                  = 'MetaModels';
-$GLOBALS['TL_LANG']['BRD']['metamodels']                                 = 'MetaModels';
 $GLOBALS['TL_LANG']['CTE']['metamodel_content']['0']                     = 'Zoznam Metamodel-ov';
 $GLOBALS['TL_LANG']['CTE']['metamodel_content']['1']                     = 'Pridá zoznam položiek MetaModel-u do článku.';
 $GLOBALS['TL_LANG']['CTE']['metamodels']                                 = 'Komponenty MetaModel-u';
@@ -39,7 +38,6 @@ $GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['sorting']              = 'Zora
 $GLOBALS['TL_LANG']['MSC']['details']                                    = 'Detaily';
 $GLOBALS['TL_LANG']['MSC']['field_label']                                = '%s:';
 $GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['editRecord']      = 'Editovať nastavenia filtra %%s v Metamodely "%s"';
-$GLOBALS['TL_LANG']['MSC']['metamodels_contributor']                     = 'Ďakujeme tímto používateľom za nápady, pripomienky a preklad';
 $GLOBALS['TL_LANG']['MSC']['metamodels_sorting']                         = 'Zoradenie';
 $GLOBALS['TL_LANG']['MSC']['metamodels_support']['contributor_headline'] = 'Ďakujeme tímto používateľom za nápady, pripomienky a preklad';
 $GLOBALS['TL_LANG']['MSC']['mm_be_info_filter']['1']                     = 'Filter';
@@ -48,7 +46,6 @@ $GLOBALS['TL_LANG']['MSC']['panelLayout']['filter']['0']                 = 'Filt
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['limit']['0']                  = 'Limit';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['search']['0']                 = 'Vyhľadávanie';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['sort']['0']                   = 'Zoradenie';
-$GLOBALS['TL_LANG']['MSC']['sorting']                                    = 'Zoradenie';
 $GLOBALS['TL_LANG']['MSC']['template_in_theme']                          = '%s (%s)';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['clr']['0']                       = 'clr';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['clx']['0']                       = 'clx';

@@ -1,15 +1,25 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2023 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ * Last-updated: 2023-02-01T15:47:39+00:00
  *
- * @link https://www.transifex.com/signup/
- * @link https://www.transifex.com/projects/p/$$project$$/language/et/
- *
- * last-updated: 2018-07-13T10:50:21+02:00
+ * @copyright 2012-2023 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
+
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['0']                = 'Lisa kõik';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['advanced_legend']            = 'Edasijõudnutele';
@@ -42,7 +52,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly']['0']              = '
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rows']['0']                  = 'Ridasid';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['searchable']['0']            = 'Otsitav';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['show']['0']                  = 'Seadete üksikasjad';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['stylepicker']                = 'Stiili valija';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['submitOnChange']['0']        = 'Lisa muutmisel';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['title_legend']               = 'Liik';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['toggle']['0']                = 'Lülita';

@@ -2,7 +2,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,17 +12,15 @@
  * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * Last-updated: 2022-11-02T22:34:22+01:00
+ * Last-updated: 2023-02-01T15:47:13+00:00
  *
- * @copyright 2012-2022 The MetaModels team.
+ * @copyright 2012-2023 The MetaModels team.
  * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @link      https://www.transifex.com/metamodels/public/
  * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
 
 
-$GLOBALS['TL_LANG']['tl_content']['ASC']                                   = 'Αύξουσα';
-$GLOBALS['TL_LANG']['tl_content']['DESC']                                  = 'Φθίνουσα';
 $GLOBALS['TL_LANG']['tl_content']['asc']                                   = 'Αύξουσα';
 $GLOBALS['TL_LANG']['tl_content']['desc']                                  = 'Φθίνουσα';
 $GLOBALS['TL_LANG']['tl_content']['editfiltersetting']['0']                = 'Επεξεργασια του φιλτρου παραμετρων';
@@ -69,6 +67,5 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_use_limit']['0']              = 'Χ
 $GLOBALS['TL_LANG']['tl_content']['metamodel_use_limit']['1']              = 'Ελέγξτε εάν θέλετε να περιορίσετε την ποσότητα των ειδών που περιλαμβάνονται. Αυτό είναι χρήσιμο για να εμφανίζονται μόνο τα πρώτα 500 στοιχεία ή όλα αποκλείοντας τα πρώτα 10 στοιχεία αλλά να κρατήθει ανέπαφη η σελιδοποίηση. ';
 $GLOBALS['TL_LANG']['tl_content']['mm_config_legend']                      = 'MetaModel Διαμόρφωση ';
 $GLOBALS['TL_LANG']['tl_content']['mm_filter_legend']                      = 'MetaModel Φιλτρο';
-$GLOBALS['TL_LANG']['tl_content']['mm_rendering']                          = 'MetaModel αποτύπωση ';
 $GLOBALS['TL_LANG']['tl_content']['mm_rendering_legend']                   = 'MetaModel αποτύπωση ';
 

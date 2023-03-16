@@ -98,7 +98,7 @@ class TableManipulatorTest extends TestCase
         $property->setAccessible(true);
 
         $manipulator   = $this->createTableManipulator();
-        $reservedWords = $property->getValue(TableManipulator::class);
+        $reservedWords = $property->getValue();
 
         foreach ($reservedWords as $word) {
             self::assertTrue($manipulator->isReservedWord($word));
