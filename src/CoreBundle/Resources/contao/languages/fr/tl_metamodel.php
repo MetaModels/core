@@ -1,15 +1,25 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2023 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/metamodels/language/fr/
+ * Last-updated: 2023-02-01T15:47:23+00:00
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- *
- * last-updated: 2015-08-04T04:14:40+02:00
+ * @copyright 2012-2023 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
+
 
 $GLOBALS['TL_LANG']['tl_metamodel']['advanced_legend']           = 'Paramètres avancés';
 $GLOBALS['TL_LANG']['tl_metamodel']['copy']['0']                 = 'Copier la définition du MetaModel';
@@ -30,12 +40,9 @@ $GLOBALS['TL_LANG']['tl_metamodel']['fields']['0']               = 'Définir les
 $GLOBALS['TL_LANG']['tl_metamodel']['fields']['1']               = 'Définir les attributs pour le MetaModel ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel']['filter']['0']               = 'Définir les filtres';
 $GLOBALS['TL_LANG']['tl_metamodel']['filter']['1']               = 'Définir les filtres pour le MetaModel ID %s';
-$GLOBALS['TL_LANG']['tl_metamodel']['itemFormat']                = '%s %s';
 $GLOBALS['TL_LANG']['tl_metamodel']['itemFormatCount']['0']      = '%s éléments';
 $GLOBALS['TL_LANG']['tl_metamodel']['itemFormatCount']['1']      = '%s élément';
 $GLOBALS['TL_LANG']['tl_metamodel']['itemFormatCount']['2:']     = '%s éléments';
-$GLOBALS['TL_LANG']['tl_metamodel']['itemPlural']                = 'articles';
-$GLOBALS['TL_LANG']['tl_metamodel']['itemSingle']                = 'Article';
 $GLOBALS['TL_LANG']['tl_metamodel']['languages']['0']            = 'Langages à fournir pour la traduction';
 $GLOBALS['TL_LANG']['tl_metamodel']['languages']['1']            = 'Spécifier les langages disponible pour  traduction.';
 $GLOBALS['TL_LANG']['tl_metamodel']['languages_isfallback']['0'] = 'Langue source';

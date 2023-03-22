@@ -1,15 +1,25 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2023 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/metamodels/language/el/
+ * Last-updated: 2023-02-01T15:48:05+00:00
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- *
- * last-updated: 2017-08-24T12:43:26+02:00
+ * @copyright 2012-2023 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
+
 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalCss']['0']     = 'Πρόσθετα css αρχεία';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalCss']['1']     = 'Επιλέξτε αυτό, εάν θέλετε να συμπεριλάβετε πρόσθετα αρχεία CSS.';
@@ -27,14 +37,11 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['format']['0']            = '
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['format']['1']            = 'Καθορίστε τη μορφή εξόδου. Αφήστε το κενό για να χρησιμοποιήσετε τη μορφή που χρησιμοποιείται από την τρέχουσα σελίδα.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['formatOptions']['html5'] = 'HTML5';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['formatOptions']['text']  = 'Κειμενο';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['formatOptions']['xhtml'] = 'XHTML';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['general_legend']         = 'Γενικες ρυθμισεις';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideEmptyValues']['0']   = 'Απόκρυψη κενων αξιών';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideEmptyValues']['1']   = 'Απόκρυψη κενων τιμές στο backend και frontend. ';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideLabels']['0']        = 'Αποκρυψη ετικετων';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideLabels']['1']        = 'Αποκρυψη ολων των ετικετων στο backend και frontend.';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault']['0']         = 'Προεπιλογη';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault']['1']         = 'Καθορίζει ότι αυτή η ρύθμιση θα πρέπει να χρησιμοποιούνται ως προεπιλογή για το MetaModel.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']['0']            = 'JumpTo σελίδα';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']['1']            = 'Η σελίδα που πρέπει να χρησιμοποιτε ως "Αναλυτικά" URLs. Σημειώστε ότι οι λεπτομερείς παραμέτρους που URL θα πάρει παράγεται από το φίλτρο ρύθμιση που είναι σήμερα σε χρήση. ';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_filter']['0']     = 'Ρυθμισεις φιλτρου';
@@ -54,7 +61,4 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['show']['1']              = '
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template']['0']          = 'Προτυπο';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template']['1']          = 'Το πρότυπο που θα χρησιμοποιηθεί για να καταστήσει τα στοιχεία. ';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['title_legend']           = 'Ονομα';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']['0']            = 'Επεξεργασια ημερομηνιας';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']['1']            = 'Ημερομηνία και ώρα της τελευταίας αναθεώρησης.';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['view_legend']            = 'Εμφανιση ρυθμισεων';
 

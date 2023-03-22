@@ -1,15 +1,25 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2023 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/metamodels/language/ru/
+ * Last-updated: 2023-02-01T15:48:05+00:00
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- *
- * last-updated: 2018-11-26T23:37:25+01:00
+ * @copyright 2012-2023 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
+
 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalCss']['0']      = 'Дополнительные css-файлы';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalCss']['1']      = 'Выберите, если хотите включить дополнительные css-файлы.';
@@ -30,14 +40,11 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['format']['0']             = 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['format']['1']             = 'Определите формат вывода. Оставьте пустым для использования формата, используемого текущей страницей.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['formatOptions']['html5']  = 'HTML5';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['formatOptions']['text']   = 'Текст';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['formatOptions']['xhtml']  = 'XHTML';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['general_legend']          = 'Основные параметры';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideEmptyValues']['0']    = 'Скрыть пустые значения';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideEmptyValues']['1']    = 'Скрыть пустые значения в панели управления и внешнем интерфейсе.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideLabels']['0']         = 'Скрыть метки';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideLabels']['1']         = 'Скрыть все метки в панели управления и внешнем интерфейсе.';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault']['0']          = 'По умолчанию';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault']['1']          = 'Определяет, что этот параметр должен использоваться по умолчанию для родительского элемента MetaModel.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']['0']             = 'Перейти к странице';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']['1']             = 'Страница, которая должна использоваться в качестве URL-адреса "Показать детали". Обратите внимание, что подробный URL получит параметр фильтра, который используется в настоящее время.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_allLanguages']     = 'Все языки';
@@ -63,7 +70,4 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['show']['1']               = 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template']['0']           = 'Шаблон';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template']['1']           = 'Шаблон, используемый для визуализации элементов.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['title_legend']            = 'Название';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']['0']             = 'Дата изменения';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']['1']             = 'Дата и время последнего изменения';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['view_legend']             = 'Параметры просмотра';
 

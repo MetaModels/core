@@ -1,15 +1,25 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2023 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/metamodels/language/fr/
+ * Last-updated: 2023-02-01T15:48:05+00:00
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- *
- * last-updated: 2017-08-24T12:43:26+02:00
+ * @copyright 2012-2023 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
+
 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalCss']['0']     = 'Fichiers CSS additionnels';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalCss']['1']     = 'Choisir ceci si vous souhaitez inclure des fichier CSS additionnels.';
@@ -27,14 +37,11 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['format']['0']            = '
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['format']['1']            = 'Définit le format de sortie. Laisser libre pour utiliser le format de la page courrante.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['formatOptions']['html5'] = 'HTML5';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['formatOptions']['text']  = 'Texte';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['formatOptions']['xhtml'] = 'XHTML';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['general_legend']         = 'Paramètres généraux';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideEmptyValues']['0']   = 'Cacher les valeurs vides';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideEmptyValues']['1']   = 'Cacher les valeurs vides dans le front office et le back office';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideLabels']['0']        = 'Cacher les étiquettes';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideLabels']['1']        = 'Cacher toutes les étiquettes dans le back office et le front office';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault']['0']         = 'Par défaut';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault']['1']         = 'Détermine que ce paramètre doit être utilisé par défaut dans le MetaModel parent.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']['0']            = 'Page cible';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']['1']            = 'L\'URL de la page qui doit être utilisé pour montrer les détails. Notez que les paramètres détaillés de l\'URL seront générés par le paramètre de filtre courant.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_allLanguages']    = 'Toutes les langues';
@@ -55,7 +62,4 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['show']['1']              = '
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template']['0']          = 'Modèle';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template']['1']          = 'Le modèle à utiliser pour produire les articles.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['title_legend']           = 'Nom';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']['0']            = 'Date de révision';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']['1']            = 'Date et heure de la dernière révision.';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['view_legend']            = 'Paramètres de vue';
 

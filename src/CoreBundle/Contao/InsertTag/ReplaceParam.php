@@ -154,7 +154,7 @@ final class ReplaceParam
             $result = $sessionBag->get($arguments[1]);
             return \str_replace(
                 '{{' . $tag . '}}',
-                \is_array($result) ? \serialize($result) : ($result ?? ''),
+                \is_array($result) ? \serialize($result) : (string) $result,
                 $content
             );
         }
@@ -162,7 +162,7 @@ final class ReplaceParam
         $result = ($sessionBag->get($arguments[1]) ?: $arguments[2]);
         return \str_replace(
             '{{' . $tag . '}}',
-            \is_array($result) ? \serialize($result) : ($result ?? ''),
+            \is_array($result) ? \serialize($result) : (string) $result,
             $content
         );
     }
@@ -176,8 +176,8 @@ final class ReplaceParam
      */
     private function splitParameter(string $parameter): ?array
     {
-        if (!(2 === \count($chunks = \explode('?', $parameter)))
-            || !(0 === \strpos($chunks[1], 'name='))
+        if ((2 !== \count($chunks = \explode('?', $parameter)))
+            || (0 !== \strpos($chunks[1], 'name='))
         ) {
             return null;
         }

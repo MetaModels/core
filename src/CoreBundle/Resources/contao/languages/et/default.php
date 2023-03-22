@@ -2,7 +2,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,9 +12,9 @@
  * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * Last-updated: 2019-05-03T19:20:55+02:00
+ * Last-updated: 2023-02-01T15:42:39+00:00
  *
- * @copyright 2012-2019 The MetaModels team.
+ * @copyright 2012-2023 The MetaModels team.
  * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @link      https://www.transifex.com/metamodels/public/
  * @link      https://www.transifex.com/signup/?join_project=metamodels
@@ -22,7 +22,6 @@
 
 
 $GLOBALS['TL_LANG']['BRD']['metamodel']                             = 'MetaModels';
-$GLOBALS['TL_LANG']['BRD']['metamodels']                            = 'MetaModels';
 $GLOBALS['TL_LANG']['CTE']['metamodel_content']['0']                = 'MetaModel nimekiri';
 $GLOBALS['TL_LANG']['CTE']['metamodels']                            = 'MetaModel elemendid';
 $GLOBALS['TL_LANG']['CTE']['metamodels_frontendclearall']['0']      = 'MetaModel tühjenda kõik';
@@ -45,7 +44,6 @@ $GLOBALS['TL_LANG']['MSC']['panelLayout']['limit']['0']             = 'Piirang';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['search']['0']            = 'Otsi';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['sort']['0']              = 'Sorteeri';
 $GLOBALS['TL_LANG']['MSC']['random']                                = 'Juhuslik';
-$GLOBALS['TL_LANG']['MSC']['sorting']                               = 'Sorteerimine';
 $GLOBALS['TL_LANG']['MSC']['template_in_theme']                     = '%s (%s)';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['clr']['0']                  = 'clr';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['clx']['0']                  = 'clx';

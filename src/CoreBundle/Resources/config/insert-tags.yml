@@ -7,3 +7,8 @@ services:
         arguments:
             - '@metamodels.contao_input'
             - '@session'
+
+    MetaModels\CoreBundle\Contao\InsertTag\ResolveLanguageTag:
+        public: false
+        arguments:
+            - '@request_stack'

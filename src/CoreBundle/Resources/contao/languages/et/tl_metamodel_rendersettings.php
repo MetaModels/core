@@ -1,15 +1,25 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2023 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ * Last-updated: 2023-02-01T15:48:05+00:00
  *
- * @link https://www.transifex.com/signup/
- * @link https://www.transifex.com/projects/p/$$project$$/language/et/
- *
- * last-updated: 2018-07-13T10:50:45+02:00
+ * @copyright 2012-2023 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
+
 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['copy']['0']               = 'Kopeeri seadete definitsioonid';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['delete']['0']             = 'Kustuta seaded';
@@ -22,11 +32,9 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['file']                    = 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['format']['0']             = 'Väljundi vorming';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['formatOptions']['html5']  = 'HTML5';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['formatOptions']['text']   = 'Tekst';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['formatOptions']['xhtml']  = 'HHTML';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['general_legend']          = 'Üldised seaded';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideEmptyValues']['0']    = 'Peida tühjad väärtused';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideLabels']['0']         = 'Peida silte';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault']['0']          = 'On vaikeväärtus';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']['0']             = 'Hüppa lehele';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_allLanguages']     = 'Kõik keeled';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_filter']['0']      = 'Filtri seaded';
@@ -41,6 +49,4 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['settings']['0']           = 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['show']['0']               = 'Filtri üksikasjad';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template']['0']           = 'Mall';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['title_legend']            = 'Nimi ';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']['0']             = 'Ülevaatamise kuupäev';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['view_legend']             = 'Vaate seaded';
 

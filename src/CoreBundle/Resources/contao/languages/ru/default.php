@@ -2,7 +2,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,9 +12,9 @@
  * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * Last-updated: 2019-05-03T19:20:55+02:00
+ * Last-updated: 2023-02-01T15:42:39+00:00
  *
- * @copyright 2012-2019 The MetaModels team.
+ * @copyright 2012-2023 The MetaModels team.
  * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @link      https://www.transifex.com/metamodels/public/
  * @link      https://www.transifex.com/signup/?join_project=metamodels
@@ -28,13 +28,11 @@ $GLOBALS['TL_LANG']['BRD']['metamodel_dca_combine']                             
 $GLOBALS['TL_LANG']['BRD']['metamodel_dca_sortgroup']                                 = 'Сортировка и группировка в "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_dcasetting']                                    = 'Входные экраны в "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_dcasetting_condition']                          = 'Условия видимости для атрибута "%s"';
-$GLOBALS['TL_LANG']['BRD']['metamodel_dcasetting_subpalette']                         = 'Подобласти для "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_filter']                                        = 'Весь фильтр "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_filtersetting']                                 = 'Параметры фильтра в "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_rendersetting']                                 = 'Настройки визуализации в "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_rendersettings']                                = 'Все настройки визуализации "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_searchable_pages']                              = 'Все индексы для "%s"';
-$GLOBALS['TL_LANG']['BRD']['metamodels']                                              = 'MetaModels';
 $GLOBALS['TL_LANG']['CTE']['metamodel_content']['0']                                  = 'MetaModel список';
 $GLOBALS['TL_LANG']['CTE']['metamodel_content']['1']                                  = 'Добавляет список элементов MetaModel к статье.';
 $GLOBALS['TL_LANG']['CTE']['metamodels']                                              = 'MetaModel элементы';
@@ -71,8 +69,6 @@ $GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['label']                  
 $GLOBALS['TL_LANG']['MSC']['metamodel_filtersettings_parameter']['simplelookup']['0'] = 'Значение фильтра для атрибута "%s"';
 $GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['editRecord']                   = 'Редактировать атрибут параметра %%s для настройки визуализации "%s" в MetaModel "%s"';
 $GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['label']                        = 'Настройка визуализации "%s" в MetaModel "%s"';
-$GLOBALS['TL_LANG']['MSC']['metamodels_contributor']                                  = 'Благодарим этих пользователей за тикеты, предложения и переводы';
-$GLOBALS['TL_LANG']['MSC']['metamodels_help']                                         = 'Мы просим оказать нам помощь!';
 $GLOBALS['TL_LANG']['MSC']['metamodels_sorting']                                      = 'Сортировка';
 $GLOBALS['TL_LANG']['MSC']['metamodels_support']['contributor_headline']              = 'Благодарим этих пользователей за тикеты, предложения и переводы';
 $GLOBALS['TL_LANG']['MSC']['metamodels_support']['contributor_link']                  = 'См. содействующих в github ...';
@@ -107,8 +103,6 @@ $GLOBALS['TL_LANG']['MSC']['metamodels_support']['other_donations']             
     <a target="_blank" href="https://now.metamodel.me/en/supporters/donate">
     пожертвование для авторов</a>.';
 $GLOBALS['TL_LANG']['MSC']['metamodels_support']['purpose']                           = 'Цель';
-$GLOBALS['TL_LANG']['MSC']['metamodelspicker']                                        = 'Сборщик MetaModels';
-$GLOBALS['TL_LANG']['MSC']['metamodelspicker_noItems']                                = 'Никаких вещей не найдено.';
 $GLOBALS['TL_LANG']['MSC']['mm_be_info_filter']['0']                                  = 'Фи';
 $GLOBALS['TL_LANG']['MSC']['mm_be_info_filter']['1']                                  = 'Фильтр';
 $GLOBALS['TL_LANG']['MSC']['mm_be_info_name']['0']                                    = 'MM';
@@ -122,7 +116,6 @@ $GLOBALS['TL_LANG']['MSC']['panelLayout']['limit']['0']                         
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['search']['0']                              = 'Поиск';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['sort']['0']                                = 'Сортировка';
 $GLOBALS['TL_LANG']['MSC']['random']                                                  = 'Случайный';
-$GLOBALS['TL_LANG']['MSC']['sorting']                                                 = 'Сортировка';
 $GLOBALS['TL_LANG']['MSC']['template_in_theme']                                       = '%s (%s)';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['clr']['0']                                    = 'clr';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['clr']['1']                                    = 'Очистить все floats.';
