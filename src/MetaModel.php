@@ -830,7 +830,7 @@ class MetaModel implements IMetaModel
     public function getAttributeById($intId)
     {
         foreach ($this->getAttributes() as $objAttribute) {
-            if ($objAttribute->get('id') === $intId) {
+            if ((int) $objAttribute->get('id') === (int) $intId) {
                 return $objAttribute;
             }
         }
