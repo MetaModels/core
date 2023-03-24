@@ -270,8 +270,10 @@ trait ListControllerTrait
             );
         }
 
-        foreach (StringUtil::deserialize(($model->metamodel_parameters ?? null), true) as $key => $value) {
-            $itemRenderer->setTemplateParameter($key, $value);
+        if ($model->metamodel_use_parameters) {
+            foreach (StringUtil::deserialize(($model->metamodel_parameters ?? null), true) as $key => $value) {
+                $itemRenderer->setTemplateParameter($key, $value);
+            }
         }
 
         $template->items         = StringUtil::encodeEmail($itemRenderer->render($model->metamodel_noparsing, $model));
