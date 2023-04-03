@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,8 @@
  * @author     Oliver Lohoff <oliverlohoff@gmail.com>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -25,61 +26,46 @@
     This file defines the basic structure of ALL MetaModel items.
     Note however, that various MetaModel extensions might remove or add stuff here.
 */
-
-$GLOBALS['TL_DCA']['tl_metamodel_item'] = array
-(
-    'config' => array
-    (
-        'dataContainer'               => 'General',
-        'switchToEdit'                => false,
-        'enableVersioning'            => false,
-    ),
-    'dca_config' => array
-    (
-        'data_provider'               => array
-        (
-            'default'                 => array
-            (
-                'class'               => 'MetaModels\DcGeneral\Data\Driver',
-            )
-        ),
-    ),
-
-    'list' => array
-    (
-        'sorting' => array
-        (
+$GLOBALS['TL_DCA']['tl_metamodel_item'] = [
+    'config'     => [
+        'dataContainer'    => 'General',
+        'switchToEdit'     => false,
+        'enableVersioning' => false,
+    ],
+    'dca_config' => [
+        'data_provider' => [
+            'default' => [
+                'class' => 'MetaModels\DcGeneral\Data\Driver',
+            ]
+        ],
+    ],
+    'list' => [
+        'sorting' => [
             // This means: 1 default sorting value, 2 switchable sorting value.
-            'mode'                    => 1,
-            'headerFields'            => array
-            (
+            'mode'         => 1,
+            'headerFields' => [
                 'tstamp'
-            ),
-        ),
+            ],
+        ],
 
-        'label' => array
-        (
-            'fields'                  => array
-            (
-            ),
-            'format'                  => '%s',
-        ),
-    ),
-
-    'fields' => array
-    (
-        'id' => array
-        (
-        ),
-        'pid' => array
-        (
-        ),
-        'sorting' => array
-        (
-            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_item']['sorting'],
-        ),
-        'tstamp' => array
-        (
-        )
-    )
-);
+        'label' => [
+            'fields' => [
+            ],
+            'format' => '%s',
+        ],
+    ],
+    'fields' => [
+        'id'      => [
+            'label' => 'id.0',
+        ],
+        'pid'     => [
+            'label' => 'pid.0',
+        ],
+        'sorting' => [
+            'label' => 'sorting.0',
+        ],
+        'tstamp'  => [
+            'label' => 'tstamp.0',
+        ]
+    ]
+];

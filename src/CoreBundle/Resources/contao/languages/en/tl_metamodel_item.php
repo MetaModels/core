@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2018 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2018 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -48,3 +49,9 @@ $GLOBALS['TL_LANG']['tl_metamodel_item']['editRecord']       = 'Edit item %s';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['newRecord']        = 'Create a new item';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['sorting'][0]       = 'Sorting';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['sorting'][1]       = 'The manual sorting';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['id'][0]            = 'ID of the item';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['id'][1]            = 'The id of the item';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['pid'][0]           = 'Parent item id';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['pid'][1]           = 'The id of the parent item';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['tstamp'][0]        = 'Revision date';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['tstamp'][1]        = 'The date when the item revision was created';
