@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,8 @@
  *
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -57,6 +58,16 @@ class FilterUrl
         array $getParameters = [],
         array $slugParameters = []
     ) {
+        if (static::class !== __CLASS__) {
+            // @codingStandardsIgnoreStart
+            @\trigger_deprecation(
+                'metamodels/core',
+                '2.2',
+                static::class . ' should not extend ' . __CLASS__ . ' as it will become final in 3.0.'
+            );
+            // @codingStandardsIgnoreEnd
+        }
+
         $this->setPage($page);
         foreach ($getParameters as $name => $value) {
             $this->setGet($name, $value);
@@ -139,12 +150,12 @@ class FilterUrl
     /**
      * Add a slug parameter.
      *
-     * @param string $name  The slug name.
-     * @param string $value The slug value.
+     * @param string              $name  The slug name.
+     * @param string|list<string> $value The slug value.
      *
      * @return self
      */
-    public function setGet(string $name, string $value): self
+    public function setGet(string $name, $value): self
     {
         if (empty($value)) {
             unset($this->getParameters[$name]);
@@ -161,9 +172,9 @@ class FilterUrl
      *
      * @param string $name The slug name.
      *
-     * @return string
+     * @return string|list<string>|null
      */
-    public function getGet(string $name): ?string
+    public function getGet(string $name)
     {
         return ($this->getParameters[$name] ?? null);
     }
