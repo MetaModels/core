@@ -456,13 +456,13 @@ class FilterUrlBuilder
             $aliases[] = $alias;
         }
 
-        // Check if there are pages with a matching alias
-        $pages = $this->pageModelAdapter->findByAliases($aliases);
+        // Check if there are pages with a matching alias - sort by priority desc.
+        $pages = $this->pageModelAdapter->findByAliases($aliases, ['order' => 'tl_page.routePriority DESC']);
         if (null === $pages) {
             return null;
         }
         $arrPages = [];
-        // Order by domain and language
+        // Order by domain and language.
         while ($pages->next()) {
             /** @var PageModel $objModel */
             $objModel = $pages->current();
@@ -470,11 +470,12 @@ class FilterUrlBuilder
             $domain   = $objPage->domain ?: '*';
 
             $arrPages[$domain][$objPage->rootLanguage][] = $objPage;
-            // Also store the fallback language
+            // Also store the fallback language.
             if ($objPage->rootIsFallback) {
                 $arrPages[$domain]['*'][] = $objPage;
             }
         }
+
         return $arrPages;
     }
 
