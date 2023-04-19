@@ -456,8 +456,9 @@ class FilterUrlBuilder
             $aliases[] = $alias;
         }
 
-        // Check if there are pages with a matching alias - sort by priority desc.
-        $pages = $this->pageModelAdapter->findByAliases($aliases, ['order' => 'tl_page.routePriority DESC']);
+        // Check if there are pages with a matching alias - sort by priority desc and id asc.
+        $pages =
+            $this->pageModelAdapter->findByAliases($aliases, ['order' => 'tl_page.routePriority DESC, tl_page.id ASC']);
         if (null === $pages) {
             return null;
         }
