@@ -108,6 +108,10 @@ $GLOBALS['TL_LANG']['tl_module']['metamodel_filterparams_use_get'][1]        = '
 $GLOBALS['TL_LANG']['tl_module']['metamodel_jumpTo'][0]                      = 'Redirect page';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_jumpTo'][1]                      =
     'Please choose the page to which visitors will be redirected when clicking a link or submitting a form.';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_fef_id'][0]                      = 'Form ID';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_fef_id'][1]                      =
+    'Set ID as own postfix for "FORM_SUBMIT" value e.g. to use redirect and another filter -' .
+    ' in which case the value must be the same. ';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_fef_urlfragment'][0]             = 'URL fragment';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_fef_urlfragment'][1]             =
     'Add URL fragment to jump to anchor or id.';
