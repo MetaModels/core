@@ -47,7 +47,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['metamodels_frontendfilter'] =
     '{type_legend},type,headline;' .
     '{mm_filter_legend},metamodel,metamodel_filtering,metamodel_fef_template,metamodel_fef_params,' .
     'metamodel_fef_autosubmit,metamodel_fef_hideclearfilter,metamodel_available_values,' .
-    'metamodel_jumpTo,metamodel_fef_urlfragment;' .
+    'metamodel_jumpTo,metamodel_fef_id,metamodel_fef_urlfragment;' .
     '{protected_legend:hide},protected;' .
     '{expert_legend:hide},guests,cssID,space;' .
     '{invisible_legend:hide},invisible,start,stop';
@@ -355,12 +355,22 @@ array_insert(
             ],
             'sql'       => "int(10) unsigned NOT NULL default '0'"
         ],
+        'metamodel_fef_id'          => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_fef_id'],
+            'exclude'   => true,
+            'inputType' => 'text',
+            'eval'      => [
+                'tl_class' => 'w50',
+                'rgxp'     => 'alias'
+            ],
+            'sql'       => "char(255) NOT NULL default ''"
+        ],
         'metamodel_fef_urlfragment'          => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_fef_urlfragment'],
             'exclude'   => true,
             'inputType' => 'text',
             'eval'      => [
-                'tl_class' => 'w50',
+                'tl_class' => 'clr w50',
                 'rgxp'     => 'alias'
             ],
             'sql'       => "char(255) NOT NULL default ''"
