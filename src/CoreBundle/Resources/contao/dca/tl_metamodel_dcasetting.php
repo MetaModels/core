@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -21,7 +21,7 @@
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -225,6 +225,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
             // * advanced
             // Core fields:
             // * tl_class           css class to use in backend.
+            // * be_template        template for backend widget.
             // * mandatory          mandatory.
             // * alwaysSave         always save.
             // * filterable         can be filtered (in backend).
@@ -298,6 +299,17 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
             ],
             'explanation' => 'tl_class',
             'sql'         => ['type' => 'string', 'length' => 64, 'default' => 'w50']
+        ],
+        'be_template' => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['be_template'],
+            'exclude'   => true,
+            'inputType' => 'select',
+            'sql'       => 'varchar(255) NOT NULL default \'\'',
+            'eval'      => [
+                'includeBlankOption' => true,
+                'tl_class'           => 'clr w50',
+                'chosen'             => 'true'
+            ]
         ],
         'legendhide'         => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendhide'],

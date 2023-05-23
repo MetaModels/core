@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,7 @@
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -36,6 +36,9 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template'][1]                =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class'][0]                = 'Backend class';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class'][1]                =
     'Here you can set backend class(es). Open the wizard for an overview of the classes.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['be_template'][0]             = 'Template at backend';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['be_template'][1]             =
+    'You can chose own template for widget in backend - add file in root folder of template.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendhide'][0]              = 'Collapse section';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendhide'][1]              = 'Collapse the section by default.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendtitle'][0]             = 'Legend title';

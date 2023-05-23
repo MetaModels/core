@@ -381,7 +381,9 @@ abstract class Base implements IAttribute
             'isvariant',
             // Settings originating from tl_metamodel_dcasetting.
             'tl_class',
-            'readonly'
+            'readonly',
+            'be_template',
+            'fe_template',
         ];
     }
 
@@ -501,7 +503,9 @@ abstract class Base implements IAttribute
             'spaceToUnderscore',
             'includeBlankOption',
             'submitOnChange',
-            'readonly'
+            'readonly',
+            'be_template',
+            'fe_template',
         ];
 
         foreach ($names as $name) {
