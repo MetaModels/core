@@ -206,13 +206,13 @@ class Contao2BackendViewDefinitionBuilder
 
         $definitions = $listing->getGroupAndSortingDefinition();
         foreach ($this->inputScreen['groupSort'] as $information) {
-            if (!$information['published']) {
+            if (empty($information['published'])) {
                 continue;
             }
 
             $definition = $definitions->add();
             $definition->setName($information['name']);
-            if ($information['isdefault'] && !$definitions->hasDefault()) {
+            if (!empty($information['isdefault']) && !$definitions->hasDefault()) {
                 $definitions->markDefault($definition);
             }
 
@@ -220,7 +220,7 @@ class Contao2BackendViewDefinitionBuilder
 
             $groupType = $this->convertRenderGroupType($information['rendergrouptype']);
             if ($groupType !== GroupAndSortingInformationInterface::GROUP_NONE
-                && $information['col_name']
+                && !empty($information['col_name'])
             ) {
                 $propertyInformation = $definition->add(0);
                 $propertyInformation
@@ -244,7 +244,7 @@ class Contao2BackendViewDefinitionBuilder
         $information,
         GroupAndSortingDefinitionInterface $definition
     ) {
-        if ($information['ismanualsort']) {
+        if (!empty($information['ismanualsort'])) {
             $definition
                 ->add()
                 ->setManualSorting()
@@ -252,7 +252,7 @@ class Contao2BackendViewDefinitionBuilder
                 ->setSortingMode(GroupAndSortingInformationInterface::SORT_ASC);
             return;
         }
-        if ($information['col_name']) {
+        if (!empty($information['col_name'])) {
             $definition
                 ->add()
                 ->setProperty($information['col_name'])
