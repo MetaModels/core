@@ -24,11 +24,8 @@
 namespace MetaModels\FrontendIntegration;
 
 use Contao\BackendTemplate;
-use Contao\ContentModel;
 use Contao\Database\Result;
-use Contao\FormModel;
 use Contao\Hybrid;
-use Contao\ModuleModel;
 use Contao\StringUtil;
 use Contao\System;
 use Doctrine\DBAL\Connection;
@@ -37,6 +34,7 @@ use MetaModels\IMetaModel;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\MetaModelsServiceContainer;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Base implementation of a MetaModel Hybrid element.
@@ -196,7 +194,7 @@ abstract class MetaModelHybrid extends Hybrid
                 // Add CSS file.
                 $GLOBALS['TL_CSS'][] = 'bundles/metamodelscore/css/style.css';
 
-                // Retrieve name of MetaModels.
+                // Retrieve name of MetaModel.
                 $infoTemplate =
                     '<div class="wc_info tl_gray"><span class="wc_label"><abbr title="%s">%s:</abbr></span> %s</div>';
 
@@ -205,10 +203,13 @@ abstract class MetaModelHybrid extends Hybrid
                 $metaModel = $factory->getMetaModel($metaModelName);
                 assert($metaModel instanceof IMetaModel);
 
+                $translator = System::getContainer()->get('translator');
+                assert($translator instanceof TranslatorInterface);
+
                 $strInfo = \sprintf(
                     $infoTemplate,
-                    $GLOBALS['TL_LANG']['MSC']['mm_be_info_name'][1],
-                    $GLOBALS['TL_LANG']['MSC']['mm_be_info_name'][0],
+                    $translator->trans('mm_be_info_name.description', [], 'metamodels_wildcard'),
+                    $translator->trans('mm_be_info_name.label', [], 'metamodels_wildcard'),
                     $metaModel->getName()
                 );
 
@@ -229,14 +230,14 @@ abstract class MetaModelHybrid extends Hybrid
                     if ($infoFi) {
                         $strInfo .= \sprintf(
                             $infoTemplate,
-                            $GLOBALS['TL_LANG']['MSC']['mm_be_info_filter'][1],
-                            $GLOBALS['TL_LANG']['MSC']['mm_be_info_filter'][0],
+                            $translator->trans('mm_be_info_filter.description', [], 'metamodels_wildcard'),
+                            $translator->trans('mm_be_info_filter.label', [], 'metamodels_wildcard'),
                             \current($infoFi)
                         );
                     }
                 }
 
-                // Retrieve name of rendersetting.
+                // Retrieve name of render setting.
                 if ($this->metamodel_rendersettings) {
                     $infoRs = $database
                         ->createQueryBuilder()
@@ -251,8 +252,8 @@ abstract class MetaModelHybrid extends Hybrid
                     if ($infoRs) {
                         $strInfo .= \sprintf(
                             $infoTemplate,
-                            $GLOBALS['TL_LANG']['MSC']['mm_be_info_render_setting'][1],
-                            $GLOBALS['TL_LANG']['MSC']['mm_be_info_render_setting'][0],
+                            $translator->trans('mm_be_info_render_setting.description', [], 'metamodels_wildcard'),
+                            $translator->trans('mm_be_info_render_setting.label', [], 'metamodels_wildcard'),
                             \current($infoRs)
                         );
                     }

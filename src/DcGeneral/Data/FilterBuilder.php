@@ -49,6 +49,7 @@ use MetaModels\ITranslatedMetaModel;
  * @psalm-type TFilter=TFilterANDOR|TFilterForProperty
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class FilterBuilder
 {
@@ -147,7 +148,7 @@ class FilterBuilder
     {
         switch ($operation['operation']) {
             case '=':
-                $filter->addFilterRule($this->buildSearchAttributeFilterRule($attribute, $operation['value']));
+                $filter->addFilterRule($this->buildSearchAttributeFilterRule($attribute, (string) $operation['value']));
                 return;
 
             case '>':

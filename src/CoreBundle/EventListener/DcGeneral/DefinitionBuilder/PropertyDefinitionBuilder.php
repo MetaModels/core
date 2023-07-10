@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -151,8 +151,8 @@ class PropertyDefinitionBuilder
         array $propInfo
     ): void {
         $property = $this->getOrCreateProperty($definition, $attribute->getColName());
-        $this->setLabel($property, $propInfo, $attribute);
-        $this->setDescription($property, $propInfo);
+        $this->setLabel($property);
+        $this->setDescription($property);
         $this->setDefaultValue($property, $propInfo);
         $this->setExcluded($property, $propInfo);
         $this->setSearchable($property, $propInfo);
@@ -188,47 +188,30 @@ class PropertyDefinitionBuilder
      * Set the label in the property.
      *
      * @param PropertyInterface $property  The property definition.
-     * @param array             $propInfo  The property info array.
-     * @param IAttribute        $attribute The attribute.
      *
      * @return void
      */
-    private function setLabel(PropertyInterface $property, array $propInfo, IAttribute $attribute): void
+    private function setLabel(PropertyInterface $property): void
     {
         if ($property->getLabel()) {
             return;
         }
-        if (!isset($propInfo['label'])) {
-            $property->setLabel($attribute->getName());
-
-            return;
-        }
-        $lang = $propInfo['label'];
-        if (\is_array($lang)) {
-            $property->setLabel(reset($lang));
-            $property->setDescription(next($lang));
-
-            return;
-        }
-
-        $property->setLabel($lang);
+        $property->setLabel($property->getName() . '.label');
     }
 
     /**
      * Set the description in the property.
      *
      * @param PropertyInterface $property The property definition.
-     * @param array             $propInfo The property info array.
      *
      * @return void
      */
-    private function setDescription(PropertyInterface $property, array $propInfo): void
+    private function setDescription(PropertyInterface $property): void
     {
-        if ($property->getDescription() || !isset($propInfo['description'])) {
+        if ($property->getDescription()) {
             return;
         }
-
-        $property->setDescription($propInfo['description']);
+        $property->setDescription($property->getName() . '.description');
     }
 
     /**

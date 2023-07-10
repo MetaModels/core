@@ -443,7 +443,7 @@ class FrontendFilter
             'filters' => $renderedWidgets,
             'submit'  => ($filterOptions->isAutoSubmit()
                 ? ''
-                : $GLOBALS['TL_LANG']['metamodels_frontendfilter']['submit']
+                : $GLOBALS['TL_LANG']['metamodels_frontendfilter']['submit'] ?? ''
             )
         ];
     }

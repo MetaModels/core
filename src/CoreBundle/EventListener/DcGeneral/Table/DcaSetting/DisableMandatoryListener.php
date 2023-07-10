@@ -92,11 +92,7 @@ class DisableMandatoryListener extends AbstractListener
 
         if ($attribute->get('isunique')) {
             Message::addInfo(
-                $this->translator->trans(
-                    'tl_metamodel_dcasetting.mandatory_for_unique_attr',
-                    [],
-                    'contao_tl_metamodel_dcasetting'
-                )
+                $this->translator->trans('mandatory_for_unique_attr', [], 'tl_metamodel_dcasetting')
             );
 
             $extra = $event->getProperty()->getExtra();

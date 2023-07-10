@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="src/CoreBundle/Resources/translations/metamodels_list.en.xlf">
+    <body>
+      <trans-unit id="metamodels_sorting" resname="metamodels_sorting">
+        <source>Sorting</source>
+      </trans-unit>
+      <trans-unit id="random" resname="random">
+        <source>Random</source>
+      </trans-unit>
+      <trans-unit id="id" resname="id">
+        <source>Id</source>
+      </trans-unit>
+      <trans-unit id="field_label" resname="field_label">
+        <source>%field_label%:</source>
+      </trans-unit>
+      <trans-unit id="noItemsMsg" resname="noItemsMsg">
+        <source>There are no items matching your search.</source>
+      </trans-unit>
+      <trans-unit id="details" resname="details">
+        <source>Details</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

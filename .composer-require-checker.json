@@ -7,6 +7,10 @@
     "Contao\\ManagerPlugin\\Bundle\\Parser\\ParserInterface",
     "Contao\\ManagerPlugin\\Routing\\RoutingPluginInterface",
     "Doctrine\\Bundle\\DoctrineBundle\\DoctrineBundle",
+    "Knp\\Menu\\FactoryInterface",
+    "Knp\\Menu\\ItemInterface",
+    "Symfony\\Bundle\\FrameworkBundle\\Translation\\Translator",
+    "Symfony\\Contracts\\Cache\\CacheInterface",
     "tl_user_group"
   ]
 }

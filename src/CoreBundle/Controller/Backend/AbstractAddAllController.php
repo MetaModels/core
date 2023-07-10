@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -201,13 +201,13 @@ abstract class AbstractAddAllController
             'action'        => '',
             'requestToken'  => System::getContainer()->get('contao.csrf.token_manager')?->getDefaultTokenValue(),
             'href'          => $this->getReferer($request, $table, true),
-            'backBt'        => $this->translator->trans('MSC.backBT', [], 'contao_default'),
-            'add'           => $this->translator->trans('MSC.continue', [], 'contao_default'),
-            'saveNclose'    => $this->translator->trans('MSC.saveNclose', [], 'contao_default'),
-            'activate'      => $this->translator->trans($table . '.addAll_activate', [], 'contao_' . $table),
+            'backBt'        => $this->translator->trans('backBT', [], $table),
+            'add'           => $this->translator->trans('continue', [], $table),
+            'saveNclose'    => $this->translator->trans('saveNclose', [], $table),
+            'activate'      => $this->translator->trans('addAll_activate', [], $table),
             'tlclass'       => '',
-            'headline'      => $this->translator->trans($table . '.addall.1', [], 'contao_' . $table),
-            'selectAll'     => $this->translator->trans('MSC.selectAll', [], 'contao_default') . '.',
+            'headline'      => $this->translator->trans('addall.description', [], $table),
+            'selectAll'     => $this->translator->trans('selectAll', [], $table) . '.',
             'cacheMessage'  => '',
             'updateMessage' => '',
             'hasCheckbox'   => \count($fields) > 0,
@@ -320,9 +320,13 @@ abstract class AbstractAddAllController
     private function checkboxCaption(string $key, string $table, IAttribute $attribute): string
     {
         return $this->translator->trans(
-            $table . '.' . $key,
-            [$attribute->getName(), $attribute->get('type'), $attribute->getColName()],
-            'contao_' . $table
+            $key,
+            [
+                '%name%'    => $attribute->getName(),
+                '%type%'    => $attribute->get('type'),
+                '%colName%' => $attribute->getColName()
+            ],
+            $table
         );
     }
 

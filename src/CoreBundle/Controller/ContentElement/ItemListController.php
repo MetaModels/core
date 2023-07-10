@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -99,7 +99,7 @@ final class ItemListController extends AbstractContentElementController
      */
     private function getBackendWildcard(ContentModel $model): Response
     {
-        $name = $this->translator->trans('CTE.' . $this->getType() . '.0', [], 'contao_modules');
+        $name = $this->translator->trans($this->getType(), [], 'metamodels_wildcard');
         $href = $this->router->generate(
             'contao_backend',
             ['do' => 'article', 'table' => 'tl_content', 'act' => 'edit', 'id' => $model->id]

@@ -47,7 +47,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = [
                 'tstamp'
             ],
         ],
-
         'label' => [
             'fields' => [
             ],
@@ -56,16 +55,16 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = [
     ],
     'fields'     => [
         'id'      => [
-            'label' => 'id.0',
+            'label' => 'id.label',
         ],
         'pid'     => [
-            'label' => 'pid.0',
+            'label' => 'pid.label',
         ],
         'sorting' => [
-            'label' => 'sorting.0',
+            'label' => 'sorting.label',
         ],
         'tstamp'  => [
-            'label' => 'tstamp.0',
+            'label' => 'tstamp.label',
         ]
     ]
 ];

@@ -75,11 +75,7 @@ class RenderModeHintListener
 
         if ('hierarchical' === $model->getProperty('rendermode')) {
             Message::addInfo(
-                $this->translator->trans(
-                    'tl_metamodel_dca.hint_rendermode_hierarchical',
-                    [],
-                    'contao_tl_metamodel_dca'
-                )
+                $this->translator->trans('hint_rendermode_hierarchical', [], 'tl_metamodel_dca')
             );
         }
     }

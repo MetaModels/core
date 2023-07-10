@@ -93,28 +93,28 @@ class ModelToLabelListener extends AbstractListener
         $type           = $model->getProperty('type');
         $parameterValue = (\is_array($model->getProperty('value'))
             ? \implode(', ', $model->getProperty('value'))
-            : $model->getProperty('value'));
-
-        $name = $this->translator->trans(
-            'tl_metamodel_dcasetting_condition.conditionnames.' . $type,
-            [],
-            'contao_tl_metamodel_dcasetting_condition'
+            : $model->getProperty('value')
         );
+
+        $name = $this->translator->trans('conditionnames.' . $type, [], 'tl_metamodel_dcasetting_condition');
+
+        $params = [
+            '%icon%'      => $this->iconBuilder->getBackendIconImageTag(
+                'bundles/metamodelscore/images/icons/filter_default.png',
+                $name,
+                '',
+                'bundles/metamodelscore/images/icons/filter_default.png'
+            ),
+            '%name%'      => $name,
+            '%attribute%' => $attribute ? $attribute->getName() : '' . $model->getProperty('attr_id'),
+            '%value%'     => $parameterValue,
+            '%comment%'   => '' !== ($comment = $model->getProperty('comment')) ? '<br/>' . $comment : '',
+        ];
 
         /** @psalm-suppress InvalidArgument */
         $event
-            ->setLabel($this->getLabelText($type))
-            ->setArgs([
-                $this->iconBuilder->getBackendIconImageTag(
-                    'bundles/metamodelscore/images/icons/filter_default.png',
-                    $name,
-                    '',
-                    'bundles/metamodelscore/images/icons/filter_default.png'
-                ),
-                $name,
-                $attribute ? $attribute->getName() : '' . $model->getProperty('attr_id'),
-                $parameterValue
-            ]);
+            ->setLabel($this->getLabelText($type, $params))
+            ->setArgs(array_values($params));
     }
 
     /**
@@ -136,25 +136,18 @@ class ModelToLabelListener extends AbstractListener
     /**
      * Retrieve the label text for a condition setting or the default one.
      *
-     * @param string $type The type of the element.
+     * @param string $type   The type of the element.
+     * @param array  $params The params.
      *
      * @return string
      */
-    private function getLabelText($type)
+    private function getLabelText(string $type, array $params): string
     {
-        $label = $this->translator->trans(
-            'tl_metamodel_dcasetting_condition.typedesc.' . $type,
-            [],
-            'contao_tl_metamodel_dcasetting_condition'
-        );
+        $label = $this->translator->trans('typedesc.' . $type, $params, 'tl_metamodel_dcasetting_condition');
 
-        if ($label === 'tl_metamodel_dcasetting_condition.typedesc.' . $type) {
-            $label = $this->translator->trans(
-                'tl_metamodel_dcasetting_condition.typedesc._default_',
-                [],
-                'contao_tl_metamodel_dcasetting_condition'
-            );
-            if ($label === 'tl_metamodel_dcasetting_condition.typedesc._default_') {
+        if ($label === 'typedesc.' . $type) {
+            $label = $this->translator->trans('typedesc._default_', $params, 'tl_metamodel_dcasetting_condition');
+            if ($label === 'typedesc._default_') {
                 return $type;
             }
         }

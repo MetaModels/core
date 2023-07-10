@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,7 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -24,6 +24,7 @@
 namespace MetaModels\Filter\Setting;
 
 use Contao\StringUtil;
+use Contao\System;
 use MetaModels\Attribute\IAttribute;
 use MetaModels\FrontendIntegration\FrontendFilterOptions;
 use MetaModels\IItem;
@@ -33,6 +34,7 @@ use MetaModels\Filter\Rules\SearchAttribute as FilterRuleSimpleLookup;
 use MetaModels\IMetaModel;
 use MetaModels\ITranslatedMetaModel;
 use MetaModels\Render\Setting\ICollection as IRenderSettings;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Filter setting implementation performing a search for a value on a configured attribute.
@@ -216,18 +218,16 @@ class SimpleLookup extends Simple
 
         $arrOptions = $objAttribute->getFilterOptions(null, (bool) $this->get('onlyused'));
 
+        $translator = System::getContainer()->get('translator');
+        assert($translator instanceof TranslatorInterface);
+
         return [
             (string) $this->getParamName() => [
-                'label'     => [
-                    \sprintf(
-                        $GLOBALS['TL_LANG']['MSC']['metamodel_filtersettings_parameter']['simplelookup'][0],
-                        $objAttribute->getName()
-                    ),
-                    \sprintf(
-                        $GLOBALS['TL_LANG']['MSC']['metamodel_filtersettings_parameter']['simplelookup'][1],
-                        $objAttribute->getName()
-                    )
-                ],
+                'label'     => $translator->trans(
+                    'simplelookup.label',
+                    ['%id%' => $objAttribute->getName()],
+                    'metamodels_filter'
+                ),
                 'inputType' => 'select',
                 'options'   => $arrOptions,
                 'eval'      => [
@@ -299,7 +299,7 @@ class SimpleLookup extends Simple
                 ),
                 'blankOptionLabel'   => $this->get('label_as_blankoption')
                     ? $this->getLabel()
-                    : $GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter'],
+                    : $GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter'] ?? '',
                 'colname'            => $attribute->getColname(),
                 'urlparam'           => $paramName,
                 'onlyused'           => $this->get('onlyused'),

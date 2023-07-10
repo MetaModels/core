@@ -64,9 +64,9 @@ class AttributeRendererListener extends BaseListener
                     </div>'
                 )
                 ->setArgs([
-                    $translator->translate('error_unknown_attribute.0', 'tl_metamodel_attribute'),
+                    $translator->translate('error_unknown_attribute.label', 'tl_metamodel_attribute'),
                     $type,
-                    $translator->translate('error_unknown_attribute.1', 'tl_metamodel_attribute', [$type]),
+                    $translator->translate('error_unknown_attribute.description', 'tl_metamodel_attribute', [$type]),
                 ]);
 
             return;

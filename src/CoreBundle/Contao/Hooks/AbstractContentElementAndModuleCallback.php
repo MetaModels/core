@@ -35,6 +35,7 @@ use MetaModels\Filter\Setting\FilterSettingFactory;
 use MetaModels\IFactory;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 use function asort;
 use function base64_decode;
@@ -107,6 +108,8 @@ abstract class AbstractContentElementAndModuleCallback
      */
     private RequestStack $requestStack;
 
+    private TranslatorInterface $translator;
+
     /**
      * Create a new instance.
      *
@@ -117,6 +120,7 @@ abstract class AbstractContentElementAndModuleCallback
      * @param Connection                 $connection        The database connection.
      * @param TemplateList               $templateList      The template list loader.
      * @param RequestStack               $requestStack      The request stack.
+     * @param TranslatorInterface        $translator        The translator.
      */
     public function __construct(
         IconBuilder $iconBuilder,
@@ -125,7 +129,8 @@ abstract class AbstractContentElementAndModuleCallback
         FilterSettingFactory $filterFactory,
         Connection $connection,
         TemplateList $templateList,
-        RequestStack $requestStack
+        RequestStack $requestStack,
+        TranslatorInterface $translator,
     ) {
         $this->iconBuilder       = $iconBuilder;
         $this->urlBuilderFactory = $urlBuilderFactory;
@@ -134,6 +139,7 @@ abstract class AbstractContentElementAndModuleCallback
         $this->templateList      = $templateList;
         $this->factory           = $factory;
         $this->requestStack      = $requestStack;
+        $this->translator        = $translator;
     }
 
     /**
@@ -152,14 +158,17 @@ abstract class AbstractContentElementAndModuleCallback
             return '';
         }
 
-        $url = $this->urlBuilderFactory->create('contao/main.php?do=metamodels&act=edit')
+        $url = $this->urlBuilderFactory->create('contao/metamodels?act=edit')
             ->setQueryParameter('id', ModelId::fromValues('tl_metamodel', $dataContainer->value)->getSerialized());
 
         return $this->renderEditButton(
-            $GLOBALS['TL_LANG'][static::$tableName]['editmetamodel'][0],
-            sprintf(
-                StringUtil::specialchars($GLOBALS['TL_LANG'][static::$tableName]['editmetamodel'][1]),
-                $dataContainer->value
+            $this->translator->trans('editmetamodel.label', [], static::$tableName),
+            StringUtil::specialchars(
+                $this->translator->trans(
+                    'editmetamodel.description',
+                    ['%id%' => $dataContainer->value],
+                    static::$tableName
+                )
             ),
             $url
         );
@@ -181,17 +190,20 @@ abstract class AbstractContentElementAndModuleCallback
             return '';
         }
 
-        $url = $this->urlBuilderFactory->create('contao/main.php?do=metamodels&table=tl_metamodel_filtersetting')
+        $url = $this->urlBuilderFactory->create('contao/metamodels?table=tl_metamodel_filtersetting')
             ->setQueryParameter(
                 'pid',
                 ModelId::fromValues('tl_metamodel_filter', $dataContainer->value)->getSerialized()
             );
 
         return $this->renderEditButton(
-            $GLOBALS['TL_LANG'][static::$tableName]['editfiltersetting'][0],
-            sprintf(
-                StringUtil::specialchars($GLOBALS['TL_LANG'][static::$tableName]['editfiltersetting'][1]),
-                $dataContainer->value
+            $this->translator->trans('editfiltersetting.label', [], static::$tableName),
+            StringUtil::specialchars(
+                $this->translator->trans(
+                    'editfiltersetting.description',
+                    ['%id%' => $dataContainer->value],
+                    static::$tableName
+                )
             ),
             $url
         );
@@ -213,17 +225,20 @@ abstract class AbstractContentElementAndModuleCallback
             return '';
         }
 
-        $url = $this->urlBuilderFactory->create('contao/main.php?do=metamodels&table=tl_metamodel_rendersetting')
+        $url = $this->urlBuilderFactory->create('contao/metamodels?table=tl_metamodel_rendersetting')
             ->setQueryParameter(
                 'pid',
                 ModelId::fromValues('tl_metamodel_rendersettings', $dataContainer->value)->getSerialized()
             );
 
         return $this->renderEditButton(
-            $GLOBALS['TL_LANG'][static::$tableName]['editrendersetting'][0],
-            sprintf(
-                StringUtil::specialchars($GLOBALS['TL_LANG'][static::$tableName]['editrendersetting'][1]),
-                $dataContainer->value
+            $this->translator->trans('editrendersetting.label', [], static::$tableName),
+            StringUtil::specialchars(
+                $this->translator->trans(
+                    'editrendersetting.description',
+                    ['%id%' => $dataContainer->value],
+                    static::$tableName
+                ),
             ),
             $url
         );
@@ -242,9 +257,9 @@ abstract class AbstractContentElementAndModuleCallback
     public function getAttributeNames(DC_Table $objDc)
     {
         $attributeNames = [
-            'sorting' => $GLOBALS['TL_LANG']['MSC']['metamodels_sorting'],
-            'random'  => $GLOBALS['TL_LANG']['MSC']['random'],
-            'id'      => $GLOBALS['TL_LANG']['MSC']['id'][0]
+            'sorting' => $this->translator->trans('metamodels_sorting', [], 'metamodels_list'),
+            'random'  => $this->translator->trans('random', [], 'metamodels_list'),
+            'id'      => $this->translator->trans('id', [], 'metamodels_list')
         ];
 
         assert(null !== $objDc->activeRecord);

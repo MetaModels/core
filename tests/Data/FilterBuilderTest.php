@@ -160,7 +160,7 @@ class FilterBuilderTest extends TestCase
 
         $filter = $builder->build();
 
-        self::assertSame([0, 1, 2, 3], $filter->getMatchingIds());
+        self::assertSame(['0', '1', '2', '3'], $filter->getMatchingIds());
     }
 
     /**
@@ -184,7 +184,7 @@ class FilterBuilderTest extends TestCase
             ->expects(self::once())
             ->method('searchFor')
             ->with('*test*')
-            ->willReturn([0, 1, 2, 3]);
+            ->willReturn(['0', '1', '2', '3']);
 
         /** @var \MetaModels\Attribute\Base $attribute */
         $metaModel->addAttribute($attribute);
@@ -220,6 +220,6 @@ class FilterBuilderTest extends TestCase
 
         $filter = $builder->build();
 
-        self::assertSame([0, 1, 2, 3], $filter->getMatchingIds());
+        self::assertSame(['0', '1', '2', '3'], $filter->getMatchingIds());
     }
 }

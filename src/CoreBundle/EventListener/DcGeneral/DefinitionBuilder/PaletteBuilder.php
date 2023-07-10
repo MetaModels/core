@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -112,8 +112,9 @@ class PaletteBuilder
             ->setName('default')
             ->setCondition(new DefaultPaletteCondition());
 
+        $prefix = 'inputscreen.' . $inputScreen['meta']['id'] . '.';
         foreach ($inputScreen['legends'] as $legendName => $legendInfo) {
-            $legend = new Legend($legendName);
+            $legend = new Legend($prefix . $legendName);
             $legend->setInitialVisibility(!$legendInfo['hide']);
             $palette->addLegend($legend);
 
@@ -191,10 +192,7 @@ class PaletteBuilder
         $chain = new PropertyConditionChain();
         $paletteProperty->setVisibleCondition($chain);
         $chain->addCondition(
-            new BooleanCondition(
-                !((isset($extra['doNotShow']) && $extra['doNotShow'])
-                || (isset($extra['hideInput']) && $extra['hideInput']))
-            )
+            new BooleanCondition(!(bool) ($extra['doNotShow'] ?? false) || !(bool) ($extra['hideInput'] ?? false))
         );
 
         if (null !== $condition) {

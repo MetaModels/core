@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -24,6 +24,11 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\Breadcrumb;
 use Contao\StringUtil;
 use MetaModels\CoreBundle\Assets\IconBuilder;
 use Symfony\Contracts\Translation\TranslatorInterface;
+
+use function array_key_exists;
+use function str_replace;
+use function str_starts_with;
+use function ucfirst;
 
 /**
  * The breadcrumb store.
@@ -35,35 +40,35 @@ class BreadcrumbStore
      *
      * @var array
      */
-    private $elements = [];
+    private array $elements = [];
 
     /**
      * The icon builder.
      *
      * @var IconBuilder
      */
-    private $iconBuilder;
+    private IconBuilder $iconBuilder;
 
     /**
      * The translator.
      *
      * @var TranslatorInterface
      */
-    private $translator;
+    private TranslatorInterface $translator;
 
     /**
      * List of "current" ids.
      *
      * @var string[]
      */
-    private $idList = [];
+    private array $idList = [];
 
     /**
      * The current URI.
      *
      * @var string
      */
-    private $uri;
+    private string $uri;
 
     /**
      * Create a new instance.
@@ -145,19 +150,19 @@ class BreadcrumbStore
     }
 
     /**
-     * Get for a table the human readable name or a fallback.
+     * Get for a table the human-readable name or a fallback.
      *
      * @param string $table Name of table.
      *
-     * @return string The human readable name.
+     * @return string The human-readable name.
      */
     public function getLabel($table): string
     {
-        if (strpos($table, 'tl_') !== 0) {
+        if (!str_starts_with($table, 'tl_')) {
             return $table;
         }
         $shortTable = str_replace('tl_', '', $table);
-        $label      = $this->translator->trans('BRD.' . $shortTable, [], 'contao_default');
+        $label      = $this->translator->trans($shortTable, [], 'metamodels_navigation');
         if ($label === $shortTable) {
             $shortTable = str_replace('tl_metamodel_', '', $table);
             return ucfirst($shortTable) . ' %s';

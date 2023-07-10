@@ -102,7 +102,7 @@ class InputScreenAddAllController extends AbstractAddAllController
     {
         return \array_merge(
             parent::render($table, $metaModel, $request),
-            ['tlclass' => $this->translator->trans($table . '.addAll_tlclass', [], 'contao_' . $table)]
+            ['tlclass' => $this->translator->trans('addAll_tlclass', [], $table)]
         );
     }
 

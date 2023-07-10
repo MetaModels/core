@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext"
+        original="src/CoreBundle/Resources/translations/tl_metamodel_dcasetting.en.xlf">
+    <body>
+      <trans-unit id="backend-module.headline" resname="backend-module.headline">
+        <source>All input screen settings</source>
+      </trans-unit>
+      <trans-unit id="id.label" resname="id.label">
+        <source>Id</source>
+      </trans-unit>
+      <trans-unit id="pid.label" resname="pid.label">
+        <source>Pid</source>
+      </trans-unit>
+      <trans-unit id="sorting.label" resname="sorting.label">
+        <source>Sorting</source>
+      </trans-unit>
+      <trans-unit id="tstamp.label" resname="tstamp.label">
+        <source>Revision date</source>
+      </trans-unit>
+      <trans-unit id="published.label" resname="published.label">
+        <source>Published</source>
+      </trans-unit>
+      <trans-unit id="new.label" resname="new.label">
+        <source>New attribute or legend</source>
+      </trans-unit>
+      <trans-unit id="new.description" resname="new.description">
+        <source>Add a new attribute or legend for input mask</source>
+      </trans-unit>
+      <trans-unit id="all.label" resname="all.label">
+        <source>Edit multiple</source>
+      </trans-unit>
+      <trans-unit id="all.description" resname="all.description">
+        <source>Edit multiple elements at once</source>
+      </trans-unit>
+      <trans-unit id="pastenew.label" resname="pastenew.label">
+        <source>Create a new element at the top</source>
+      </trans-unit>
+      <trans-unit id="pastenew.description" resname="pastenew.description">
+        <source>Create a new element after element ID %id%</source>
+      </trans-unit>
+      <trans-unit id="pasteafter.label" resname="pasteafter.label">
+        <source>Paste at the top</source>
+      </trans-unit>
+      <trans-unit id="pasteafter.description" resname="pasteafter.description">
+        <source>Paste after element ID %id%</source>
+      </trans-unit>
+      <trans-unit id="backBT" resname="backBT">
+        <source>Go back</source>
+      </trans-unit>
+      <trans-unit id="backBTTitle" resname="backBTTitle">
+        <source>Back to the previous page</source>
+      </trans-unit>
+      <trans-unit id="saveNclose" resname="saveNclose">
+        <source>Save and close</source>
+      </trans-unit>
+      <trans-unit id="continue" resname="continue">
+        <source>Continue</source>
+      </trans-unit>
+      <trans-unit id="selectAll" resname="selectAll">
+        <source>Select all</source>
+      </trans-unit>
+      <trans-unit id="closeAll.label" resname="closeAll.label">
+        <source>Cancel</source>
+      </trans-unit>
+      <trans-unit id="closeAll.description" resname="closeAll.description">
+        <source>Cancel multiple processing.</source>
+      </trans-unit>
+      <trans-unit id="dcatype.label" resname="dcatype.label">
+        <source>Type</source>
+      </trans-unit>
+      <trans-unit id="dcatype.description" resname="dcatype.description">
+        <source>Select the attribute type.</source>
+      </trans-unit>
+      <trans-unit id="attr_id.label" resname="attr_id.label">
+        <source>Attribute</source>
+      </trans-unit>
+      <trans-unit id="attr_id.description" resname="attr_id.description">
+        <source>Attribute this setting relates to.</source>
+      </trans-unit>
+      <trans-unit id="template.label" resname="template.label">
+        <source>Custom template to use for generating</source>
+      </trans-unit>
+      <trans-unit id="template.description" resname="template.description">
+        <source>Select the template that shall be used for the selected attribute. Valid template files start with "mm_&amp;lt;type&amp;gt;"
+          where the type name is put for &amp;lt;type&amp;gt;
+        </source>
+      </trans-unit>
+      <trans-unit id="tl_class.label" resname="tl_class.label">
+        <source>Backend class</source>
+      </trans-unit>
+      <trans-unit id="tl_class.description" resname="tl_class.description">
+        <source>Here you can set backend class(es). Open the wizard for an overview of the classes.</source>
+      </trans-unit>
+      <trans-unit id="be_template.label" resname="be_template.label">
+        <source>Template at backend</source>
+      </trans-unit>
+      <trans-unit id="be_template.description" resname="be_template.description">
+        <source>You can chose own template for widget in backend - add file in root folder of template.</source>
+      </trans-unit>
+      <trans-unit id="legendhide.label" resname="legendhide.label">
+        <source>Collapse section</source>
+      </trans-unit>
+      <trans-unit id="legendhide.description" resname="legendhide.description">
+        <source>Collapse the section by default.</source>
+      </trans-unit>
+      <trans-unit id="legendtitle.label" resname="legendtitle.label">
+        <source>Legend title</source>
+      </trans-unit>
+      <trans-unit id="legendtitle.description" resname="legendtitle.description">
+        <source>Here you can enter the legend title.</source>
+      </trans-unit>
+      <trans-unit id="name_langcode" resname="name_langcode">
+        <source>Language</source>
+      </trans-unit>
+      <trans-unit id="name_value" resname="name_value">
+        <source>Legend title</source>
+      </trans-unit>
+      <trans-unit id="mandatory.label" resname="mandatory.label">
+        <source>Mandatory</source>
+      </trans-unit>
+      <trans-unit id="mandatory.description" resname="mandatory.description">
+        <source>Check if this attribute shall be mandatory.
+          &lt;br /&gt;NOTE: This will be implicitely active on if you selected "Unique values" in the attribute
+          configuration.
+        </source>
+      </trans-unit>
+      <trans-unit id="alwaysSave.label" resname="alwaysSave.label">
+        <source>Always save</source>
+      </trans-unit>
+      <trans-unit id="alwaysSave.description" resname="alwaysSave.description">
+        <source>If true the field will always be saved, even if its value has not changed.</source>
+      </trans-unit>
+      <trans-unit id="chosen.label" resname="chosen.label">
+        <source>Chosen</source>
+      </trans-unit>
+      <trans-unit id="chosen.description" resname="chosen.description">
+        <source>Enable Chosen graphical select widget.</source>
+      </trans-unit>
+      <trans-unit id="filterable.label" resname="filterable.label">
+        <source>Filterable</source>
+      </trans-unit>
+      <trans-unit id="filterable.description" resname="filterable.description">
+        <source>Check if this attribute shall be available for backend filtering.</source>
+      </trans-unit>
+      <trans-unit id="searchable.label" resname="searchable.label">
+        <source>Searchable</source>
+      </trans-unit>
+      <trans-unit id="searchable.description" resname="searchable.description">
+        <source>Check if this attribute shall be available for backend search.</source>
+      </trans-unit>
+      <trans-unit id="allowHtml.label" resname="allowHtml.label">
+        <source>Do not encode allowed html tags.</source>
+      </trans-unit>
+      <trans-unit id="allowHtml.description" resname="allowHtml.description">
+        <source>If you select this, allowed HTML tags from system settings will not be encoded.</source>
+      </trans-unit>
+      <trans-unit id="preserveTags.label" resname="preserveTags.label">
+        <source>Do not encode all html tags.</source>
+      </trans-unit>
+      <trans-unit id="preserveTags.description" resname="preserveTags.description">
+        <source>If you select this, no HTML tags will be encoded.</source>
+      </trans-unit>
+      <trans-unit id="decodeEntities.label" resname="decodeEntities.label">
+        <source>Decode HTML entities.</source>
+      </trans-unit>
+      <trans-unit id="decodeEntities.description" resname="decodeEntities.description">
+        <source>If you select this, all HTML entities will be decoded. Note that HTML entities are always decoded if "Do
+          not encode allowed html tags" is true.
+        </source>
+      </trans-unit>
+      <trans-unit id="rte.label" resname="rte.label">
+        <source>Enable richtext editor on this</source>
+      </trans-unit>
+      <trans-unit id="rte.description" resname="rte.description">
+        <source>Select the rich text configuration that shall be used on this field (if any).</source>
+      </trans-unit>
+      <trans-unit id="rows.label" resname="rows.label">
+        <source>Rows</source>
+      </trans-unit>
+      <trans-unit id="rows.description" resname="rows.description">
+        <source>Amount of rows to use for longtext/table widget.</source>
+      </trans-unit>
+      <trans-unit id="cols.label" resname="cols.label">
+        <source>Columns</source>
+      </trans-unit>
+      <trans-unit id="cols.description" resname="cols.description">
+        <source>Amount of colums to use for longtext/table widget</source>
+      </trans-unit>
+      <trans-unit id="trailingSlash.label" resname="trailingSlash.label">
+        <source>Trailing slash handling</source>
+      </trans-unit>
+      <trans-unit id="trailingSlash.description" resname="trailingSlash.description">
+        <source>Here you can specify how trailing slashes shall be handled</source>
+      </trans-unit>
+      <trans-unit id="spaceToUnderscore.label" resname="spaceToUnderscore.label">
+        <source>Replace spaces with underscore</source>
+      </trans-unit>
+      <trans-unit id="spaceToUnderscore.description" resname="spaceToUnderscore.description">
+        <source>If true any whitespace character will be replaced by an underscore.</source>
+      </trans-unit>
+      <trans-unit id="includeBlankOption.label" resname="includeBlankOption.label">
+        <source>Include blank option</source>
+      </trans-unit>
+      <trans-unit id="includeBlankOption.description" resname="includeBlankOption.description">
+        <source>if true a blank option will be added to the options which allows to define a &amp;quot;no item selected&amp;quot;
+          option.
+        </source>
+      </trans-unit>
+      <trans-unit id="readonly.label" resname="readonly.label">
+        <source>Read only</source>
+      </trans-unit>
+      <trans-unit id="readonly.description" resname="readonly.description">
+        <source>If true a the widget will be read only and may not be changed.</source>
+      </trans-unit>
+      <trans-unit id="submitOnChange.label" resname="submitOnChange.label">
+        <source>Submit on change</source>
+      </trans-unit>
+      <trans-unit id="submitOnChange.description" resname="submitOnChange.description">
+        <source>If active the form will be submitted when the field value changes.</source>
+      </trans-unit>
+      <trans-unit id="title_legend" resname="title_legend">
+        <source>Type</source>
+      </trans-unit>
+      <trans-unit id="presentation_legend" resname="presentation_legend">
+        <source>Widget appearance related options</source>
+      </trans-unit>
+      <trans-unit id="functions_legend" resname="functions_legend">
+        <source>Functionality related options</source>
+      </trans-unit>
+      <trans-unit id="overview_legend" resname="overview_legend">
+        <source>Filtering and searching in the backend list</source>
+      </trans-unit>
+      <trans-unit id="backend_legend" resname="backend_legend">
+        <source>Backend</source>
+      </trans-unit>
+      <trans-unit id="config_legend" resname="config_legend">
+        <source>Configuration</source>
+      </trans-unit>
+      <trans-unit id="advanced_legend" resname="advanced_legend">
+        <source>Advanced</source>
+      </trans-unit>
+      <trans-unit id="edit.label" resname="edit.label">
+        <source>Edit setting</source>
+      </trans-unit>
+      <trans-unit id="edit.description" resname="edit.description">
+        <source>Edit the setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="cut.label" resname="cut.label">
+        <source>Cut setting definition</source>
+      </trans-unit>
+      <trans-unit id="cut.description" resname="cut.description">
+        <source>Cut the setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="copy.label" resname="copy.label">
+        <source>Copy setting definition</source>
+      </trans-unit>
+      <trans-unit id="copy.description" resname="copy.description">
+        <source>Copy the setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="delete.label" resname="delete.label">
+        <source>Delete setting</source>
+      </trans-unit>
+      <trans-unit id="delete.description" resname="delete.description">
+        <source>Delete the setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="delete.confirm" resname="delete.confirm">
+        <source>Do you really want to delete element ID %id%?</source>
+      </trans-unit>
+      <trans-unit id="conditions.label" resname="conditions.label">
+        <source>Manage visibility conditions</source>
+      </trans-unit>
+      <trans-unit id="conditions.description" resname="conditions.description">
+        <source>Manage the visibility conditions of property ID %id%</source>
+      </trans-unit>
+      <trans-unit id="show.label" resname="show.label">
+        <source>Setting details</source>
+      </trans-unit>
+      <trans-unit id="show.description" resname="show.description">
+        <source>Show details of setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="toggle.label" resname="toggle.label">
+        <source>Toggle</source>
+      </trans-unit>
+      <trans-unit id="toggle.description" resname="toggle.description">
+        <source>Toggle the state of setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="addall.label" resname="addall.label">
+        <source>Add all</source>
+      </trans-unit>
+      <trans-unit id="addall.description" resname="addall.description">
+        <source>Add all attributes to input screen</source>
+      </trans-unit>
+      <trans-unit id="dcatypes.legend" resname="dcatypes.legend">
+        <source>Legend</source>
+      </trans-unit>
+      <trans-unit id="dcatypes.attribute" resname="dcatypes.attribute">
+        <source>Attribute</source>
+      </trans-unit>
+      <trans-unit id="trailingSlash_options.0" resname="trailingSlash_options.0">
+        <source>Strip slash on save</source>
+      </trans-unit>
+      <trans-unit id="trailingSlash_options.1" resname="trailingSlash_options.1">
+        <source>Add slash on save</source>
+      </trans-unit>
+      <trans-unit id="trailingSlash_options.2" resname="trailingSlash_options.2">
+        <source>Do nothing</source>
+      </trans-unit>
+      <trans-unit id="addAll_willadd" resname="addAll_willadd">
+        <source>Will add the attribute "%name%" [%type%, "%colName%"] to the input screen.</source>
+      </trans-unit>
+      <trans-unit id="addAll_alreadycontained" resname="addAll_alreadycontained">
+        <source>Attribute "%name%" [%type%, "%colName%"] is already contained in input screen.</source>
+      </trans-unit>
+      <trans-unit id="addAll_addsuccess" resname="addAll_addsuccess">
+        <source>Added the attribute "%name%" [%type%, "%colName%"] to the input screen.</source>
+      </trans-unit>
+      <trans-unit id="addAll_activate" resname="addAll_activate">
+        <source>Add new settings enabled.</source>
+      </trans-unit>
+      <trans-unit id="addAll_tlclass" resname="addAll_tlclass">
+        <source>Set backend class.</source>
+      </trans-unit>
+      <trans-unit id="mandatory_for_unique_attr" resname="mandatory_for_unique_attr">
+        <source>Unique attribues are automatically mandatory (this is not changable).</source>
+      </trans-unit>
+      <trans-unit id="readonly_for_force_alias" resname="readonly_for_force_alias">
+        <source>Attribues with force alias are automatically readonly (this is not changable).</source>
+      </trans-unit>
+      <trans-unit id="showRecord" resname="showRecord">
+        <source>Show the details of record %id%</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

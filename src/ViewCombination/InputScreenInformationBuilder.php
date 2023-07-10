@@ -62,6 +62,35 @@ class InputScreenInformationBuilder
     }
 
     /**
+     * Fetch information about all input screens.
+     *
+     * @return array
+     *
+     * @throws Exception
+     */
+    public function fetchAllInputScreensForTable(string $tableName): array
+    {
+        $builder = $this->connection->createQueryBuilder();
+        $screens = $builder
+            ->select('d.*')
+            ->from('tl_metamodel_dca', 'd')
+            ->leftJoin('d', 'tl_metamodel', 'm', 'm.id=d.pid')
+            ->where($builder->expr()->in('m.tableName', ':tableName'))
+            ->setParameter('tableName', $tableName)
+            ->orderBy('m.sorting')
+            ->executeQuery()
+            ->fetchAllAssociative();
+
+        $result = [];
+        foreach ($screens as $screen) {
+            $result[$screen['id']] = $this->prepareInputScreen($tableName, $screen);
+            // FIXME: simplify prepareInputScreen to not translate the values inline but define translation keys.
+        }
+
+        return $result;
+    }
+
+    /**
      * Fetch information about an input screen.
      *
      * @param array $idList The ids of the input screens to obtain (table name => id).
@@ -117,7 +146,7 @@ class InputScreenInformationBuilder
             throw new \InvalidArgumentException('Could not retrieve MetaModel ' . $modelName);
         }
         $caption     = ['' => $metaModel->getName()];
-        $description = ['' => $metaModel->getName()];
+        $description = ['' => ''];
         $fallback    = null;
         /**
          * @psalm-suppress DeprecatedMethod

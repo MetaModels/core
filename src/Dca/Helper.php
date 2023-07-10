@@ -26,6 +26,7 @@
 
 namespace MetaModels\Dca;
 
+use Contao\CoreBundle\Intl\Locales;
 use Contao\Folder;
 use Contao\StringUtil;
 use Contao\System;
@@ -127,17 +128,35 @@ class Helper
      * @param IMetaModel          $metaModel  The MetaModel to extract the languages from.
      * @param TranslatorInterface $translator The translator to use.
      *
-     * @return \string[]
+     * @return array<string, string>
      */
     private static function buildLanguageArray(IMetaModel $metaModel, TranslatorInterface $translator)
     {
         $languages = [];
-        /** @psalm-suppress DeprecatedMethod */
-        foreach ((array) $metaModel->getAvailableLanguages() as $langCode) {
-            $languages[$langCode] = $translator->translate('LNG.' . $langCode, 'languages');
+        if ($metaModel instanceof ITranslatedMetaModel) {
+            $intlLocales = System::getContainer()->get('contao.intl.locales');
+            assert($intlLocales instanceof Locales);
+            $labels = $intlLocales->getLocales();
+            foreach ($metaModel->getLanguages() as $langCode) {
+                $languages[$langCode] = $labels[$langCode];
+            }
+
+            return $languages;
         }
 
-        return $languages;
+        /**
+         * @psalm-suppress DeprecatedMethod
+         * @psalm-suppress TooManyArguments
+         */
+        if ($metaModel->isTranslated(false)) {
+            /** @psalm-suppress DeprecatedMethod */
+            foreach ((array) $metaModel->getAvailableLanguages() as $langCode) {
+                $languages[$langCode] = $translator->translate('LNG.' . $langCode, 'contao_languages');
+            }
+            return $languages;
+        }
+
+        throw new \RuntimeException('Should not end up here.');
     }
 
     /**
@@ -195,7 +214,7 @@ class Helper
 
         $rowClasses = [];
         foreach (\array_keys($arrValues) as $langCode) {
-            $rowClasses[] = ($langCode == $fallback) ? 'fallback_language' : 'normal_language';
+            $rowClasses[] = ($langCode === $fallback) ? 'fallback_language' : 'normal_language';
         }
 
         $extra = $property->getExtra();
@@ -227,6 +246,7 @@ class Helper
                 ]
             ],
         ];
+        $extra['useTranslator'] = true;
 
         $property
             ->setWidgetType('multiColumnWizard')

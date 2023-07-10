@@ -48,3 +48,12 @@ services:
             -   name: kernel.event_listener
                 event: dc-general.view.contao2backend.get-paste-root-button
                 method: handleRoot
+
+    MetaModels\CoreBundle\EventListener\DcGeneral\Table\DeleteOperationButtonListener:
+        arguments:
+            - "@cca.dc-general.scope-matcher"
+            - "@translator"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-operation-button
+              method: handle

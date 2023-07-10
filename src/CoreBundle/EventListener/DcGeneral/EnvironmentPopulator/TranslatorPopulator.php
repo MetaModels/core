@@ -21,15 +21,16 @@
 
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\EnvironmentPopulator;
 
-use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
-use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
+use Contao\System;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\Translator\StaticTranslator;
+use ContaoCommunityAlliance\Translator\SymfonyTranslatorBridge;
 use ContaoCommunityAlliance\Translator\TranslatorChain;
 use ContaoCommunityAlliance\Translator\TranslatorInterface;
 use MetaModels\Helper\LocaleUtil;
 use MetaModels\ViewCombination\ViewCombination;
+use Symfony\Contracts\Translation\TranslatorInterface as SymfonyTranslator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -40,29 +41,17 @@ class TranslatorPopulator
     use MetaModelPopulatorTrait;
 
     /**
-     * The event dispatcher.
-     *
-     * @var EventDispatcherInterface
-     */
-    private EventDispatcherInterface $dispatcher;
-
-    /**
-     * The view combination.
-     *
-     * @var ViewCombination
-     */
-    private ViewCombination $viewCombination;
-
-    /**
      * Create a new instance.
      *
      * @param EventDispatcherInterface $dispatcher      The event dispatcher.
      * @param ViewCombination          $viewCombination The view combination.
+     * @param SymfonyTranslator        $translator      The translator.
      */
-    public function __construct(EventDispatcherInterface $dispatcher, ViewCombination $viewCombination)
-    {
-        $this->dispatcher      = $dispatcher;
-        $this->viewCombination = $viewCombination;
+    public function __construct(
+        private EventDispatcherInterface $dispatcher,
+        private ViewCombination $viewCombination,
+        private SymfonyTranslator $translator
+    ) {
     }
 
     /**
@@ -87,23 +76,11 @@ class TranslatorPopulator
         } else {
             $translatorChain = $translator;
         }
+        $translatorChain->add(new SymfonyTranslatorBridge($this->translator));
         $translatorChain->add($translator = new StaticTranslator());
-
-        // Map the tl_metamodel_item domain over to this domain.
-        $this->dispatcher->dispatch(
-            new LoadLanguageFileEvent('tl_metamodel_item'),
-            ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE
-        );
-
         $dataDefinition = $environment->getDataDefinition();
         assert($dataDefinition instanceof ContainerInterface);
-
         $definitionName = $dataDefinition->getName();
-        $this->mapTranslations(
-            $GLOBALS['TL_LANG']['tl_metamodel_item'],
-            $definitionName,
-            $translator
-        );
 
         if (null === $inputScreen = $this->viewCombination->getScreen($definitionName)) {
             return;

@@ -160,7 +160,7 @@ class ModelToLabelListener extends AbstractListener
                 $name,
                 // unique attributes are automatically mandatory.
                 (bool) $model->getProperty('mandatory') || $isUnique
-                    ? ' [' . $this->trans('mandatory.0') . ']'
+                    ? ' [' . $this->trans('mandatory.label') . ']'
                     : '',
                 $model->getProperty('tl_class') ? \sprintf('[%s]', $model->getProperty('tl_class')) : ''
             ]);
@@ -197,7 +197,7 @@ class ModelToLabelListener extends AbstractListener
                 <div class="dca_palette">%s%s</div>')
             ->setArgs([
                 $model->getProperty('published') ? 'published' : 'unpublished',
-                $this->trans('dcatypes.legend'),
+                $this->translator->trans('dcatypes.legend', [], 'tl_metamodel_dcasetting'),
                 $legend,
                 $model->getProperty('legendhide') ? ':hide' : ''
             ]);
@@ -212,6 +212,6 @@ class ModelToLabelListener extends AbstractListener
      */
     private function trans($key)
     {
-        return $this->translator->trans('tl_metamodel_dcasetting.' . $key, [], 'contao_tl_metamodel_dcasetting');
+        return $this->translator->trans($key, [], 'tl_metamodel_dcasetting');
     }
 }

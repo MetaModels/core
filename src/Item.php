@@ -479,7 +479,7 @@ class Item implements IItem
             $arrResult['actions']['jumpTo'] = [
                 'href'  => $jumpTo['url'],
                 'deep'  => $jumpTo['deep'],
-                'label' => $this->getCaptionText('details'),
+                'label' => $jumpTo['label'],
                 'class' => 'details'
             ];
         }
@@ -595,40 +595,6 @@ class Item implements IItem
         }
 
         return $objNewItem;
-    }
-
-
-    /**
-     * Retrieve the translation string for the given lang key.
-     *
-     * In order to achieve the correct caption text, the function tries several translation strings sequentially.
-     * The first language key that is set will win, even if it is to be considered empty.
-     *
-     * This message is looked up in the following order:
-     * 1. $GLOBALS['TL_LANG']['MSC'][<mm tablename>][<render settings id>][$langKey]
-     * 2. $GLOBALS['TL_LANG']['MSC'][<mm tablename>][$langKey]
-     * 3. $GLOBALS['TL_LANG']['MSC'][$langKey]
-     *
-     * @param string $langKey The language key to retrieve.
-     *
-     * @return string
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    private function getCaptionText($langKey)
-    {
-        $tableName = $this->getMetaModel()->getTableName();
-        if (
-            isset($this->objView)
-            && isset($GLOBALS['TL_LANG']['MSC'][$tableName][$this->objView->get('id')][$langKey])
-        ) {
-            return $GLOBALS['TL_LANG']['MSC'][$tableName][$this->objView->get('id')][$langKey];
-        } elseif (isset($GLOBALS['TL_LANG']['MSC'][$tableName][$langKey])) {
-            return $GLOBALS['TL_LANG']['MSC'][$tableName][$langKey];
-        }
-
-        return $GLOBALS['TL_LANG']['MSC'][$langKey];
     }
 
     /**

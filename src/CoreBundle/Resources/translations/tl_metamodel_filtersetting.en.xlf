@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext"
+        original="src/CoreBundle/Resources/translations/tl_metamodel_filtersetting.en.xlf">
+    <body>
+      <trans-unit id="backend-module.headline" resname="backend-module.headline">
+        <source>All filter settings</source>
+      </trans-unit>
+      <trans-unit id="id.label" resname="id.label">
+        <source>Id</source>
+      </trans-unit>
+      <trans-unit id="pid.label" resname="pid.label">
+        <source>Pid</source>
+      </trans-unit>
+      <trans-unit id="sorting.label" resname="sorting.label">
+        <source>Sorting</source>
+      </trans-unit>
+      <trans-unit id="tstamp.label" resname="tstamp.label">
+        <source>Revision date</source>
+      </trans-unit>
+      <trans-unit id="new.label" resname="new.label">
+        <source>New filter setting</source>
+      </trans-unit>
+      <trans-unit id="new.description" resname="new.description">
+        <source>Create a new filter setting</source>
+      </trans-unit>
+      <trans-unit id="all.label" resname="all.label">
+        <source>Edit multiple</source>
+      </trans-unit>
+      <trans-unit id="all.description" resname="all.description">
+        <source>Edit multiple elements at once</source>
+      </trans-unit>
+      <trans-unit id="pastenew.label" resname="pastenew.label">
+        <source>Create a new element at the top</source>
+      </trans-unit>
+      <trans-unit id="pastenew.description" resname="pastenew.description">
+        <source>Create a new element after element ID %id%</source>
+      </trans-unit>
+      <trans-unit id="pasteafter.label" resname="pasteafter.label">
+        <source>Paste at the top</source>
+      </trans-unit>
+      <trans-unit id="pasteafter.description" resname="pasteafter.description">
+        <source>Paste after element ID %id%</source>
+      </trans-unit>
+      <trans-unit id="pasteinto.label" resname="pasteinto.label">
+        <source>Create new setting at the top</source>
+      </trans-unit>
+      <trans-unit id="pasteinto.description" resname="pasteinto.description">
+        <source>Create new into setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="backBT" resname="backBT">
+        <source>Go back</source>
+      </trans-unit>
+      <trans-unit id="backBTTitle" resname="backBTTitle">
+        <source>Back to the previous page</source>
+      </trans-unit>
+      <trans-unit id="list_label.label" resname="list_label.label">
+        <source>Filter settings</source>
+      </trans-unit>
+      <trans-unit id="fid.label" resname="fid.label">
+        <source>Parent collection</source>
+      </trans-unit>
+      <trans-unit id="fid.description" resname="fid.description">
+        <source>The collection of filter settings, this setting belongs to.</source>
+      </trans-unit>
+      <trans-unit id="type.label" resname="type.label">
+        <source>Type</source>
+      </trans-unit>
+      <trans-unit id="type.description" resname="type.description">
+        <source>The type of this setting.</source>
+      </trans-unit>
+      <trans-unit id="enabled.label" resname="enabled.label">
+        <source>Enabled</source>
+      </trans-unit>
+      <trans-unit id="enabled.description" resname="enabled.description">
+        <source>Enable this filter setting.</source>
+      </trans-unit>
+      <trans-unit id="comment.label" resname="comment.label">
+        <source>Comment</source>
+      </trans-unit>
+      <trans-unit id="comment.description" resname="comment.description">
+        <source>A short comment for describing the purpose of this filter setting.</source>
+      </trans-unit>
+      <trans-unit id="attr_id.label" resname="attr_id.label">
+        <source>Attribute</source>
+      </trans-unit>
+      <trans-unit id="attr_id.description" resname="attr_id.description">
+        <source>Attribute this setting relates to.</source>
+      </trans-unit>
+      <trans-unit id="all_langs.label" resname="all_langs.label">
+        <source>Search all languages</source>
+      </trans-unit>
+      <trans-unit id="all_langs.description" resname="all_langs.description">
+        <source>Check if you want to perform the lookup language independant. If this is not checked, only the current
+          active language will be searched.
+        </source>
+      </trans-unit>
+      <trans-unit id="allow_empty.label" resname="allow_empty.label">
+        <source>Allow empty value</source>
+      </trans-unit>
+      <trans-unit id="allow_empty.description" resname="allow_empty.description">
+        <source>Check if you want to allow this filter value to be emtpy, if checked and the parameter holds an empty
+          value, this filter rule will behave as if it was not defined.
+        </source>
+      </trans-unit>
+      <trans-unit id="stop_after_match.label" resname="stop_after_match.label">
+        <source>Stop after first match</source>
+      </trans-unit>
+      <trans-unit id="stop_after_match.description" resname="stop_after_match.description">
+        <source>Check if you want this filter setting to stop executing its child rules after the first subset returned
+          matches.
+        </source>
+      </trans-unit>
+      <trans-unit id="urlparam.label" resname="urlparam.label">
+        <source>URL parameter</source>
+      </trans-unit>
+      <trans-unit id="urlparam.description" resname="urlparam.description">
+        <source>The URL parameter that shall get mapped to the selected attribute. The special &lt;em&gt;"auto_item"&lt;/em&gt;
+          parameter can also be used, this is especially useful for alias columns.
+        </source>
+      </trans-unit>
+      <trans-unit id="predef_param.label" resname="predef_param.label">
+        <source>Static parameter</source>
+      </trans-unit>
+      <trans-unit id="predef_param.description" resname="predef_param.description">
+        <source>Check if you want to be able to set the value of this parameter in the parenting list (modules, content
+          elements, etc.).
+        </source>
+      </trans-unit>
+      <trans-unit id="fe_widget.label" resname="fe_widget.label">
+        <source>Provide Frontend widget</source>
+      </trans-unit>
+      <trans-unit id="fe_widget.description" resname="fe_widget.description">
+        <source>Check if you want to display a filter widget in the Frontend.</source>
+      </trans-unit>
+      <trans-unit id="customsql.label" resname="customsql.label">
+        <source>Custom SQL Query</source>
+      </trans-unit>
+      <trans-unit id="customsql.description" resname="customsql.description">
+        <source>The SQL query that shall be executed, insert tags are supported.</source>
+      </trans-unit>
+      <trans-unit id="label.label" resname="label.label">
+        <source>Label</source>
+      </trans-unit>
+      <trans-unit id="label.description" resname="label.description">
+        <source>Show label instead of attribute name.</source>
+      </trans-unit>
+      <trans-unit id="template.label" resname="template.label">
+        <source>Template</source>
+      </trans-unit>
+      <trans-unit id="template.description" resname="template.description">
+        <source>Sub template for this filter element. Standard: form widget.</source>
+      </trans-unit>
+      <trans-unit id="blankoption.label" resname="blankoption.label">
+        <source>Empty option</source>
+      </trans-unit>
+      <trans-unit id="blankoption.description" resname="blankoption.description">
+        <source>Show empty options in filter widget.</source>
+      </trans-unit>
+      <trans-unit id="onlyused.label" resname="onlyused.label">
+        <source>Assigned values only</source>
+      </trans-unit>
+      <trans-unit id="onlyused.description" resname="onlyused.description">
+        <source>Show only options, that are assigned somewhere in the MetaModel.</source>
+      </trans-unit>
+      <trans-unit id="onlypossible.label" resname="onlypossible.label">
+        <source>Remaining values only</source>
+      </trans-unit>
+      <trans-unit id="onlypossible.description" resname="onlypossible.description">
+        <source>Show only options, that are still assigned somewhere after the actual filter is set.</source>
+      </trans-unit>
+      <trans-unit id="skipfilteroptions.label" resname="skipfilteroptions.label">
+        <source>Ignore this filter for the remaining values</source>
+      </trans-unit>
+      <trans-unit id="skipfilteroptions.description" resname="skipfilteroptions.description">
+        <source>If activate the filter will return all options without itself in the filter rules.</source>
+      </trans-unit>
+      <trans-unit id="hide_label.label" resname="hide_label.label">
+        <source>Hide label in filter widget</source>
+      </trans-unit>
+      <trans-unit id="hide_label.description" resname="hide_label.description">
+        <source>If active, the label is not output.</source>
+      </trans-unit>
+      <trans-unit id="label_as_blankoption.label" resname="label_as_blankoption.label">
+        <source>Use label as blank option</source>
+      </trans-unit>
+      <trans-unit id="label_as_blankoption.description" resname="label_as_blankoption.description">
+        <source>If active, the label output as blank option.</source>
+      </trans-unit>
+      <trans-unit id="apply_sorting.label" resname="apply_sorting.label">
+        <source>Sorting</source>
+      </trans-unit>
+      <trans-unit id="apply_sorting.description" resname="apply_sorting.description">
+        <source>Please enter sorting of values in filter widget.</source>
+      </trans-unit>
+      <trans-unit id="cssID.label" resname="cssID.label">
+        <source>CSS ID/class</source>
+      </trans-unit>
+      <trans-unit id="cssID.description" resname="cssID.description">
+        <source>Here you can set an ID and one or more classes.</source>
+      </trans-unit>
+      <trans-unit id="placeholder.label" resname="placeholder.label">
+        <source>Placeholder</source>
+      </trans-unit>
+      <trans-unit id="placeholder.description" resname="placeholder.description">
+        <source>Show this text as long as the field is empty.</source>
+      </trans-unit>
+      <trans-unit id="sorting_directions.natsort_asc" resname="sorting_directions.natsort_asc">
+        <source>Natural sorting (ASC)</source>
+      </trans-unit>
+      <trans-unit id="sorting_directions.natsort_desc" resname="sorting_directions.natsort_desc">
+        <source>Natural sorting (DESC)</source>
+      </trans-unit>
+      <trans-unit id="defaultid.label" resname="defaultid.label">
+        <source>Default</source>
+      </trans-unit>
+      <trans-unit id="defaultid.description" resname="defaultid.description">
+        <source>Default value for selection.</source>
+      </trans-unit>
+      <trans-unit id="title_legend" resname="title_legend">
+        <source>Type</source>
+      </trans-unit>
+      <trans-unit id="config_legend" resname="config_legend">
+        <source>Configuration</source>
+      </trans-unit>
+      <trans-unit id="fefilter_legend" resname="fefilter_legend">
+        <source>Frontend filter</source>
+      </trans-unit>
+      <trans-unit id="edit.label" resname="edit.label">
+        <source>Edit setting</source>
+      </trans-unit>
+      <trans-unit id="edit.description" resname="edit.description">
+        <source>Edit the filter setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="copy.label" resname="copy.label">
+        <source>Copy filter setting definition</source>
+      </trans-unit>
+      <trans-unit id="copy.description" resname="copy.description">
+        <source>Copy the filter setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="cut.label" resname="cut.label">
+        <source>Cut filter setting definition</source>
+      </trans-unit>
+      <trans-unit id="cut.description" resname="cut.description">
+        <source>Cut the filter setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="delete.label" resname="delete.label">
+        <source>Delete filter setting</source>
+      </trans-unit>
+      <trans-unit id="delete.description" resname="delete.description">
+        <source>Delete the filter setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="delete.confirm" resname="delete.confirm">
+        <source>Do you really want to delete element ID %id%?</source>
+      </trans-unit>
+      <trans-unit id="show.label" resname="show.label">
+        <source>Filter setting details</source>
+      </trans-unit>
+      <trans-unit id="show.description" resname="show.description">
+        <source>Show details of filter setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="toggle.label" resname="toggle.label">
+        <source>Toggle</source>
+      </trans-unit>
+      <trans-unit id="toggle.description" resname="toggle.description">
+        <source>Toggle the state of setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="typenames.idlist" resname="typenames.idlist">
+        <source>Predefined set of items</source>
+      </trans-unit>
+      <trans-unit id="typenames.simplelookup" resname="typenames.simplelookup">
+        <source>Simple lookup</source>
+      </trans-unit>
+      <trans-unit id="typenames.customsql" resname="typenames.customsql">
+        <source>Custom SQL</source>
+      </trans-unit>
+      <trans-unit id="typenames.conditionor" resname="typenames.conditionor">
+        <source>OR condition</source>
+      </trans-unit>
+      <trans-unit id="typenames.conditionand" resname="typenames.conditionand">
+        <source>AND condition</source>
+      </trans-unit>
+      <trans-unit id="typedesc._attribute_" resname="typedesc._attribute_">
+        <source>&lt;em&gt;[%colName%, "%name%"]&lt;/em&gt;</source>
+      </trans-unit>
+      <trans-unit id="typedesc._url_" resname="typedesc._url_">
+        <source>&lt;em&gt;(URL: %urlparam%)&lt;/em&gt;</source>
+      </trans-unit>
+      <trans-unit id="typedesc._comment_" resname="typedesc._comment_">
+        <source>&lt;br /&gt;%comment%</source>
+      </trans-unit>
+      <trans-unit id="typedesc._default_" resname="typedesc._default_">
+        <source>%1$s &lt;strong&gt;%2$s&lt;/strong&gt; %3$s %5$s %4$s</source>
+      </trans-unit>
+      <trans-unit id="typedesc.simplelookup" resname="typedesc.simplelookup">
+        <source>%1$s &lt;strong&gt;%2$s&lt;/strong&gt; %3$s %5$s %4$s</source>
+      </trans-unit>
+      <trans-unit id="typedesc.fefilter" resname="typedesc.fefilter">
+        <source>%1$s &lt;strong&gt;%2$s&lt;/strong&gt; %3$s %4$s</source>
+      </trans-unit>
+      <trans-unit id="typedesc.conditionor" resname="typedesc.conditionor">
+        <source>%1$s &lt;strong&gt;%2$s&lt;/strong&gt; %4$s</source>
+      </trans-unit>
+      <trans-unit id="typedesc.conditionand" resname="typedesc.conditionand">
+        <source>%1$s &lt;strong&gt;%2$s&lt;/strong&gt; %4$s</source>
+      </trans-unit>
+      <trans-unit id="items.label" resname="items.label">
+        <source>Items</source>
+      </trans-unit>
+      <trans-unit id="items.description" resname="items.description">
+        <source>Please enter the IDs of the items for filtering as comma-separated list.</source>
+      </trans-unit>
+      <trans-unit id="deleteConfirm" resname="deleteConfirm">
+        <source>Do you really want to delete filter setting ID %id%?</source>
+      </trans-unit>
+      <trans-unit id="closeAll.label" resname="closeAll.label">
+        <source>Cancel</source>
+      </trans-unit>
+      <trans-unit id="closeAll.description" resname="closeAll.description">
+        <source>Cancel multiple processing.</source>
+      </trans-unit>
+      <trans-unit id="editRecord" resname="editRecord">
+        <source>Edit record %id%</source>
+      </trans-unit>
+      <trans-unit id="save" resname="save">
+        <source>Save</source>
+      </trans-unit>
+      <trans-unit id="saveNclose" resname="saveNclose">
+        <source>Save and close</source>
+      </trans-unit>
+      <trans-unit id="saveNcreate" resname="saveNcreate">
+        <source>Save and new</source>
+      </trans-unit>
+      <trans-unit id="saveNback" resname="saveNback">
+        <source>Save and go back</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

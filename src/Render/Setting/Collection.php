@@ -35,6 +35,7 @@ use MetaModels\IItem;
 use MetaModels\IMetaModel;
 use MetaModels\ITranslatedMetaModel;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Base implementation for render settings.
@@ -188,10 +189,18 @@ class Collection implements ICollection
     private function getJumpToLabel()
     {
         $tableName = $this->metaModel->getTableName();
+        if (
+            null !== ($label = ($GLOBALS['TL_LANG']['MSC'][$tableName][$this->get('id')]['details'] ??
+            ($GLOBALS['TL_LANG']['MSC'][$tableName]['details'] ??
+            ($GLOBALS['TL_LANG']['MSC']['details'] ?? null))))
+        ) {
+            return $label;
+        }
 
-        return ($GLOBALS['TL_LANG']['MSC'][$tableName][$this->get('id')]['details'] ??
-                ($GLOBALS['TL_LANG']['MSC'][$tableName]['details'] ??
-                 $GLOBALS['TL_LANG']['MSC']['details']));
+        $translator = System::getContainer()->get('translator');
+        assert($translator instanceof TranslatorInterface);
+
+        return $translator->trans('details', [], $tableName);
     }
 
     /**

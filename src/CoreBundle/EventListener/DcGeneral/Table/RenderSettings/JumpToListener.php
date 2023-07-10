@@ -178,18 +178,23 @@ class JumpToListener extends AbstractAbstainingListener
 
         /** @psalm-suppress DeprecatedMethod */
         if ($metaModel->isTranslated()) {
+            /** @psalm-suppress DeprecatedMethod */
+            $fallback = $metaModel->getFallbackLanguage();
+
             $arrLanguages = [];
+            $rowClasses   = [];
             /** @psalm-suppress DeprecatedMethod */
             foreach ((array) $metaModel->getAvailableLanguages() as $strLangCode) {
                 $arrLanguages[$strLangCode] = $this->translator
                     ->trans('LNG.' . $strLangCode, [], 'contao_languages');
+                $rowClasses[] = ($strLangCode === $fallback) ? 'fallback_language' : 'normal_language';
             }
-            asort($arrLanguages);
 
             $extra['minCount'] = \count($arrLanguages);
             $extra['maxCount'] = \count($arrLanguages);
 
-            $extra['columnFields']['langcode']['options'] = $arrLanguages;
+            $extra['columnFields']['langcode']['options']            = $arrLanguages;
+            $extra['columnFields']['langcode']['eval']['rowClasses'] = $rowClasses;
         } else {
             $extra['minCount'] = 1;
             $extra['maxCount'] = 1;
@@ -197,9 +202,9 @@ class JumpToListener extends AbstractAbstainingListener
             $extra['columnFields']['langcode']['options'] = [
                 'xx' => $this->translator
                     ->trans(
-                        'tl_metamodel_rendersettings.jumpTo_allLanguages',
+                        'jumpTo_allLanguages',
                         [],
-                        'contao_tl_metamodel_rendersettings'
+                        'tl_metamodel_rendersettings'
                     )
             ];
         }

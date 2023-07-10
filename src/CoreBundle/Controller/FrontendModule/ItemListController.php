@@ -81,7 +81,7 @@ final class ItemListController extends AbstractFrontendModuleController
      */
     protected function getBackendWildcard(ModuleModel $module): Response
     {
-        $name = $this->translator->trans('FMD.' . $this->getType() . '.0', [], 'contao_modules');
+        $name = $this->translator->trans($this->getType(), [], 'metamodels_wildcard');
         $href = $this->router->generate(
             'contao_backend',
             ['do' => 'themes', 'table' => 'tl_module', 'act' => 'edit', 'id' => $module->id]

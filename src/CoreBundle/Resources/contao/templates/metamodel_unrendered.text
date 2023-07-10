@@ -1,4 +1,5 @@
 <?php
+$translator = \Contao\System::getContainer()->get('translator');
 
 $hideLabels = $this->view->get('hideLabels');
 
@@ -7,7 +8,7 @@ if ($this->items->getCount()) {
         foreach ($item['attributes'] as $field => $attribute) {
             if ((isset($item['text'][$field]) && ($value = $item['text'][$field]))) {
                 if (!$hideLabels) {
-                    echo sprintf($GLOBALS['TL_LANG']['MSC']['field_label'], $attribute->getName()) . ' ';
+                    echo trim($translator->trans('field_label', ['%field_label%' => $attribute->getName()], 'metamodels_list')) . ' ';
                 }
                 echo $value . PHP_EOL;
             }

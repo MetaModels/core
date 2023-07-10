@@ -27,7 +27,7 @@
 use ContaoCommunityAlliance\DcGeneral\DC\General;
 
 $GLOBALS['TL_DCA']['tl_metamodel_filter'] = [
-    'config' => [
+    'config'       => [
         'dataContainer'    => General::class,
         'switchToEdit'     => false,
         'enableVersioning' => false,
@@ -38,8 +38,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = [
             ],
         ],
     ],
-
-    'dca_config' => [
+    'dca_config'   => [
         'data_provider'  => [
             'default' => [
                 'source' => 'tl_metamodel_filter'
@@ -97,9 +96,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = [
             ],
         ],
     ],
-
-    'list' => [
-        'sorting' => [
+    'list'         => [
+        'sorting'           => [
             'mode'         => 4,
             'fields'       => [
                 'name'
@@ -110,52 +108,50 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = [
             ],
             'flag'         => 1,
         ],
-
-        'label' => [
+        'label'             => [
             'fields' => [
                 'name'
             ],
             'format' => '%s'
         ],
-
         'global_operations' => [
             'all' => [
-                'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
-                'href'       => 'act=select',
-                'class'      => 'header_edit_all',
-                'attributes' => 'onclick="Backend.getScrollOffset();"'
+                'label'       => 'all.label',
+                'description' => 'all.description',
+                'href'        => 'act=select',
+                'class'       => 'header_edit_all',
+                'attributes'  => 'onclick="Backend.getScrollOffset();"'
             ]
         ],
-
-        'operations' => [
+        'operations'        => [
             'edit'     => [
-                'label' => &$GLOBALS['TL_LANG']['tl_metamodel_filter']['edit'],
-                'href'  => 'act=edit',
-                'icon'  => 'edit.svg'
+                'label'       => 'edit.label',
+                'description' => 'edit.description',
+                'href'        => 'act=edit',
+                'icon'        => 'edit.svg'
             ],
             'delete'   => [
-                'label'      => &$GLOBALS['TL_LANG']['tl_metamodel_filter']['delete'],
-                'href'       => 'act=delete',
-                'icon'       => 'delete.svg',
-                'attributes' => sprintf(
-                    'onclick="if (!confirm(\'%s\')) return false; Backend.getScrollOffset();"',
-                    $GLOBALS['TL_LANG']['tl_metamodel_filter']['deleteConfirm'] ?? ''
-                )
+                'label'       => 'delete.label',
+                'description' => 'delete.description',
+                'href'        => 'act=delete',
+                'icon'        => 'delete.svg',
+                'attributes'  => 'onclick="if (!confirm(this.dataset.msgConfirm)) return false; Backend.getScrollOffset();"',
             ],
             'show'     => [
-                'label' => &$GLOBALS['TL_LANG']['tl_metamodel_filter']['show'],
-                'href'  => 'act=show',
-                'icon'  => 'show.svg'
+                'label'       => 'show.label',
+                'description' => 'show.description',
+                'href'        => 'act=show',
+                'icon'        => 'show.svg'
             ],
             'settings' => [
-                'label'   => &$GLOBALS['TL_LANG']['tl_metamodel_filter']['settings'],
-                'href'    => 'table=tl_metamodel_filtersetting',
-                'idparam' => 'pid',
-                'icon'    => 'bundles/metamodelscore/images/icons/filter_setting.png',
+                'label'       => 'settings.label',
+                'description' => 'settings.description',
+                'href'        => 'table=tl_metamodel_filtersetting',
+                'idparam'     => 'pid',
+                'icon'        => 'bundles/metamodelscore/images/icons/filter_setting.png',
             ],
         ]
     ],
-
     'metapalettes' => [
         'default' => [
             'title' => [
@@ -163,30 +159,30 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = [
             ]
         ],
     ],
-
-    'fields' => [
+    'fields'       => [
         'id'     => [
-            'label' => 'id.0',
+            'label' => 'id.label',
             'sql'   => 'int(10) unsigned NOT NULL auto_increment'
         ],
         'pid'    => [
-            'label' => 'pid.0',
+            'label' => 'pid.label',
             'sql'   => "int(10) unsigned NOT NULL default '0'"
         ],
         'tstamp' => [
-            'label' => 'tstamp.0',
+            'label' => 'tstamp.label',
             'sql'   => "int(10) unsigned NOT NULL default '0'"
         ],
         'name'   => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filter']['name'],
-            'exclude'   => true,
-            'inputType' => 'text',
-            'eval'      => [
+            'label'       => 'name.label',
+            'description' => 'name.description',
+            'exclude'     => true,
+            'inputType'   => 'text',
+            'eval'        => [
                 'mandatory' => true,
                 'maxlength' => 255,
                 'tl_class'  => 'w50'
             ],
-            'sql'       => "varchar(255) NOT NULL default ''"
+            'sql'         => "varchar(255) NOT NULL default ''"
         ],
     ]
 ];

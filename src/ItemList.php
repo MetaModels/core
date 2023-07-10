@@ -53,6 +53,7 @@ use MetaModels\Render\Template;
 use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 use function array_key_exists;
 use function array_keys;
@@ -1099,8 +1100,14 @@ class ItemList
         ) {
             return $GLOBALS['TL_LANG']['MSC'][$tableName][$this->objView->get('id')][$langKey];
         }
+        if (null !== ($caption = $GLOBALS['TL_LANG']['MSC'][$tableName][$langKey] ?? null)) {
+            return $caption;
+        }
 
-        return ($GLOBALS['TL_LANG']['MSC'][$tableName][$langKey] ?? $GLOBALS['TL_LANG']['MSC'][$langKey]);
+        $translator = System::getContainer()->get('translator');
+        assert($translator instanceof TranslatorInterface);
+
+        return $translator->trans($langKey, [], 'metamodels_list');
     }
 
     /**

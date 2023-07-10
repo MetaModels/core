@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="src/CoreBundle/Resources/translations/metamodels_default.en.xlf">
+    <body>
+      <trans-unit id="no_theme" resname="no_theme">
+        <source>global scope</source>
+      </trans-unit>
+      <trans-unit id="fallback" resname="fallback">
+        <source>default</source>
+      </trans-unit>
+      <trans-unit id="template_in_theme" resname="template_in_theme">
+        <source>%template% (%themes%)</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

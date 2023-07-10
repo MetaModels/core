@@ -114,7 +114,7 @@ final class EditMaskSubHeadlineListener
 
         // Translate language key and add headline part.
         $subHeadline =
-            $this->translator->trans('tl_metamodel_item.editRecord', [0 => $headlineAdd], 'contao_tl_metamodel_item');
+            $this->translator->trans('editRecord', ['%item%' => $headlineAdd], $metaModelName);
 
         $event->setHeadline($subHeadline);
     }

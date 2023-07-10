@@ -40,6 +40,8 @@ use MetaModels\Render\Template;
  *
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
  */
 abstract class Base implements IAttribute
 {
@@ -192,7 +194,8 @@ abstract class Base implements IAttribute
             );
         }
 
-        if (\array_key_exists($strLangCode, $arrValues)) {
+        // If empty, use main-language.
+        if (\array_key_exists($strLangCode, $arrValues) && '' !== $arrValues[$strLangCode]) {
             return $arrValues[$strLangCode];
         }
 

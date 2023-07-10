@@ -152,11 +152,13 @@ abstract class AbstractFilterSettingTypeRenderer
     protected function getLabelComment(ModelInterface $model, TranslatorInterface $translator)
     {
         if ($model->getProperty('comment')) {
-            return \sprintf(
-                $translator->translate('typedesc._comment_', 'tl_metamodel_filtersetting'),
-                StringUtil::specialchars($model->getProperty('comment'))
+            return $translator->translate(
+                'typedesc._comment_',
+                'tl_metamodel_filtersetting',
+                ['%comment%' => StringUtil::specialchars($model->getProperty('comment'))]
             );
         }
+
         return '';
     }
 
@@ -262,16 +264,21 @@ abstract class AbstractFilterSettingTypeRenderer
         return [
             $this->getLabelImage($model),
             $this->getLabelText($translator, $model),
-            \sprintf(
-                $translator->translate('typedesc._attribute_', 'tl_metamodel_filtersetting'),
-                $attributeColumnName,
-                $attributeName
+            $translator->translate(
+                'typedesc._attribute_',
+                'tl_metamodel_filtersetting',
+                ['%colName%' => $attributeColumnName, '%name%' => $attributeName],
             ),
             $this->getLabelComment($model, $translator),
-            \sprintf(
-                $translator->translate('typedesc._url_', 'tl_metamodel_filtersetting'),
-                ($model->getProperty('urlparam') ? $model->getProperty('urlparam') : $attributeColumnName)
-            )
+            $translator->translate(
+                'typedesc._url_',
+                'tl_metamodel_filtersetting',
+                [
+                    '%urlparam%' => ($model->getProperty('urlparam')
+                        ? $model->getProperty('urlparam')
+                        : $attributeColumnName)
+                ]
+            ),
         ];
     }
 

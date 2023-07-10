@@ -32,6 +32,7 @@ services:
         arguments:
             - "@event_dispatcher"
             - "@metamodels.view_combination"
+            - "@translator"
         tags:
             - name: kernel.event_listener
               event: dc-general.factory.populate-environment

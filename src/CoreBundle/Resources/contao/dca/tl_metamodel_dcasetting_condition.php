@@ -27,7 +27,8 @@ use ContaoCommunityAlliance\DcGeneral\DC\General;
 $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = [
     'config'                => [
         'dataContainer'    => General::class,
-        'label'            => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['list_label'],
+        'label'            => 'list_label.label',
+        'description'      => 'list_label.description',
         'switchToEdit'     => false,
         'enableVersioning' => false,
         'sql'              => [
@@ -154,45 +155,49 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = [
         ],
         'global_operations' => [
             'all' => [
-                'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
-                'href'       => 'act=select',
-                'class'      => 'header_edit_all',
-                'attributes' => 'onclick="Backend.getScrollOffset();"'
+                'label'       => 'all.label',
+                'description' => 'all.description',
+                'href'        => 'act=select',
+                'class'       => 'header_edit_all',
+                'attributes'  => 'onclick="Backend.getScrollOffset();"'
             ]
         ],
         'operations'        => [
             'edit'   => [
-                'label' => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['edit'],
-                'href'  => 'act=edit',
-                'icon'  => 'edit.svg'
+                'label'       => 'edit.label',
+                'description' => 'edit.description',
+                'href'        => 'act=edit',
+                'icon'        => 'edit.svg'
             ],
             'copy'   => [
-                'label' => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['copy'],
-                'href'  => 'act=copy',
-                'icon'  => 'copy.svg'
+                'label'       => 'copy.label',
+                'description' => 'copy.description',
+                'href'        => 'act=copy',
+                'icon'        => 'copy.svg'
             ],
             'cut'    => [
-                'label'      => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['cut'],
-                'href'       => 'act=paste&amp;mode=cut',
-                'icon'       => 'cut.svg',
-                'attributes' => 'onclick="Backend.getScrollOffset()"',
+                'label'       => 'cut.label',
+                'description' => 'cut.description',
+                'href'        => 'act=paste&amp;mode=cut',
+                'icon'        => 'cut.svg',
+                'attributes'  => 'onclick="Backend.getScrollOffset()"',
             ],
             'delete' => [
-                'label'      => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['delete'],
-                'href'       => 'act=delete',
-                'icon'       => 'delete.svg',
-                'attributes' => sprintf(
-                    'onclick="if (!confirm(\'%s\')) return false; Backend.getScrollOffset();"',
-                    $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['deleteConfirm'] ?? ''
-                )
+                'label'       => 'delete.label',
+                'description' => 'delete.description',
+                'href'        => 'act=delete',
+                'icon'        => 'delete.svg',
+                'attributes'  => 'onclick="if (!confirm(this.dataset.msgConfirm)) return false; Backend.getScrollOffset();"',
             ],
             'show'   => [
-                'label' => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['show'],
-                'href'  => 'act=show',
-                'icon'  => 'show.svg'
+                'label'       => 'show.label',
+                'description' => 'show.description',
+                'href'        => 'act=show',
+                'icon'        => 'show.svg'
             ],
             'toggle' => [
-                'label'          => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['toggle'],
+                'label'          => 'toggle.label',
+                'description'    => 'toggle.description',
                 'icon'           => 'visible.svg',
                 'toggleProperty' => 'enabled',
             ]
@@ -235,29 +240,31 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = [
     ],
     'fields'                => [
         'id'        => [
-            'label' => 'id.0',
+            'label' => 'id.label',
             'sql'   => 'int(10) unsigned NOT NULL auto_increment'
         ],
         'pid'       => [
-            'label' => 'pid.0',
+            'label' => 'pid.label',
             'sql'   => "int(10) unsigned NOT NULL default '0'"
         ],
         'sorting'   => [
-            'label' => 'sorting.0',
+            'label' => 'sorting.label',
             'sql'   => "int(10) unsigned NOT NULL default '0'"
         ],
         'tstamp'    => [
-            'label' => 'tstamp.0',
+            'label' => 'tstamp.label',
             'sql'   => "int(10) unsigned NOT NULL default '0'"
         ],
         'settingId' => [
             // Keep this empty but keep it here!
             // needed for act=copy in DC_Table, as otherwise the fid value will not be copied.
-            'label' => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['fid'],
-            'sql'   => "int(10) unsigned NOT NULL default '0'"
+            'label'       => 'fid.label',
+            'description' => 'fid.description',
+            'sql'         => "int(10) unsigned NOT NULL default '0'"
         ],
         'type'      => [
-            'label'       => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['type'],
+            'label'       => 'type.label',
+            'description' => 'type.description',
             'exclude'     => true,
             'inputType'   => 'select',
             'eval'        => [
@@ -274,30 +281,33 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = [
             'sql'         => "varchar(255) NOT NULL default ''"
         ],
         'enabled'   => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['enabled'],
-            'exclude'   => true,
-            'inputType' => 'checkbox',
-            'default'   => 1,
-            'eval'      => [
+            'label'       => 'enabled.label',
+            'description' => 'enabled.description',
+            'exclude'     => true,
+            'inputType'   => 'checkbox',
+            'default'     => 1,
+            'eval'        => [
                 'alwaysSave' => true,
                 'tl_class'   => 'w50 m12 cbx',
             ],
-            'sql'       => "char(1) NOT NULL default ''"
+            'sql'         => "char(1) NOT NULL default ''"
         ],
         'comment'   => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['comment'],
-            'exclude'   => true,
-            'inputType' => 'text',
-            'eval'      => [
+            'label'       => 'comment.label',
+            'description' => 'comment.description',
+            'exclude'     => true,
+            'inputType'   => 'text',
+            'eval'        => [
                 'tl_class' => 'clr long'
             ],
-            'sql'       => "varchar(255) NOT NULL default ''"
+            'sql'         => "varchar(255) NOT NULL default ''"
         ],
         'attr_id'   => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['attr_id'],
-            'exclude'   => true,
-            'inputType' => 'select',
-            'eval'      => [
+            'label'       => 'attr_id.label',
+            'description' => 'attr_id.description',
+            'exclude'     => true,
+            'inputType'   => 'select',
+            'eval'        => [
                 'doNotSaveEmpty'     => true,
                 'alwaysSave'         => true,
                 'submitOnChange'     => true,
@@ -306,19 +316,20 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = [
                 'tl_class'           => 'w50',
                 'chosen'             => true
             ],
-            'sql'       => "int(10) unsigned NOT NULL default '0'"
+            'sql'         => "int(10) unsigned NOT NULL default '0'"
         ],
         'value'     => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['value'],
-            'exclude'   => true,
-            'inputType' => 'select',
-            'eval'      => [
+            'label'       => 'value.label',
+            'description' => 'value.description',
+            'exclude'     => true,
+            'inputType'   => 'select',
+            'eval'        => [
                 'alwaysSave'         => true,
                 'includeBlankOption' => true,
                 'tl_class'           => 'w50',
                 'chosen'             => true
             ],
-            'sql'       => 'blob NULL'
+            'sql'         => 'blob NULL'
         ],
     ]
 ];

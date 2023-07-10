@@ -83,12 +83,12 @@ final class ResolveLanguageTag
 
             $flags    = \explode('|', $strTag);
             $tag      = \array_shift($flags);
-            $elements = \explode('::', $tag);
+            $elements = \array_merge(\explode('::', $tag), ['']);
 
             $arrCache[$strTag] = '';
 
             if (
-                !empty($elements[1]) &&
+                '' !== $elements[1] &&
                 $this->languageMatches($elements[1]) === (\strtolower($elements[0]) === 'ifnlng')
             ) {
                 for (; $_rit<$_cnt; $_rit+=2) {

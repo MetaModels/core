@@ -119,6 +119,7 @@ class UserListener
      */
     private function buildBackendModules(&$localMenu)
     {
+        return;
         foreach ($this->viewCombination->getStandalone() as $metaModelName => $screen) {
             $section = $screen['meta']['backendsection'];
             if (!isset($localMenu[$section])) {

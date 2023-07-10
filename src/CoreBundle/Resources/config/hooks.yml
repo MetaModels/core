@@ -19,6 +19,7 @@ services:
             - '@database_connection'
             - '@metamodels.template_list'
             - '@request_stack'
+            - '@translator'
         public: true
 
     MetaModels\CoreBundle\Contao\Hooks\ModuleCallback:
@@ -30,6 +31,7 @@ services:
             - '@database_connection'
             - '@metamodels.template_list'
             - '@request_stack'
+            - '@translator'
         public: true
 
     MetaModels\CoreBundle\EventListener\GetSearchablePagesListener:

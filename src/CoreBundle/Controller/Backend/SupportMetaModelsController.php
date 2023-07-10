@@ -89,20 +89,20 @@ class SupportMetaModelsController
                     'stylesheets' => [
                         'bundles/metamodelscore/css/supportscreen.css'
                     ],
-                    'headline' => $this->translator->trans('MOD.support_metamodels.0', [], 'contao_modules'),
+                    'headline' => $this->translator->trans('menu.label', [], 'metamodels_support'),
                     'sub_headline' =>
-                        $this->translator->trans('MSC.metamodels_support.main_headline', [], 'contao_default'),
+                        $this->translator->trans('main_headline', [], 'metamodels_support'),
                     'head_contributor' =>
-                        $this->translator->trans('MSC.metamodels_support.contributor_headline', [], 'contao_default'),
-                    'purpose' => $this->translator->trans('MSC.metamodels_support.purpose', [], 'contao_default'),
+                        $this->translator->trans('contributor_headline', [], 'metamodels_support'),
+                    'purpose' => $this->translator->trans('purpose', [], 'metamodels_support'),
                     'other_donations' =>
-                        $this->translator->trans('MSC.metamodels_support.other_donations', [], 'contao_default'),
+                        $this->translator->trans('other_donations', [], 'metamodels_support'),
                     'main_text' =>
-                        $this->translator->trans('MSC.metamodels_support.main_text', [], 'contao_default'),
+                        $this->translator->trans('main_text', [], 'metamodels_support'),
                     'help_headline' =>
-                        $this->translator->trans('MSC.metamodels_support.help_headline', [], 'contao_default'),
+                        $this->translator->trans('help_headline', [], 'metamodels_support'),
                     'help_text' =>
-                        $this->translator->trans('MSC.metamodels_support.help_text', [], 'contao_default'),
+                        $this->translator->trans('help_text', [], 'metamodels_support'),
                     'github_contributors' => $this->getJsonFile($this->github),
                     'transifex_contributors' => $this->getJsonFile($this->transifex)
                 ]

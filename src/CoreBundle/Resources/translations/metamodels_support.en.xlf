@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext"
+        original="src/CoreBundle/Resources/translations/metamodel_support.en.xlf">
+    <body>
+      <trans-unit id="menu.label" resname="menu.label">
+        <source>Support MetaModels</source>
+      </trans-unit>
+      <trans-unit id="menu.description" resname="menu.description">
+        <source>Support information for the MetaModels extension.</source>
+      </trans-unit>
+      <trans-unit id="main_text" resname="main_text">
+        <source>As the developers of this project, we receive no compensation for our work.
+          Much of our valuable time is freely given to the MetaModels project. Any
+          donations towards the MetaModels project would allow us to work on the
+          project during our working hours, speeding up development significantly.
+          &lt;br /&gt;&lt;br /&gt; We guarantee to spend any donations only on this project.
+          If you have any specific requirements or features requests, you are free
+          to hire a member from our &lt;a target="_blank"
+          href="https://now.metamodel.me/en/about/team"&gt;team&lt;/a&gt;, who will gladly
+          help you.&lt;br /&gt;&lt;br /&gt;A big thanks to all our &lt;a target="_blank"
+          href="https://now.metamodel.me/en/supporters"&gt;existing supporters and
+          sponsors&lt;/a&gt;. Please consider joining our list of sponsors. We could not
+          create such a popular open source project without the support of the
+          community.&lt;br /&gt;&lt;br /&gt;&lt;a target="_blank"
+          href="https://now.metamodel.me/en/supporters/donate"&gt;More informations&lt;/a&gt;
+        </source>
+      </trans-unit>
+      <trans-unit id="main_headline" resname="main_headline">
+        <source>We are calling for your help!</source>
+      </trans-unit>
+      <trans-unit id="contributor_headline" resname="contributor_headline">
+        <source>Thanks to these users for tickets, suggestions and translations</source>
+      </trans-unit>
+      <trans-unit id="purpose" resname="purpose">
+        <source>Purpose</source>
+      </trans-unit>
+      <trans-unit id="other_donations" resname="other_donations">
+        <source>For donations check also our
+          &lt;a target="_blank" href="https://now.metamodel.me/en/supporters/fundraising"&gt;
+          fundraisings&lt;/a&gt; or consider
+          &lt;a target="_blank" href="https://now.metamodel.me/en/supporters/donate"&gt;
+          donating for the manual&lt;/a&gt;.
+        </source>
+      </trans-unit>
+      <trans-unit id="help_headline" resname="help_headline">
+        <source>Help for your MetaModels projects</source>
+      </trans-unit>
+      <trans-unit id="help_text" resname="help_text">
+        <source>On our &lt;a target="_blank" href="https://now.metamodel.me/en/help"&gt;help
+          website as guide to MetaModels&lt;/a&gt; you can find the manual, all support
+          channels, videos tutorials and our newsletter service.&lt;br /&gt;&lt;br /&gt;
+          &lt;a target="_blank" href="https://metamodels.readthedocs.io/en/latest/"&gt;
+          Direct link to the MetaModels manual...&lt;/a&gt;
+        </source>
+      </trans-unit>
+      <trans-unit id="contributor_link" resname="contributor_link">
+        <source>See contributors at github...</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -121,43 +121,47 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = [
         ],
         'global_operations' => [
             'addall' => [
-                'label'      => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addall'],
-                'class'      => 'header_add_all rendersetting_add_all',
-                'attributes' => 'onclick="Backend.getScrollOffset();"'
+                'label'       => 'addall.label',
+                'description' => 'addall.description',
+                'class'       => 'header_add_all rendersetting_add_all',
+                'attributes'  => 'onclick="Backend.getScrollOffset();"'
             ],
             'all'    => [
-                'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
-                'href'       => 'act=select',
-                'class'      => 'header_edit_all',
-                'attributes' => 'onclick="Backend.getScrollOffset();"'
+                'label'       => 'all.label',
+                'description' => 'all.description',
+                'href'        => 'act=select',
+                'class'       => 'header_edit_all',
+                'attributes'  => 'onclick="Backend.getScrollOffset();"'
             ]
         ],
         'operations'        => [
             'edit'   => [
-                'label' => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['edit'],
-                'href'  => 'act=edit',
-                'icon'  => 'edit.svg'
+                'label'       => 'edit.label',
+                'description' => 'edit.description',
+                'href'        => 'act=edit',
+                'icon'        => 'edit.svg'
             ],
             'cut'    => [
-                'label' => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['cut'],
-                'icon'  => 'cut.svg'
+                'label'       => 'cut.label',
+                'description' => 'cut.description',
+                'icon'        => 'cut.svg'
             ],
             'delete' => [
-                'label'      => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['delete'],
-                'href'       => 'act=delete',
-                'icon'       => 'delete.svg',
-                'attributes' => sprintf(
-                    'onclick="if (!confirm(\'%s\')) return false; Backend.getScrollOffset();"',
-                    $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['deleteConfirm'] ?? ''
-                )
+                'label'       => 'delete.label',
+                'description' => 'delete.description',
+                'href'        => 'act=delete',
+                'icon'        => 'delete.svg',
+                'attributes'  => 'onclick="if (!confirm(this.dataset.msgConfirm)) return false; Backend.getScrollOffset();"',
             ],
             'show'   => [
-                'label' => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['show'],
-                'href'  => 'act=show',
-                'icon'  => 'show.svg'
+                'label'       => 'show.label',
+                'description' => 'show.description',
+                'href'        => 'act=show',
+                'icon'        => 'show.svg'
             ],
             'toggle' => [
-                'label'          => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['toggle'],
+                'label'          => 'toggle.label',
+                'description'    => 'toggle.description',
                 'icon'           => 'visible.svg',
                 'toggleProperty' => 'enabled',
             ]
@@ -180,26 +184,27 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = [
     // Fields.
     'fields'       => [
         'id'               => [
-            'label' => 'id.0',
+            'label' => 'id.label',
             'sql'   => 'int(10) unsigned NOT NULL auto_increment'
         ],
         'pid'              => [
-            'label' => 'pid.0',
+            'label' => 'pid.label',
             'sql'   => "int(10) unsigned NOT NULL default '0'"
         ],
         'sorting'          => [
-            'label' => 'sorting.0',
+            'label' => 'sorting.label',
             'sql'   => "int(10) unsigned NOT NULL default '0'"
         ],
         'tstamp'           => [
-            'label' => 'tstamp.0',
+            'label' => 'tstamp.label',
             'sql'   => "int(10) unsigned NOT NULL default '0'"
         ],
         'attr_id'          => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['attr_id'],
-            'exclude'   => true,
-            'inputType' => 'select',
-            'eval'      => [
+            'label'       => 'attr_id.label',
+            'description' => 'attr_id.description',
+            'exclude'     => true,
+            'inputType'   => 'select',
+            'eval'        => [
                 'doNotSaveEmpty'     => true,
                 'alwaysSave'         => true,
                 'submitOnChange'     => true,
@@ -208,32 +213,36 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = [
                 'chosen'             => true,
                 'tl_class'           => 'w50'
             ],
-            'sql'       => "int(10) unsigned NOT NULL default '0'"
+            'sql'         => "int(10) unsigned NOT NULL default '0'"
         ],
         'template'         => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['template'],
-            'exclude'   => true,
-            'inputType' => 'select',
-            'eval'      => [
+            'label'       => 'template.label',
+            'description' => 'template.description',
+            'exclude'     => true,
+            'inputType'   => 'select',
+            'eval'        => [
                 'tl_class'           => 'w50',
                 'chosen'             => true,
                 'includeBlankOption' => true,
             ],
-            'sql'       => "varchar(64) NOT NULL default ''"
+            'sql'         => "varchar(64) NOT NULL default ''"
         ],
         'additional_class' => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['additional_class'],
-            'exclude'   => true,
-            'inputType' => 'text',
-            'eval'      => [
+            'label'       => 'additional_class.label',
+            'description' => 'additional_class.description',
+            'exclude'     => true,
+            'inputType'   => 'text',
+            'eval'        => [
                 'tl_class'  => 'w50',
                 'maxlength' => 64,
             ],
-            'sql'       => "varchar(64) NOT NULL default ''"
+            'sql'         => "varchar(64) NOT NULL default ''"
         ],
         'enabled'          => [
-            'default' => 1,
-            'sql'     => "char(1) NOT NULL default ''"
+            'label'       => 'enabled.label',
+            'description' => 'enabled.description',
+            'default'     => 1,
+            'sql'         => "char(1) NOT NULL default ''"
         ]
     ]
 ];

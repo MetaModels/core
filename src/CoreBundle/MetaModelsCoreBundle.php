@@ -25,6 +25,7 @@ use MetaModels\CoreBundle\DependencyInjection\CompilerPass\CollectDoctrineSchema
 use MetaModels\CoreBundle\DependencyInjection\CompilerPass\CollectFactoriesPass;
 use MetaModels\CoreBundle\DependencyInjection\CompilerPass\CollectSchemaGeneratorsPass;
 use MetaModels\CoreBundle\DependencyInjection\CompilerPass\CollectSchemaManagersPass;
+use MetaModels\CoreBundle\DependencyInjection\CompilerPass\PrepareTranslatorPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -44,5 +45,6 @@ class MetaModelsCoreBundle extends Bundle
         $container->addCompilerPass(new CollectSchemaGeneratorsPass());
         $container->addCompilerPass(new CollectSchemaManagersPass());
         $container->addCompilerPass(new CollectDoctrineSchemaGeneratorsPass());
+        $container->addCompilerPass(new PrepareTranslatorPass());
     }
 }

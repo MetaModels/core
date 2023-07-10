@@ -566,8 +566,10 @@ class Driver implements MultiLanguageDataProviderInterface
      */
     public function isUniqueValue($field, $new, $primaryId = null)
     {
-        $attribute = $this->getMetaModel()?->getAttribute($field);
-        if ($attribute) {
+        $model = $this->getMetaModel();
+        assert($model instanceof IMetaModel);
+        $attribute = $model->getAttribute($field);
+        if (null !== $attribute) {
             $matchingIds = $this
                 ->prepareFilter(
                     $this->getEmptyConfig()->setFilter(

@@ -207,10 +207,10 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
         $arrReturn = $this->getTranslatedDataFor($arrIds, $strActiveLanguage);
 
         // Second round, fetch fallback languages if not all items could be resolved.
-        if ((\count($arrReturn) < \count($arrIds)) && ($strActiveLanguage !== $strFallbackLanguage)) {
+        if (($strActiveLanguage !== $strFallbackLanguage) && (\count($arrReturn) < \count($arrIds))) {
             $arrFallbackIds = [];
             foreach ($arrIds as $intId) {
-                if (empty($arrReturn[$intId])) {
+                if (!\array_key_exists($intId, $arrReturn)) {
                     $arrFallbackIds[] = $intId;
                 }
             }
@@ -223,6 +223,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
                 }
             }
         }
+
         return $arrReturn;
     }
 
@@ -301,6 +302,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
 
         $statement = $queryBuilder->executeQuery();
 
+        // Return value list as list<mixed>, parent function wants a list<string> so we make a cast.
         return \array_map(static fn (mixed $value) => (string) $value, $statement->fetchFirstColumn());
     }
 
@@ -309,9 +311,9 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     public function sortIds($idList, $strDirection)
     {
-        $builder = $this->connection->createQueryBuilder();
-        $expr    = $builder->expr();
-        $builder
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $expr         = $queryBuilder->expr();
+        $queryBuilder
             ->select('IF(t2.item_id IS NOT NULL, t2.item_id, t1.item_id)')
             ->from($this->getValueTable(), 't1')
             ->leftJoin(
@@ -332,7 +334,10 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
             ->setParameter('att_id', $this->get('id'))
             ->setParameter('id_list', \array_unique($idList), ArrayParameterType::STRING);
 
-        return $builder->executeQuery()->fetchFirstColumn();
+        $statement = $queryBuilder->executeQuery();
+
+        // Return value list as list<mixed>, parent function wants a list<string> so we make a cast.
+        return \array_map(static fn(mixed $value) => (string) $value, $statement->fetchFirstColumn());
     }
 
     /**

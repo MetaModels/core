@@ -1,6 +1,10 @@
 parameters:
   metamodels.managed-schema-type-names: []
 services:
+    _defaults:
+      bind:
+        $translator: '@cca.translator.contao_translator'
+
     MetaModels\IFactory: '@metamodels.factory'
     MetaModels\Filter\Setting\IFilterSettingFactory: '@metamodels.filter_setting_factory'
     MetaModels\Render\Setting\IRenderSettingFactory: '@metamodels.render_setting_factory'
@@ -74,6 +78,7 @@ services:
           - "@database_connection"
           - "%contao.resources_paths%"
           - "%kernel.project_dir%"
+          - "@translator"
 
     metamodels.contao_input:
         class: Contao\Input
@@ -141,6 +146,14 @@ services:
         class: MetaModels\CoreBundle\Controller\Backend\RenderSettingAddAllController
         parent: metamodels.controller.abstract.add_all
         tags: ['controller.service_arguments']
+
+    MetaModels\CoreBundle\Controller\Backend\ConfigurationController:
+      tags: ['controller.service_arguments']
+
+    MetaModels\CoreBundle\Controller\Backend\MetaModelController:
+      arguments:
+        - '@contao.menu.backend_builder'
+      tags: ['controller.service_arguments']
 
     metamodels.controller.support_screen:
         class: MetaModels\CoreBundle\Controller\Backend\SupportMetaModelsController
@@ -285,10 +298,20 @@ services:
             - "@contao.image.picture_factory"
             - "@session"
 
+    MetaModels\CoreBundle\Translator\MetaModelTranslatorConfigurator:
+      arguments:
+        $factory: '@metamodels.factory'
+        $cache: '@metamodels.cache_internal'
+
     MetaModels\CoreBundle\Translator\Translator:
       decorates: 'contao.translation.translator'
       arguments:
         - '@MetaModels\CoreBundle\Translator\Translator.inner'
 
     MetaModels\CoreBundle\Translator\MetaModelTranslationLoader:
+      arguments:
+        $baseTranslator: '@contao.translation.translator'
+        $factory: '@metamodels.factory'
+        $viewCombination: '@metamodels.view_combination'
+        $builder: '@metamodels.view_combination.input_screen_information_builder'
       tags: [ { name: translation.loader, alias: 'metamodels' } ]

@@ -61,9 +61,8 @@ class DuplicateModel
         $model = $event->getModel();
 
         $metaModel = $this->factory->getMetaModel($model->getProviderName());
-        assert($metaModel instanceof IMetaModel);
 
-        if (!$metaModel->hasVariants()) {
+        if (null === $metaModel || !$metaModel->hasVariants()) {
             return;
         }
 

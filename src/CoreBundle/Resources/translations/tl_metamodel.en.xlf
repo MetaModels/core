@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="src/CoreBundle/Resources/translations/tl_metamodel.en.xlf">
+    <body>
+      <trans-unit id="backend-module.headline" resname="backend-module.headline">
+        <source>All MetaModels</source>
+      </trans-unit>
+      <trans-unit id="new.label" resname="new.label">
+        <source>New MetaModel</source>
+      </trans-unit>
+      <trans-unit id="new.description" resname="new.description">
+        <source>Create a new MetaModel</source>
+      </trans-unit>
+      <trans-unit id="all.label" resname="all.label">
+        <source>Edit multiple</source>
+      </trans-unit>
+      <trans-unit id="all.description" resname="all.description">
+        <source>Edit multiple elements at once</source>
+      </trans-unit>
+      <trans-unit id="pastenew.label" resname="pastenew.label">
+        <source>Create a new element at the top</source>
+      </trans-unit>
+      <trans-unit id="pastenew.description" resname="pastenew.description">
+        <source>Create a new element after element ID %id%</source>
+      </trans-unit>
+      <trans-unit id="pasteafter.label" resname="pasteafter.label">
+        <source>Paste at the top</source>
+      </trans-unit>
+      <trans-unit id="pasteafter.description" resname="pasteafter.description">
+        <source>Paste after element ID %id%</source>
+      </trans-unit>
+      <trans-unit id="backBT" resname="backBT">
+        <source>Go back</source>
+      </trans-unit>
+      <trans-unit id="backBTTitle" resname="backBTTitle">
+        <source>Back to the previous page</source>
+      </trans-unit>
+      <trans-unit id="showRecord" resname="showRecord">
+          <source>Show the details of record %id%</source>
+      </trans-unit>
+      <trans-unit id="id.label" resname="id.label">
+        <source>Id</source>
+      </trans-unit>
+      <trans-unit id="id.description" resname="id.description">
+        <source>Id of the MetaModel</source>
+      </trans-unit>
+      <trans-unit id="name.label" resname="name.label">
+        <source>Name</source>
+      </trans-unit>
+      <trans-unit id="name.description" resname="name.description">
+        <source>MetaModel name.</source>
+      </trans-unit>
+      <trans-unit id="tstamp.label" resname="tstamp.label">
+        <source>Revision date</source>
+      </trans-unit>
+      <trans-unit id="tstamp.description" resname="tstamp.description">
+        <source>Date and time of the latest revision</source>
+      </trans-unit>
+      <trans-unit id="tableName.label" resname="tableName.label">
+        <source>Table name</source>
+      </trans-unit>
+      <trans-unit id="tableName.description" resname="tableName.description">
+        <source>Name of database table to store items to.</source>
+      </trans-unit>
+      <trans-unit id="mode.label" resname="mode.label">
+        <source>Parent list mode</source>
+      </trans-unit>
+      <trans-unit id="mode.description" resname="mode.description">
+        <source>Mode to use for parent/child relationship.</source>
+      </trans-unit>
+      <trans-unit id="translated.label" resname="translated.label">
+        <source>Translation</source>
+      </trans-unit>
+      <trans-unit id="translated.description" resname="translated.description">
+        <source>Check if this MetaModel shall support translation/multilingualism.</source>
+      </trans-unit>
+      <trans-unit id="languages.label" resname="languages.label">
+        <source>Languages to provide for translation</source>
+      </trans-unit>
+      <trans-unit id="languages.description" resname="languages.description">
+        <source>Specify all languages that shall be available for translation.</source>
+      </trans-unit>
+      <trans-unit id="languages_langcode.label" resname="languages_langcode.label">
+        <source>Language</source>
+      </trans-unit>
+      <trans-unit id="languages_langcode.description" resname="languages_langcode.description">
+        <source>Select the languages you want to provide.</source>
+      </trans-unit>
+      <trans-unit id="languages_isfallback.label" resname="languages_isfallback.label">
+        <source>Fallback language</source>
+      </trans-unit>
+      <trans-unit id="languages_isfallback.description" resname="languages_isfallback.description">
+        <source>Check the language that shall be used as fallback.</source>
+      </trans-unit>
+      <trans-unit id="varsupport.label" resname="varsupport.label">
+        <source>Variant support</source>
+      </trans-unit>
+      <trans-unit id="varsupport.description" resname="varsupport.description">
+        <source>Check if this MetaModel shall support variants of items.</source>
+      </trans-unit>
+      <trans-unit id="localeterritorysupport.label" resname="localeterritorysupport.label">
+        <source>Locale territory support</source>
+      </trans-unit>
+      <trans-unit id="localeterritorysupport.description" resname="localeterritorysupport.description">
+        <source>Check if this MetaModel shall support language territory at locale.</source>
+      </trans-unit>
+      <trans-unit id="sorting.label" resname="sorting.label">
+        <source>Sorting</source>
+      </trans-unit>
+      <trans-unit id="sorting.description" resname="sorting.description">
+        <source>Sorting order of items.</source>
+      </trans-unit>
+      <trans-unit id="title_legend" resname="title_legend">
+        <source>Name and table</source>
+      </trans-unit>
+      <trans-unit id="translated_legend" resname="translated_legend">
+        <source>Translation</source>
+      </trans-unit>
+      <trans-unit id="advanced_legend" resname="advanced_legend">
+        <source>Advanced settings</source>
+      </trans-unit>
+      <trans-unit id="closeAll.label" resname="closeAll.label">
+          <source>Cancel</source>
+      </trans-unit>
+      <trans-unit id="closeAll.description" resname="closeAll.description">
+          <source>Cancel multiple processing.</source>
+      </trans-unit>
+      <trans-unit id="edit.label" resname="edit.label">
+        <source>Manage items</source>
+      </trans-unit>
+      <trans-unit id="edit.description" resname="edit.description">
+        <source>Manage items of MetaModel ID %id%</source>
+      </trans-unit>
+      <trans-unit id="copy.label" resname="copy.label">
+        <source>Copy MetaModel definition</source>
+      </trans-unit>
+      <trans-unit id="copy.description" resname="copy.description">
+        <source>Copy definition of MetaModel ID %id%</source>
+      </trans-unit>
+      <trans-unit id="delete.label" resname="delete.label">
+        <source>Delete MetaModel</source>
+      </trans-unit>
+      <trans-unit id="delete.description" resname="delete.description">
+        <source>Delete MetaModel ID %id%</source>
+      </trans-unit>
+      <trans-unit id="delete.confirm" resname="delete.confirm">
+        <source>Do you really want to delete element ID %id%?</source>
+      </trans-unit>
+      <trans-unit id="show.label" resname="show.label">
+        <source>MetaModel details</source>
+      </trans-unit>
+      <trans-unit id="show.description" resname="show.description">
+        <source>Show details of MetaModel ID %id%</source>
+      </trans-unit>
+      <trans-unit id="editheader.label" resname="editheader.label">
+        <source>Edit MetaModel</source>
+      </trans-unit>
+      <trans-unit id="editheader.description" resname="editheader.description">
+        <source>Edit the MetaModel ID %id%</source>
+      </trans-unit>
+      <trans-unit id="fields.label" resname="fields.label">
+        <source>Define attributes</source>
+      </trans-unit>
+      <trans-unit id="fields.description" resname="fields.description">
+        <source>Define attributes for MetaModel ID %id%</source>
+      </trans-unit>
+      <trans-unit id="filter.label" resname="filter.label">
+        <source>Define filters</source>
+      </trans-unit>
+      <trans-unit id="filter.description" resname="filter.description">
+        <source>Define filters for MetaModel ID %id%</source>
+      </trans-unit>
+      <trans-unit id="rendersettings.label" resname="rendersettings.label">
+        <source>Define render settings</source>
+      </trans-unit>
+      <trans-unit id="rendersettings.description" resname="rendersettings.description">
+        <source>Define render settings for MetaModel ID %id%</source>
+      </trans-unit>
+      <trans-unit id="dca.label" resname="dca.label">
+        <source>Define input screens</source>
+      </trans-unit>
+      <trans-unit id="dca.description" resname="dca.description">
+        <source>Define input screens for MetaModel ID %id%</source>
+      </trans-unit>
+      <trans-unit id="dca_combine.label" resname="dca_combine.label">
+        <source>Define input/output combinations</source>
+      </trans-unit>
+      <trans-unit id="dca_combine.description" resname="dca_combine.description">
+        <source>Define input/output combinations for MetaModel ID %id%</source>
+      </trans-unit>
+      <trans-unit id="cut.label" resname="cut.label">
+        <source>Move MetaModel</source>
+      </trans-unit>
+      <trans-unit id="cut.description" resname="cut.description">
+        <source>Define the order of your MetaModels.</source>
+      </trans-unit>
+      <trans-unit id="searchable_pages.label" resname="searchable_pages.label">
+        <source>Define search settings</source>
+      </trans-unit>
+      <trans-unit id="searchable_pages.description" resname="searchable_pages.description">
+        <source>Define search settings for MetaModel ID %id%</source>
+      </trans-unit>
+      <trans-unit id="itemFormatCount.label" resname="itemFormatCount.label">
+        <source>{-1} Table does not exist, run migration!| {0} No items|{1} 1 item|[2,Inf[ %count% items</source>
+      </trans-unit>
+      <trans-unit id="deleteConfirm" resname="deleteConfirm">
+        <source>Do you really want to delete MetaModel ID %id%?</source>
+      </trans-unit>
+      <trans-unit id="hint_schema_manager" resname="hint_schema_manager">
+        <source>After creating a model, the database must be migrated (console, Contao Manager) - even if the table
+          name is changed. When changing the table name, the user data itself must be transferred.
+        </source>
+      </trans-unit>
+      <trans-unit id="newRecord" resname="newRecord">
+        <source>Create a new item</source>
+      </trans-unit>
+      <trans-unit id="editRecord" resname="editRecord">
+        <source>Edit record %id%</source>
+      </trans-unit>
+      <trans-unit id="save" resname="save">
+        <source>Save</source>
+      </trans-unit>
+      <trans-unit id="saveNclose" resname="saveNclose">
+        <source>Save and close</source>
+      </trans-unit>
+      <trans-unit id="saveNcreate" resname="saveNcreate">
+        <source>Save and new</source>
+      </trans-unit>
+      <trans-unit id="saveNback" resname="saveNback">
+        <source>Save and go back</source>
+      </trans-unit>
+      <trans-unit id="ERR.tableNameNotGiven" resname="ERR.tableNameNotGiven">
+        <source>The table name is not given or empty.</source>
+      </trans-unit>
+      <trans-unit id="ERR.invalidTableName" resname="ERR.invalidTableName">
+        <source>The table name "%table_name%" is invalid.</source>
+      </trans-unit>
+      <trans-unit id="ERR.tableExists" resname="ERR.tableExists">
+        <source>Table "%table_name%" already exists.</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

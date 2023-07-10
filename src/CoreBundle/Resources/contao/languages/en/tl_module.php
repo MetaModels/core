@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -41,7 +41,7 @@ $GLOBALS['TL_LANG']['tl_module']['metamodel_offset'][1]                      =
     'Please specify the offset value (i.e. 10 to skip the first 10 items).';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_limit'][0]                       = 'Maximum number of items';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_limit'][1]                       =
-    'Please enter the maximum number of items. Enter 0 to show all items and therefore disable the pagination.';
+    'Please enter the maximum number of items - enter 0 to show all items.';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_sortby'][0]                      = 'Order by';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_sortby'][1]                      = 'Please choose the sort order.';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_sortby_direction'][0]            = 'Order by direction';
@@ -84,9 +84,9 @@ $GLOBALS['TL_LANG']['tl_module']['metamodel_noparsing'][1]                   =
 $GLOBALS['TL_LANG']['tl_module']['metamodel_page_param_type'][0]             = 'URL-Type for pagination';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_page_param_type'][1]             =
     'Please specify the type of URL parameters als slug (key\value) or GET (key=value).';
-$GLOBALS['TL_LANG']['tl_module']['metamodel_maxpaginationlinks'][0]         =
+$GLOBALS['TL_LANG']['tl_module']['metamodel_maxpaginationlinks'][0]          =
     'Maximum number of pagination links';
-$GLOBALS['TL_LANG']['tl_module']['metamodel_maxpaginationlinks'][1]         =
+$GLOBALS['TL_LANG']['tl_module']['metamodel_maxpaginationlinks'][1]          =
     'Please enter the maximum number pagination links. Enter 0 to show the default value from Contao e.g. 7.';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_pagination'][0]                  =
     'Custom template to use for pagination';
@@ -149,9 +149,3 @@ $GLOBALS['TL_LANG']['tl_module']['metamodel_meta_title'][1]                  =
 $GLOBALS['TL_LANG']['tl_module']['metamodel_meta_description'][0]            = 'Meta Description';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_meta_description'][1]            =
     'Set this attribute as the meta-description of the page.';
-$GLOBALS['TL_LANG']['tl_module']['editmetamodel'][0]                         = 'Edit MetaModel';
-$GLOBALS['TL_LANG']['tl_module']['editmetamodel'][1]                         = 'Edit the MetaModel ID %s.';
-$GLOBALS['TL_LANG']['tl_module']['editrendersetting'][0]                     = 'Edit render setting';
-$GLOBALS['TL_LANG']['tl_module']['editrendersetting'][1]                     = 'Edit the render setting ID %s.';
-$GLOBALS['TL_LANG']['tl_module']['editfiltersetting'][0]                     = 'Edit filter setting';
-$GLOBALS['TL_LANG']['tl_module']['editfiltersetting'][1]                     = 'Edit the filter setting ID %s.';

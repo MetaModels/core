@@ -93,11 +93,7 @@ class DisableReadOnlyListener extends AbstractListener
 
         if ($attribute->get('force_alias')) {
             Message::addInfo(
-                $this->translator->trans(
-                    'tl_metamodel_dcasetting.readonly_for_force_alias',
-                    [],
-                    'contao_tl_metamodel_dcasetting'
-                )
+                $this->translator->trans('readonly_for_force_alias', [], 'tl_metamodel_dcasetting')
             );
 
             $extra = $event->getProperty()->getExtra();

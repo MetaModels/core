@@ -33,7 +33,6 @@ use ContaoCommunityAlliance\DcGeneral\Exception\DcGeneralInvalidArgumentExceptio
 use MetaModels\CoreBundle\Assets\IconBuilder;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\DcGeneral\Events\MetaModel\BuildMetaModelOperationsEvent;
-use MetaModels\Helper\LocaleUtil;
 use MetaModels\IFactory;
 use MetaModels\IMetaModel;
 use MetaModels\ViewCombination\ViewCombination;
@@ -138,14 +137,14 @@ class CommandBuilder
             );
         }
 
-        $this->container   = $container;
+        $this->container = $container;
         $inputScreen = $this->viewCombination->getScreen($container->getName());
         if (null === $inputScreen) {
             return;
         }
         $this->addEditMultipleCommand($view);
         $this->parseModelOperations($view);
-        $this->container   = null;
+        $this->container = null;
 
         if ($this->dispatcher->hasListeners(BuildMetaModelOperationsEvent::NAME)) {
             // @codingStandardsIgnoreStart
@@ -180,9 +179,9 @@ class CommandBuilder
         $commands = $view->getGlobalCommands();
         $command  = new SelectCommand();
         $command
-            ->setName('all')
-            ->setLabel('MSC.all.0')
-            ->setDescription('MSC.all.1');
+            ->setName('editAll')
+            ->setLabel('editAll.label')
+            ->setDescription('editAll.description');
 
         $parameters        = $command->getParameters();
         $parameters['act'] = 'select';
@@ -214,10 +213,8 @@ class CommandBuilder
             ['act' => 'delete'],
             'delete.svg',
             [
-                'attributes' => sprintf(
-                    'onclick="if (!confirm(\'%s\')) return false; Backend.getScrollOffset();"',
-                    $this->translator->trans('MSC.deleteConfirm', [], 'contao_default')
-                )
+                'attributes' =>
+                    'onclick="if (!confirm(this.dataset.msgConfirm)) return false; Backend.getScrollOffset();"',
             ]
         );
         $this->createCommand($collection, 'show', ['act' => 'show'], 'show.svg');
@@ -235,18 +232,14 @@ class CommandBuilder
 
         // Check if we have some children.
         foreach ($this->viewCombination->getChildrenOf($this->container->getName()) as $tableName => $screen) {
-            $metaModel = $this->factory->getMetaModel($tableName);
-            assert($metaModel instanceof IMetaModel);
-            $caption = $this->getChildModelCaption($metaModel, $screen);
-
             $this->createCommand(
                 $collection,
                 'edit_' . $tableName,
                 ['table' => $tableName],
                 $this->iconBuilder->getBackendIcon($screen['meta']['backendicon']),
                 [
-                    'label'       => $caption[0],
-                    'description' => $caption[1],
+                    'label'       => 'metamodel_edit_as_child.' . $tableName . '.label',
+                    'description' => 'metamodel_edit_as_child.' . $tableName . '.description',
                     'idparam'     => 'pid'
                 ]
             );
@@ -254,7 +247,7 @@ class CommandBuilder
     }
 
     /**
-     * Build a command into the the command collection.
+     * Build a command into the command collection.
      *
      * @param CommandCollectionInterface $collection      The command collection.
      * @param string                     $operationName   The operation name.
@@ -280,14 +273,14 @@ class CommandBuilder
         }
 
         if (!$command->getLabel()) {
-            $command->setLabel($operationName . '.0');
+            $command->setLabel($operationName . '.label');
             if (isset($extraValues['label'])) {
                 $command->setLabel($extraValues['label']);
             }
         }
 
         if (!$command->getDescription()) {
-            $command->setDescription($operationName . '.1');
+            $command->setDescription($operationName . '.description');
             if (isset($extraValues['description'])) {
                 $command->setDescription($extraValues['description']);
             }
@@ -334,39 +327,5 @@ class CommandBuilder
         }
 
         return $command;
-    }
-
-    /**
-     * Create the caption text for the child model.
-     *
-     * @param IMetaModel $metaModel The child model.
-     * @param array      $screen    The input screen.
-     *
-     * @return array
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    private function getChildModelCaption(IMetaModel $metaModel, array $screen): array
-    {
-        $caption = [
-            '',
-            \sprintf(
-                $GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label'],
-                $metaModel->getName()
-            )
-        ];
-
-        foreach ($screen['label'] as $langCode => $label) {
-            // @deprecated usage of TL_LANGUAGE - remove for Contao 5.0.
-            if (!empty($label) && $langCode === LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE'])) {
-                $caption = [
-                    $screen['description'][$langCode],
-                    $label
-                ];
-            }
-        }
-
-        return $caption;
     }
 }

@@ -87,39 +87,42 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = [
         ],
         'global_operations' => [
             'all' => [
-                'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
-                'href'       => 'act=select',
-                'class'      => 'header_edit_all',
-                'attributes' => 'onclick="Backend.getScrollOffset();"'
+                'label'       => 'all.label',
+                'description' => 'all.description',
+                'href'        => 'act=select',
+                'class'       => 'header_edit_all',
+                'attributes'  => 'onclick="Backend.getScrollOffset();"'
             ],
         ],
         'operations'        => [
             'edit'   => [
-                'label' => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['edit'],
-                'href'  => 'act=edit',
-                'icon'  => 'edit.svg',
+                'label'       => 'edit.label',
+                'description' => 'edit.description',
+                'href'        => 'act=edit',
+                'icon'        => 'edit.svg',
             ],
             'copy'   => [
-                'label' => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['copy'],
-                'href'  => 'act=copy',
-                'icon'  => 'copy.svg',
+                'label'       => 'copy.label',
+                'description' => 'copy.description',
+                'href'        => 'act=copy',
+                'icon'        => 'copy.svg',
             ],
             'delete' => [
-                'label'      => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['delete'],
-                'href'       => 'act=delete',
-                'icon'       => 'delete.svg',
-                'attributes' => sprintf(
-                    'onclick="if (!confirm(\'%s\')) return false; Backend.getScrollOffset();"',
-                    $GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['deleteConfirm'] ?? ''
-                )
+                'label'       => 'delete.label',
+                'description' => 'delete.description',
+                'href'        => 'act=delete',
+                'icon'        => 'delete.svg',
+                'attributes'  => 'onclick="if (!confirm(this.dataset.msgConfirm)) return false; Backend.getScrollOffset();"',
             ],
             'show'   => [
-                'label' => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['show'],
-                'href'  => 'act=show',
-                'icon'  => 'show.svg'
+                'label'       => 'show.label',
+                'description' => 'show.description',
+                'href'        => 'act=show',
+                'icon'        => 'show.svg'
             ],
             'toggle' => [
-                'label'          => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['toggle'],
+                'label'          => 'toggle.label',
+                'description'    => 'toggle.description',
                 'icon'           => 'visible.svg',
                 'toggleProperty' => 'published'
             ]
@@ -139,71 +142,78 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = [
     ],
     'fields'       => [
         'id'            => [
-            'label' => 'id.0',
+            'label' => 'id.label',
             'sql'   => 'int(10) unsigned NOT NULL auto_increment'
         ],
         'pid'           => [
-            'label' => 'pid.0',
+            'label' => 'pid.label',
             'sql'   => "int(10) unsigned NOT NULL default '0'"
         ],
         'tstamp'        => [
-            'label' => 'tstamp.0',
+            'label' => 'tstamp.label',
             'sql'   => "int(10) unsigned NOT NULL default '0'"
         ],
         'name'          => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['name'],
-            'exclude'   => true,
-            'search'    => true,
-            'inputType' => 'text',
-            'eval'      => [
+            'label'       => 'name.label',
+            'description' => 'name.description',
+            'exclude'     => true,
+            'search'      => true,
+            'inputType'   => 'text',
+            'eval'        => [
                 'mandatory' => true,
                 'maxlength' => 255,
                 'tl_class'  => 'w50'
             ],
-            'sql'       => "varchar(255) NOT NULL default ''"
+            'sql'         => "varchar(255) NOT NULL default ''"
         ],
         'filter'        => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['filter'],
-            'exclude'   => true,
-            'inputType' => 'select',
-            'eval'      => [
+            'label'       => 'filter.label',
+            'description' => 'filter.description',
+            'exclude'     => true,
+            'inputType'   => 'select',
+            'eval'        => [
                 'includeBlankOption' => true,
                 'chosen'             => true,
                 'submitOnChange'     => true,
                 'tl_class'           => 'clr w50',
             ],
-            'sql'       => "int(10) unsigned NOT NULL default '0'"
+            'sql'         => "int(10) unsigned NOT NULL default '0'"
         ],
         'filterparams'  => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['filterparams'],
-            'exclude'   => true,
-            'inputType' => 'mm_subdca',
-            'eval'      => [
+            'label'       => 'filterparams.label',
+            'description' => 'filterparams.description',
+            'exclude'     => true,
+            'inputType'   => 'mm_subdca',
+            'eval'        => [
                 'tl_class'   => 'clr m12',
                 'flagfields' => [
                     'use_get' => [
-                        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['filterparams'],
-                        'inputType' => 'checkbox'
+                        'label'       => 'filterparams.label',
+                        'description' => 'filterparams.description',
+                        'inputType'   => 'checkbox'
                     ],
                 ],
             ],
-            'sql'       => 'longblob NULL'
+            'sql'         => 'longblob NULL'
         ],
         'rendersetting' => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['rendersetting'],
-            'exclude'   => true,
-            'inputType' => 'select',
-            'eval'      => [
+            'label'       => 'rendersetting.label',
+            'description' => 'rendersetting.description',
+            'exclude'     => true,
+            'inputType'   => 'select',
+            'eval'        => [
                 'includeBlankOption' => true,
                 'mandatory'          => true,
                 'chosen'             => true,
                 'tl_class'           => 'w50',
             ],
-            'sql'       => "int(10) unsigned NOT NULL default '0'"
+            'sql'         => "int(10) unsigned NOT NULL default '0'"
         ],
         'published'     => [
-            'default' => 1,
-            'sql'     => "char(1) NOT NULL default '1'"
+            'label'       => 'published.label',
+            'description' => 'published.description',
+            'default'     => 1,
+            'sql'         => "char(1) NOT NULL default '1'"
         ]
     ]
 ];

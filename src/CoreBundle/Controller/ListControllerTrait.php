@@ -432,13 +432,14 @@ trait ListControllerTrait
         // Add CSS file.
         $GLOBALS['TL_CSS'][] = 'bundles/metamodelscore/css/style.css';
 
-        // Retrieve name of MetaModels.
+        // Retrieve name of MetaModel.
         $infoTemplate =
             '<div class="wc_info tl_gray"><span class="wc_label"><abbr title="%s">%s:</abbr></span> %s</div>';
 
         $metaModel = $this->factory->getMetaModel($metaModelName);
         assert($metaModel instanceof IMetaModel);
-        $header    = $name . ': ' . $metaModel->getName();
+
+        $header = $metaModel->getName();
         if ($href) {
             $header .= \sprintf(
                 ' (<a href="%1$s&amp;rt=%2$s" class="tl_gray">ID: %3$s</a>)',
@@ -447,11 +448,11 @@ trait ListControllerTrait
                 (string) $model->id
             );
         }
-        $infoText = \sprintf(
+        $infoText = '### ' . $name . ' ###' . \sprintf(
             $infoTemplate,
-            $this->translator->trans('MSC.mm_be_info_name.1', [], 'contao_default'),
-            $this->translator->trans('MSC.mm_be_info_name.0', [], 'contao_default'),
-            $header
+            $this->translator->trans('mm_be_info_name.description', [], 'metamodels_wildcard'),
+            $this->translator->trans('mm_be_info_name.label', [], 'metamodels_wildcard'),
+            $header,
         );
 
         // Retrieve name of filter.
@@ -469,14 +470,14 @@ trait ListControllerTrait
             if (null !== $infoFi) {
                 $infoText .= \sprintf(
                     $infoTemplate,
-                    $this->translator->trans('MSC.mm_be_info_filter.1', [], 'contao_default'),
-                    $this->translator->trans('MSC.mm_be_info_filter.0', [], 'contao_default'),
+                    $this->translator->trans('mm_be_info_filter.description', [], 'metamodels_wildcard'),
+                    $this->translator->trans('mm_be_info_filter.label', [], 'metamodels_wildcard'),
                     $infoFi . $infoFiPa
                 );
             }
         }
 
-        // Retrieve name of rendersetting.
+        // Retrieve name of render setting.
         /** @psalm-suppress UndefinedMagicPropertyFetch */
         if ($model->metamodel_rendersettings) {
             $infoRs = $this->renderSettingFactory
@@ -485,8 +486,8 @@ trait ListControllerTrait
             if (null !== $infoRs) {
                 $infoText .= \sprintf(
                     $infoTemplate,
-                    $this->translator->trans('MSC.mm_be_info_render_setting.1', [], 'contao_default'),
-                    $this->translator->trans('MSC.mm_be_info_render_setting.0', [], 'contao_default'),
+                    $this->translator->trans('mm_be_info_render_setting.description', [], 'metamodels_wildcard'),
+                    $this->translator->trans('mm_be_info_render_setting.label', [], 'metamodels_wildcard'),
                     $infoRs
                 );
             }

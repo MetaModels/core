@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -40,21 +40,21 @@ class ModelToLabelListener extends AbstractListener
      *
      * @var IAttributeFactory
      */
-    private $attributeFactory;
+    private IAttributeFactory $attributeFactory;
 
     /**
      * The icon builder.
      *
      * @var IconBuilder
      */
-    private $iconBuilder;
+    private IconBuilder $iconBuilder;
 
     /**
      * The translator.
      *
      * @var TranslatorInterface
      */
-    private $translator;
+    private TranslatorInterface $translator;
 
     /**
      * Create a new instance.
@@ -110,7 +110,7 @@ class ModelToLabelListener extends AbstractListener
             $name    = $attribute->getName();
             $colName = $attribute->getColName();
         } else {
-            $type    = $this->trans('error_unknown_id', [$model->getProperty('attr_id')]);
+            $type    = $this->trans('error_unknown_id', ['%id%' => $model->getProperty('attr_id')]);
             $image   = $this->iconBuilder->getBackendIconImageTag('bundles/metamodelscore/images/icons/fields.png');
             $variant = '';
             $name    = $this->trans('error_unknown_attribute');
@@ -137,17 +137,12 @@ class ModelToLabelListener extends AbstractListener
      * Translate a key.
      *
      * @param string $key    The key to translate.
-     *
      * @param array  $params The parameters.
      *
      * @return string
      */
-    private function trans($key, $params = [])
+    private function trans(string $key, array $params = []): string
     {
-        return $this->translator->trans(
-            'tl_metamodel_rendersettings.' . $key,
-            $params,
-            'contao_tl_metamodel_rendersettings'
-        );
+        return $this->translator->trans($key, $params, 'tl_metamodel_rendersettings');
     }
 }

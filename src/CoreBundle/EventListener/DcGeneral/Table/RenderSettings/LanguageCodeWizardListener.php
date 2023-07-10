@@ -92,7 +92,7 @@ class LanguageCodeWizardListener
 
         $urlEvent = new GenerateHtmlEvent(
             'pickpage.svg',
-            $translator->translate('MSC.pagepicker'),
+            $translator->translate('pagePicker', 'dc-general'),
             'style="vertical-middle:top;cursor:pointer"'
         );
 
@@ -106,7 +106,7 @@ class LanguageCodeWizardListener
             ->set('name', $event->getWidget()->name)
             ->set('popupUrl', $pickerUrl)
             ->set('html', ' ' . (string) $urlEvent->getHtml())
-            ->set('label', $event->getProperty()->getLabel()[1])
+            ->set('label', $translator->translate($event->getProperty()->getLabel(), $dataDefinition->getName()))
             ->set('id', $event->getWidget()->id);
 
         $event->getWidget()->wizard = $template->parse();

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="src/CoreBundle/Resources/translations/metamodels_filter.en.xlf">
+    <body>
+      <trans-unit id="simplelookup.label" resname="simplelookup.label">
+        <source>Filter value for attribute "%id%"</source>
+      </trans-unit>
+      <trans-unit id="simplelookup.description" resname="simplelookup.description">
+        <source></source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

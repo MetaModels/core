@@ -124,43 +124,46 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = [
         ],
         'global_operations' => [
             'all' => [
-                'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
-                'href'       => 'act=select',
-                'class'      => 'header_edit_all',
-                'attributes' => 'onclick="Backend.getScrollOffset();"'
+                'label'       => 'all.label',
+                'description' => 'all.description',
+                'href'        => 'act=select',
+                'class'       => 'header_edit_all',
+                'attributes'  => 'onclick="Backend.getScrollOffset();"'
             ]
         ],
         'operations'        => [
             'edit'     => [
-                'label' => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['edit'],
-                'href'  => 'act=edit',
-                'icon'  => 'edit.svg'
+                'label'       => 'edit.label',
+                'description' => 'edit.description',
+                'href'        => 'act=edit',
+                'icon'        => 'edit.svg'
             ],
             'copy'     => [
-                'label' => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['copy'],
-                'href'  => 'act=copy',
-                'icon'  => 'copy.svg'
+                'label'       => 'copy.label',
+                'description' => 'copy.description',
+                'href'        => 'act=copy',
+                'icon'        => 'copy.svg'
             ],
             'delete'   => [
-                'label'      => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['delete'],
-                'href'       => 'act=delete',
-                'icon'       => 'delete.svg',
-                'attributes' => sprintf(
-                    'onclick="if (!confirm(\'%s\')) return false; Backend.getScrollOffset();"',
-                    $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['deleteConfirm'] ?? ''
-                )
+                'label'       => 'delete.label',
+                'description' => 'delete.description',
+                'href'        => 'act=delete',
+                'icon'        => 'delete.svg',
+                'attributes'  => 'onclick="if (!confirm(this.dataset.msgConfirm)) return false; Backend.getScrollOffset();"',
             ],
             'show'     => [
-                'label' => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['show'],
-                'href'  => 'act=show',
-                'icon'  => 'show.svg'
+                'label'       => 'show.label',
+                'description' => 'show.description',
+                'href'        => 'act=show',
+                'icon'        => 'show.svg'
             ],
             'settings' =>
                 [
-                    'label'   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['settings'],
-                    'href'    => 'table=tl_metamodel_rendersetting',
-                    'icon'    => 'bundles/metamodelscore/images/icons/rendersetting.png',
-                    'idparam' => 'pid'
+                    'label'       => 'settings.label',
+                    'description' => 'settings.description',
+                    'href'        => 'table=tl_metamodel_rendersetting',
+                    'icon'        => 'bundles/metamodelscore/images/icons/rendersetting.png',
+                    'idparam'     => 'pid'
                 ],
         ]
     ],
@@ -189,109 +192,122 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = [
     ],
     'fields'       => [
         'id'              => [
-            'label' => 'id.0',
-            'sql' => 'int(10) unsigned NOT NULL auto_increment'
+            'label' => 'id.label',
+            'sql'   => 'int(10) unsigned NOT NULL auto_increment'
         ],
         'pid'             => [
-            'label' => 'pid.0',
-            'sql' => "int(10) unsigned NOT NULL default '0'"
+            'label' => 'pid.label',
+            'sql'   => "int(10) unsigned NOT NULL default '0'"
         ],
         'tstamp'          => [
-            'label' => 'tstamp.0',
-            'sql' => "int(10) unsigned NOT NULL default '0'"
+            'label' => 'tstamp.label',
+            'sql'   => "int(10) unsigned NOT NULL default '0'"
         ],
         'name'            => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['name'],
-            'exclude'   => true,
-            'inputType' => 'text',
-            'eval'      => [
+            'label'       => 'name.label',
+            'description' => 'name.description',
+            'exclude'     => true,
+            'inputType'   => 'text',
+            'eval'        => [
                 'mandatory' => true,
                 'maxlength' => 255,
                 'tl_class'  => 'w50'
             ],
-            'sql'       => "varchar(255) NOT NULL default ''"
+            'sql'         => "varchar(255) NOT NULL default ''"
         ],
         'hideEmptyValues' => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideEmptyValues'],
-            'exclude'   => true,
-            'inputType' => 'checkbox',
-            'eval'      => [
+            'label'       => 'hideEmptyValues.label',
+            'description' => 'hideEmptyValues.description',
+            'exclude'     => true,
+            'inputType'   => 'checkbox',
+            'eval'        => [
                 'tl_class' => 'w50 cbx'
             ],
-            'sql'       => "char(1) NOT NULL default ''"
+            'sql'         => "char(1) NOT NULL default ''"
         ],
         'hideLabels'      => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideLabels'],
-            'exclude'   => true,
-            'inputType' => 'checkbox',
-            'eval'      => [
+            'label'       => 'hideLabels.label',
+            'description' => 'hideLabels.description',
+            'exclude'     => true,
+            'inputType'   => 'checkbox',
+            'eval'        => [
                 'tl_class' => 'w50 cbx'
             ],
-            'sql'       => "char(1) NOT NULL default ''"
+            'sql'         => "char(1) NOT NULL default ''"
         ],
         'template'        => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template'],
-            'default'   => 'metamodel_prerendered',
-            'exclude'   => true,
-            'inputType' => 'select',
-            'eval'      => [
+            'label'       => 'template.label',
+            'description' => 'template.description',
+            'default'     => 'metamodel_prerendered',
+            'exclude'     => true,
+            'inputType'   => 'select',
+            'eval'        => [
                 'includeBlankOption' => true,
                 'tl_class'           => 'w50',
                 'mandatory'          => true,
                 'chosen'             => true
             ],
-            'sql'       => "varchar(64) NOT NULL default ''"
+            'sql'         => "varchar(64) NOT NULL default ''"
         ],
         'format'          => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['format'],
-            'exclude'   => true,
-            'inputType' => 'select',
-            'options'   => [
+            'label'       => 'format.label',
+            'description' => 'format.description',
+            'exclude'     => true,
+            'inputType'   => 'select',
+            'options'     => [
                 'html5',
                 'text'
             ],
-            'reference' => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['formatOptions'],
-            'eval'      => [
+            'reference'   => [
+                'html5' => 'formatOptions.html5',
+                'text'  => 'formatOptions.text',
+            ],
+            'eval'        => [
                 'includeBlankOption' => true,
                 'tl_class'           => 'w50',
                 'chosen'             => true
             ],
-            'sql'       => "varchar(255) NOT NULL default ''"
+            'sql'         => "varchar(255) NOT NULL default ''"
         ],
         'jumpTo'          => [
-            'label'          => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo'],
+            'label'          => 'jumpTo.label',
+            'description'    => 'jumpTo.description',
             'exclude'        => true,
             'minCount'       => 1,
             'maxCount'       => 1,
             'disableSorting' => '1',
             'inputType'      => 'multiColumnWizard',
             'eval'           => [
-                'dragAndDrop'  => false,
-                'hideButtons'  => true,
-                'style'        => 'width:100%;',
-                'tl_class'     => 'clr clx',
-                'columnFields' => [
+                'useTranslator' => true,
+                'dragAndDrop'   => false,
+                'hideButtons'   => true,
+                'style'         => 'width:100%;',
+                'tl_class'      => 'clr clx',
+                'columnFields'  => [
                     'langcode' => [
-                        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_language'],
-                        'exclude'   => true,
-                        'inputType' => 'justtextoption',
-                        'eval'      => [
+                        'label'       => 'jumpTo_language.label',
+                        'description' => 'jumpTo_language.description',
+                        'exclude'     => true,
+                        'inputType'   => 'justtextoption',
+                        'eval'        => [
                             'valign' => 'center'
                         ]
                     ],
                     'value'    => [
-                        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_page'],
-                        'exclude'   => true,
-                        'inputType' => 'text',
-                        'eval'      => [
+                        'label'       => 'jumpTo_page.label',
+                        'description' => 'jumpTo_page.description',
+                        'exclude'     => true,
+                        'inputType'   => 'text',
+                        'eval'        => [
                             'style' => 'width:90%;'
                         ]
                     ],
                     'filter'   => [
-                        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_filter'],
-                        'exclude'   => true,
-                        'inputType' => 'select',
-                        'eval'      => [
+                        'label'       => 'jumpTo_filter.label',
+                        'description' => 'jumpTo_filter.description',
+                        'exclude'     => true,
+                        'inputType'   => 'select',
+                        'eval'        => [
                             'style'              => 'width:100%;',
                             'includeBlankOption' => true,
                             'chosen'             => true
@@ -302,64 +318,72 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = [
             'sql'            => 'blob NULL'
         ],
         'additionalCss'   => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalCss'],
-            'exclude'   => true,
-            'inputType' => 'multiColumnWizard',
-            'eval'      => [
-                'style'        => 'width:100%;',
-                'tl_class'     => 'w50',
-                'columnFields' => [
+            'label'       => 'additionalCss.label',
+            'description' => 'additionalCss.description',
+            'exclude'     => true,
+            'inputType'   => 'multiColumnWizard',
+            'eval'        => [
+                'useTranslator' => true,
+                'style'         => 'width:100%;',
+                'tl_class'      => 'w50',
+                'columnFields'  => [
                     'file'      => [
-                        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['file'],
-                        'exclude'   => true,
-                        'inputType' => 'select',
-                        'eval'      => [
+                        'label'       => 'file.label',
+                        'description' => 'file.description',
+                        'exclude'     => true,
+                        'inputType'   => 'select',
+                        'eval'        => [
                             'style'              => 'width:100%;',
                             'chosen'             => true,
                             'includeBlankOption' => true
                         ]
                     ],
                     'published' => [
-                        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['publish'],
-                        'exclude'   => true,
-                        'inputType' => 'checkbox',
-                        'eval'      => [
+                        'label'       => 'publish.label',
+                        'description' => 'publish.description',
+                        'exclude'     => true,
+                        'inputType'   => 'checkbox',
+                        'eval'        => [
                             'style' => 'width:40px;'
                         ]
                     ],
                 ]
             ],
-            'sql'       => 'blob NULL'
+            'sql'         => 'blob NULL'
         ],
         'additionalJs'    => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalJs'],
-            'exclude'   => true,
-            'inputType' => 'multiColumnWizard',
-            'eval'      => [
-                'style'        => 'width:100%;',
-                'tl_class'     => 'w50',
-                'columnFields' => [
+            'label'       => 'additionalJs.label',
+            'description' => 'additionalJs.description',
+            'exclude'     => true,
+            'inputType'   => 'multiColumnWizard',
+            'eval'        => [
+                'useTranslator' => true,
+                'style'         => 'width:100%;',
+                'tl_class'      => 'w50',
+                'columnFields'  => [
                     'file'      => [
-                        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['file'],
-                        'exclude'   => true,
-                        'inputType' => 'select',
-                        'eval'      => [
+                        'label'       => 'file.label',
+                        'description' => 'file.description',
+                        'exclude'     => true,
+                        'inputType'   => 'select',
+                        'eval'        => [
                             'style'              => 'width:100%;',
                             'chosen'             => true,
                             'includeBlankOption' => true
                         ]
                     ],
                     'published' => [
-                        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['publish'],
-                        'exclude'   => true,
-                        'inputType' => 'checkbox',
-                        'eval'      => [
+                        'label'       => 'publish.label',
+                        'description' => 'publish.description',
+                        'exclude'     => true,
+                        'inputType'   => 'checkbox',
+                        'eval'        => [
                             'style' => 'width:40px;'
                         ]
                     ],
                 ]
             ],
-            'sql'       => 'blob NULL'
+            'sql'         => 'blob NULL'
         ],
     ],
 ];

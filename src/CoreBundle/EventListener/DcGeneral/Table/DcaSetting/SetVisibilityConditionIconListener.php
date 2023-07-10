@@ -27,7 +27,6 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CommandInterface;
 use Contao\Image;
 use Contao\StringUtil;
-use MetaModels\IMetaModel;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -82,9 +81,9 @@ class SetVisibilityConditionIconListener extends AbstractListener
             $command->getName(),
             $event->getHref() ?? '',
             StringUtil::specialchars(
-                \sprintf($command->getDescription(), $model->getID())
+                \sprintf($event->getTitle(), $model->getID())
             ),
-            $this->renderImageAsHtml($event, $icon, $command->getLabel())
+            $this->renderImageAsHtml($event, $icon, $event->getLabel())
         );
 
         $event->setHtml($button);

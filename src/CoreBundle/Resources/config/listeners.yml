@@ -81,6 +81,7 @@ services:
             - '@metamodels.view_combination'
             - '@security.token_storage'
             - '@router'
+            - '@session'
         tags:
             - { name: kernel.event_listener }
 

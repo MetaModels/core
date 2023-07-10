@@ -87,17 +87,17 @@ class TableNamePrefixingListener extends AbstractAbstainingListener
         // See #49 (We can no longer find the correct issue number... :().
         $tableName = \strtolower($event->getValue());
 
+        $translator = $event->getEnvironment()->getTranslator();
+        assert($translator instanceof TranslatorInterface);
+
         if ('' === $tableName) {
-            throw new \RuntimeException('Table name not given');
+            throw new \RuntimeException($translator->translate('ERR.tableNameNotGiven', 'tl_metamodel'));
         }
 
         // Force mm_ prefix.
         if (!\str_starts_with($tableName, 'mm_')) {
             $tableName = 'mm_' . $tableName;
         }
-
-        $translator = $event->getEnvironment()->getTranslator();
-        assert($translator instanceof TranslatorInterface);
 
         // New model, ensure the table does not exist.
         if (!$event->getModel()->getId()) {
@@ -123,14 +123,16 @@ class TableNamePrefixingListener extends AbstractAbstainingListener
             $this->tableManipulator->checkTablename($tableName);
         } catch (InvalidTableNameException $exception) {
             throw new \RuntimeException(
-                \sprintf($translator->translate('ERR.invalidTableName'), $tableName),
+                $translator->translate('ERR.invalidTableName', 'tl_metamodel', ['%table_name%' => $tableName]),
                 $exception->getCode(),
                 $exception
             );
         }
         $model = $this->factory->getMetaModel($tableName);
         if (null !== $model) {
-            throw new \RuntimeException(\sprintf($translator->translate('ERR.tableExists'), $tableName));
+            throw new \RuntimeException(
+                $translator->translate('ERR.tableExists', 'tl_metamodel', ['%table_name%' => $tableName])
+            );
         }
     }
 }

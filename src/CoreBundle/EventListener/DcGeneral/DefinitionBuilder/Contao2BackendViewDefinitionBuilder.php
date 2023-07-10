@@ -184,8 +184,12 @@ class Contao2BackendViewDefinitionBuilder
     {
         assert($this->definition instanceof Contao2BackendViewDefinitionInterface);
         assert($this->metaModel instanceof IMetaModel);
-        assert(\is_array($this->inputScreen));
+        if (null === $this->inputScreen) {
+            return;
+        }
+
         $listing = $this->definition->getListingConfig();
+
 
         if (null === $listing->getRootLabel()) {
             $listing->setRootLabel($this->metaModel->get('name'));

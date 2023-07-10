@@ -32,6 +32,11 @@ use Doctrine\DBAL\Exception;
 use MetaModels\Helper\TableManipulator;
 use MetaModels\IMetaModel;
 
+use function array_map;
+use function is_array;
+use function serialize;
+use function str_replace;
+
 /**
  * Reference implementation for Simple attributes.
  * Simple fields are fields that only consist of one column in the metamodel table and therefore do not need
@@ -117,7 +122,7 @@ class BaseSimple extends Base implements ISimple
      * @param string $strMetaName Name of the meta information that shall be updated.
      * @param mixed $varNewValue The new value for this meta information.
      *
-     * @return \MetaModels\Attribute\IAttribute The instance of this attribute, to support chaining.
+     * @return IAttribute The instance of this attribute, to support chaining.
      *
      * @throws Exception
      *
@@ -163,7 +168,7 @@ class BaseSimple extends Base implements ISimple
                 ->update($strTable, 't')
                 ->where('t.id=:id')
                 ->set('t.' . $strColName, ':' . $strColName)
-                ->setParameter($strColName, \is_array($varData) ? \serialize($varData) : $varData)
+                ->setParameter($strColName, is_array($varData) ? serialize($varData) : $varData)
                 ->setParameter('id', $intId)
                 ->executeQuery();
         }
@@ -202,7 +207,7 @@ class BaseSimple extends Base implements ISimple
 
         $arrResult = [];
         while ($objRow = $statement->fetchAssociative()) {
-            if (\is_array($arrCount)) {
+            if (is_array($arrCount)) {
                 $arrCount[$objRow[$strCol]] = $objRow['mm_count'];
             }
 
@@ -222,14 +227,17 @@ class BaseSimple extends Base implements ISimple
     public function sortIds($idList, $strDirection)
     {
         // Base implementation, do a simple sorting on given column.
-        return $this->connection->createQueryBuilder()
+        $statement = $this->connection
+            ->createQueryBuilder()
             ->select('t.id')
             ->from($this->getMetaModel()->getTableName(), 't')
             ->where('t.id IN (:ids)')
             ->setParameter('ids', $idList, ArrayParameterType::STRING)
             ->orderBy('t.' . $this->getColName(), $strDirection)
-            ->executeQuery()
-            ->fetchFirstColumn();
+            ->executeQuery();
+
+        // Return value list as list<mixed>, parent function wants a list<string> so we make a cast.
+        return array_map(static fn (mixed $value) => (string) $value, $statement->fetchFirstColumn());
     }
 
     /**
@@ -247,17 +255,18 @@ class BaseSimple extends Base implements ISimple
     public function searchFor($strPattern)
     {
         // Base implementation, do a simple search on given column.
-        $strPattern = \str_replace(['*', '?'], ['%', '_'], $strPattern);
+        $strPattern = str_replace(['*', '?'], ['%', '_'], $strPattern);
 
-        $result = $this->connection->createQueryBuilder()
+        $statement = $this->connection
+            ->createQueryBuilder()
             ->select('t.id')
             ->from($this->getMetaModel()->getTableName(), 't')
             ->where('t.' . $this->getColName() . ' LIKE :pattern')
             ->setParameter('pattern', $strPattern)
-            ->executeQuery()
-            ->fetchFirstColumn();
+            ->executeQuery();
 
-        return \array_map(static fn (mixed $value) => (string) $value, $result);
+        // Return value list as list<mixed>, parent function wants a list<string> so we make a cast.
+        return array_map(static fn (mixed $value) => (string) $value, $statement->fetchFirstColumn());
     }
 
     /**

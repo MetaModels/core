@@ -12,6 +12,9 @@
       <directory name="src/CoreBundle/Resources/contao/config"/>
       <directory name="src/CoreBundle/Resources/contao/dca"/>
       <directory name="src/CoreBundle/Resources/contao/languages"/>
+      <directory name="vendor/contao/core-bundle"/>
+      <directory name="vendor/symfony/console"/>
+      <directory name="vendor/symfony/dependency-injection"/>
       <file name="src/Helper/ViewCombinations.php"/>
     </ignoreFiles>
   </projectFiles>
