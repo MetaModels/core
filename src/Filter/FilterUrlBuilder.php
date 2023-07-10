@@ -186,12 +186,14 @@ class FilterUrlBuilder
      * This is mostly based on \Contao\Frontend::getPageIdFromUrl() but stripped off of some checks.
      *
      * Options may be:
-     *   bool postAsSlug  Fields of POST data that shall be added to the slug entries.
-     *                    default: []
-     *   bool postAsGet   Fields of POST data that shall be added to the GET entries.
-     *                    default: []
-     *   bool preserveGet Flag if the GET parameters shall be added to the filter URL.
-     *                    default: true
+     *   bool postAsSlug      Fields of POST data that shall be added to the slug entries.
+     *                        default: []
+     *   bool postAsGet       Fields of POST data that shall be added to the GET entries.
+     *                        default: []
+     *   bool preserveGet     Flag if the GET parameters shall be added to the filter URL.
+     *                        default: true
+     *   bool removeGetOnSlug Flag to remove GET parameters from the filter URL when a same named slug parameter exists.
+     *                        default: true
      *
      * @param FilterUrl  $filterUrl The filter URL to update.
      * @param array|null $options   The options for updating.
@@ -202,9 +204,10 @@ class FilterUrlBuilder
     {
         if (null === $options) {
             $options = [
-                'postAsSlug'  => [],
-                'postAsGet'   => [],
-                'preserveGet' => true
+                'postAsSlug'      => [],
+                'postAsGet'       => [],
+                'preserveGet'     => true,
+                'removeGetOnSlug' => true
             ];
         }
 
@@ -213,7 +216,7 @@ class FilterUrlBuilder
             return;
         }
 
-        if (isset($options['preserveGet'])) {
+        if ($options['preserveGet'] ?? true) {
             foreach ($request->query->all() as $name => $value) {
                 $filterUrl->setGet($name, $value);
             }
@@ -265,10 +268,14 @@ class FilterUrlBuilder
             }
 
             // Decode slashes in slugs - They got encoded in generate() above.
+            $name = $this->decodeForAllowEncodedSlashes($fragments[$i]);
             $filterUrl->setSlug(
-                $this->decodeForAllowEncodedSlashes($fragments[$i]),
-                $this->decodeForAllowEncodedSlashes($fragments[($i + 1)] ?? '')
+                $name,
+                $this->decodeForAllowEncodedSlashes($fragments[($i + 1)])
             );
+            if (($options['removeGetOnSlug'] ?? true) && $filterUrl->hasGet($name)) {
+                $filterUrl->setGet($name, '');
+            }
         }
 
         $this->extractPostData($filterUrl, $options, $request);
