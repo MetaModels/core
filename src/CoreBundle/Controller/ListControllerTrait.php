@@ -182,7 +182,7 @@ trait ListControllerTrait
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function getResponseInternal(Template $template, Model $model, Request $request): ?Response
+    private function getResponseInternal(Template $template, Model $model, Request $request): Response
     {
         if (empty($pageParam = $model->metamodel_page_param)) {
             switch ($model->type) {

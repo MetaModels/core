@@ -96,7 +96,7 @@ final class ItemListController extends AbstractFrontendModuleController
      *
      * @return Response The response.
      */
-    protected function getResponse(Template $template, ModuleModel $model, Request $request): ?Response
+    protected function getResponse(Template $template, ModuleModel $model, Request $request): Response
     {
         return $this->getResponseInternal($template, $model, $request);
     }

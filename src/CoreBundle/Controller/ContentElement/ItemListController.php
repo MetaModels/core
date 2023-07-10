@@ -79,7 +79,7 @@ final class ItemListController extends AbstractContentElementController
      *
      * @return Response The response.
      */
-    protected function getResponse(Template $template, ContentModel $model, Request $request): ?Response
+    protected function getResponse(Template $template, ContentModel $model, Request $request): Response
     {
         $response = $this->getResponseInternal($template, $model, $request);
         $this->addSharedMaxAgeToResponse($response, $model);
