@@ -337,7 +337,7 @@ final class InsertTagsListener
             $outputFormat = 'raw';
         }
 
-        return $arrAttr[$outputFormat];
+        return $arrAttr[$outputFormat] ?? false;
     }
 
     /**
