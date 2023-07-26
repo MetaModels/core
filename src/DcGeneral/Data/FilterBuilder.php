@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,7 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2020 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -276,14 +276,13 @@ class FilterBuilder
      * Calculate a native SQL sub procedure.
      *
      * @param FilterBuilderSql $procedure The procedure to which to append to.
-     *
      * @param array            $children  The children to calculate.
      *
      * @return array
      */
-    protected function buildNativeSqlProcedure(FilterBuilderSql $procedure, $children)
+    protected function buildNativeSqlProcedure(FilterBuilderSql $procedure, $children): array
     {
-        $skipped   = array();
+        $skipped   = [];
         $metaModel = $this->getMetaModel();
         $tableName = $metaModel->getTableName();
         foreach ($children as $child) {
@@ -296,7 +295,7 @@ class FilterBuilder
 
             // Try to parse the sub procedure and extract as much as possible.
             if (('AND' === $child['operation']) || ('OR' === $child['operation'])) {
-                if (null === $child['children']) {
+                if (empty($child['children'])) {
                     continue;
                 }
 
