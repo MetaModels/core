@@ -463,12 +463,18 @@ class FilterUrlBuilder
             $aliases[] = $alias;
         }
 
-        // Check if there are pages with a matching alias - sort by priority desc and id asc.
-        $pages =
-            $this->pageModelAdapter->findByAliases($aliases, ['order' => 'tl_page.routePriority DESC, tl_page.id ASC']);
+        // Check if there are pages with a matching alias - sort by priority desc and alias* desc.
+        // *: You can assume that if folderurl is enabled, the lower hierarchy pages will have a
+        // longer alias string - hence descending sorting.
+        $pages = $this->pageModelAdapter->findByAliases(
+            $aliases,
+            ['order' => 'tl_page.routePriority DESC, tl_page.alias DESC']
+        );
+
         if (null === $pages) {
             return null;
         }
+
         $arrPages = [];
         // Order by domain and language.
         while ($pages->next()) {
