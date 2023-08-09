@@ -5,8 +5,8 @@ services:
     MetaModels\CoreBundle\Contao\InsertTag\ReplaceParam:
         public: false
         arguments:
-            - '@metamodels.contao_input'
-            - '@session'
+            - '@contao.framework'
+            - '@request_stack'
 
     MetaModels\CoreBundle\Contao\InsertTag\ResolveLanguageTag:
         public: false

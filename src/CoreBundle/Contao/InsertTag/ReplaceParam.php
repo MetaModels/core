@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@
  * @author     Oliver Hoff <oliver@hofff.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -27,8 +27,9 @@ declare(strict_types=1);
 namespace MetaModels\CoreBundle\Contao\InsertTag;
 
 use Contao\CoreBundle\Framework\Adapter;
+use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\Input;
-use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * This replaces the insert tag param.
@@ -36,29 +37,36 @@ use Symfony\Component\HttpFoundation\Session\Session;
 final class ReplaceParam
 {
     /**
-     * The input.
+     * The input framework.
      *
-     * @var Input
+     * @var ContaoFramework
      */
-    private $input;
+    private ContaoFramework $framework;
 
     /**
-     * The session.
+     * The adapter.
      *
-     * @var Session
+     * @var Adapter|null
      */
-    private $session;
+    private ?Adapter $input = null;
+
+    /**
+     * The request stack.
+     *
+     * @var RequestStack
+     */
+    private RequestStack $requestStack;
 
     /**
      * ReplaceParam constructor.
      *
-     * @param Adapter $input   The input.
-     * @param Session $session The session.
+     * @param ContaoFramework $framework    The input framework.
+     * @param RequestStack    $requestStack The session.
      */
-    public function __construct(Adapter $input, Session $session)
+    public function __construct(ContaoFramework $framework, RequestStack $requestStack)
     {
-        $this->input   = $input;
-        $this->session = $session;
+        $this->framework    = $framework;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -71,7 +79,7 @@ final class ReplaceParam
      */
     public function replace(string $content): ?string
     {
-        if (false === \strpos($content, '{{')
+        if (!\str_contains($content, '{{')
             || !($tags = preg_split('@\{\{(.*)\}\}@', $content, -1, PREG_SPLIT_DELIM_CAPTURE))
             || (\count($tags) < 2)
         ) {
@@ -111,7 +119,11 @@ final class ReplaceParam
             return $content;
         }
 
-        if ((false === \strpos($tag, '&default='))) {
+        if (null === $this->input) {
+            $this->input = $this->framework->getAdapter(Input::class);
+        }
+
+        if ((!\str_contains($tag, '&default='))) {
             if (null === ($result = $this->input->{$arguments[0]}($arguments[1]))) {
                 return null;
             }
@@ -148,9 +160,9 @@ final class ReplaceParam
             return $content;
         }
 
-        $sessionBag = $this->session->getBag('contao_frontend');
+        $sessionBag = $this->requestStack->getSession()->getBag('contao_frontend');
 
-        if ((false === \strpos($tag, '&default='))) {
+        if ((!\str_contains($tag, '&default='))) {
             $result = $sessionBag->get($arguments[1]);
             return \str_replace(
                 '{{' . $tag . '}}',
@@ -177,12 +189,12 @@ final class ReplaceParam
     private function splitParameter(string $parameter): ?array
     {
         if ((2 !== \count($chunks = \explode('?', $parameter)))
-            || (0 !== \strpos($chunks[1], 'name='))
+            || (!\str_starts_with($chunks[1], 'name='))
         ) {
             return null;
         }
 
-        if (false === \strpos($chunks[1], '&default=')) {
+        if (!\str_contains($chunks[1], '&default=')) {
             return [$chunks[0], \substr($chunks[1], \strlen('name='))];
         }
 
@@ -205,7 +217,7 @@ final class ReplaceParam
     {
         $isSupported = false;
         foreach ($supported as $name) {
-            if (0 !== \strpos($parameter, $name)) {
+            if (!\str_starts_with($parameter, $name)) {
                 continue;
             }
 
