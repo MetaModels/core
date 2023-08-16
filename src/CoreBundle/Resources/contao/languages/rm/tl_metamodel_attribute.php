@@ -1,14 +1,24 @@
 <?php
+
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2023 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/metamodels/language/rm/
+ * Last-updated: 2023-08-16T21:02:07+02:00
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- *
- * last-updated: 2017-08-24T12:42:55+02:00
+ * @copyright 2012-2023 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['advanced_legend']  = 'Configuraziun extendida';
@@ -42,4 +52,3 @@ $GLOBALS['TL_LANG']['tl_metamodel_attribute']['show']['1']        = 'Detagls da 
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['title_legend']     = 'Tip, num e configuraziun da basa d\'attributs';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['type']['0']        = 'Tip da l\'attribut';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['type']['1']        = 'Tscherna il tip da quest attribut. ATTENZIUN: Sche ti midas quai vegnan tut las datas entaifer quest attribut stizzadas!';
-

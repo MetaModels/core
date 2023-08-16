@@ -1,14 +1,24 @@
 <?php
+
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2023 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/metamodels/language/fr/
+ * Last-updated: 2023-08-16T21:02:08+02:00
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- *
- * last-updated: 2015-08-04T04:14:40+02:00
+ * @copyright 2012-2023 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['copy']['0']       = 'Copier le paramêtre de filtre.';
@@ -30,4 +40,3 @@ $GLOBALS['TL_LANG']['tl_metamodel_filter']['show']['1']       = 'Montrer les dé
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['title_legend']    = 'Nom';
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['tstamp']['0']     = 'Date de modification';
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['tstamp']['1']     = 'Date et heure de la dernière modification.';
-
