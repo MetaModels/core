@@ -297,7 +297,7 @@ class PropertyDefinitionBuilder
      */
     private function setWidgetType(PropertyInterface $property, $propInfo)
     {
-        if (null !== $property->getWidgetType() || !isset($propInfo['inputType'])) {
+        if ('' !== $property->getWidgetType() || !isset($propInfo['inputType'])) {
             return;
         }
 
