@@ -352,7 +352,13 @@ class GetSearchablePagesListener
 
         // Get the path.
         if ($path === null) {
-            $event = new GenerateFrontendUrlEvent($pageDetails, null, $pageDetails['language'], true);
+            // Add dummy parameter, because non legacy mode parameter must not be null.
+            $event = new GenerateFrontendUrlEvent(
+                $pageDetails,
+                ($pageDetails['requireItem'] ?? false) ? '/foo/bar' : null,
+                $pageDetails['language'],
+                true
+            );
             $this->dispatcher->dispatch($event, ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL);
             $url->setPath($event->getUrl());
         } else {
