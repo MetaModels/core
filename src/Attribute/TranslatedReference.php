@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,7 +19,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Andreas Fischer <anfischer@kaffee-partner.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -27,6 +27,7 @@
 namespace MetaModels\Attribute;
 
 use Contao\System;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use MetaModels\Filter\Rules\SimpleQuery;
@@ -298,42 +299,30 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     public function sortIds($idList, $strDirection)
     {
-        $langSet = sprintf(
-            '\'%s\',\'%s\'',
-            $this->getActiveLanguage(),
-            $this->getFallbackLanguage()
-        );
+        $builder = $this->connection->createQueryBuilder();
+        $expr    = $builder->expr();
+        $builder
+            ->select('IF(t2.item_id IS NOT NULL, t2.item_id, t1.item_id)')
+            ->from($this->getValueTable(), 't1')
+            ->leftJoin(
+                't1',
+                $this->getValueTable(),
+                't2',
+                $expr
+                    ->andX()
+                    ->add($expr->eq('t1.att_id', 't2.att_id'))
+                    ->add($expr->eq('t1.item_id', 't2.item_id'))
+                    ->add($expr->eq('t2.langcode', ':langcode'))
+            )
+            ->where($expr->eq('t1.att_id', ':att_id'))
+            ->andWhere($expr->in('t1.item_id', ':id_list'))
+            ->andWhere($expr->in('t1.langcode', ':langfallbackcode'))
+            ->setParameter('langcode', $this->getActiveLanguage())
+            ->setParameter('langfallbackcode', $this->getFallbackLanguage())
+            ->setParameter('att_id', $this->get('id'))
+            ->setParameter('id_list', \array_unique($idList), ArrayParameterType::STRING);
 
-        $statement = $this->connection
-            ->executeQuery(
-                sprintf(
-                    'SELECT t1.item_id
-                       FROM %1$s AS t1
-                       INNER JOIN %1$s as t3 ON (t1.id = (SELECT
-                           t2.id
-                           FROM %1$s AS t2
-                           WHERE (t2.att_id=%2$s)
-                           AND langcode IN (%3$s)
-                           AND (t2.item_id=t1.item_id)
-                           ORDER BY FIELD(t2.langcode,%3$s)
-                           LIMIT 1
-                       ))
-                       WHERE (t1.item_id IN (?))
-                       AND (t3.item_id IN (?))
-                       GROUP BY t1.id
-                       ORDER BY t1.value %4$s',
-                    // @codingStandardsIgnoreStart - we want to keep the numbers at the end of the lines below.
-                    $this->getValueTable(),                    // 1
-                    $this->get('id'),                          // 2
-                    $langSet,                                  // 3
-                    $strDirection                              // 4
-                    // @codingStandardsIgnoreEnd
-                ),
-                [$idList, $idList],
-                [Connection::PARAM_STR_ARRAY, Connection::PARAM_STR_ARRAY]
-            );
-
-        return $statement->fetchFirstColumn();
+        return $builder->executeQuery()->fetchFirstColumn();
     }
 
     /**
