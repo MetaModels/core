@@ -406,12 +406,13 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = [
         ],
     ],
     'fields'          => [
-        'id'         =>
-            [
-                'sql' => 'int(10) unsigned NOT NULL auto_increment'
-            ],
+        'id'         => [
+            'label' => &$GLOBALS['TL_LANG']['tl_metamodel']['id'],
+            'sql'   => 'int(10) unsigned NOT NULL auto_increment'
+        ],
         'tstamp'     => [
-            'sql' => "int(10) unsigned NOT NULL default '0'"
+            'label' => &$GLOBALS['TL_LANG']['tl_metamodel']['tstamp'],
+            'sql'   => "int(10) unsigned NOT NULL default '0'"
         ],
         'sorting'    => [
             'label'   => &$GLOBALS['TL_LANG']['tl_metamodel']['sorting'],
@@ -449,9 +450,6 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = [
                 'doNotOverrideMultiple' => true
             ],
             'sql'       => "varchar(64) NOT NULL default ''"
-        ],
-        'mode'       => [
-            'sql' => "int(1) unsigned NOT NULL default '1'"
         ],
         'translated' => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel']['translated'],

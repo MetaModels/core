@@ -21,6 +21,8 @@
  * @filesource
  */
 
+$GLOBALS['TL_LANG']['tl_metamodel']['id'][0]                     = 'Id';
+$GLOBALS['TL_LANG']['tl_metamodel']['id'][1]                     = 'Id of the MetaModel';
 $GLOBALS['TL_LANG']['tl_metamodel']['name'][0]                   = 'Name';
 $GLOBALS['TL_LANG']['tl_metamodel']['name'][1]                   = 'MetaModel name.';
 $GLOBALS['TL_LANG']['tl_metamodel']['tstamp'][0]                 = 'Revision date';
