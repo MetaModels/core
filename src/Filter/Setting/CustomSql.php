@@ -52,42 +52,42 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      *
      * @var ICollection
      */
-    private $collection = null;
+    private ?ICollection $collection = null;
 
     /**
      * The attributes of this filter setting.
      *
      * @var array
      */
-    private $data = [];
+    private array $data = [];
 
     /**
      * The filter params (should be an array or null).
      *
      * @var array
      */
-    private $filterParameters;
+    private array $filterParameters;
 
     /**
      * The query string.
      *
      * @var string
      */
-    private $queryString;
+    private string $queryString;
 
     /**
      * The query parameters.
      *
      * @var array
      */
-    private $queryParameter;
+    private array $queryParameter;
 
     /**
      * The service container.
      *
      * @var ContainerInterface
      */
-    private $container;
+    private ContainerInterface $container;
 
     /**
      * Constructor - initialize the object and store the parameters.
@@ -174,9 +174,9 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     {
         $arrParams = [];
 
-        preg_match_all('@\{\{param::filter\?([^}]*)\}\}@', $this->get('customsql'), $arrMatches);
+        \preg_match_all('@\{\{param::filter\?([^}]*)\}\}@', $this->get('customsql'), $arrMatches);
         foreach ($arrMatches[1] as $strQuery) {
-            parse_str($strQuery, $arrArgs);
+            \parse_str($strQuery, $arrArgs);
             if (isset($arrArgs['name'])) {
                 $arrName     = (array) $arrArgs['name'];
                 $arrParams[] = $arrName[0];
@@ -263,7 +263,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
             return;
         }
 
-        $this->queryParameter = array_merge($this->queryParameter, $parameters);
+        $this->queryParameter = \array_merge($this->queryParameter, $parameters);
     }
 
     /**
@@ -307,8 +307,8 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
         }
 
         $service = $this->container->get(IMetaModelsServiceContainer::class)->getService($serviceName);
-        if (is_callable($service)) {
-            return call_user_func($service, $valueName, $arguments);
+        if (\is_callable($service)) {
+            return \call_user_func($service, $valueName, $arguments);
         }
 
         return 'NULL';
@@ -328,7 +328,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      */
     private function getValueFromSource(string $source, string $valueName, array $arguments)
     {
-        switch (strtolower($source)) {
+        switch (\strtolower($source)) {
             case 'get':
             case 'post':
             case 'cookie':
@@ -336,7 +336,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
                 return $this->executeInsertTagReplaceParam($source, $arguments);
 
             case 'filter':
-                if (is_array($this->filterParameters)) {
+                if (\is_array($this->filterParameters)) {
                     if (\array_key_exists($valueName, $this->filterParameters)) {
                         return $this->filterParameters[$valueName];
                     }
@@ -392,7 +392,6 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      * Convert a parameter using an aggregate function.
      *
      * @param array $var       The parameter value.
-     *
      * @param array $arguments The arguments of the parameter.
      *
      * @return string
@@ -413,6 +412,10 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
             return 'NULL';
         }
 
+        if ($arguments['aggregate'] === 'list') {
+            $var = \array_merge(...\array_map(static fn ($value) => \explode(',', $value), $var));
+        }
+
         if (!empty($arguments['key'])) {
             $var = \array_keys($var);
         } else {
@@ -420,7 +423,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
             $var = \array_values($var);
         }
 
-        if ($arguments['aggregate'] == 'set') {
+        if (!\in_array($arguments['aggregate'], ['set', 'list'], true)) {
             $this->addParameter(implode(',', $var));
 
             return '?';
@@ -440,15 +443,15 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      */
     private function convertParameter(string $strMatch): string
     {
-        list($strSource, $strQuery) = explode('?', $strMatch, 2);
-        parse_str($strQuery, $arrArgs);
+        list($strSource, $strQuery) = \explode('?', $strMatch, 2);
+        \parse_str($strQuery, $arrArgs);
         $arrName = (array) $arrArgs['name'];
 
-        $var = $this->getValueFromSource($strSource, array_shift($arrName), $arrArgs);
+        $var = $this->getValueFromSource($strSource, \array_shift($arrName), $arrArgs);
 
         $index = 0;
-        $count = count($arrName);
-        while ($index < $count && is_array($var)) {
+        $count = \count($arrName);
+        while ($index < $count && \is_array($var)) {
             $var = $var[$arrName[$index++]];
         }
 
