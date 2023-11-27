@@ -53,7 +53,7 @@ class SimpleLookup extends Simple
         if ($objAttribute) {
             $paramName = $objAttribute->getColName();
             // Work around #1505.
-            if ($paramName === 'language') {
+            if (\in_array($paramName, ['language', 'items'], true)) {
                 $paramName .= '__';
             }
 
