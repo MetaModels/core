@@ -51,7 +51,13 @@ class SimpleLookup extends Simple
 
         $objAttribute = $this->getFilteredAttribute();
         if ($objAttribute) {
-            return $objAttribute->getColName();
+            $paramName = $objAttribute->getColName();
+            // Work around #1505.
+            if ($paramName === 'language') {
+                $paramName .= '__';
+            }
+
+            return $paramName;
         }
 
         return null;
