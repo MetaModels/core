@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -64,7 +64,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_sort
 $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_parameters';
 
 // Insert new Subpalettes after position 1.
-array_insert(
+\array_insert(
     $GLOBALS['TL_DCA']['tl_content']['subpalettes'],
     1,
     [
@@ -75,7 +75,7 @@ array_insert(
 );
 
 // Fields.
-array_insert(
+\array_insert(
     $GLOBALS['TL_DCA']['tl_content']['fields'],
     1,
     [

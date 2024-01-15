@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,7 +20,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -255,17 +255,21 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
     ],
     'fields'                => [
         'id'                   => [
-            'sql' => 'int(10) unsigned NOT NULL auto_increment'
+            'label' => 'id.0',
+            'sql'   => 'int(10) unsigned NOT NULL auto_increment'
         ],
         'pid'                  => [
-            'sql' => "int(10) unsigned NOT NULL default '0'"
+            'label' => 'pid.0',
+            'sql'   => "int(10) unsigned NOT NULL default '0'"
         ],
         'sorting'              => [
+            'label'   => 'sorting.0',
             'sorting' => true,
             'sql'     => "int(10) unsigned NOT NULL default '0'"
         ],
         'tstamp'               => [
-            'sql' => "int(10) unsigned NOT NULL default '0'"
+            'label' => 'tstamp.0',
+            'sql'   => "int(10) unsigned NOT NULL default '0'"
         ],
         'fid'                  => [
             // Keep this empty but keep it here!

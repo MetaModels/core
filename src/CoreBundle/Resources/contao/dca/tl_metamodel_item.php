@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -39,7 +39,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = [
             ]
         ],
     ],
-    'list' => [
+    'list'       => [
         'sorting' => [
             // This means: 1 default sorting value, 2 switchable sorting value.
             'mode'         => 1,
@@ -54,7 +54,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = [
             'format' => '%s',
         ],
     ],
-    'fields' => [
+    'fields'     => [
         'id'      => [
             'label' => 'id.0',
         ],
