@@ -406,21 +406,21 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = [
         ],
     ],
     'fields'          => [
-        'id'         => [
+        'id'                     => [
             'label' => &$GLOBALS['TL_LANG']['tl_metamodel']['id'],
             'sql'   => 'int(10) unsigned NOT NULL auto_increment'
         ],
-        'tstamp'     => [
+        'tstamp'                 => [
             'label' => &$GLOBALS['TL_LANG']['tl_metamodel']['tstamp'],
             'sql'   => "int(10) unsigned NOT NULL default '0'"
         ],
-        'sorting'    => [
+        'sorting'                => [
             'label'   => &$GLOBALS['TL_LANG']['tl_metamodel']['sorting'],
             'sorting' => true,
             'flag'    => 11,
             'sql'     => "int(10) unsigned NOT NULL default '0'"
         ],
-        'name'       => [
+        'name'                   => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel']['name'],
             'sorting'   => true,
             'flag'      => 3,
@@ -435,7 +435,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = [
             ],
             'sql'       => "varchar(255) NOT NULL default ''"
         ],
-        'tableName'  => [
+        'tableName'              => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel']['tableName'],
             'sorting'   => true,
             'exclude'   => true,
@@ -451,7 +451,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = [
             ],
             'sql'       => "varchar(64) NOT NULL default ''"
         ],
-        'translated' => [
+        'translated'             => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel']['translated'],
             'exclude'   => true,
             'inputType' => 'checkbox',
@@ -461,7 +461,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = [
             ],
             'sql'       => "char(1) NOT NULL default ''"
         ],
-        'languages'  => [
+        'languages'              => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel']['languages'],
             'exclude'   => true,
             'inputType' => 'multiColumnWizard',
@@ -490,12 +490,12 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = [
                 ],
             'sql'       => 'text NULL'
         ],
-        'varsupport' => [
+        'varsupport'             => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel']['varsupport'],
             'exclude'   => true,
             'inputType' => 'checkbox',
             'eval'      => [
-                'tl_class'       => 'clr w50'
+                'tl_class' => 'clr w50'
             ],
             'sql'       => "char(1) NOT NULL default ''"
         ],
