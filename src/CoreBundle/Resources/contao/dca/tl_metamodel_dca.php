@@ -223,16 +223,20 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = [
     ],
     'fields'                => [
         'id'             => [
-            'sql' => 'int(10) unsigned NOT NULL auto_increment'
+            'label' => 'id.0',
+            'sql'   => 'int(10) unsigned NOT NULL auto_increment'
         ],
         'pid'            => [
-            'sql' => "int(10) unsigned NOT NULL default '0'"
+            'label' => 'pid.0',
+            'sql'   => "int(10) unsigned NOT NULL default '0'"
         ],
         'sorting'        => [
-            'sql' => "int(10) unsigned NOT NULL default '0'"
+            'label' => 'sorting.0',
+            'sql'   => "int(10) unsigned NOT NULL default '0'"
         ],
         'tstamp'         => [
-            'sql' => "int(10) unsigned NOT NULL default '0'"
+            'label' => 'tstamp.0',
+            'sql'   => "int(10) unsigned NOT NULL default '0'"
         ],
         'name'           => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['name'],

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -21,7 +21,7 @@
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -40,7 +40,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
     ],
     'dca_config'            => [
         'data_provider'  => [
-            'root'      => [
+            'root'         => [
                 'source' => 'tl_metamodel_dcasetting'
             ],
             'parent'       => [
@@ -246,16 +246,20 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
     ],
     'fields'                => [
         'id'                 => [
-            'sql' => 'int(10) unsigned NOT NULL auto_increment'
+            'label' => 'id.0',
+            'sql'   => 'int(10) unsigned NOT NULL auto_increment'
         ],
         'pid'                => [
-            'sql' => "int(10) unsigned NOT NULL default '0'"
+            'label' => 'pid.0',
+            'sql'   => "int(10) unsigned NOT NULL default '0'"
         ],
         'sorting'            => [
-            'sql' => "int(10) unsigned NOT NULL default '0'"
+            'label' => 'sorting.0',
+            'sql'   => "int(10) unsigned NOT NULL default '0'"
         ],
         'tstamp'             => [
-            'sql' => "int(10) unsigned NOT NULL default '0'"
+            'label' => 'tstamp.0',
+            'sql'   => "int(10) unsigned NOT NULL default '0'"
         ],
         'published'          => [
             'default' => 1,
@@ -300,7 +304,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
             'explanation' => 'tl_class',
             'sql'         => ['type' => 'string', 'length' => 64, 'default' => 'w50']
         ],
-        'be_template' => [
+        'be_template'        => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['be_template'],
             'exclude'   => true,
             'inputType' => 'select',

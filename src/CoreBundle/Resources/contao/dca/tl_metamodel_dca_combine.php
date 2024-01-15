@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -75,15 +75,19 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = [
     ],
     'fields'     => [
         'id'       => [
+            'label' => 'id.0',
             'sql' => 'int(10) unsigned NOT NULL auto_increment'
         ],
         'pid'      => [
+            'label' => 'pid.0',
             'sql' => "int(10) unsigned NOT NULL default '0'"
         ],
         'sorting'  => [
+            'label' => 'sorting.0',
             'sql' => "int(10) unsigned NOT NULL default '0'"
         ],
         'tstamp'   => [
+            'label' => 'tstamp.0',
             'sql' => "int(10) unsigned NOT NULL default '0'"
         ],
         'rows'     => [

@@ -73,16 +73,16 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = [
                 ]
             ],
             [
-                'from'    => 'tl_metamodel',
-                'to'      => 'tl_metamodel_dca',
-                'setOn'   =>
+                'from'   => 'tl_metamodel',
+                'to'     => 'tl_metamodel_dca',
+                'setOn'  =>
                     [
                         [
                             'to_field'   => 'pid',
                             'from_field' => 'id',
                         ],
                     ],
-                'filter'  => [
+                'filter' => [
                     [
                         'local'     => 'pid',
                         'remote'    => 'id',
@@ -179,17 +179,20 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = [
     ],
     'fields'                => [
         'id'              => [
-            'sql' => 'int(10) unsigned NOT NULL auto_increment'
+            'label' => 'id.0',
+            'sql'   => 'int(10) unsigned NOT NULL auto_increment'
         ],
         'pid'             => [
-            'sql' => "int(10) unsigned NOT NULL default '0'"
+            'label' => 'pid.0',
+            'sql'   => "int(10) unsigned NOT NULL default '0'"
         ],
-        'sorting'         =>
-            [
-                'sql' => "int(10) unsigned NOT NULL default '0'"
-            ],
+        'sorting'         => [
+            'label' => 'sorting.0',
+            'sql'   => "int(10) unsigned NOT NULL default '0'"
+        ],
         'tstamp'          => [
-            'sql' => "int(10) unsigned NOT NULL default '0'"
+            'label' => 'tstamp.0',
+            'sql'   => "int(10) unsigned NOT NULL default '0'"
         ],
         'name'            => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['name'],
@@ -261,8 +264,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = [
             'exclude'   => true,
             'inputType' => 'select',
             'eval'      => [
-                'tl_class'       => 'w50',
-                'chosen'         => true
+                'tl_class' => 'w50',
+                'chosen'   => true
             ],
             'sql'       => "int(10) unsigned NOT NULL default '0'"
         ],
@@ -276,7 +279,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = [
             ],
             'sql'       => "int(10) unsigned NOT NULL default '1'"
         ],
-        'published' => [
+        'published'       => [
             'default' => 1,
             'sql'     => "char(1) NOT NULL default '1'"
         ]
