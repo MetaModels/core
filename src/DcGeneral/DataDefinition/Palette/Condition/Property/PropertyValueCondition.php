@@ -140,6 +140,7 @@ class PropertyValueCondition implements PropertyConditionInterface
         if ($this->metaModel instanceof ITranslatedMetaModel) {
             $currentLanguage = $this->metaModel->getLanguage();
         } else {
+            /** @psalm-suppress DeprecatedMethod */
             $currentLanguage = $this->metaModel->getActiveLanguage();
         }
 

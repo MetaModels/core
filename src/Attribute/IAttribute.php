@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,8 @@
  * @author     David Maack <david.maack@arcor.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -35,17 +36,17 @@ use MetaModels\Render\Setting\Simple;
 interface IAttribute
 {
     /**
-     * Retrieve the human readable name (or title) from the attribute.
+     * Retrieve the human-readable name (or title) from the attribute.
      *
      * If the MetaModel is translated, the currently active language is used,
      * with properly falling back to the defined fallback language.
      *
-     * @return string the human readable name
+     * @return string the human-readable name
      */
     public function getName();
 
     /**
-     * Queries the attribute for it's column name within it's MetaModel.
+     * Queries the attribute for its column name within it's MetaModel.
      *
      * @return string the attributes column name.
      */
@@ -70,13 +71,12 @@ interface IAttribute
     /**
      * Override a meta information setting.
      *
-     * All changes to an attribute via set() are considered to be non persistent and therefore will not update any
+     * All changes to an attribute via set() are considered to be non-persistent and therefore will not update any
      * structural information or auxiliary properties that might be needed within the attribute type.
      *
      * For persistent updates, use {@link IAttribute::handleMetaChange()} instead.
      *
      * @param string $strKey   The meta information name that shall be set.
-     *
      * @param mixed  $varValue The value to set.
      *
      * @return IAttribute Instance of this attribute, for chaining support.
@@ -94,7 +94,6 @@ interface IAttribute
      * will then keep the old meta value.
      *
      * @param string $strMetaName Name of the meta information that shall be updated.
-     *
      * @param mixed  $varNewValue The new value for this meta information.
      *
      * @return IAttribute The instance of this attribute, to support chaining.
@@ -124,8 +123,8 @@ interface IAttribute
     /**
      * Returns all valid settings for the attribute type.
      *
-     * @return string[] All valid setting names, this re-ensembles the columns in tl_metamodel_attribute
-     *                  this attribute class understands.
+     * @return list<string> All valid setting names, this re-ensembles the columns in tl_metamodel_attribute
+     *                      this attribute class understands.
      */
     public function getAttributeSettingNames();
 
@@ -136,8 +135,8 @@ interface IAttribute
      * Using the optional override parameter, settings known by this attribute can be overridden for the
      * generating of the output array.
      *
-     * @param array $arrOverrides The values to override, for a list of valid parameters, call
-     *                            getAttributeSettingNames().
+     * @param array<string, mixed> $arrOverrides The values to override, for a list of valid parameters, call
+     *                                           getAttributeSettingNames().
      *
      * @return array The DCA array to use as $GLOBALS['TL_DCA']['tablename']['fields']['attribute-name]
      */
@@ -151,7 +150,7 @@ interface IAttribute
      * Due to the fact that it calls getFieldDefinition() internally, the result at least contains
      * the sub array 'fields' with the information of this field's settings.
      *
-     * @param array $arrOverrides See documentation in getFieldDefinition() method.
+     * @param array<string, mixed> $arrOverrides See documentation in getFieldDefinition() method.
      *
      * @return array The DCA array to use as $GLOBALS['tablename']
      *
@@ -181,7 +180,6 @@ interface IAttribute
      * value.
      *
      * @param mixed  $varValue The value to be transformed.
-     *
      * @param string $itemId   The id of the item the value belongs to.
      *
      * @return mixed The resulting native value
@@ -191,7 +189,7 @@ interface IAttribute
     /**
      * This method is called to store the data for certain items to the database.
      *
-     * @param mixed[] $arrValues The values to be stored into database. Mapping is item id=>value.
+     * @param array<string, mixed> $arrValues The values to be stored into database. Mapping is item id=>value.
      *
      * @return void
      */
@@ -212,9 +210,7 @@ interface IAttribute
      * Each attribute class MAY return as many other values in this array with custom keys as it wants.
      *
      * @param array                     $arrRowData      The (native) row data from the MetaModel table.
-     *
      * @param string                    $strOutputFormat The desired output format.
-     *
      * @param ISimpleRenderSetting|null $objSettings     Custom settings to be passed to the renderer.
      *
      * @return array An array with all the converted data.
@@ -233,11 +229,10 @@ interface IAttribute
     /**
      * Sorts the given array list by field value in the given direction.
      *
-     * @param string[] $idList       A list of Ids from the MetaModel table.
+     * @param list<string> $idList       A list of Ids from the MetaModel table.
+     * @param string       $strDirection The direction for sorting. either 'ASC' or 'DESC', as in plain SQL.
      *
-     * @param string   $strDirection The direction for sorting. either 'ASC' or 'DESC', as in plain SQL.
-     *
-     * @return string[] The sorted array.
+     * @return list<string> The sorted array.
      */
     public function sortIds($idList, $strDirection);
 
@@ -253,12 +248,10 @@ interface IAttribute
      * This is only relevant, when using "null" as id list for attributes that have pre configured
      * values like select lists and tags i.e.
      *
-     * @param string[]|null $idList   The ids of items that the values shall be fetched from
-     *                                (If empty or null, all items).
-     *
-     * @param bool          $usedOnly Determines if only "used" values shall be returned.
-     *
-     * @param array|null    $arrCount Array for the counted values.
+     * @param list<string>|null $idList   The ids of items that the values shall be fetched from
+     *                                    (If empty or null, all items).
+     * @param bool              $usedOnly Determines if only "used" values shall be returned.
+     * @param array|null        $arrCount Array for the counted values.
      *
      * @return array All options matching the given conditions as name => value.
      */
@@ -271,7 +264,7 @@ interface IAttribute
      *
      * @param string $strPattern The text to search for. This may contain wildcards.
      *
-     * @return string[]|null The list of item ids of all items matching the condition or null if all match.
+     * @return list<string> The list of item ids of all items matching the condition or null if all match.
      */
     public function searchFor($strPattern);
 
@@ -279,10 +272,9 @@ interface IAttribute
      * Filter all values greater than the passed value.
      *
      * @param mixed $varValue     The value to use as lower end.
-     *
      * @param bool  $blnInclusive If true, the passed value will be included, if false, it will be excluded.
      *
-     * @return string[]|null The list of item ids of all items matching the condition or null if all match.
+     * @return list<string>|null The list of item ids of all items matching the condition or null if all match.
      */
     public function filterGreaterThan($varValue, $blnInclusive = false);
 
@@ -290,10 +282,9 @@ interface IAttribute
      * Filter all values less than the passed value.
      *
      * @param mixed $varValue     The value to use as upper end.
-     *
      * @param bool  $blnInclusive If true, the passed value will be included, if false, it will be excluded.
      *
-     * @return string[]|null The list of item ids of all items matching the condition or null if all match.
+     * @return list<string>|null The list of item ids of all items matching the condition or null if all match.
      */
     public function filterLessThan($varValue, $blnInclusive = false);
 
@@ -302,7 +293,7 @@ interface IAttribute
      *
      * @param mixed $varValue The value to use as upper end.
      *
-     * @return string[]|null The list of item ids of all items matching the condition or null if all match.
+     * @return list<string>|null The list of item ids of all items matching the condition or null if all match.
      */
     public function filterNotEqual($varValue);
 

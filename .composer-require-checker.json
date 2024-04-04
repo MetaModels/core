@@ -1,0 +1,12 @@
+{
+  "symbol-whitelist": [
+    "array", "bool", "false", "int", "null", "self", "static", "parent", "string", "true", "void", "mixed",
+    "Contao\\ManagerBundle\\ContaoManagerBundle",
+    "Contao\\ManagerPlugin\\Bundle\\BundlePluginInterface",
+    "Contao\\ManagerPlugin\\Bundle\\Config\\BundleConfig",
+    "Contao\\ManagerPlugin\\Bundle\\Parser\\ParserInterface",
+    "Contao\\ManagerPlugin\\Routing\\RoutingPluginInterface",
+    "Doctrine\\Bundle\\DoctrineBundle\\DoctrineBundle",
+    "tl_user_group"
+  ]
+}

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Andreas Fischer <anfischer@kaffee-partner.de>
- * @copyright  2012-2021 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -51,12 +52,13 @@ trait DriverBcLayerTrait
         );
         // @codingStandardsIgnoreEnd
         $collection = new DefaultLanguageInformationCollection();
-        foreach ($metaModel->getAvailableLanguages() as $langCode) {
-            [$langCode, $country] = explode('_', $langCode, 2);
-            $collection->add(new DefaultLanguageInformation($langCode, $country ?: null));
+        /** @psalm-suppress DeprecatedMethod */
+        foreach ($metaModel->getAvailableLanguages() ?? [] as $langCode) {
+            [$langCode, $country] = \explode('_', $langCode ?: '', 2) + ['', null];
+            $collection->add(new DefaultLanguageInformation($langCode, $country ?? null));
         }
 
-        if (count($collection) > 0) {
+        if (\count($collection) > 0) {
             return $collection;
         }
 
@@ -81,11 +83,12 @@ trait DriverBcLayerTrait
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
+        /** @psalm-suppress DeprecatedMethod */
         $langCode = $metaModel->getFallbackLanguage();
 
-        [$langCode, $country] = explode('_', $langCode, 2);
+        [$langCode, $country] = \explode('_', $langCode ?? '', 2) + ['', null];
 
-        return new DefaultLanguageInformation($langCode, $country ?: null);
+        return new DefaultLanguageInformation($langCode, $country ?? null);
         // @coverageIgnoreEnd
     }
 }

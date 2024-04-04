@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -22,7 +22,10 @@
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\Attribute;
 
 use Contao\StringUtil;
+use Contao\System;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
+use ContaoCommunityAlliance\Translator\TranslatorInterface;
+use MetaModels\ITranslatedMetaModel;
 
 /**
  * This renders attribute information in the backend listing.
@@ -49,10 +52,10 @@ class AttributeRendererListener extends BaseListener
         $attribute = $this->attributeFactory->createAttribute($model->getPropertiesAsArray(), $metaModel);
 
         if (!$attribute) {
-            $translator = $event
-                ->getEnvironment()
-                ->getTranslator();
+            $translator = $event->getEnvironment()->getTranslator();
+            assert($translator instanceof TranslatorInterface);
 
+            /** @psalm-suppress InvalidArgument */
             $event
                 ->setLabel(
                     '<div class="field_heading cte_type"><strong>%s</strong> <em>[%s]</em></div>
@@ -65,6 +68,7 @@ class AttributeRendererListener extends BaseListener
                     $type,
                     $translator->translate('error_unknown_attribute.1', 'tl_metamodel_attribute', [$type]),
                 ]);
+
             return;
         }
 
@@ -72,15 +76,24 @@ class AttributeRendererListener extends BaseListener
         $colName        = $attribute->getColName();
         $name           = $attribute->getName();
         $arrDescription = StringUtil::deserialize($attribute->get('description'));
-        if (is_array($arrDescription)) {
-            $description = $arrDescription[$attribute->getMetaModel()->getActiveLanguage()] ?? null;
-            if (!$description) {
-                $description = $arrDescription[$attribute->getMetaModel()->getFallbackLanguage()];
+        if (\is_array($arrDescription)) {
+            $locale      = (string) System::getContainer()->get('request_stack')?->getCurrentRequest()?->getLocale();
+            $description = $arrDescription[$locale] ?? null;
+            /** @psalm-suppress DeprecatedMethod */
+            if (null === $description) {
+                if ($metaModel instanceof ITranslatedMetaModel) {
+                    $description = $arrDescription[$metaModel->getMainLanguage()] ?? $attribute->getName();
+                } else {
+                    /** @psalm-suppress DeprecatedMethod */
+                    $description = $arrDescription[(string) $attribute->getMetaModel()->getFallbackLanguage()]
+                        ?? $attribute->getName();
+                }
             }
         } else {
             $description = $arrDescription ?: $attribute->getName();
         }
 
+        /** @psalm-suppress InvalidArgument */
         $event
             ->setLabel(
                 '<div class="field_heading cte_type"><strong>%s</strong> <em>[%s%s]</em></div>

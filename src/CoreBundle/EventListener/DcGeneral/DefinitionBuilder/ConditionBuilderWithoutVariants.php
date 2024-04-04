@@ -43,7 +43,7 @@ class ConditionBuilderWithoutVariants extends AbstractConditionBuilder
     protected function calculate(): void
     {
         if ($this->inputScreen['meta']['rendertype'] !== 'standalone') {
-            if ($this->container->getBasicDefinition()->getMode() == BasicDefinitionInterface::MODE_HIERARCHICAL) {
+            if ($this->container->getBasicDefinition()->getMode() === BasicDefinitionInterface::MODE_HIERARCHICAL) {
                 throw new \RuntimeException('Hierarchical mode with parent table is not supported yet.');
             }
         }
@@ -78,7 +78,7 @@ class ConditionBuilderWithoutVariants extends AbstractConditionBuilder
                 ->setSetters([['property' => 'pid', 'value' => $parentValue]]);
         }
 
-        $builder = FilterBuilder::fromArrayForRoot((array) $relationship->getFilterArray())->getFilter();
+        $builder = FilterBuilder::fromArrayForRoot($relationship->getFilterArray())->getFilter();
 
         $builder->andPropertyEquals('pid', $parentValue);
 
@@ -88,7 +88,6 @@ class ConditionBuilderWithoutVariants extends AbstractConditionBuilder
         $setter  = [['to_field' => 'pid', 'from_field' => 'id']];
         $inverse = [];
 
-        /** @var ParentChildConditionInterface $relationship */
         $relationship = $this->definition->getChildCondition($this->container->getName(), $this->container->getName());
         if ($relationship === null) {
             $relationship = new ParentChildCondition();

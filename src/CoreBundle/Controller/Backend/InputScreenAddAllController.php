@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -43,7 +43,7 @@ class InputScreenAddAllController extends AbstractAddAllController
      *
      * @var TranslatorInterface
      */
-    private $translator;
+    private TranslatorInterface $translator;
 
     /**
      * The twig engine.
@@ -107,7 +107,15 @@ class InputScreenAddAllController extends AbstractAddAllController
     }
 
     /**
-     * {@inheritDoc}
+     * Create an empty data set for inclusion into the database.
+     *
+     * @param IAttribute $attribute The attribute to generate the data for.
+     * @param string     $parentId  The parent id.
+     * @param bool       $activate  Flag if the setting shall get activated.
+     * @param int        $sort      The sorting value.
+     * @param string     $tlclass   The CSS class.
+     *
+     * @return array
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -119,7 +127,7 @@ class InputScreenAddAllController extends AbstractAddAllController
             'attr_id'   => $attribute->get('id'),
             'pid'       => $parentId,
             'sorting'   => $sort,
-            'tstamp'    => time(),
+            'tstamp'    => \time(),
             'published' => $activate ? '1' : ''
         ];
     }

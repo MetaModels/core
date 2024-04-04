@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Marc Reimann <reimann@mediendepot-ruhr.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2021 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -60,9 +60,9 @@ class ContentElementCallback extends AbstractContentElementAndModuleCallback
      */
     public function getTemplates(DC_Table $objDC)
     {
-        /** @noinspection PhpUndefinedFieldInspection */
+        assert(null !== $objDC->activeRecord);
         $type = $objDC->activeRecord->type;
-        if ($type == 'metamodel_content') {
+        if ($type === 'metamodel_content') {
             $type = 'metamodel_list';
         }
 

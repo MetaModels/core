@@ -23,12 +23,15 @@ declare(strict_types=1);
 
 namespace MetaModels\Test;
 
+use Contao\CoreBundle\Routing\ScopeMatcher;
+use Contao\System;
 use MetaModels\Filter\Setting\IFilterSettingFactory;
 use MetaModels\IFactory;
 use MetaModels\ItemList;
 use MetaModels\Filter\FilterUrlBuilder;
 use MetaModels\Render\Setting\IRenderSettingFactory;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -38,6 +41,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 final class ItemListTest extends TestCase
 {
+    /** @SuppressWarnings(PHPMD.Superglobals) */
     public function testGetOutputFormat(): void
     {
         $factory              = $this->getMockForAbstractClass(IFactory::class);
@@ -45,7 +49,13 @@ final class ItemListTest extends TestCase
         $renderSettingFactory = $this->getMockForAbstractClass(IRenderSettingFactory::class);
         $eventDispatcher      = $this->getMockForAbstractClass(EventDispatcherInterface::class);
         $filterUrlBuilder     = $this->getMockBuilder(FilterUrlBuilder::class)->disableOriginalConstructor()->getMock();
-        $itemlist             = new ItemList($factory, $filterFactory, $renderSettingFactory, $eventDispatcher, $filterUrlBuilder);
+        $itemlist             = new ItemList(
+            $factory,
+            $filterFactory,
+            $renderSettingFactory,
+            $eventDispatcher,
+            $filterUrlBuilder
+        );
 
         if (!defined('TL_MODE')) {
             define('TL_MODE', 'FE');
@@ -54,6 +64,22 @@ final class ItemListTest extends TestCase
         if (TL_MODE !== 'FE') {
             self::markTestSkipped('Test assumes that TL_MODE is set to "FE"');
         }
+
+        $scopeMatcher = $this
+            ->getMockBuilder(ScopeMatcher::class)
+            ->onlyMethods(['isFrontendRequest'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $scopeMatcher->method('isFrontendRequest')->willReturn(true);
+
+        $mockContainer = $this->getMockForAbstractClass(ContainerInterface::class);
+        $mockContainer
+            ->method('get')
+            ->willReturnCallback(fn(string $service) => match ($service) {
+                'contao.routing.scope_matcher' => $scopeMatcher,
+                'request_stack' => null,
+            });
+        System::setContainer($mockContainer);
 
         $GLOBALS['objPage'] = null;
         self::assertSame('text', $itemlist->getOutputFormat());

@@ -38,21 +38,21 @@ class AttributeOptionsListener extends AbstractListener
      *
      * @var SelectAttributeOptionLabelFormatter
      */
-    private $attributeLabelFormatter;
+    private SelectAttributeOptionLabelFormatter $labelFormatter;
 
     /**
      * {@inheritDoc}
      *
-     * @param SelectAttributeOptionLabelFormatter $attributeLabelFormatter The attribute select option label formatter.
+     * @param SelectAttributeOptionLabelFormatter $labelFormatter The attribute select option label formatter.
      */
     public function __construct(
         RequestScopeDeterminator $scopeDeterminator,
         IFactory $factory,
         Connection $connection,
-        SelectAttributeOptionLabelFormatter $attributeLabelFormatter
+        SelectAttributeOptionLabelFormatter $labelFormatter
     ) {
         parent::__construct($scopeDeterminator, $factory, $connection);
-        $this->attributeLabelFormatter = $attributeLabelFormatter;
+        $this->labelFormatter = $labelFormatter;
     }
 
     /**
@@ -71,7 +71,7 @@ class AttributeOptionsListener extends AbstractListener
         $model     = $event->getModel();
         $metaModel = $this->getMetaModelFromModel($model);
 
-        if (!$metaModel) {
+        if (null === $metaModel) {
             return;
         }
 
@@ -92,12 +92,13 @@ class AttributeOptionsListener extends AbstractListener
 
         $options = [];
         foreach ($metaModel->getAttributes() as $attribute) {
-            if ($attribute instanceof IInternal
+            if (
+                $attribute instanceof IInternal
                 || in_array($attribute->get('id'), $alreadyTaken)
             ) {
                 continue;
             }
-            $options[$attribute->get('id')] = $this->attributeLabelFormatter->formatLabel($attribute);
+            $options[$attribute->get('id')] = $this->labelFormatter->formatLabel($attribute);
         }
 
         $event->setOptions($options);

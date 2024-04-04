@@ -36,9 +36,9 @@ class TableManipulatorTest extends TestCase
     /**
      * System columns.
      *
-     * @var array
+     * @var list<string>
      */
-    private $systemColumns = [
+    private array $systemColumns = [
         'id',
         'pid',
         'sorting',
@@ -51,10 +51,8 @@ class TableManipulatorTest extends TestCase
      * Create the table manipulator.
      *
      * @param Connection|null $connection Optional pass a connection mock.
-     *
-     * @return TableManipulator
      */
-    private function createTableManipulator(Connection $connection = null)
+    private function createTableManipulator(?Connection $connection = null): TableManipulator
     {
         $connection = $connection ?: $this->mockConnection();
 
@@ -63,10 +61,8 @@ class TableManipulatorTest extends TestCase
 
     /**
      * Mock the database connection.
-     *
-     * @return MockObject|Connection
      */
-    private function mockConnection()
+    private function mockConnection(): Connection&MockObject
     {
         $connection  = $this->getMockBuilder(Connection::class)
             ->disableOriginalConstructor()
@@ -77,10 +73,8 @@ class TableManipulatorTest extends TestCase
 
     /**
      * Test the instantiation.
-     *
-     * @return void
      */
-    public function testInstantiation()
+    public function testInstantiation(): void
     {
         $manipulator = $this->createTableManipulator();
 
@@ -89,10 +83,8 @@ class TableManipulatorTest extends TestCase
 
     /**
      * Tests the reserved words.
-     *
-     * @return void
      */
-    public function testReservedWords()
+    public function testReservedWords(): void
     {
         $property = new \ReflectionProperty(TableManipulator::class, 'reservedWords');
         $property->setAccessible(true);

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -32,7 +33,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PropertyInterface;
 class ConditionTableNameIsMetaModel implements PropertyConditionInterface
 {
     /**
-     * The name of the property in the passed model which contains the table name.
+     * The name of the property in the past model which contains the table name.
      *
      * @var string
      */
@@ -48,9 +49,8 @@ class ConditionTableNameIsMetaModel implements PropertyConditionInterface
     /**
      * Create a new instance.
      *
-     * @param string $tableProperty The name of the property in the passed model which contains the table name.
-     *
-     * @param string $desiredValue  The desired value, true if the table shall be a MetaModel, false otherwise.
+     * @param string $tableProperty The name of the property in the past model which contains the table name.
+     * @param bool   $desiredValue  The desired value, true if the table shall be a MetaModel, false otherwise.
      */
     public function __construct($tableProperty, $desiredValue)
     {
@@ -97,7 +97,7 @@ class ConditionTableNameIsMetaModel implements PropertyConditionInterface
     }
 
     /**
-     * Retrieve the name of the property in the passed model which contains the table name.
+     * Retrieve the name of the property in the past model which contains the table name.
      *
      * @return string
      */
@@ -124,7 +124,7 @@ class ConditionTableNameIsMetaModel implements PropertyConditionInterface
             return false;
         }
 
-        return $this->desiredValue == (substr($value, 0, 3) === 'mm_');
+        return $this->desiredValue == (\str_starts_with($value, 'mm_'));
     }
 
     /**

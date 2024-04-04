@@ -44,6 +44,7 @@ use function strtolower;
  * This is the class for table manipulations like creation/renaming/deleting of tables and columns.
  *
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.LongVariable)
  */
 class TableManipulator
 {
@@ -159,7 +160,7 @@ class TableManipulator
      */
     public function isReservedWord($word): bool
     {
-        return in_array(strtoupper($word), self::$reservedWords);
+        return \in_array(\strtoupper($word), self::$reservedWords);
     }
 
     /**
@@ -173,14 +174,15 @@ class TableManipulator
     {
         $inputProvider = new InputProvider();
 
-        if (!$inputProvider->hasValue('colname')
-            || strtolower($strColName) !== strtolower($inputProvider->getValue('colname'))
+        if (
+            !$inputProvider->hasValue('colname')
+            || \strtolower($strColName) !== \strtolower($inputProvider->getValue('colname'))
         ) {
             return false;
         }
 
         foreach (self::$reservedColumnPostFix as $postFix) {
-            if ($postFix !== strtolower(substr($strColName, -strlen($postFix)))) {
+            if ($postFix !== \strtolower(\substr($strColName, -\strlen($postFix)))) {
                 continue;
             }
 
@@ -201,7 +203,7 @@ class TableManipulator
     {
         // Match for valid table/column name, according to MySQL, a table name must start
         // with a letter and must be combined of letters, decimals and underscore.
-        return (1 == preg_match('/^[a-z_][a-z\d_]*$/i', $strName));
+        return (1 == \preg_match('/^[a-z_][a-z\d_]*$/i', $strName));
     }
 
     /**
@@ -213,6 +215,7 @@ class TableManipulator
      */
     public function isValidTablename(string $strTableName): bool
     {
+        /** @psalm-suppress DeprecatedMethod */
         return $this->isValidMySQLIdentifier($strTableName) && !$this->isReservedWord($strTableName);
     }
 
@@ -225,6 +228,7 @@ class TableManipulator
      */
     public function isValidColumnName(string $strColName): bool
     {
+        /** @psalm-suppress DeprecatedMethod */
         return $this->isValidMySQLIdentifier($strColName)
             && !$this->isReservedWord($strColName)
             && !$this->isReserveColumnPostFix($strColName);
@@ -239,7 +243,7 @@ class TableManipulator
      */
     public function isSystemColumn(string $strColName): bool
     {
-        return in_array($strColName, $this->systemColumns);
+        return \in_array($strColName, $this->systemColumns);
     }
 
     /**
@@ -339,7 +343,7 @@ class TableManipulator
     public function createTable(string $strTableName): void
     {
         $this->checkTableDoesNotExist($strTableName);
-        $this->connection->executeQuery(sprintf(self::STATEMENT_CREATE_TABLE, $strTableName));
+        $this->connection->executeQuery(\sprintf(self::STATEMENT_CREATE_TABLE, $strTableName));
     }
 
     /**
@@ -360,7 +364,7 @@ class TableManipulator
         $this->checkTableExists($strTableName);
         $this->checkTableDoesNotExist($strNewTableName);
 
-        $this->connection->executeQuery(sprintf(self::STATEMENT_RENAME_TABLE, $strTableName, $strNewTableName));
+        $this->connection->executeQuery(\sprintf(self::STATEMENT_RENAME_TABLE, $strTableName, $strNewTableName));
     }
 
     /**
@@ -400,7 +404,7 @@ class TableManipulator
     {
         $this->checkColumnExists($strTableName, $strColName);
         $this->connection->executeQuery(
-            sprintf(
+            \sprintf(
                 self::STATEMENT_ADD_INDEX_COLUMN,
                 $strTableName,
                 $strIndexType,
@@ -455,8 +459,7 @@ class TableManipulator
         string $strTableName,
         string $strColName,
         bool $blnAllowSystemCol = false
-    ): void
-    {
+    ): void {
         $this->checkTableExists($strTableName);
         $this->checkColumnName($strColName, $blnAllowSystemCol);
 
@@ -484,11 +487,10 @@ class TableManipulator
         string $strColumnName,
         string $strType,
         bool $blnAllowSystemCol = false
-    ): void
-    {
+    ): void {
         $this->checkColumnDoesNotExist($strTableName, $strColumnName, $blnAllowSystemCol);
         $this->connection->executeQuery(
-            sprintf(
+            \sprintf(
                 self::STATEMENT_CREATE_COLUMN,
                 $strTableName,
                 $strColumnName,
@@ -518,14 +520,13 @@ class TableManipulator
         string $strNewColumnName,
         string $strNewType,
         bool $blnAllowSystemCol = false
-    ): void
-    {
+    ): void {
         if ($strColumnName != $strNewColumnName) {
             $this->checkColumnExists($strTableName, $strColumnName, $blnAllowSystemCol);
             $this->checkColumnDoesNotExist($strTableName, $strNewColumnName, $blnAllowSystemCol);
         }
         $this->connection->executeQuery(
-            sprintf(
+            \sprintf(
                 self::STATEMENT_RENAME_COLUMN,
                 $strTableName,
                 $strColumnName,
@@ -552,7 +553,7 @@ class TableManipulator
     {
         $this->checkColumnExists($strTableName, $strColumnName, $blnAllowSystemCol);
         $this->connection->executeQuery(
-            sprintf(
+            \sprintf(
                 self::STATEMENT_DROP_COLUMN,
                 $strTableName,
                 $strColumnName
@@ -573,19 +574,22 @@ class TableManipulator
     public function setVariantSupport(string $strTableName, bool $blnVariantSupport): void
     {
         if ($blnVariantSupport) {
-            if ($this->connection->createSchemaManager()->tablesExist([$strTableName])
-                && (!$this->fieldExists($strTableName, 'varbase'))) {
+            if (
+                $this->connection->createSchemaManager()->tablesExist([$strTableName])
+                && (!$this->fieldExists($strTableName, 'varbase'))
+            ) {
                 $this->createColumn($strTableName, 'varbase', 'char(1) NOT NULL default \'\'', true);
                 $this->createColumn($strTableName, 'vargroup', 'int(11) NOT NULL default 0', true);
 
                 // If there is pre-existing data in the table, we need to provide a separate 'vargroup' value to all of
                 // them, we can do this safely by setting all vargroups to the id of the base item.
                 $this->connection->executeQuery(
-                    sprintf('UPDATE `%1$s` SET %1$s.vargroup=id, %1$s.varbase=1', $strTableName)
+                    \sprintf('UPDATE `%1$s` SET %1$s.vargroup=id, %1$s.varbase=1', $strTableName)
                 );
             }
-        } elseif ($this->connection->createSchemaManager()->tablesExist([$strTableName])
-                  && $this->fieldExists($strTableName, 'varbase')
+        } elseif (
+            $this->connection->createSchemaManager()->tablesExist([$strTableName])
+            && $this->fieldExists($strTableName, 'varbase')
         ) {
             $this->dropColumn($strTableName, 'varbase', true);
             $this->dropColumn($strTableName, 'vargroup', true);

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,7 @@
  *
  * @package    MetaModels/core
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -21,6 +21,8 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetEditMaskSubHeadlineEvent;
 use Contao\CoreBundle\String\SimpleTokenParser;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
+use ContaoCommunityAlliance\DcGeneral\InputProviderInterface;
 use MetaModels\DcGeneral\DataDefinition\Definition\IMetaModelDefinition;
 use MetaModels\ViewCombination\InputScreenInformationBuilder;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -75,25 +77,29 @@ final class EditMaskSubHeadlineListener
      */
     public function __invoke(GetEditMaskSubHeadlineEvent $event): void
     {
-        if (!\str_starts_with($event->getEnvironment()->getDataDefinition()->getName(), 'mm_')) {
+        $environment    = $event->getEnvironment();
+        $dataDefinition = $environment->getDataDefinition();
+        assert($dataDefinition instanceof ContainerInterface);
+
+        if (!\str_starts_with($dataDefinition->getName(), 'mm_')) {
             return;
         }
 
         // Nothing to do on create item.
-        $environment = $event->getEnvironment();
-        if ('create' === $environment->getInputProvider()->getParameter('act')) {
+        $inputProvider = $environment->getInputProvider();
+        assert($inputProvider instanceof InputProviderInterface);
+        if ('create' === $inputProvider->getParameter('act')) {
             return;
         }
 
         // Retrieve the settings of the input mask for item attribute.
-        $dataDefinition = $environment->getDataDefinition();
-        /** @var IMetaModelDefinition $metaModels */
-        $metaModel     = $dataDefinition->getDefinition(IMetaModelDefinition::NAME);
+        $metaModel = $dataDefinition->getDefinition(IMetaModelDefinition::NAME);
+        assert($metaModel instanceof IMetaModelDefinition);
         $metaModelName = $dataDefinition->getName();
         $screen        = $this->inputScreens->fetchInputScreens([$metaModelName => $metaModel->getActiveInputScreen()]);
         $screenMeta    = $screen[$metaModelName]['meta'] ?? null;
 
-        if (empty($screenMeta) || empty($headline = ($screenMeta['subheadline'] ?? null))) {
+        if (null === $screenMeta || null === ($headline = ($screenMeta['subheadline'] ?? null))) {
             return;
         }
 
@@ -123,8 +129,10 @@ final class EditMaskSubHeadlineListener
      */
     private function replaceSimpleTokensAtHeadline(string $headline, array $tokenData): string
     {
-        if (\str_contains($headline, '&#35;&#35;')
-            || \str_contains($headline, '##')) {
+        if (
+            \str_contains($headline, '&#35;&#35;')
+            || \str_contains($headline, '##')
+        ) {
             $headline =
                 $this->tokenParser->parse(
                     \str_replace('&#35;', '#', $headline),

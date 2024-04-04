@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -43,7 +43,7 @@ class MetaModelsCoreExtension extends Extension implements PrependExtensionInter
      *
      * @var array
      */
-    private $defaultTableOptions;
+    private array $defaultTableOptions = [];
 
     /**
      * The configuration files.
@@ -88,14 +88,16 @@ class MetaModelsCoreExtension extends Extension implements PrependExtensionInter
     /**
      * {@inheritDoc}
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         foreach (self::$files as $file) {
             $loader->load($file);
         }
 
-        $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);
+        $configuration = $this->getConfiguration($configs, $container);
+        assert($configuration instanceof Configuration);
+        $config = $this->processConfiguration($configuration, $configs);
         $this->buildCacheService($container, $config);
 
         $container->setParameter('metamodels.resource_dir', __DIR__ . '/../Resources');
@@ -105,7 +107,7 @@ class MetaModelsCoreExtension extends Extension implements PrependExtensionInter
         $container->getDefinition(TableCollationMigration::class)
             ->setArgument('$defaultTableOptions', $this->defaultTableOptions);
 
-        if ($container->getParameter('contao.legacy_routing')) {
+        if ((bool) $container->getParameter('contao.legacy_routing')) {
             $container->getDefinition(FilterUrlBuilder::class)
                 ->setArgument(0, new Reference('contao.routing.url_generator'));
         }
@@ -116,10 +118,9 @@ class MetaModelsCoreExtension extends Extension implements PrependExtensionInter
      */
     public function getConfiguration(array $config, ContainerBuilder $container)
     {
-        return new Configuration(
-            $container->getParameter('kernel.debug'),
-            $container->getParameter('kernel.project_dir')
-        );
+        $projectDir = $container->getParameter('kernel.project_dir');
+        assert(\is_string($projectDir));
+        return new Configuration((bool) $container->getParameter('kernel.debug'), $projectDir);
     }
 
     /**
@@ -130,7 +131,7 @@ class MetaModelsCoreExtension extends Extension implements PrependExtensionInter
      *
      * @return void
      */
-    private function buildCacheService(ContainerBuilder $container, array $config)
+    private function buildCacheService(ContainerBuilder $container, array $config): void
     {
         // if cache disabled, swap it out with the dummy cache.
         if (!$config['enable_cache']) {
@@ -145,7 +146,7 @@ class MetaModelsCoreExtension extends Extension implements PrependExtensionInter
     }
 
     /**
-     * Collect the default table options from the dcotrine extension.
+     * Collect the default table options from the doctrine extension.
      *
      * @param ContainerBuilder $container The container builder.
      *

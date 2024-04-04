@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<psalm
+        errorLevel="3"
+        resolveFromConfigFile="true"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="https://getpsalm.org/schema/config"
+        xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+>
+  <projectFiles>
+    <directory name="src" />
+    <ignoreFiles>
+      <directory name="src/CoreBundle/Resources/contao/config"/>
+      <directory name="src/CoreBundle/Resources/contao/dca"/>
+      <directory name="src/CoreBundle/Resources/contao/languages"/>
+      <file name="src/Helper/ViewCombinations.php"/>
+    </ignoreFiles>
+  </projectFiles>
+  <issueHandlers>
+    <PossiblyNullArgument>
+      <errorLevel type="suppress">
+        <file name="vendor/contao/core-bundle/src/Resources/contao/library/Contao/Widget.php"/>
+      </errorLevel>
+    </PossiblyNullArgument>
+    <MixedAssignment>
+      <errorLevel type="suppress">
+        <file name="vendor/contao/core-bundle/src/Resources/contao/library/Contao/Widget.php"/>
+      </errorLevel>
+    </MixedAssignment>
+    <TooManyArguments>
+      <errorLevel type="suppress">
+        <referencedFunction name="Doctrine\DBAL\Query\QueryBuilder::select"/>
+      </errorLevel>
+    </TooManyArguments>
+  </issueHandlers>
+</psalm>

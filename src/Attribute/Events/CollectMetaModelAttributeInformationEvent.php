@@ -34,7 +34,7 @@ class CollectMetaModelAttributeInformationEvent extends Event
     /**
      * The event name.
      */
-    const NAME = 'metamodels.metamodel.collect-metamodel-attribute-information';
+    public const NAME = 'metamodels.metamodel.collect-metamodel-attribute-information';
 
     /**
      * The MetaModel instance being created.

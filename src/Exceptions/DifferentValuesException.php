@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -28,27 +29,27 @@ class DifferentValuesException extends \Exception
     /**
      * Two values are an array but differ in count.
      */
-    const ARRAY_COUNT_MISMATCH = 1;
+    public const ARRAY_COUNT_MISMATCH = 1;
 
     /**
      * Two values are an array but differ in keys.
      */
-    const ARRAY_KEY_MISMATCH = 1;
+    public const ARRAY_KEY_MISMATCH = 1;
 
     /**
      * Two values are an array but have a different value at a certain key.
      */
-    const ARRAY_VALUE_MISMATCH = 1;
+    public const ARRAY_VALUE_MISMATCH = 1;
 
     /**
      * Two values differ in type.
      */
-    const TYPE_MISMATCH = 1;
+    public const TYPE_MISMATCH = 1;
 
     /**
      * Two values are different.
      */
-    const VALUE_MISMATCH = 1;
+    public const VALUE_MISMATCH = 1;
 
     /**
      * The expected value.
@@ -75,13 +76,9 @@ class DifferentValuesException extends \Exception
      * Create a new instance.
      *
      * @param mixed      $expected The expected value.
-     *
      * @param mixed      $actual   The actual value.
-     *
      * @param bool       $strict   Compared in strict mode.
-     *
      * @param string     $message  The Exception message to throw.
-     *
      * @param int        $code     The Exception code.
      *
      * @param \Exception $previous The previous exception used for the exception chaining.
@@ -103,9 +100,7 @@ class DifferentValuesException extends \Exception
      * Check if the actual argument is the same as the expected.
      *
      * @param mixed $expected The expected value.
-     *
      * @param mixed $actual   The actual value.
-     *
      * @param bool  $strict   Run in strict mode.
      *
      * @return void
@@ -168,65 +163,59 @@ class DifferentValuesException extends \Exception
      */
     public function getLongMessage($glue = ' ')
     {
-        $messages  = array();
+        $messages = [];
         $exception = $this;
         do {
             $messages[] = $exception->getMessage();
         } while (null !== ($exception = $exception->getPrevious()));
 
-        return implode($glue, $messages);
+        return \implode($glue, $messages);
     }
 
     /**
      * Check if the actual argument is of type array and empty and the expected value is of type string and also empty.
      *
      * @param mixed $expected The expected value.
-     *
      * @param mixed $actual   The actual value.
      *
      * @return bool
      */
-    private static function isEmptyArrayEquivalent($expected, $actual)
+    private static function isEmptyArrayEquivalent(mixed $expected, mixed $actual): bool
     {
-        return (gettype($expected) == 'string')
-            && ((gettype($actual) == 'array') || (gettype($actual) == 'NULL'))
-            && empty($actual)
-            && empty($expected);
+        return ('' === $expected) && ([] === $actual || null === $actual);
     }
 
     /**
      * Check for differences in arrays.
      *
      * @param array $expected The expected value.
-     *
      * @param array $actual   The actual value.
-     *
      * @param bool  $strict   Run in strict mode.
      *
      * @return void
      *
      * @throws \LogicException When the values differ.
      */
-    private static function calculateArrayDiff($expected, $actual, $strict)
+    private static function calculateArrayDiff(array $expected, array $actual, bool $strict): void
     {
-        if (count($expected) !== count($actual)) {
+        if (\count($expected) !== count($actual)) {
             throw new \LogicException(
-                sprintf(
+                \sprintf(
                     'Array element count mismatch. Found %s, expected %s.',
-                    count($actual),
-                    count($expected)
+                    \count($actual),
+                    \count($expected)
                 ),
                 self::ARRAY_COUNT_MISMATCH
             );
         }
 
-        reset($actual);
+        \reset($actual);
         foreach ($expected as $key => $value) {
             if ($key !== key($actual)) {
                 throw new \LogicException(
-                    sprintf(
+                    \sprintf(
                         'Array key mismatch. Found %s, expected %s.',
-                        key($actual),
+                        \key($actual),
                         $key
                     ),
                     self::ARRAY_KEY_MISMATCH
@@ -237,15 +226,15 @@ class DifferentValuesException extends \Exception
                 self::calculateDiff($value, current($actual), $strict);
             } catch (\Exception $exception) {
                 throw new \LogicException(
-                    sprintf(
+                    \sprintf(
                         'Array value mismatch for key %s.',
-                        key($actual)
+                        \key($actual)
                     ),
                     self::ARRAY_VALUE_MISMATCH,
                     $exception
                 );
             }
-            next($actual);
+            \next($actual);
         }
     }
 
@@ -253,48 +242,46 @@ class DifferentValuesException extends \Exception
      * Helper to determine if two values are the same.
      *
      * @param mixed $expected The expected value.
-     *
      * @param mixed $actual   The actual value.
-     *
      * @param bool  $strict   Run in strict mode.
      *
      * @return void
      *
      * @throws \LogicException When the values differ.
      */
-    private static function calculateDiff($expected, $actual, $strict)
+    private static function calculateDiff(mixed $expected, mixed $actual, bool $strict): void
     {
         if ($expected === $actual) {
             return;
         }
 
-        if (gettype($expected) !== gettype($actual)) {
-            // Only exception of the rule: array values are transported as empty string.
+        if (\gettype($expected) !== \gettype($actual)) {
+            // Only exception to the rule: array values are transported as empty string.
             if (!$strict && self::isEmptyArrayEquivalent($expected, $actual)) {
                 return;
             }
 
             throw new \LogicException(
-                sprintf(
+                \sprintf(
                     'Encountered type %s expected %s (Found %s, expected %s)',
-                    gettype($actual),
-                    gettype($expected),
-                    var_export($actual, true),
-                    var_export($expected, true)
+                    \gettype($actual),
+                    \gettype($expected),
+                    \var_export($actual, true),
+                    \var_export($expected, true)
                 ),
                 self::TYPE_MISMATCH
             );
         }
 
-        if (is_array($expected)) {
+        if (\is_array($expected)) {
             self::calculateArrayDiff($expected, $actual, $strict);
         }
 
         throw new \LogicException(
-            sprintf(
+            \sprintf(
                 'Found %s expected %s',
-                var_export($actual, true),
-                var_export($expected, true)
+                \var_export($actual, true),
+                \var_export($expected, true)
             ),
             self::VALUE_MISMATCH
         );

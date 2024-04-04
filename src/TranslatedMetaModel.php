@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -27,6 +27,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * This defines a translated MetaModel.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class TranslatedMetaModel extends MetaModel implements ITranslatedMetaModel
 {
@@ -35,14 +37,14 @@ class TranslatedMetaModel extends MetaModel implements ITranslatedMetaModel
      *
      * @var string
      */
-    private $activeLanguage;
+    private string $activeLanguage = '';
 
     /**
      * The fallback language.
      *
      * @var string
      */
-    private $mainLanguage;
+    private string $mainLanguage = '';
 
     /**
      * The locale territory support.
@@ -85,7 +87,7 @@ class TranslatedMetaModel extends MetaModel implements ITranslatedMetaModel
      */
     public function getLanguages(): array
     {
-        return array_keys((array) $this->arrData['languages']);
+        return \array_keys((array) $this->arrData['languages']);
     }
 
     /**
@@ -140,7 +142,7 @@ class TranslatedMetaModel extends MetaModel implements ITranslatedMetaModel
         try {
             $attributeData = $attribute->getTranslatedDataFor($ids, $this->getLanguage());
             // Second round, fetch missing data from main language.
-            if ([] !== $missing = array_diff($ids, array_keys($attributeData))) {
+            if ([] !== $missing = \array_values(\array_diff($ids, \array_keys($attributeData)))) {
                 $attributeData += $attribute->getTranslatedDataFor($missing, $this->getMainLanguage());
             }
 

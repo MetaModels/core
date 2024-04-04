@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,13 +13,15 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\EnvironmentPopulator;
 
+use ContaoCommunityAlliance\DcGeneral\Contao\Dca\ContaoDataProviderInformation;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DataProviderDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
@@ -40,21 +42,21 @@ class DataProviderPopulator
      *
      * @var IFactory
      */
-    private $factory;
+    private IFactory $factory;
 
     /**
      * The event dispatcher to pass to drivers.
      *
-     * @var EventDispatcherInterface
+     * @var EventDispatcherInterface|null
      */
-    private $dispatcher = null;
+    private ?EventDispatcherInterface $dispatcher = null;
 
     /**
      * The database connection.
      *
      * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * Create a new instance.
@@ -79,11 +81,13 @@ class DataProviderPopulator
      */
     public function populate(EnvironmentInterface $environment)
     {
-        foreach ([
-            $environment->getDataDefinition(),
-            $environment->getParentDataDefinition(),
-            $environment->getRootDataDefinition()
-        ] as $definition) {
+        foreach (
+            [
+                $environment->getDataDefinition(),
+                $environment->getParentDataDefinition(),
+                $environment->getRootDataDefinition()
+            ] as $definition
+        ) {
             if (!$definition instanceof ContainerInterface) {
                 continue;
             }
@@ -103,11 +107,11 @@ class DataProviderPopulator
     {
         foreach ($providerDefinitions as $provider) {
             $providerInstance = $environment->getDataProvider($provider->getName());
-            if ($providerInstance instanceof Driver) {
+            if ($providerInstance instanceof Driver && $provider instanceof ContaoDataProviderInformation) {
                 $initialization = $provider->getInitializationData();
                 $metaModel      = $this->factory->getMetaModel($initialization['source']);
                 $providerInstance->setBaseConfig(
-                    array_merge($initialization, ['metaModel' => $metaModel])
+                    \array_merge($initialization, ['metaModel' => $metaModel])
                 );
                 $providerInstance->setDispatcher($this->dispatcher);
                 $providerInstance->setConnection($this->connection);

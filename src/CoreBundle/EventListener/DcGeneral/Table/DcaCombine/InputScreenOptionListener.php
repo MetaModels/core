@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,13 +14,14 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaCombine;
 
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use Doctrine\DBAL\Connection;
 use MenAtWork\MultiColumnWizardBundle\Event\GetOptionsEvent;
 
@@ -34,7 +35,7 @@ class InputScreenOptionListener
      *
      * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * Create a new instance.
@@ -55,9 +56,14 @@ class InputScreenOptionListener
      */
     public function handle(GetOptionsEvent $event)
     {
-        if (('tl_metamodel_dca_combine' !== $event->getEnvironment()->getDataDefinition()->getName())
+        $dataDefinition = $event->getEnvironment()->getDataDefinition();
+        assert($dataDefinition instanceof ContainerInterface);
+
+        if (
+            ('tl_metamodel_dca_combine' !== $dataDefinition->getName())
             || ('rows' !== $event->getPropertyName())
-            || ('dca_id' !== $event->getSubPropertyName())) {
+            || ('dca_id' !== $event->getSubPropertyName())
+        ) {
             return;
         }
 

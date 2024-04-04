@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Andreas Fischer <anfischer@kaffee-partner.de>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -26,6 +26,7 @@ namespace MetaModels\Filter;
 use Contao\ArrayUtil;
 use Contao\Config;
 use Contao\CoreBundle\Framework\Adapter;
+use Contao\Model\Collection;
 use Contao\PageModel;
 use Contao\System;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,6 +36,18 @@ use Symfony\Component\Routing\Route;
 
 /**
  * This class builds filter URLs.
+ *
+ * @psalm-type TFilterUrlOptions=array{
+ *   postAsSlug?: list<string>,
+ *   postAsGet?: list<string>,
+ *   preserveGet?: bool,
+ *   removeGetOnSlug?: bool
+ * }
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FilterUrlBuilder
 {
@@ -69,9 +82,9 @@ class FilterUrlBuilder
     /**
      * The page model adapter.
      *
-     * @var Adapter|PageModel
+     * @var Adapter<PageModel>
      */
-    private Adapter|PageModel $pageModelAdapter;
+    private Adapter $pageModelAdapter;
 
     /**
      * Flag if legacy routing is active.
@@ -87,7 +100,7 @@ class FilterUrlBuilder
      * @param RequestStack          $requestStack      The request stack.
      * @param bool                  $isLocalePrepended Flag if the locale is prepended to the URL.
      * @param string                $urlSuffix         The URL suffix.
-     * @param Adapter               $pageModelAdapter  The page model adapter.
+     * @param Adapter<PageModel>    $pageModelAdapter  The page model adapter.
      * @param bool                  $hasLegacyRouting  Flag if legacy routing is active.
      */
     public function __construct(
@@ -130,8 +143,8 @@ class FilterUrlBuilder
         $parameters = $filterUrl->getGetParameters();
 
         $url = '';
-        if ($filterUrl->hasSlug('auto_item')) {
-            $url .= '/' . $this->encodeForAllowEncodedSlashes($filterUrl->getSlug('auto_item'));
+        if ($filterUrl->hasSlug('auto_item') && '' !== ($slug = (string) $filterUrl->getSlug('auto_item'))) {
+            $url .= '/' . $this->encodeForAllowEncodedSlashes($slug);
         }
 
         if ($this->hasLegacyRouting) {
@@ -147,7 +160,7 @@ class FilterUrlBuilder
             $parameters['_locale'] = $locale;
         }
         foreach ($filterUrl->getSlugParameters() as $name => $value) {
-            if (\in_array($name, ['auto_item'])) {
+            if ($name === 'auto_item') {
                 continue;
             }
 
@@ -169,7 +182,8 @@ class FilterUrlBuilder
     /**
      * Generate a filter URL from the current request.
      *
-     * @param array|null $options The options for updating - for details see FilterUrlBuilder::addFromCurrentRequest().
+     * @param TFilterUrlOptions|null $options The options for updating - for details
+     *                                        see FilterUrlBuilder::addFromCurrentRequest().
      *
      * @return FilterUrl
      */
@@ -196,7 +210,7 @@ class FilterUrlBuilder
      *                        default: true
      *
      * @param FilterUrl  $filterUrl The filter URL to update.
-     * @param array|null $options   The options for updating.
+     * @param TFilterUrlOptions|null $options   The options for updating.
      *
      * @return void
      */
@@ -232,7 +246,7 @@ class FilterUrlBuilder
         } else {
             $routeName = $this->determineRouteName($request);
 
-            $filterUrl->setPageValue('id', substr($routeName, 8));
+            $filterUrl->setPageValue('id', \substr($routeName, 8));
             $requestUri = \rawurldecode(\substr($request->getPathInfo(), 1));
 
             if (null === ($route = $request->attributes->get('_route_object'))) {
@@ -249,9 +263,9 @@ class FilterUrlBuilder
             $fragments = \explode('/', \substr($requestUri, $start, $length));
 
             if (1 === \count($fragments) % 2) {
-                array_unshift($fragments, 'auto_item');
+                \array_unshift($fragments, 'auto_item');
             }
-            array_unshift($fragments, $pageModel->alias);
+            \array_unshift($fragments, $pageModel->alias);
         }
 
         // If alias part is empty, this means we have the 'index' page.
@@ -327,7 +341,7 @@ class FilterUrlBuilder
 
         $fragments = null;
         // Use folder-style URLs
-        if (Config::get('folderUrl') && false !== \strpos($requestUri, '/')) {
+        if (Config::get('folderUrl') && \str_contains($requestUri, '/')) {
             $fragments = $this->getFolderUrlFragments(
                 $requestUri,
                 $request->getHttpHost(),
@@ -345,7 +359,7 @@ class FilterUrlBuilder
 
         // Add the second fragment as auto_item if the number of fragments is even
         if (Config::get('useAutoItem') && 0 === (\count($fragments) % 2)) {
-            ArrayUtil::arrayInsert($fragments, 1, ['auto_item']);
+            \array_splice($fragments, 1, 0, 'auto_item');
         }
 
         $fragments = $this->getPageIdFromUrlHook($fragments);
@@ -368,7 +382,7 @@ class FilterUrlBuilder
     private function strippedUri(Request $request): ?string
     {
         // Strip leading slash.
-        if (null === $request || '' === $requestUri = \rawurldecode(substr($request->getPathInfo(), 1))) {
+        if ('' === $requestUri = \rawurldecode(\substr($request->getPathInfo(), 1))) {
             return null;
         }
         if ($this->isLocalePrepended) {
@@ -380,9 +394,11 @@ class FilterUrlBuilder
         }
 
         // Remove the URL suffix if not just a language root (e.g. en/) is requested
-        if ('' !== $this->urlSuffix && '' !== $requestUri && (
+        if (
+            '' !== $this->urlSuffix && '' !== $requestUri && (
                 !$this->isLocalePrepended || !\preg_match('@^[a-z]{2}(-[A-Z]{2})?/$@', $requestUri)
-            )) {
+            )
+        ) {
             $requestUri = \substr($requestUri, 0, -\strlen($this->urlSuffix));
         }
 
@@ -404,30 +420,30 @@ class FilterUrlBuilder
     {
         // Check if there are pages with a matching alias
         $pages = $this->getPageCandidates($alias);
-        if (null === $pages) {
+        if ([] === $pages) {
             return null;
         }
 
         // Look for a root page whose domain name matches the host name
-        if (isset($pages[$host])) {
-            $languages = $pages[$host];
-        } else {
+        $languages = $pages[$host]
             // empty domain
-            $languages = $pages['*'] ?: [];
-        }
+            ?? ($pages['*'] ?: []);
         unset($pages);
 
         $pages = [];
 
         if (!$this->isLocalePrepended) {
-            // Use the first result (see #4872)
+            // Use the first result (see #4872).
             $pages = \current($languages);
-        } elseif ($locale && isset($languages[$locale])) {
+            if (false === $pages) {
+                $pages = [];
+            }
+        } elseif (null !== $locale && isset($languages[$locale])) {
             // Try to find a page matching the language parameter
             $pages = $languages[$locale];
         }
 
-        // Return if there are no matches
+        // Return if there are no matches.
         if (empty($pages)) {
             return null;
         }
@@ -436,11 +452,11 @@ class FilterUrlBuilder
         $page = $pages[0];
 
         // The request consists of the alias only
-        if ($alias == $page->alias) {
+        if ($alias === $page->alias) {
             $arrFragments = [$alias];
         } else {
             // Remove the alias from the request string, explode it and then re-insert it at the beginning.
-            $arrFragments = explode('/', \substr($alias, (\strlen($page->alias) + 1)));
+            $arrFragments = \explode('/', \substr($alias, (\strlen($page->alias) + 1)));
             \array_unshift($arrFragments, $page->alias);
         }
 
@@ -452,13 +468,13 @@ class FilterUrlBuilder
      *
      * @param string $alias The requested alias.
      *
-     * @return array|null
+     * @return array<non-falsy-string, array<string, non-empty-list<PageModel>>>
      */
-    private function getPageCandidates(string $alias): ?array
+    private function getPageCandidates(string $alias): array
     {
         $aliases = [$alias];
         // Compile all possible aliases by applying dirname() to the request.
-        while ('/' !== $alias && false !== strpos($alias, '/')) {
+        while ('/' !== $alias && \str_contains($alias, '/')) {
             $alias     = \dirname($alias);
             $aliases[] = $alias;
         }
@@ -466,14 +482,12 @@ class FilterUrlBuilder
         // Check if there are pages with a matching alias - sort by priority desc and alias* desc.
         // *: You can assume that if folderurl is enabled, the lower hierarchy pages will have a
         // longer alias string - hence descending sorting.
+        /** @psalm-suppress InternalMethod */
         $pages = $this->pageModelAdapter->findByAliases(
             $aliases,
             ['order' => 'tl_page.routePriority DESC, tl_page.alias DESC']
         );
-
-        if (null === $pages) {
-            return null;
-        }
+        assert($pages instanceof Collection);
 
         $arrPages = [];
         // Order by domain and language.
@@ -536,7 +550,7 @@ class FilterUrlBuilder
 
         foreach ($request->request->all() as $name => $value) {
             if (\is_array($value)) {
-                $value = implode(',', $value);
+                $value = \implode(',', $value);
             }
             if (\in_array($name, $options['postAsSlug'])) {
                 $filterUrl->setSlug($name, $value);
@@ -559,10 +573,10 @@ class FilterUrlBuilder
         $pageModel = $request->attributes->get('pageModel');
 
         return 'tl_page.' . match (true) {
-                ($pageModel instanceof PageModel) => $pageModel->id,
-                is_int($pageModel) => (string) $pageModel,
-                default =>
-                    throw new \RuntimeException('Unknown page model encountered: ' . get_debug_type($pageModel)),
-            };
+            ($pageModel instanceof PageModel) => $pageModel->id,
+            \is_int($pageModel) => (string) $pageModel,
+            default =>
+                throw new \RuntimeException('Unknown page model encountered: ' . \get_debug_type($pageModel)),
+        };
     }
 }

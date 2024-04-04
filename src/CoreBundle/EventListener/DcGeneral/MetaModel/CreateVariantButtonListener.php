@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -30,17 +30,26 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\ContaoBacke
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\EditMask;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetOperationButtonEvent;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CommandInterface;
+use ContaoCommunityAlliance\DcGeneral\Data\DataProviderInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\ActionEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PostCreateModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PreCreateModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PreEditModelEvent;
+use ContaoCommunityAlliance\DcGeneral\InputProviderInterface;
+use MetaModels\DcGeneral\Data\Driver;
 use MetaModels\DcGeneral\Data\Model;
 use MetaModels\IFactory;
+use MetaModels\IItem;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Event handler class to manage the "create variant" button.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreateVariantButtonListener
 {
@@ -49,20 +58,19 @@ class CreateVariantButtonListener
      *
      * @var IFactory
      */
-    private $factory;
+    private IFactory $factory;
 
     /**
      * The request scope determinator.
      *
      * @var RequestScopeDeterminator
      */
-    private $scopeMatcher;
+    private RequestScopeDeterminator $scopeMatcher;
 
     /**
      * Create a new instance.
      *
      * @param IFactory                 $factory      The factory.
-     *
      * @param RequestScopeDeterminator $scopeMatcher The request scope determinator.
      */
     public function __construct(IFactory $factory, RequestScopeDeterminator $scopeMatcher)
@@ -80,12 +88,18 @@ class CreateVariantButtonListener
      */
     public function createButton(GetOperationButtonEvent $event)
     {
-        if ('createvariant' !== $event->getCommand()->getName()) {
+        $command = $event->getCommand();
+        assert($command instanceof CommandInterface);
+
+        if ('createvariant' !== $command->getName()) {
             return;
         }
+
         /** @var Model $model */
-        $model     = $event->getModel();
-        $metamodel = $model->getItem()->getMetaModel();
+        $model = $event->getModel();
+        $item  = $model->getItem();
+        assert($item instanceof IItem);
+        $metamodel = $item->getMetaModel();
 
         if (!$metamodel->hasVariants() || $model->getProperty('varbase') === '0') {
             $event->setHtml('');
@@ -104,20 +118,27 @@ class CreateVariantButtonListener
      */
     public function handleCreateVariantAction(ActionEvent $event)
     {
-        if (false === $this->scopeMatcher->currentScopeIsBackend()
-            || 'createvariant' !== $event->getAction()->getName()) {
+        if (
+            false === $this->scopeMatcher->currentScopeIsBackend()
+            || 'createvariant' !== $event->getAction()->getName()
+        ) {
             return;
         }
 
-        $environment   = $event->getEnvironment();
-        $view          = $environment->getView();
-        $dataProvider  = $environment->getDataProvider();
+        $environment  = $event->getEnvironment();
+        $view         = $environment->getView();
+        $dataProvider = $environment->getDataProvider();
+        assert($dataProvider instanceof Driver);
         $inputProvider = $environment->getInputProvider();
-        $modelId       = $inputProvider->hasParameter('id')
+        assert($inputProvider instanceof InputProviderInterface);
+        $modelId = $inputProvider->hasParameter('id')
             ? ModelId::fromSerialized($inputProvider->getParameter('id'))
             : null;
 
-        /** @var \MetaModels\DcGeneral\Data\Driver $dataProvider */
+        if (null === $modelId) {
+            throw new \RuntimeException('No model id passed.');
+        }
+
         $model = $dataProvider
             ->createVariant(
                 $dataProvider
@@ -125,35 +146,41 @@ class CreateVariantButtonListener
                     ->setId($modelId->getId())
             );
 
-        if ($model == null) {
+        if ($model === null) {
             throw new \RuntimeException(sprintf(
                 'Could not find model with id %s for creating a variant.',
-                $modelId
+                $modelId->getSerialized()
             ));
         }
 
         $metaModel = $this->factory->getMetaModel($model->getProviderName());
 
-        if (!$metaModel || !$metaModel->hasVariants()) {
+        if ((null === $metaModel) || !$metaModel->hasVariants()) {
             return;
         }
 
-        $preFunction = function ($environment, $model) {
-            /** @var EnvironmentInterface $environment */
+        $preFunction = function (EnvironmentInterface $environment, ModelInterface $model): void {
+            $dispatcher = $environment->getEventDispatcher();
+            assert($dispatcher instanceof EventDispatcherInterface);
+
             $copyEvent = new PreCreateModelEvent($environment, $model);
-            $environment->getEventDispatcher()->dispatch($copyEvent, $copyEvent::NAME);
+            $dispatcher->dispatch($copyEvent, $copyEvent::NAME);
         };
 
-        $postFunction = function ($environment, $model) {
-            /** @var EnvironmentInterface $environment */
+        $postFunction = function (EnvironmentInterface $environment, ModelInterface $model): void {
+            $dispatcher = $environment->getEventDispatcher();
+            assert($dispatcher instanceof EventDispatcherInterface);
+
             $copyEvent = new PostCreateModelEvent($environment, $model);
-            $environment->getEventDispatcher()->dispatch($copyEvent, $copyEvent::NAME);
+            $dispatcher->dispatch($copyEvent, $copyEvent::NAME);
         };
 
         if (!$view instanceof BackendViewInterface) {
             throw new \InvalidArgumentException('Invalid view registered in environment.');
         }
-        $editMask = new EditMask($view, $model, null, $preFunction, $postFunction, $this->breadcrumb($environment));
+        $newModel = clone $model;
+        $editMask =
+            new EditMask($view, $newModel, $model, $preFunction, $postFunction, $this->breadcrumb($environment));
         $event->setResponse($editMask->execute());
     }
 
@@ -176,7 +203,8 @@ class CreateVariantButtonListener
 
         // Get the item and check the context.
         $nativeItem = $model->getItem();
-        $metaModel  = $nativeItem->getMetaModel();
+        assert($nativeItem instanceof IItem);
+        $metaModel = $nativeItem->getMetaModel();
 
         if ($metaModel->hasVariants() && (!$nativeItem->get('vargroup'))) {
             $nativeItem->set('varbase', '1');
@@ -195,20 +223,21 @@ class CreateVariantButtonListener
      */
     protected function breadcrumb(EnvironmentInterface $environment)
     {
-        $event = new GetBreadcrumbEvent($environment);
-
-        $environment->getEventDispatcher()->dispatch($event, $event::NAME);
+        $event      = new GetBreadcrumbEvent($environment);
+        $dispatcher = $environment->getEventDispatcher();
+        assert($dispatcher instanceof EventDispatcherInterface);
+        $dispatcher->dispatch($event, $event::NAME);
 
         $arrReturn = $event->getElements();
 
-        if (!is_array($arrReturn) || count($arrReturn) == 0) {
-            return null;
+        if ([] === $arrReturn) {
+            return '';
         }
 
         $GLOBALS['TL_CSS'][] = 'bundles/ccadcgeneral/css/generalBreadcrumb.css';
 
         $objTemplate           = new ContaoBackendViewTemplate('dcbe_general_breadcrumb');
-        $objTemplate->elements = $arrReturn;
+        $objTemplate->set('elements', $arrReturn);
 
         return $objTemplate->parse();
     }

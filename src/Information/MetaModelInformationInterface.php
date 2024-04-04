@@ -17,7 +17,7 @@
  * @filesource
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace MetaModels\Information;
 
@@ -90,7 +90,7 @@ interface MetaModelInformationInterface
     /**
      * Retrieve attributes.
      *
-     * @return AttributeInformation[]
+     * @return list<AttributeInformationInterface>
      */
     public function getAttributes(): array;
 
@@ -99,7 +99,7 @@ interface MetaModelInformationInterface
      *
      * @param string $typeName Retrieve all attributes of a certain type.
      *
-     * @return \Traversable|AttributeInformation[]
+     * @return \Traversable<int, AttributeInformationInterface>
      */
     public function getAttributesOfType(string $typeName): \Traversable;
 }

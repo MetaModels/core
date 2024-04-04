@@ -80,7 +80,7 @@ interface ISimple extends IAttribute
      *
      * @param mixed $value The input value.
      *
-     * @return string
+     * @return string|null
      */
     public function serializeData($value);
 }

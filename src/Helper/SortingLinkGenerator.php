@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,7 @@
  *
  * @package    MetaModels/core
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -125,12 +125,47 @@ class SortingLinkGenerator
     {
         $pageFilterUrl = $this->urlBuilder->getCurrentFilterUrl();
         $sortBy        = $this->tryReadFromSlugOrGet($pageFilterUrl, $this->sortOrderByParam, $this->sortParamType)
-            ?: $this->defaultSorting;
+            ?? $this->defaultSorting;
         $sortDirection = $this->tryReadFromSlugOrGet($pageFilterUrl, $this->sortOrderDirParam, $this->sortParamType)
-            ?: $this->defaultDirection;
+            ?? $this->defaultDirection;
         $attributeName = $attribute->getColName();
         $active        = $sortBy === $attributeName;
 
+        $dir = $this->determineDirection($type, $active, $sortDirection);
+
+        if ($attributeName === $this->defaultSorting && $dir === $this->defaultDirection) {
+            $attributeName = '';
+        }
+
+        $this->updateSortingInFilterUrl($pageFilterUrl, $attributeName, $dir);
+
+        return [
+            'attribute' => $attribute,
+            'name'      => $attribute->getName(),
+            'href'      => $this->urlBuilder->generate($pageFilterUrl) .
+                           ($this->sortFragment ? '#' . $this->sortFragment : ''),
+            'direction' => $dir,
+            'active'    => $active,
+            'class'     => 'sort' . ($active ? ' active' : '') . ' ' . $dir,
+            'label'     => $this->translator->trans(
+                'MSC.orderMetaModelListBy' . ($dir === 'asc' ? 'Ascending' : 'Descending'),
+                [0 => $attribute->getName()],
+                'contao_default'
+            ),
+        ];
+    }
+
+    /**
+     * Determine the direction to use.
+     *
+     * @param string $type          Type of the link to generate a direction for.
+     * @param bool   $active        Flag if the sorting is currently active.
+     * @param string $sortDirection The current direction (only considered when active).
+     *
+     * @return string
+     */
+    private function determineDirection(string $type, bool $active, string $sortDirection): string
+    {
         switch ($type) {
             case 'toggle':
                 // In case of toggle, we override the type with the desired direction.
@@ -141,43 +176,11 @@ class SortingLinkGenerator
             // NO break here!
             case 'asc':
             case 'desc':
-                $dir = $type;
+                return $type;
                 break;
             default:
-                throw new RuntimeException('Unknown link type: ' . $type);
         }
-
-        if ($attributeName === $this->defaultSorting && $dir === $this->defaultDirection) {
-            $attributeName = '';
-        }
-
-        if ('get' === $this->sortParamType) {
-            $pageFilterUrl->setGet($this->sortOrderByParam, $attributeName);
-            $pageFilterUrl->setGet($this->sortOrderDirParam, $attributeName ? $dir : '');
-        } else {
-            // Use slug or slugNget.
-            $pageFilterUrl
-                ->setSlug($this->sortOrderByParam, $attributeName)
-                ->setGet($this->sortOrderByParam, '');
-            $pageFilterUrl
-                ->setSlug($this->sortOrderDirParam, $attributeName ? $dir : '')
-                ->setGet($this->sortOrderDirParam, '');
-        }
-
-        return [
-            'attribute' => $attribute,
-            'name'      => $attribute->getName(),
-            'href'      => $this->urlBuilder->generate($pageFilterUrl) .
-                           ($this->sortFragment ? '#' . $this->sortFragment : ''),
-            'direction' => $dir,
-            'active'    => (bool) $active,
-            'class'     => 'sort' . ($active ? ' active' : '') . ' ' . $dir,
-            'label'     => $this->translator->trans(
-                'MSC.orderMetaModelListBy' . ($dir === 'asc' ? 'Ascending' : 'Descending'),
-                [0 => $attribute->getName()],
-                'contao_default'
-            ),
-        ];
+        throw new RuntimeException('Unknown link type: ' . $type);
     }
 
     /**
@@ -195,13 +198,13 @@ class SortingLinkGenerator
 
         switch ($sortType) {
             case 'get':
-                $result = $filterUrl->getGet($sortParam);
+                $result = $this->getGetParam($filterUrl, $sortParam);
                 break;
             case 'slug':
                 $result = $filterUrl->getSlug($sortParam);
                 break;
             case 'slugNget':
-                $result = ($filterUrl->getGet($sortParam) ?? $filterUrl->getSlug($sortParam));
+                $result = ($this->getGetParam($filterUrl, $sortParam) ?? $filterUrl->getSlug($sortParam));
                 break;
             default:
         }
@@ -210,5 +213,48 @@ class SortingLinkGenerator
         Input::get($sortParam);
 
         return $result;
+    }
+
+    /**
+     * Retrieve GET parameters.
+     *
+     * @param FilterUrl $filterUrl The filter URL.
+     * @param string    $sortParam The sort parameter.
+     *
+     * @return string|null
+     */
+    private function getGetParam(FilterUrl $filterUrl, string $sortParam): ?string
+    {
+        $value = $filterUrl->getGet($sortParam);
+        if (\is_array($value)) {
+            return null;
+        }
+
+        return $value;
+    }
+
+    /**
+     * Write parameter to filter url.
+     *
+     * @param FilterUrl $pageFilterUrl The filter url to update.
+     * @param string    $attributeName The name of the attribute to update.
+     * @param string    $dir           The direction.
+     *
+     * @return void
+     */
+    private function updateSortingInFilterUrl(FilterUrl $pageFilterUrl, string $attributeName, mixed $dir): void
+    {
+        if ('get' === $this->sortParamType) {
+            $pageFilterUrl->setGet($this->sortOrderByParam, $attributeName);
+            $pageFilterUrl->setGet($this->sortOrderDirParam, $attributeName ? $dir : '');
+        } else {
+            // Use slug or slugNget.
+            $pageFilterUrl
+                ->setSlug($this->sortOrderByParam, $attributeName)
+                ->setGet($this->sortOrderByParam, '');
+            $pageFilterUrl
+                ->setSlug($this->sortOrderDirParam, $attributeName ? $dir : '')
+                ->setGet($this->sortOrderDirParam, '');
+        }
     }
 }

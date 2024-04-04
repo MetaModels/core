@@ -29,7 +29,7 @@
 // Preserve values by extensions but insert as first entry after 'system'.
 $arrOld = isset($GLOBALS['BE_MOD']['metamodels']) ? $GLOBALS['BE_MOD']['metamodels'] : array();
 unset($GLOBALS['BE_MOD']['metamodels']);
-array_insert(
+\Contao\ArrayUtil::arrayInsert(
     $GLOBALS['BE_MOD'],
     (array_search('accounts', array_keys($GLOBALS['BE_MOD'])) + 1),
     array
@@ -114,7 +114,7 @@ $GLOBALS['METAMODELS']['metainformation']['allowedDescription'][] = 'longtext';
 $GLOBALS['METAMODELS']['metainformation']['allowedDescription'][] = 'translatedlongtext';
 $GLOBALS['METAMODELS']['metainformation']['allowedDescription'][] = 'combinedvalues';
 
-array_insert($GLOBALS['BE_FFL'], 15, array
+\Contao\ArrayUtil::arrayInsert($GLOBALS['BE_FFL'], 15, array
 (
     'mm_subdca'    => 'MetaModels\Widgets\SubDcaWidget'
 ));

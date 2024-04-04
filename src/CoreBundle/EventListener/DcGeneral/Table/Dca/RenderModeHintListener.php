@@ -22,6 +22,7 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\Dca;
 use Contao\Message;
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\BuildWidgetEvent;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use Doctrine\DBAL\Connection;
 use MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\AbstractListener;
 use MetaModels\IFactory;
@@ -37,7 +38,7 @@ class RenderModeHintListener
      *
      * @var TranslatorInterface
      */
-    private $translator;
+    private TranslatorInterface $translator;
 
     /**
      * Create a new instance.
@@ -59,10 +60,14 @@ class RenderModeHintListener
      */
     public function handle(BuildWidgetEvent $event)
     {
-        $environment = $event->getEnvironment();
-        if (($environment->getDataDefinition()->getName() !== 'tl_metamodel_dca')
+        $dataDefinition = $event->getEnvironment()->getDataDefinition();
+        assert($dataDefinition instanceof ContainerInterface);
+
+        if (
+            ($dataDefinition->getName() !== 'tl_metamodel_dca')
             || ($event->getProperty()->getName() !== 'rendermode')
-            || (null === $event->getModel()->getId())) {
+            || (null === $event->getModel()->getId())
+        ) {
             return;
         }
 

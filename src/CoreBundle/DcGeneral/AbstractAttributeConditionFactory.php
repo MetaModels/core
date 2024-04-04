@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -31,7 +31,6 @@ abstract class AbstractAttributeConditionFactory implements AttributeAwareProper
      * Extract the attribute instance from the MetaModel.
      *
      * @param IMetaModel $metaModel   The MetaModel instance.
-     *
      * @param int        $attributeId The attribute id.
      *
      * @return string
@@ -40,7 +39,7 @@ abstract class AbstractAttributeConditionFactory implements AttributeAwareProper
      */
     protected function attributeIdToName(IMetaModel $metaModel, $attributeId)
     {
-        if (null === $attribute = $metaModel->getAttributeById((int) $attributeId)) {
+        if (null === $attribute = $metaModel->getAttributeById($attributeId)) {
             throw new \RuntimeException(sprintf(
                 'Could not retrieve attribute %s from MetaModel %s.',
                 $attributeId,

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,8 @@
  *
  * @package    MetaModels/core
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -20,8 +21,10 @@
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaCombine;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
-use ContaoCommunityAlliance\DcGeneral\Data\DataProviderInterface;
+use ContaoCommunityAlliance\DcGeneral\Data\DefaultDataProvider;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelManipulator;
+use ContaoCommunityAlliance\DcGeneral\Data\TableRowsAsRecordsDataProvider;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\PropertiesDefinitionInterface;
 
 /**
@@ -38,14 +41,21 @@ class FixTypeSafetyListener
      */
     public function handle(EncodePropertyValueFromWidgetEvent $event)
     {
-        if (('tl_metamodel_dca_combine' !== $event->getEnvironment()->getDataDefinition()->getName())
-            || ('rows' !== $event->getProperty())) {
+        $environment    = $event->getEnvironment();
+        $dataDefinition = $environment->getDataDefinition();
+        assert($dataDefinition instanceof ContainerInterface);
+
+        if (
+            ('tl_metamodel_dca_combine' !== $dataDefinition->getName())
+            || ('rows' !== $event->getProperty())
+        ) {
             return;
         }
 
-        $environment  = $event->getEnvironment();
+
         $dataProvider = $environment->getDataProvider();
-        $properties   = $environment->getDataDefinition()->getPropertiesDefinition();
+        assert($dataProvider instanceof TableRowsAsRecordsDataProvider);
+        $properties = $dataDefinition->getPropertiesDefinition();
 
         $values = (array) $event->getValue();
         foreach ($values as $row => $current) {
@@ -60,17 +70,18 @@ class FixTypeSafetyListener
      *
      * @param array                         $values       The values for update.
      * @param PropertiesDefinitionInterface $properties   The properties.
-     * @param DataProviderInterface         $dataProvider The data provider.
+     * @param TableRowsAsRecordsDataProvider $dataProvider The data provider.
      *
      * @return array
      */
     private function updateValues(
         array &$values,
         PropertiesDefinitionInterface $properties,
-        DataProviderInterface $dataProvider
+        TableRowsAsRecordsDataProvider $dataProvider
     ) {
         foreach ($values as $propertyName => $propertyValue) {
-            if (($dataProvider->getIdProperty() === $propertyName)
+            if (
+                ($dataProvider->getIdProperty() === $propertyName)
                 || ($dataProvider->getGroupColumnProperty() === $propertyName)
                 || ($dataProvider->getSortingColumnProperty() === $propertyName)
                 || ($dataProvider->getTimeStampProperty() === $propertyName)

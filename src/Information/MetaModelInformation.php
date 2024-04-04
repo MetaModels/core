@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,12 +12,13 @@
  *
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace MetaModels\Information;
 
@@ -33,14 +34,14 @@ class MetaModelInformation implements MetaModelInformationInterface
      *
      * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * The array of attribute information.
      *
      * @var AttributeInformationInterface[]
      */
-    private $attributes = [];
+    private array $attributes = [];
 
     /**
      * Create a new instance.
@@ -67,7 +68,7 @@ class MetaModelInformation implements MetaModelInformationInterface
      */
     public function getAttributeNames(): array
     {
-        return array_keys($this->attributes);
+        return \array_keys($this->attributes);
     }
 
     /**
@@ -91,7 +92,7 @@ class MetaModelInformation implements MetaModelInformationInterface
     /**
      * {@inheritDoc}
      *
-     * @return AttributeInformation
+     * @return AttributeInformationInterface
      *
      * @throws \InvalidArgumentException When the attribute is not registered.
      */
@@ -117,7 +118,7 @@ class MetaModelInformation implements MetaModelInformationInterface
      */
     public function getAttributes(): array
     {
-        return array_values($this->attributes);
+        return \array_values($this->attributes);
     }
 
     /**

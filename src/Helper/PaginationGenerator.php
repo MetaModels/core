@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@
  * @package    MetaModels/core
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2021 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -119,7 +119,7 @@ class PaginationGenerator
         $this->urlBuilder         = $urlBuilder;
         $this->numRows            = $numRows;
         $this->rowsPerPage        = $rowsPerPage;
-        $this->totalPages         = ceil($this->numRows / $this->rowsPerPage);
+        $this->totalPages         = (int) \ceil($this->numRows / $this->rowsPerPage);
         $this->numberOfLinks      = $numberOfLinks;
         $this->pageParam          = $pageParam;
         $this->paramType          = $paramType;
@@ -153,19 +153,31 @@ class PaginationGenerator
             $page = $this->totalPages;
         }
 
-        $template                     = $this->template;
-        $template->hasFirst           = $this->hasFirst($page);
-        $template->hasPrevious        = $this->hasPrevious($page);
-        $template->hasNext            = $this->hasNext($page);
-        $template->hasLast            = $this->hasLast($page);
-        $template->pages              = $this->getItemsAsArray($filterUrl, $page);
-        $template->page               = $page;
-        $template->totalPages         = $this->totalPages;
-        $template->first              = $template->hasFirst ? $this->linkToPage($filterUrl, 1) : '';
-        $template->previous           = $template->hasPrevious ? $this->linkToPage($filterUrl, ($page - 1)) : '';
-        $template->next               = $template->hasNext ? $this->linkToPage($filterUrl, ($page + 1)) : '';
-        $template->last               = $template->hasLast ? $this->linkToPage($filterUrl, $this->totalPages) : '';
-        $template->class              = 'pagination-' . $this->pageParam;
+        $template = $this->template;
+        /** @psalm-suppress UndefinedMagicPropertyAssignment */
+        $template->hasFirst = $this->hasFirst($page);
+        /** @psalm-suppress UndefinedMagicPropertyAssignment */
+        $template->hasPrevious = $this->hasPrevious($page);
+        /** @psalm-suppress UndefinedMagicPropertyAssignment */
+        $template->hasNext = $this->hasNext($page);
+        /** @psalm-suppress UndefinedMagicPropertyAssignment */
+        $template->hasLast = $this->hasLast($page);
+        /** @psalm-suppress UndefinedMagicPropertyAssignment */
+        $template->pages = $this->getItemsAsArray($filterUrl, $page);
+        /** @psalm-suppress UndefinedMagicPropertyAssignment */
+        $template->page = $page;
+        /** @psalm-suppress UndefinedMagicPropertyAssignment */
+        $template->totalPages = $this->totalPages;
+        /** @psalm-suppress UndefinedMagicPropertyAssignment */
+        $template->first = $template->hasFirst ? $this->linkToPage($filterUrl, 1) : '';
+        /** @psalm-suppress UndefinedMagicPropertyAssignment */
+        $template->previous = $template->hasPrevious ? $this->linkToPage($filterUrl, ($page - 1)) : '';
+        /** @psalm-suppress UndefinedMagicPropertyAssignment */
+        $template->next = $template->hasNext ? $this->linkToPage($filterUrl, ($page + 1)) : '';
+        /** @psalm-suppress UndefinedMagicPropertyAssignment */
+        $template->last  = $template->hasLast ? $this->linkToPage($filterUrl, $this->totalPages) : '';
+        $template->class = 'pagination-' . $this->pageParam;
+        /** @psalm-suppress UndefinedMagicPropertyAssignment */
         $template->paginationFragment = $this->paginationFragment;
         // @codingStandardsIgnoreStart
         // Adding rel="prev" and rel="next" links is not possible
@@ -188,17 +200,32 @@ class PaginationGenerator
     {
         switch ($this->paramType) {
             case 'get':
-                return (int) ($filterUrl->getGet($this->pageParam) ?? 1);
+                return (int) ($this->getGetPageParam($filterUrl) ?? 1);
             case 'slug':
                 return (int) ($filterUrl->getSlug($this->pageParam) ?? 1);
             case 'slugNget':
-                return (int) ($filterUrl->getGet($this->pageParam)
-                    ?? $filterUrl->getSlug($this->pageParam)
-                    ?? 1);
+                return (int) ($this->getGetPageParam($filterUrl) ?? $filterUrl->getSlug($this->pageParam) ?? 1);
             default:
         }
 
         throw new InvalidArgumentException('Invalid configured value: ' . $this->paramType);
+    }
+
+    /**
+     * Retrieve GET parameters.
+     *
+     * @param FilterUrl $filterUrl The filter URL.
+     *
+     * @return string|null
+     */
+    private function getGetPageParam(FilterUrl $filterUrl): ?string
+    {
+        $value = $filterUrl->getGet($this->pageParam);
+        if (\is_array($value)) {
+            return null;
+        }
+
+        return $value;
     }
 
     /**
@@ -261,7 +288,7 @@ class PaginationGenerator
     {
         $links = [];
 
-        $numberOfLinks = floor($this->numberOfLinks / 2);
+        $numberOfLinks = (int) floor($this->numberOfLinks / 2);
         $firstOffset   = ($page - $numberOfLinks - 1);
 
         if ($firstOffset > 0) {
@@ -287,7 +314,7 @@ class PaginationGenerator
         }
 
         for ($i = $firstLink; $i <= $lastLink; $i++) {
-            if ($i == $page) {
+            if ($i === $page) {
                 $links[] = [
                     'page' => $i,
                     'href' => null
@@ -320,9 +347,9 @@ class PaginationGenerator
 
         $pageFilterUrl = $filterUrl->clone();
         if ($this->paramType === 'get') {
-            $pageFilterUrl->setGet($this->pageParam, $page);
+            $pageFilterUrl->setGet($this->pageParam, (string) $page);
         } else {
-            $pageFilterUrl->setSlug($this->pageParam, $page)->setGet($this->pageParam, '');
+            $pageFilterUrl->setSlug($this->pageParam, (string) $page)->setGet($this->pageParam, '');
         }
 
         return $this->urlBuilder->generate($pageFilterUrl);

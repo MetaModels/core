@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,36 +13,39 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\Helper;
 
+use Contao\Database;
+
 /**
  * Upgrade handler class that changes structural changes in the database.
- * This should rarely be necessary but sometimes we need it.
+ * This should rarely be necessary, but sometimes we need it.
  */
 class UpgradeHandler
 {
     /**
      * Retrieve the database instance from Contao.
      *
-     * @return \Database
+     * @return Database
      *
      * @SuppressWarnings(PHPMD.ShortMethodName)
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
     protected static function DB()
     {
-        return \Database::getInstance();
+        return Database::getInstance();
     }
 
     /**
      * Handle database upgrade for the jumpTo field.
      *
-     * Introduced: pre release 1.0.
+     * Introduced: pre-release 1.0.
      *
      * If the field 'metamodel_jumpTo' does exist in tl_module or tl_content,
      * it will get created and the content from jumpTo will get copied over.
@@ -52,7 +55,8 @@ class UpgradeHandler
     protected static function upgradeJumpTo()
     {
         $objDB = self::DB();
-        if ($objDB->tableExists('tl_content', null, true)
+        if (
+            $objDB->tableExists('tl_content', null, true)
             && !$objDB->fieldExists('metamodel_jumpTo', 'tl_content', true)
         ) {
             // Create the column in the database and copy the data over.
@@ -66,7 +70,8 @@ class UpgradeHandler
             }
         }
 
-        if ($objDB->tableExists('tl_module', null, true)
+        if (
+            $objDB->tableExists('tl_module', null, true)
             && !$objDB->fieldExists('metamodel_jumpTo', 'tl_module', true)
         ) {
             // Create the column in the database and copy the data over.
@@ -95,7 +100,8 @@ class UpgradeHandler
     protected static function upgradeDcaSettingsPublished()
     {
         $objDB = self::DB();
-        if ($objDB->tableExists('tl_metamodel_dcasetting', null, true)
+        if (
+            $objDB->tableExists('tl_metamodel_dcasetting', null, true)
             && !$objDB->fieldExists('published', 'tl_metamodel_dcasetting', true)
         ) {
             // Create the column in the database and copy the data over.
@@ -137,7 +143,8 @@ class UpgradeHandler
             );
         }
 
-        if ($objDB->tableExists('tl_metamodel_dcasetting', null, true)
+        if (
+            $objDB->tableExists('tl_metamodel_dcasetting', null, true)
             && $objDB->fieldExists('subpalette', 'tl_metamodel_dcasetting', true)
         ) {
             $subpalettes = $objDB->execute('SELECT * FROM tl_metamodel_dcasetting WHERE subpalette!=0');
@@ -155,6 +162,7 @@ class UpgradeHandler
 
                 $attr = array();
                 while ($attributes->next()) {
+                    /** @psalm-suppress UndefinedMagicPropertyFetch */
                     $attr[$attributes->attr_id] = $attributes->colName;
                 }
 
@@ -168,25 +176,27 @@ class UpgradeHandler
 
                 $check = array();
                 while ($checkboxes->next()) {
+                    /** @psalm-suppress UndefinedMagicPropertyFetch */
                     $check[$checkboxes->id] = $checkboxes->attr_id;
                 }
 
                 while ($subpalettes->next()) {
                     // Add property value condition for parent property dependency.
-                    $data = array(
-                        'pid' => 0,
+                    /** @psalm-suppress UndefinedMagicPropertyFetch */
+                    $data = [
+                        'pid'       => 0,
                         'settingId' => $subpalettes->id,
-                        'sorting' => '128',
-                        'tstamp' => time(),
-                        'enabled' => '1',
-                        'type' => 'conditionpropertyvalueis',
-                        'attr_id' => $check[$subpalettes->subpalette],
-                        'comment' => sprintf(
+                        'sorting'   => '128',
+                        'tstamp'    => \time(),
+                        'enabled'   => '1',
+                        'type'      => 'conditionpropertyvalueis',
+                        'attr_id'   => $check[$subpalettes->subpalette],
+                        'comment'   => \sprintf(
                             'Only show when checkbox "%s" is checked',
                             $attr[$check[$subpalettes->subpalette]]
                         ),
-                        'value' => '1',
-                    );
+                        'value'     => '1',
+                    ];
 
                     $objDB
                         ->prepare('INSERT INTO tl_metamodel_dcasetting_condition %s')
@@ -217,8 +227,10 @@ class UpgradeHandler
         $objDB = self::DB();
 
         // Change isclosed to iseditable, iscreatable and isdeleteable.
-        if ($objDB->tableExists('tl_metamodel_dca', null, true)
-            && !$objDB->fieldExists('iseditable', 'tl_metamodel_dca')) {
+        if (
+            $objDB->tableExists('tl_metamodel_dca', null, true)
+            && !$objDB->fieldExists('iseditable', 'tl_metamodel_dca')
+        ) {
             // Create the column in the database and copy the data over.
             TableManipulation::createColumn(
                 'tl_metamodel_dca',
@@ -321,26 +333,28 @@ class UpgradeHandler
 
         while ($dca->next()) {
             $renderGroupLen = 0;
-            if (in_array($dca->flag, array(1,2,3,4))) {
+            /** @psalm-suppress UndefinedMagicPropertyFetch */
+            if (\in_array($dca->flag, [1, 2, 3, 4])) {
                 $renderGroupType = 'char';
-                if (in_array($dca->flag, array(1,2))) {
+                if (\in_array($dca->flag, [1, 2])) {
                     $renderGroupLen = 1;
                 } else {
                     $renderGroupLen = 2;
                 }
-            } elseif (in_array($dca->flag, array(5,6))) {
+            } elseif (\in_array($dca->flag, [5, 6])) {
                 $renderGroupType = 'day';
-            } elseif (in_array($dca->flag, array(7,8))) {
+            } elseif (\in_array($dca->flag, [7, 8])) {
                 $renderGroupType = 'month';
-            } elseif (in_array($dca->flag, array(9,10))) {
+            } elseif (\in_array($dca->flag, [9, 10])) {
                 $renderGroupType = 'year';
-            } elseif (in_array($dca->flag, array(11,12))) {
+            } elseif (\in_array($dca->flag, [11, 12])) {
                 $renderGroupType = 'digit';
             } else {
                 $renderGroupType = 'none';
             }
 
-            $data = array(
+            /** @psalm-suppress UndefinedMagicPropertyFetch */
+            $data = [
                 'pid'             => $dca->id,
                 'sorting'         => 128,
                 'tstamp'          => time(),
@@ -350,9 +364,9 @@ class UpgradeHandler
                 'rendergrouptype' => $renderGroupType,
                 'rendergrouplen'  => $renderGroupLen,
                 'rendergroupattr' => 0,
-                'rendersort'      => in_array($dca->flag, array(2,4,6,8,10,12)) ? 'desc' : 'asc',
+                'rendersort'      => \in_array($dca->flag, [2, 4, 6, 8, 10, 12]) ? 'desc' : 'asc',
                 'rendersortattr'  => 0,
-            );
+            ];
 
             $objDB
                 ->prepare('INSERT INTO tl_metamodel_dca_sortgroup %s')

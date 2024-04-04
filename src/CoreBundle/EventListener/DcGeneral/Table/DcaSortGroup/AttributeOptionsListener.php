@@ -29,6 +29,7 @@ use MetaModels\Attribute\IInternal;
 use MetaModels\CoreBundle\Formatter\SelectAttributeOptionLabelFormatter;
 use MetaModels\CoreBundle\Sorter\AttributeSorter;
 use MetaModels\IFactory;
+use MetaModels\IMetaModel;
 
 /**
  * This provides the attribute name options.
@@ -40,7 +41,7 @@ class AttributeOptionsListener extends AbstractListener
      *
      * @var SelectAttributeOptionLabelFormatter
      */
-    private SelectAttributeOptionLabelFormatter $attributeLabelFormatter;
+    private SelectAttributeOptionLabelFormatter $labelFormatter;
 
     /**
      * The attribute sorter.
@@ -52,19 +53,19 @@ class AttributeOptionsListener extends AbstractListener
     /**
      * {@inheritDoc}
      *
-     * @param SelectAttributeOptionLabelFormatter $attributeLabelFormatter The attribute select option label formatter.
-     * @param AttributeSorter                     $attributeSorter         The attribute sorter.
+     * @param SelectAttributeOptionLabelFormatter $labelFormatter  The attribute select option label formatter.
+     * @param AttributeSorter                     $attributeSorter The attribute sorter.
      */
     public function __construct(
         RequestScopeDeterminator $scopeDeterminator,
         IFactory $factory,
         Connection $connection,
-        SelectAttributeOptionLabelFormatter $attributeLabelFormatter,
+        SelectAttributeOptionLabelFormatter $labelFormatter,
         AttributeSorter $attributeSorter
     ) {
         parent::__construct($scopeDeterminator, $factory, $connection);
-        $this->attributeLabelFormatter = $attributeLabelFormatter;
-        $this->attributeSorter         = $attributeSorter;
+        $this->labelFormatter  = $labelFormatter;
+        $this->attributeSorter = $attributeSorter;
     }
 
     /**
@@ -82,6 +83,7 @@ class AttributeOptionsListener extends AbstractListener
 
         $result     = [];
         $metaModel  = $this->getMetaModelFromModel($event->getModel());
+        assert($metaModel instanceof IMetaModel);
         $attributes = $metaModel->getAttributes();
         $attributes = $this->attributeSorter->sortByName($attributes);
 
@@ -89,7 +91,7 @@ class AttributeOptionsListener extends AbstractListener
             if ($attribute instanceof IInternal) {
                 continue;
             }
-            $result[$attribute->get('id')] = $this->attributeLabelFormatter->formatLabel($attribute);
+            $result[$attribute->get('id')] = $this->labelFormatter->formatLabel($attribute);
         }
 
         $event->setOptions($result);

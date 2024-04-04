@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -23,7 +23,9 @@
 namespace MetaModels\ViewCombination;
 
 use Contao\StringUtil;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use MetaModels\IFactory;
 use MetaModels\IMetaModel;
 use MetaModels\ITranslatedMetaModel;
@@ -38,14 +40,14 @@ class InputScreenInformationBuilder
      *
      * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * The MetaModels factory.
      *
      * @var IFactory
      */
-    private $factory;
+    private IFactory $factory;
 
     /**
      * Create a new instance.
@@ -65,23 +67,24 @@ class InputScreenInformationBuilder
      * @param array $idList The ids of the input screens to obtain (table name => id).
      *
      * @return array
+     * @throws Exception
      */
     public function fetchInputScreens($idList): array
     {
-        $idList  = array_filter($idList);
+        $idList  = \array_filter($idList);
         $builder = $this->connection->createQueryBuilder();
         $screens = $builder
             ->select('d.*')
             ->from('tl_metamodel_dca', 'd')
             ->leftJoin('d', 'tl_metamodel', 'm', 'm.id=d.pid')
             ->where($builder->expr()->in('d.id', ':idList'))
-            ->setParameter('idList', $idList, Connection::PARAM_STR_ARRAY)
+            ->setParameter('idList', $idList, ArrayParameterType::STRING)
             ->orderBy('m.sorting')
             ->executeQuery()
             ->fetchAllAssociative();
 
         $result = [];
-        $keys   = array_flip($idList);
+        $keys   = \array_flip($idList);
         foreach ($screens as $screen) {
             $metaModelName          = $keys[$screen['id']];
             $result[$metaModelName] = $this->prepareInputScreen($metaModelName, $screen);
@@ -96,11 +99,19 @@ class InputScreenInformationBuilder
      * @param string $modelName The MetaModel name.
      * @param array  $screen    The screen meta data.
      *
-     * @return array
+     * @return array{
+     *   meta: array,
+     *   properties: array,
+     *   conditions: list<array{setting_attr_id: string, ...<string, string>}>,
+     *   groupSort: array,
+     *   label: array<string, string>,
+     *   description: array<string, string>,
+     *   legends: array,
+     * }
      *
      * @throws \InvalidArgumentException When the MetaModel can not be retrieved.
      */
-    private function prepareInputScreen($modelName, $screen): array
+    private function prepareInputScreen(string $modelName, array $screen): array
     {
         if (null === $metaModel = $this->factory->getMetaModel($modelName)) {
             throw new \InvalidArgumentException('Could not retrieve MetaModel ' . $modelName);
@@ -108,9 +119,14 @@ class InputScreenInformationBuilder
         $caption     = ['' => $metaModel->getName()];
         $description = ['' => $metaModel->getName()];
         $fallback    = null;
+        /**
+         * @psalm-suppress DeprecatedMethod
+         * @psalm-suppress TooManyArguments
+         */
         if ($metaModel instanceof ITranslatedMetaModel) {
             $fallback = $metaModel->getMainLanguage();
         } elseif ($metaModel->isTranslated(false)) {
+            /** @psalm-suppress DeprecatedMethod */
             $fallback = $metaModel->getFallbackLanguage();
         }
         foreach (StringUtil::deserialize($screen['backendcaption'], true) as $languageEntry) {
@@ -152,28 +168,33 @@ class InputScreenInformationBuilder
         $bySetting    = [];
         foreach ($conditions as $condition) {
             unset($converted);
+            $conditionId        = $condition['id'];
+            $conditionPid       = $condition['pid'];
+            $conditionSettingId = $condition['settingId'];
             // Check if already mapped, if so, we need to set the values.
-            if (array_key_exists($condition['id'], $conditionMap)) {
-                $converted = &$conditionMap[$condition['id']];
+            if (\array_key_exists($conditionId, $conditionMap)) {
+                $converted = &$conditionMap[$conditionId];
                 foreach ($condition as $key => $value) {
                     $converted[$key] = $value;
                 }
             } else {
-                $converted                      = \array_slice($condition, 0);
-                $conditionMap[$condition['id']] = &$converted;
+                $converted                  = \array_slice($condition, 0);
+                $conditionMap[$conditionId] = &$converted;
             }
             // Is on root level - add to setting now.
-            if (empty($condition['pid'])) {
-                $bySetting[$condition['settingId']][] = &$converted;
+            if (empty($conditionPid)) {
+                /** @psalm-suppress UnsupportedReferenceUsage */
+                $bySetting[$conditionSettingId][] = &$converted;
                 continue;
             }
             // Is a child, check if parent already added.
-            if (!isset($conditionMap[$condition['pid']])) {
-                $temp                            = ['children' => []];
-                $conditionMap[$condition['pid']] = &$temp;
+            if (!isset($conditionMap[$conditionPid])) {
+                $temp                        = ['children' => []];
+                $conditionMap[$conditionPid] = &$temp;
             }
             // Add child to parent now.
-            $conditionMap[$condition['pid']]['children'][] = &$converted;
+            /** @psalm-suppress UnsupportedReferenceUsage */
+            $conditionMap[$conditionPid]['children'][] = &$converted;
         }
 
         return $bySetting;
@@ -186,32 +207,36 @@ class InputScreenInformationBuilder
      * @param IMetaModel $metaModel     The MetaModel to fetch properties for.
      *
      * @return array
+     * @throws Exception
      */
-    private function fetchPropertiesFor($inputScreenId, IMetaModel $metaModel): array
+    private function fetchPropertiesFor(string $inputScreenId, IMetaModel $metaModel): array
     {
         $builder = $this->connection->createQueryBuilder();
-        return array_map(function ($column) use ($inputScreenId, $metaModel) {
-            if ('attribute' !== $column['dcatype']) {
-                return $column;
-            }
-            if (!($attribute = $metaModel->getAttributeById((int) $column['attr_id']))) {
-                // @codingStandardsIgnoreStart
-                @trigger_error(
-                    'Unknown attribute "' . $column['attr_id'] . '" in input screen "' . $inputScreenId . '"',
-                    E_USER_WARNING
+
+        return \array_map(
+            static function ($column) use ($inputScreenId, $metaModel) {
+                if ('attribute' !== $column['dcatype']) {
+                    return $column;
+                }
+                if (!($attribute = $metaModel->getAttributeById((int)$column['attr_id']))) {
+                    // @codingStandardsIgnoreStart
+                    @trigger_error(
+                        'Unknown attribute "' . $column['attr_id'] . '" in input screen "' . $inputScreenId . '"',
+                        E_USER_WARNING
+                    );
+
+                    // @codingStandardsIgnoreEnd
+                    return $column;
+                }
+
+                $column = \array_merge(
+                    $column,
+                    $attribute->getFieldDefinition($column),
+                    ['col_name' => $attribute->getColName()]
                 );
-                // @codingStandardsIgnoreEnd
+
                 return $column;
-            }
-
-            $column = array_merge(
-                $column,
-                $attribute->getFieldDefinition($column),
-                ['col_name' => $attribute->getColName()]
-            );
-
-            return $column;
-        },
+            },
             $builder
                 ->select('t.*')
                 ->from('tl_metamodel_dcasetting', 't')
@@ -221,7 +246,8 @@ class InputScreenInformationBuilder
                 ->setParameter('published', 1)
                 ->orderBy('t.sorting')
                 ->executeQuery()
-                ->fetchAllAssociative());
+                ->fetchAllAssociative()
+        );
     }
 
     /**
@@ -229,9 +255,9 @@ class InputScreenInformationBuilder
      *
      * @param string $inputScreenId The input screen to obtain conditions for.
      *
-     * @return array
+     * @return list<array{setting_attr_id: string, ...<string, string>}>
      */
-    private function fetchConditions($inputScreenId): array
+    private function fetchConditions(string $inputScreenId): array
     {
         $builder = $this->connection->createQueryBuilder();
 
@@ -257,39 +283,43 @@ class InputScreenInformationBuilder
      * @param IMetaModel $metaModel     The MetaModel to fetch properties for.
      *
      * @return array
+     *
+     * @throws Exception
      */
-    private function fetchGroupSort($inputScreenId, IMetaModel $metaModel): array
+    private function fetchGroupSort(string $inputScreenId, IMetaModel $metaModel): array
     {
         $builder = $this->connection->createQueryBuilder();
 
-        return array_map(function ($information) use ($inputScreenId, $metaModel) {
-            $information['isdefault']      = (bool) $information['isdefault'];
-            $information['ismanualsort']   = (bool) $information['ismanualsort'];
-            $information['rendergrouplen'] = (int) $information['rendergrouplen'];
-            if ($information['ismanualsort']) {
-                $information['rendergrouptype'] = 'none';
-            }
-
-            if (!empty($information['rendersortattr'])) {
-                if (!($attribute = $metaModel->getAttributeById((int) $information['rendersortattr']))) {
-                    // @codingStandardsIgnoreStart
-                    @trigger_error(
-                        sprintf(
-                            'Unknown attribute "%1$s" in group sorting "%2$s.%3$s"',
-                            $information['rendersortattr'],
-                            $inputScreenId,
-                            $information['id']
-                        ),
-                        E_USER_WARNING
-                    );
-                    // @codingStandardsIgnoreEnd
-                    return $information;
+        return \array_map(
+            static function ($information) use ($inputScreenId, $metaModel) {
+                $information['isdefault']      = (bool)$information['isdefault'];
+                $information['ismanualsort']   = (bool)$information['ismanualsort'];
+                $information['rendergrouplen'] = (int)$information['rendergrouplen'];
+                if ($information['ismanualsort']) {
+                    $information['rendergrouptype'] = 'none';
                 }
-                $information['col_name'] = $attribute->getColName();
-            }
 
-            return $information;
-        },
+                if (!empty($information['rendersortattr'])) {
+                    if (!($attribute = $metaModel->getAttributeById((int)$information['rendersortattr']))) {
+                        // @codingStandardsIgnoreStart
+                        @trigger_error(
+                            \sprintf(
+                                'Unknown attribute "%1$s" in group sorting "%2$s.%3$s"',
+                                $information['rendersortattr'],
+                                $inputScreenId,
+                                $information['id']
+                            ),
+                            E_USER_WARNING
+                        );
+
+                        // @codingStandardsIgnoreEnd
+                        return $information;
+                    }
+                    $information['col_name'] = $attribute->getColName();
+                }
+
+                return $information;
+            },
             $builder
                 ->select('t.*')
                 ->from('tl_metamodel_dca_sortgroup', 't')
@@ -297,7 +327,8 @@ class InputScreenInformationBuilder
                 ->setParameter('screenId', $inputScreenId)
                 ->orderBy('t.sorting')
                 ->executeQuery()
-                ->fetchAllAssociative());
+                ->fetchAllAssociative()
+        );
     }
 
     /**
@@ -305,7 +336,6 @@ class InputScreenInformationBuilder
      *
      * @param array      $properties The property and legend information.
      * @param IMetaModel $metaModel  The MetaModel to fetch properties for.
-     *
      * @param array      $conditions The conditions for the entries.
      *
      * @return array
@@ -313,6 +343,10 @@ class InputScreenInformationBuilder
     private function convertLegends(array $properties, IMetaModel $metaModel, array $conditions): array
     {
         $result = [];
+        /**
+         * @psalm-suppress DeprecatedMethod
+         * @psalm-suppress TooManyArguments
+         */
         $trans  = (($metaModel instanceof ITranslatedMetaModel) || $metaModel->isTranslated(false));
         $label  = $this->buildLabel($trans, $metaModel);
         $legend = [
@@ -321,8 +355,8 @@ class InputScreenInformationBuilder
             'properties' => []
         ];
 
-        $condition = function ($property) use ($conditions) {
-            if (!isset($conditions[$property['id']])) {
+        $condition = function (array $property) use ($conditions): ?array {
+            if (!isset($conditions[($property['id'])])) {
                 return null;
             }
 
@@ -333,9 +367,14 @@ class InputScreenInformationBuilder
         };
 
         $fallbackLanguage = null;
+        /**
+         * @psalm-suppress DeprecatedMethod
+         * @psalm-suppress TooManyArguments
+         */
         if ($metaModel instanceof ITranslatedMetaModel) {
             $fallbackLanguage = $metaModel->getMainLanguage();
         } elseif ($metaModel->isTranslated(false)) {
+            /** @psalm-suppress DeprecatedMethod */
             $fallbackLanguage = $metaModel->getFallbackLanguage();
         }
         foreach ($properties as $property) {
@@ -372,9 +411,11 @@ class InputScreenInformationBuilder
     {
         if ($isTranslated) {
             $label = [];
-            foreach (($metaModel instanceof ITranslatedMetaModel)
+            /** @psalm-suppress DeprecatedMethod */
+            foreach (
+                ($metaModel instanceof ITranslatedMetaModel)
                 ? $metaModel->getLanguages()
-                : $metaModel->getAvailableLanguages() as $availableLanguage
+                : ($metaModel->getAvailableLanguages() ?? []) as $availableLanguage
             ) {
                 $label[$availableLanguage] = $metaModel->getName();
             }

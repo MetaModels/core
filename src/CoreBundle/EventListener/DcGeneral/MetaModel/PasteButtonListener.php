@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,8 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -24,16 +25,18 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\MetaModel;
 
 use ContaoCommunityAlliance\DcGeneral\Clipboard\ClipboardInterface;
 use ContaoCommunityAlliance\DcGeneral\Clipboard\Filter;
-use ContaoCommunityAlliance\DcGeneral\Clipboard\ItemInterface;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPasteButtonEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPasteRootButtonEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\DataProviderInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use MetaModels\IFactory;
 
 /**
  * This class handles the paste into and after button activation and deactivation for all MetaModels being edited.
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class PasteButtonListener
 {
@@ -42,35 +45,35 @@ class PasteButtonListener
      *
      * @var IFactory
      */
-    private $factory;
+    private IFactory $factory;
 
     /**
      * The current environment.
      *
-     * @var EnvironmentInterface
+     * @var EnvironmentInterface|null
      */
-    private $environment;
+    private EnvironmentInterface|null $environment = null;
 
     /**
      * The current data provider.
      *
-     * @var DataProviderInterface
+     * @var DataProviderInterface|null
      */
-    private $provider;
+    private DataProviderInterface|null $provider = null;
 
     /**
      * The name of current data provider.
      *
-     * @var string
+     * @var string|null
      */
-    private $providerName;
+    private string|null $providerName = null;
 
     /**
      * The model where we have to check if is it a paste into or paste after.
      *
-     * @var ModelInterface
+     * @var ModelInterface|null
      */
-    private $currentModel;
+    private ModelInterface|null $currentModel = null;
 
     /**
      * Get determinator if there exists a circular reference.
@@ -78,23 +81,23 @@ class PasteButtonListener
      * This flag determines if there exists a circular reference between the item currently in the clipboard and the
      * current model. A circular reference is of relevance when performing a cut and paste operation for example.
      *
-     * @var boolean
+     * @var boolean|null
      */
-    private $circularReference;
+    private bool|null $circularReference = null;
 
     /**
      * Disable the paste after.
      *
      * @var bool
      */
-    private $disablePA = true;
+    private bool $disablePA = true;
 
     /**
      * Disable the paste into.
      *
      * @var bool
      */
-    private $disablePI = true;
+    private bool $disablePI = true;
 
     /**
      * Create a new instance.
@@ -119,15 +122,21 @@ class PasteButtonListener
     {
         $this->circularReference = $event->isCircularReference();
         $this->environment       = $event->getEnvironment();
-        $this->provider          = $this->environment->getDataProvider();
-        $this->providerName      = $this->provider->getEmptyModel()->getProviderName();
-        $clipboard               = $this->environment->getClipboard();
-        $this->currentModel      = $event->getModel();
-        $this->disablePI         = true;
-        $this->disablePA         = true;
+        $provider                = $this->environment->getDataProvider();
+        assert($provider instanceof DataProviderInterface);
+        $this->provider     = $provider;
+        $this->providerName = $this->provider->getEmptyModel()->getProviderName();
+        $clipboard          = $this->environment->getClipboard();
+        assert($clipboard instanceof ClipboardInterface);
+        $currentModel = $event->getModel();
+        assert($currentModel instanceof ModelInterface);
+        $this->currentModel = $currentModel;
+        $this->disablePI    = true;
+        $this->disablePA    = true;
 
         // Only run for a MetaModels and if both values already disabled return here.
-        if ((substr($this->providerName, 0, 3) !== 'mm_')
+        if (
+            (!\str_starts_with($this->providerName, 'mm_'))
             || ($event->isPasteIntoDisabled() && $event->isPasteAfterDisabled())
         ) {
             return;
@@ -153,15 +162,18 @@ class PasteButtonListener
      */
     public function handleRoot(GetPasteRootButtonEvent $event)
     {
-        $this->environment  = $event->getEnvironment();
-        $this->provider     = $this->environment->getDataProvider();
+        $this->environment = $event->getEnvironment();
+        $provider          = $this->environment->getDataProvider();
+        assert($provider instanceof DataProviderInterface);
+        $this->provider     = $provider;
         $this->providerName = $this->provider->getEmptyModel()->getProviderName();
         $clipboard          = $this->environment->getClipboard();
+        assert($clipboard instanceof ClipboardInterface);
         $this->currentModel = null;
         $this->disablePI    = false;
 
         // Only run for a MetaModels.
-        if ((substr($this->providerName, 0, 3) !== 'mm_') || $event->isPasteDisabled()) {
+        if ((!\str_starts_with($this->providerName, 'mm_')) || $event->isPasteDisabled()) {
             return;
         }
 
@@ -173,24 +185,26 @@ class PasteButtonListener
     }
 
     /**
-     * Find a item by its id.
+     * Find an item by its id.
      *
-     * @param int $modelId The id to find.
+     * @param mixed $modelId The id to find.
      *
-     * @return ModelInterface
+     * @return ModelInterface|null
      */
-    private function getModelById($modelId)
+    private function getModelById(mixed $modelId): ?ModelInterface
     {
         if ($modelId === null) {
             return null;
         }
 
-        $provider = $this->environment->getDataProvider();
-        $config   = $provider
-            ->getEmptyConfig()
-            ->setId($modelId);
+        $environment = $this->environment;
+        assert($environment instanceof EnvironmentInterface);
+        $dataProvider = $environment->getDataProvider();
+        assert($dataProvider instanceof DataProviderInterface);
 
-        return $provider->fetch($config);
+        $config = $dataProvider->getEmptyConfig()->setId($modelId);
+
+        return $dataProvider->fetch($config);
     }
 
     /**
@@ -200,12 +214,15 @@ class PasteButtonListener
      *
      * @throws \RuntimeException When the MetaModel can not be loaded.
      */
-    private function hasVariants()
+    private function hasVariants(): bool
     {
+        if ($this->providerName === null) {
+            throw new \RuntimeException('No MetaModel name given');
+        }
         $metaModel = $this->factory->getMetaModel($this->providerName);
 
         if ($metaModel === null) {
-            throw new \RuntimeException(sprintf('Could not find a MetaModels with the name %s', $this->providerName));
+            throw new \RuntimeException(\sprintf('Could not find a MetaModel with the name %s', $this->providerName));
         }
 
         return $metaModel->hasVariants();
@@ -215,24 +232,17 @@ class PasteButtonListener
      * Check the buttons based on the action.
      *
      * @param ClipboardInterface $clipboard The clipboard.
-     *
      * @param string             $action    The action to be checked.
      *
      * @return void
      */
-    private function checkForAction($clipboard, $action)
+    private function checkForAction(ClipboardInterface $clipboard, string $action): void
     {
         // Make a filter for the given action.
         $filter = new Filter();
         $filter->andActionIs($action);
         $items = $clipboard->fetch($filter);
 
-        // Check if there are items.
-        if ($items === null) {
-            return;
-        }
-
-        /** @var ItemInterface[] $items */
         foreach ($items as $item) {
             // Check the context.
             $itemProviderName = $item->getDataProviderName();
@@ -248,7 +258,7 @@ class PasteButtonListener
             }
 
             $containedModel = $this->getModelById($modelId->getId());
-            if ($this->currentModel == null) {
+            if ($this->currentModel === null) {
                 $this->checkForRoot($containedModel, $action);
             } elseif ($containedModel) {
                 $this->checkForModel($containedModel, $action);
@@ -265,11 +275,11 @@ class PasteButtonListener
      *
      * @return void
      */
-    private function checkEmpty($action)
+    private function checkEmpty(string $action): void
     {
         if ($this->hasVariants() && $this->currentModel !== null) {
             $this->disablePA = false;
-        } elseif ($action == 'create') {
+        } elseif ($action === 'create') {
             $this->disablePA = false;
             $this->disablePI = false;
         }
@@ -278,15 +288,19 @@ class PasteButtonListener
     /**
      * Check the PI for the root element.
      *
-     * @param ModelInterface $containedModel The model with all data.
-     *
-     * @param string         $action         The action to be checked.
+     * @param ModelInterface|null $containedModel The model with all data.
+     * @param string              $action         The action to be checked.
      *
      * @return void
      */
-    private function checkForRoot($containedModel, $action)
+    private function checkForRoot(?ModelInterface $containedModel, string $action): void
     {
-        if ($this->hasVariants() && $action == 'cut' && $containedModel->getProperty('varbase') == 0) {
+        if (
+            $action === 'cut'
+            && null !== $containedModel
+            && $this->hasVariants()
+            && $containedModel->getProperty('varbase') === ''
+        ) {
             $this->disablePI = true;
         }
     }
@@ -295,29 +309,34 @@ class PasteButtonListener
      * Check the PA and PI with a model.
      *
      * @param ModelInterface $containedModel The model with all data.
-     *
      * @param string         $action         The action to be checked.
      *
      * @return void
      */
-    private function checkForModel($containedModel, $action)
+    private function checkForModel(ModelInterface $containedModel, string $action): void
     {
         if (!$this->circularReference) {
             if ($this->hasVariants()) {
                 $this->checkModelWithVariants($containedModel);
             }
             $this->checkModelWithoutVariants($containedModel);
-        } elseif ($this->currentModel == null && $containedModel->getProperty('varbase') == 0) {
-            $this->disablePA = true;
-        } else {
-            $this->disablePA = false;
-            // The following rules apply:
-            // 1. Variant bases must not get pasted into anything.
-            // 2. If we are not in create mode, disable the paste into for the item itself.
-            $this->disablePI =
-                ($this->hasVariants() && $containedModel->getProperty('varbase') == 1)
-                || ($action != 'create' && $containedModel->getId() == $this->currentModel->getId());
+            return;
         }
+
+        if ($this->currentModel === null) {
+            if ($containedModel->getProperty('varbase') === '') {
+                $this->disablePA = true;
+            }
+
+            return;
+        }
+        $this->disablePA = false;
+        // The following rules apply:
+        // 1. Variant bases must not get pasted into anything.
+        // 2. If we are not in create mode, disable the paste into for the item itself.
+        $this->disablePI =
+            ($this->hasVariants() && $containedModel->getProperty('varbase') === '1')
+            || ($action !== 'create' && $containedModel->getId() === $this->currentModel->getId());
     }
 
     /**
@@ -327,19 +346,19 @@ class PasteButtonListener
      *
      * @return void
      */
-    private function checkModelWithVariants($containedModel)
+    private function checkModelWithVariants(ModelInterface $containedModel): void
     {
         // Item and variant support.
         $isVarbase        = (bool) $containedModel->getProperty('varbase');
         $vargroup         = $containedModel->getProperty('vargroup');
-        $isCurrentVarbase = (bool) $this->currentModel->getProperty('varbase');
-        $currentVargroup  = $this->currentModel->getProperty('vargroup');
+        $isCurrentVarbase = (bool) $this->currentModel?->getProperty('varbase');
+        $currentVargroup  = $this->currentModel?->getProperty('vargroup');
 
         if ($isVarbase && !$this->circularReference && $isCurrentVarbase) {
             // Insert new items only after bases.
             // Insert a varbase after any other varbase, for sorting.
             $this->disablePA = false;
-        } elseif (!$isVarbase && !$isCurrentVarbase && $vargroup == $currentVargroup) {
+        } elseif (!$isVarbase && !$isCurrentVarbase && $vargroup === $currentVargroup) {
             // Move items in their vargroup and only there.
             $this->disablePA = false;
         }
@@ -354,14 +373,20 @@ class PasteButtonListener
      *
      * @return void
      */
-    private function checkModelWithoutVariants($containedModel)
+    private function checkModelWithoutVariants(ModelInterface $containedModel): void
     {
-        $parentDefinition = $this->environment->getDataDefinition()->getBasicDefinition()->getParentDataProvider();
+        $environment = $this->environment;
+        assert($environment instanceof EnvironmentInterface);
+        $dataDefinition = $environment->getDataDefinition();
+        assert($dataDefinition instanceof ContainerInterface);
 
-        $this->disablePA = ($this->currentModel->getId() == $containedModel->getId())
-            || ($parentDefinition && $this->currentModel->getProperty('pid') == $containedModel->getProperty('pid'));
-        $this->disablePI = ($this->circularReference)
-            || ($this->currentModel->getId() == $containedModel->getId())
-            || ($parentDefinition && $this->currentModel->getProperty('pid') == $containedModel->getId());
+        $parentDefinition = null !== $dataDefinition->getBasicDefinition()->getParentDataProvider();
+        $currentModelId   = $this->currentModel?->getId();
+        $currentModelPid  = $this->currentModel?->getProperty('pid');
+        $this->disablePA  = ($currentModelId === $containedModel->getId())
+            || ($parentDefinition && $currentModelPid === $containedModel->getProperty('pid'));
+        $this->disablePI  = ($this->circularReference)
+            || ($currentModelId === $containedModel->getId())
+            || ($parentDefinition && $currentModelPid === $containedModel->getId());
     }
 }

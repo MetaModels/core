@@ -30,7 +30,7 @@ interface IMetaModelDefinition extends DefinitionInterface
     /**
      * The name of the definition.
      */
-    const NAME = 'metamodels';
+    public const NAME = 'metamodels';
 
     /**
      * Set the id of the active render setting for the MetaModel.

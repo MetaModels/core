@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,8 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -42,7 +43,6 @@ interface IItem
      * Set the native value of an attribute.
      *
      * @param string $strAttributeName The name of the attribute.
-     *
      * @param mixed  $varValue         The value of the attribute.
      *
      * @return \MetaModels\IItem
@@ -50,18 +50,18 @@ interface IItem
     public function set($strAttributeName, $varValue);
 
     /**
-     * Fetch the meta model that represents this item.
+     * Fetch the MetaModel that represents this item.
      *
      * @return \MetaModels\IMetaModel The instance.
      */
     public function getMetaModel();
 
     /**
-     * Fetch the meta model attribute instance with the given name.
+     * Fetch the MetaModel attribute instance with the given name.
      *
      * @param string $strAttributeName The name of the attribute.
      *
-     * @return \MetaModels\Attribute\IAttribute The instance.
+     * @return \MetaModels\Attribute\IAttribute|null the instance or null if not found.
      */
     public function getAttribute($strAttributeName);
 
@@ -88,7 +88,7 @@ interface IItem
     /**
      * Determines if this item is a variant of another item.
      *
-     * @return bool True if it is an variant, false otherwise
+     * @return bool True if it is a variant, false otherwise
      */
     public function isVariant();
 
@@ -99,12 +99,12 @@ interface IItem
      * this item. It merely simply states, that this item is able
      * to function as variant base for other items.
      *
-     * @return bool true if it is an variant base, false otherwise.
+     * @return bool true if it is a variant base, false otherwise.
      */
     public function isVariantBase();
 
     /**
-     * Fetch the meta model variants for this item.
+     * Fetch the MetaModel variants for this item.
      *
      * @param \MetaModels\Filter\IFilter $objFilter The filter settings to be applied.
      *
@@ -113,7 +113,7 @@ interface IItem
     public function getVariants($objFilter);
 
     /**
-     * Fetch the meta model variant base for this item.
+     * Fetch the MetaModel variant base for this item.
      *
      * Note: For a non-variant item the variant base is the item itself.
      *
@@ -138,7 +138,6 @@ interface IItem
      * For further information {@see IMetaModelAttribute::parseValue()}.
      *
      * @param string      $strOutputFormat Optional, the desired output format (default: text).
-     *
      * @param ICollection $objSettings     The render settings to use optional (default: null).
      *
      * @return array attribute name => format => value
@@ -151,9 +150,7 @@ interface IItem
      * For further information {@see IMetaModelAttribute::parseValue()}.
      *
      * @param string      $strAttributeName The desired attribute.
-     *
      * @param string      $strOutputFormat  Optional, the desired output format (default: text).
-     *
      * @param ICollection $objSettings      The render settings to use optional (default: null).
      *
      * @return array format=>value
@@ -175,7 +172,7 @@ interface IItem
      * Additionally, the item will be a variant child of this item.
      *
      * NOTE: if this item is not a variant base itself, this item will return a item
-     * that is a child of this items variant base. i.e. exact clone.
+     * that is a child of these items variant base. i.e. exact clone.
      *
      * @return \MetaModels\IItem the new copy.
      */

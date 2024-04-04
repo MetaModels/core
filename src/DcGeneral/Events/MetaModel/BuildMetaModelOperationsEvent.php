@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,18 +13,21 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\DcGeneral\Events\MetaModel;
 
+use Contao\System;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\AbstractContainerAwareEvent;
 use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\BackendIntegration\InputScreen\InputScreen;
 use MetaModels\IMetaModel;
+use MetaModels\IMetaModelsServiceContainer;
 
 /**
  * This event is triggered to allow adding of model operations for MetaModels when the data container is being built.
@@ -34,7 +37,7 @@ class BuildMetaModelOperationsEvent extends AbstractContainerAwareEvent
     /**
      * The event name.
      */
-    const NAME = 'metamodels.dc-general.events.metamodel.build.metamodel.operations';
+    public const NAME = 'metamodels.dc-general.events.metamodel.build.metamodel.operations';
 
     /**
      * The MetaModel instance.
@@ -54,9 +57,7 @@ class BuildMetaModelOperationsEvent extends AbstractContainerAwareEvent
      * Create a new container aware event.
      *
      * @param IMetaModel         $metaModel     The MetaModel.
-     *
      * @param ContainerInterface $dataContainer The data container information.
-     *
      * @param array              $inputScreen   The input screen in use.
      */
     public function __construct(
@@ -96,11 +97,17 @@ class BuildMetaModelOperationsEvent extends AbstractContainerAwareEvent
      * @return IInputScreen
      *
      * @deprecated The InputScreen class will get removed.
+     *
+     * @psalm-suppress DeprecatedInterface
+     * @psalm-suppress DeprecatedClass
      */
     public function getInputScreen()
     {
+        $serviceContainer = System::getContainer()->get('cca.legacy_dic')?->getService('metamodels-service-container');
+        assert($serviceContainer instanceof IMetaModelsServiceContainer);
+
         return new InputScreen(
-            \System::getContainer()->get('cca.legacy_dic')->getService('metamodels-service-container'),
+            $serviceContainer,
             $this->inputScreen['meta'],
             $this->inputScreen['properties'],
             $this->inputScreen['conditions'],

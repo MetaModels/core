@@ -17,12 +17,14 @@
  * @filesource
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace MetaModels\Information;
 
 /**
  * This is a collection of MetaModels.
+ *
+ * @extends \IteratorAggregate<int, MetaModelInformationInterface>
  */
 interface MetaModelCollectionInterface extends \IteratorAggregate
 {
@@ -63,7 +65,7 @@ interface MetaModelCollectionInterface extends \IteratorAggregate
     /**
      * {@inheritDoc}
      *
-     * @return \Traversable|MetaModelInformationInterface[]
+     * @return \Traversable<int, MetaModelInformationInterface>
      */
-    public function getIterator();
+    public function getIterator(): \Traversable;
 }

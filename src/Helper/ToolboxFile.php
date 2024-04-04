@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,13 +20,15 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Andreas Fischer <anfischer@kaffee-partner.de>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\Helper;
 
+use Contao\CoreBundle\Asset\ContaoContext;
+use Contao\Model\Collection;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
 use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
@@ -46,6 +48,7 @@ use Contao\Validator;
 use InvalidArgumentException;
 use Symfony\Component\Asset\Context\ContextInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
@@ -53,6 +56,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class ToolboxFile
 {
@@ -63,35 +68,35 @@ class ToolboxFile
      *
      * @deprecated The event dispatcher will get removed in 3.0 as we now use the image factory.
      */
-    private EventDispatcherInterface|null $dispatcher;
+    private EventDispatcherInterface|null $dispatcher = null;
 
     /**
      * The project root dir.
      *
-     * @var string|null
+     * @var string
      */
-    private string|null $rootDir;
+    private string $rootDir;
 
     /**
      * The image factory for resizing.
      *
      * @var ImageFactoryInterface|null
      */
-    private ImageFactoryInterface|null $imageFactory;
+    private ImageFactoryInterface|null $imageFactory = null;
 
     /**
      * The assets file context.
      *
-     * @var ContextInterface|null
+     * @var ContaoContext
      */
-    private ContextInterface|null $filesContext;
+    private ContaoContext $filesContext;
 
     /**
      * The picture factory.
      *
-     * @var PictureFactoryInterface|null
+     * @var PictureFactoryInterface
      */
-    private PictureFactoryInterface|null $pictureFactory;
+    private PictureFactoryInterface $pictureFactory;
 
     /**
      * Symfony session object
@@ -124,9 +129,9 @@ class ToolboxFile
     /**
      * Determines if we want to generate images or not.
      *
-     * @var bool|null
+     * @var bool
      */
-    protected bool|null $blnShowImages = false;
+    protected bool $blnShowImages = false;
 
     /**
      * Image resize information.
@@ -220,7 +225,7 @@ class ToolboxFile
         Session $session = null
     ) {
         switch (true) {
-            case ($imageFactory instanceof ImageFactoryInterface) && !empty($rootDir):
+            case ($imageFactory instanceof ImageFactoryInterface) && (null !== $rootDir):
                 $this->imageFactory = $imageFactory;
                 $this->rootDir      = $rootDir;
                 break;
@@ -232,6 +237,7 @@ class ToolboxFile
                     E_USER_DEPRECATED
                 );
                 // @codingStandardsIgnoreEnd
+                /** @psalm-suppress DeprecatedProperty */
                 $this->dispatcher = $imageFactory;
                 break;
             // This is another deprecated fallback (remove in MetaModels 3.0).
@@ -242,42 +248,52 @@ class ToolboxFile
                     E_USER_DEPRECATED
                 );
                 // @codingStandardsIgnoreEnd
-                $this->dispatcher = System::getContainer()->get('event_dispatcher');
+                $dispatcher = System::getContainer()->get('event_dispatcher');
+                assert($dispatcher instanceof EventDispatcherInterface);
+                /** @psalm-suppress DeprecatedProperty */
+                $this->dispatcher = $dispatcher;
         }
         // Initialize some values to sane base.
         if (isset($GLOBALS['TL_CONFIG']) && isset($GLOBALS['TL_CONFIG']['allowedDownload'])) {
             $this->setAcceptedExtensions(StringUtil::trimsplit(',', $GLOBALS['TL_CONFIG']['allowedDownload']));
         }
 
-        if (null === ($this->rootDir)) {
+        if (null === $rootDir) {
             // @codingStandardsIgnoreStart
             @trigger_error(
                 'Not passing an "%kernel.project_dir%" parameter is deprecated.',
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
-            $this->rootDir = System::getContainer()->getParameter('kernel.project_dir');
+            $rootDir = System::getContainer()->getParameter('kernel.project_dir');
+            assert(\is_string($rootDir));
         }
+        $this->rootDir = $rootDir;
 
-        if (null === ($this->filesContext = $filesContext)) {
+        if (null === $filesContext) {
             // @codingStandardsIgnoreStart
             @trigger_error(
                 'Not passing an "ContextInterface" is deprecated.',
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
-            $this->filesContext = System::getContainer()->get('contao.assets.files_context');
+            $filesContext = System::getContainer()->get('contao.assets.files_context');
+            assert($filesContext instanceof ContextInterface);
         }
+        assert($filesContext instanceof ContaoContext);
+        $this->filesContext = $filesContext;
 
-        if (null === ($this->pictureFactory = $pictureFactory)) {
+        if (null === $pictureFactory) {
             // @codingStandardsIgnoreStart
             @trigger_error(
                 'Not passing an "PictureFactoryInterface" is deprecated.',
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
-            $this->pictureFactory = System::getContainer()->get('contao.image.picture_factory');
+            $pictureFactory = System::getContainer()->get('contao.image.picture_factory');
+            assert($pictureFactory instanceof PictureFactoryInterface);
         }
+        $this->pictureFactory = $pictureFactory;
 
         if (null === $session) {
             // @codingStandardsIgnoreStart
@@ -289,7 +305,6 @@ class ToolboxFile
             $session = System::getContainer()->get('session');
             assert($session instanceof Session);
         }
-
         $this->session = $session;
     }
 
@@ -354,7 +369,7 @@ class ToolboxFile
      *
      * @param string|null $fallbackLanguage The fallback language to use.
      *
-     * @return ToolboxFile
+     * @return static
      */
     public function setFallbackLanguage(?string $fallbackLanguage): static
     {
@@ -376,11 +391,11 @@ class ToolboxFile
     /**
      * Set to show/prepare images or not.
      *
-     * @param boolean|null $blnShowImages True to show images, false otherwise.
+     * @param boolean $blnShowImages True to show images, false otherwise.
      *
-     * @return ToolboxFile
+     * @return static
      */
-    public function setShowImages(?bool $blnShowImages): static
+    public function setShowImages(bool $blnShowImages): static
     {
         $this->blnShowImages = $blnShowImages;
 
@@ -509,12 +524,12 @@ class ToolboxFile
         $parameters = [];
         if (\count($this->pendingIds)) {
             $conditions[] = $table . '.uuid IN(' .
-                            \implode(',', \array_fill(0, count($this->pendingIds), 'UNHEX(?)')) . ')';
+                            \implode(',', \array_fill(0, \count($this->pendingIds), 'UNHEX(?)')) . ')';
             $parameters   = \array_map('bin2hex', $this->pendingIds);
 
             $this->pendingIds = [];
         }
-        if (\count($this->pendingPaths)) {
+        if ([] !== $this->pendingPaths) {
             $slug = $table . '.path LIKE ?';
             foreach ($this->pendingPaths as $pendingPath) {
                 $conditions[] = $slug;
@@ -527,11 +542,13 @@ class ToolboxFile
             return;
         }
 
-        if ($files = FilesModel::findBy([\implode(' OR ', $conditions)], $parameters)) {
+        $files = FilesModel::findBy([\implode(' OR ', $conditions)], $parameters);
+        if ($files instanceof Collection) {
             $this->addFileModels($files);
         }
 
-        if (count($this->pendingPaths)) {
+        /** @psalm-suppress DocblockTypeContradiction - filled addFileModel */
+        if ([] !== $this->pendingPaths) {
             // Run again.
             $this->collectFiles();
         }
@@ -556,6 +573,7 @@ class ToolboxFile
         }
 
         $bag = $this->session->getBag('attributes');
+        assert($bag instanceof AttributeBagInterface);
 
         $links = $bag->has('metaModels_downloads') ? $bag->get('metaModels_downloads') : [];
         if (!\is_array($links)) {
@@ -604,7 +622,6 @@ class ToolboxFile
      * This returns an array like: array('files' => array(), 'source' => array())
      *
      * @param array $arrFiles  The files to sort.
-     *
      * @param array $arrSource The source list.
      *
      * @return array The mapped result.
@@ -639,7 +656,6 @@ class ToolboxFile
      * random    - Shuffle all the files around.
      *
      * @param string $sortType The sort condition to be applied.
-     *
      * @param array  $sortIds  The list of binary ids to sort by (sort type "manual" only).
      *
      * @return array The sorted file list.
@@ -671,7 +687,8 @@ class ToolboxFile
     /**
      * Attach first, last and even/odd classes to the given array.
      *
-     * @param array $arrSource The array reference of the array to which the classes shall be added to.
+     * @param array<int, array<string, mixed>> $arrSource The array reference of the array to which the classes
+     *                                                    shall be added to.
      *
      * @return void
      */
@@ -679,9 +696,9 @@ class ToolboxFile
     {
         $countFiles = \count($arrSource);
         foreach (\array_keys($arrSource) as $k) {
-            $arrSource[$k]['class'] = (($k == 0) ? ' first' : '') .
-                                      (($k == ($countFiles - 1)) ? ' last' : '') .
-                                      ((($k % 2) == 0) ? ' even' : ' odd');
+            $arrSource[$k]['class'] = (($k === 0) ? ' first' : '') .
+                                      (($k === ($countFiles - 1)) ? ' last' : '') .
+                                      ((($k % 2) === 0) ? ' even' : ' odd');
         }
     }
 
@@ -832,7 +849,9 @@ class ToolboxFile
         if (($file = Input::get('file'))) {
             if ($this->withDownloadKeys) {
                 $bag   = $this->session->getBag('attributes');
+                assert($bag instanceof AttributeBagInterface);
                 $links = $bag->has('metaModels_downloads') ? $bag->get('metaModels_downloads') : [];
+
                 if (!\is_array($links)) {
                     $links = [];
                 }
@@ -840,7 +859,10 @@ class ToolboxFile
                 // keep both null-coalescing values different to account for missing values.
                 if (($links[$file] ?? null) !== (Input::get('fileKey') ?? false)) {
                     $objHandler = new $GLOBALS['TL_PTY']['error_403']();
-                    /** @var PageError403 $objHandler */
+                    /**
+                     * @var PageError403 $objHandler
+                     * @psalm-suppress DeprecatedMethod
+                     */
                     $objHandler->generate($file);
                 }
             }
@@ -864,7 +886,7 @@ class ToolboxFile
 
         $objFiles = FilesModel::findByPk($varValue);
 
-        if ($objFiles !== null) {
+        if ($objFiles instanceof FilesModel) {
             return $objFiles->path;
         }
         return '';
@@ -920,7 +942,8 @@ class ToolboxFile
      */
     public static function convertValuesToMetaModels($values)
     {
-        if (!is_array($values)) {
+        /** @psalm-suppress DocblockTypeContradiction */
+        if (!\is_array($values)) {
             throw new InvalidArgumentException('Invalid uuid list.');
         }
 
@@ -943,7 +966,7 @@ class ToolboxFile
 
         $models = FilesModel::findMultipleByUuids($values);
 
-        if ($models === null) {
+        if (!$models instanceof Collection) {
             return $result;
         }
 
@@ -976,7 +999,7 @@ class ToolboxFile
      */
     public static function convertUuidsOrPathsToMetaModels($values)
     {
-        $values = \array_filter((array) $values);
+        $values = \array_filter($values);
         if (empty($values)) {
             return [
                 'bin'   => [],
@@ -993,7 +1016,7 @@ class ToolboxFile
                 }
 
                 $file = FilesModel::findByPath($value) ?: Dbafs::addResource($value);
-                if (!$file) {
+                if (!($file instanceof FilesModel)) {
                     throw new InvalidArgumentException('Invalid path.');
                 }
 
@@ -1010,12 +1033,14 @@ class ToolboxFile
      * Must either be called from within collectFiles or collectFiles must be called later on as this method
      * will add models of type folder to the list of pending paths to allow for recursive inclusion.
      *
-     * @param FilesModel[] $files     The files to add.
-     * @param array        $skipPaths List of directories not to be added to the list of pending directories.
+     * @param Collection   $files     The files to add.
+     * @param list<string> $skipPaths List of directories not to be added to the list of pending directories.
      *
      * @return void
+     *
+     * @psalm-assert list<string> $this->pendingPaths
      */
-    private function addFileModels($files, $skipPaths = [])
+    private function addFileModels(Collection $files, array $skipPaths = []): void
     {
         $baseLanguage     = $this->getBaseLanguage();
         $fallbackLanguage = $this->getFallbackLanguage();
@@ -1024,7 +1049,8 @@ class ToolboxFile
                 $this->pendingPaths[] = $file->path . '/';
                 continue;
             }
-            if (is_file(TL_ROOT . DIRECTORY_SEPARATOR . $file->path)
+            if (
+                \is_file($this->rootDir . DIRECTORY_SEPARATOR . $file->path)
                 && \in_array(
                     \strtolower(pathinfo($file->path, PATHINFO_EXTENSION)),
                     $this->acceptedExtensions
@@ -1036,9 +1062,9 @@ class ToolboxFile
                 $meta                       = StringUtil::deserialize($file->meta, true);
 
                 if (isset($meta[$baseLanguage])) {
-                    $this->metaInformation[dirname($path)][basename($path)] = $meta[$baseLanguage];
+                    $this->metaInformation[\dirname($path)][\basename($path)] = $meta[$baseLanguage];
                 } elseif (isset($meta[$fallbackLanguage])) {
-                    $this->metaInformation[dirname($path)][basename($path)] = $meta[$fallbackLanguage];
+                    $this->metaInformation[\dirname($path)][\basename($path)] = $meta[$fallbackLanguage];
                 }
             }
         }
@@ -1052,6 +1078,7 @@ class ToolboxFile
      * @return void
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     private function processFile($fileName)
@@ -1071,7 +1098,7 @@ class ToolboxFile
             'file'       => $fileName,
             'mtime'      => $file->mtime,
             'alt'        => $altText,
-            'caption'    => (!empty($meta['caption']) ? $meta['caption'] : ''),
+            'caption'    => $meta['caption'] ?? '',
             'title'      => $title,
             'metafile'   => $meta,
             'icon'       => 'assets/contao/images/' . $file->icon,
@@ -1079,8 +1106,6 @@ class ToolboxFile
             'size'       => $file->filesize,
             'sizetext'   => \sprintf('(%s)', Controller::getReadableSize($file->filesize, 2)),
             'url'        => StringUtil::specialchars($this->getDownloadLink($fileName)),
-            'isGdImage'  => false,
-            'isSvgImage' => false,
             'isPicture'  => false,
         ];
 
@@ -1088,8 +1113,8 @@ class ToolboxFile
         if ($information['isGdImage'] = $file->isGdImage) {
             $information['src'] = \urldecode($this->resizeImage($fileName));
             $information['lb']  = 'lb_' . $this->getLightboxId();
-            if (file_exists(TL_ROOT . '/' . $information['src'])) {
-                $size              = getimagesize(TL_ROOT . '/' . $information['src']);
+            if (\file_exists($this->rootDir . '/' . $information['src'])) {
+                $size              = \getimagesize($this->rootDir . '/' . $information['src']);
                 $information['w']  = $size[0];
                 $information['h']  = $size[1];
                 $information['wh'] = $size[3];
@@ -1106,6 +1131,7 @@ class ToolboxFile
         // Prepare the picture for provide the image size.
         if ($file->isImage && ($information['isPicture'] = (int) ($this->resizeImages[2] ?? 0))) {
             $projectDir = $this->rootDir;
+            /** @psalm-suppress InternalMethod */
             $staticUrl  = $this->filesContext->getStaticUrl();
             $picture    = $this->pictureFactory->create($projectDir . '/' . $file->path, $this->getResizeImages());
 
@@ -1139,9 +1165,9 @@ class ToolboxFile
      *
      * @param string $fileName The file to resize.
      *
-     * @return null|string
+     * @return string
      */
-    private function resizeImage($fileName)
+    private function resizeImage(string $fileName): string
     {
         [$width, $height, $mode] = $this->getResizeImages() + [null, null, null];
         if ($this->getShowImages() && ($width || $height || $mode)) {
@@ -1155,8 +1181,13 @@ class ToolboxFile
             }
 
             $event = new ResizeImageEvent($fileName, $width, $height, $mode);
-            $this->dispatcher->dispatch($event, ContaoEvents::IMAGE_RESIZE);
-            return $event->getResultImage();
+
+            /** @psalm-suppress DeprecatedProperty */
+            $dispatcher = $this->dispatcher;
+            assert($dispatcher instanceof EventDispatcherInterface);
+            $dispatcher->dispatch($event, ContaoEvents::IMAGE_RESIZE);
+
+            return (string) $event->getResultImage();
         }
 
         return $fileName;

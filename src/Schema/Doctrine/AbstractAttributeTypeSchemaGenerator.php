@@ -17,7 +17,7 @@
  * @filesource
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace MetaModels\Schema\Doctrine;
 
@@ -39,12 +39,11 @@ abstract class AbstractAttributeTypeSchemaGenerator implements DoctrineSchemaGen
     {
         $typeName = $this->getTypeName();
         foreach ($collection as $metaModelInformation) {
-            if ([] !== $attributes = $metaModelInformation->getAttributesOfType($typeName)) {
-                $tableSchema = $this->getSchemaForMetaModel($schema, $metaModelInformation);
-
-                foreach ($attributes as $attribute) {
-                    $this->generateAttribute($tableSchema, $attribute);
-                }
+            $attributes = $metaModelInformation->getAttributesOfType($typeName);
+            $tableSchema = $this->getSchemaForMetaModel($schema, $metaModelInformation);
+            foreach ($attributes as $attribute) {
+                assert($attribute instanceof AttributeInformation, 'Sorry, we mistyped the generateAttribute method.');
+                $this->generateAttribute($tableSchema, $attribute);
             }
         }
     }

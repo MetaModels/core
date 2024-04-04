@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2020 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -25,6 +25,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\BasicDefinitionI
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefaultBasicDefinition;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\IFactory;
+use MetaModels\IMetaModel;
 use MetaModels\ViewCombination\ViewCombination;
 
 /**
@@ -39,14 +40,14 @@ class BasicDefinitionBuilder
      *
      * @var ViewCombination
      */
-    private $viewCombination;
+    private ViewCombination $viewCombination;
 
     /**
      * The factory.
      *
      * @var IFactory
      */
-    private $factory;
+    private IFactory $factory;
 
     /**
      * Create a new instance.
@@ -70,7 +71,7 @@ class BasicDefinitionBuilder
     protected function build(IMetaModelDataDefinition $container)
     {
         $inputScreen = $this->viewCombination->getScreen($container->getName());
-        if (!$inputScreen) {
+        if (null === $inputScreen) {
             return;
         }
         $meta = $inputScreen['meta'];
@@ -80,6 +81,7 @@ class BasicDefinitionBuilder
         $config->setDataProvider($container->getName());
 
         $metaModel = $this->factory->getMetaModel($container->getName());
+        assert($metaModel instanceof IMetaModel);
         // If we have variants, override all modes to tree mode.
         if ($metaModel->hasVariants()) {
             $config->setMode(BasicDefinitionInterface::MODE_HIERARCHICAL);
@@ -113,7 +115,7 @@ class BasicDefinitionBuilder
      *
      * @return BasicDefinitionInterface
      */
-    private function getOrCreateBasicDefinition(IMetaModelDataDefinition $container)
+    private function getOrCreateBasicDefinition(IMetaModelDataDefinition $container): BasicDefinitionInterface
     {
         if ($container->hasBasicDefinition()) {
             return $container->getBasicDefinition();

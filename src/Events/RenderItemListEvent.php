@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -35,35 +35,33 @@ class RenderItemListEvent extends Event
      *
      * @var ItemList
      */
-    private $list;
+    private ItemList $list;
 
     /**
      * The list template being rendered.
      *
      * @var Template
      */
-    private $template;
+    private Template $template;
 
     /**
      * The calling object (most likely a Module or ContentElement).
      *
-     * @var object
+     * @var object|null
      */
-    private $caller;
+    private object|null $caller;
 
     /**
      * Create a new instance.
      *
-     * @param ItemList $list     The item list getting rendered.
-     *
-     * @param Template $template The list template.
-     *
-     * @param object   $caller   The calling object (most likely a Module or ContentElement).
+     * @param ItemList    $list     The item list getting rendered.
+     * @param Template    $template The list template.
+     * @param object|null $caller   The calling object (most likely a Module or ContentElement).
      */
     public function __construct(ItemList $list, Template $template, $caller = null)
     {
-        $this->template = $template;
         $this->list     = $list;
+        $this->template = $template;
         $this->caller   = $caller;
     }
 

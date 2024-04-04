@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -40,17 +41,19 @@ class ParentTableVisibilityListener
     {
         foreach ($event->getContainer()->getPalettesDefinition()->getPalettes() as $palette) {
             foreach ($palette->getProperties() as $property) {
-                if ($property->getName() != 'ptable') {
+                if ($property->getName() !== 'ptable') {
                     continue;
                 }
 
                 $chain = $property->getVisibleCondition();
-                if (!($chain
+                if (
+                    !($chain
                     && ($chain instanceof PropertyConditionChain)
                     && $chain->getConjunction() == PropertyConditionChain::AND_CONJUNCTION
-                )) {
+                    )
+                ) {
                     $chain = new PropertyConditionChain(
-                        array($property->getVisibleCondition()),
+                        [$property->getVisibleCondition()],
                         PropertyConditionChain::AND_CONJUNCTION
                     );
 

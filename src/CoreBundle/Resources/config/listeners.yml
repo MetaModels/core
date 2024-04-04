@@ -74,9 +74,6 @@ services:
                 event: dc-general.model.post-persist
                 method: checkPurge
 
-
-
-
     MetaModels\CoreBundle\EventListener\BackendNavigationListener:
         arguments:
             - '@contao.translation.translator'
@@ -86,18 +83,6 @@ services:
             - '@router'
         tags:
             - { name: kernel.event_listener }
-
-
-
-
-
-
-
-
-
-
-
-
 
     MetaModels\CoreBundle\EventListener\DoctrineSchemaListener:
       arguments:
@@ -117,8 +102,6 @@ services:
             - name: kernel.event_listener
               event: kernel.request
               priority: -500
-
-
 
 #    metamodels.listener.table.tl_metamodel_rendersettings:
 #        class: MetaModels\DcGeneral\Events\Table\RenderSettings\Subscriber

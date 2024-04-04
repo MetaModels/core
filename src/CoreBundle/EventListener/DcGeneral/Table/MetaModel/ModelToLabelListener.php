@@ -36,14 +36,14 @@ class ModelToLabelListener extends AbstractAbstainingListener
      *
      * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * The translator.
      *
      * @var TranslatorInterface
      */
-    private $translator;
+    private TranslatorInterface $translator;
 
     /**
      * Create a new instance.
@@ -83,7 +83,7 @@ class ModelToLabelListener extends AbstractAbstainingListener
 
         $count   = '?';
         $transId = 'tl_metamodel.itemFormatCount.0';
-        if ($model && !empty($tableName) && $this->connection->createSchemaManager()->tablesExist([$tableName])) {
+        if (!empty($tableName) && $this->connection->createSchemaManager()->tablesExist([$tableName])) {
             $count = $this->connection
                 ->createQueryBuilder()
                 ->select('COUNT(t.id) AS itemCount')
@@ -107,6 +107,7 @@ class ModelToLabelListener extends AbstractAbstainingListener
         $label = \vsprintf($event->getLabel(), $event->getArgs());
         $image = ((bool) $model->getProperty('translated')) ? 'locale.png' : 'locale_1.png';
 
+        /** @psalm-suppress InvalidArgument */
         $event
             ->setLabel('
     <span class="name">

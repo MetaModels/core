@@ -39,6 +39,7 @@ class AssetPopulator
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function populate(EnvironmentInterface $environment)
     {

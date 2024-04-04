@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -24,12 +24,16 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\Breadcrumb;
 use Contao\StringUtil;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
 use MetaModels\Helper\LocaleUtil;
+use MetaModels\IMetaModel;
 
 /**
  * Generate a breadcrumb for table tl_metamodel_dcasetting_condition.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class BreadcrumbDcaSettingConditionListener extends AbstractBreadcrumbListener
 {
@@ -41,7 +45,10 @@ class BreadcrumbDcaSettingConditionListener extends AbstractBreadcrumbListener
      */
     protected function wantToHandle(GetBreadcrumbEvent $event)
     {
-        return 'tl_metamodel_dcasetting_condition' === $event->getEnvironment()->getDataDefinition()->getName();
+        $dataDefinition = $event->getEnvironment()->getDataDefinition();
+        assert($dataDefinition instanceof ContainerInterface);
+
+        return 'tl_metamodel_dcasetting_condition' === $dataDefinition->getName();
     }
 
     /**
@@ -68,11 +75,12 @@ class BreadcrumbDcaSettingConditionListener extends AbstractBreadcrumbListener
             ->unsetQueryParameter('act')
             ->unsetQueryParameter('id');
 
+        $dcaSettingId = $elements->getId('tl_metamodel_dcasetting');
         $elements->push(
             StringUtil::ampersand($builder->getUrl()),
-            sprintf(
+            \sprintf(
                 $elements->getLabel('tl_metamodel_dcasetting_condition'),
-                $this->getConditionAttribute($elements->getId('tl_metamodel_dcasetting'))
+                (null !== $dcaSettingId) ? $this->getConditionAttribute($dcaSettingId) : ''
             ),
             'bundles/metamodelscore/images/icons/dca_condition.png'
         );
@@ -92,10 +100,12 @@ class BreadcrumbDcaSettingConditionListener extends AbstractBreadcrumbListener
     {
         $setting = $this->getRow($settingId, 'tl_metamodel_dcasetting');
 
-        if ($setting->dcatype == 'attribute') {
-            $attribute     = (object) $this->getRow($setting->attr_id, 'tl_metamodel_attribute');
+        if ($setting->dcatype === 'attribute') {
+            $attribute     = $this->getRow($setting->attr_id, 'tl_metamodel_attribute');
             $metaModelName = $this->factory->translateIdToMetaModelName($attribute->pid);
-            $attribute     = $this->factory->getMetaModel($metaModelName)->getAttributeById((int) $attribute->id);
+            $metaModel     = $this->factory->getMetaModel($metaModelName);
+            assert($metaModel instanceof IMetaModel);
+            $attribute = $metaModel->getAttributeById((int) $attribute->id);
             if ($attribute) {
                 return $attribute->getName();
             }

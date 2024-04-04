@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -27,9 +27,11 @@ use ContaoCommunityAlliance\DcGeneral\Data\PropertyValueBag;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\LegendInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PropertyInterface;
+use MetaModels\DcGeneral\Data\Model;
+use MetaModels\IItem;
 
 /**
- * This condition matches as soon as all of the following apply:
+ * This condition matches as soon as all the following apply:
  * 1. the MetaModel supports variants.
  * 2. the current item is not a variant base.
  * 3. the attribute is not an invariant attribute.
@@ -45,17 +47,15 @@ class IsVariantAttribute implements PropertyConditionInterface
         PropertyInterface $property = null,
         LegendInterface $legend = null
     ) {
-        if ($property === null || $model === null) {
+        if ($property === null || !($model instanceof Model)) {
             return false;
         }
-
-        /** @var $model \MetaModels\DcGeneral\Data\Model */
-
         $nativeItem = $model->getItem();
-        $metaModel  = $nativeItem->getMetaModel();
+        assert($nativeItem instanceof IItem);
+        $metaModel = $nativeItem->getMetaModel();
 
         if ($metaModel->hasVariants() && !$nativeItem->isVariantBase()) {
-            return !in_array($property->getName(), array_keys($metaModel->getInVariantAttributes()));
+            return !\in_array($property->getName(), \array_keys($metaModel->getInVariantAttributes()));
         }
 
         return true;

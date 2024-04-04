@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,13 +17,14 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\Widgets;
 
+use Contao\DataContainer;
 use Contao\Date;
 use Contao\StringUtil;
 use Contao\System;
@@ -33,9 +34,14 @@ use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Widget\GetAttributesFromDcaEvent;
 use Exception;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Provide methods to handle multiple widgets in one.
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class SubDcaWidget extends Widget
 {
@@ -58,28 +64,28 @@ class SubDcaWidget extends Widget
      *
      * @var array
      */
-    protected $arrOptions = array();
+    protected $arrOptions = [];
 
     /**
      * SubFields.
      *
      * @var array
      */
-    protected $arrSubFields = array();
+    protected $arrSubFields = [];
 
     /**
      * Flag fields to be applied to each subfield.
      *
      * @var array
      */
-    protected $arrFlagFields = array();
+    protected $arrFlagFields = [];
 
     /**
      * The prepared widgets.
      *
      * @var array
      */
-    protected $arrWidgets = array();
+    protected $arrWidgets = [];
 
     /**
      * Initialize the object.
@@ -89,14 +95,17 @@ class SubDcaWidget extends Widget
     public function __construct($attributes = false)
     {
         parent::__construct();
-        $this->addAttributes($attributes);
-        // Input field callback.
-        if (isset($attributes['getsubfields_callback']) && is_array($attributes['getsubfields_callback'])) {
-            $arrCallback = $this->$attributes['getsubfields_callback'];
-            if (!is_object($arrCallback[0])) {
-                $this->import($arrCallback[0]);
+        if (\is_array($attributes)) {
+            $this->addAttributes($attributes);
+
+            // Input field callback.
+            if (isset($attributes['getsubfields_callback']) && is_array($attributes['getsubfields_callback'])) {
+                $arrCallback = $this->$attributes['getsubfields_callback'];
+                if (!is_object($arrCallback[0])) {
+                    $this->import($arrCallback[0]);
+                }
+                $this->arrSubFields = $this->{$arrCallback[0]}->{$arrCallback[1]}($this, $attributes);
             }
-            $this->arrSubFields = $this->{$arrCallback[0]}->{$arrCallback[1]}($this, $attributes);
         }
     }
 
@@ -107,7 +116,6 @@ class SubDcaWidget extends Widget
      * widget does understand: 'options', 'subfields' and 'flagfields'.
      *
      * @param string $strKey   The key of the attribute to set.
-     *
      * @param mixed  $varValue The value to use.
      *
      * @return void
@@ -145,14 +153,16 @@ class SubDcaWidget extends Widget
      */
     public function getEventDispatcher()
     {
-        return System::getContainer()->get('event_dispatcher');
+        $dispatcher = System::getContainer()->get('event_dispatcher');
+        assert($dispatcher instanceof EventDispatcherInterface);
+
+        return $dispatcher;
     }
 
     /**
-     * Generate an help wizard if needed.
+     * Generate a help wizard if needed.
      *
      * @param string $key   The widget name.
-     *
      * @param array  $field The field DCA - might get changed within this routine.
      *
      * @return string
@@ -174,14 +184,15 @@ class SubDcaWidget extends Widget
         );
         $this->getEventDispatcher()->dispatch($event, ContaoEvents::IMAGE_GET_HTML);
 
-        return sprintf(
-            ' <a href="%shelp.php?table=%s&amp;field=%s_%s" title="%s" rel="lightbox[help 610 80%]">%s</a>',
+        /** @psalm-suppress UndefinedConstant */
+        return \sprintf(
+            ' <a href="%shelp.php?table=%s&amp;field=%s_%s" title="%s" rel="lightbox[help 610 80%%]">%s</a>',
             TL_PATH . 'contao/',
             $this->strTable,
             $this->strName,
             $key,
             StringUtil::specialchars($GLOBALS['TL_LANG']['MSC']['helpWizard']),
-            $event->getHtml()
+            $event->getHtml() ?? ''
         );
     }
 
@@ -189,9 +200,7 @@ class SubDcaWidget extends Widget
      * Make fields mandatory if necessary.
      *
      * @param array  $field The field DCA.
-     *
      * @param string $row   The setting name.
-     *
      * @param string $key   The widget name.
      *
      * @return array
@@ -204,14 +213,12 @@ class SubDcaWidget extends Widget
             return $field;
         }
 
-        if (is_array($this->varValue[$row][$key])) {
+        if (\is_array($this->varValue[$row][$key])) {
             if (empty($this->varValue[$row][$key])) {
                 $field['eval']['required'] = true;
             }
-        } else {
-            if (!strlen($this->varValue[$row][$key])) {
-                $field['eval']['required'] = true;
-            }
+        } elseif ($this->varValue[$row][$key] === '') {
+            $field['eval']['required'] = true;
         }
 
         return $field;
@@ -229,20 +236,25 @@ class SubDcaWidget extends Widget
      */
     protected function getWidgetClass($field)
     {
-        $className = $GLOBALS[(TL_MODE == 'BE' ? 'BE_FFL' : 'TL_FFL')][$field['inputType']];
+        $isBackend = (bool) System::getContainer()
+            ->get('contao.routing.scope_matcher')
+            ?->isBackendRequest(
+                System::getContainer()->get('request_stack')?->getCurrentRequest() ?? Request::create('')
+            );
+        /** @var class-string<Widget>|null $strClass */
+        $className = $GLOBALS[($isBackend ? 'BE_FFL' : 'TL_FFL')][$field['inputType']];
 
-        if (($className !== '') && class_exists($className)) {
+        if (($className !== '') && \class_exists($className)) {
             return $className;
         }
 
-        return null;
+        return '';
     }
 
     /**
      * Handle the onload_callback.
      *
      * @param array $field The field information.
-     *
      * @param mixed $value The value.
      *
      * @return mixed
@@ -250,7 +262,7 @@ class SubDcaWidget extends Widget
     protected function handleLoadCallback($field, $value)
     {
         // Load callback.
-        if (isset($field['load_callback']) && is_array($field['load_callback'])) {
+        if (isset($field['load_callback']) && \is_array($field['load_callback'])) {
             foreach ($field['load_callback'] as $callback) {
                 $this->import($callback[0]);
                 $value = $this->{$callback[0]}->{$callback[1]}($value, $this);
@@ -266,11 +278,8 @@ class SubDcaWidget extends Widget
      * Based on DataContainer::row() from Contao 2.10.1.
      *
      * @param array  $arrField The field DCA - might get changed within this routine.
-     *
      * @param string $strRow   The setting name.
-     *
      * @param string $strKey   The widget name.
-     *
      * @param mixed  $varValue The widget value.
      *
      * @return Widget|null The widget on success, null otherwise.
@@ -280,14 +289,15 @@ class SubDcaWidget extends Widget
         $xlabel = $this->getHelpWizard($strKey, $arrField);
 
         // Input field callback.
-        if (isset($arrField['input_field_callback']) && is_array($arrField['input_field_callback'])) {
-            if (!is_object($this->$arrField['input_field_callback'][0])) {
+        if (isset($arrField['input_field_callback']) && \is_array($arrField['input_field_callback'])) {
+            if (!\is_object($this->$arrField['input_field_callback'][0])) {
                 $this->import($arrField['input_field_callback'][0]);
             }
 
             return $this->{$arrField['input_field_callback'][0]}->$arrField['input_field_callback'][1]($this, $xlabel);
         }
 
+        /** @var class-string<Widget>|null $strClass */
         $strClass = $this->getWidgetClass($arrField);
 
         if (empty($strClass)) {
@@ -308,15 +318,19 @@ class SubDcaWidget extends Widget
             $arrField['value'],
             '',
             $this->strTable,
-            $this->objDca
+            ((\is_a($this->objDca, DataContainer::class)) ? $this->objDca : null)
         );
 
         $this->getEventDispatcher()->dispatch($event, ContaoEvents::WIDGET_GET_ATTRIBUTES_FROM_DCA);
 
+        /** @psalm-suppress UnsafeInstantiation */
         $objWidget = new $strClass($event->getResult());
+        if (!($objWidget instanceof Widget)) {
+            return null;
+        }
 
-        $objWidget->strId       = $arrField['id'];
-        $objWidget->storeValues = true;
+        $objWidget->strId       = (int) $arrField['id'];
+        $objWidget->storeValues = 1; // The type is int in the widget.
         $objWidget->xlabel      = $xlabel;
 
         return $objWidget;
@@ -333,15 +347,15 @@ class SubDcaWidget extends Widget
             return;
         }
 
-        $arrWidgets = array();
+        $arrWidgets = [];
         foreach ($this->arrSubFields as $strFieldName => &$arrSubField) {
-            $varValue  = $this->value[$strFieldName];
-            $arrRow    = array();
+            $varValue  = $this->value[$strFieldName] ?? [];
+            $arrRow = [];
             $objWidget = $this->initializeWidget(
                 $arrSubField,
                 $strFieldName,
                 'value',
-                $varValue['value']
+                $varValue['value'] ?? null
             );
 
             if (!$objWidget) {
@@ -353,7 +367,7 @@ class SubDcaWidget extends Widget
                     $arrFlagField,
                     $strFieldName,
                     $strFlag,
-                    $varValue[$strFlag]
+                    $varValue[$strFlag] ?? null
                 );
 
                 if ($objWidget) {
@@ -369,9 +383,7 @@ class SubDcaWidget extends Widget
      * Handle the onsave_callback for a widget.
      *
      * @param array  $field  The field DCA.
-     *
      * @param Widget $widget The widget to validate.
-     *
      * @param mixed  $value  The value.
      *
      * @return mixed
@@ -380,7 +392,7 @@ class SubDcaWidget extends Widget
     {
         $newValue = $value;
 
-        if (isset($field['save_callback']) && is_array($field['save_callback'])) {
+        if (isset($field['save_callback']) && \is_array($field['save_callback'])) {
             foreach ($field['save_callback'] as $callback) {
                 $this->import($callback[0]);
 
@@ -404,11 +416,8 @@ class SubDcaWidget extends Widget
      * Based on DataContainer::row() from Contao 2.10.1
      *
      * @param array  $arrField The field DCA.
-     *
      * @param string $strRow   The setting name.
-     *
      * @param string $strKey   The widget name.
-     *
      * @param mixed  $varInput The overall input value.
      *
      * @return bool
@@ -420,7 +429,7 @@ class SubDcaWidget extends Widget
     {
         $varValue  = $varInput[$strRow][$strKey] ?? '';
         $objWidget = $this->initializeWidget($arrField, $strRow, $strKey, $varValue);
-        if (!is_object($objWidget)) {
+        if (!\is_object($objWidget)) {
             return false;
         }
 
@@ -497,10 +506,11 @@ class SubDcaWidget extends Widget
      */
     protected function getHelpForWidget($widget)
     {
-        if ($GLOBALS['TL_CONFIG']['showHelp'] && $widget->description) {
-            return sprintf(
+        if (!empty($GLOBALS['TL_CONFIG']['showHelp']) && !empty($widget->description)) {
+            /** @psalm-suppress UndefinedMagicPropertyFetch */
+            return \sprintf(
                 '<p class="tl_help tl_tip%s">%s</p>',
-                $widget->tl_class,
+                (string) $widget->tl_class,
                 $widget->description
             );
         }
@@ -511,21 +521,23 @@ class SubDcaWidget extends Widget
     /**
      *  Build the options for a widget.
      *
-     * @return array.
+     * @return array
      */
     protected function buildOptions()
     {
-        $options = array();
+        $options = [];
         foreach ($this->arrWidgets as $widgetRow) {
-            $columns = array();
-            foreach ($widgetRow as $widget) {
+            $columns = [];
+            foreach ((array) $widgetRow as $widget) {
                 /** @var Widget $widget */
-                $valign = ($widget->valign != '' ? ' valign="' . $widget->valign . '"' : '');
-                $class  = ($widget->tl_class != '' ? ' class="' . $widget->tl_class . '"' : '');
+                /** @psalm-suppress UndefinedMagicPropertyFetch */
+                $valign = ($widget->valign != '' ? ' valign="' . ($widget->valign ?? '') . '"' : '');
+                /** @psalm-suppress UndefinedMagicPropertyFetch */
+                $class  = ($widget->tl_class != '' ? ' class="' . ($widget->tl_class ?? '') . '"' : '');
                 $style  = ($widget->style != '' ? ' style="' . $widget->style . '"' : '');
                 $help   = $this->getHelpForWidget($widget);
 
-                $columns[] = sprintf(
+                $columns[] = \sprintf(
                     '<td %1$s%2$s%3$s>%4$s%5$s</td>',
                     $valign,
                     $class,
@@ -534,7 +546,7 @@ class SubDcaWidget extends Widget
                     $help
                 );
             }
-            $options[] = implode('', $columns);
+            $options[] = \implode('', $columns);
         }
 
         return $options;
@@ -557,25 +569,27 @@ class SubDcaWidget extends Widget
         $arrOptions = $this->buildOptions();
 
         // Add a "no entries found" message if there are no sub widgets.
-        if (!count($arrOptions)) {
-            $arrOptions[] = '<td><p class="tl_noopt">'.$GLOBALS['TL_LANG']['MSC']['noResult'].'</p></td>';
+        if (!\count($arrOptions)) {
+            $arrOptions[] = '<td><p class="tl_noopt">'
+                            . (string) ($GLOBALS['TL_LANG']['MSC']['noResult'] ?? '')
+                            . '</p></td>';
         }
 
         $strHead = '';
-        $strBody = sprintf('<tbody><tr>%s</tr></tbody>', implode("</tr>\n<tr>", $arrOptions));
+        $strBody = \sprintf('<tbody><tr>%s</tr></tbody>', \implode("</tr>\n<tr>", $arrOptions));
 
-        $strOutput = sprintf(
-            '<table cellspacing="0"%s cellpadding="0" id="ctrl_%s" class="tl_subdca">%s%s</table>',
+        $strOutput = \sprintf(
+            '<table%s id="ctrl_%s" class="tl_subdca">%s%s</table>',
             (($this->style) ? ('style="' . $this->style . '"') : ('')),
             $this->strId,
             $strHead,
             $strBody
         );
 
-        return sprintf(
+        return \sprintf(
             '<div id="ctrl_%s" class="tl_multiwidget_container%s clr">%s</div>',
             $this->strName,
-            (strlen($this->strClass) ? ' ' . $this->strClass : ''),
+            (\strlen($this->strClass) ? ' ' . $this->strClass : ''),
             $strOutput
         );
     }

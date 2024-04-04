@@ -17,7 +17,7 @@
  * @filesource
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace MetaModels\Test\Schema\Doctrine;
 
@@ -39,6 +39,8 @@ use PHPUnit\Framework\TestCase;
  * This tests the doctrine schema.
  *
  * @covers \MetaModels\Schema\LegacySchemaGenerator
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class LegacySchemaGeneratorTest extends TestCase
 {

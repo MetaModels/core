@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,8 @@
  *
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -25,6 +26,8 @@ use MetaModels\IMetaModel;
 
 /**
  * This factory takes care of building property conditions.
+ *
+ * @psalm-suppress DeprecatedClass
  */
 class PropertyConditionFactory
 {
@@ -33,20 +36,22 @@ class PropertyConditionFactory
      *
      * @var IdProvidingServiceLocator
      */
-    private $factories;
+    private IdProvidingServiceLocator $factories;
 
     /**
      * The fallback factory.
      *
      * @var FallbackPropertyConditionFactory
      */
-    private $fallbackFactory;
+    private FallbackPropertyConditionFactory $fallbackFactory;
 
     /**
      * Create a new instance.
      *
      * @param IdProvidingServiceLocator        $factories       The factories.
      * @param FallbackPropertyConditionFactory $fallbackFactory The fallback factory.
+     *
+     * @psalm-suppress DeprecatedClass
      */
     public function __construct(IdProvidingServiceLocator $factories, FallbackPropertyConditionFactory $fallbackFactory)
     {
@@ -138,11 +143,7 @@ class PropertyConditionFactory
         }
 
         if (!$this->factories->has($typeName = $configuration['type'])) {
-            if ($result = $this->fallbackFactory->createCondition($configuration, $metaModel)) {
-                return $result;
-            }
-
-            throw new \InvalidArgumentException('Unknown type: ' . $typeName);
+            return $this->fallbackFactory->createCondition($configuration, $metaModel);
         }
 
         return $this->getFactory($typeName)->buildCondition($configuration, $metaModel);

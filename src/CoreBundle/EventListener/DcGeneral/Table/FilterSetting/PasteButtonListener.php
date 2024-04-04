@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,17 +13,20 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\FilterSetting;
 
+use ContaoCommunityAlliance\DcGeneral\Clipboard\ClipboardInterface;
 use ContaoCommunityAlliance\DcGeneral\Clipboard\Filter;
 use ContaoCommunityAlliance\DcGeneral\Clipboard\ItemInterface;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPasteButtonEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use MetaModels\Filter\Setting\IFilterSettingFactory;
 
 /**
@@ -36,7 +39,7 @@ class PasteButtonListener
      *
      * @var IFilterSettingFactory
      */
-    private $filterFactory;
+    private IFilterSettingFactory $filterFactory;
 
     /**
      * Create a new instance.
@@ -58,13 +61,14 @@ class PasteButtonListener
     public function handle(GetPasteButtonEvent $event)
     {
         $model = $event->getModel();
+        assert($model instanceof ModelInterface);
+
         if (('tl_metamodel_filtersetting' !== $model->getProviderName())) {
             return;
         }
 
-        $environment = $event->getEnvironment();
-        $model       = $event->getModel();
-        $clipboard   = $environment->getClipboard();
+        $clipboard = $event->getEnvironment()->getClipboard();
+        assert($clipboard instanceof ClipboardInterface);
 
         $filter = Filter::create()->andModelIs(ModelId::fromModel($model))->andActionIs(ItemInterface::CUT);
         // Disable all buttons if there is a circular reference.

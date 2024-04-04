@@ -17,7 +17,7 @@
  * @filesource
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace MetaModels\Information;
 
@@ -29,7 +29,7 @@ class MetaModelCollection implements MetaModelCollectionInterface
     /**
      * The list of configured MetaModels.
      *
-     * @var MetaModelInformationInterface[]
+     * @var array<string, MetaModelInformationInterface>
      */
     private $metaModels = [];
 

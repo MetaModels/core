@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,23 +13,28 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\DcGeneral\Data;
 
+use MetaModels\IItem;
+
 /**
  * Iterator class for allowing usage of MetaModels\DcGeneral\Data\Model
  * in foreach constructs.
+ *
+ * @implements \Iterator<string, mixed>
  */
 class ModelIterator implements \Iterator
 {
     /**
      * The model to iterate over.
      *
-     * @var Model
+     * @var Model|null
      */
     protected $objModel = null;
 
@@ -38,14 +43,14 @@ class ModelIterator implements \Iterator
      *
      * @var int
      */
-    private $intPosition = 0;
+    private int $intPosition = 0;
 
     /**
      * All property names.
      *
      * @var string[]
      */
-    protected $arrKeys = array();
+    protected $arrKeys = [];
 
     /**
      * Returns an array containing all property names.
@@ -66,14 +71,16 @@ class ModelIterator implements \Iterator
     {
         $this->intPosition = 0;
         $this->objModel    = $objModel;
-        $objMetaModel      = $this->objModel->getItem()->getMetaModel();
+        $item              = $this->objModel->getItem();
+        assert($item instanceof IItem);
+        $objMetaModel = $item->getMetaModel();
 
-        $arrKeys = array();
+        $arrKeys = [];
         if ($objMetaModel->hasVariants()) {
             $arrKeys[] = 'varbase';
             $arrKeys[] = 'vargroup';
         }
-        $this->arrKeys = array_merge($arrKeys, array_keys($objMetaModel->getAttributes()));
+        $this->arrKeys = \array_merge($arrKeys, \array_keys($objMetaModel->getAttributes()));
     }
 
     /**
@@ -81,7 +88,7 @@ class ModelIterator implements \Iterator
      *
      * @return void
      */
-    public function rewind()
+    public function rewind(): void
     {
         $this->intPosition = 0;
     }
@@ -91,9 +98,12 @@ class ModelIterator implements \Iterator
      *
      * @return mixed
      */
-    public function current()
+    public function current(): mixed
     {
-        return $this->objModel->getProperty($this->key());
+        $model = $this->objModel;
+        assert($model instanceof Model);
+
+        return $model->getProperty($this->key());
     }
 
     /**
@@ -101,9 +111,10 @@ class ModelIterator implements \Iterator
      *
      * @return string
      */
-    public function key()
+    public function key(): string
     {
         $arrKeys = $this->getKeys();
+
         return $arrKeys[$this->intPosition];
     }
 
@@ -112,7 +123,7 @@ class ModelIterator implements \Iterator
      *
      * @return void
      */
-    public function next()
+    public function next(): void
     {
         ++$this->intPosition;
     }
@@ -122,8 +133,8 @@ class ModelIterator implements \Iterator
      *
      * @return bool
      */
-    public function valid()
+    public function valid(): bool
     {
-        return strlen($this->key()) > 0;
+        return \strlen($this->key()) > 0;
     }
 }

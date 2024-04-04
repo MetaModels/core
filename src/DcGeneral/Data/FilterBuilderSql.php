@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2020 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -44,51 +44,49 @@ class FilterBuilderSql
      *
      * @var string
      */
-    private $combiner;
+    private string $combiner;
 
     /**
      * The SQL procedure.
      *
-     * @var string
+     * @var array
      */
-    private $procedures = [];
+    private array $procedures = [];
 
     /**
      * The SQL query parameters.
      *
      * @var array
      */
-    private $parameter = [];
+    private array $parameter = [];
 
     /**
      * The database instance.
      *
      * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * The table alias to use.
      *
      * @var string
      */
-    private $tableAlias;
+    private string $tableAlias;
 
     /**
      * Create a new instance.
      *
      * @param string     $tableName  The table name.
-     *
      * @param string     $combiner   The combiner (AND or OR).
-     *
      * @param Connection $connection The database connection.
-     *
      * @param string     $tableAlias The table alias prefix (defaults to 't.').
      */
     public function __construct($tableName, $combiner, $connection, string $tableAlias = 't.')
     {
         $this->tableName  = $tableName;
         $this->combiner   = strtoupper($combiner);
+        /** @psalm-suppress DeprecatedMethod */
         $this->connection = $this->sanitizeConnection($connection);
         $this->tableAlias = $tableAlias;
     }
@@ -110,7 +108,7 @@ class FilterBuilderSql
      */
     public function getProcedure()
     {
-        return '(' . implode(' ' . $this->combiner . ' ', $this->procedures) . ')';
+        return '(' . \implode(' ' . $this->combiner . ' ', $this->procedures) . ')';
     }
 
     /**
@@ -132,7 +130,7 @@ class FilterBuilderSql
     {
         if (!$this->isEmpty()) {
             return new SimpleQuery(
-                sprintf('SELECT t.id FROM %s AS t WHERE %s', $this->tableName, $this->getProcedure()),
+                \sprintf('SELECT t.id FROM %s AS t WHERE %s', $this->tableName, $this->getProcedure()),
                 $this->getParameters(),
                 'id',
                 $this->connection
@@ -152,7 +150,7 @@ class FilterBuilderSql
     protected function getFilterForComparingOperator($operation)
     {
         $this->parameter[]  = $operation['value'];
-        $this->procedures[] = sprintf(
+        $this->procedures[] = \sprintf(
             '(%s%s %s ?)',
             $this->tableAlias,
             $operation['property'],
@@ -171,12 +169,12 @@ class FilterBuilderSql
      */
     protected function getFilterForInList($operation)
     {
-        $this->parameter    = array_merge($this->parameter, array_values($operation['values']));
-        $this->procedures[] = sprintf(
+        $this->parameter    = \array_merge($this->parameter, \array_values($operation['values']));
+        $this->procedures[] = \sprintf(
             '(%s%s IN (%s))',
             $this->tableAlias,
             $operation['property'],
-            rtrim(str_repeat('?,', \count($operation['values'])), ',')
+            \rtrim(\str_repeat('?,', \count($operation['values'])), ',')
         );
 
         return $this;
@@ -193,8 +191,8 @@ class FilterBuilderSql
      */
     protected function getFilterForLike($operation)
     {
-        $this->parameter[]  = str_replace(array('*', '?'), array('%', '_'), $operation['value']);
-        $this->procedures[] = sprintf('(%s%s LIKE ?)', $this->tableAlias, $operation['property']);
+        $this->parameter[]  = \str_replace(array('*', '?'), array('%', '_'), $operation['value']);
+        $this->procedures[] = \sprintf('(%s%s LIKE ?)', $this->tableAlias, $operation['property']);
 
         return $this;
     }
@@ -210,11 +208,7 @@ class FilterBuilderSql
      */
     public function addChild($child)
     {
-        if (!\is_array($child)) {
-            throw new \RuntimeException('Error Processing sub filter: ' . var_export($child, true), 1);
-        }
-
-        switch (strtoupper($child['operation'])) {
+        switch (\strtoupper($child['operation'])) {
             case '=':
             case '>':
             case '<':
@@ -229,7 +223,7 @@ class FilterBuilderSql
             default:
         }
 
-        throw new \RuntimeException('Error processing filter array ' . var_export($child, true), 1);
+        throw new \RuntimeException('Error processing filter array ' . \var_export($child, true), 1);
     }
 
     /**
@@ -242,7 +236,7 @@ class FilterBuilderSql
     public function addSubProcedure(FilterBuilderSql $subProcedure)
     {
         $this->procedures[] = $subProcedure->getProcedure();
-        $this->parameter    = array_merge($this->parameter, $subProcedure->getParameters());
+        $this->parameter    = \array_merge($this->parameter, $subProcedure->getParameters());
 
         return $this;
     }
@@ -250,7 +244,7 @@ class FilterBuilderSql
     /**
      * Sanitize the connection value
      *
-     * @param Connection|\Contao\Database $connection The connection value.
+     * @param \Contao\Database|Connection|null $connection The connection value.
      *
      * @return Connection
      *
@@ -258,7 +252,7 @@ class FilterBuilderSql
      *
      * @deprecated To be removed in 3.0 - you should ALWAYS pass the proper connection.
      */
-    private function sanitizeConnection($connection)
+    private function sanitizeConnection(Connection|Database|null $connection): Connection
     {
         if ($connection instanceof Connection) {
             return $connection;
@@ -275,8 +269,10 @@ class FilterBuilderSql
             );
             $reflection = new \ReflectionProperty(Database::class, 'resConnection');
             $reflection->setAccessible(true);
+
             return $reflection->getValue($connection);
         }
+
         if (null === $connection) {
             @trigger_error(
                 'You should pass a doctrine database connection to "' . __METHOD__ . '".',

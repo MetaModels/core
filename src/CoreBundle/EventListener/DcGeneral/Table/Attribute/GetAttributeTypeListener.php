@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -23,8 +24,11 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\Attribute;
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\AbstractEnvironmentAwareEvent;
+use ContaoCommunityAlliance\Translator\TranslatorInterface;
 use MetaModels\Attribute\IAttributeFactory;
+use MetaModels\Attribute\IAttributeTypeFactory;
 use MetaModels\IFactory;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -70,10 +74,13 @@ class GetAttributeTypeListener extends BaseListener
             return;
         }
 
-        $translator   = $event->getEnvironment()->getTranslator();
+        $translator = $event->getEnvironment()->getTranslator();
+        assert($translator instanceof TranslatorInterface);
+
         $objMetaModel = $this->getMetaModelByModelPid($event->getModel());
         $flags        = IAttributeFactory::FLAG_ALL_UNTRANSLATED;
 
+        /** @psalm-suppress DeprecatedMethod */
         if ($objMetaModel->isTranslated()) {
             $flags |= IAttributeFactory::FLAG_INCLUDE_TRANSLATED;
         }
@@ -82,7 +89,9 @@ class GetAttributeTypeListener extends BaseListener
         $optionsTrans = [];
         foreach ($this->attributeFactory->getTypeNames($flags) as $attributeType) {
             // Differentiate translated and simple.
-            if ($this->attributeFactory->getTypeFactory($attributeType)->isTranslatedType()) {
+            $typeFactory = $this->attributeFactory->getTypeFactory($attributeType);
+            assert($typeFactory instanceof IAttributeTypeFactory);
+            if ($typeFactory->isTranslatedType()) {
                 $optionsTrans[$attributeType] = $translator->translate(
                     'typeOptions.' . $attributeType,
                     'tl_metamodel_attribute'
@@ -94,12 +103,13 @@ class GetAttributeTypeListener extends BaseListener
                 );
             }
         }
-        asort($options);
+        \asort($options);
 
         // Add translated attributes.
+        /** @psalm-suppress DeprecatedMethod */
         if ($objMetaModel->isTranslated()) {
-            asort($optionsTrans);
-            $options = array_merge($options, $optionsTrans);
+            \asort($optionsTrans);
+            $options = \array_merge($options, $optionsTrans);
         }
 
         $event->setOptions($options);
@@ -123,6 +133,8 @@ class GetAttributeTypeListener extends BaseListener
         }
 
         $request = $this->requestStack->getCurrentRequest();
+        assert($request instanceof Request);
+
         if ($request->request->get('act', null) === 'select' && !$event->getModel()->getId()) {
             return false;
         }

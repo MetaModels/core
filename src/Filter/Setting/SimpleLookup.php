@@ -30,11 +30,14 @@ use MetaModels\IItem;
 use MetaModels\Filter\IFilter;
 use MetaModels\Filter\Rules\StaticIdList as FilterRuleStaticIdList;
 use MetaModels\Filter\Rules\SearchAttribute as FilterRuleSimpleLookup;
+use MetaModels\IMetaModel;
+use MetaModels\ITranslatedMetaModel;
 use MetaModels\Render\Setting\ICollection as IRenderSettings;
 
 /**
- * Filter setting implementation performing a search for a value on a
- * configured attribute.
+ * Filter setting implementation performing a search for a value on a configured attribute.
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity) - revisit after removing bc layer.
  */
 class SimpleLookup extends Simple
 {
@@ -93,11 +96,9 @@ class SimpleLookup extends Simple
     /**
      * Internal helper function for descendant classes to retrieve the options.
      *
-     * @param IAttribute    $objAttribute The attribute to search.
-     *
-     * @param string[]|null $arrIds       The Id list of items for which to retrieve the options.
-     *
-     * @param array         $arrCount     If non null, the amount of matches will get returned.
+     * @param IAttribute        $objAttribute The attribute to search.
+     * @param list<string>|null $arrIds       The Id list of items for which to retrieve the options.
+     * @param array             $arrCount     If non-null, the amount of matches will get returned.
      *
      * @return array
      */
@@ -112,10 +113,10 @@ class SimpleLookup extends Simple
         // Remove empty values.
         foreach ($arrOptions as $mixOptionKey => $mixOptions) {
             // Remove html/php tags.
-            $mixOptions = strip_tags($mixOptions);
-            $mixOptions = trim($mixOptions);
+            $mixOptions = \strip_tags($mixOptions);
+            $mixOptions = \trim($mixOptions);
 
-            if ($mixOptions === '' || $mixOptions === null) {
+            if ($mixOptions === '') {
                 unset($arrOptions[$mixOptionKey]);
             }
         }
@@ -154,26 +155,25 @@ class SimpleLookup extends Simple
         $objAttribute = $this->getFilteredAttribute();
         $strParam     = $this->getParamName();
 
-        if ($objAttribute && $strParam) {
-            if ($arrFilterValue = $this->determineFilterValue($arrFilterUrl, $strParam)) {
-                if ($objMetaModel->isTranslated() && $this->get('all_langs')) {
-                    $arrLanguages = $objMetaModel->getAvailableLanguages();
-                } else {
-                    $arrLanguages = array($objMetaModel->getActiveLanguage());
-                }
-                $objFilterRule = new FilterRuleSimpleLookup($objAttribute, $arrFilterValue, $arrLanguages);
+        if ($objAttribute && null !== $strParam) {
+            if (null !== ($arrFilterValue = $this->determineFilterValue($arrFilterUrl, $strParam))) {
+                $objFilterRule = new FilterRuleSimpleLookup(
+                    $objAttribute,
+                    $arrFilterValue,
+                    $this->determineLanguages($objMetaModel)
+                );
                 $objFilter->addFilterRule($objFilterRule);
+
                 return;
             }
 
             // We found an attribute but no match in URL. So ignore this filter setting if allow_empty is set.
             if ($this->allowEmpty()) {
-                $objFilter->addFilterRule(new FilterRuleStaticIdList(null));
                 return;
             }
         }
         // Either no attribute found or no match in url, do not return anything.
-        $objFilter->addFilterRule(new FilterRuleStaticIdList(array()));
+        $objFilter->addFilterRule(new FilterRuleStaticIdList([]));
     }
 
     /**
@@ -182,7 +182,9 @@ class SimpleLookup extends Simple
     public function generateFilterUrlFrom(IItem $objItem, IRenderSettings $objRenderSetting)
     {
         if ($attribute = $this->getFilteredAttribute()) {
-            return [$this->getParamName() => $attribute->getFilterUrlValue($objItem->get($attribute->getColName()))];
+            return [
+                (string) $this->getParamName() => $attribute->getFilterUrlValue($objItem->get($attribute->getColName()))
+            ];
         }
 
         return [];
@@ -193,7 +195,7 @@ class SimpleLookup extends Simple
      */
     public function getParameters()
     {
-        return ($strParamName = $this->getParamName()) ? array($strParamName) : array();
+        return (null !== ($strParamName = $this->getParamName())) ? [$strParamName] : [];
     }
 
     /**
@@ -210,16 +212,18 @@ class SimpleLookup extends Simple
         }
 
         $objAttribute = $this->getFilteredAttribute();
-        $arrOptions   = $objAttribute->getFilterOptions(null, (bool) $this->get('onlyused'));
+        assert($objAttribute instanceof IAttribute);
+
+        $arrOptions = $objAttribute->getFilterOptions(null, (bool) $this->get('onlyused'));
 
         return [
-            $this->getParamName() => [
+            (string) $this->getParamName() => [
                 'label'     => [
-                    sprintf(
+                    \sprintf(
                         $GLOBALS['TL_LANG']['MSC']['metamodel_filtersettings_parameter']['simplelookup'][0],
                         $objAttribute->getName()
                     ),
-                    sprintf(
+                    \sprintf(
                         $GLOBALS['TL_LANG']['MSC']['metamodel_filtersettings_parameter']['simplelookup'][1],
                         $objAttribute->getName()
                     )
@@ -239,13 +243,13 @@ class SimpleLookup extends Simple
      */
     public function getParameterFilterNames()
     {
-        if (($label = $this->getLabel()) && ($paramName = $this->getParamName())) {
-            return array(
+        if (null !== ($label = $this->getLabel()) && null !== ($paramName = $this->getParamName())) {
+            return [
                 $paramName => $label
-            );
+            ];
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -253,6 +257,7 @@ class SimpleLookup extends Simple
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function getParameterFilterWidgets(
         $arrIds,
@@ -262,14 +267,17 @@ class SimpleLookup extends Simple
     ) {
         // If defined as static, return nothing as not to be manipulated via editors.
         if (!$this->enableFEFilterWidget()) {
-            return array();
+            return [];
         }
 
         if (!($attribute = $this->getFilteredAttribute())) {
-            return array();
+            return [];
         }
 
-        $GLOBALS['MM_FILTER_PARAMS'][] = $this->getParamName();
+        $paramName = $this->getParamName();
+        assert(\is_string($paramName));
+
+        $GLOBALS['MM_FILTER_PARAMS'][] = $paramName;
 
         $cssID = StringUtil::deserialize($this->get('cssID'), true);
 
@@ -277,7 +285,7 @@ class SimpleLookup extends Simple
         $arrWidget = [
             'label'     => [
                 $this->getLabel(),
-                'GET: ' . $this->getParamName()
+                'GET: ' . $paramName
             ],
             'inputType' => 'select',
             'options'   => $this->getParameterFilterOptions($attribute, $arrIds, $arrCount),
@@ -293,7 +301,7 @@ class SimpleLookup extends Simple
                     ? $this->getLabel()
                     : $GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter'],
                 'colname'            => $attribute->getColname(),
-                'urlparam'           => $this->getParamName(),
+                'urlparam'           => $paramName,
                 'onlyused'           => $this->get('onlyused'),
                 'onlypossible'       => $this->get('onlypossible'),
                 'template'           => $this->get('template'),
@@ -303,15 +311,14 @@ class SimpleLookup extends Simple
             ]
         ];
 
-        return array
-        (
-            $this->getParamName() => $this->prepareFrontendFilterWidget(
+        return [
+            $paramName => $this->prepareFrontendFilterWidget(
                 $arrWidget,
                 $arrFilterUrl,
                 $arrJumpTo,
                 $objFrontendFilterOptions
             )
-        );
+        ];
     }
 
     /**
@@ -359,5 +366,42 @@ class SimpleLookup extends Simple
         }
 
         return $filterValues[$valueName] ?? null;
+    }
+
+    /**
+     * @return list<non-empty-string>
+     */
+    private function determineLanguages(IMetaModel $metaModel): array
+    {
+        if ((bool) $this->get('all_langs')) {
+            if ($metaModel instanceof ITranslatedMetaModel) {
+                return \array_values(\array_filter($metaModel->getLanguages()));
+            }
+            /**
+             * @psalm-suppress DeprecatedMethod
+             * @psalm-suppress TooManyArguments
+             */
+            if ($metaModel->isTranslated(false)) {
+                /** @psalm-suppress DeprecatedMethod */
+                return \array_values(\array_filter($metaModel->getAvailableLanguages() ?? []));
+            }
+
+            return [];
+        }
+
+        if ($metaModel instanceof ITranslatedMetaModel) {
+            return \array_filter([$metaModel->getLanguage()]);
+        }
+
+        /**
+         * @psalm-suppress DeprecatedMethod
+         * @psalm-suppress TooManyArguments
+         */
+        if ($metaModel->isTranslated(false)) {
+            /** @psalm-suppress DeprecatedMethod */
+            return \array_filter([$metaModel->getActiveLanguage()]);
+        }
+
+        return [];
     }
 }

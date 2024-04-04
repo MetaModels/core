@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -35,6 +35,8 @@ use Symfony\Component\HttpFoundation\Response;
  * The item list front end module.
  *
  * @FrontendModule("metamodel_list", category="metamodels")
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 final class ItemListController extends AbstractFrontendModuleController
 {
@@ -62,7 +64,8 @@ final class ItemListController extends AbstractFrontendModuleController
             return $this->getBackendWildcard($model);
         }
 
-        if (!empty($model->metamodel_layout)) {
+        /** @psalm-suppress UndefinedMagicPropertyFetch */
+        if (null !== $model->metamodel_layout) {
             $model->customTpl = $model->metamodel_layout;
         }
 
@@ -78,7 +81,7 @@ final class ItemListController extends AbstractFrontendModuleController
      */
     protected function getBackendWildcard(ModuleModel $module): Response
     {
-        $name = $this->translator->trans('FMD.'.$this->getType().'.0', [], 'contao_modules');
+        $name = $this->translator->trans('FMD.' . $this->getType() . '.0', [], 'contao_modules');
         $href = $this->router->generate(
             'contao_backend',
             ['do' => 'themes', 'table' => 'tl_module', 'act' => 'edit', 'id' => $module->id]

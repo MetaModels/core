@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -32,11 +33,11 @@ class InvalidColumnNameException extends \RuntimeException
      * @param int        $code       The optional Exception code.
      * @param \Exception $previous   The optional previous throwable used for the exception chaining.
      *
-     * @return static
+     * @return self
      */
     public static function invalidCharacters($columnName, $code = 0, $previous = null)
     {
-        return new static(sprintf('The column name "%s" is invalid.', $columnName), $code, $previous);
+        return new self(\sprintf('The column name "%s" is invalid.', $columnName), $code, $previous);
     }
 
     /**
@@ -46,10 +47,10 @@ class InvalidColumnNameException extends \RuntimeException
      * @param int        $code       The optional Exception code.
      * @param \Exception $previous   The optional previous throwable used for the exception chaining.
      *
-     * @return static
+     * @return self
      */
     public static function systemColumn($columnName, $code = 0, $previous = null)
     {
-        return new static(sprintf('The column name "%s" is reserved for system use.', $columnName), $code, $previous);
+        return new self(\sprintf('The column name "%s" is reserved for system use.', $columnName), $code, $previous);
     }
 }

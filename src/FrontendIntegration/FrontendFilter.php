@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,7 +20,7 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Marc Reimann <reimann@mediendepot-ruhr.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -28,19 +28,28 @@
 namespace MetaModels\FrontendIntegration;
 
 use Contao\CoreBundle\Exception\RedirectResponseException;
+use Contao\FrontendTemplate;
 use Contao\Input;
 use Contao\System;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\RedirectEvent;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception;
 use MetaModels\Filter\FilterUrl;
 use MetaModels\Filter\FilterUrlBuilder;
 use MetaModels\FrontendIntegration\Content\FilterClearAll as ContentElementFilterClearAll;
 use MetaModels\FrontendIntegration\Module\FilterClearAll as ModuleFilterClearAll;
+use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * FE-filtering for Contao MetaModels.
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class FrontendFilter
 {
@@ -63,20 +72,20 @@ class FrontendFilter
      *
      * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * The filter URL builder.
      *
      * @var FilterUrlBuilder
      */
-    private $filterUrlBuilder;
+    private FilterUrlBuilder $filterUrlBuilder;
 
     /**
      * FrontendFilter constructor.
      *
-     * @param Connection       $connection       Database connection.
-     * @param FilterUrlBuilder $filterUrlBuilder The filter URL builder.
+     * @param Connection|null       $connection       Database connection.
+     * @param FilterUrlBuilder|null $filterUrlBuilder The filter URL builder.
      */
     public function __construct(Connection $connection = null, FilterUrlBuilder $filterUrlBuilder = null)
     {
@@ -88,7 +97,10 @@ class FrontendFilter
             );
             // @codingStandardsIgnoreEnd
             $connection = System::getContainer()->get('database_connection');
+            assert($connection instanceof Connection);
         }
+        $this->connection = $connection;
+
         if (null === $filterUrlBuilder) {
             // @codingStandardsIgnoreStart
             @trigger_error(
@@ -97,9 +109,8 @@ class FrontendFilter
             );
             // @codingStandardsIgnoreEnd
             $filterUrlBuilder = System::getContainer()->get('metamodels.filter_url');
+            assert($filterUrlBuilder instanceof FilterUrlBuilder);
         }
-
-        $this->connection       = $connection;
         $this->filterUrlBuilder = $filterUrlBuilder;
     }
 
@@ -110,7 +121,10 @@ class FrontendFilter
      */
     protected function getDispatcher()
     {
-        return System::getContainer()->get('event_dispatcher');
+        $dispatcher = System::getContainer()->get('event_dispatcher');
+        assert($dispatcher instanceof EventDispatcherInterface);
+
+        return $dispatcher;
     }
 
     /**
@@ -124,6 +138,7 @@ class FrontendFilter
     {
         $this->objFilterConfig = $objFilterConfig;
 
+        /** @psalm-suppress UndefinedMagicPropertyFetch */
         $this->formId .= $this->objFilterConfig->metamodel_fef_id ?: $this->objFilterConfig->id;
         return $this->getFilters();
     }
@@ -144,7 +159,7 @@ class FrontendFilter
     {
         // @codingStandardsIgnoreStart
         @trigger_error(
-            sprintf('"%1$s" has been deprecated in favor of the new "FilterUrlBuilder"', __METHOD__),
+            \sprintf('"%1$s" has been deprecated in favor of the new "FilterUrlBuilder"', __METHOD__),
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
@@ -152,29 +167,29 @@ class FrontendFilter
         $strFilterAction = '';
         foreach ($arrParams as $strName => $varParam) {
             // Skip the magic "language" parameter.
-            if (($strName == 'language') && $GLOBALS['TL_CONFIG']['addLanguageToUrl']) {
+            if (($strName === 'language') && $GLOBALS['TL_CONFIG']['addLanguageToUrl']) {
                 continue;
             }
 
             $strValue = $varParam;
 
-            if (is_array($varParam)) {
-                $strValue = implode(',', array_filter($varParam));
+            if (\is_array($varParam)) {
+                $strValue = \implode(',', \array_filter($varParam));
             }
 
-            if (strlen($strValue)) {
+            if (\strlen($strValue)) {
                 // Shift auto_item to the front.
                 if ($strName == 'auto_item') {
-                    $strFilterAction = '/' . rawurlencode(rawurlencode($strValue)) . $strFilterAction;
+                    $strFilterAction = '/' . \rawurlencode(\rawurlencode($strValue)) . $strFilterAction;
                     continue;
                 }
 
-                $strFilterAction .= sprintf(
+                $strFilterAction .= \sprintf(
                     $GLOBALS['TL_CONFIG']['disableAlias'] ? '&amp;%s=%s' : '/%s/%s',
-                    rawurlencode($strName),
+                    \rawurlencode($strName),
                     // Double rawurlencode to encode all special characters.
                     // Look at http://php.net/manual/en/function.rawurlencode.php .
-                    rawurlencode(rawurlencode($strValue))
+                    \rawurlencode(\rawurlencode($strValue))
                 );
             }
         }
@@ -196,7 +211,7 @@ class FrontendFilter
     {
         // @codingStandardsIgnoreStart
         @trigger_error(
-            sprintf('"%1$s" has been deprecated in favor of the new "FilterUrlBuilder"', __METHOD__),
+            \sprintf('"%1$s" has been deprecated in favor of the new "FilterUrlBuilder"', __METHOD__),
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
@@ -212,11 +227,16 @@ class FrontendFilter
     /**
      * Retrieve the list of parameter names that shall be evaluated.
      *
-     * @return array
+     * @return list<string>
      */
     protected function getWantedNames()
     {
-        return (array) unserialize($this->objFilterConfig->metamodel_fef_params);
+        return \array_values(
+            \array_map(
+                static fn (mixed $value): string => (string) $value,
+                (array) \unserialize($this->objFilterConfig->metamodel_fef_params, ['allowed_classes' => false])
+            )
+        );
     }
 
     /**
@@ -233,39 +253,38 @@ class FrontendFilter
     {
         // @codingStandardsIgnoreStart
         @trigger_error(
-            sprintf('"%1$s" has been deprecated in favor of the new "FilterUrlBuilder"', __METHOD__),
+            \sprintf('"%1$s" has been deprecated in favor of the new "FilterUrlBuilder"', __METHOD__),
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
         $arrWantedParam = $this->getWantedNames();
-        $arrMyParams    = $arrOtherParams = array();
+        $arrMyParams    = $arrOtherParams = [];
 
         if ($_GET) {
-            foreach (array_keys($_GET) as $strParam) {
-                if (in_array($strParam, $arrWantedParam)) {
-                    $arrMyParams[$strParam] = Input::get($strParam);
-                } elseif ($strParam != 'page') {
+            foreach (\array_keys($_GET) as $strParam) {
+                if (\in_array($strParam, $arrWantedParam)) {
+                    $arrMyParams[$strParam] = Input::get((string) $strParam);
+                } elseif ($strParam !== 'page') {
                     // Add only to the array if param is not page.
-                    $arrOtherParams[$strParam] = Input::get($strParam);
+                    $arrOtherParams[$strParam] = Input::get((string) $strParam);
                 }
             }
         }
 
         // if POST, translate to proper GET url
-        if ($_POST && (Input::post('FORM_SUBMIT') == $this->formId)) {
-            foreach (array_keys($_POST) as $strParam) {
-                if (in_array($strParam, $arrWantedParam)) {
-                    $arrMyParams[$strParam] = Input::post($strParam);
+        if ($_POST && (Input::post('FORM_SUBMIT') === $this->formId)) {
+            foreach (\array_keys($_POST) as $strParam) {
+                if (\in_array($strParam, $arrWantedParam)) {
+                    $arrMyParams[$strParam] = Input::post((string) $strParam);
                 }
             }
         }
 
-        return array
-        (
+        return [
             'filter' => $arrMyParams,
-            'other' => $arrOtherParams,
-            'all' => array_merge($arrOtherParams, $arrMyParams)
-        );
+            'other'  => $arrOtherParams,
+            'all'    => \array_merge($arrOtherParams, $arrMyParams)
+        ];
     }
 
     /**
@@ -280,10 +299,11 @@ class FrontendFilter
     {
         $filter       = $widget;
         $templateName = ($filter['raw']['eval']['template'] ?? 'mm_filteritem_default');
-        $template     = new \FrontendTemplate($templateName);
+        $template     = new FrontendTemplate($templateName);
 
         $template->setData($filter);
 
+        /** @psalm-suppress UndefinedMagicPropertyAssignment */
         $template->submit = $filterOptions->isAutoSubmit();
         $filter['value']  = $template->parse();
 
@@ -305,7 +325,7 @@ class FrontendFilter
     {
         // @codingStandardsIgnoreStart
         @trigger_error(
-            sprintf('"%1$s" has been deprecated in favor of the new "FilterUrlBuilder"', __METHOD__),
+            \sprintf('"%1$s" has been deprecated in favor of the new "FilterUrlBuilder"', __METHOD__),
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
@@ -337,17 +357,17 @@ class FrontendFilter
      */
     protected function getFrontendFilterOptions()
     {
-        $objFrontendFilterOptions = new FrontendFilterOptions();
-        $objFrontendFilterOptions->setAutoSubmit($this->objFilterConfig->metamodel_fef_autosubmit ? true : false);
-        $objFrontendFilterOptions->setHideClearFilter(
+        $filterOptions = new FrontendFilterOptions();
+        $filterOptions->setAutoSubmit($this->objFilterConfig->metamodel_fef_autosubmit ? true : false);
+        $filterOptions->setHideClearFilter(
             $this->objFilterConfig->metamodel_fef_hideclearfilter ? true : false
         );
-        $objFrontendFilterOptions->setShowCountValues(
+        $filterOptions->setShowCountValues(
             $this->objFilterConfig->metamodel_available_values ? true : false
         );
-        $objFrontendFilterOptions->setUrlFragment((string) $this->objFilterConfig->metamodel_fef_urlfragment);
+        $filterOptions->setUrlFragment($this->objFilterConfig->metamodel_fef_urlfragment);
 
-        return $objFrontendFilterOptions;
+        return $filterOptions;
     }
 
     /**
@@ -383,7 +403,7 @@ class FrontendFilter
         }
 
         $arrWidgets = $filterSetting->getParameterFilterWidgets(
-            array_merge($all->getSlugParameters(), $all->getGetParameters()),
+            \array_merge($all->getSlugParameters(), $all->getGetParameters()),
             $jumpToInformation,
             $filterOptions
         );
@@ -413,6 +433,7 @@ class FrontendFilter
         }
 
         // Return filter data.
+        /** @psalm-suppress UndefinedMagicPropertyFetch */
         return [
             'action'  => $this->filterUrlBuilder->generate($other)
                          . ($this->objFilterConfig->metamodel_fef_urlfragment
@@ -430,28 +451,30 @@ class FrontendFilter
     /**
      * Retrieve the parameter values.
      *
-     * @param FilterUrl $other       Destination for "other" parameters (not originating from current filter module).
-     * @param FilterUrl $all         Destination for "all" parameters.
-     * @param string[]  $wantedNames The wanted parameter names.
+     * @param FilterUrl    $other       Destination for "other" parameters (not originating from current filter module).
+     * @param FilterUrl    $all         Destination for "all" parameters.
+     * @param list<string> $wantedNames The wanted parameter names.
      *
      * @return void
      */
     protected function buildParameters(FilterUrl $other, FilterUrl $all, array $wantedNames): void
     {
-        $current = $this->filterUrlBuilder->getCurrentFilterUrl([
-                                                                    'postAsSlug'  => $wantedNames,
-                                                                    'postAsGet'   => [],
-                                                                    'preserveGet' => true
-                                                                ]);
+        $current = $this->filterUrlBuilder->getCurrentFilterUrl(
+            [
+                'postAsSlug'  => $wantedNames,
+                'postAsGet'   => [],
+                'preserveGet' => true
+            ]
+        );
         foreach ($current->getSlugParameters() as $name => $value) {
             $all->setSlug($name, $value);
-            if (!in_array($name, $wantedNames)) {
+            if (!\in_array($name, $wantedNames)) {
                 $other->setSlug($name, $value);
             }
         }
         foreach ($current->getGetParameters() as $name => $value) {
             $all->setGet($name, $value);
-            if (!in_array($name, $wantedNames)) {
+            if (!\in_array($name, $wantedNames)) {
                 $other->setGet($name, $value);
             }
         }
@@ -495,8 +518,7 @@ class FrontendFilter
      *
      * @return string
      *
-     * @throws \Doctrine\DBAL\DBALException When a database error occur.
-     * @throws \Doctrine\DBAL\Exception
+     * @throws Exception When a database error occur.
      */
     protected function generateElement($table, $content, $replace, $elementId)
     {
@@ -513,19 +535,21 @@ class FrontendFilter
 
         // Check if we have an existing module or ce element.
         if ($result === false) {
-            return str_replace($replace, '', $content);
+            return \str_replace($replace, '', $content);
         }
 
         // Get instance and call generate function.
-        if ($table == 'tl_module') {
+        if ($table === 'tl_module') {
+            /** @psalm-suppress ArgumentTypeCoercion */
             $objElement = new ModuleFilterClearAll((object) $result);
-        } elseif ($table == 'tl_content') {
+        } elseif ($table === 'tl_content') {
+            /** @psalm-suppress ArgumentTypeCoercion */
             $objElement = new ContentElementFilterClearAll((object) $result);
         } else {
-            return str_replace($replace, '', $content);
+            return \str_replace($replace, '', $content);
         }
 
-        return str_replace($replace, $objElement->generateReal(), $content);
+        return \str_replace($replace, $objElement->generateReal(), $content);
     }
 
     /**
@@ -538,29 +562,31 @@ class FrontendFilter
      *
      * @return string
      *
-     * @throws \RuntimeException When an invalid selector has been used (different than "ce" or "mod").
+     * @throws RuntimeException When an invalid selector has been used (different than "ce" or "mod").
      */
     public function generateClearAll($strContent, $strTemplate)
     {
-        if (substr($strTemplate, 0, 3) === 'fe_') {
-            if (preg_match_all(
-                '#\[\[\[metamodelfrontendfilterclearall::(ce|mod)::([^\]]*)\]\]\]#',
-                $strContent,
-                $arrMatches,
-                PREG_SET_ORDER
-            )) {
+        if (\str_starts_with($strTemplate, 'fe_')) {
+            if (
+                (bool) \preg_match_all(
+                    '#\[\[\[metamodelfrontendfilterclearall::(ce|mod)::([^\]]*)\]\]\]#',
+                    $strContent,
+                    $arrMatches,
+                    PREG_SET_ORDER
+                )
+            ) {
                 foreach ($arrMatches as $arrMatch) {
                     switch ($arrMatch[1]) {
                         case 'ce':
-                            $strContent = $this->generateContentElement($strContent, $arrMatch[0], $arrMatch[2]);
+                            $strContent = $this->generateContentElement($strContent, $arrMatch[0], (int) $arrMatch[2]);
                             break;
 
                         case 'mod':
-                            $strContent = $this->generateModule($strContent, $arrMatch[0], $arrMatch[2]);
+                            $strContent = $this->generateModule($strContent, $arrMatch[0], (int) $arrMatch[2]);
                             break;
 
                         default:
-                            throw new \RuntimeException('Unexpected element determinator encountered: ' . $arrMatch[1]);
+                            throw new RuntimeException('Unexpected element determinator encountered: ' . $arrMatch[1]);
                     }
                 }
             }

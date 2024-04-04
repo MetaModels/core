@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -22,6 +22,7 @@
 namespace MetaModels\Test\Filter\Setting;
 
 use Contao\CoreBundle\Framework\Adapter;
+use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\Input;
 use Contao\PageModel;
 use Contao\Session as ContaoSession;
@@ -52,6 +53,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
  * @covers \MetaModels\CoreBundle\Contao\InsertTag\ReplaceTableName
  *
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CustomSqlTest extends AutoLoadingTestCase
@@ -64,6 +66,9 @@ class CustomSqlTest extends AutoLoadingTestCase
      * @param array<string, object> $services   The services to inject.
      *
      * @return CustomSql
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function mockCustomSql(
         array $properties = [],
@@ -104,11 +109,9 @@ class CustomSqlTest extends AutoLoadingTestCase
                 ->addMethods(['cookie', 'get', 'post'])
                 ->getMock();
         }
-
         if (!isset($services[Session::class])) {
             $services[Session::class] = $this->mockSession([]);
         }
-
         if (!isset($services[PageModel::class])) {
             $services[PageModel::class] = $this
                 ->getMockBuilder(PageModel::class)
@@ -121,6 +124,7 @@ class CustomSqlTest extends AutoLoadingTestCase
             $services[Request::class] = new Request();
             $services[Request::class]->attributes->set('pageModel', $services[PageModel::class]);
             $services[Request::class]->attributes->set('_locale', $services[PageModel::class]->language);
+            $services[Request::class]->setSession($services[Session::class]);
         }
         if (!isset($services[RequestStack::class])) {
             $services[RequestStack::class] = new RequestStack();
@@ -136,13 +140,27 @@ class CustomSqlTest extends AutoLoadingTestCase
                 ->disableOriginalConstructor()
                 ->getMockForAbstractClass();
         }
-
+        if (!isset($services[ContaoFramework::class])) {
+            $services[ContaoFramework::class] = $this
+                ->getMockBuilder(ContaoFramework::class)
+                ->disableOriginalConstructor()
+                ->onlyMethods(['getAdapter'])
+                ->getMock();
+            $services[ContaoFramework::class]->method('getAdapter')->willReturnCallback(
+                fn (string $class) => match ($class) {
+                    Input::class => $services[Input::class],
+                    default => throw new \RuntimeException('Override ContaoFramework instance'),
+                }
+            );
+        }
         $services[ReplaceTableName::class] = new ReplaceTableName();
-        $services[ReplaceParam::class]     = new ReplaceParam($services[Input::class], $services[ContaoSession::class]);
+        $services[ReplaceParam::class] = new ReplaceParam(
+            $services[ContaoFramework::class],
+            $services[RequestStack::class]
+        );
         $services[ResolveLanguageTag::class] = new ResolveLanguageTag($services[RequestStack::class]);
 
         $container = new Container();
-
         foreach (CustomSql::getSubscribedServices() as $serviceId) {
             $container->set($serviceId, $services[$serviceId]);
         }
@@ -437,10 +455,7 @@ class CustomSqlTest extends AutoLoadingTestCase
         $setting = $this->mockCustomSql(
             ['customsql' => 'SELECT id FROM tableName WHERE catname={{param::session?name=category}}'],
             'tableName',
-            [
-                Session::class => $this->mockSession(['category' => 'category name']),
-                ContaoSession::class => $this->mockLegacySession(['category' => 'category name']),
-            ]
+            [Session::class => $this->mockSession(['category' => 'category name'])]
         );
 
         $this->assertGeneratedSqlIs($setting, 'SELECT id FROM tableName WHERE catname=?', ['category name'], []);
@@ -454,19 +469,13 @@ class CustomSqlTest extends AutoLoadingTestCase
         $setting = $this->mockCustomSql(
             ['customsql' => 'SELECT id FROM tableName WHERE catname IN ({{param::session?name=category&aggregate}})'],
             'tableName',
-            [
-                Session::class => $this->mockSession(['category' => ['first', 'second']]),
-                ContaoSession::class => $this->mockLegacySession(['category' => ['first', 'second']]),
-            ]
+            [Session::class => $this->mockSession(['category' => ['first', 'second']])]
         );
 
         $this->assertGeneratedSqlIs(
             $setting,
-            'SELECT id FROM tableName WHERE catname IN (?,?)',
-            [
-                'first',
-                'second'
-            ],
+            'SELECT id FROM tableName WHERE catname IN (?)',
+            ['first,second'],
             []
         );
     }
@@ -480,10 +489,7 @@ class CustomSqlTest extends AutoLoadingTestCase
             ['customsql' =>
                  'SELECT id FROM tableName WHERE catname={{param::session?name=category&default=defaultcat}}'],
             'tableName',
-            [
-                Session::class => $this->mockSession(['category' => null]),
-                ContaoSession::class => $this->mockLegacySession(['category' => null]),
-            ]
+            [Session::class => $this->mockSession(['category' => null])]
         );
 
         $this->assertGeneratedSqlIs(
@@ -536,11 +542,8 @@ class CustomSqlTest extends AutoLoadingTestCase
 
         $this->assertGeneratedSqlIs(
             $setting,
-            'SELECT id FROM tableName WHERE catname IN (?,?)',
-            [
-                'first',
-                'second'
-            ],
+            'SELECT id FROM tableName WHERE catname IN (?)',
+            ['first,second'],
             []
         );
     }
@@ -567,7 +570,7 @@ class CustomSqlTest extends AutoLoadingTestCase
             [Input::class => $input]
         );
 
-        $this->assertGeneratedSqlIs($setting, 'SELECT id FROM tableName WHERE catids IN (?)', ['1,2'], []);
+        $this->assertGeneratedSqlIs($setting, 'SELECT id FROM tableName WHERE catids IN (?,?)', ['1','2'], []);
     }
 
     /**
@@ -707,7 +710,8 @@ class CustomSqlTest extends AutoLoadingTestCase
         ];
         yield [
             'sql' => 'SELECT id FROM {{table}}
-WHERE alias = {{iflng::de}}moe-yer-ss-hans-herbert-oeaeue{{iflng::en}}3{{iflng::nl}}2{{iflng::es}}4{{iflng::el}}5{{iflng}}',
+WHERE alias = {{iflng::de}}moe-yer-ss-hans-herbert-oeaeue' .
+                '{{iflng::en}}3{{iflng::nl}}2{{iflng::es}}4{{iflng::el}}5{{iflng}}',
             'language' => 'de',
             'exp_sql' => 'SELECT id FROM tableName
 WHERE alias = moe-yer-ss-hans-herbert-oeaeue',

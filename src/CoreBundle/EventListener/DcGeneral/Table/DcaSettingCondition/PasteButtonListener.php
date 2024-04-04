@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,13 +14,14 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2020 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSettingCondition;
 
+use ContaoCommunityAlliance\DcGeneral\Clipboard\ClipboardInterface;
 use ContaoCommunityAlliance\DcGeneral\Clipboard\Filter;
 use ContaoCommunityAlliance\DcGeneral\Clipboard\ItemInterface;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPasteButtonEvent;
@@ -28,7 +29,8 @@ use ContaoCommunityAlliance\DcGeneral\Controller\ModelCollector;
 use ContaoCommunityAlliance\DcGeneral\Controller\RelationshipManager;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
-use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\BasicDefinitionInterface;
 
 /**
  * This handles the type options for conditions.
@@ -50,11 +52,15 @@ class PasteButtonListener extends AbstractConditionFactoryUsingListener
 
         $environment = $event->getEnvironment();
         $model       = $event->getModel();
-        $clipboard   = $environment->getClipboard();
+        assert($model instanceof ModelInterface);
+        $clipboard = $environment->getClipboard();
+        assert($clipboard instanceof ClipboardInterface);
         // Disable all buttons if there is a circular reference.
-        if ($clipboard->fetch(
-            Filter::create()->andActionIs(ItemInterface::CUT)->andModelIs(ModelId::fromModel($model))
-        )) {
+        if (
+            $clipboard->fetch(
+                Filter::create()->andActionIs(ItemInterface::CUT)->andModelIs(ModelId::fromModel($model))
+            )
+        ) {
             $event
                 ->setPasteAfterDisabled(true)
                 ->setPasteIntoDisabled(true);
@@ -87,15 +93,19 @@ class PasteButtonListener extends AbstractConditionFactoryUsingListener
      */
     private function testParent(ModelInterface $model, GetPasteButtonEvent $event): void
     {
-        $environment   = $event->getEnvironment();
-        $definition    = $environment->getDataDefinition();
-        $mode          = $definition->getBasicDefinition()->getMode();
+        $environment = $event->getEnvironment();
+        $definition  = $environment->getDataDefinition();
+        assert($definition instanceof ContainerInterface);
+
+        $mode          = $definition->getBasicDefinition()->getMode() ?? BasicDefinitionInterface::MODE_FLAT;
         $relationships = new RelationshipManager($definition->getModelRelationshipDefinition(), $mode);
         $collector     = new ModelCollector($environment);
 
-        if (!$relationships->isRoot($model)
+        if (
+            !$relationships->isRoot($model)
             && ($parent = $collector->searchParentOf($model))
-            && !$this->acceptsAnotherChild($parent, $collector)) {
+            && !$this->acceptsAnotherChild($parent, $collector)
+        ) {
             $event->setPasteAfterDisabled(true);
         }
     }

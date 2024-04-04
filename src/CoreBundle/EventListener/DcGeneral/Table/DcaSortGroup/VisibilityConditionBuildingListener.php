@@ -97,10 +97,11 @@ class VisibilityConditionBuildingListener
     private function addCondition(PropertyInterface $property, ConditionInterface $condition)
     {
         $chain = $property->getVisibleCondition();
-        if (!($chain
+        if (
+            !($chain
             && ($chain instanceof PropertyConditionChain)
             && $chain->getConjunction() == PropertyConditionChain::AND_CONJUNCTION
-        )
+            )
         ) {
             if ($property->getVisibleCondition()) {
                 $previous = array($property->getVisibleCondition());

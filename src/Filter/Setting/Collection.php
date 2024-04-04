@@ -32,11 +32,13 @@ use MetaModels\Render\Setting\ICollection as IRenderSettings;
 
 /**
  * This is the ICollection reference implementation.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class Collection implements ICollection
 {
     /**
-     * The additional meta data for this filter setting collection.
+     * The additional meta-data for this filter setting collection.
      *
      * @var array
      */
@@ -97,13 +99,7 @@ class Collection implements ICollection
      */
     public function getMetaModel()
     {
-        if ($this->metaModel) {
-            return $this->metaModel;
-        }
-
-        throw new \RuntimeException(
-            sprintf('Error: Filter setting %d not attached to a MetaModel', $this->arrData['id'])
-        );
+        return $this->metaModel;
     }
 
     /**
@@ -127,7 +123,7 @@ class Collection implements ICollection
     {
         foreach ($this->arrSettings as $objSetting) {
             // If the setting is on the ignore list skip it.
-            if (in_array($objSetting->get('id'), $arrIgnoredFilter, false)) {
+            if (\in_array($objSetting->get('id'), $arrIgnoredFilter, false)) {
                 continue;
             }
 
@@ -145,7 +141,7 @@ class Collection implements ICollection
             $filterUrl[] = $objSetting->generateFilterUrlFrom($objItem, $objRenderSetting);
         }
 
-        return [] === $filterUrl ? [] : array_merge(...$filterUrl);
+        return [] === $filterUrl ? [] : \array_merge(...$filterUrl);
     }
 
     /**
@@ -158,7 +154,7 @@ class Collection implements ICollection
             $parameters[] = $objSetting->getParameters();
         }
 
-        return [] === $parameters ? [] : array_merge(...$parameters);
+        return [] === $parameters ? [] : \array_merge(...$parameters);
     }
 
     /**
@@ -171,7 +167,7 @@ class Collection implements ICollection
             $parameters[] = $objSetting->getParameterDCA();
         }
 
-        return [] === $parameters ? [] : array_merge(...$parameters);
+        return [] === $parameters ? [] : \array_merge(...$parameters);
     }
 
     /**
@@ -183,16 +179,16 @@ class Collection implements ICollection
         foreach ($this->arrSettings as $objSetting) {
             $filterNames  = $objSetting->getParameterFilterNames();
             $filterType   = $objSetting->get('type');
-            $parameters[] = \array_map(function ($name) use ($filterType) {
-                return $name . ' [' . $filterType . ']';
-            }, $filterNames);
+            $parameters[] = \array_map(fn (string $name): string => $name . ' [' . $filterType . ']', $filterNames);
         }
 
-        return [] === $parameters ? [] : array_merge(...$parameters);
+        return [] === $parameters ? [] : \array_merge(...$parameters);
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function getParameterFilterWidgets(
         $arrFilterUrl,
@@ -220,7 +216,7 @@ class Collection implements ICollection
                 $setting->getParameterFilterWidgets($ids, $arrFilterUrl, $arrJumpTo, $objFrontendFilterOptions);
         }
 
-        return [] === $parameters ? [] : array_merge(...$parameters);
+        return [] === $parameters ? [] : \array_merge(...$parameters);
     }
 
     /**
@@ -233,6 +229,6 @@ class Collection implements ICollection
             $attributes[] = $setting->getReferencedAttributes();
         }
 
-        return [] === $attributes ? [] : array_merge(...$attributes);
+        return [] === $attributes ? [] : \array_merge(...$attributes);
     }
 }

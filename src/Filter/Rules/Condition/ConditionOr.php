@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Maack <david.maack@arcor.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -32,9 +33,9 @@ class ConditionOr extends FilterRule
     /**
      * The list of child filters that shall be evaluated.
      *
-     * @var IFilter[]
+     * @var list<IFilter>
      */
-    protected $arrChildFilters = array();
+    protected $arrChildFilters = [];
 
     /**
      * Flag determining if filtering shall return the first non-empty match.
@@ -42,7 +43,7 @@ class ConditionOr extends FilterRule
      * This flag determines if the rule shall return the result of the first
      * child that returns at least one element (a return value of NULL from a
      * rule counts as "all ids" in this context and therefore is considered
-     * non empty per definition).
+     * non-empty per definition).
      *
      * @var boolean
      */
@@ -86,17 +87,17 @@ class ConditionOr extends FilterRule
      * evaluated, as the result set can not expand any further.
      *
      * Note: when "stopAfterMatch" has been set, the rule will stop processing
-     * also when the first rule returns a non empty result and return that
+     * also when the first rule returns a non-empty result and return that
      * result.
      *
-     * @return string[]|null
+     * @return list<string>|null
      */
     public function getMatchingIds()
     {
-        $arrIds = array();
+        $arrIds = [];
         foreach ($this->arrChildFilters as $objChildFilter) {
             $arrChildMatches = $objChildFilter->getMatchingIds();
-            // NULL => all items - for OR conditions, this can never be more than all so we are already satisfied here.
+            // NULL => all items - for OR conditions, this can never be more than all, so we are already satisfied here.
             if ($arrChildMatches === null) {
                 return null;
             }
@@ -106,10 +107,10 @@ class ConditionOr extends FilterRule
             }
 
             if ($arrChildMatches) {
-                $arrIds = array_merge($arrIds, $arrChildMatches);
+                $arrIds = \array_merge($arrIds, $arrChildMatches);
             }
         }
 
-        return array_unique($arrIds);
+        return \array_values(\array_unique($arrIds));
     }
 }

@@ -17,7 +17,7 @@
  * @filesource
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace MetaModels\Schema;
 
@@ -29,7 +29,7 @@ class SchemaManager implements SchemaManagerInterface
     /**
      * The list of registered schema managers.
      *
-     * @var list<SchemaManagerInterface>
+     * @var SchemaManagerInterface[]
      */
     private array $managers;
 

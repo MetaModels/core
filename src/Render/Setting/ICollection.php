@@ -71,7 +71,7 @@ interface ICollection
     /**
      * Retrieve the names of all columns getting rendered via this setting.
      *
-     * @return string[]
+     * @return list<string>
      */
     public function getSettingNames();
 

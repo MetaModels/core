@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,16 +13,19 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2021 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\EnvironmentPopulator;
 
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use MetaModels\DcGeneral\Events\MetaModel\PopulateAttributeEvent;
 use MetaModels\IFactory;
+use MetaModels\IMetaModel;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -37,14 +40,14 @@ class AttributePopulator
      *
      * @var EventDispatcherInterface
      */
-    private $dispatcher;
+    private EventDispatcherInterface $dispatcher;
 
     /**
      * The MetaModels factory.
      *
      * @var IFactory
      */
-    private $factory;
+    private IFactory $factory;
 
     /**
      * Create a new instance.
@@ -67,7 +70,10 @@ class AttributePopulator
      */
     public function populate(EnvironmentInterface $environment)
     {
-        $metaModel = $this->factory->getMetaModel($environment->getDataDefinition()->getName());
+        $dataDefinition = $environment->getDataDefinition();
+        assert($dataDefinition instanceof ContainerInterface);
+        $metaModel = $this->factory->getMetaModel($dataDefinition->getName());
+        assert($metaModel instanceof IMetaModel);
         foreach ($metaModel->getAttributes() as $attribute) {
             $event = new PopulateAttributeEvent($metaModel, $attribute, $environment);
             // Trigger BuildAttribute Event.

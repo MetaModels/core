@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Marc Reimann <reimann@mediendepot-ruhr.de>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -28,14 +28,26 @@ use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
 use ContaoCommunityAlliance\UrlBuilder\UrlBuilderFactoryInterface;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use MetaModels\BackendIntegration\TemplateList;
 use MetaModels\CoreBundle\Assets\IconBuilder;
 use MetaModels\Filter\Setting\FilterSettingFactory;
 use MetaModels\IFactory;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\RequestStack;
+
+use function asort;
+use function base64_decode;
+use function base64_encode;
+use function in_array;
+use function reset;
+use function sprintf;
+use function trim;
 
 /**
  * This class is the abstract base for building the "edit MetaModel" button in the backend.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractContentElementAndModuleCallback
 {
@@ -51,49 +63,49 @@ abstract class AbstractContentElementAndModuleCallback
      *
      * @var IconBuilder
      */
-    private $iconBuilder;
+    private IconBuilder $iconBuilder;
 
     /**
      * The URL builder factory.
      *
      * @var UrlBuilderFactoryInterface
      */
-    private $urlBuilderFactory;
+    private UrlBuilderFactoryInterface $urlBuilderFactory;
 
     /**
      * The MetaModel factory.
      *
      * @var IFactory
      */
-    private $factory;
+    private IFactory $factory;
 
     /**
      * The filtersetting factory.
      *
      * @var FilterSettingFactory
      */
-    private $filterFactory;
+    private FilterSettingFactory $filterFactory;
 
     /**
      * The database connection.
      *
      * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * The template list.
      *
      * @var TemplateList
      */
-    private $templateList;
+    private TemplateList $templateList;
 
     /**
      * The request stack.
      *
      * @var RequestStack
      */
-    private $requestStack;
+    private RequestStack $requestStack;
 
     /**
      * Create a new instance.
@@ -235,7 +247,13 @@ abstract class AbstractContentElementAndModuleCallback
             'id'      => $GLOBALS['TL_LANG']['MSC']['id'][0]
         ];
 
-        $metaModelName = $this->factory->translateIdToMetaModelName($objDc->activeRecord->metamodel);
+        assert(null !== $objDc->activeRecord);
+        try {
+            $metaModelName = $this->factory->translateIdToMetaModelName($objDc->activeRecord->metamodel);
+        } catch (RuntimeException $exception) {
+            // No valid MetaModel selected, can not add attributes of it.
+            return $attributeNames;
+        }
         $metaModel     = $this->factory->getMetaModel($metaModelName);
 
         if ($metaModel) {
@@ -248,7 +266,7 @@ abstract class AbstractContentElementAndModuleCallback
     }
 
     /**
-     * Fetch all available filter settings for the current meta model.
+     * Fetch all available filter settings for the current MetaModel.
      *
      * @param DC_Table $objDC The data container calling this method.
      *
@@ -256,6 +274,7 @@ abstract class AbstractContentElementAndModuleCallback
      */
     public function getFilterSettings(DC_Table $objDC)
     {
+        assert(null !== $objDC->activeRecord);
         $filterSettings = $this->connection->createQueryBuilder()
             ->select('f.id', 'f.name')
             ->from('tl_metamodel_filter', 'f')
@@ -287,6 +306,9 @@ abstract class AbstractContentElementAndModuleCallback
      */
     public function getMetaTitleAttributes(DC_Table $objDC)
     {
+        assert(null !== $objDC->activeRecord);
+
+        /** @psalm-suppress ArgumentTypeCoercion - We HOPE there is a list of strings. */
         return $this->getFilteredAttributeNames(
             $objDC->activeRecord->metamodel,
             (array) $GLOBALS['METAMODELS']['metainformation']['allowedTitle']
@@ -305,6 +327,9 @@ abstract class AbstractContentElementAndModuleCallback
      */
     public function getMetaDescriptionAttributes(DC_Table $objDC)
     {
+        assert(null !== $objDC->activeRecord);
+
+        /** @psalm-suppress ArgumentTypeCoercion - We HOPE there is a list of strings. */
         return $this->getFilteredAttributeNames(
             $objDC->activeRecord->metamodel,
             (array) $GLOBALS['METAMODELS']['metainformation']['allowedDescription']
@@ -319,17 +344,18 @@ abstract class AbstractContentElementAndModuleCallback
      *
      * @return void
      *
-     * @throws \Doctrine\DBAL\Exception
+     * @throws Exception
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function buildFilterParamsFor(DC_Table $dataContainer, $elementName)
     {
-        if (!$this->requestStack->getCurrentRequest()->query->get('act')) {
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request || !$request->query->has('act')) {
             return;
         }
 
-        $filterId = $this->connection->createQueryBuilder()
+        $filterIds = $this->connection->createQueryBuilder()
             ->select('c.metamodel_filtering')
             ->from(static::$tableName, 'c')
             ->join('c', 'tl_metamodel', 'mm', 'mm.id=c.metamodel')
@@ -341,17 +367,20 @@ abstract class AbstractContentElementAndModuleCallback
             ->executeQuery()
             ->fetchFirstColumn();
 
-        if (!reset($filterId)) {
+        if (false === ($filterId = reset($filterIds)) || 0 === $filterId) {
             unset($GLOBALS['TL_DCA'][static::$tableName]['fields']['metamodel_filterparams']);
             return;
         }
 
-        $collection = $this->filterFactory->createCollection(current($filterId));
+        $collection = $this->filterFactory->createCollection($filterId);
         $dca        = $collection->getParameterDCA();
         foreach ($dca as $fieldName => $subField) {
             $options = [];
             foreach (($subField['options'] ?? []) as $key => $value) {
-                $options[$this->loadCallback($key)] = $value;
+                $newKey = $this->loadCallback($key);
+                if (null !== $newKey) {
+                    $options[$newKey] = $value;
+                }
             }
 
             $dca[$fieldName]['options']         = $options;
@@ -372,7 +401,7 @@ abstract class AbstractContentElementAndModuleCallback
      */
     public function saveCallback(string $value = null)
     {
-        return null === $value ? null : \base64_decode($value);
+        return null === $value ? null : base64_decode($value);
     }
 
     /**
@@ -384,7 +413,7 @@ abstract class AbstractContentElementAndModuleCallback
      */
     public function loadCallback(string $value = null)
     {
-        return null === $value ? null : trim(\base64_encode($value), '=');
+        return null === $value ? null : trim(base64_encode($value), '=');
     }
 
     /**
@@ -396,16 +425,16 @@ abstract class AbstractContentElementAndModuleCallback
      */
     public function getFilterParameterNames(DC_Table $objDc)
     {
-        $return = array();
+        assert(null !== $objDc->activeRecord);
+
+        $return = [];
         $filter = $objDc->activeRecord->metamodel_filtering;
 
         if (!$filter) {
             return $return;
         }
 
-        $collection = $this->filterFactory->createCollection($filter);
-
-        return $collection->getParameterFilterNames();
+        return $this->filterFactory->createCollection($filter)->getParameterFilterNames();
     }
 
     /**
@@ -417,6 +446,8 @@ abstract class AbstractContentElementAndModuleCallback
      */
     public function getFilterTemplates(DC_Table $dcTable)
     {
+        assert(null !== $dcTable->activeRecord);
+
         if ($dcTable->activeRecord->type === 'metamodels_frontendclearall') {
             return $this->templateList->getTemplatesForBase('mm_clearall_');
         }
@@ -437,7 +468,7 @@ abstract class AbstractContentElementAndModuleCallback
     }
 
     /**
-     * Fetch all available render settings for the current meta model.
+     * Fetch all available render settings for the current MetaModel.
      *
      * @param DC_Table $objDC The data container calling this method.
      *
@@ -445,6 +476,8 @@ abstract class AbstractContentElementAndModuleCallback
      */
     public function getRenderSettings(DC_Table $objDC)
     {
+        assert(null !== $objDC->activeRecord);
+
         $filterSettings = $this->connection->createQueryBuilder()
             ->select('r.id', 'r.name')
             ->from('tl_metamodel_rendersettings', 'r')
@@ -473,7 +506,7 @@ abstract class AbstractContentElementAndModuleCallback
      *
      * @return string
      */
-    private function renderEditButton($caption, $title, UrlBuilder $url)
+    private function renderEditButton(string $caption, string $title, UrlBuilder $url): string
     {
         $icon = $this->iconBuilder->getBackendIconImageTag(
             'system/themes/flexible/icons/alias.svg',
@@ -494,19 +527,24 @@ abstract class AbstractContentElementAndModuleCallback
      *
      * If the optional parameter arrTypes is not given, all attributes will be retrieved.
      *
-     * @param int      $metaModelId  The id of the MetaModel from which the attributes shall be retrieved from.
-     *
-     * @param string[] $allowedTypes The attribute type names that shall be retrieved (optional).
+     * @param string       $metaModelId  The id of the MetaModel from which the attributes shall be retrieved from.
+     * @param list<string> $allowedTypes The attribute type names that shall be retrieved.
      *
      * @return array A list with all found attributes.
      */
-    private function getFilteredAttributeNames($metaModelId, $allowedTypes = array())
+    private function getFilteredAttributeNames(string $metaModelId, array $allowedTypes): array
     {
-        $attributeNames = array();
+        $attributeNames = [];
 
-        if ($metaModel = $this->factory->getMetaModel($this->factory->translateIdToMetaModelName($metaModelId))) {
+        try {
+            $metaModelName = $this->factory->translateIdToMetaModelName($metaModelId);
+        } catch (RuntimeException $exception) {
+            // No valid MetaModel selected, can not add attributes of it.
+            return $attributeNames;
+        }
+        if ($metaModel = $this->factory->getMetaModel($metaModelName)) {
             foreach ($metaModel->getAttributes() as $attribute) {
-                if (empty($allowedTypes) || in_array($attribute->get('type'), $allowedTypes)) {
+                if (empty($allowedTypes) || in_array($attribute->get('type'), $allowedTypes, true)) {
                     $attributeNames[$attribute->getColName()] =
                         sprintf(
                             '%s [%s]',

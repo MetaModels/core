@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -23,6 +23,7 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\DefinitionBuilder;
 
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ConditionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefaultPalettesDefinition;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\PalettesDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\Properties\PropertyInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Palette\DefaultPaletteCondition;
@@ -40,6 +41,8 @@ use MetaModels\ViewCombination\ViewCombination;
 
 /**
  * This class takes care of the palette building.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PaletteBuilder
 {
@@ -50,21 +53,21 @@ class PaletteBuilder
      *
      * @var ViewCombination
      */
-    private $viewCombination;
+    private ViewCombination $viewCombination;
 
     /**
      * The factory to use.
      *
      * @var IFactory
      */
-    private $factory;
+    private IFactory $factory;
 
     /**
      * The property condition factory.
      *
      * @var PropertyConditionFactory
      */
-    private $conditionFactory;
+    private PropertyConditionFactory $conditionFactory;
 
     /**
      * Create a new instance.
@@ -95,7 +98,10 @@ class PaletteBuilder
         if (null === ($inputScreen = $this->viewCombination->getScreen($container->getName()))) {
             return;
         }
-        $metaModel          = $this->factory->getMetaModel($container->getName());
+
+        $metaModel = $this->factory->getMetaModel($container->getName());
+        assert($metaModel instanceof IMetaModel);
+
         $variantHandling    = $metaModel->hasVariants();
         $palettesDefinition = $this->getOrCreatePaletteDefinition($container);
 
@@ -131,13 +137,17 @@ class PaletteBuilder
      *
      * @param IMetaModelDataDefinition $container The container.
      *
-     * @return DefaultPalettesDefinition|\ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefinitionInterface
+     * @return PalettesDefinitionInterface
      */
-    private function getOrCreatePaletteDefinition(IMetaModelDataDefinition $container)
+    private function getOrCreatePaletteDefinition(IMetaModelDataDefinition $container): PalettesDefinitionInterface
     {
         if ($container->hasDefinition(PalettesDefinitionInterface::NAME)) {
-            return $container->getDefinition(PalettesDefinitionInterface::NAME);
+            $definition = $container->getDefinition(PalettesDefinitionInterface::NAME);
+            assert($definition instanceof PalettesDefinitionInterface);
+
+            return $definition;
         }
+
         $container->setDefinition(
             PalettesDefinitionInterface::NAME,
             $palettesDefinition = new DefaultPalettesDefinition()
@@ -201,14 +211,13 @@ class PaletteBuilder
      * Build the conditions for the passed condition array.
      *
      * @param array|null $condition The condition information.
-     *
      * @param IMetaModel $metaModel The MetaModel instance.
      *
      * @return null|ConditionInterface
      *
      * @throws \RuntimeException Throws if condition type not be transformed to an instance.
      */
-    private function buildCondition($condition, $metaModel)
+    private function buildCondition(?array $condition, IMetaModel $metaModel): ?ConditionInterface
     {
         if (null === $condition) {
             return null;

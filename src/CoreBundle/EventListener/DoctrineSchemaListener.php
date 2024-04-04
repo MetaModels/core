@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,8 @@
  *
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -21,6 +22,7 @@ namespace MetaModels\CoreBundle\EventListener;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Table;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Tools\Event\GenerateSchemaEventArgs;
 use LogicException;
 use MetaModels\InformationProvider\MetaModelInformationCollector;
@@ -50,12 +52,11 @@ final class DoctrineSchemaListener
         $this->generator->generate($information = new SchemaInformation(), $this->collector->getCollection());
 
         $contaoSchema = $event->getSchema();
-        if ($schema = $information->get(DoctrineSchemaInformation::class)) {
-            if (!$schema instanceof DoctrineSchemaInformation) {
-                throw new LogicException('Invalid schema information obtained.');
-            }
-            $this->mergeSchema($schema, $contaoSchema);
+        $schema       = $information->get(DoctrineSchemaInformation::class);
+        if (!$schema instanceof DoctrineSchemaInformation) {
+            throw new LogicException('Invalid schema information obtained.');
         }
+        $this->mergeSchema($schema, $contaoSchema);
     }
 
     private function mergeSchema(DoctrineSchemaInformation $source, Schema $target): void
@@ -85,8 +86,9 @@ final class DoctrineSchemaListener
 
     private function mergeColumns(Table $sourceTable, Table $targetTable): void
     {
+        $registry = Type::getTypeRegistry();
         foreach ($sourceTable->getColumns() as $sourceColumn) {
-            $name                = $sourceColumn->getName();
+            $name    = $sourceColumn->getName();
             $options = [
                 'default'             => $sourceColumn->getDefault(),
                 'notnull'             => $sourceColumn->getNotnull(),
@@ -99,20 +101,15 @@ final class DoctrineSchemaListener
                 'columnDefinition'    => $sourceColumn->getColumnDefinition(),
                 'comment'             => $sourceColumn->getComment(),
             ];
-            $platformOptions     = $sourceColumn->getPlatformOptions();
-            $customSchemaOptions = $sourceColumn->getCustomSchemaOptions();
 
+            $platformOptions = $sourceColumn->getPlatformOptions();
             if ($targetTable->hasColumn($name)) {
-                $tmpColumn = $targetTable->getColumn($name);
-                $platformOptions     = array_merge($tmpColumn->getPlatformOptions(), $platformOptions);
-                $customSchemaOptions = array_merge($tmpColumn->getCustomSchemaOptions(), $customSchemaOptions);
+                $platformOptions = \array_merge($targetTable->getColumn($name)->getPlatformOptions(), $platformOptions);
             }
 
             $targetTable
-                ->addColumn($name, $sourceColumn->getType()->getName(), $options)
-                ->setPlatformOptions($platformOptions)
-                ->setCustomSchemaOptions($customSchemaOptions);
-
+                ->addColumn($name, $registry->lookupName($sourceColumn->getType()), $options)
+                ->setPlatformOptions($platformOptions);
         }
     }
 
@@ -128,9 +125,9 @@ final class DoctrineSchemaListener
             if ($targetTable->hasIndex($name)) {
                 $tmpIndex = $targetTable->getIndex($name);
                 $targetTable->dropIndex($name);
-                $columns = array_merge($tmpIndex->getColumns(), $columns);
-                $flags = array_merge($tmpIndex->getFlags(), $flags);
-                $options = array_merge($tmpIndex->getOptions(), $options);
+                $columns = \array_merge($tmpIndex->getColumns(), $columns);
+                $flags   = \array_merge($tmpIndex->getFlags(), $flags);
+                $options = \array_merge($tmpIndex->getOptions(), $options);
                 $unique  = $unique || $source->isUnique();
                 $primary = $primary || $source->isPrimary();
             }
@@ -149,16 +146,16 @@ final class DoctrineSchemaListener
     private function mergeUniqueConstraints(Table $sourceTable, Table $targetTable): void
     {
         foreach ($sourceTable->getUniqueConstraints() as $uniqueConstraint) {
-            $name = $uniqueConstraint->getName();
+            $name    = $uniqueConstraint->getName();
             $columns = $uniqueConstraint->getColumns();
-            $flags = $uniqueConstraint->getFlags();
+            $flags   = $uniqueConstraint->getFlags();
             $options = $uniqueConstraint->getOptions();
             if ($targetTable->hasUniqueConstraint($name)) {
                 $tmpUniqueConstraint = $targetTable->getUniqueConstraint($name);
                 $targetTable->removeUniqueConstraint($name);
-                $columns = array_merge($tmpUniqueConstraint->getColumns(), $columns);
-                $flags = array_merge($tmpUniqueConstraint->getFlags(), $flags);
-                $options = array_merge($tmpUniqueConstraint->getOptions(), $options);
+                $columns = \array_merge($tmpUniqueConstraint->getColumns(), $columns);
+                $flags   = \array_merge($tmpUniqueConstraint->getFlags(), $flags);
+                $options = \array_merge($tmpUniqueConstraint->getOptions(), $options);
             }
 
             $targetTable->addUniqueConstraint($columns, $name, $flags, $options);
@@ -168,17 +165,17 @@ final class DoctrineSchemaListener
     private function mergeForeignKeyConstraints(Table $sourceTable, Table $targetTable): void
     {
         foreach ($sourceTable->getForeignKeys() as $foreignKey) {
-            $name = $foreignKey->getName();
-            $foreignTable = $foreignKey->getForeignTableName();
-            $localColumns = $foreignKey->getLocalColumns();
+            $name           = $foreignKey->getName();
+            $foreignTable   = $foreignKey->getForeignTableName();
+            $localColumns   = $foreignKey->getLocalColumns();
             $foreignColumns = $foreignKey->getForeignColumns();
-            $options = $foreignKey->getOptions();
+            $options        = $foreignKey->getOptions();
             if ($targetTable->hasForeignKey($name)) {
                 $tmpUniqueConstraint = $targetTable->getForeignKey($name);
                 $targetTable->removeUniqueConstraint($name);
-                $localColumns = array_merge($tmpUniqueConstraint->getLocalColumns(), $localColumns);
-                $foreignColumns = array_merge($tmpUniqueConstraint->getForeignColumns(), $foreignColumns);
-                $options = array_merge($tmpUniqueConstraint->getOptions(), $options);
+                $localColumns   = \array_merge($tmpUniqueConstraint->getLocalColumns(), $localColumns);
+                $foreignColumns = \array_merge($tmpUniqueConstraint->getForeignColumns(), $foreignColumns);
+                $options        = \array_merge($tmpUniqueConstraint->getOptions(), $options);
             }
             $targetTable->addForeignKeyConstraint($foreignTable, $localColumns, $foreignColumns, $options, $name);
         }

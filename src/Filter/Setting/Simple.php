@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -37,9 +37,13 @@ use MetaModels\IItem;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\Render\Setting\ICollection as IRenderSettings;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Base class for filter setting implementation.
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class Simple implements ISimple
 {
@@ -48,14 +52,14 @@ abstract class Simple implements ISimple
      *
      * @var ICollection
      */
-    private $collection = null;
+    private ICollection $collection;
 
     /**
      * The attributes of this filter setting.
      *
      * @var array
      */
-    private $data = [];
+    private array $data = [];
 
     /**
      * The event dispatcher.
@@ -69,7 +73,7 @@ abstract class Simple implements ISimple
      *
      * @var FilterUrlBuilder
      */
-    private $filterUrlBuilder;
+    private FilterUrlBuilder $filterUrlBuilder;
 
     /**
      * Constructor - initialize the object and store the parameters.
@@ -97,6 +101,7 @@ abstract class Simple implements ISimple
             // @codingStandardsIgnoreEnd
 
             $eventDispatcher = System::getContainer()->get('event_dispatcher');
+            assert($eventDispatcher instanceof EventDispatcherInterface);
         }
 
         if (null === $filterUrlBuilder) {
@@ -107,6 +112,7 @@ abstract class Simple implements ISimple
             );
             // @codingStandardsIgnoreEnd
             $filterUrlBuilder = System::getContainer()->get('metamodels.filter_url');
+            assert($filterUrlBuilder instanceof FilterUrlBuilder);
         }
 
         $this->eventDispatcher  = $eventDispatcher;
@@ -119,6 +125,8 @@ abstract class Simple implements ISimple
      * @return IMetaModelsServiceContainer
      *
      * @deprecated Inject needed services via constructor or setter.
+     *
+     * @psalm-suppress DeprecatedInterface
      */
     public function getServiceContainer()
     {
@@ -128,6 +136,7 @@ abstract class Simple implements ISimple
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
+        /** @psalm-suppress DeprecatedMethod */
         return $this->getMetaModel()->getServiceContainer();
     }
 
@@ -155,7 +164,7 @@ abstract class Simple implements ISimple
      */
     public function get($strKey)
     {
-        return isset($this->data[$strKey]) ? $this->data[$strKey] : null;
+        return $this->data[$strKey] ?? null;
     }
 
     /**
@@ -182,9 +191,7 @@ abstract class Simple implements ISimple
      * Returns if the given value is currently active in the given filter settings.
      *
      * @param array  $arrWidget    The widget information.
-     *
      * @param array  $arrFilterUrl The filter url parameters to use.
-     *
      * @param string $strKeyOption The option value to determine.
      *
      * @return bool  true If the given value is mentioned in the given filter parameters, false otherwise.
@@ -200,7 +207,7 @@ abstract class Simple implements ISimple
         }
 
         if ($defaultValue = $this->get('defaultid')) {
-            return $strKeyOption == $defaultValue;
+            return $strKeyOption === $defaultValue;
         }
 
         return false;
@@ -210,15 +217,13 @@ abstract class Simple implements ISimple
      * Translate an option to a proper url value to be used in the filter url.
      *
      * Overriding this method allows to toggle the value in the url in addition to extract
-     * or inject a value into an "combined" filter url parameter (like tags i.e.)
+     * or inject a value into a "combined" filter url parameter (like tags i.e.)
      *
      * @param array  $arrWidget    The widget information.
-     *
      * @param array  $arrFilterUrl The filter url parameters to use.
-     *
      * @param string $strKeyOption The option value to determine.
      *
-     * @return string The filter url value to use for link gererating.
+     * @return string The filter url value to use for link generating.
      */
     protected function getFrontendFilterValue($arrWidget, $arrFilterUrl, $strKeyOption)
     {
@@ -233,12 +238,10 @@ abstract class Simple implements ISimple
      * Add a parameter to the url, if it is auto_item, it will get prepended.
      *
      * @param string $url   The url built so far.
-     *
      * @param string $name  The parameter name.
-     *
      * @param mixed  $value The parameter value.
      *
-     * @return string.
+     * @return string
      *
      * @deprecated Not in use anymore, use the FilterUrlBuilder.
      */
@@ -246,16 +249,16 @@ abstract class Simple implements ISimple
     {
         // @codingStandardsIgnoreStart
         @trigger_error(
-            sprintf('"%1$s" has been deprecated in favor of the "FilterUrlBuilder"', __METHOD__),
+            \sprintf('"%1$s" has been deprecated in favor of the "FilterUrlBuilder"', __METHOD__),
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
 
-        if (is_array($value)) {
-            $value = implode(',', array_filter($value));
+        if (\is_array($value)) {
+            $value = \implode(',', \array_filter($value));
         }
 
-        $value = str_replace('%', '%%', urlencode($value));
+        $value = \str_replace('%', '%%', \urlencode($value));
 
         if (empty($value)) {
             return $url;
@@ -274,7 +277,6 @@ abstract class Simple implements ISimple
      * Build the filter url based upon the fragments.
      *
      * @param array  $fragments The parameters to be used in the Url.
-     *
      * @param string $searchKey The param key to handle for "this".
      *
      * @return string
@@ -288,7 +290,7 @@ abstract class Simple implements ISimple
     {
         // @codingStandardsIgnoreStart
         @trigger_error(
-            sprintf('"%1$s" has been deprecated in favor of the "FilterUrlBuilder"', __METHOD__),
+            \sprintf('"%1$s" has been deprecated in favor of the "FilterUrlBuilder"', __METHOD__),
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
@@ -300,11 +302,11 @@ abstract class Simple implements ISimple
         // The URL parameter concerning us will be masked via %s to be used later on in a sprintf().
         foreach ($fragments as $key => $value) {
             // Skip the magic "language" parameter.
-            if (($key == 'language') && $GLOBALS['TL_CONFIG']['addLanguageToUrl']) {
+            if (($key === 'language') && $GLOBALS['TL_CONFIG']['addLanguageToUrl']) {
                 continue;
             }
 
-            if ($key == $searchKey) {
+            if ($key === $searchKey) {
                 if ($key !== 'auto_item') {
                     $url .= '%s';
                 } else {
@@ -312,6 +314,7 @@ abstract class Simple implements ISimple
                 }
                 $found = true;
             } else {
+                /** @psalm-suppress DeprecatedMethod */
                 $url = $this->addUrlParameter($url, $key, $value);
             }
         }
@@ -340,12 +343,9 @@ abstract class Simple implements ISimple
      * * class  The CSS class to use. Contains active if the option is active or is empty otherwise.
      *
      * @param array $arrWidget     The widget information to use for value generating.
-     *
      * @param array $arrFilterUrl  The filter url parameters to use.
-     *
      * @param array $arrJumpTo     The jumpTo page to use for URL generating - if empty, the current
      *                             frontend page will get used.
-     *
      * @param bool  $blnAutoSubmit Determines if the generated options/widgets shall perform auto submitting
      *                             or not.
      *
@@ -366,23 +366,22 @@ abstract class Simple implements ISimple
 
         $filterUrl = new FilterUrl($arrJumpTo);
         foreach ($arrFilterUrl as $name => $value) {
-            if (is_array($value)) {
-                $value = implode(',', array_filter($value));
+            if (\is_array($value)) {
+                $value = \implode(',', \array_filter($value));
             }
 
             $filterUrl->setSlug($name, (string) $value);
         }
         $parameterName = $arrWidget['eval']['urlparam'] ?? '';
 
-        if ($arrWidget['eval']['includeBlankOption'] ?? null) {
+        if ((bool) ($arrWidget['eval']['includeBlankOption'] ?? false)) {
             $blnActive = $this->isActiveFrontendFilterValue($arrWidget, $arrFilterUrl, '');
 
             $arrOptions[] = [
                 'key'    => '',
-                'value'  => (
-                !$arrWidget['eval']['blankOptionLabel']
-                    ? $GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter']
-                    : $arrWidget['eval']['blankOptionLabel']
+                'value'  => (string) (
+                    $arrWidget['eval']['blankOptionLabel']
+                    ?? ($GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter'] ?? '')
                 ),
                 'href'   => $this->filterUrlBuilder->generate(
                     $filterUrl->clone()->setSlug($parameterName, '')->setGet($parameterName, '')
@@ -437,6 +436,8 @@ abstract class Simple implements ISimple
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     *
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     protected function prepareFrontendFilterWidget(
         array $arrWidget,
@@ -444,7 +445,8 @@ abstract class Simple implements ISimple
         array $arrJumpTo,
         FrontendFilterOptions $objFrontendFilterOptions
     ): array {
-        $strClass = $GLOBALS['TL_FFL'][$arrWidget['inputType']];
+        /** @var class-string<Widget>|null $strClass */
+        $strClass = $GLOBALS['TL_FFL'][$arrWidget['inputType']] ?? null;
 
         // No widget? no output! that's it.
         if (!$strClass) {
@@ -465,19 +467,26 @@ abstract class Simple implements ISimple
 
         $this->eventDispatcher->dispatch($event, ContaoEvents::WIDGET_GET_ATTRIBUTES_FROM_DCA);
 
-        if ($objFrontendFilterOptions->isAutoSubmit() && TL_MODE == 'FE') {
-            $min                                    = System::getContainer()->get('kernel')->isDebug() ? '' : '.min';
-            $GLOBALS['TL_JAVASCRIPT']['metamodels'] = sprintf('bundles/metamodelscore/js/metamodels%s.js', $min);
+        $isFrontend = (bool) System::getContainer()
+            ->get('contao.routing.scope_matcher')
+            ?->isFrontendRequest(
+                System::getContainer()->get('request_stack')?->getCurrentRequest() ?? Request::create('')
+            );
+
+        if ($objFrontendFilterOptions->isAutoSubmit() && $isFrontend) {
+            $min = ((bool) System::getContainer()->get('kernel')?->isDebug()) ? '' : '.min';
+            $GLOBALS['TL_JAVASCRIPT']['metamodels'] = \sprintf('bundles/metamodelscore/js/metamodels%s.js', $min);
         }
 
-        /** @var \Widget $objWidget */
+        /** @psalm-suppress UnsafeInstantiation */
         $objWidget = new $strClass($event->getResult());
         $this->validateWidget($objWidget, $arrWidget['value']);
         $strField = $objWidget->generate();
 
+        /** @psalm-suppress InvalidArgument - We assume the widget array is fine. */
         return [
             'cssID'       => $arrWidget['eval']['cssID'] ?? '',
-            'class'       => sprintf(
+            'class'       => \sprintf(
                 'mm_%s %s%s%s%s',
                 $arrWidget['inputType'],
                 $arrWidget['eval']['urlparam'],
@@ -500,7 +509,7 @@ abstract class Simple implements ISimple
             'count'       => isset($arrWidget['count']) ? $arrWidget['count'] : null,
             'showCount'   => $objFrontendFilterOptions->isShowCountValues(),
             'autosubmit'  => $objFrontendFilterOptions->isAutoSubmit(),
-            'urlvalue'    => array_key_exists('urlvalue', $arrWidget) ? $arrWidget['urlvalue'] : $arrWidget['value'],
+            'urlvalue'    => \array_key_exists('urlvalue', $arrWidget) ? $arrWidget['urlvalue'] : $arrWidget['value'],
             'errors'      => $objWidget->hasErrors() ? $objWidget->getErrors() : [],
             'used'        => $arrWidget['value'] !== null ? true : false,
             'urlfragment' => $objFrontendFilterOptions->getUrlFragment()
@@ -541,6 +550,8 @@ abstract class Simple implements ISimple
 
     /**
      * {@inheritdoc}
+     *
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function getParameterFilterWidgets(
         $arrIds,
@@ -563,7 +574,6 @@ abstract class Simple implements ISimple
      * Validate the widget using the value.
      *
      * @param Widget      $widget The widget to validate.
-     *
      * @param string|null $value  The value to validate.
      *
      * @return void
@@ -585,12 +595,12 @@ abstract class Simple implements ISimple
     /**
      * Generate legend.
      *
-     * @param array<string, array{label: list<string>}> $arrWidget The widget information array.
+     * @param array{label: list<string>} $arrWidget The widget information array.
      *
      * @return string
      */
     protected function generateLegend($arrWidget): string
     {
-        return '<legend>' . $arrWidget['label'][0] . '</legend>';
+        return '<legend>' . ($arrWidget['label'][0] ?? '') . '</legend>';
     }
 }

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -34,7 +34,7 @@ class ConditionAnd extends FilterRule
      *
      * @var IFilter[]
      */
-    protected $arrChildFilters = array();
+    protected $arrChildFilters = [];
 
     /**
      * Adds a child filter to this rule that will get evaluated when this rule is evaluated.
@@ -56,15 +56,15 @@ class ConditionAnd extends FilterRule
     public function getMatchingIds()
     {
         if (0 === count($this->arrChildFilters)) {
-            return array();
+            return [];
         }
 
         $ids = null;
         foreach ($this->arrChildFilters as $objChildFilter) {
             $matchingIds = $objChildFilter->getMatchingIds();
-            if (array() === $matchingIds) {
+            if ([] === $matchingIds) {
                 // Empty array, no items allowed by this rule, break out.
-                return array();
+                return [];
             }
 
             // If null => all items allowed by this rule => ignore it.
@@ -77,9 +77,9 @@ class ConditionAnd extends FilterRule
                 continue;
             }
 
-            $ids = array_intersect($ids, $matchingIds);
+            $ids = \array_intersect($ids, $matchingIds);
         }
 
-        return is_array($ids) ? array_values($ids) : null;
+        return \is_array($ids) ? \array_values($ids) : null;
     }
 }

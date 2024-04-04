@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -29,27 +29,30 @@ use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GenerateFrontendUr
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GetPageDetailsEvent;
 use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
 use Contao\CoreBundle\Event\SitemapEvent;
+use Contao\Environment;
 use Contao\StringUtil;
 use DOMElement;
 use DOMException;
 use DOMNode;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
-use Environment;
 use Generator;
 use MetaModels\Filter\IFilter;
 use MetaModels\Filter\Setting\IFilterSettingFactory;
 use MetaModels\IFactory;
-use MetaModels\IItem;
 use MetaModels\IItems;
 use MetaModels\IMetaModel;
+use MetaModels\Item;
 use MetaModels\ITranslatedMetaModel;
 use MetaModels\Render\Setting\ICollection as IRenderSettingCollection;
 use MetaModels\Render\Setting\IRenderSettingFactory;
 use RuntimeException;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
+use function array_merge;
+use function array_values;
 use function in_array;
+use function trim;
 
 /**
  * Class SearchablePages.
@@ -64,6 +67,9 @@ use function in_array;
  *   rendersetting: int,
  *   published: string
  * }
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 class GetSearchablePagesListener
 {
@@ -132,17 +138,20 @@ class GetSearchablePagesListener
      */
     public function __invoke(SitemapEvent $event): void
     {
-        $rootPageIds      = $event->getRootPageIds();
-        $sitemap          = $event->getDocument();
-        $urlSet           = $sitemap->childNodes[0];
+        $rootPageIds = $event->getRootPageIds();
+        $sitemap     = $event->getDocument();
+        $urlSet      = $sitemap->childNodes[0];
+        assert($urlSet instanceof DOMElement);
 
         // Run each entry in the published config array and search detail pages.
         foreach ($this->getPublishedConfigs() as $config) {
-            $metaModelId   = $config['pid'];
-            $metaModel     = $this->getMetaModel($metaModelId);
+            $metaModelId = (string) $config['pid'];
+            $metaModel   = $this->getMetaModel($metaModelId);
+            assert($metaModel instanceof IMetaModel);
             $filterParams  = StringUtil::deserialize($config['filterparams'], true);
-            $listFilter    = $this->getListFilter($metaModel, (string)$config['filter'], $filterParams);
-            $renderSetting = $this->renderSettingFactory->createCollection($metaModel, $config['rendersetting']);
+            $listFilter    = $this->getListFilter($metaModel, (string) $config['filter'], $filterParams);
+            $renderSetting =
+                $this->renderSettingFactory->createCollection($metaModel, (string) $config['rendersetting']);
 
             // Now loop over all detail pages...
             foreach ((array) $renderSetting->get('jumpTo') as $jumpTo) {
@@ -195,6 +204,8 @@ class GetSearchablePagesListener
      * @param IFilter                  $listFilter       The list filter.
      *
      * @return Generator
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     private function generateUrlsFor(
         IMetaModel $metaModel,
@@ -220,7 +231,7 @@ class GetSearchablePagesListener
                 0,
                 0,
                 'ASC',
-                array_merge($renderSetting->getSettingNames(), $filterAttributes)
+                array_values(array_merge($renderSetting->getSettingNames(), $filterAttributes))
             );
 
             foreach ($this->buildUrlsForItems($items, $renderSetting, $pageDetails) as $url) {
@@ -251,6 +262,7 @@ class GetSearchablePagesListener
             ->where('t.published=1')
             ->executeQuery();
 
+        /** @var TSearchablePageConfig $config */
         foreach ($statement->fetchAllAssociative() as $config) {
             yield $config;
         }
@@ -288,24 +300,18 @@ class GetSearchablePagesListener
     /**
      * Get a MetaModels by name or id.
      *
-     * @param string $identifier  The Name or ID of a MetaModels.
+     * @param string $identifier The Name/ID of a MetaModels.
      *
-     * @return IMetaModel
+     * @return IMetaModel|null
      *
      * @throws RuntimeException When the MetaModels is missing.
      */
-    private function getMetaModel(string $identifier): IMetaModel
+    private function getMetaModel(string $identifier): ?IMetaModel
     {
         // Translate id to name.
         $identifier = $this->factory->translateIdToMetaModelName($identifier);
-        $metaModel  = $this->factory->getMetaModel($identifier);
 
-        // If we have no mm throw a new exception.
-        if (null === $metaModel) {
-            throw new RuntimeException('Could not find the MetaModels with the name ' . $identifier);
-        }
-
-        return $metaModel;
+        return $this->factory->getMetaModel($identifier);
     }
 
     /**
@@ -323,7 +329,7 @@ class GetSearchablePagesListener
         array $pageDetails
     ): Generator {
         foreach ($items as $item) {
-            assert($item instanceof IItem);
+            assert($item instanceof Item);
             $jumpTo = $item->buildJumpToLink($renderSetting);
             $url    = UrlBuilder::fromUrl($jumpTo['url']);
             if (null === $url->getScheme()) {
@@ -338,8 +344,8 @@ class GetSearchablePagesListener
     /**
      * Get the base URL.
      *
-     * @param string[]    $pageDetails The page details.
-     * @param string|null $path        Additional path settings.
+     * @param array<string, string> $pageDetails The page details.
+     * @param string|null           $path        Additional path settings.
      *
      * @return UrlBuilder
      */
@@ -355,7 +361,7 @@ class GetSearchablePagesListener
             // Add dummy parameter, because non legacy mode parameter must not be null.
             $event = new GenerateFrontendUrlEvent(
                 $pageDetails,
-                ($pageDetails['requireItem'] ?? false) ? '/foo/bar' : null,
+                ((bool) ($pageDetails['requireItem'] ?? false)) ? '/foo/bar' : null,
                 $pageDetails['language'],
                 true
             );
@@ -385,9 +391,10 @@ class GetSearchablePagesListener
             }
 
             foreach ($childNode->childNodes as $childNode2) {
-                if (!$this->isDomElement($childNode2, 'loc') || trim($childNode2->nodeValue) !== $removeUrl) {
+                if (!$this->isDomElement($childNode2, 'loc') || trim((string) $childNode2->nodeValue) !== $removeUrl) {
                     continue;
                 }
+                assert($childNode->parentNode instanceof \DOMNode);
                 $childNode->parentNode->removeChild($childNode);
 
                 return;

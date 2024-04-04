@@ -36,6 +36,8 @@ use Symfony\Component\HttpFoundation\Response;
  * The item list content element.
  *
  * @ContentElement("metamodel_content", category="metamodels", template="ce_metamodel_content")
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 final class ItemListController extends AbstractContentElementController
 {
@@ -63,7 +65,8 @@ final class ItemListController extends AbstractContentElementController
             return $this->getBackendWildcard($model);
         }
 
-        if (!empty($model->metamodel_layout)) {
+        /** @psalm-suppress UndefinedMagicPropertyFetch */
+        if (null !== $model->metamodel_layout) {
             $model->customTpl = $model->metamodel_layout;
         }
 

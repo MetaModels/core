@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -48,28 +48,28 @@ class BackendNavigationListener
      *
      * @var TranslatorInterface
      */
-    private $translator;
+    private TranslatorInterface $translator;
 
     /**
      * The translator in use.
      *
      * @var ViewCombination
      */
-    private $viewCombination;
+    private ViewCombination $viewCombination;
 
     /**
      * The token storage.
      *
      * @var TokenStorageInterface
      */
-    private $tokenStorage;
+    private TokenStorageInterface $tokenStorage;
 
     /**
      * The router.
      *
      * @var RouterInterface
      */
-    private $router;
+    private RouterInterface $router;
 
     /**
      * Create a new instance.
@@ -113,17 +113,18 @@ class BackendNavigationListener
             return;
         }
 
-        if (null === $request = $this->requestStack->getCurrentRequest()) {
+        if (null === ($request = $this->requestStack->getCurrentRequest())) {
+            return;
+        }
+
+        if (null === ($user = $this->tokenStorage->getToken())) {
             return;
         }
 
         $this->addBackendCss();
 
-        if (null !== ($user = $this->tokenStorage->getToken())) {
-            $userRights = $this->extractUserRights($user);
-        }
-
-        $isAdmin = \in_array('ROLE_ADMIN', $user->getRoleNames(), true);
+        $userRights = $this->extractUserRights($user);
+        $isAdmin    = \in_array('ROLE_ADMIN', $user->getRoleNames(), true);
 
         $metaModelsNode = $tree->getChild('metamodels');
         if (null !== $metaModelsNode && ($isAdmin || isset($userRights['support_metamodels']))) {
@@ -133,7 +134,7 @@ class BackendNavigationListener
                 ->setLabel($this->translator->trans('MOD.support_metamodels.0', [], 'contao_modules'))
                 ->setLinkAttribute('title', $this->translator->trans('MOD.support_metamodels.1', [], 'contao_modules'))
                 ->setLinkAttribute('class', 'support_screen')
-                ->setCurrent('metamodels.support_screen' === $request->get('_route'));
+                ->setCurrent('metamodels.support_screen' === $request->attributes->get('_route'));
 
             $metaModelsNode->addChild($node);
         }
@@ -158,7 +159,9 @@ class BackendNavigationListener
                 ->setLabel($this->extractLanguageValue($screen['label'], $locale))
                 ->setLinkAttribute('title', $this->extractLanguageValue($screen['description'], $locale))
                 ->setLinkAttribute('class', $item)
-                ->setCurrent($request->get('_route') === 'contao_backend' && $request->query->get('do') === $item);
+                ->setCurrent(
+                    ($request->attributes->get('_route') === 'contao_backend') && ($request->query->get('do') === $item)
+                );
 
             $sectionNode->addChild($node);
         }
@@ -189,21 +192,20 @@ class BackendNavigationListener
             default:
         }
 
-        return array_flip($allowedModules);
+        return \array_flip($allowedModules);
     }
 
     /**
      * Extract the language value.
      *
      * @param string[] $values The values.
-     *
      * @param string   $locale The current locale.
      *
      * @return string
      */
-    private function extractLanguageValue($values, $locale): string
+    private function extractLanguageValue(array $values, string $locale): string
     {
-        return html_entity_decode(($values[$locale] ?? $values['']));
+        return \html_entity_decode(($values[$locale] ?? $values['']));
     }
 
     /**

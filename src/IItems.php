@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Maack <david.maack@arcor.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -28,13 +29,15 @@ use MetaModels\Render\Setting\ICollection;
  *
  * @method IItems|bool next() Advance the internal cursor by one returns the current instance or false when last
  *                            item has had been reached.
+ * @extends \Iterator<int, IItem>
+ * @extends \ArrayAccess<int, IItem>
  */
 interface IItems extends \Iterator, \ArrayAccess
 {
     /**
      * Return the current item.
      *
-     * @return IItem
+     * @return IItem|null
      */
     public function getItem();
 
@@ -90,7 +93,6 @@ interface IItems extends \Iterator, \ArrayAccess
      * Parses the current item in the desired output format using the format settings.
      *
      * @param string           $strOutputFormat Optional, defaults to text. The output format to use.
-     *
      * @param ICollection|null $objSettings     Optional, defaults to null. The additional settings.
      *
      * @return array the parsed information.
@@ -101,7 +103,6 @@ interface IItems extends \Iterator, \ArrayAccess
      * Parses all items in the desired output format using the format settings.
      *
      * @param string           $strOutputFormat Optional, defaults to text. The output format to use.
-     *
      * @param ICollection|null $objSettings     Optional, defaults to null. The additional settings.
      *
      * @return array the parsed information.
