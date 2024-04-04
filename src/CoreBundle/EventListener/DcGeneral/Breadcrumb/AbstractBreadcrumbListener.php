@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -23,6 +24,7 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\Breadcrumb;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
+use ContaoCommunityAlliance\DcGeneral\InputProviderInterface;
 
 /**
  * This class renders various breadcrumbs.
@@ -34,14 +36,14 @@ abstract class AbstractBreadcrumbListener
      *
      * @var BreadcrumbStoreFactory
      */
-    private $storeFactory;
+    private BreadcrumbStoreFactory $storeFactory;
 
     /**
      * The parent element renderer.
      *
-     * @var AbstractBreadcrumbListener
+     * @var AbstractBreadcrumbListener|null
      */
-    private $parent;
+    private ?AbstractBreadcrumbListener $parent;
 
     /**
      * Create a new instance.
@@ -90,7 +92,6 @@ abstract class AbstractBreadcrumbListener
      * Perform the bread crumb generating.
      *
      * @param EnvironmentInterface $environment The environment in use.
-     *
      * @param BreadcrumbStore      $elements    The elements generated so far.
      *
      * @return void
@@ -106,15 +107,17 @@ abstract class AbstractBreadcrumbListener
      * Extract the id value from the serialized parameter with the given name.
      *
      * @param EnvironmentInterface $environment   The environment.
-     *
      * @param string               $parameterName The parameter name containing the id.
      *
-     * @return int
+     * @return string
      */
     protected function extractIdFrom(EnvironmentInterface $environment, $parameterName = 'pid')
     {
-        $parameter = $environment->getInputProvider()->getParameter($parameterName);
+        $inputProvider = $environment->getInputProvider();
+        assert($inputProvider instanceof InputProviderInterface);
 
-        return ModelId::fromSerialized($parameter)->getId();
+        $parameter = $inputProvider->getParameter($parameterName);
+
+        return (string) ModelId::fromSerialized($parameter)->getId();
     }
 }

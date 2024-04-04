@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -35,6 +35,7 @@ use MetaModels\Filter\Setting\IFilterSettingFactory;
 use MetaModels\Helper\SortingLinkGenerator;
 use MetaModels\IFactory;
 use MetaModels\IItem;
+use MetaModels\IMetaModel;
 use MetaModels\ItemList;
 use MetaModels\Render\Setting\IRenderSettingFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -141,7 +142,9 @@ trait ListControllerTrait
             // @codingStandardsIgnoreEnd
 
             $translator = System::getContainer()->get('translator');
+            assert($translator instanceof TranslatorInterface);
         }
+        $this->translator = $translator;
 
         if (null === $router) {
             // @codingStandardsIgnoreStart
@@ -152,7 +155,9 @@ trait ListControllerTrait
             // @codingStandardsIgnoreEnd
 
             $router = System::getContainer()->get('router');
+            assert($router instanceof RouterInterface);
         }
+        $this->router = $router;
 
         if (null === $scopeMatcher) {
             // @codingStandardsIgnoreStart
@@ -163,10 +168,8 @@ trait ListControllerTrait
             // @codingStandardsIgnoreEnd
 
             $scopeMatcher = System::getContainer()->get('contao.routing.scope_matcher');
+            assert($scopeMatcher instanceof ScopeMatcher);
         }
-
-        $this->translator   = $translator;
-        $this->router       = $router;
         $this->scopeMatcher = $scopeMatcher;
     }
 
@@ -181,10 +184,14 @@ trait ListControllerTrait
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     private function getResponseInternal(Template $template, Model $model, Request $request): Response
     {
-        if (empty($pageParam = $model->metamodel_page_param)) {
+        /** @psalm-suppress UndefinedMagicPropertyFetch */
+        if (null === ($pageParam = $model->metamodel_page_param)) {
+            /** @psalm-suppress UndefinedMagicPropertyFetch */
             switch ($model->type) {
                 case 'metamodel_content':
                     $pageParam = 'page_mmce' . $model->id;
@@ -197,6 +204,7 @@ trait ListControllerTrait
             }
         }
 
+        /** @psalm-suppress UndefinedMagicPropertyFetch */
         $itemRenderer = new ItemList(
             $this->factory,
             $this->filterFactory,
@@ -210,42 +218,59 @@ trait ListControllerTrait
             $model->metamodel_pagination_urlfragment
         );
 
+        /**
+         * @psalm-suppress UndefinedMagicPropertyAssignment
+         * @psalm-suppress UndefinedMagicPropertyFetch
+         */
         $template->searchable = !$model->metamodel_donotindex;
 
-        $sorting           = $model->metamodel_sortby;
-        $direction         = $model->metamodel_sortby_direction;
+        /** @psalm-suppress UndefinedMagicPropertyFetch */
+        $sorting = $model->metamodel_sortby;
+        /** @psalm-suppress UndefinedMagicPropertyFetch */
+        $direction = $model->metamodel_sortby_direction;
+        /** @psalm-suppress UndefinedMagicPropertyFetch */
         $sortParamType     = $model->metamodel_sort_param_type;
         $sortOrderByParam  = 'orderBy';
         $sortOrderDirParam = 'orderDir';
-        $sortOverride      = $model->metamodel_sort_override;
-        $sortFragment      = $model->metamodel_sort_urlfragment;
+        /** @psalm-suppress UndefinedMagicPropertyFetch */
+        $sortOverride = $model->metamodel_sort_override;
+        /** @psalm-suppress UndefinedMagicPropertyFetch */
+        $sortFragment = $model->metamodel_sort_urlfragment;
 
         // @codingStandardsIgnoreStart
         // FIXME: filter URL should be created from local request and not from master request.
         // @codingStandardsIgnoreEnd
         $filterUrl = $this->filterUrlBuilder->getCurrentFilterUrl();
         if ($sortOverride) {
-            $sortOrderByParam  = $model->metamodel_order_by_param ?: $sortOrderByParam;
+            /** @psalm-suppress UndefinedMagicPropertyFetch */
+            $sortOrderByParam = $model->metamodel_order_by_param ?: $sortOrderByParam;
+            /** @psalm-suppress UndefinedMagicPropertyFetch */
             $sortOrderDirParam = $model->metamodel_order_dir_param ?: $sortOrderDirParam;
-            if (null !==
+            if (
+                null !==
                 $value = $this->tryReadFromSlugOrGet(
                     $filterUrl,
                     $sortOrderByParam,
                     $sortParamType
-                )) {
+                )
+            ) {
                 $sorting = $value;
             }
-            if (null !==
+            if (
+                null !==
                 $value = $this->tryReadFromSlugOrGet(
                     $filterUrl,
                     $sortOrderDirParam,
                     $sortParamType
-                )) {
+                )
+            ) {
                 $direction = $value;
             }
         }
 
+        /** @psalm-suppress UndefinedMagicPropertyFetch */
         $filterParams = StringUtil::deserialize($model->metamodel_filterparams, true);
+        /** @psalm-suppress UndefinedMagicPropertyFetch */
         $itemRenderer
             ->setMetaModel($model->metamodel, $model->metamodel_rendersettings)
             ->setListTemplate($template)
@@ -256,6 +281,7 @@ trait ListControllerTrait
             ->setFilterParameters($filterParams, $this->getFilterParameters($filterUrl, $itemRenderer))
             ->setMetaTags($model->metamodel_meta_title, $model->metamodel_meta_description);
         if ($sortOverride) {
+            /** @psalm-suppress UndefinedMagicPropertyFetch */
             $itemRenderer->setSortingLinkGenerator(
                 new SortingLinkGenerator(
                     $this->filterUrlBuilder,
@@ -270,19 +296,27 @@ trait ListControllerTrait
             );
         }
 
+        /** @psalm-suppress UndefinedMagicPropertyFetch */
         if ($model->metamodel_use_parameters) {
+            /** @psalm-suppress UndefinedMagicPropertyFetch */
             foreach (StringUtil::deserialize(($model->metamodel_parameters ?? null), true) as $key => $value) {
                 $itemRenderer->setTemplateParameter($key, $value);
             }
         }
 
+        /**
+         * @psalm-suppress UndefinedMagicPropertyAssignment
+         * @psalm-suppress UndefinedMagicPropertyFetch
+         */
         $template->items         = StringUtil::encodeEmail($itemRenderer->render($model->metamodel_noparsing, $model));
+        /** @psalm-suppress UndefinedMagicPropertyAssignment */
         $template->numberOfItems = $itemRenderer->getItems()->getCount();
+        /** @psalm-suppress UndefinedMagicPropertyAssignment */
         $template->pagination    = $itemRenderer->getPagination();
 
         $responseTags = \array_map(
             static function (IItem $item) {
-                return sprintf('contao.db.%s.%d', $item->getMetaModel()->getTableName(), $item->get('id'));
+                return \sprintf('contao.db.%s.%d', $item->getMetaModel()->getTableName(), $item->get('id'));
             },
             \iterator_to_array($itemRenderer->getItems(), false)
         );
@@ -359,11 +393,14 @@ trait ListControllerTrait
     {
         $template = new BackendTemplate('be_wildcard');
 
+        /** @psalm-suppress UndefinedMagicPropertyFetch */
         $headline = StringUtil::deserialize($model->headline);
-
+        /** @psalm-suppress UndefinedMagicPropertyAssignment */
         $template->wildcard = $this->getWildcardInfoText($model, $href, $name);
-        $template->title    = (\is_array($headline) ? $headline['value'] : $headline);
-        $template->id       = $model->id;
+        /** @psalm-suppress UndefinedMagicPropertyAssignment */
+        $template->title = (\is_array($headline) ? $headline['value'] : $headline);
+        /** @psalm-suppress UndefinedMagicPropertyAssignment */
+        $template->id = $model->id;
 
         return new Response($template->parse());
     }
@@ -384,11 +421,12 @@ trait ListControllerTrait
      */
     private function getWildcardInfoText(Model $model, string $href, string $name): string
     {
-        if (empty($model->metamodel)) {
+        /** @psalm-suppress UndefinedMagicPropertyFetch */
+        if (null === $model->metamodel) {
             return 'MetaModel not configured.';
         }
 
-        if (null === $metaModelName = $this->factory->translateIdToMetaModelName($model->metamodel)) {
+        if ('' === ($metaModelName = $this->factory->translateIdToMetaModelName($model->metamodel))) {
             return 'Unknown MetaModel: ' . $model->metamodel;
         }
         // Add CSS file.
@@ -399,13 +437,14 @@ trait ListControllerTrait
             '<div class="wc_info tl_gray"><span class="wc_label"><abbr title="%s">%s:</abbr></span> %s</div>';
 
         $metaModel = $this->factory->getMetaModel($metaModelName);
+        assert($metaModel instanceof IMetaModel);
         $header    = $name . ': ' . $metaModel->getName();
         if ($href) {
             $header .= \sprintf(
                 ' (<a href="%1$s&amp;rt=%2$s" class="tl_gray">ID: %3$s</a>)',
                 $href,
-                REQUEST_TOKEN,
-                $model->id
+                System::getContainer()->get('contao.csrf.token_manager')?->getDefaultTokenValue() ?? '',
+                (string) $model->id
             );
         }
         $infoText = \sprintf(
@@ -416,8 +455,10 @@ trait ListControllerTrait
         );
 
         // Retrieve name of filter.
+        /** @psalm-suppress UndefinedMagicPropertyFetch */
         if ($model->metamodel_filtering) {
             $filterparams = [];
+            /** @psalm-suppress UndefinedMagicPropertyFetch */
             foreach (StringUtil::deserialize($model->metamodel_filterparams, true) as $filterparam) {
                 if ($filterparam['value']) {
                     $filterparams[] = $filterparam['value'];
@@ -425,7 +466,7 @@ trait ListControllerTrait
             }
             $infoFiPa = \count($filterparams) ? ': ' . \implode(', ', $filterparams) : '';
             $infoFi   = $this->filterFactory->createCollection($model->metamodel_filtering)->get('name');
-            if ($infoFi) {
+            if (null !== $infoFi) {
                 $infoText .= \sprintf(
                     $infoTemplate,
                     $this->translator->trans('MSC.mm_be_info_filter.1', [], 'contao_default'),
@@ -436,11 +477,12 @@ trait ListControllerTrait
         }
 
         // Retrieve name of rendersetting.
+        /** @psalm-suppress UndefinedMagicPropertyFetch */
         if ($model->metamodel_rendersettings) {
             $infoRs = $this->renderSettingFactory
                 ->createCollection($metaModel, $model->metamodel_rendersettings)
                 ->get('name');
-            if ($infoRs) {
+            if (null !== $infoRs) {
                 $infoText .= \sprintf(
                     $infoTemplate,
                     $this->translator->trans('MSC.mm_be_info_render_setting.1', [], 'contao_default'),

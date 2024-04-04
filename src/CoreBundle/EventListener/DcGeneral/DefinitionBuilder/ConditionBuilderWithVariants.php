@@ -66,7 +66,7 @@ class ConditionBuilderWithVariants extends AbstractConditionBuilder
 
         $relationship = $this->getRootCondition();
 
-        $builder = FilterBuilder::fromArrayForRoot((array) $relationship->getFilterArray())->getFilter();
+        $builder = FilterBuilder::fromArrayForRoot($relationship->getFilterArray())->getFilter();
 
         $builder->andPropertyEquals('varbase', 1);
 
@@ -78,7 +78,6 @@ class ConditionBuilderWithVariants extends AbstractConditionBuilder
         ];
         $inverse = [];
 
-        /** @var ParentChildConditionInterface $relationship */
         $relationship = $this->definition->getChildCondition($this->container->getName(), $this->container->getName());
 
         if ($relationship === null) {
@@ -100,7 +99,7 @@ class ConditionBuilderWithVariants extends AbstractConditionBuilder
                     ->encapsulateOr()
                     ->andRemotePropertyEquals('vargroup', 'vargroup')
                     ->andRemotePropertyEquals('vargroup', 'id')
-                    ->andRemotePropertyEquals('varbase', 0, true)
+                    ->andRemotePropertyEquals('varbase', '0', true)
                     ->getAllAsArray()
             )
             ->setSetters($setter)

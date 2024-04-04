@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -21,6 +22,7 @@
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\Dca;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 
 /**
  * This provides the render type options.
@@ -39,8 +41,13 @@ class RenderTypeOptionListener
      */
     public function handle(GetPropertyOptionsEvent $event)
     {
-        if (('tl_metamodel_dca' !== $event->getEnvironment()->getDataDefinition()->getName())
-            || ('rendertype' !== $event->getPropertyName())) {
+        $dataDefinition = $event->getEnvironment()->getDataDefinition();
+        assert($dataDefinition instanceof ContainerInterface);
+
+        if (
+            ('tl_metamodel_dca' !== $dataDefinition->getName())
+            || ('rendertype' !== $event->getPropertyName())
+        ) {
             return;
         }
 

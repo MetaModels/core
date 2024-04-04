@@ -27,8 +27,10 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\Build
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use Doctrine\DBAL\Connection;
 use MetaModels\IFactory;
+use MetaModels\IMetaModel;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -41,21 +43,21 @@ class JumpToListener extends AbstractAbstainingListener
      *
      * @var IFactory
      */
-    private $factory;
+    private IFactory $factory;
 
     /**
      * The connection.
      *
      * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * The translator.
      *
      * @var TranslatorInterface
      */
-    private $translator;
+    private TranslatorInterface $translator;
 
     /**
      * Create a new instance.
@@ -90,23 +92,27 @@ class JumpToListener extends AbstractAbstainingListener
             return;
         }
 
-        $propInfo = $event->getEnvironment()->getDataDefinition()->getPropertiesDefinition()->getProperty('jumpTo');
+        $dataDefinition = $event->getEnvironment()->getDataDefinition();
+        assert($dataDefinition instanceof ContainerInterface);
+
+        $propInfo = $dataDefinition->getPropertiesDefinition()->getProperty('jumpTo');
         $value    = StringUtil::deserialize($event->getValue(), true);
         $extra    = $propInfo->getExtra();
 
         $newValues = [];
+        /** @var array<string, mixed> $languages */
         $languages = $extra['columnFields']['langcode']['options'] ?? [];
-        foreach (array_keys($languages) as $key) {
+        foreach (\array_keys($languages) as $key) {
             $newValue = '';
             $filter   = 0;
             if ($value) {
                 foreach ($value as $arr) {
-                    if (!is_array($arr)) {
+                    if (!\is_array($arr)) {
                         break;
                     }
 
                     // Set the new value and exit the loop.
-                    if (array_search($key, $arr) !== false) {
+                    if (\in_array($key, $arr, true)) {
                         $newValue = '{{link_url::' . $arr['value'] . '}}';
                         $filter   = $arr['filter'];
                         break;
@@ -141,10 +147,10 @@ class JumpToListener extends AbstractAbstainingListener
         $value = StringUtil::deserialize($event->getValue(), true);
 
         foreach ($value as $k => $v) {
-            $value[$k]['value'] = str_replace(['{{link_url::', '}}'], ['', ''], $v['value']);
+            $value[$k]['value'] = \str_replace(['{{link_url::', '}}'], ['', ''], $v['value']);
         }
 
-        $event->setValue(serialize($value));
+        $event->setValue(\serialize($value));
     }
 
     /**
@@ -166,19 +172,22 @@ class JumpToListener extends AbstractAbstainingListener
         $model     = $event->getModel();
         $metaModel =
             $this->factory->getMetaModel($this->factory->translateIdToMetaModelName($model->getProperty('pid')));
+        assert($metaModel instanceof IMetaModel);
 
         $extra = $event->getProperty()->getExtra();
 
+        /** @psalm-suppress DeprecatedMethod */
         if ($metaModel->isTranslated()) {
             $arrLanguages = [];
+            /** @psalm-suppress DeprecatedMethod */
             foreach ((array) $metaModel->getAvailableLanguages() as $strLangCode) {
                 $arrLanguages[$strLangCode] = $this->translator
-                    ->trans('LNG.'. $strLangCode, [], 'contao_languages');
+                    ->trans('LNG.' . $strLangCode, [], 'contao_languages');
             }
             asort($arrLanguages);
 
-            $extra['minCount'] = count($arrLanguages);
-            $extra['maxCount'] = count($arrLanguages);
+            $extra['minCount'] = \count($arrLanguages);
+            $extra['maxCount'] = \count($arrLanguages);
 
             $extra['columnFields']['langcode']['options'] = $arrLanguages;
         } else {

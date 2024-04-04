@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Alexander Menk <a.menk@imi.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -46,7 +46,7 @@ class ItemRendererListener
      *
      * @var IRenderSettingFactory
      */
-    private $renderSettingFactory;
+    private IRenderSettingFactory $renderSettingFactory;
 
     /**
      * Create a new instance.
@@ -82,35 +82,33 @@ class ItemRendererListener
         }
 
         $nativeItem = $model->getItem();
-        $metaModel  = $nativeItem->getMetaModel();
+        assert($nativeItem instanceof IItem);
+        $metaModel = $nativeItem->getMetaModel();
 
         $renderSetting = $this->renderSettingFactory
             ->createCollection($metaModel, $definition->getMetaModelDefinition()->getActiveRenderSetting());
 
-        if (!$renderSetting) {
-            return;
-        }
-
-        $data = array($nativeItem->parseValue('html5', $renderSetting));
+        $data = [$nativeItem->parseValue('html5', $renderSetting)];
 
         if ($listing->getShowColumns()) {
             $event->setArgs($data[0]['html5']);
             return;
         }
 
-        $template      = new Template($renderSetting->get('template'));
+        $template      = new Template($renderSetting->get('template') ?? '');
         $renderSetting = self::removeInvariantAttributes($nativeItem, $renderSetting);
 
         $template->setData(
-            array(
+            [
                 'settings' => $renderSetting,
-                'items'    => new Items(array($nativeItem)),
+                'items'    => new Items([$nativeItem]),
                 'view'     => $renderSetting,
                 'data'     => $data
-            )
+            ]
         );
 
-        $event->setLabel('%s')->setArgs(array($template->parse('html5')));
+        /** @psalm-suppress InvalidArgument */
+        $event->setLabel('%s')->setArgs([$template->parse('html5')]);
     }
 
     /**
@@ -134,8 +132,10 @@ class ItemRendererListener
         }
 
         $nativeItem = $model->getItem();
-        $metaModel  = $nativeItem->getMetaModel();
-        $propName   = $event->getProperty()->getName();
+        assert($nativeItem instanceof IItem);
+        $metaModel = $nativeItem->getMetaModel();
+        $propName  = $event->getProperty()->getName();
+
         if ($nativeItem->getAttribute($propName) instanceof IInternal) {
             return;
         }
@@ -145,23 +145,20 @@ class ItemRendererListener
             $definition->getMetaModelDefinition()->getActiveRenderSetting()
         );
 
-        if (!$renderSetting) {
-            return;
-        }
-
         $result = $nativeItem->parseAttribute($propName, 'text', $renderSetting);
 
         if (!isset($result['text'])) {
             // If hide empty values active and the value IS empty, this is expected. See #1318.
-            if ($renderSetting->get('hideEmptyValues') && EmptyTest::isEmptyValue($nativeItem->get($propName))) {
+            if ((bool) $renderSetting->get('hideEmptyValues') && EmptyTest::isEmptyValue($nativeItem->get($propName))) {
                 return;
             }
             $event->setRendered(
-                sprintf(
+                \sprintf(
                     'Unexpected behaviour, attribute %s text representation was not rendered.',
                     $event->getProperty()->getName()
                 )
             );
+
             return;
         }
 
@@ -182,26 +179,32 @@ class ItemRendererListener
         if (!$parentModel instanceof Model) {
             return;
         }
+
         $environment = $event->getEnvironment();
         /** @var IMetaModelDataDefinition $definition */
         $definition = $environment->getDataDefinition();
 
         $item          = $parentModel->getItem();
+        assert($item instanceof IItem);
         $metaModel     = $item->getMetaModel();
         $renderSetting = $this->renderSettingFactory->createCollection(
             $metaModel,
             $definition->getMetaModelDefinition()->getActiveRenderSetting()
         );
-        $additional    = array();
+        $additional    = [];
 
         foreach ($renderSetting->getSettingNames() as $name) {
             $parsed = $item->parseAttribute($name, 'text', $renderSetting);
-            $name   = $item->getAttribute($name)->getName();
+            $attribute = $item->getAttribute($name);
+            if (null === $attribute) {
+                continue;
+            }
+            $name = $attribute->getName();
 
             $additional[$name] = $parsed['text'];
         }
 
-        $additional = array_merge(
+        $additional = \array_merge(
             $additional,
             $event->getAdditional()
         );
@@ -215,7 +218,6 @@ class ItemRendererListener
      * This is done by cloning the input collection of render settings and removing any invariant attribute.
      *
      * @param IItem       $nativeItem    The native item.
-     *
      * @param ICollection $renderSetting The render setting to be used.
      *
      * @return ICollection
@@ -229,7 +231,7 @@ class ItemRendererListener
             $renderSetting = clone $renderSetting;
 
             // Loop over all attributes and remove those from rendering that are not desired.
-            foreach (array_keys($model->getInVariantAttributes()) as $strAttrName) {
+            foreach (\array_keys($model->getInVariantAttributes()) as $strAttrName) {
                 $renderSetting->setSetting($strAttrName, null);
             }
         }

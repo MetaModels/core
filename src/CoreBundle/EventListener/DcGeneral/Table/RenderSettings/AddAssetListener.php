@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,7 @@
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Andreas Fischer <anfischer@kaffee-partner.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -24,6 +24,7 @@
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\RenderSettings;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use MenAtWork\MultiColumnWizardBundle\Event\GetOptionsEvent;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Finder\Finder;
@@ -38,14 +39,14 @@ class AddAssetListener
      *
      * @var RequestScopeDeterminator
      */
-    private $scopeDeterminator;
+    private RequestScopeDeterminator $scopeDeterminator;
 
     /**
      * The upload path to scan within.
      *
      * @var string
      */
-    private $uploadPath;
+    private string $uploadPath;
 
     /**
      * Create a new instance.
@@ -68,9 +69,11 @@ class AddAssetListener
      */
     public function getStylesheets(GetOptionsEvent $event)
     {
-        if (!$this->wantToHandle($event)
+        if (
+            !$this->wantToHandle($event)
             || ($event->getPropertyName() !== 'additionalCss')
-            || ($event->getSubPropertyName() !== 'file')) {
+            || ($event->getSubPropertyName() !== 'file')
+        ) {
             return;
         }
 
@@ -86,9 +89,14 @@ class AddAssetListener
      */
     public function getJavascripts(GetOptionsEvent $event)
     {
-        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_rendersettings')
+        $dataDefinition = $event->getEnvironment()->getDataDefinition();
+        assert($dataDefinition instanceof ContainerInterface);
+
+        if (
+            ($dataDefinition->getName() !== 'tl_metamodel_rendersettings')
             || ($event->getPropertyName() !== 'additionalJs')
-            || ($event->getSubPropertyName() !== 'file')) {
+            || ($event->getSubPropertyName() !== 'file')
+        ) {
             return;
         }
 
@@ -105,7 +113,8 @@ class AddAssetListener
     private function scanFiles($extension)
     {
         $files = [];
-        foreach (Finder::create()
+        foreach (
+            Finder::create()
             ->followLinks()
             ->in($this->uploadPath)
             ->name('*.' . $extension)
@@ -130,12 +139,15 @@ class AddAssetListener
             return false;
         }
 
-        $environment = $event->getEnvironment();
-        if ('tl_metamodel_rendersettings' !== $environment->getDataDefinition()->getName()) {
+        $environment    = $event->getEnvironment();
+        $dataDefinition = $environment->getDataDefinition();
+        assert($dataDefinition instanceof ContainerInterface);
+
+        if ('tl_metamodel_rendersettings' !== $dataDefinition->getName()) {
             return false;
         }
 
-        if ($event->getEnvironment()->getDataDefinition()->getName() !== $event->getModel()->getProviderName()) {
+        if ($dataDefinition->getName() !== $event->getModel()->getProviderName()) {
             return false;
         }
 

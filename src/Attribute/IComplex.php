@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Maack <david.maack@arcor.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -31,17 +32,17 @@ interface IComplex extends IAttribute
     /**
      * This method is called to retrieve the data for certain items from the database.
      *
-     * @param string[] $arrIds The ids of the items to retrieve.
+     * @param list<string> $arrIds The ids of the items to retrieve.
      *
-     * @return mixed[] The nature of the resulting array is a mapping from id => "native data" where
-     *                 the definition of "native data" is only of relevance to the given item.
+     * @return array<string, mixed> The nature of the resulting array is a mapping from id => "native data" where
+     *                              the definition of "native data" is only of relevance to the given item.
      */
     public function getDataFor($arrIds);
 
     /**
      * Remove values for items.
      *
-     * @param string[] $arrIds The ids of the items to retrieve.
+     * @param list<string> $arrIds The ids of the items to retrieve.
      *
      * @return void
      */

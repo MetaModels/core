@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,29 +18,36 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\Render;
 
+use Contao\Config;
+use Contao\BackendTemplate;
 use Contao\CoreBundle\Framework\Adapter;
+use Contao\FrontendTemplate;
 use Contao\System;
 use Contao\TemplateLoader;
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
+use Exception;
 use MetaModels\Helper\ContaoController;
+use RuntimeException;
+
 use function array_key_exists;
 
 /**
  * Template class for MetaModels.
- * In most aspects this behaves identically to the FrontendTemplate class from Contao but it differs in respect to
+ * In most aspects this behaves identically to the FrontendTemplate class from Contao, but it differs in respect to
  * format selection.
  * The format is being determined upon parsing and not upon instantiation. There is also an optional "fail on not
  * found" flag, which defaults to false and therefore one can parse the template and have zero output instead of
  * cluttering the frontend with exceptions.
  *
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Template
 {
@@ -54,14 +61,14 @@ class Template
     /**
      * Parent template.
      *
-     * @var string
+     * @var string|null
      */
     protected $strParent;
 
     /**
      * Default template.
      *
-     * @var string
+     * @var string|null
      */
     protected $strDefault;
 
@@ -70,33 +77,33 @@ class Template
      *
      * @var array
      */
-    protected $arrData = array();
+    protected $arrData = [];
 
     /**
      * Current output format. Only valid when within {@link MetaModelTemplate::parse()}.
      *
      * @var string
      */
-    protected $strFormat = null;
+    protected $strFormat = '';
 
     /**
      * Blocks.
      *
      * @var array
      */
-    protected $arrBlocks = array();
+    protected $arrBlocks = [];
 
     /**
      * Block names.
      *
      * @var array
      */
-    protected $arrBlockNames = array();
+    protected $arrBlockNames = [];
 
     /**
      * The template loader.
      *
-     * @var Adapter|Adapter<TemplateLoader>|null Template loader adapter.
+     * @var Adapter|Adapter<TemplateLoader> Template loader adapter.
      */
     protected $templateLoader;
 
@@ -117,21 +124,21 @@ class Template
     protected static $templatePathCache = [];
 
     /**
-     * Makes all protected methods from class Controller callable publically.
+     * Makes all protected methods from class Controller callable publicly.
      *
      * @param string $strMethod The method name.
-     *
      * @param array  $arrArgs   The parameters for the method.
      *
      * @return mixed
      */
     public function __call($strMethod, $arrArgs)
     {
-        if (isset($this->$strMethod) && is_callable($this->$strMethod)) {
-            return call_user_func_array($this->$strMethod, $arrArgs);
+        if (isset($this->$strMethod) && \is_callable($this->$strMethod)) {
+            return \call_user_func_array($this->$strMethod, $arrArgs);
         }
 
-        return call_user_func_array(array(ContaoController::getInstance(), $strMethod), $arrArgs);
+        /** @psalm-suppress DeprecatedClass */
+        return \call_user_func_array(array(ContaoController::getInstance(), $strMethod), $arrArgs);
     }
 
     /**
@@ -139,7 +146,7 @@ class Template
      *
      * @param string                               $strTemplate       The name of the template file.
      * @param Adapter|Adapter<TemplateLoader>|null $templateLoader    Template loader adapter.
-     * @param RequestScopeDeterminator             $scopeDeterminator Request scope determinator.
+     * @param RequestScopeDeterminator|null        $scopeDeterminator Request scope determinator.
      */
     public function __construct(
         $strTemplate = '',
@@ -156,7 +163,8 @@ class Template
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
-            $templateLoader = System::getContainer()->get('contao.framework')->getAdapter(TemplateLoader::class);
+            $templateLoader = System::getContainer()->get('contao.framework')?->getAdapter(TemplateLoader::class);
+            assert($templateLoader instanceof Adapter);
         }
         $this->templateLoader = $templateLoader;
 
@@ -169,6 +177,7 @@ class Template
             );
             // @codingStandardsIgnoreEnd
             $scopeDeterminator = System::getContainer()->get('cca.dc-general.scope-matcher');
+            assert($scopeDeterminator instanceof RequestScopeDeterminator);
         }
         $this->scopeDeterminator = $scopeDeterminator;
     }
@@ -177,7 +186,6 @@ class Template
      * Set an object property.
      *
      * @param string $strKey   The name of the property.
-     *
      * @param mixed  $varValue The value to set.
      *
      * @return void
@@ -199,12 +207,12 @@ class Template
      */
     public function __get($strKey)
     {
-        if (array_key_exists($strKey, $this->arrData)) {
+        if (\array_key_exists($strKey, $this->arrData)) {
             return $this->arrData[$strKey];
         }
 
         if (!empty($GLOBALS['TL_CONFIG']['debugMode'])) {
-            trigger_error($this->getName() . ': Undefined template variable: ' . $strKey, E_USER_WARNING);
+            \trigger_error($this->getName() . ': Undefined template variable: ' . $strKey, E_USER_WARNING);
         }
         return null;
     }
@@ -269,12 +277,14 @@ class Template
      * Print all template variables to the screen using print_r.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
      */
     public function showTemplateVars()
     {
         echo "<pre>\n";
         // @codingStandardsIgnoreStart - We really want to keep this debug function here.
-        print_r($this->arrData);
+        \print_r($this->arrData);
         // @codingStandardsIgnoreEnd
         echo "</pre>\n";
     }
@@ -283,12 +293,16 @@ class Template
      * Print all template variables to the screen using var_dump.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
+     *
+     * @psalm-suppress ForbiddenCode
      */
     public function dumpTemplateVars()
     {
         echo "<pre>\n";
         // @codingStandardsIgnoreStart - We really want to keep this debug function here.
-        var_dump($this->arrData);
+        \var_dump($this->arrData);
         // @codingStandardsIgnoreEnd
         echo "</pre>\n";
     }
@@ -297,34 +311,33 @@ class Template
      * Find a particular template file and return its path.
      *
      * @param string $strTemplate       Name of the template file.
-     *
      * @param string $strFormat         The format to search for.
-     *
      * @param bool   $blnFailIfNotFound Boolean flag telling if an Exception shall be thrown when the file can not
      *                                  be found.
      *
-     * @throws \RuntimeException When the flag has been set and the file has not been found.
+     * @throws RuntimeException When the flag has been set and the file has not been found.
      *
-     * @return string
+     * @return string|null
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function getTemplate($strTemplate, $strFormat = 'html5', $blnFailIfNotFound = false)
     {
-        $strTemplate = basename($strTemplate);
+        $strTemplate = \basename($strTemplate);
         $strCustom   = 'templates';
 
         // Check for a theme folder if scope frontend and a normal page.
         if (isset($GLOBALS['objPage']) && $this->scopeDeterminator->currentScopeIsFrontend()) {
-            $tmpDir = str_replace('../', '', $GLOBALS['objPage']->templateGroup);
-            if (!empty($tmpDir)) {
+            $tmpDir = \str_replace('../', '', (string) $GLOBALS['objPage']->templateGroup);
+            if ('' !== $tmpDir) {
                 $strCustom = $tmpDir;
             }
         }
 
-        if (isset(self::$templatePathCache[$strTemplate][$strFormat])
-            && array_key_exists($strCustom, self::$templatePathCache[$strTemplate][$strFormat])
+        if (
+            isset(self::$templatePathCache[$strTemplate][$strFormat])
+            && \array_key_exists($strCustom, self::$templatePathCache[$strTemplate][$strFormat])
         ) {
             return self::$templatePathCache[$strTemplate][$strFormat][$strCustom] !== false
                 ? self::$templatePathCache[$strTemplate][$strFormat][$strCustom]
@@ -332,6 +345,7 @@ class Template
         }
 
         try {
+            /** @psalm-suppress InternalMethod - the ContaoFramework class is internal, not the method usage. */
             self::$templatePathCache[$strTemplate][$strFormat][$strCustom] = $this->templateLoader->getPath(
                 $strTemplate,
                 $strFormat,
@@ -339,11 +353,11 @@ class Template
             );
 
             return self::$templatePathCache[$strTemplate][$strFormat][$strCustom];
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             self::$templatePathCache[$strTemplate][$strFormat][$strCustom] = false;
             if ($blnFailIfNotFound) {
-                throw new \RuntimeException(
-                    sprintf('Could not find template %s.%s', $strTemplate, $strFormat),
+                throw new RuntimeException(
+                    \sprintf('Could not find template %s.%s', $strTemplate, $strFormat),
                     1,
                     $exception
                 );
@@ -363,14 +377,15 @@ class Template
      */
     protected function callParseTemplateHook()
     {
-        if (isset($GLOBALS['METAMODEL_HOOKS']['parseTemplate'])
-            && is_array($GLOBALS['METAMODEL_HOOKS']['parseTemplate'])
+        if (
+            isset($GLOBALS['METAMODEL_HOOKS']['parseTemplate'])
+            && \is_array($GLOBALS['METAMODEL_HOOKS']['parseTemplate'])
         ) {
             foreach ($GLOBALS['METAMODEL_HOOKS']['parseTemplate'] as $callback) {
                 [$strClass, $strMethod] = $callback;
 
-                $objCallback = (in_array('getInstance', get_class_methods($strClass)))
-                    ? call_user_func(array($strClass, 'getInstance'))
+                $objCallback = (\in_array('getInstance', \get_class_methods($strClass)))
+                    ? \call_user_func(array($strClass, 'getInstance'))
                     : new $strClass();
 
                 $objCallback->$strMethod($this);
@@ -382,7 +397,6 @@ class Template
      * Parse the template file and return it as string.
      *
      * @param string  $strOutputFormat   The desired output format.
-     *
      * @param boolean $blnFailIfNotFound If set to true, the template object will throw an exception if the template
      *                                   can not be found. Defaults to false.
      *
@@ -390,7 +404,7 @@ class Template
      */
     public function parse($strOutputFormat, $blnFailIfNotFound = false)
     {
-        if ($this->strTemplate == '') {
+        if ($this->strTemplate === '') {
             return '';
         }
 
@@ -409,11 +423,11 @@ class Template
         while ($this->strParent !== null) {
             $strCurrent = $this->strParent;
             $strParent  = $this->strDefault
-                ?: $this->getTemplate($this->strParent, $this->strFormat, $blnFailIfNotFound);
+                ?? $this->getTemplate($this->strParent, $this->strFormat, $blnFailIfNotFound);
 
             // Check if we have the template.
-            if (empty($strParent)) {
-                return sprintf(
+            if (null === $strParent) {
+                return \sprintf(
                     'Template %s.%s not found (it is maybe within a unreachable theme folder?).',
                     $this->strParent,
                     $this->strFormat
@@ -424,25 +438,30 @@ class Template
             $this->strParent  = null;
             $this->strDefault = null;
 
-            ob_start();
+            \ob_start();
+            assert(\is_file($strParent));
+            /** @var string|null $this->strParent */
             include($strParent);
 
-            // Capture the output of the root template
+            // Capture the output of the root template.
             if ($this->strParent === null) {
-                $strBuffer = ob_get_contents();
-            } elseif ($this->strParent == $strCurrent) {
+                $strBuffer = \ob_get_contents();
+            } elseif ($this->strParent === $strCurrent) {
                 $this->strDefault = $this->getTemplate($this->strParent, $this->strFormat, $blnFailIfNotFound);
             }
 
-            ob_end_clean();
+            \ob_end_clean();
         }
 
         // Reset the internal arrays.
         $this->arrBlocks = [];
 
         // Add start and end markers in debug mode.
-        if (\Config::get('debugMode') && ('html5' === $this->strFormat)) {
-            $strRelPath = str_replace(TL_ROOT . '/', '', $this->getTemplate($this->strTemplate, $this->strFormat));
+        if (Config::get('debugMode') && ('html5' === $this->strFormat)) {
+            $rootDir = System::getContainer()->getParameter('kernel.project_dir');
+            assert(\is_string($rootDir));
+            $strRelPath =
+                \str_replace($rootDir . '/', '', (string) $this->getTemplate($this->strTemplate, $this->strFormat));
             $strBuffer  = <<<EOF
 <!-- TEMPLATE START: $strRelPath -->
 $strBuffer
@@ -451,7 +470,7 @@ $strBuffer
 EOF;
         }
 
-        return $strBuffer;
+        return (string) $strBuffer;
     }
 
     /**
@@ -470,9 +489,7 @@ EOF;
      * Static convenience method to perform the whole rendering within one line of code.
      *
      * @param string $strTemplate       Name of the template file.
-     *
      * @param string $strOutputFormat   The desired output format.
-     *
      * @param array  $arrTplData        The data to use in the template.
      *
      * @param bool   $blnFailIfNotFound If set to true, the template object will throw an exception if the template
@@ -517,50 +534,50 @@ EOF;
      *
      * @return void
      *
-     * @throws \Exception If a child templates contains nested blocks.
+     * @throws Exception If a child templates contains nested blocks.
      */
     public function block($strName)
     {
         $this->arrBlockNames[] = $strName;
 
-        // Root template
+        // Root template.
         if ($this->strParent === null) {
-            // Register the block name
+            // Register the block name.
             if (!isset($this->arrBlocks[$strName])) {
                 $this->arrBlocks[$strName] = '[[TL_PARENT]]';
-            } elseif (is_array($this->arrBlocks[$strName])) {
+            } elseif (\is_array($this->arrBlocks[$strName])) {
                 // Combine the contents of the child blocks
-                $callback = function ($current, $parent) {
-                    return str_replace('[[TL_PARENT]]', $parent, $current);
+                $callback = static function (string $current, string $parent): string {
+                    return \str_replace('[[TL_PARENT]]', $parent, $current);
                 };
 
-                $this->arrBlocks[$strName] = array_reduce($this->arrBlocks[$strName], $callback, '[[TL_PARENT]]');
+                $this->arrBlocks[$strName] = \array_reduce($this->arrBlocks[$strName], $callback, '[[TL_PARENT]]');
             }
 
-            // Handle nested blocks
-            if ($this->arrBlocks[$strName] != '[[TL_PARENT]]') {
-                // Output everything before the first TL_PARENT tag
-                if (strpos($this->arrBlocks[$strName], '[[TL_PARENT]]') !== false) {
-                    [$content] = explode('[[TL_PARENT]]', $this->arrBlocks[$strName], 2);
+            // Handle nested blocks.
+            if ($this->arrBlocks[$strName] !== '[[TL_PARENT]]') {
+                // Output everything before the first TL_PARENT tag.
+                if (\strpos($this->arrBlocks[$strName], '[[TL_PARENT]]') !== false) {
+                    [$content] = \explode('[[TL_PARENT]]', $this->arrBlocks[$strName], 2);
                     echo $content;
                 } else {
                     // Output the current block and start a new output buffer to remove the following blocks
                     echo $this->arrBlocks[$strName];
-                    ob_start();
+                    \ob_start();
                 }
             }
         } else {
             // Child template
-            // Clean the output buffer
-            ob_end_clean();
+            // Clean the output buffer.
+            \ob_end_clean();
 
-            // Check for nested blocks
-            if (count($this->arrBlockNames) > 1) {
-                throw new \Exception('Nested blocks are not allowed in child templates');
+            // Check for nested blocks.
+            if (\count($this->arrBlockNames) > 1) {
+                throw new Exception('Nested blocks are not allowed in child templates');
             }
 
-            // Start a new output buffer
-            ob_start();
+            // Start a new output buffer.
+            \ob_start();
         }
     }
 
@@ -569,62 +586,61 @@ EOF;
      *
      * @return void
      *
-     * @throws \Exception If there is no open block.
+     * @throws Exception If there is no open block.
      */
     public function endblock()
     {
-        // Check for open blocks
+        // Check for open blocks.
         if (empty($this->arrBlockNames)) {
-            throw new \Exception('You must start a block before you can end it');
+            throw new Exception('You must start a block before you can end it');
         }
 
         // Get the block name
-        $name = array_pop($this->arrBlockNames);
+        $name = \array_pop($this->arrBlockNames);
 
-        // Root template
+        // Root template.
         if ($this->strParent === null) {
             // Handle nested blocks
-            if ($this->arrBlocks[$name] != '[[TL_PARENT]]') {
+            if ($this->arrBlocks[$name] !== '[[TL_PARENT]]') {
                 // Output everything after the first TL_PARENT tag
-                if (strpos($this->arrBlocks[$name], '[[TL_PARENT]]') !== false) {
-                    [, $content] = explode('[[TL_PARENT]]', $this->arrBlocks[$name], 2);
+                if (\str_contains($this->arrBlocks[$name], '[[TL_PARENT]]')) {
+                    [, $content] = \array_merge(\explode('[[TL_PARENT]]', $this->arrBlocks[$name], 2), ['']);
                     echo $content;
                 } else {
                     // Remove the overwritten content
-                    ob_end_clean();
+                    \ob_end_clean();
                 }
             }
         } else {
             // Child template
-            // Capture the block content
-            $this->arrBlocks[$name][] = ob_get_contents();
-            ob_end_clean();
+            // Capture the block content.
+            $this->arrBlocks[$name][] = \ob_get_clean();
 
             // Start a new output buffer
-            ob_start();
+            \ob_start();
         }
     }
 
     /**
      * Insert a template
      *
-     * @param string $strName The template name.
-     * @param array  $arrData An optional data array.
+     * @param string     $strName The template name.
+     * @param array|null $arrData An optional data array.
      *
      * @return void
      */
     public function insert($strName, array $arrData = null)
     {
         if ($this->scopeDeterminator->currentScopeIsBackend()) {
-            $objTemplate = new \BackendTemplate($strName);
+            $objTemplate = new BackendTemplate($strName);
         } else {
-            $objTemplate = new \FrontendTemplate($strName);
+            $objTemplate = new FrontendTemplate($strName);
         }
 
         if ($arrData !== null) {
             $objTemplate->setData($arrData);
         }
 
-        echo $objTemplate->parse($this->getFormat());
+        echo $objTemplate->parse();
     }
 }

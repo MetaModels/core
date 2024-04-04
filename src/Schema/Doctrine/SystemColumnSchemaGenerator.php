@@ -17,7 +17,7 @@
  * @filesource
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace MetaModels\Schema\Doctrine;
 
@@ -75,8 +75,10 @@ class SystemColumnSchemaGenerator implements DoctrineSchemaGeneratorInterface
 
         $tableSchema->setPrimaryKey(['id']);
 
-        if ($metaModelInformation->hasConfigurationValue('varsupport')
-            && '1' === $metaModelInformation->getConfigurationValue('varsupport')) {
+        if (
+            $metaModelInformation->hasConfigurationValue('varsupport')
+            && '1' === $metaModelInformation->getConfigurationValue('varsupport')
+        ) {
             $this->setColumnData($tableSchema, 'varbase', Types::STRING, [
                 'length' => 1,
                 'fixed' => true,

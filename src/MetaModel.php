@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -21,13 +21,16 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels;
 
+use Contao\Database;
+use Contao\System;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use MetaModels\Attribute\IAttribute;
@@ -49,6 +52,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MetaModel implements IMetaModel
 {
@@ -59,7 +63,7 @@ class MetaModel implements IMetaModel
      *
      * @var array
      */
-    protected $arrData = array();
+    protected $arrData = [];
 
     /**
      * This holds all attribute instances.
@@ -68,47 +72,49 @@ class MetaModel implements IMetaModel
      *
      * @var array
      */
-    protected $arrAttributes = array();
+    protected $arrAttributes = [];
 
     /**
      * The service container.
      *
-     * @var IMetaModelsServiceContainer
+     * @var \Closure|IMetaModelsServiceContainer|null
+     *
+     * @psalm-suppress DeprecatedInterface
      */
-    protected $serviceContainer;
+    protected $serviceContainer = null;
 
     /**
      * The database connection.
      *
      * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * The event dispatcher.
      *
      * @var EventDispatcherInterface
      */
-    private $dispatcher;
+    private EventDispatcherInterface $dispatcher;
 
     /**
      * The system columns to preserve.
      *
      * @var string[]
      */
-    private $systemColumns;
+    private mixed $systemColumns;
 
     /**
      * The cache existing ids.
      *
      * @var array
      */
-    private $existingIds = [];
+    private array $existingIds = [];
 
     /**
      * Instantiate a MetaModel.
      *
-     * @param array $arrData                            The information array, for information on the available
+     * @param array                         $arrData    The information array, for information on the available
      *                                                  columns, refer to documentation of table tl_metamodel.
      * @param EventDispatcherInterface|null $dispatcher The event dispatcher.
      * @param Connection|null               $connection The database connection.
@@ -121,11 +127,9 @@ class MetaModel implements IMetaModel
         foreach ($arrData as $strKey => $varValue) {
             $this->arrData[$strKey] = $this->tryUnserialize($varValue);
         }
-        $this->systemColumns = array_key_exists('system_columns', $arrData) ? $arrData['system_columns'] : [];
+        $this->systemColumns = \array_key_exists('system_columns', $arrData) ? $arrData['system_columns'] : [];
 
-        $this->connection = $connection;
-        $this->dispatcher = $dispatcher;
-        if (null === $this->dispatcher) {
+        if (null === $dispatcher) {
             // @codingStandardsIgnoreStart
             @trigger_error(
                 'Not passing the event dispatcher as 2nd argument to "' . __METHOD__ . '" is deprecated ' .
@@ -133,8 +137,13 @@ class MetaModel implements IMetaModel
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
+
+            $dispatcher = System::getContainer()->get('event_dispatcher');
+            assert($dispatcher instanceof EventDispatcherInterface);
         }
-        if (null === $this->connection) {
+        $this->dispatcher = $dispatcher;
+
+        if (null === $connection) {
             // @codingStandardsIgnoreStart
             @trigger_error(
                 'Not passing the database connection as 3rd argument to "' . __METHOD__ . '" is deprecated ' .
@@ -142,7 +151,11 @@ class MetaModel implements IMetaModel
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
+
+            $connection = System::getContainer()->get('database_connection');
+            assert($connection instanceof Connection);
         }
+        $this->connection = $connection;
     }
 
     /**
@@ -158,7 +171,14 @@ class MetaModel implements IMetaModel
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
-        return is_callable($this->serviceContainer) ? call_user_func($this->serviceContainer) : $this->serviceContainer;
+
+        if (null === $this->serviceContainer) {
+            throw new \RuntimeException('Deprecated service container has not been set.');
+        }
+
+        return \is_callable($this->serviceContainer)
+            ? \call_user_func($this->serviceContainer)
+            : $this->serviceContainer;
     }
 
     /**
@@ -167,11 +187,14 @@ class MetaModel implements IMetaModel
      * NOTE: this is deprecated - to prevent triggering deprecation notices, you may pass a closure here which
      * will then return the service container.
      *
-     * @param \Closure|IMetaModelsServiceContainer $serviceContainer The service container.
+     * @param \Closure|IMetaModelsServiceContainer $serviceContainer  The service container.
+     * @param bool                                 $deprecationNotice Send deprecation notice.
      *
      * @return MetaModel
      *
      * @deprecated Inject services via constructor or setter.
+     *
+     * @psalm-suppress DeprecatedInterface
      */
     public function setServiceContainer($serviceContainer, $deprecationNotice = true)
     {
@@ -191,7 +214,7 @@ class MetaModel implements IMetaModel
     /**
      * Retrieve the database instance to use.
      *
-     * @return \Contao\Database
+     * @return Database
      *
      * @deprecated Use the doctrine connection instead.
      */
@@ -203,6 +226,7 @@ class MetaModel implements IMetaModel
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
+        /** @psalm-suppress DeprecatedMethod */
         return $this->getServiceContainer()->getDatabase();
     }
 
@@ -215,10 +239,11 @@ class MetaModel implements IMetaModel
      */
     protected function tryUnserialize(mixed $value): mixed
     {
-        if (\is_string($value)
-            && 0 === \strpos($value, 'a:')
-            && \is_array($unSerialized = \unserialize($value, ['allowed_classes' => false]))) {
-
+        if (
+            \is_string($value)
+            && \str_starts_with($value, 'a:')
+            && \is_array($unSerialized = \unserialize($value, ['allowed_classes' => false]))
+        ) {
             return $unSerialized;
         }
 
@@ -255,7 +280,7 @@ class MetaModel implements IMetaModel
      */
     public function hasAttribute($strAttributeName)
     {
-        return array_key_exists($strAttributeName, $this->arrAttributes);
+        return \array_key_exists($strAttributeName, $this->arrAttributes);
     }
 
     /**
@@ -303,7 +328,7 @@ class MetaModel implements IMetaModel
      */
     protected function getAttributeImplementing($interface)
     {
-        $result = array();
+        $result = [];
         foreach ($this->getAttributes() as $colName => $attribute) {
             if ($attribute instanceof $interface) {
                 $result[$colName] = $attribute;
@@ -348,7 +373,7 @@ class MetaModel implements IMetaModel
      *
      * @param IFilter|null $objFilter The filter to search the matching ids for.
      *
-     * @return array all matching Ids.
+     * @return list<string> all matching Ids.
      */
     protected function getMatchingIds($objFilter)
     {
@@ -379,7 +404,7 @@ class MetaModel implements IMetaModel
      */
     protected function buildDatabaseParameterList($parameters)
     {
-        return implode(',', array_fill(0, count($parameters), '?'));
+        return \implode(',', \array_fill(0, \count($parameters), '?'));
     }
 
     /**
@@ -387,7 +412,6 @@ class MetaModel implements IMetaModel
      *
      * @param string[] $arrIds      The ids of the items to retrieve the order of ids is used for sorting of the return
      *                              values.
-     *
      * @param string[] $arrAttrOnly Names of the attributes that shall be contained in the result, defaults to array()
      *                              which means all attributes.
      *
@@ -404,20 +428,20 @@ class MetaModel implements IMetaModel
             ->select('t.*')
             ->from($this->getTableName(), 't')
             ->where($builder->expr()->in('t.id', ':values'))
-            ->setParameter('values', $arrIds, Connection::PARAM_STR_ARRAY)
+            ->setParameter('values', $arrIds, ArrayParameterType::STRING)
             ->orderBy('FIELD(id, :values)')
             ->executeQuery();
 
         // If we have an attribute restriction, make sure we keep the system columns. See #196.
         if ($arrAttrOnly) {
-            $arrAttrOnly = array_merge($this->systemColumns, $arrAttrOnly);
+            $arrAttrOnly = \array_merge($this->systemColumns, $arrAttrOnly);
         }
 
         $result = [];
         while ($row = $query->fetchAssociative()) {
             $data = [];
             foreach ($row as $attribute => $value) {
-                if ((!$arrAttrOnly) || (in_array($attribute, $arrAttrOnly, true))) {
+                if ((!$arrAttrOnly) || (\in_array($attribute, $arrAttrOnly, true))) {
                     $data[$attribute] = $value;
                 }
             }
@@ -431,10 +455,9 @@ class MetaModel implements IMetaModel
     /**
      * This method is called to retrieve the data for certain items from the database.
      *
-     * @param ITranslated $attribute The attribute to fetch the values for.
-     *
-     * @param string[]    $ids       The ids of the items to retrieve the order of ids is used for sorting of the return
-     *                               values.
+     * @param ITranslated  $attribute The attribute to fetch the values for.
+     * @param list<string> $ids       The ids of the items to retrieve the order of ids is used for sorting of the
+     *                                return values.
      *
      * @return array an array of all matched items, sorted by the id list.
      *
@@ -442,11 +465,13 @@ class MetaModel implements IMetaModel
      */
     protected function fetchTranslatedAttributeValues(ITranslated $attribute, $ids)
     {
+        /** @psalm-suppress DeprecatedMethod */
         $attributeData = $attribute->getTranslatedDataFor($ids, $this->getActiveLanguage());
-        $missing       = array_diff($ids, array_keys($attributeData));
+        $missing       = \array_values(\array_diff($ids, array_keys($attributeData)));
 
         if ($missing) {
-            $attributeData += $attribute->getTranslatedDataFor($missing, $this->getFallbackLanguage());
+            /** @psalm-suppress DeprecatedMethod */
+            $attributeData += $attribute->getTranslatedDataFor($missing, $this->getFallbackLanguage() ?? '');
         }
 
         return $attributeData;
@@ -455,22 +480,20 @@ class MetaModel implements IMetaModel
     /**
      * This method is called to retrieve the data for certain items from the database.
      *
-     * @param string[] $ids      The ids of the items to retrieve the order of ids is used for sorting of the
-     *                           return values.
-     *
-     * @param array    $result   The current values.
-     *
-     * @param string[] $attrOnly Names of the attributes that shall be contained in the result, defaults to array()
-     *                           which means all attributes.
+     * @param list<string> $ids      The ids of the items to retrieve the order of ids is used for sorting of the
+     *                               return values.
+     * @param array        $result   The current values.
+     * @param string[]     $attrOnly Names of the attributes that shall be contained in the result, defaults to array()
+     *                               which means all attributes.
      *
      * @return array an array of all matched items, sorted by the id list.
      */
-    protected function fetchAdditionalAttributes($ids, $result, $attrOnly = array())
+    protected function fetchAdditionalAttributes($ids, $result, $attrOnly = [])
     {
         $attributes     = $this->getAttributeByNames($attrOnly);
-        $attributeNames = array_intersect(
-            array_keys($attributes),
-            array_keys(array_merge($this->getComplexAttributes(), $this->getTranslatedAttributes()))
+        $attributeNames = \array_intersect(
+            \array_keys($attributes),
+            \array_keys(\array_merge($this->getComplexAttributes(), $this->getTranslatedAttributes()))
         );
 
         foreach ($attributeNames as $attributeName) {
@@ -481,14 +504,17 @@ class MetaModel implements IMetaModel
 
             // If it is translated, fetch the translated data now.
             if ($this->isTranslatedAttribute($attribute)) {
-                /** @var ITranslated $attribute */
+                /**
+                 * @var ITranslated $attribute
+                 * @psalm-suppress DeprecatedMethod
+                 */
                 $attributeData = $this->fetchTranslatedAttributeValues($attribute, $ids);
             } else {
                 /** @var IComplex $attribute */
                 $attributeData = $attribute->getDataFor($ids);
             }
 
-            foreach (array_keys($result) as $id) {
+            foreach (\array_keys($result) as $id) {
                 $result[$id][$attributeName] = ($attributeData[$id] ?? null);
             }
         }
@@ -499,24 +525,23 @@ class MetaModel implements IMetaModel
     /**
      * This method is called to retrieve the data for certain items from the database.
      *
-     * @param int[]    $arrIds      The ids of the items to retrieve the order of ids is used for sorting of the
-     *                              return values.
+     * @param list<string> $arrIds      The ids of the items to retrieve the order of ids is used for sorting of the
+     *                                  return values.
+     * @param string[]     $arrAttrOnly Names of the attributes that shall be contained in the result, defaults to
+     *                                  array() which means all attributes.
      *
-     * @param string[] $arrAttrOnly Names of the attributes that shall be contained in the result, defaults to array()
-     *                              which means all attributes.
-     *
-     * @return \MetaModels\IItems a collection of all matched items, sorted by the id list.
+     * @return IItems a collection of all matched items, sorted by the id list.
      */
-    protected function getItemsWithId($arrIds, $arrAttrOnly = array())
+    protected function getItemsWithId($arrIds, $arrAttrOnly = [])
     {
-        $arrIds = array_unique(array_filter($arrIds));
+        $arrIds = \array_values(\array_unique(\array_filter($arrIds)));
 
         if (!$arrIds) {
-            return new Items(array());
+            return new Items([]);
         }
 
         if (!$arrAttrOnly) {
-            $arrAttrOnly = array_keys($this->getAttributes());
+            $arrAttrOnly = \array_keys($this->getAttributes());
         }
 
         $arrResult = $this->fetchRows($arrIds, $arrAttrOnly);
@@ -527,9 +552,9 @@ class MetaModel implements IMetaModel
             $strColName = $objAttribute->getColName();
 
             // Run each row.
-            foreach (array_keys($arrResult) as $intId) {
+            foreach (\array_keys($arrResult) as $intId) {
                 // Do only skip if the key does not exist. Do not use isset() here as "null" is a valid value.
-                if (!array_key_exists($strColName, $arrResult[$intId])) {
+                if (!\array_key_exists($strColName, $arrResult[$intId])) {
                     continue;
                 }
                 $value  = $arrResult[$intId][$strColName];
@@ -538,8 +563,8 @@ class MetaModel implements IMetaModel
                 if ($value === $value2) {
                     $value2 = $this->tryUnserialize($value);
                     if ($value !== $value2) {
-                        trigger_error(
-                            sprintf(
+                        \trigger_error(
+                            \sprintf(
                                 'Attribute type %s should implement method unserializeData() and  serializeData().',
                                 $objAttribute->get('type')
                             ),
@@ -554,7 +579,7 @@ class MetaModel implements IMetaModel
 
         // Determine "independent attributes" (complex and translated) and inject their content into the row.
         $arrResult = $this->fetchAdditionalAttributes($arrIds, $arrResult, $arrAttrOnly);
-        $arrItems  = array();
+        $arrItems  = [];
         foreach ($arrResult as $arrEntry) {
             $arrItems[] = new Item($this, $arrEntry, $this->dispatcher);
         }
@@ -576,6 +601,7 @@ class MetaModel implements IMetaModel
         } else {
             $objNewFilter = $this->getEmptyFilter();
         }
+
         return $objNewFilter;
     }
 
@@ -586,12 +612,12 @@ class MetaModel implements IMetaModel
     {
         // Try to retrieve via getter method.
         $strGetter = 'get' . $strKey;
-        if (method_exists($this, $strGetter)) {
+        if (\method_exists($this, $strGetter)) {
             return $this->$strGetter();
         }
 
         // Return via raw array if available.
-        if (array_key_exists($strKey, $this->arrData)) {
+        if (\array_key_exists($strKey, $this->arrData)) {
             return $this->arrData[$strKey];
         }
 
@@ -603,7 +629,7 @@ class MetaModel implements IMetaModel
      */
     public function getTableName()
     {
-        return ($this->arrData['tableName'] ?? null);
+        return ($this->arrData['tableName'] ?? '');
     }
 
     /**
@@ -631,12 +657,14 @@ class MetaModel implements IMetaModel
         if (!$this->hasVariants()) {
             return $arrAttributes;
         }
+
         // Remove all attributes that are selected for overriding.
         foreach ($arrAttributes as $strAttributeId => $objAttribute) {
             if ($objAttribute->get('isvariant')) {
                 unset($arrAttributes[$strAttributeId]);
             }
         }
+
         return $arrAttributes;
     }
 
@@ -650,20 +678,22 @@ class MetaModel implements IMetaModel
         if (!$deprecation) {
             return $this->arrData['translated'];
         }
+
         if ($this instanceof ITranslatedMetaModel) {
             // @codingStandardsIgnoreStart
             @\trigger_error(
-                sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
+                \sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
                     'Please use "instanceof \MetaModels\ITranslatedMetaModel" instead.', __METHOD__),
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
             return true;
         }
+
         if ($this->arrData['translated']) {
             // @codingStandardsIgnoreStart
             @\trigger_error(
-                sprintf(
+                \sprintf(
                     'The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
                     'MetaModel "%s" should implement "\MetaModels\ITranslatedMetaModel" instead.',
                     __METHOD__,
@@ -672,12 +702,13 @@ class MetaModel implements IMetaModel
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
+
             return true;
         }
 
         // @codingStandardsIgnoreStart
         @\trigger_error(
-            sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
+            \sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
                 'Please use "instanceof \MetaModels\ITranslatedMetaModel" instead.', __METHOD__),
             E_USER_DEPRECATED
         );
@@ -704,7 +735,7 @@ class MetaModel implements IMetaModel
         if ($this instanceof ITranslatedMetaModel) {
             // @codingStandardsIgnoreStart
             @\trigger_error(
-                sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
+                \sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
                     'Please use "\MetaModels\ITranslatedMetaModel::getLanguages" instead.', __METHOD__),
                 E_USER_DEPRECATED
             );
@@ -712,21 +743,22 @@ class MetaModel implements IMetaModel
             return $this->getLanguages();
         }
 
+        /** @psalm-suppress DeprecatedMethod */
         if ($this->isTranslated(false)) {
             // @codingStandardsIgnoreStart
             @\trigger_error(
-                sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
+                \sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
                     'Please test for "instanceof "\MetaModels\ITranslatedMetaModel" and use '.
                     '"\MetaModels\ITranslatedMetaModel::getLanguages" instead.', __METHOD__),
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
 
-            return array_keys((array) $this->arrData['languages']);
+            return \array_keys((array) $this->arrData['languages']);
         }
         // @codingStandardsIgnoreStart
         @\trigger_error(
-            sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
+            \sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
                 'Please test for "instanceof \MetaModels\ITranslatedMetaModel".', __METHOD__),
             E_USER_DEPRECATED
         );
@@ -745,7 +777,7 @@ class MetaModel implements IMetaModel
         if ($this instanceof ITranslatedMetaModel) {
             // @codingStandardsIgnoreStart
             @\trigger_error(
-                sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
+                \sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
                     'Please use "\MetaModels\ITranslatedMetaModel::getMainLanguage" instead.', __METHOD__),
                 E_USER_DEPRECATED
             );
@@ -753,10 +785,11 @@ class MetaModel implements IMetaModel
             return $this->getMainLanguage();
         }
 
+        /** @psalm-suppress DeprecatedMethod */
         if ($this->isTranslated(false)) {
             // @codingStandardsIgnoreStart
             @\trigger_error(
-                sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
+                \sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
                     'Please implement interface "\MetaModels\ITranslatedMetaModel" and use ' .
                     '"\MetaModels\ITranslatedMetaModel::getMainLanguage" instead.', __METHOD__),
                 E_USER_DEPRECATED
@@ -770,7 +803,7 @@ class MetaModel implements IMetaModel
         }
         // @codingStandardsIgnoreStart
         @\trigger_error(
-            sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
+            \sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
                 'Please test for translations via "instanceof \MetaModels\ITranslatedMetaModel" and call ' .
                 '"\MetaModels\ITranslatedMetaModel::getMainLanguage" instead.', __METHOD__),
             E_USER_DEPRECATED
@@ -795,7 +828,7 @@ class MetaModel implements IMetaModel
         if ($this instanceof ITranslatedMetaModel) {
             // @codingStandardsIgnoreStart
             @\trigger_error(
-                sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
+                \sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
                     'Please use "\MetaModels\ITranslatedMetaModel::getLanguage" and ' .
                     '"\MetaModels\ITranslatedMetaModel::selectLanguage" instead.', __METHOD__),
                 E_USER_DEPRECATED
@@ -804,7 +837,7 @@ class MetaModel implements IMetaModel
         } else {
             // @codingStandardsIgnoreStart
             @\trigger_error(
-                sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
+                \sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
                     'Please use "\MetaModels\ITranslatedMetaModel::getLanguage" instead.', __METHOD__),
                 E_USER_DEPRECATED
             );
@@ -821,6 +854,7 @@ class MetaModel implements IMetaModel
     public function getAttribute($strAttributeName)
     {
         $arrAttributes = $this->getAttributes();
+
         return ($arrAttributes[$strAttributeName] ?? null);
     }
 
@@ -830,10 +864,11 @@ class MetaModel implements IMetaModel
     public function getAttributeById($intId)
     {
         foreach ($this->getAttributes() as $objAttribute) {
-            if ((int) $objAttribute->get('id') === (int) $intId) {
+            if ((int) $objAttribute->get('id') === $intId) {
                 return $objAttribute;
             }
         }
+
         return null;
     }
 
@@ -864,15 +899,17 @@ class MetaModel implements IMetaModel
     /**
      * {@inheritdoc}
      */
-    public function findById($intId, $arrAttrOnly = array())
+    public function findById($intId, $arrAttrOnly = [])
     {
         if (!$intId) {
             return null;
         }
-        $objItems = $this->getItemsWithId(array($intId), $arrAttrOnly);
-        if ($objItems && $objItems->first()) {
+
+        $objItems = $this->getItemsWithId([$intId], $arrAttrOnly);
+        if ($objItems->first()) {
             return $objItems->getItem();
         }
+
         return null;
     }
 
@@ -885,7 +922,7 @@ class MetaModel implements IMetaModel
         $intOffset = 0,
         $intLimit = 0,
         $strSortOrder = 'ASC',
-        $arrAttrOnly = array()
+        $arrAttrOnly = []
     ) {
         return $this->getItemsWithId(
             $this->getIdsFromFilter(
@@ -906,7 +943,7 @@ class MetaModel implements IMetaModel
      */
     public function getIdsFromFilter($objFilter, $strSortBy = '', $intOffset = 0, $intLimit = 0, $strSortOrder = 'ASC')
     {
-        if ([] === $arrFilteredIds = array_filter($this->getMatchingIds($objFilter))) {
+        if ([] === $arrFilteredIds = \array_values(\array_filter($this->getMatchingIds($objFilter)))) {
             return [];
         }
 
@@ -916,28 +953,28 @@ class MetaModel implements IMetaModel
                 $arrFilteredIds = $objSortAttribute->sortIds($arrFilteredIds, $strSortOrder);
             } elseif ('id' === $strSortBy) {
                 if ($strSortOrder === 'ASC') {
-                    asort($arrFilteredIds);
+                    \asort($arrFilteredIds);
                 } else {
-                    rsort($arrFilteredIds);
+                    \rsort($arrFilteredIds);
                 }
-            } elseif (in_array($strSortBy, array('pid', 'tstamp', 'sorting'))) {
+            } elseif (\in_array($strSortBy, array('pid', 'tstamp', 'sorting'))) {
                 // Build the right key for the cache.
                 $sortKey = \sprintf('%s-%s', $strSortBy, \strtolower($strSortOrder));
                 // Used the cached ID list, and make a list of wanted ID's with the sorting of the cache.
                 if (!isset($this->existingIds[$sortKey])) {
                     $this->existingIds[$sortKey] = [];
                 }
-                $cacheResult = array_intersect($this->existingIds[$sortKey], $arrFilteredIds);
+                $cacheResult = \array_intersect($this->existingIds[$sortKey], $arrFilteredIds);
                 // Check if we have all ID's or if we have one missing, now we are using the order of the MM Filter.
-                if (array_intersect($arrFilteredIds, $cacheResult) === $arrFilteredIds) {
+                if (\array_intersect($arrFilteredIds, $cacheResult) === $arrFilteredIds) {
                     if ($intOffset > 0 || $intLimit > 0) {
-                        return array_values(array_slice($cacheResult, $intOffset, $intLimit ?: null));
+                        return \array_values(\array_slice($cacheResult, $intOffset, $intLimit ?: null));
                     }
-                    return array_values($cacheResult);
+                    return \array_values($cacheResult);
                 }
 
                 // Merge the already known and the new one.
-                $fullIdList = array_merge((array) $this->existingIds[$sortKey], $arrFilteredIds);
+                $fullIdList = \array_merge((array) $this->existingIds[$sortKey], $arrFilteredIds);
                 $fullIdList = \array_keys(\array_flip($fullIdList));
 
                 // Sort by database values.
@@ -947,24 +984,24 @@ class MetaModel implements IMetaModel
                     ->select('t.id')
                     ->from($this->getTableName(), 't')
                     ->where($builder->expr()->in('t.id', ':values'))
-                    ->setParameter('values', $arrFilteredIds, Connection::PARAM_STR_ARRAY)
+                    ->setParameter('values', $arrFilteredIds, ArrayParameterType::STRING)
                     ->orderBy($strSortBy, $strSortOrder)
                     ->executeQuery()
                     ->fetchFirstColumn();
 
                 // Add the new sorted Id's to the cache and use only the wanted.
                 $this->existingIds[$sortKey] = $arrSortedFilteredIds;
-                $arrFilteredIds              = array_intersect($arrSortedFilteredIds, $arrFilteredIds);
-            } elseif ($strSortBy == 'random') {
-                shuffle($arrFilteredIds);
+                $arrFilteredIds              = \array_intersect($arrSortedFilteredIds, $arrFilteredIds);
+            } elseif ($strSortBy === 'random') {
+                \shuffle($arrFilteredIds);
             }
         }
 
         // Apply limiting then.
         if ($intOffset > 0 || $intLimit > 0) {
-            $arrFilteredIds = array_slice($arrFilteredIds, $intOffset, $intLimit ?: null);
+            $arrFilteredIds = \array_slice($arrFilteredIds, $intOffset, $intLimit ?: null);
         }
-        return array_values($arrFilteredIds);
+        return \array_values($arrFilteredIds);
     }
 
     /**
@@ -973,7 +1010,7 @@ class MetaModel implements IMetaModel
     public function getCount($objFilter)
     {
         $arrFilteredIds = $this->getMatchingIds($objFilter);
-        if (0 === count($arrFilteredIds)) {
+        if (0 === \count($arrFilteredIds)) {
             return 0;
         }
 
@@ -983,7 +1020,7 @@ class MetaModel implements IMetaModel
             ->select('COUNT(t.id)')
             ->from($this->getTableName(), 't')
             ->where($builder->expr()->in('t.id', ':values'))
-            ->setParameter('values', $arrFilteredIds, Connection::PARAM_STR_ARRAY)
+            ->setParameter('values', $arrFilteredIds, ArrayParameterType::STRING)
             ->executeQuery()
             ->fetchOne();
     }
@@ -1005,6 +1042,7 @@ class MetaModel implements IMetaModel
             ->fetchFirstColumn();
 
         $objNewFilter->addFilterRule(new StaticIdList($idList));
+
         return $this->findByFilter($objNewFilter);
     }
 
@@ -1015,7 +1053,7 @@ class MetaModel implements IMetaModel
     {
         if (!$arrIds) {
             // Return an empty result.
-            return $this->getItemsWithId(array());
+            return $this->getItemsWithId([]);
         }
         $objNewFilter = $this->copyFilter($objFilter);
 
@@ -1026,11 +1064,12 @@ class MetaModel implements IMetaModel
             ->from($this->getTableName(), 't')
             ->where('t.varbase=0')
             ->andWhere($builder->expr()->in('t.vargroup', ':ids'))
-            ->setParameter('ids', $arrIds, Connection::PARAM_STR_ARRAY)
+            ->setParameter('ids', $arrIds, ArrayParameterType::STRING)
             ->executeQuery()
             ->fetchFirstColumn();
 
         $objNewFilter->addFilterRule(new StaticIdList($idList));
+
         return $this->findByFilter($objNewFilter);
     }
 
@@ -1052,11 +1091,12 @@ class MetaModel implements IMetaModel
             ->from($this->getTableName(), 't')
             ->leftJoin('t', $this->getTableName(), 't2', 't.vargroup=t2.vargroup')
             ->where($builder->expr()->in('t2.id', ':ids'))
-            ->setParameter('ids', $arrIds, Connection::PARAM_STR_ARRAY)
+            ->setParameter('ids', $arrIds, ArrayParameterType::STRING)
             ->executeQuery()
             ->fetchFirstColumn();
 
         $objNewFilter->addFilterRule(new StaticIdList($idList));
+
         return $this->findByFilter($objNewFilter);
     }
 
@@ -1070,10 +1110,11 @@ class MetaModel implements IMetaModel
             if ($objFilter) {
                 $arrFilteredIds = $this->getMatchingIds($objFilter);
                 $arrFilteredIds = $objAttribute->sortIds($arrFilteredIds, 'ASC');
+
                 return $objAttribute->getFilterOptions($arrFilteredIds, true);
-            } else {
-                return $objAttribute->getFilterOptions(null, true);
             }
+
+            return $objAttribute->getFilterOptions(null, true);
         }
 
         return [];
@@ -1083,38 +1124,33 @@ class MetaModel implements IMetaModel
      * Update the value of a native column for the given ids with the given data.
      *
      * @param string $strColumn The column name to update (i.e. tstamp).
-     *
      * @param array  $arrIds    The ids of the rows that shall be updated.
-     *
      * @param mixed  $varData   The data to save. If this is an array, it is automatically serialized.
      *
      * @return void
      */
     protected function saveSimpleColumn($strColumn, $arrIds, $varData)
     {
-        if (is_array($varData)) {
-            $varData = serialize($varData);
+        if (\is_array($varData)) {
+            $varData = \serialize($varData);
         }
 
         $builder = $this->getConnection()->createQueryBuilder();
 
         $builder
             ->update($this->getTableName(), 't2')
-            ->set('t2.' . $strColumn, is_array($varData) ? serialize($varData) : $varData)
+            ->set('t2.' . $strColumn, \is_array($varData) ? \serialize($varData) : $varData)
             ->where($builder->expr()->in('t2.id', ':ids'))
-            ->setParameter('ids', $arrIds, Connection::PARAM_STR_ARRAY)
-            ->execute();
+            ->setParameter('ids', $arrIds, ArrayParameterType::STRING)
+            ->executeQuery();
     }
 
     /**
      * Update an attribute for the given ids with the given data.
      *
      * @param IAttribute $objAttribute The attribute to save.
-     *
      * @param array      $arrIds       The ids of the rows that shall be updated.
-     *
      * @param mixed      $varData      The data to save in raw data.
-     *
      * @param string     $strLangCode  The language code to save.
      *
      * @return void
@@ -1129,7 +1165,7 @@ class MetaModel implements IMetaModel
             $varData = $objAttribute->serializeData($varData);
         }
 
-        $arrData = array();
+        $arrData = [];
         foreach ($arrIds as $intId) {
             $arrData[$intId] = $varData;
         }
@@ -1146,7 +1182,7 @@ class MetaModel implements IMetaModel
         } else {
             throw new \RuntimeException(
                 'Unknown attribute type, can not save. Interfaces implemented: ' .
-                implode(', ', class_implements($objAttribute))
+                \implode(', ', \class_implements($objAttribute))
             );
         }
     }
@@ -1155,11 +1191,8 @@ class MetaModel implements IMetaModel
      * Update the variants with the value if needed.
      *
      * @param IItem  $item           The item to save.
-     *
      * @param string $activeLanguage The language the values are in.
-     *
      * @param int[]  $allIds         The ids of all variants.
-     *
      * @param bool   $baseAttributes If also the base attributes get updated as well.
      *
      * @return void
@@ -1220,7 +1253,7 @@ class MetaModel implements IMetaModel
             ->insert($this->getTableName())
             ->values($parameters)
             ->setParameters($data)
-            ->execute();
+            ->executeQuery();
 
         $item->set('id', $connection->lastInsertId());
 
@@ -1242,28 +1275,32 @@ class MetaModel implements IMetaModel
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
+
+            $timestamp = \time();
         }
 
         $baseAttributes = $this->saveBaseColumns($objItem, $timestamp ?: \time());
+        /** @psalm-suppress DeprecatedMethod */
         if ($this instanceof ITranslatedMetaModel) {
             $strActiveLanguage = $this->getLanguage();
         } elseif ($this->isTranslated(false)) {
             // @codingStandardsIgnoreStart
             @\trigger_error(
-                sprintf('Support for translated MetaModels not implementing "\MetaModels\ITranslatedMetaModel" '.
-                    'is  deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
+                \sprintf('Support for translated MetaModels not implementing "\MetaModels\ITranslatedMetaModel" '.
+                    'is %s deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
                     'Please implement interface "\MetaModels\ITranslatedMetaModel".', __METHOD__),
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
+            /** @psalm-suppress DeprecatedMethod */
             $strActiveLanguage = $this->getActiveLanguage();
         } else {
-            $strActiveLanguage = null;
+            $strActiveLanguage = '';
         }
 
         $arrAllIds = array();
         if ($objItem->isVariantBase()) {
-            $objVariants = $this->findVariantsWithBase(array($objItem->get('id')), null);
+            $objVariants = $this->findVariantsWithBase([$objItem->get('id')], null);
             foreach ($objVariants as $objVariant) {
                 /** @var IItem $objVariant */
                 $arrAllIds[] = $objVariant->get('id');
@@ -1285,10 +1322,11 @@ class MetaModel implements IMetaModel
      */
     public function delete(IItem $objItem)
     {
-        $arrIds = array($objItem->get('id'));
+        $arrIds = [$objItem->get('id')];
         // Determine if the model is a variant base and if so, fetch the variants additionally.
         if ($objItem->isVariantBase()) {
             $objVariants = $objItem->getVariants(new Filter($this));
+            assert($objVariants instanceof IItems);
             foreach ($objVariants as $objVariant) {
                 /** @var IItem $objVariant */
                 $arrIds[] = $objVariant->get('id');
@@ -1308,8 +1346,8 @@ class MetaModel implements IMetaModel
         $builder
             ->delete($this->getTableName())
             ->where($builder->expr()->in($this->getTableName() . '.id', ':ids'))
-            ->setParameter('ids', $arrIds, Connection::PARAM_STR_ARRAY)
-            ->execute();
+            ->setParameter('ids', $arrIds, ArrayParameterType::STRING)
+            ->executeQuery();
     }
 
     /**
@@ -1335,6 +1373,7 @@ class MetaModel implements IMetaModel
 
         $objFilter = $this->getEmptyFilter();
         if ($intFilterSettings) {
+            /** @psalm-suppress DeprecatedMethod */
             $objFilterSettings = $this->getServiceContainer()->getFilterFactory()->createCollection($intFilterSettings);
             $objFilterSettings->addRules($objFilter, $arrFilterUrl);
         }
@@ -1354,26 +1393,18 @@ class MetaModel implements IMetaModel
         );
         // @codingStandardsIgnoreEnd
 
-        return $this->getServiceContainer()->getRenderSettingFactory()->createCollection($this, $intViewId);
+        /** @psalm-suppress DeprecatedMethod */
+        return $this->getServiceContainer()->getRenderSettingFactory()->createCollection($this, (string) $intViewId);
     }
 
     /**
      * Obtain the doctrine connection.
      *
      * @return Connection
-     *
-     * @throws \ReflectionException Throws could not connect to database.
      */
     private function getConnection()
     {
-        if ($this->connection) {
-            return $this->connection;
-        }
-
-        $reflection = new \ReflectionProperty(\Contao\Database::class, 'resConnection');
-        $reflection->setAccessible(true);
-
-        return $this->connection = $reflection->getValue($this->getDatabase());
+        return $this->connection;
     }
 
     /**
@@ -1384,7 +1415,7 @@ class MetaModel implements IMetaModel
      *
      * @return bool
      */
-    private function saveBaseColumns(IItem $item, $timestamp)
+    private function saveBaseColumns(IItem $item, int $timestamp): bool
     {
         $isNew = false;
         $item->set('tstamp', $timestamp);

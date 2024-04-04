@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -25,7 +25,7 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Fritz Michael Gschwantner <fmg@inspiredminds.at>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -52,12 +52,26 @@ use MetaModels\Render\Setting\IRenderSettingFactory;
 use MetaModels\Render\Template;
 use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Request;
+
+use function array_key_exists;
+use function array_keys;
+use function array_merge;
+use function func_num_args;
+use function in_array;
+use function is_object;
+use function sprintf;
+use function strtoupper;
+use function trigger_error;
 
 /**
  * Implementation of a general purpose MetaModel listing.
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.LongVariable)
  */
 class ItemList
 {
@@ -78,35 +92,37 @@ class ItemList
     /**
      * The view id to use.
      *
-     * @var int
+     * @var string
      */
-    protected int $intView = 0;
+    protected string $intView = '0';
 
     /**
      * Output format type.
      *
      * @var string|null
      */
-    protected ?string $outputFormat;
+    protected ?string $outputFormat = null;
 
     /**
      * The MetaModel id to use.
      *
-     * @var int
+     * @var string
      */
-    protected int $intMetaModel = 0;
+    protected string $intMetaModel = '0';
 
     /**
      * The filter id to use.
      *
-     * @var int
+     * @var string
+     *
+     * @deprecated Not in use anymore - remove in MetaModels 3.0
      */
-    protected int $intFilter = 0;
+    protected string $intFilter = '0';
 
     /**
      * The parameters for the filter.
      *
-     * @var string[]
+     * @var array<string, list<string>|string>
      */
     protected array $arrParam = [];
 
@@ -254,7 +270,7 @@ class ItemList
      */
     private function getFilterFactory(): IFilterSettingFactory
     {
-        if ($this->filterFactory) {
+        if (null !== $this->filterFactory) {
             return $this->filterFactory;
         }
         // @codingStandardsIgnoreStart
@@ -264,8 +280,10 @@ class ItemList
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
+        $factory = System::getContainer()->get('metamodels.filter_setting_factory');
+        assert($factory instanceof IFilterSettingFactory);
 
-        return $this->filterFactory = System::getContainer()->get('metamodels.filter_setting_factory');
+        return $this->filterFactory = $factory;
     }
 
     /**
@@ -307,8 +325,10 @@ class ItemList
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
+        $factory = System::getContainer()->get('metamodels.factory');
+        assert($factory instanceof IFactory);
 
-        return $this->factory = System::getContainer()->get('metamodels.factory');
+        return $this->factory = $factory;
     }
 
     /**
@@ -373,8 +393,10 @@ class ItemList
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
+        $dispatcher = System::getContainer()->get('event_dispatcher');
+        assert($dispatcher instanceof EventDispatcherInterface);
 
-        return $this->eventDispatcher = System::getContainer()->get('event_dispatcher');
+        return $this->eventDispatcher = $dispatcher;
     }
 
     /**
@@ -407,6 +429,8 @@ class ItemList
      * @return IMetaModelsServiceContainer|null
      *
      * @deprecated The service container will get removed, use the symfony service container instead.
+     *
+     * @psalm-suppress DeprecatedInterface
      */
     public function getServiceContainer(): ?IMetaModelsServiceContainer
     {
@@ -476,7 +500,7 @@ class ItemList
         if ('' !== $outputFormat) {
             $this->outputFormat = $outputFormat;
         } else {
-            unset($this->outputFormat);
+            $this->outputFormat = null;
         }
 
         return $this;
@@ -485,12 +509,12 @@ class ItemList
     /**
      * Set MetaModel and render settings.
      *
-     * @param int $intMetaModel The MetaModel to use.
-     * @param int $intView      The render settings to use (if 0, the default will be used).
+     * @param string $intMetaModel The MetaModel to use.
+     * @param string $intView      The render settings to use (if 0, the default will be used).
      *
      * @return ItemList
      */
-    public function setMetaModel(int $intMetaModel, int $intView): self
+    public function setMetaModel(string $intMetaModel, string $intView): self
     {
         $this->intMetaModel = $intMetaModel;
         $this->intView      = $intView;
@@ -535,44 +559,44 @@ class ItemList
     /**
      * The Metamodel to use.
      *
-     * @var IMetaModel
+     * @var IMetaModel|null
      */
-    protected $objMetaModel;
+    protected $objMetaModel = null;
 
     /**
      * The render settings to use.
      *
-     * @var IRenderSettingCollection
+     * @var IRenderSettingCollection|null
      */
-    protected $objView;
+    protected $objView = null;
 
     /**
      * The render template to use (metamodel_).
      *
-     * @var Template
+     * @var Template|null
      */
-    protected $objTemplate;
+    protected $objTemplate = null;
 
     /**
      * The list template (ce_ or mod_).
      *
-     * @var ContaoTemplate
+     * @var ContaoTemplate|null
      */
-    private $listTemplate;
+    private $listTemplate = null;
 
     /**
      * The filter settings to use.
      *
-     * @var IFilterSettingCollection
+     * @var IFilterSettingCollection|null
      */
-    protected $objFilterSettings;
+    protected $objFilterSettings = null;
 
     /**
      * The filter to use.
      *
-     * @var IFilter
+     * @var IFilter|null
      */
-    protected $objFilter;
+    protected $objFilter = null;
 
     /**
      * The model, can be module model or content model.
@@ -581,7 +605,7 @@ class ItemList
      *
      * @deprecated Do not use.
      */
-    private $model;
+    private ModuleModel|null|ContentModel $model = null;
 
     /**
      * Get the model.
@@ -592,6 +616,7 @@ class ItemList
      */
     public function getModel(): ?Model
     {
+        /** @psalm-suppress DeprecatedProperty */
         return $this->model;
     }
 
@@ -601,6 +626,8 @@ class ItemList
      * @return void
      *
      * @throws RuntimeException When the MetaModel can not be found.
+     *
+     * @psalm-assert IMetaModel $this->objMetaModel
      */
     protected function prepareMetaModel(): void
     {
@@ -620,37 +647,30 @@ class ItemList
      */
     protected function prepareView(): void
     {
+        $metaModel = $this->getMetaModel();
         if ($this->renderSettingFactory) {
-            $this->objView = $this->renderSettingFactory->createCollection($this->objMetaModel, $this->intView);
+            $this->objView = $this->renderSettingFactory->createCollection($metaModel, $this->intView);
         } else {
-            $this->objView = $this->objMetaModel->getView($this->intView);
+            /** @psalm-suppress DeprecatedMethod */
+            $this->objView = $metaModel->getView((int) $this->intView);
         }
 
-        if ($this->objView) {
-            $this->objTemplate       = new Template($this->objView->get('template'));
-            $this->objTemplate->view = $this->objView;
-        } else {
-            // Fallback to default.
-            $this->objTemplate = new Template('metamodel_full');
-        }
+        $this->objTemplate       = new Template((string) $this->objView->get('template'));
+        $this->objTemplate->view = $this->objView;
     }
 
     /**
      * Set the filter setting to use.
      *
-     * @param int $intFilter The filter setting id to use.
+     * @param string $intFilter The filter setting id to use.
      *
      * @return $this
      *
      * @throws RuntimeException When the filter settings can not be found.
      */
-    public function setFilterSettings(int $intFilter): self
+    public function setFilterSettings(string $intFilter): self
     {
         $this->objFilterSettings = $this->getFilterFactory()->createCollection($intFilter);
-
-        if (!$this->objFilterSettings) {
-            throw new RuntimeException('Error: no filter object defined.');
-        }
 
         return $this;
     }
@@ -658,8 +678,9 @@ class ItemList
     /**
      * Set parameters.
      *
-     * @param string[][] $presets The parameter preset values to use.
-     * @param string[]   $values  The dynamic parameter values that may be used.
+     * @param array<string, array{value: string, use_get: ''|'1'}> $presets The parameter preset values to use.
+     * @param array<string, list<string>|string>                   $values  The dynamic parameter values that may be
+     *                                                                      used.
      *
      * @return ItemList
      *
@@ -695,7 +716,7 @@ class ItemList
             }
 
             // Not a preset or allowed to override? - use value.
-            if ((!array_key_exists($filterParameterKey, $presets)) || $presets[$filterParameterKey]['use_get']) {
+            if ((!array_key_exists($filterParameterKey, $presets)) || (bool) $presets[$filterParameterKey]['use_get']) {
                 $processed[$filterParameterKey] = $values[$filterParameterKey];
             }
         }
@@ -712,6 +733,10 @@ class ItemList
      */
     public function getFilter(): IFilter
     {
+        if (null === $this->objFilter) {
+            throw new RuntimeException('No filter is set.');
+        }
+
         return $this->objFilter;
     }
 
@@ -722,6 +747,12 @@ class ItemList
      */
     public function getFilterSettings(): IFilterSettingCollection
     {
+        if (null === $this->objFilterSettings) {
+            throw new RuntimeException(
+                'Error: no filter object defined, call setFilterSettings() before.'
+            );
+        }
+
         return $this->objFilterSettings;
     }
 
@@ -765,9 +796,9 @@ class ItemList
     /**
      * The items in the list view.
      *
-     * @var IItems
+     * @var IItems|null
      */
-    protected IItems $objItems;
+    protected ?IItems $objItems = null;
 
     /**
      * Add additional filter rules to the list.
@@ -791,7 +822,7 @@ class ItemList
     public function addFilterRule(IFilterRule $filterRule): self
     {
         if (!$this->objFilter) {
-            $this->objFilter = $this->objMetaModel->getEmptyFilter();
+            $this->objFilter = $this->getMetaModel()->getEmptyFilter();
         }
 
         $this->objFilter->addFilterRule($filterRule);
@@ -804,32 +835,52 @@ class ItemList
      *
      * In this base implementation, this only includes the attributes mentioned in the render setting.
      *
-     * @return string[] the names of the attributes to be fetched.
+     * @return list<string> the names of the attributes to be fetched.
      */
     protected function getAttributeNames(): array
     {
-        $attributes = $this->objView->getSettingNames();
+        $attributes = $this->getView()->getSettingNames();
+        $metaModel  = $this->getMetaModel();
+        /**
+         * @psalm-suppress DeprecatedMethod
+         * @psalm-suppress TooManyArguments
+         */
+        if ($metaModel instanceof ITranslatedMetaModel) {
+            $desiredLanguage  = $metaModel->getLanguage();
+            $fallbackLanguage = $metaModel->getMainLanguage();
+            $isTranslated     = true;
+        } elseif ($metaModel->isTranslated(false)) {
+            // Get the right jumpTo.
+            /** @psalm-suppress DeprecatedMethod */
+            $desiredLanguage = $metaModel->getActiveLanguage();
+            /** @psalm-suppress DeprecatedMethod */
+            $fallbackLanguage = $metaModel->getFallbackLanguage();
+            $isTranslated     = true;
+        } else {
+            $desiredLanguage  =
+            $fallbackLanguage = System::getContainer()->get('request_stack')?->getCurrentRequest()?->getLocale();
+            $isTranslated     = false;
+        }
 
-        // Get the right jumpTo.
-        $desiredLanguage  = $this->getMetaModel()->getActiveLanguage();
-        $fallbackLanguage = $this->getMetaModel()->getFallbackLanguage();
-
-        $filterSettingsId = 0;
-
+        $filterSettingsId = '';
         foreach ((array) $this->getView()->get('jumpTo') as $jumpTo) {
+            $langCode = (string) ($jumpTo['langcode'] ?? '');
             // If either desired language or fallback, keep the result.
-            if (!$this->getMetaModel()->isTranslated()
-                || $jumpTo['langcode'] == $desiredLanguage
-                || $jumpTo['langcode'] == $fallbackLanguage) {
-                $filterSettingsId = $jumpTo['filter'] ?? 0;
+            /** @psalm-suppress DeprecatedMethod */
+            if (
+                $langCode === $desiredLanguage
+                || $langCode === $fallbackLanguage
+                || !$isTranslated
+            ) {
+                $filterSettingsId = (string) ($jumpTo['filter'] ?? '');
                 // If the desired language, break. Otherwise, try to get the desired one until all have been evaluated.
-                if (isset($jumpTo['langcode']) && $desiredLanguage === $jumpTo['langcode']) {
+                if ($desiredLanguage === $langCode) {
                     break;
                 }
             }
         }
 
-        if ($filterSettingsId) {
+        if ('' !== $filterSettingsId) {
             $filterSettings = $this->getFilterFactory()->createCollection($filterSettingsId);
             $attributes     = array_merge($filterSettings->getReferencedAttributes(), $attributes);
         }
@@ -846,13 +897,14 @@ class ItemList
      */
     public function prepare(): self
     {
-        if (isset($this->objItems)) {
+        if (null !== $this->objItems) {
             return $this;
         }
+        $metaModel = $this->getMetaModel();
 
         // Create an empty filter object if not done before.
         if (!isset($this->objFilter)) {
-            $this->objFilter = $this->objMetaModel->getEmptyFilter();
+            $this->objFilter = $metaModel->getEmptyFilter();
         }
 
         if (isset($this->objFilterSettings)) {
@@ -861,16 +913,18 @@ class ItemList
 
         $this->modifyFilter();
 
-        $total = $this->objMetaModel->getCount($this->objFilter);
+        $total = $metaModel->getCount($this->objFilter);
 
         $calculator = $this->paginationLimitCalculator;
         $calculator->setTotalAmount($total);
-        $this->objTemplate->total = $total;
+        if (null !== $this->objTemplate) {
+            $this->objTemplate->total = $total;
+        }
 
-        if ($this->objMetaModel instanceof TranslatedMetaModel) {
+        if ($metaModel instanceof TranslatedMetaModel) {
             if (null === $this->language) {
                 // @codingStandardsIgnoreStart
-                @\trigger_error(
+                @trigger_error(
                     sprintf(
                         'Not setting a language code in "%s" is deprecated since MetaModels 2.3 and will fail in 3.0',
                         __CLASS__
@@ -882,20 +936,20 @@ class ItemList
                 // @deprecated usage of TL_LANGUAGE - remove for Contao 5.0.
                 $this->language = LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE'] ?? 'en');
             }
-            $previousLanguage = $this->objMetaModel->selectLanguage($this->language);
+            $previousLanguage = $metaModel->selectLanguage($this->language);
         }
 
-        $this->objItems = $this->objMetaModel->findByFilter(
+        $this->objItems = $metaModel->findByFilter(
             $this->objFilter,
             $this->strSortBy,
-            $calculator->getCalculatedOffset(),
-            $calculator->getCalculatedLimit(),
+            (int) $calculator->getCalculatedOffset(),
+            (int) $calculator->getCalculatedLimit(),
             $this->strSortDirection,
             $this->getAttributeNames()
         );
 
-        if (isset($previousLanguage)) {
-            $this->objMetaModel->selectLanguage($previousLanguage);
+        if (isset($previousLanguage) && ($metaModel instanceof TranslatedMetaModel)) {
+            $metaModel->selectLanguage($previousLanguage);
         }
 
         return $this;
@@ -920,6 +974,10 @@ class ItemList
      */
     public function getItems(): IItems
     {
+        if (null === $this->objItems) {
+            throw new RuntimeException('Call prepare first');
+        }
+
         return $this->objItems;
     }
 
@@ -949,6 +1007,10 @@ class ItemList
      */
     public function getView(): IRenderSettingCollection
     {
+        if (!$this->objView) {
+            throw new RuntimeException('No render setting set - call prepareView() first.');
+        }
+
         return $this->objView;
     }
 
@@ -959,6 +1021,10 @@ class ItemList
      */
     public function getMetaModel(): IMetaModel
     {
+        if (!$this->objMetaModel) {
+            throw new RuntimeException('No metamodel object set - call prepareMetaModel() first.');
+        }
+
         return $this->objMetaModel;
     }
 
@@ -972,7 +1038,13 @@ class ItemList
      */
     private function getPage(): ?object
     {
-        return ('FE' === TL_MODE && is_object($GLOBALS['objPage'])) ? $GLOBALS['objPage'] : null;
+        $isFrontend = (bool) System::getContainer()
+            ->get('contao.routing.scope_matcher')
+            ?->isFrontendRequest(
+                System::getContainer()->get('request_stack')?->getCurrentRequest() ?? Request::create('')
+            );
+
+        return ($isFrontend && is_object($page = $GLOBALS['objPage'])) ? $page : null;
     }
 
     /**
@@ -982,12 +1054,12 @@ class ItemList
      */
     public function getOutputFormat(): string
     {
-        if (isset($this->outputFormat)) {
+        if (null !== $this->outputFormat) {
             return $this->outputFormat;
         }
 
-        if (isset($this->objView) && $this->objView->get('format')) {
-            return $this->objView->get('format');
+        if ('' !== ($format = (string) $this->objView?->get('format'))) {
+            return $format;
         }
 
         $page = $this->getPage();
@@ -1016,11 +1088,15 @@ class ItemList
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @psalm-suppress PossiblyNullArrayOffset
      */
     private function getCaptionText(string $langKey): string
     {
         $tableName = $this->getMetaModel()->getTableName();
-        if (isset($this->objView, $GLOBALS['TL_LANG']['MSC'][$tableName][$this->objView->get('id')][$langKey])) {
+        if (
+            null !== $this->objView
+            && isset($GLOBALS['TL_LANG']['MSC'][$tableName][$this->objView->get('id')][$langKey])
+        ) {
             return $GLOBALS['TL_LANG']['MSC'][$tableName][$this->objView->get('id')][$langKey];
         }
 
@@ -1049,11 +1125,13 @@ class ItemList
      * Set the title and description in the page object.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function setTitleAndDescription(): void
     {
         $page = $this->getPage();
-        if ($page && $this->objItems->getCount()) {
+        if ($page && null !== $this->objItems && $this->objItems->getCount()) {
             // Add title if needed.
             if (!empty($this->strTitleAttribute)) {
                 while ($this->objItems->next()) {
@@ -1119,26 +1197,33 @@ class ItemList
      *                                       else.
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function render(bool $isNoNativeParsing, object $caller = null): string
     {
         if (func_num_args() > 1) {
             trigger_error('Passing $objCaller as second argument is deprecated', E_USER_DEPRECATED);
             if ($caller instanceof ContentModel || $caller instanceof ModuleModel) {
+                /** @psalm-suppress DeprecatedProperty */
                 $this->model = $caller;
             }
         }
 
+        if (null === $this->objTemplate) {
+            return '';
+        }
+
         $event = new RenderItemListEvent($this, $this->objTemplate, $caller);
         $this->getEventDispatcher()->dispatch($event, MetaModelsEvents::RENDER_ITEM_LIST);
-
         $this->objTemplate->noItemsMsg = $this->getNoItemsCaption();
         $this->objTemplate->details    = $this->getCaptionText('details');
 
         $this->prepare();
         $outputFormat = $this->getOutputFormat();
 
-        if (!$isNoNativeParsing && $this->objItems->getCount()) {
+        if (!$isNoNativeParsing && null !== $this->objItems && $this->objItems->getCount()) {
             $this->objTemplate->data = $this->objItems->parseAll($outputFormat, $this->objView);
         } else {
             $this->objTemplate->data = [];
@@ -1151,16 +1236,16 @@ class ItemList
                 return [];
             }
 
-            $attribute = $this->objMetaModel->getAttribute($attributeName);
+            $attribute = $this->getMetaModel()->getAttribute($attributeName);
 
             if (null === $attribute) {
-                throw new \RuntimeException('Attribute not found: ' . $attributeName);
+                throw new RuntimeException('Attribute not found: ' . $attributeName);
             }
 
             return $this->sortingLinkGenerator->generateSortingLink($attribute, $type);
         };
 
-        $renderSortingLink = function (string $attributeName, string $type) use ($generateSortingLink): string {
+        $renderSortingLink = static function (string $attributeName, string $type) use ($generateSortingLink): string {
             if ([] === $sortingLink = $generateSortingLink($attributeName, $type)) {
                 return '';
             }

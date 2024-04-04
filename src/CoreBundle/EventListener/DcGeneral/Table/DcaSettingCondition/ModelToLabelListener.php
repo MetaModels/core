@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -24,6 +24,7 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSettingConditio
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\AbstractEnvironmentAwareEvent;
+use ContaoCommunityAlliance\DcGeneral\InputProviderInterface;
 use Doctrine\DBAL\Connection;
 use MetaModels\CoreBundle\Assets\IconBuilder;
 use MetaModels\IFactory;
@@ -39,14 +40,14 @@ class ModelToLabelListener extends AbstractListener
      *
      * @var TranslatorInterface
      */
-    private $translator;
+    private TranslatorInterface $translator;
 
     /**
      * The icon builder.
      *
      * @var IconBuilder
      */
-    private $iconBuilder;
+    private IconBuilder $iconBuilder;
 
     /**
      * Create a new instance.
@@ -91,7 +92,7 @@ class ModelToLabelListener extends AbstractListener
         $attribute      = $metaModel->getAttributeById((int) $model->getProperty('attr_id'));
         $type           = $model->getProperty('type');
         $parameterValue = (\is_array($model->getProperty('value'))
-            ? implode(', ', $model->getProperty('value'))
+            ? \implode(', ', $model->getProperty('value'))
             : $model->getProperty('value'));
 
         $name = $this->translator->trans(
@@ -100,6 +101,7 @@ class ModelToLabelListener extends AbstractListener
             'contao_tl_metamodel_dcasetting_condition'
         );
 
+        /** @psalm-suppress InvalidArgument */
         $event
             ->setLabel($this->getLabelText($type))
             ->setArgs([
@@ -120,9 +122,12 @@ class ModelToLabelListener extends AbstractListener
      */
     protected function wantToHandle(AbstractEnvironmentAwareEvent $event)
     {
-        return $event->getEnvironment()->getInputProvider()->hasParameter('mode')
+        $inputProvider = $event->getEnvironment()->getInputProvider();
+        assert($inputProvider instanceof InputProviderInterface);
+
+        return $inputProvider->hasParameter('mode')
             ? parent::wantToHandle($event)
-              && ('select' === $event->getEnvironment()->getInputProvider()->getParameter('act'))
+              && ('select' === $inputProvider->getParameter('act'))
             : parent::wantToHandle(
                 $event
             );
@@ -142,6 +147,7 @@ class ModelToLabelListener extends AbstractListener
             [],
             'contao_tl_metamodel_dcasetting_condition'
         );
+
         if ($label === 'tl_metamodel_dcasetting_condition.typedesc.' . $type) {
             $label = $this->translator->trans(
                 'tl_metamodel_dcasetting_condition.typedesc._default_',
@@ -152,6 +158,7 @@ class ModelToLabelListener extends AbstractListener
                 return $type;
             }
         }
+
         return $label;
     }
 }

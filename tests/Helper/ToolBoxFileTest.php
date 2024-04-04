@@ -47,7 +47,7 @@ class ToolBoxFileTest extends TestCase
             'meta'  => []
         ];
 
-        self::assertEquals($emptyExpected, ToolboxFile::convertUuidsOrPathsToMetaModels(null));
+        self::assertEquals($emptyExpected, ToolboxFile::convertUuidsOrPathsToMetaModels([]));
         self::assertEquals($emptyExpected, ToolboxFile::convertUuidsOrPathsToMetaModels([]));
         self::assertEquals($emptyExpected, ToolboxFile::convertUuidsOrPathsToMetaModels([null]));
     }

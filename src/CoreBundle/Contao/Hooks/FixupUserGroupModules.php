@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Ben <kampfq@users.noreply.github.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -23,6 +24,7 @@ namespace MetaModels\CoreBundle\Contao\Hooks;
 use Contao\DataContainer;
 use MetaModels\ViewCombination\InputScreenInformationBuilder;
 use MetaModels\ViewCombination\ViewCombinationBuilder;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -35,14 +37,14 @@ class FixupUserGroupModules
      *
      * @var ViewCombinationBuilder
      */
-    private $combinationBuilder;
+    private ViewCombinationBuilder $combinationBuilder;
 
     /**
      * The input screen information builder.
      *
      * @var InputScreenInformationBuilder
      */
-    private $inputScreens;
+    private InputScreenInformationBuilder $inputScreens;
 
     /**
      * The request stack.
@@ -79,41 +81,47 @@ class FixupUserGroupModules
      */
     public function fixupModules(DataContainer $dataContainer)
     {
-        if (!class_exists('tl_user_group', false)) {
+        if (!\class_exists('tl_user_group', false)) {
             throw new \RuntimeException('data container is not loaded!');
         }
 
         $original = new \tl_user_group();
+        /** @var array<string, list<string>> $modules */
         $modules  = $original->getModules($dataContainer);
 
         // 1. remove all MetaModels
-        foreach (array_keys($modules) as $group) {
+        foreach (\array_keys($modules) as $group) {
             foreach ($modules[$group] as $key => $module) {
-                if (strpos($module, 'metamodel_') === 0) {
+                if (\str_starts_with($module, 'metamodel_')) {
                     unset($modules[$group][$key]);
                 }
             }
             // Otherwise we end up with an associative array.
-            $modules[$group] = array_values($modules[$group]);
+            $modules[$group] = \array_values($modules[$group]);
+        }
+        if (!\is_array($modules['metamodels'] ?? null)) {
+            $modules['metamodels'] = [];
         }
 
         // 2. Add our "custom" modules and remove the main module.
         $modules['metamodels'][] = 'support_metamodels';
-        if (false !== $index = array_search('metamodels', $modules['metamodels'], true)) {
+        if (false !== ($index = \array_search('metamodels', $modules['metamodels'], true))) {
             unset($modules['metamodels'][$index]);
-            $modules['metamodels'] = array_values($modules['metamodels']);
+            $modules['metamodels'] = \array_values($modules['metamodels']);
         }
 
         // 3. Add back all MetaModels for the current group.
+        assert(null !== $dataContainer->activeRecord);
         $combinations = $this->combinationBuilder->getCombinationsForUser([$dataContainer->activeRecord->id], 'be');
 
-        $screenIds = array_map(function ($combination) {
+        $screenIds = \array_map(static function (array $combination): mixed {
             return $combination['dca_id'];
-        }, $combinations['byName']);
+        }, $combinations['byName'] ?? []);
 
-        $screens = $this->inputScreens->fetchInputScreens($screenIds);
-
-        $locale = $this->requestStack->getCurrentRequest()->getLocale();
+        $screens        = $this->inputScreens->fetchInputScreens($screenIds);
+        $currentRequest = $this->requestStack->getCurrentRequest();
+        assert($currentRequest instanceof Request);
+        $locale = $currentRequest->getLocale();
         foreach ($screens as $metaModel => $screen) {
             if ('standalone' === $screen['meta']['rendertype']) {
                 $modules[$screen['meta']['backendsection']][] = 'metamodel_' . $metaModel;
@@ -136,7 +144,7 @@ class FixupUserGroupModules
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    private function buildLanguageString($name, $screen, $locale)
+    private function buildLanguageString(string $name, array $screen, string $locale): void
     {
         if (isset($screen['label'][$locale])) {
             $GLOBALS['TL_LANG']['MOD'][$name] = $screen['label'][$locale];

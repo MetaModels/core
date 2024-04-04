@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -39,21 +40,19 @@ interface ITranslated extends IAttribute
     /**
      * Search matches for the given expression.
      *
-     * @param string $strPattern   The text to search for. This may contain wildcards.
+     * @param string                 $strPattern   The text to search for. This may contain wildcards.
+     * @param list<non-empty-string> $arrLanguages Array of valid language codes that shall be searched.
+     *                                             (optional) If empty, all languages will be taken into account.
      *
-     * @param array  $arrLanguages Array of valid language codes that shall be searched. (optional)
-     *                             If empty, all languages will be taken into account.
-     *
-     * @return string[] the ids of matching items.
+     * @return list<string> the ids of matching items.
      */
-    public function searchForInLanguages($strPattern, $arrLanguages = array());
+    public function searchForInLanguages($strPattern, $arrLanguages = []);
 
     /**
      * Set a value for an item in a certain language.
      *
-     * @param mixed[] $arrValues   The values to be set in id => value layout.
-     *
-     * @param string  $strLangCode The language code for which the data shall be retrieved.
+     * @param array<string, array<string, mixed>> $arrValues   The values to be set in id => value layout.
+     * @param string                              $strLangCode The language code for which the data shall be retrieved.
      *
      * @return void
      */
@@ -62,20 +61,18 @@ interface ITranslated extends IAttribute
     /**
      * Get values for the given items in a certain language.
      *
-     * @param string[] $arrIds      The ids for which values shall be retrieved.
+     * @param list<string> $arrIds      The ids for which values shall be retrieved.
+     * @param string       $strLangCode The language code for which the data shall be retrieved.
      *
-     * @param string   $strLangCode The language code for which the data shall be retrieved.
-     *
-     * @return mixed[] the values.
+     * @return array<string, array<string, mixed>> the values.
      */
     public function getTranslatedDataFor($arrIds, $strLangCode);
 
     /**
      * Remove values for items in a certain language.
      *
-     * @param string[] $arrIds      The ids for which values shall be removed.
-     *
-     * @param string   $strLangCode The language code for which the data shall be removed.
+     * @param list<string> $arrIds      The ids for which values shall be removed.
+     * @param string       $strLangCode The language code for which the data shall be removed.
      *
      * @return void
      */

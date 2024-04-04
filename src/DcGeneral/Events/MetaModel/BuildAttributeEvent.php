@@ -33,7 +33,7 @@ class BuildAttributeEvent extends AbstractContainerAwareEvent
     /**
      * The event name.
      */
-    const NAME = 'metamodels.dc-general.events.metamodel.build.attribute';
+    public const NAME = 'metamodels.dc-general.events.metamodel.build.attribute';
 
     /**
      * The Attribute.

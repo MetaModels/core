@@ -22,6 +22,7 @@ namespace MetaModels\Test\Filter\Rules;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\Statement;
+use Doctrine\DBAL\Result;
 use MetaModels\Filter\Rules\SimpleQuery;
 use PHPUnit\Framework\TestCase;
 
@@ -48,17 +49,20 @@ class SimpleQueryTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['executeQuery'])
             ->getMock();
-        $statement  = $this->getMockForAbstractClass(Statement::class);
+        $result  = $this
+            ->getMockBuilder(Result::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['fetchAllAssociative'])
+            ->getMock();
 
         $connection
             ->expects(self::once())
             ->method('executeQuery')
             ->with($query, $params, $types)
-            ->willReturn($statement);
-        $statement
+            ->willReturn($result);
+        $result
             ->expects(self::once())
-            ->method('fetchAll')
-            ->with(\PDO::FETCH_ASSOC)
+            ->method('fetchAllAssociative')
             ->willReturn([['idcolumn' => 'a'], ['idcolumn' => 'b'], ['idcolumn' => 'c']]);
 
         $rule = new SimpleQuery($query, $params, 'idcolumn', $connection, $types);

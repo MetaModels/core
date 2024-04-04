@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,8 @@
  * @author     David Maack <david.maack@arcor.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -25,6 +26,8 @@ namespace MetaModels\Filter\Setting;
 use MetaModels\FrontendIntegration\FrontendFilterOptions;
 use MetaModels\IItem;
 use MetaModels\Render\Setting\ICollection as IRenderSettings;
+
+use function array_merge;
 
 /**
  * Base implementation for settings that can contain children.
@@ -36,7 +39,7 @@ abstract class WithChildren extends Simple implements IWithChildren
      *
      * @var ISimple[]
      */
-    protected $arrChildren = array();
+    protected $arrChildren = [];
 
     /**
      * {@inheritdoc}
@@ -84,6 +87,8 @@ abstract class WithChildren extends Simple implements IWithChildren
 
     /**
      * {@inheritdoc}
+     *
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function getParameterFilterWidgets(
         $arrIds,
@@ -91,7 +96,7 @@ abstract class WithChildren extends Simple implements IWithChildren
         $arrJumpTo,
         FrontendFilterOptions $objFrontendFilterOptions
     ) {
-        $arrParams = array();
+        $arrParams = [];
         foreach ($this->arrChildren as $objSetting) {
             $arrParams = array_merge(
                 $arrParams,
@@ -106,7 +111,7 @@ abstract class WithChildren extends Simple implements IWithChildren
      */
     public function getParameterFilterNames()
     {
-        $arrParams = array();
+        $arrParams = [];
         foreach ($this->arrChildren as $objSetting) {
             $arrParams = array_merge($arrParams, $objSetting->getParameterFilterNames());
         }
@@ -116,11 +121,11 @@ abstract class WithChildren extends Simple implements IWithChildren
     /**
      * Retrieve a list of all referenced attributes within the filter setting.
      *
-     * @return array
+     * @return list<string>
      */
     public function getReferencedAttributes()
     {
-        $arrAttributes = array();
+        $arrAttributes = [];
         foreach ($this->arrChildren as $objSetting) {
             $arrAttributes = array_merge($arrAttributes, $objSetting->getReferencedAttributes());
         }

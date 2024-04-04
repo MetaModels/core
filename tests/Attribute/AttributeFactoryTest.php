@@ -165,6 +165,8 @@ class AttributeFactoryTest extends TestCase
      * Test that the method attributeTypeMatchesFlags() works correctly.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testGetTypeNames()
     {
@@ -277,7 +279,7 @@ class AttributeFactoryTest extends TestCase
     public function testGetTypeIcon()
     {
         $factory     = new AttributeFactory($this->getMockForAbstractClass(EventDispatcherInterface::class));
-        $typeFactory = $this->mockAttributeFactory('test', true, false, false, new \stdClass, 'icon.png');
+        $typeFactory = $this->mockAttributeFactory('test', true, false, false, new \stdClass(), 'icon.png');
         $factory->addTypeFactory($typeFactory);
 
         self::assertEquals($typeFactory->getTypeIcon(), $factory->getIconForType('test'));

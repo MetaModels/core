@@ -17,7 +17,7 @@
  * @filesource
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace MetaModels\Schema;
 
@@ -31,7 +31,7 @@ class SchemaInformation
     /**
      * The list of registered schema information.
      *
-     * @var list<SchemaInformationInterface>
+     * @var array<string, SchemaInformationInterface>
      */
     private array $information = [];
 

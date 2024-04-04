@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -21,6 +22,7 @@
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\MetaModel;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\AbstractEnvironmentAwareEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\AbstractModelAwareEvent;
 
@@ -34,7 +36,7 @@ abstract class AbstractAbstainingListener
      *
      * @var RequestScopeDeterminator
      */
-    private $scopeDeterminator;
+    private RequestScopeDeterminator $scopeDeterminator;
 
     /**
      * Create a new instance.
@@ -59,13 +61,16 @@ abstract class AbstractAbstainingListener
             return false;
         }
 
-        $environment = $event->getEnvironment();
-        if ('tl_metamodel' !== $environment->getDataDefinition()->getName()) {
+        $environment    = $event->getEnvironment();
+        $dataDefinition = $environment->getDataDefinition();
+        assert($dataDefinition instanceof ContainerInterface);
+
+        if ('tl_metamodel' !== $dataDefinition->getName()) {
             return false;
         }
 
         if ($event instanceof AbstractModelAwareEvent) {
-            if ($event->getEnvironment()->getDataDefinition()->getName() !== $event->getModel()->getProviderName()) {
+            if ($dataDefinition->getName() !== $event->getModel()->getProviderName()) {
                 return false;
             }
         }

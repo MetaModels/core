@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,12 +12,13 @@
  *
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace MetaModels\Schema;
 
@@ -43,37 +44,46 @@ class LegacySchemaManager implements SchemaManagerInterface
      */
     public function process(SchemaInformation $information): void
     {
+        /** @psalm-suppress DeprecatedClass */
         if (!$information->has(LegacySchemaInformation::class)) {
             return;
         }
-        /** @var LegacySchemaInformation $legacySchema */
+        /**
+         * @var LegacySchemaInformation $legacySchema
+         * @psalm-suppress DeprecatedClass
+         */
         $legacySchema = $information->get(LegacySchemaInformation::class);
 
         foreach ($legacySchema->getAttributes() as $attribute) {
             try {
+                /** @psalm-suppress DeprecatedMethod */
                 $attribute->initializeAUX();
             } catch (\Throwable $exception) {
                 // Transcribe known exceptions.
                 switch (true) {
                     case $exception instanceof NonUniqueFieldNameException:
-                        if (preg_match(
-                            '/SQLSTATE\[42S21\]: Column already exists: 1060 Duplicate column name \'(?P<name>.+)\'/',
-                            $exception->getMessage(),
-                            $matches
-                        )) {
+                        if (
+                            \preg_match(
+                                '/SQLSTATE\[42S21\]: ' .
+                                'Column already exists: 1060 Duplicate column name \'(?P<name>.+)\'/',
+                                $exception->getMessage(),
+                                $matches
+                            )
+                        ) {
                             // @codingStandardsIgnoreStart
                             @trigger_error('Column already exists: "' . $matches['name'] . '"');
                             // @codingStandardsIgnoreEnd
                             continue 2;
                         }
+                        break;
                     default:
                 }
 
                 // @codingStandardsIgnoreStart
                 @trigger_error(
-                    sprintf(
+                    \sprintf(
                         'Ignored exception "%1$s" for attribute "%2$s": %3$s',
-                        get_class($exception),
+                        \get_class($exception),
                         $attribute->getColName(),
                         $exception->getMessage()
                     ),
@@ -97,15 +107,20 @@ class LegacySchemaManager implements SchemaManagerInterface
      */
     public function validate(SchemaInformation $information): array
     {
+        /** @psalm-suppress DeprecatedClass */
         if (!$information->has(LegacySchemaInformation::class)) {
             return [];
         }
-        /** @var LegacySchemaInformation $legacySchema */
+
+        /**
+         * @var LegacySchemaInformation $legacySchema
+         * @psalm-suppress DeprecatedClass
+         */
         $legacySchema = $information->get(LegacySchemaInformation::class);
 
         $tasks = [];
         foreach ($legacySchema->getAttributes() as $attribute) {
-            $tasks[] = sprintf(
+            $tasks[] = \sprintf(
                 '(Re-)Initialize attribute "%1$s" (type: "%2$s") via legacy method.',
                 $attribute->getColName(),
                 $attribute->get('type')

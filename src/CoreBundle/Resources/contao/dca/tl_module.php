@@ -60,7 +60,7 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'metamodel_sort_
 $GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'metamodel_use_parameters';
 
 // Insert new Subpalettes after position 1.
-\array_insert(
+\Contao\ArrayUtil::arrayInsert(
     $GLOBALS['TL_DCA']['tl_module']['subpalettes'],
     1,
     [
@@ -71,7 +71,7 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'metamodel_use_p
 );
 
 // Fields.
-\array_insert(
+\Contao\ArrayUtil::arrayInsert(
     $GLOBALS['TL_DCA']['tl_module']['fields'],
     1,
     [

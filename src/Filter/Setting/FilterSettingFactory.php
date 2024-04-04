@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -30,6 +30,9 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * This is the filter settings factory interface.
+ *
+ * @psalm-suppress DeprecatedInterface
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class FilterSettingFactory implements IFilterSettingFactory
 {
@@ -37,6 +40,8 @@ class FilterSettingFactory implements IFilterSettingFactory
      * The event dispatcher.
      *
      * @var IMetaModelsServiceContainer
+     *
+     * @psalm-suppress DeprecatedInterface
      */
     protected $serviceContainer;
 
@@ -45,28 +50,28 @@ class FilterSettingFactory implements IFilterSettingFactory
      *
      * @var EventDispatcherInterface
      */
-    private $eventDispatcher;
+    private EventDispatcherInterface $eventDispatcher;
 
     /**
      * The database connection.
      *
      * @var Connection
      */
-    private $database;
+    private Connection $database;
 
     /**
      * The registered type factories.
      *
      * @var IFilterSettingTypeFactory[]
      */
-    private $typeFactories;
+    private array $typeFactories;
 
     /**
      * The MetaModels factory.
      *
      * @var IFactory
      */
-    private $factory;
+    private IFactory $factory;
 
     /**
      * Create a new instance.
@@ -90,7 +95,7 @@ class FilterSettingFactory implements IFilterSettingFactory
      *
      * @deprecated The service container will get removed, use the symfony service container instead.
      */
-    public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer, $deprecationNotice = true)
+    public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer, bool $deprecationNotice = true)
     {
         if ($deprecationNotice) {
             // @codingStandardsIgnoreStart
@@ -262,11 +267,11 @@ class FilterSettingFactory implements IFilterSettingFactory
             ->setMaxResults(1)
             ->setParameter('id', $settingId)
             ->executeQuery();
-        if (!$query) {
+        if (0 === $query->rowCount()) {
             throw new \RuntimeException('Could not retrieve filter setting');
         }
 
-        if (!empty($information = $query->fetchAssociative())) {
+        if (false !== ($information = $query->fetchAssociative())) {
             $metaModel = $this->factory->getMetaModel($this->factory->translateIdToMetaModelName($information['pid']));
             if ($metaModel === null) {
                 throw new \RuntimeException('Could not retrieve MetaModel ' . $information['pid']);
@@ -279,7 +284,7 @@ class FilterSettingFactory implements IFilterSettingFactory
             return $collection;
         }
 
-        return new Collection(array());
+        return new Collection([]);
     }
 
     /**
@@ -287,6 +292,6 @@ class FilterSettingFactory implements IFilterSettingFactory
      */
     public function getTypeNames()
     {
-        return array_keys($this->typeFactories);
+        return \array_keys($this->typeFactories);
     }
 }

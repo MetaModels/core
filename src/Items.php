@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,8 @@
  * @author     David Maack <david.maack@arcor.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -41,7 +42,7 @@ class Items implements IItems
      *
      * @var array
      */
-    protected $arrItems = array();
+    protected $arrItems = [];
 
     /**
      * Creates a new instance with the passed items.
@@ -56,6 +57,7 @@ class Items implements IItems
     /**
      * {@inheritDoc}
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->first();
@@ -64,6 +66,7 @@ class Items implements IItems
     /**
      * {@inheritDoc}
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return $this->getItem();
@@ -72,6 +75,7 @@ class Items implements IItems
     /**
      * {@inheritDoc}
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return $this->intCursor;
@@ -80,6 +84,7 @@ class Items implements IItems
     /**
      * {@inheritDoc}
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return ($this->offsetExists($this->intCursor));
@@ -88,17 +93,16 @@ class Items implements IItems
     /**
      * {@inheritDoc}
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
-        if (!is_numeric($offset)) {
-            return false;
-        }
         return (($this->getCount() > $offset) && ($offset > -1));
     }
 
     /**
      * {@inheritDoc}
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         if ($this->offsetExists($offset)) {
@@ -112,7 +116,6 @@ class Items implements IItems
      * Not implemented in this class.
      *
      * @param mixed $offset The offset to assign the value to.
-     *
      * @param mixed $value  The value to set.
      *
      * @return void
@@ -121,6 +124,7 @@ class Items implements IItems
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         throw new \RuntimeException('MetaModelItems is a read only class, you can not manipulate the collection.', 1);
@@ -137,6 +141,7 @@ class Items implements IItems
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         throw new \RuntimeException('MetaModelItems is a read only class, you can not manipulate the collection.', 1);
@@ -165,7 +170,7 @@ class Items implements IItems
      */
     public function getCount()
     {
-        return count($this->arrItems);
+        return \count($this->arrItems);
     }
 
     /**
@@ -177,22 +182,29 @@ class Items implements IItems
             $this->intCursor = 0;
             return $this;
         }
+
         return false;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @psalm-suppress InvalidReturnType
+     * @psalm-suppress InvalidReturnStatement
+     * @psalm-suppress InvalidFalsableReturnType
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
-        if ($this->getCount() == $this->intCursor) {
+        if ($this->getCount() === $this->intCursor) {
             return false;
         }
+
         // We must advance over the last element.
-        $this->intCursor += 1;
+        ++$this->intCursor;
 
         // Check the index again, see #461.
-        return ($this->getCount() == $this->intCursor) ? false : $this;
+        return ($this->getCount() === $this->intCursor) ? false : $this;
     }
 
     /**
@@ -205,6 +217,7 @@ class Items implements IItems
         }
 
         $this->intCursor--;
+
         return $this;
     }
 
@@ -232,7 +245,7 @@ class Items implements IItems
      */
     public function getClass()
     {
-        $arrClass = array();
+        $arrClass = [];
         if ($this->intCursor == 0) {
             $arrClass[] = 'first';
         }
@@ -246,7 +259,8 @@ class Items implements IItems
         } else {
             $arrClass[] = 'odd';
         }
-        return implode(' ', $arrClass);
+
+        return \implode(' ', $arrClass);
     }
 
     /**
@@ -254,7 +268,10 @@ class Items implements IItems
      */
     public function parseValue($strOutputFormat = 'text', $objSettings = null)
     {
-        return $this->getItem()->parseValue($strOutputFormat, $objSettings);
+        $item = $this->getItem();
+        assert($item instanceof IItem);
+
+        return $item->parseValue($strOutputFormat, $objSettings);
     }
 
     /**
@@ -264,7 +281,7 @@ class Items implements IItems
      */
     public function parseAll($strOutputFormat = 'text', $objSettings = null)
     {
-        $arrResult = array();
+        $arrResult = [];
 
         // Buffer cursor.
         $intCursor = $this->intCursor;

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -24,6 +24,7 @@ namespace MetaModels\Render\Setting;
 
 use Contao\StringUtil;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use MetaModels\Filter\FilterUrlBuilder;
 use MetaModels\Filter\Setting\IFilterSettingFactory;
 use MetaModels\IMetaModel;
@@ -34,52 +35,57 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * This is the filter settings factory interface.
+ *
+ * @psalm-suppress DeprecatedInterface
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RenderSettingFactory implements IRenderSettingFactory
 {
     /**
-     * The event dispatcher.
+     * The service container.
      *
-     * @var IMetaModelsServiceContainer
+     * @var IMetaModelsServiceContainer|null
      *
      * @deprecated The service container will get removed.
+     *
+     * @psalm-suppress DeprecatedInterface
      */
-    private $serviceContainer;
+    private ?IMetaModelsServiceContainer $serviceContainer = null;
 
     /**
      * The database connection.
      *
      * @var Connection
      */
-    private $database;
+    private Connection $database;
 
     /**
      * The event dispatcher.
      *
      * @var EventDispatcherInterface
      */
-    private $eventDispatcher;
+    private EventDispatcherInterface $eventDispatcher;
 
     /**
      * The filter setting factory.
      *
      * @var IFilterSettingFactory
      */
-    private $filterFactory;
+    private IFilterSettingFactory $filterFactory;
 
     /**
      * The already created render settings.
      *
-     * @var ICollection[]
+     * @var array<string, array<string, ICollection>>
      */
-    private $renderSettings;
+    private array $renderSettings = [];
 
     /**
      * The filter URL builder.
      *
      * @var FilterUrlBuilder
      */
-    private $filterUrlBuilder;
+    private FilterUrlBuilder $filterUrlBuilder;
 
     /**
      * Create a new instance.
@@ -110,6 +116,8 @@ class RenderSettingFactory implements IRenderSettingFactory
      * @return RenderSettingFactory
      *
      * @deprecated The service container will get removed, use the symfony service container instead.
+     *
+     * @psalm-suppress DeprecatedInterface
      */
     public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer, $deprecationNotice = true)
     {
@@ -121,6 +129,7 @@ class RenderSettingFactory implements IRenderSettingFactory
             );
             // @codingStandardsIgnoreEnd
         }
+        /** @psalm-suppress DeprecatedProperty */
         $this->serviceContainer = $serviceContainer;
 
         if ($this->eventDispatcher->hasListeners(MetaModelsEvents::RENDER_SETTING_FACTORY_CREATE)) {
@@ -133,6 +142,10 @@ class RenderSettingFactory implements IRenderSettingFactory
             );
             // @codingStandardsIgnoreEnd
 
+            /**
+             * @psalm-suppress DeprecatedMethod
+             * @psalm-suppress DeprecatedProperty
+             */
             $this->serviceContainer->getEventDispatcher()->dispatch(
                 new CreateRenderSettingFactoryEvent($this),
                 MetaModelsEvents::RENDER_SETTING_FACTORY_CREATE
@@ -148,6 +161,8 @@ class RenderSettingFactory implements IRenderSettingFactory
      * @return IMetaModelsServiceContainer
      *
      * @deprecated The service container will get removed, use the symfony service container instead.
+     *
+     * @psalm-suppress DeprecatedInterface
      */
     public function getServiceContainer()
     {
@@ -157,6 +172,13 @@ class RenderSettingFactory implements IRenderSettingFactory
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
+
+        /** @psalm-suppress DeprecatedProperty */
+        if (null === $this->serviceContainer) {
+            throw new \RuntimeException('Deprecated service container has not been set.');
+        }
+
+        /** @psalm-suppress DeprecatedProperty */
         return $this->serviceContainer;
     }
 
@@ -167,7 +189,7 @@ class RenderSettingFactory implements IRenderSettingFactory
      * @param ICollection $renderSetting The render setting.
      *
      * @return void
-     * @throws \Doctrine\DBAL\Exception
+     * @throws Exception
      */
     public function collectAttributeSettings(IMetaModel $metaModel, $renderSetting)
     {
@@ -206,12 +228,12 @@ class RenderSettingFactory implements IRenderSettingFactory
      * Create a ICollection instance from the id.
      *
      * @param IMetaModel $metaModel The MetaModel for which to retrieve the render setting.
-     * @param string     $settingId The id of the ICollection.
+     * @param string|int $settingId The id of the ICollection.
      *
-     * @return ICollection The instance or null if not found.
-     * @throws \Doctrine\DBAL\Exception
+     * @return ICollection The instance.
+     * @throws Exception
      */
-    protected function internalCreateRenderSetting(IMetaModel $metaModel, $settingId)
+    protected function internalCreateRenderSetting(IMetaModel $metaModel, string|int $settingId)
     {
         $row = $this
             ->database
@@ -221,12 +243,12 @@ class RenderSettingFactory implements IRenderSettingFactory
             ->where('t.pid=:pid')
             ->andWhere('t.id=:id')
             ->setParameter('pid', $metaModel->get('id'))
-            ->setParameter('id', $settingId ?: 0)
+            ->setParameter('id', (int) $settingId ?: 0)
             ->setMaxResults(1)
             ->executeQuery()
             ->fetchAssociative();
 
-        if (!$row) {
+        if (false === $row) {
             $row = [];
         }
 
@@ -238,7 +260,7 @@ class RenderSettingFactory implements IRenderSettingFactory
             $this->filterUrlBuilder
         );
 
-        if ($renderSetting->get('id')) {
+        if (null !== $renderSetting->get('id')) {
             $this->collectAttributeSettings($metaModel, $renderSetting);
         }
 
@@ -252,7 +274,7 @@ class RenderSettingFactory implements IRenderSettingFactory
     {
         $tableName = $metaModel->getTableName();
         if (!isset($this->renderSettings[$tableName])) {
-            $this->renderSettings[$tableName] = array();
+            $this->renderSettings[$tableName] = [];
         }
 
         if (!isset($this->renderSettings[$tableName][$settingId])) {

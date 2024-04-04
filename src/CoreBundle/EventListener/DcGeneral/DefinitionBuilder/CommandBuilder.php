@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -42,6 +42,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * This class builds the commands.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CommandBuilder
 {
@@ -52,49 +54,42 @@ class CommandBuilder
      *
      * @var EventDispatcherInterface
      */
-    private $dispatcher;
+    private EventDispatcherInterface $dispatcher;
 
     /**
      * The view combinations.
      *
      * @var ViewCombination
      */
-    private $viewCombination;
+    private ViewCombination $viewCombination;
 
     /**
      * The MetaModels factory.
      *
      * @var IFactory
      */
-    private $factory;
+    private IFactory $factory;
 
     /**
      * The container (only set during build phase).
      *
-     * @var IMetaModelDataDefinition
+     * @var IMetaModelDataDefinition|null
      */
-    private $container;
-
-    /**
-     * The input screen (only set during build phase).
-     *
-     * @var array
-     */
-    private $inputScreen;
+    private IMetaModelDataDefinition|null $container = null;
 
     /**
      * The icon builder.
      *
      * @var IconBuilder
      */
-    private $iconBuilder;
+    private IconBuilder $iconBuilder;
 
     /**
      * The translator.
      *
      * @var TranslatorInterface
      */
-    private $translator;
+    private TranslatorInterface $translator;
 
     /**
      * Create a new instance.
@@ -144,14 +139,13 @@ class CommandBuilder
         }
 
         $this->container   = $container;
-        $this->inputScreen = $inputScreen = $this->viewCombination->getScreen($container->getName());
+        $inputScreen = $this->viewCombination->getScreen($container->getName());
         if (null === $inputScreen) {
             return;
         }
         $this->addEditMultipleCommand($view);
         $this->parseModelOperations($view);
         $this->container   = null;
-        $this->inputScreen = null;
 
         if ($this->dispatcher->hasListeners(BuildMetaModelOperationsEvent::NAME)) {
             // @codingStandardsIgnoreStart
@@ -160,11 +154,9 @@ class CommandBuilder
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
-            $event = new BuildMetaModelOperationsEvent(
-                $this->factory->getMetaModel($container->getName()),
-                $container,
-                $inputScreen
-            );
+            $metaModel = $this->factory->getMetaModel($container->getName());
+            assert($metaModel instanceof IMetaModel);
+            $event = new BuildMetaModelOperationsEvent($metaModel, $container, $inputScreen);
             $this->dispatcher->dispatch($event, $event::NAME);
         }
     }
@@ -176,8 +168,9 @@ class CommandBuilder
      *
      * @return void
      */
-    private function addEditMultipleCommand(Contao2BackendViewDefinitionInterface $view)
+    private function addEditMultipleCommand(Contao2BackendViewDefinitionInterface $view): void
     {
+        assert($this->container instanceof IMetaModelDataDefinition);
         $definition = $this->container->getBasicDefinition();
         // No actions allowed. Don't add the select command button.
         if (!$definition->isEditable() && !$definition->isDeletable() && !$definition->isCreatable()) {
@@ -206,8 +199,9 @@ class CommandBuilder
      *
      * @return void
      */
-    private function parseModelOperations(Contao2BackendViewDefinitionInterface $view)
+    private function parseModelOperations(Contao2BackendViewDefinitionInterface $view): void
     {
+        assert($this->container instanceof IMetaModelDataDefinition);
         $collection = $view->getModelCommands();
 
         $scrOffsetAttributes = ['attributes' => 'onclick="Backend.getScrollOffset();"'];
@@ -228,7 +222,9 @@ class CommandBuilder
         );
         $this->createCommand($collection, 'show', ['act' => 'show'], 'show.svg');
 
-        if ($this->factory->getMetaModel($this->container->getName())->hasVariants()) {
+        $metaModel = $this->factory->getMetaModel($this->container->getName());
+        assert($metaModel instanceof IMetaModel);
+        if ($metaModel->hasVariants()) {
             $this->createCommand(
                 $collection,
                 'createvariant',
@@ -240,7 +236,8 @@ class CommandBuilder
         // Check if we have some children.
         foreach ($this->viewCombination->getChildrenOf($this->container->getName()) as $tableName => $screen) {
             $metaModel = $this->factory->getMetaModel($tableName);
-            $caption   = $this->getChildModelCaption($metaModel, $screen);
+            assert($metaModel instanceof IMetaModel);
+            $caption = $this->getChildModelCaption($metaModel, $screen);
 
             $this->createCommand(
                 $collection,
@@ -269,10 +266,10 @@ class CommandBuilder
      */
     private function createCommand(
         CommandCollectionInterface $collection,
-        $operationName,
-        $queryParameters,
-        $icon,
-        $extraValues = []
+        string $operationName,
+        array $queryParameters,
+        string $icon,
+        array $extraValues = []
     ) {
         $command    = $this->getCommandInstance($collection, $operationName);
         $parameters = $command->getParameters();
@@ -310,12 +307,11 @@ class CommandBuilder
      * Retrieve or create a command instance of the given name.
      *
      * @param CommandCollectionInterface $collection    The command collection.
-     *
      * @param string                     $operationName The name of the operation.
      *
      * @return CommandInterface
      */
-    private function getCommandInstance(CommandCollectionInterface $collection, $operationName)
+    private function getCommandInstance(CommandCollectionInterface $collection, string $operationName)
     {
         if ($collection->hasCommandNamed($operationName)) {
             $command = $collection->getCommandNamed($operationName);
@@ -351,11 +347,11 @@ class CommandBuilder
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    private function getChildModelCaption($metaModel, $screen)
+    private function getChildModelCaption(IMetaModel $metaModel, array $screen): array
     {
         $caption = [
             '',
-            sprintf(
+            \sprintf(
                 $GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label'],
                 $metaModel->getName()
             )

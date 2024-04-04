@@ -120,9 +120,9 @@ class AttributeByIdIsOfType implements PropertyConditionInterface
                 ->executeQuery();
 
             $result = $statement->fetchFirstColumn();
-            if(count($result) > 0){
+            if (count($result) > 0) {
                 self::$attributeTypes[$value] = \current($result);
-            }else {
+            } else {
                 self::$attributeTypes[$value] = null;
             }
         }

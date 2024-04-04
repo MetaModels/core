@@ -50,10 +50,11 @@ class PaletteRestrictionListener
                 }
 
                 $chain = $property->getVisibleCondition();
-                if (!($chain
+                if (
+                    !($chain
                     && ($chain instanceof PropertyConditionChain)
                     && $chain->getConjunction() == PropertyConditionChain::AND_CONJUNCTION
-                )
+                    )
                 ) {
                     $chain = new PropertyConditionChain(
                         $chain ?: array(),

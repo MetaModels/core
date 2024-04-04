@@ -23,6 +23,7 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\Attribute;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
+use ContaoCommunityAlliance\Translator\TranslatorInterface;
 use MetaModels\Attribute\IAttributeFactory;
 use MetaModels\Exceptions\Database\InvalidColumnNameException;
 use MetaModels\Helper\TableManipulator;
@@ -76,6 +77,8 @@ class ColNameValidationListener extends BaseListener
         $oldColumnName = $event->getModel()->getProperty($event->getProperty());
         $columnName    = $event->getValue();
         $metaModel     = $this->getMetaModelByModelPid($event->getModel());
+        $translator    = $event->getEnvironment()->getTranslator();
+        assert($translator instanceof TranslatorInterface);
 
         if ((!$columnName) || $oldColumnName !== $columnName) {
             try {
@@ -83,7 +86,7 @@ class ColNameValidationListener extends BaseListener
             } catch (InvalidColumnNameException $exception) {
                 throw new \RuntimeException(
                     \sprintf(
-                        $event->getEnvironment()->getTranslator()->translate(
+                        $translator->translate(
                             'ERR.' . ($this->tableManipulator->isSystemColumn($columnName)
                                 ? 'systemColumn'
                                 : 'invalidColumnName')
@@ -100,7 +103,7 @@ class ColNameValidationListener extends BaseListener
             if (\in_array($columnName, $colNames)) {
                 throw new \RuntimeException(
                     \sprintf(
-                        $event->getEnvironment()->getTranslator()->translate('ERR.columnExists'),
+                        $translator->translate('ERR.columnExists'),
                         $columnName,
                         $metaModel->getTableName()
                     )

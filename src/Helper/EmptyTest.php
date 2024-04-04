@@ -35,9 +35,11 @@ class EmptyTest
     {
         if (is_array($mixValue)) {
             return self::isArrayEmpty($mixValue);
-        } elseif ('' === $mixValue) {
+        }
+        if ('' === $mixValue) {
             return true;
-        } elseif (null === $mixValue) {
+        }
+        if (null === $mixValue) {
             return true;
         }
 
@@ -54,7 +56,7 @@ class EmptyTest
     public static function isArrayEmpty(array $array): bool
     {
         // First off check for simple types.
-        if (empty($array)) {
+        if ([] === $array) {
             return true;
         }
         // Next check for a value array.
@@ -62,15 +64,12 @@ class EmptyTest
             return self::isArrayEmpty($array['value']);
         }
         // Now check sub arrays.
-        if (is_array($array)) {
-            foreach ($array as $value) {
-                if (!self::isEmptyValue($value)) {
-                    return false;
-                }
+        foreach ($array as $value) {
+            if (!self::isEmptyValue($value)) {
+                return false;
             }
-            return true;
         }
 
-        return false;
+        return true;
     }
 }

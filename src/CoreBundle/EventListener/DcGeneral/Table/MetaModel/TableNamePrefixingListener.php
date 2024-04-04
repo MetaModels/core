@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -23,6 +23,8 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\MetaModel;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
+use ContaoCommunityAlliance\DcGeneral\Data\DataProviderInterface;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\Translator\TranslatorInterface;
 use MetaModels\Exceptions\Database\InvalidTableNameException;
 use MetaModels\Helper\TableManipulator;
@@ -94,15 +96,21 @@ class TableNamePrefixingListener extends AbstractAbstainingListener
             $tableName = 'mm_' . $tableName;
         }
 
+        $translator = $event->getEnvironment()->getTranslator();
+        assert($translator instanceof TranslatorInterface);
+
         // New model, ensure the table does not exist.
         if (!$event->getModel()->getId()) {
-            $this->checkTableName($tableName, $event->getEnvironment()->getTranslator());
+            $this->checkTableName($tableName, $translator);
         } else {
             $dataProvider = $event->getEnvironment()->getDataProvider('tl_metamodel');
+            assert($dataProvider instanceof DataProviderInterface);
+
             // Edited model, ensure the value is unique and then that the table does not exist.
             $oldVersion = $dataProvider->fetch($dataProvider->getEmptyConfig()->setId($event->getModel()->getId()));
+            assert($oldVersion instanceof ModelInterface);
             if ($oldVersion->getProperty('tableName') !== $event->getModel()->getProperty('tableName')) {
-                $this->checkTableName($tableName, $event->getEnvironment()->getTranslator());
+                $this->checkTableName($tableName, $translator);
             }
         }
 

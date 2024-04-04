@@ -20,7 +20,9 @@
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSortGroup;
 
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\PreEditModelEvent;
+use ContaoCommunityAlliance\DcGeneral\InputProviderInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 
@@ -58,12 +60,18 @@ class SortGroupCreateListener
      */
     public function handle(PreEditModelEvent $event): void
     {
-        if ('tl_metamodel_dca_sortgroup' !== $event->getEnvironment()->getDataDefinition()->getName()) {
+        $environment    = $event->getEnvironment();
+        $dataDefinition = $environment->getDataDefinition();
+        assert($dataDefinition instanceof ContainerInterface);
+
+        if ('tl_metamodel_dca_sortgroup' !== $dataDefinition->getName()) {
             return;
         }
 
-        if ('paste' !== $event->getEnvironment()->getInputProvider()->getParameter('act')
-            || !($pid = $event->getEnvironment()->getInputProvider()->getParameter('pid'))) {
+        $inputProvider = $environment->getInputProvider();
+        assert($inputProvider instanceof InputProviderInterface);
+
+        if ('paste' !== $inputProvider->getParameter('act') || !($pid = $inputProvider->getParameter('pid'))) {
             return;
         }
 

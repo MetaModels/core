@@ -32,6 +32,8 @@ use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 
 /**
  * This class is the abstract base for the hierarchical/variant model condition builders.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractConditionBuilder
 {
@@ -80,12 +82,23 @@ abstract class AbstractConditionBuilder
             throw new \InvalidArgumentException('Search element does not implement the correct interface.');
         }
 
-        $instance = new static();
-
-        $instance->container   = $container;
-        $instance->inputScreen = $inputScreen;
-        $instance->definition  = $definition;
+        $instance = new static($container, $inputScreen, $definition);
         $instance->calculate();
+    }
+
+    /**
+     * @param IMetaModelDataDefinition             $container
+     * @param array                                $inputScreen
+     * @param ModelRelationshipDefinitionInterface $definition
+     */
+    final public function __construct(
+        IMetaModelDataDefinition $container,
+        array $inputScreen,
+        ModelRelationshipDefinitionInterface $definition
+    ) {
+        $this->container   = $container;
+        $this->inputScreen = $inputScreen;
+        $this->definition  = $definition;
     }
 
     /**
@@ -123,8 +136,8 @@ abstract class AbstractConditionBuilder
                 ->setDestinationName($this->container->getName());
             $this->definition->addChildCondition($relationship);
         } else {
-            $setter  = array_merge_recursive($setter, $relationship->getSetters());
-            $inverse = array_merge_recursive($inverse, $relationship->getInverseFilterArray());
+            $setter  = \array_merge_recursive($setter, $relationship->getSetters());
+            $inverse = \array_merge_recursive($inverse, $relationship->getInverseFilterArray());
         }
 
         // For tl_ prefix, the only unique target can be the id?

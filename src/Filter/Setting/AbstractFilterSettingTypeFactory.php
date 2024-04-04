@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,18 +14,23 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\Filter\Setting;
 
+use MetaModels\Filter\Setting\IWithChildren;
+
 /**
  * This is an abstract factory to query instances of attributes.
  *
  * Extend your own attribute factories from this class and register them when the create attribute factory event is
  * triggered.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 abstract class AbstractFilterSettingTypeFactory implements IFilterSettingTypeFactory
 {
@@ -34,21 +39,21 @@ abstract class AbstractFilterSettingTypeFactory implements IFilterSettingTypeFac
      *
      * @var string
      */
-    private $typeName;
+    private string $typeName;
 
     /**
      * The name of the attribute class of this type.
      *
-     * @var string
+     * @var class-string<ISimple>
      */
-    private $typeClass;
+    private string $typeClass;
 
     /**
      * The icon representing this filter setting type.
      *
      * @var string
      */
-    private $typeIcon;
+    private string $typeIcon;
 
     /**
      * The maximum amount of children allowed.
@@ -57,21 +62,21 @@ abstract class AbstractFilterSettingTypeFactory implements IFilterSettingTypeFac
      *
      * @var int|null
      */
-    private $maxChildren;
+    private ?int $maxChildren = null;
 
     /**
      * List of valid attribute types that can be filtered with this filter.
      *
-     * @var string[]
+     * @var list<string>|null
      */
-    private $attributeTypes;
+    private ?array $attributeTypes = null;
 
     /**
      * Cache lookup variable.
      *
      * @var bool
      */
-    private $isNestedType;
+    private ?bool $isNestedType = null;
 
     /**
      * Create a new instance.
@@ -84,7 +89,7 @@ abstract class AbstractFilterSettingTypeFactory implements IFilterSettingTypeFac
     /**
      * Set the type class.
      *
-     * @param string $typeClass The name of the class.
+     * @param class-string<ISimple> $typeClass The name of the class.
      *
      * @return AbstractFilterSettingTypeFactory
      */
@@ -98,7 +103,7 @@ abstract class AbstractFilterSettingTypeFactory implements IFilterSettingTypeFac
     /**
      * Get the type class.
      *
-     * @return string|null
+     * @return class-string<ISimple>|null
      */
     protected function getTypeClass(): ?string
     {
@@ -164,11 +169,8 @@ abstract class AbstractFilterSettingTypeFactory implements IFilterSettingTypeFac
      */
     public function isNestedType()
     {
-        if (!isset($this->isNestedType)) {
-            $this->isNestedType = in_array(
-                'MetaModels\Filter\Setting\IWithChildren',
-                class_implements($this->typeClass, true)
-            );
+        if (null === $this->isNestedType) {
+            $this->isNestedType = \in_array(IWithChildren::class, \class_implements($this->typeClass, true), true);
         }
 
         return $this->isNestedType;
@@ -203,7 +205,7 @@ abstract class AbstractFilterSettingTypeFactory implements IFilterSettingTypeFac
     }
 
     /**
-     * Setup the allowance of attribute types to be added to this factory.
+     * Set up the allowance of attribute types to be added to this factory.
      *
      * This must be called before any calls to addKnownAttributeType() is allowed.
      *
@@ -211,7 +213,8 @@ abstract class AbstractFilterSettingTypeFactory implements IFilterSettingTypeFac
      *
      * Either pass one parameter as array of string or pass 1 to n parameters as string.
      *
-     * @param string|string[] $initialType1toN One or more attribute type names to be available initially (optional).
+     * @param string|list<string> $initialType1toN One or more attribute type names to be available
+     *                                             initially (optional).
      *
      * @return AbstractFilterSettingTypeFactory
      *
@@ -219,11 +222,12 @@ abstract class AbstractFilterSettingTypeFactory implements IFilterSettingTypeFac
      */
     protected function allowAttributeTypes($initialType1toN = null)
     {
-        if (is_array($initialType1toN)) {
+        if (\is_array($initialType1toN)) {
             $this->attributeTypes = $initialType1toN;
         } else {
-            $this->attributeTypes = func_get_args();
+            $this->attributeTypes = \func_get_args();
         }
+        $this->attributeTypes = \array_values(\array_unique($this->attributeTypes));
 
         return $this;
     }
@@ -231,7 +235,7 @@ abstract class AbstractFilterSettingTypeFactory implements IFilterSettingTypeFac
     /**
      * Retrieve the list of known attribute types.
      *
-     * @return string[] The list of attribute names or null if no attributes are allowed.
+     * @return list<string>|null The list of attribute names or null if no attributes are allowed.
      */
     public function getKnownAttributeTypes()
     {
@@ -249,11 +253,13 @@ abstract class AbstractFilterSettingTypeFactory implements IFilterSettingTypeFac
      */
     public function addKnownAttributeType($typeName)
     {
-        if (!is_array($this->attributeTypes)) {
+        if (!\is_array($this->attributeTypes)) {
             throw new \LogicException('Filter setting ' . $this->typeClass . ' can not handle attributes.');
         }
 
-        $this->attributeTypes[$typeName] = $typeName;
+        $this->attributeTypes[] = $typeName;
+
+        $this->attributeTypes = \array_values(\array_unique($this->attributeTypes));
 
         return $this;
     }

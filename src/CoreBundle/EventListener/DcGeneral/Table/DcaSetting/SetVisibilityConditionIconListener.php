@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,7 @@
  *
  * @package    MetaModels/core
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -21,12 +21,14 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting;
 
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
-use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetOperationButtonEvent;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CommandInterface;
 use Contao\Image;
 use Contao\StringUtil;
-use Doctrine\DBAL\Connection;
-use MetaModels\IFactory;
+use MetaModels\IMetaModel;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * This handles the icon as status of visibility condition.
@@ -42,24 +44,29 @@ class SetVisibilityConditionIconListener extends AbstractListener
      */
     public function handle(GetOperationButtonEvent $event): void
     {
-        $environment = $event->getEnvironment();
-        if ('tl_metamodel_dcasetting' !== $environment->getDataDefinition()->getName()
-            || 'conditions' !== $event->getCommand()->getName()) {
+        $dataDefinition = $event->getEnvironment()->getDataDefinition();
+        assert($dataDefinition instanceof ContainerInterface);
+        $command = $event->getCommand();
+        assert($command instanceof CommandInterface);
+        if (
+            'tl_metamodel_dcasetting' !== $dataDefinition->getName()
+            || 'conditions' !== $command->getName()
+        ) {
             return;
         }
-
+        $model = $event->getModel();
+        assert($model instanceof ModelInterface);
         $statement = $this->connection->createQueryBuilder()
             ->select('count(*) as count')
             ->from('tl_metamodel_dcasetting_condition', 't')
             ->where('settingId=:settingId')
-            ->setParameter('settingId', $event->getModel()->getId())
+            ->setParameter('settingId', $model->getId())
             ->setMaxResults(1)
-            ->execute()
+            ->executeQuery()
             ->fetchFirstColumn();
 
-        $command = $event->getCommand();
         $extra   = (array) $command->getExtra();
-        $icon    = $extra['icon'];
+        $icon    = (string) $extra['icon'];
 
         if (empty($statement[0])) {
             $iconDisabledSuffix = '_1';
@@ -67,15 +74,15 @@ class SetVisibilityConditionIconListener extends AbstractListener
             if ($icon !== Image::getPath($icon)) {
                 $iconDisabledSuffix = '_';
             }
-            $icon = \substr_replace($icon, $iconDisabledSuffix, \strrpos($icon, '.'), 0);
+            $icon = \substr_replace($icon, $iconDisabledSuffix, (int) \strrpos($icon, '.'), 0);
         }
 
         $button = \sprintf(
             ' <a class="%s" href="%s" title="%s">%s</a>',
             $command->getName(),
-            $event->getHref(),
+            $event->getHref() ?? '',
             StringUtil::specialchars(
-                \sprintf((string) $command->getDescription(), $event->getModel()->getID())
+                \sprintf($command->getDescription(), $model->getID())
             ),
             $this->renderImageAsHtml($event, $icon, $command->getLabel())
         );
@@ -94,12 +101,14 @@ class SetVisibilityConditionIconListener extends AbstractListener
      */
     private function renderImageAsHtml(GetOperationButtonEvent $event, string $src, string $alt): string
     {
+        $dispatcher = $event->getEnvironment()->getEventDispatcher();
+        assert($dispatcher instanceof EventDispatcherInterface);
         /** @var GenerateHtmlEvent $imageEvent */
-        $imageEvent = $event->getEnvironment()->getEventDispatcher()->dispatch(
+        $imageEvent = $dispatcher->dispatch(
             new GenerateHtmlEvent($src, $alt),
             ContaoEvents::IMAGE_GET_HTML
         );
 
-        return $imageEvent->getHtml();
+        return $imageEvent->getHtml() ?? '';
     }
 }

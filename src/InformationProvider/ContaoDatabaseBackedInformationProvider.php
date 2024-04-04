@@ -18,7 +18,7 @@
  * @filesource
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace MetaModels\InformationProvider;
 
@@ -85,7 +85,7 @@ class ContaoDatabaseBackedInformationProvider implements InformationProviderInte
             ->fetchAssociative();
 
         // Not managed by us.
-        if (empty($configuration)) {
+        if (false === $configuration) {
             return;
         }
 
@@ -111,7 +111,9 @@ class ContaoDatabaseBackedInformationProvider implements InformationProviderInte
             }
 
             $attribute = $information->getAttribute($colName);
-            $attribute->addConfiguration($attributeRow);
+            if ($attribute instanceof AttributeInformation) {
+                $attribute->addConfiguration($attributeRow);
+            }
         }
     }
 }

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -31,11 +31,14 @@ use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\Translator\TranslatorInterface;
 use MetaModels\CoreBundle\Assets\IconBuilder;
 use MetaModels\Filter\Setting\IFilterSettingFactory;
+use MetaModels\Filter\Setting\IFilterSettingTypeFactory;
 use MetaModels\IMetaModel;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Handles rendering of model from tl_metamodel_filtersetting.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractFilterSettingTypeRenderer
 {
@@ -44,28 +47,28 @@ abstract class AbstractFilterSettingTypeRenderer
      *
      * @var IFilterSettingFactory
      */
-    private $factory;
+    private IFilterSettingFactory $factory;
 
     /**
      * The event dispatcher.
      *
      * @var EventDispatcherInterface
      */
-    private $dispatcher;
+    private EventDispatcherInterface $dispatcher;
 
     /**
      * The icon builder.
      *
      * @var IconBuilder
      */
-    private $iconBuilder;
+    private IconBuilder $iconBuilder;
 
     /**
      * Request scope determinator.
      *
      * @var RequestScopeDeterminator
      */
-    private $scopeMatcher;
+    private RequestScopeDeterminator $scopeMatcher;
 
     /**
      * Create a new instance.
@@ -102,8 +105,9 @@ abstract class AbstractFilterSettingTypeRenderer
         }
 
         $model = $event->getModel();
-        if (($model->getProviderName() !== 'tl_metamodel_filtersetting')
-            || !in_array($event->getModel()->getProperty('type'), $this->getTypes())
+        if (
+            ($model->getProviderName() !== 'tl_metamodel_filtersetting')
+            || !\in_array($event->getModel()->getProperty('type'), $this->getTypes())
         ) {
             return;
         }
@@ -148,7 +152,7 @@ abstract class AbstractFilterSettingTypeRenderer
     protected function getLabelComment(ModelInterface $model, TranslatorInterface $translator)
     {
         if ($model->getProperty('comment')) {
-            return sprintf(
+            return \sprintf(
                 $translator->translate('typedesc._comment_', 'tl_metamodel_filtersetting'),
                 StringUtil::specialchars($model->getProperty('comment'))
             );
@@ -166,6 +170,7 @@ abstract class AbstractFilterSettingTypeRenderer
     protected function getLabelImage(ModelInterface $model)
     {
         $typeFactory = $this->factory->getTypeFactory($model->getProperty('type'));
+        assert($typeFactory instanceof IFilterSettingTypeFactory);
 
         $image = $this->iconBuilder->getBackendIconImageTag(
             $this->updateImageWithDisabled($model, $typeFactory->getTypeIcon()),
@@ -180,7 +185,7 @@ abstract class AbstractFilterSettingTypeRenderer
             ContaoEvents::BACKEND_ADD_TO_URL
         );
 
-        return sprintf(
+        return \sprintf(
             '<a href="%s">%s</a>',
             $urlEvent->getUrl(),
             $image
@@ -199,7 +204,7 @@ abstract class AbstractFilterSettingTypeRenderer
     {
         $type  = $model->getProperty('type');
         $label = $translator->translate('typenames.' . $type, 'tl_metamodel_filtersetting');
-        if ($label == 'typenames.' . $type) {
+        if ($label === 'typenames.' . $type) {
             return $type;
         }
         return $label;
@@ -216,10 +221,12 @@ abstract class AbstractFilterSettingTypeRenderer
     protected function getLabelPattern(EnvironmentInterface $environment, ModelInterface $model)
     {
         $translator = $environment->getTranslator();
-        $type       = $model->getProperty('type');
-        $combined   = 'typedesc.' . $type;
+        assert($translator instanceof TranslatorInterface);
 
-        if (($resultPattern = $translator->translate($combined, 'tl_metamodel_filtersetting')) == $combined) {
+        $type     = $model->getProperty('type');
+        $combined = 'typedesc.' . $type;
+
+        if (($resultPattern = $translator->translate($combined, 'tl_metamodel_filtersetting')) === $combined) {
             $resultPattern = $translator->translate('typedesc._default_', 'tl_metamodel_filtersetting');
         }
 
@@ -239,8 +246,10 @@ abstract class AbstractFilterSettingTypeRenderer
         ModelInterface $model
     ) {
         $translator = $environment->getTranslator();
-        $metamodel  = $this->getMetaModel($model);
-        $attribute  = $metamodel->getAttributeById((int) $model->getProperty('attr_id'));
+        assert($translator instanceof TranslatorInterface);
+
+        $metamodel = $this->getMetaModel($model);
+        $attribute = $metamodel->getAttributeById((int) $model->getProperty('attr_id'));
 
         if ($attribute) {
             $attributeColumnName = $attribute->getColName();
@@ -277,6 +286,7 @@ abstract class AbstractFilterSettingTypeRenderer
     protected function getLabelParametersNormal(EnvironmentInterface $environment, ModelInterface $model)
     {
         $translator = $environment->getTranslator();
+        assert($translator instanceof TranslatorInterface);
 
         return [
             $this->getLabelImage($model),

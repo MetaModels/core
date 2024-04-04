@@ -37,6 +37,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * This is the information retriever database backend.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DatabaseBackedListener
 {
@@ -45,14 +47,14 @@ class DatabaseBackedListener
      *
      * @var Connection
      */
-    private $database;
+    private Connection $database;
 
     /**
      * The event dispatcher.
      *
      * @var EventDispatcherInterface
      */
-    private $dispatcher;
+    private EventDispatcherInterface $dispatcher;
 
     /**
      * All MetaModel instances created via this listener.
@@ -61,7 +63,7 @@ class DatabaseBackedListener
      *
      * @var IMetaModel[]
      */
-    private $instancesById = [];
+    private array $instancesById = [];
 
     /**
      * All MetaModel instances.
@@ -70,35 +72,35 @@ class DatabaseBackedListener
      *
      * @var IMetaModel[]
      */
-    private $instancesByTable = [];
+    private array $instancesByTable = [];
 
     /**
      * The table names.
      *
      * @var string[]
      */
-    private $tableNames = [];
+    private array $tableNames = [];
 
     /**
      * Flag if the table names have already been collected.
      *
      * @var bool
      */
-    private $tableNamesCollected = false;
+    private bool $tableNamesCollected = false;
 
     /**
      * All attribute information.
      *
      * @var array[]
      */
-    private $attributeInformation = [];
+    private array $attributeInformation = [];
 
     /**
      * The system columns of MetaModels.
      *
      * @var string[]
      */
-    private $systemColumns;
+    private array $systemColumns;
 
     /**
      * Create a new instance.
@@ -120,10 +122,16 @@ class DatabaseBackedListener
      * @return IMetaModelsServiceContainer
      *
      * @deprecated The service container is deprecated and should not be used anymore.
+     *
+     * @psalm-suppress DeprecatedInterface
      */
     public function getServiceContainer()
     {
-        return System::getContainer()->get(MetaModelsServiceContainer::class);
+        /** @psalm-suppress DeprecatedClass */
+        $serviceContainer = System::getContainer()->get(MetaModelsServiceContainer::class);
+        assert($serviceContainer instanceof IMetaModelsServiceContainer);
+
+        return $serviceContainer;
     }
 
     /**
@@ -136,7 +144,7 @@ class DatabaseBackedListener
     public function getMetaModelNameFromId(GetMetaModelNameFromIdEvent $event)
     {
         $metaModelId = $event->getMetaModelId();
-        if (array_key_exists($metaModelId, $this->instancesById)) {
+        if (\array_key_exists($metaModelId, $this->instancesById)) {
             $event->setMetaModelName($this->instancesById[$metaModelId]->getTableName());
 
             return;
@@ -160,7 +168,7 @@ class DatabaseBackedListener
                 ->executeQuery()
                 ->fetchAssociative();
 
-            if ($table) {
+            if (false !== $table) {
                 $this->tableNames[$metaModelId] = $table['tableName'];
                 $event->setMetaModelName($this->tableNames[$metaModelId]);
             }
@@ -171,7 +179,6 @@ class DatabaseBackedListener
      * Determines the correct factory from a metamodel table name and creates an instance using the factory.
      *
      * @param CreateMetaModelEvent $event   The event.
-     *
      * @param array                $arrData The meta information for the MetaModel.
      *
      * @return bool
@@ -191,16 +198,15 @@ class DatabaseBackedListener
         // @codingStandardsIgnoreEnd
 
         $factoryClass = $GLOBALS['METAMODELS']['factories'][$name];
-        $event->setMetaModel(call_user_func_array(array($factoryClass, 'createInstance'), array($arrData)));
+        $event->setMetaModel(\call_user_func_array([$factoryClass, 'createInstance'], [$arrData]));
 
-        return $event->getMetaModel() !== null;
+        return (bool) $event->getMetaModel();
     }
 
     /**
      * Create a MetaModel instance with the given information.
      *
      * @param CreateMetaModelEvent $event   The event.
-     *
      * @param array                $arrData The meta information for the MetaModel.
      *
      * @return void
@@ -210,15 +216,18 @@ class DatabaseBackedListener
      */
     protected function createInstance(CreateMetaModelEvent $event, $arrData)
     {
-        if (!$this->createInstanceViaLegacyFactory($event, $arrData)) {
+        if (false === $this->createInstanceViaLegacyFactory($event, $arrData)) {
             if ($arrData['translated']) {
                 $metaModel = new TranslatedMetaModel($arrData, $this->dispatcher, $this->database);
                 // @deprecated usage of TL_LANGUAGE - remove for Contao 5.0.
-                $metaModel->selectLanguage(LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE']));
+                $metaModel->selectLanguage(LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE'] ?? 'en'));
             } else {
                 $metaModel = new MetaModel($arrData, $this->dispatcher, $this->database);
             }
+
+            /** @psalm-suppress DeprecatedMethod */
             $metaModel->setServiceContainer(function () {
+                /** @psalm-suppress DeprecatedMethod */
                 return $this->getServiceContainer();
             }, false);
             $event->setMetaModel($metaModel);
@@ -240,6 +249,7 @@ class DatabaseBackedListener
     public function createMetaModel(CreateMetaModelEvent $event)
     {
         if ($event->getMetaModel() !== null) {
+            /** @psalm-suppress DeprecatedMethod */
             if (($metaModel = $event->getMetaModel()) instanceof ITranslatedMetaModel && $metaModel->isTranslated()) {
                 // @codingStandardsIgnoreStart
                 @\trigger_error(
@@ -269,7 +279,7 @@ class DatabaseBackedListener
             ->executeQuery()
             ->fetchAssociative();
 
-        if ($table) {
+        if (false !== $table) {
             $table['system_columns'] = $this->systemColumns;
 
             $this->createInstance($event, $table);
@@ -318,7 +328,7 @@ class DatabaseBackedListener
     public function collectMetaModelAttributeInformation(CollectMetaModelAttributeInformationEvent $event)
     {
         $metaModelName = $event->getMetaModel()->getTableName();
-        if (!array_key_exists($metaModelName, $this->attributeInformation)) {
+        if (!\array_key_exists($metaModelName, $this->attributeInformation)) {
             $attributes = $this
                 ->database
                 ->createQueryBuilder()

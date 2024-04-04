@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -34,21 +35,21 @@ abstract class AbstractAttributeTypeFactory implements IAttributeTypeFactory
      *
      * @var string
      */
-    protected $typeName;
+    protected $typeName = '';
 
     /**
      * The name of the attribute class of this type.
      *
-     * @var string
+     * @var class-string<IAttribute>
      */
-    protected $typeClass;
+    protected $typeClass = IAttribute::class;
 
     /**
-     * The icon representing this attributy type.
+     * The icon representing this attribute type.
      *
      * @var string
      */
-    protected $typeIcon;
+    protected $typeIcon = '';
 
     /**
      * {@inheritdoc}
@@ -89,7 +90,7 @@ abstract class AbstractAttributeTypeFactory implements IAttributeTypeFactory
      */
     public function isTranslatedType()
     {
-        return in_array('MetaModels\Attribute\ITranslated', class_implements($this->typeClass, true));
+        return \in_array('MetaModels\Attribute\ITranslated', \class_implements($this->typeClass), true);
     }
 
     /**
@@ -99,7 +100,7 @@ abstract class AbstractAttributeTypeFactory implements IAttributeTypeFactory
      */
     public function isSimpleType()
     {
-        return in_array('MetaModels\Attribute\ISimple', class_implements($this->typeClass, true));
+        return \in_array('MetaModels\Attribute\ISimple', \class_implements($this->typeClass), true);
     }
 
     /**
@@ -109,6 +110,6 @@ abstract class AbstractAttributeTypeFactory implements IAttributeTypeFactory
      */
     public function isComplexType()
     {
-        return in_array('MetaModels\Attribute\IComplex', class_implements($this->typeClass, true));
+        return \in_array('MetaModels\Attribute\IComplex', \class_implements($this->typeClass), true);
     }
 }

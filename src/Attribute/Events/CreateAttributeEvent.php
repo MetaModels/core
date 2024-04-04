@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -33,7 +33,7 @@ class CreateAttributeEvent extends Event
     /**
      * The event name.
      */
-    const NAME = 'metamodels.attribute.create';
+    public const NAME = 'metamodels.attribute.create';
 
     /**
      * The attribute information.
@@ -52,7 +52,7 @@ class CreateAttributeEvent extends Event
     /**
      * The attribute instance.
      *
-     * @var IAttribute
+     * @var IAttribute|null
      */
     protected $attribute;
 
@@ -60,7 +60,6 @@ class CreateAttributeEvent extends Event
      * Create a new instance.
      *
      * @param array      $attributeInformation The attribute information array.
-     *
      * @param IMetaModel $metaModel            The MetaModel instance for which the attribute shall get created for.
      */
     public function __construct($attributeInformation, $metaModel)
@@ -92,7 +91,7 @@ class CreateAttributeEvent extends Event
     /**
      * Retrieve the attribute instance.
      *
-     * @return IAttribute
+     * @return IAttribute|null
      */
     public function getAttribute()
     {

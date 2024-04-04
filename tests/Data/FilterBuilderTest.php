@@ -22,11 +22,10 @@ namespace MetaModels\Test\Data;
 
 use ContaoCommunityAlliance\DcGeneral\Data\DefaultConfig;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Driver\ResultStatement;
+use Doctrine\DBAL\Result;
 use MetaModels\DcGeneral\Data\FilterBuilder;
 use MetaModels\IMetaModel;
 use MetaModels\MetaModel;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use MetaModels\Attribute\Base;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -72,37 +71,6 @@ class FilterBuilderTest extends TestCase
     }
 
     /**
-     * Mock a database connection with the passed query.
-     *
-     * @param string $queryString The expected SQL query.
-     * @param array  $params      The expected parameters.
-     * @param array  $result      The query result.
-     *
-     * @return MockObject|Connection
-     */
-    private function mockConnection($queryString, $params, $result)
-    {
-        $connection = $this->getMockBuilder(Connection::class)->disableOriginalConstructor()->getMock();
-
-        $statement = $this
-            ->getMockBuilder(ResultStatement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $statement
-            ->expects(self::once())
-            ->method('fetchAll')
-            ->with(\PDO::FETCH_ASSOC)
-            ->willReturn($result);
-        $connection
-            ->expects(self::once())
-            ->method('executeQuery')
-            ->with($queryString, $params)
-            ->willReturn($statement);
-
-        return $connection;
-    }
-
-    /**
      * Test the build process.
      *
      * @return void
@@ -138,7 +106,7 @@ class FilterBuilderTest extends TestCase
         $attribute = $this
             ->getMockBuilder(Base::class)
             ->setConstructorArgs([$metaModel, ['colname' => 'test1']])
-            ->setMethods(['searchFor'])
+            ->onlyMethods(['searchFor'])
             ->getMockForAbstractClass();
 
         $attribute
@@ -167,14 +135,13 @@ class FilterBuilderTest extends TestCase
 
         $connection = $this->getMockBuilder(Connection::class)->disableOriginalConstructor()->getMock();
 
-        $statement = $this
-            ->getMockBuilder(ResultStatement::class)
+        $result = $this
+            ->getMockBuilder(Result::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $statement
+        $result
             ->expects(self::once())
-            ->method('fetchAll')
-            ->with(\PDO::FETCH_ASSOC)
+            ->method('fetchAllAssociative')
             ->willReturn([
                 ['id' => 0],
                 ['id' => 1],
@@ -187,7 +154,7 @@ class FilterBuilderTest extends TestCase
             ->expects(self::once())
             ->method('executeQuery')
             ->with('SELECT t.id FROM mm_test AS t WHERE ((t.foo = ?))', [0])
-            ->willReturn($statement);
+            ->willReturn($result);
 
         $builder = new FilterBuilder($metaModel, $config, $connection);
 

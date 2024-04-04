@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Maack <david.maack@arcor.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2021 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -30,6 +31,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * This is the MetaModel factory interface.
  *
  * To create a MetaModel instance, call @link{MetaModelFactory::getMetaModel()}
+ *
+ * @psalm-suppress DeprecatedInterface
  */
 class Factory implements IFactory
 {
@@ -38,21 +41,23 @@ class Factory implements IFactory
      *
      * @var EventDispatcherInterface
      */
-    private $dispatcher;
+    private EventDispatcherInterface $dispatcher;
 
     /**
      * The service container.
      *
-     * @var IMetaModelsServiceContainer
+     * @var IMetaModelsServiceContainer|null
+     *
+     * @psalm-suppress DeprecatedInterface
      */
-    private $serviceContainer;
+    private IMetaModelsServiceContainer|null $serviceContainer = null;
 
     /**
      * The already translated MetaModel names.
      *
      * @var string[]
      */
-    private $lookupMap = array();
+    private array $lookupMap = [];
 
     /**
      * Create a new instance.
@@ -67,11 +72,14 @@ class Factory implements IFactory
     /**
      * Set the service container.
      *
-     * @param IMetaModelsServiceContainer $serviceContainer The service container to use.
+     * @param IMetaModelsServiceContainer $serviceContainer  The service container to use.
+     * @param bool                        $deprecationNotice The flag to trigger error.
      *
      * @return Factory
      *
      * @deprecated The service container will get removed, use the symfony service container instead.
+     *
+     * @psalm-suppress DeprecatedInterface
      */
     public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer, $deprecationNotice = true)
     {
@@ -95,9 +103,15 @@ class Factory implements IFactory
      * @return IMetaModelsServiceContainer
      *
      * @deprecated The service container will get removed, use the symfony service container instead.
+     *
+     * @psalm-suppress DeprecatedInterface
      */
     public function getServiceContainer()
     {
+        if (null === $this->serviceContainer) {
+            throw new \RuntimeException('Deprecated service container is not set anymore by default.');
+        }
+
         // @codingStandardsIgnoreStart
         @trigger_error(
             '"' .__METHOD__ . '" is deprecated - use the services from the service container.',
@@ -116,8 +130,12 @@ class Factory implements IFactory
             $event = new GetMetaModelNameFromIdEvent($metaModelId);
 
             $this->dispatcher->dispatch($event, $event::NAME);
+            $translated = $event->getMetaModelName();
+            if (null === $translated) {
+                throw new \RuntimeException('Failed to convert id ' . $metaModelId . ' to table name.');
+            }
 
-            $this->lookupMap[$metaModelId] = $event->getMetaModelName();
+            $this->lookupMap[$metaModelId] = $translated;
         }
 
         return $this->lookupMap[$metaModelId];
@@ -132,9 +150,7 @@ class Factory implements IFactory
 
         $this->dispatcher->dispatch($event, $event::NAME);
 
-        $metaModel = $event->getMetaModel();
-
-        return $metaModel;
+        return $event->getMetaModel();
     }
 
     /**

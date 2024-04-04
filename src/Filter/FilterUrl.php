@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -28,30 +28,30 @@ class FilterUrl
     /**
      * The page array.
      *
-     * @var string[]
+     * @var array<string, mixed>
      */
-    private $page = [];
+    private array $page = [];
 
     /**
      * All parameters to be used as GET parameters.
      *
-     * @var string[]
+     * @var array<string, string|list<string>>
      */
-    private $getParameters = [];
+    private array $getParameters = [];
 
     /**
      * All parameters to be used as slug.
      *
-     * @var string[]
+     * @var array<string, string>
      */
-    private $slugParameters = [];
+    private array $slugParameters = [];
 
     /**
      * Create a new instance.
      *
-     * @param string[] $page           The page.
-     * @param string[] $getParameters  The get parameters.
-     * @param string[] $slugParameters The slug parameters.
+     * @param array<string, mixed> $page           The page.
+     * @param array<string, string> $getParameters  The get parameters.
+     * @param array<string, string> $slugParameters The slug parameters.
      */
     public function __construct(
         array $page = [],
@@ -60,10 +60,9 @@ class FilterUrl
     ) {
         if (static::class !== __CLASS__) {
             // @codingStandardsIgnoreStart
-            @\trigger_deprecation(
-                'metamodels/core',
-                '2.2',
-                static::class . ' should not extend ' . __CLASS__ . ' as it will become final in 3.0.'
+            @trigger_error(
+                static::class . ' should not extend ' . __CLASS__ . ' as it will become final in 3.0.',
+                E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
         }
@@ -94,7 +93,7 @@ class FilterUrl
     /**
      * Set the target page.
      *
-     * @param array $page The page.
+     * @param array<string, mixed> $page The page.
      *
      * @return self
      */
@@ -108,7 +107,7 @@ class FilterUrl
     /**
      * Obtain the target page.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function getPage(): array
     {
@@ -148,7 +147,7 @@ class FilterUrl
     }
 
     /**
-     * Add a slug parameter.
+     * Add a GET parameter.
      *
      * @param string              $name  The slug name.
      * @param string|list<string> $value The slug value.
@@ -157,8 +156,9 @@ class FilterUrl
      */
     public function setGet(string $name, $value): self
     {
-        if (empty($value)) {
+        if ([] === $value || '' === $value) {
             unset($this->getParameters[$name]);
+
             return $this;
         }
 
@@ -188,7 +188,7 @@ class FilterUrl
      */
     public function hasGet(string $name): bool
     {
-        return array_key_exists($name, $this->getParameters);
+        return \array_key_exists($name, $this->getParameters);
     }
 
     /**
@@ -225,7 +225,7 @@ class FilterUrl
      *
      * @param string $name The slug name.
      *
-     * @return string
+     * @return string|null
      */
     public function getSlug(string $name): ?string
     {
@@ -241,13 +241,13 @@ class FilterUrl
      */
     public function hasSlug(string $name): bool
     {
-        return array_key_exists($name, $this->slugParameters);
+        return \array_key_exists($name, $this->slugParameters);
     }
 
     /**
      * Obtain the slug parameters.
      *
-     * @return array
+     * @return array<string, string>
      */
     public function getSlugParameters(): array
     {

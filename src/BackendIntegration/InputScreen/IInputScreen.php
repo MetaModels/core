@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,8 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Alexander Menk <a.menk@imi.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -27,6 +28,8 @@ use MetaModels\IMetaModel;
 
 /**
  * This interface describes the abstraction of an input screen.
+ *
+ * @psalm-type TLegend=array{name: string, visible: bool, properties: list<string>}
  *
  * @deprecated This will get removed.
  */
@@ -42,14 +45,14 @@ interface IInputScreen
     /**
      * Retrieve all legends.
      *
-     * @return string[]
+     * @return array<string, TLegend>
      */
     public function getLegends();
 
     /**
      * Retrieve the names of all legends.
      *
-     * @return string[]
+     * @return list<string>
      */
     public function getLegendNames();
 
@@ -58,7 +61,7 @@ interface IInputScreen
      *
      * @param string $name The name of the legend.
      *
-     * @return array
+     * @return TLegend
      */
     public function getLegend($name);
 
@@ -81,7 +84,7 @@ interface IInputScreen
     /**
      * Retrieve the names of all contained properties.
      *
-     * @return string[]
+     * @return list<string>
      */
     public function getPropertyNames();
 

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Marc Reimann <reimann@mediendepot-ruhr.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -26,7 +26,9 @@
 namespace MetaModels\Attribute;
 
 use Contao\System;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use MetaModels\Helper\TableManipulator;
 use MetaModels\IMetaModel;
 
@@ -60,13 +62,13 @@ class BaseSimple extends Base implements ISimple
      *
      * Note that you should not use this directly but use the factory classes to instantiate attributes.
      *
-     * @param IMetaModel       $objMetaModel     The MetaModel instance this attribute belongs to.
-     * @param array            $arrData          The information array, for attribute information, refer to
-     *                                           documentation of table tl_metamodel_attribute and documentation of the
-     *                                           certain attribute classes for information what values are understood.
-     * @param Connection       $connection       The database connection.
-     *
-     * @param TableManipulator $tableManipulator Table manipulator instance.
+     * @param IMetaModel            $objMetaModel     The MetaModel instance this attribute belongs to.
+     * @param array                 $arrData          The information array, for attribute information, refer to
+     *                                                documentation of table tl_metamodel_attribute and documentation
+     *                                                of the certain attribute classes for information what values are
+     *                                                understood.
+     * @param Connection|null       $connection       The database connection.
+     * @param TableManipulator|null $tableManipulator Table manipulator instance.
      */
     public function __construct(
         IMetaModel $objMetaModel,
@@ -84,7 +86,9 @@ class BaseSimple extends Base implements ISimple
             );
             // @codingStandardsIgnoreEnd
             $connection = System::getContainer()->get('database_connection');
+            assert($connection instanceof Connection);
         }
+        $this->connection = $connection;
 
         if (null === $tableManipulator) {
             // @codingStandardsIgnoreStart
@@ -95,9 +99,8 @@ class BaseSimple extends Base implements ISimple
             // @codingStandardsIgnoreEnd
 
             $tableManipulator = System::getContainer()->get('metamodels.table_manipulator');
+            assert($tableManipulator instanceof TableManipulator);
         }
-
-        $this->connection       = $connection;
         $this->tableManipulator = $tableManipulator;
     }
 
@@ -106,16 +109,17 @@ class BaseSimple extends Base implements ISimple
      *
      * This tells the attribute to perform any actions that must be done to correctly initialize the new value
      * and to perform any action to undo the changes that had been done for the previous value.
-     * i.e.: when an attribute type needs columns in an an auxiliary table, these will have to be updated herein.
+     * i.e.: when an attribute type needs columns in an auxiliary table, these will have to be updated herein.
      *
      * This method may throw an exception, when the new value is invalid or any problems appear, the MetaModelAttribute
      * will then keep the old meta value.
      *
      * @param string $strMetaName Name of the meta information that shall be updated.
-     *
-     * @param mixed  $varNewValue The new value for this meta information.
+     * @param mixed $varNewValue The new value for this meta information.
      *
      * @return \MetaModels\Attribute\IAttribute The instance of this attribute, to support chaining.
+     *
+     * @throws Exception
      *
      * @deprecated Implement schema generators instead.
      */
@@ -126,13 +130,17 @@ class BaseSimple extends Base implements ISimple
             return $this;
         }
 
-        // By default we accept any change of meta information.
-        if ($strMetaName == 'colname') {
-            if ($this->get($strMetaName) != $varNewValue) {
+        // By default, we accept any change of meta information.
+        if ($strMetaName === 'colname') {
+            if ($this->get($strMetaName) !== $varNewValue) {
+                /** @psalm-suppress DeprecatedMethod */
                 $this->renameColumn($varNewValue);
             }
+
             return $this;
         }
+
+        /** @psalm-suppress DeprecatedMethod */
         return parent::handleMetaChange($strMetaName, $varNewValue);
     }
 
@@ -142,6 +150,8 @@ class BaseSimple extends Base implements ISimple
      * @param mixed $arrValues The values to be stored into database. Mapping is item id=>value.
      *
      * @return void
+     *
+     * @throws Exception
      */
     public function setDataFor($arrValues)
     {
@@ -153,7 +163,7 @@ class BaseSimple extends Base implements ISimple
                 ->update($strTable, 't')
                 ->where('t.id=:id')
                 ->set('t.' . $strColName, ':' . $strColName)
-                ->setParameter($strColName, is_array($varData) ? serialize($varData) : $varData)
+                ->setParameter($strColName, \is_array($varData) ? \serialize($varData) : $varData)
                 ->setParameter('id', $intId)
                 ->executeQuery();
         }
@@ -161,6 +171,8 @@ class BaseSimple extends Base implements ISimple
 
     /**
      * {@inheritDoc}
+     *
+     * @throws Exception
      */
     public function getFilterOptions($idList, $usedOnly, &$arrCount = null)
     {
@@ -177,7 +189,7 @@ class BaseSimple extends Base implements ISimple
                 ->where('t.id IN (:ids)')
                 ->groupBy('t.' . $strCol)
                 ->orderBy('MIN(FIELD(t.id, :ids))')
-                ->setParameter('ids', $idList, Connection::PARAM_STR_ARRAY)
+                ->setParameter('ids', $idList, ArrayParameterType::STRING)
                 ->executeQuery();
         } else {
             $statement = $this->connection->createQueryBuilder()
@@ -190,12 +202,13 @@ class BaseSimple extends Base implements ISimple
 
         $arrResult = [];
         while ($objRow = $statement->fetchAssociative()) {
-            if (is_array($arrCount)) {
+            if (\is_array($arrCount)) {
                 $arrCount[$objRow[$strCol]] = $objRow['mm_count'];
             }
 
             $arrResult[$objRow[$strCol]] = $objRow[$strCol];
         }
+
         return $arrResult;
     }
 
@@ -203,20 +216,20 @@ class BaseSimple extends Base implements ISimple
      * {@inheritdoc}
      *
      * This base implementation does a plain SQL sort by native value as defined by MySQL.
+     *
+     * @throws Exception
      */
     public function sortIds($idList, $strDirection)
     {
         // Base implementation, do a simple sorting on given column.
-        $idList = $this->connection->createQueryBuilder()
+        return $this->connection->createQueryBuilder()
             ->select('t.id')
             ->from($this->getMetaModel()->getTableName(), 't')
             ->where('t.id IN (:ids)')
-            ->setParameter('ids', $idList, Connection::PARAM_STR_ARRAY)
+            ->setParameter('ids', $idList, ArrayParameterType::STRING)
             ->orderBy('t.' . $this->getColName(), $strDirection)
             ->executeQuery()
             ->fetchFirstColumn();
-
-        return $idList;
     }
 
     /**
@@ -227,12 +240,15 @@ class BaseSimple extends Base implements ISimple
      *
      * @param string $strPattern The text to search for. This may contain wildcards.
      *
-     * @return int[] the ids of matching items.
+     * @return list<string> The ids of matching items.
+     *
+     * @throws Exception
      */
     public function searchFor($strPattern)
     {
         // Base implementation, do a simple search on given column.
-        $strPattern = str_replace(array('*', '?'), array('%', '_'), $strPattern);
+        $strPattern = \str_replace(['*', '?'], ['%', '_'], $strPattern);
+
         return $this->connection->createQueryBuilder()
             ->select('t.id')
             ->from($this->getMetaModel()->getTableName(), 't')
@@ -272,12 +288,16 @@ class BaseSimple extends Base implements ISimple
     {
         if ($this->isManagedAttribute($this->get('type'))) {
             $this->triggerDeprecationShouldNotCallManaged(static::class, __METHOD__);
+
             return;
         }
 
         $this->triggerDeprecationIsUnmanagedAttribute(static::class, __METHOD__);
 
+        /** @psalm-suppress DeprecatedMethod */
         parent::destroyAUX();
+
+        /** @psalm-suppress DeprecatedMethod */
         $this->deleteColumn();
     }
 
@@ -286,18 +306,24 @@ class BaseSimple extends Base implements ISimple
      *
      * @return void
      *
+     * @throws Exception
+     *
      * @deprecated Implement schema generators instead - see #1267.
      */
     public function initializeAUX()
     {
         if ($this->isManagedAttribute($this->get('type'))) {
             $this->triggerDeprecationShouldNotCallManaged(static::class, __METHOD__);
+
             return;
         }
 
         $this->triggerDeprecationIsUnmanagedAttribute(static::class, __METHOD__);
 
+        /** @psalm-suppress DeprecatedMethod */
         parent::initializeAUX();
+
+        /** @psalm-suppress DeprecatedMethod */
         $this->createColumn();
     }
 
@@ -308,18 +334,22 @@ class BaseSimple extends Base implements ISimple
      *
      * @return void
      *
+     * @throws Exception
+     *
      * @deprecated Implement schema generators instead - see #1267.
      */
     public function createColumn()
     {
         if ($this->isManagedAttribute($this->get('type'))) {
             $this->triggerDeprecationShouldNotCallManaged(static::class, __METHOD__);
+
             return;
         }
 
         $this->triggerDeprecationIsUnmanagedAttribute(static::class, __METHOD__);
 
         if ($this->getColName()) {
+            /** @psalm-suppress DeprecatedMethod */
             $this->tableManipulator->createColumn(
                 $this->getMetaModel()->getTableName(),
                 $this->getColName(),
@@ -333,18 +363,21 @@ class BaseSimple extends Base implements ISimple
      *
      * @return void
      *
+     * @throws Exception
+     *
      * @deprecated Implement schema generators instead - see #1267.
      */
     public function deleteColumn()
     {
         if ($this->isManagedAttribute($this->get('type'))) {
             $this->triggerDeprecationShouldNotCallManaged(static::class, __METHOD__);
+
             return;
         }
 
         $this->triggerDeprecationIsUnmanagedAttribute(static::class, __METHOD__);
 
-        $schemaManager = $this->connection->getSchemaManager();
+        $schemaManager = $this->connection->createSchemaManager();
         $columns       = $schemaManager->listTableColumns($this->getMetaModel()->getTableName());
 
         // Try to delete the column. If it does not exist as we can assume it has been deleted already then.
@@ -360,12 +393,15 @@ class BaseSimple extends Base implements ISimple
      *
      * @return void
      *
+     * @throws Exception
+     *
      * @deprecated Implement schema generators instead - see #1267.
      */
     public function renameColumn($strNewColumnName)
     {
         if ($this->isManagedAttribute($this->get('type'))) {
             $this->triggerDeprecationShouldNotCallManaged(static::class, __METHOD__);
+
             return;
         }
 
@@ -373,10 +409,11 @@ class BaseSimple extends Base implements ISimple
 
         $this->tableManipulator->checkColumnName($strNewColumnName);
 
-        $schemaManager = $this->connection->getSchemaManager();
+        $schemaManager = $this->connection->createSchemaManager();
         $columns       = $schemaManager->listTableIndexes($this->getMetaModel()->getTableName());
 
         if ($this->getColName() && isset($columns[$this->getColName()])) {
+            /** @psalm-suppress DeprecatedMethod */
             $this->tableManipulator->renameColumn(
                 $this->getMetaModel()->getTableName(),
                 $this->getColName(),
@@ -386,6 +423,7 @@ class BaseSimple extends Base implements ISimple
         } else {
             $strBackupColName = $this->getColName();
             $this->set('colname', $strNewColumnName);
+            /** @psalm-suppress DeprecatedMethod */
             $this->createColumn();
             $this->set('colname', $strBackupColName);
         }
@@ -408,10 +446,14 @@ class BaseSimple extends Base implements ISimple
      *
      * @param mixed $value The input value.
      *
-     * @return string
+     * @return string|null
      */
     public function serializeData($value)
     {
-        return $value;
+        if (empty($value)) {
+            return null;
+        }
+
+        return (string) $value;
     }
 }

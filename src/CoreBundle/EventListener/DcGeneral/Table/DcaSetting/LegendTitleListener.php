@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -26,7 +27,9 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\Decod
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\Properties\PropertyInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\AbstractEnvironmentAwareEvent;
+use ContaoCommunityAlliance\Translator\TranslatorInterface;
 use MetaModels\Dca\Helper;
+use MetaModels\IMetaModel;
 
 /**
  * This handles the serialization and deserialization as well as the building of the title widget.
@@ -47,10 +50,11 @@ class LegendTitleListener extends AbstractListener
         }
 
         $metaModel = $this->getMetaModelFromModel($event->getModel());
+        assert($metaModel instanceof IMetaModel);
 
         $values = Helper::decodeLangArray($event->getValue(), $metaModel);
 
-        $event->setValue(unserialize($values));
+        $event->setValue(\unserialize($values));
     }
 
     /**
@@ -67,6 +71,7 @@ class LegendTitleListener extends AbstractListener
         }
 
         $metaModel = $this->getMetaModelFromModel($event->getModel());
+        assert($metaModel instanceof IMetaModel);
 
         $values = Helper::encodeLangArray($event->getValue(), $metaModel);
 
@@ -87,13 +92,16 @@ class LegendTitleListener extends AbstractListener
         }
 
         $metaModel = $this->getMetaModelFromModel($event->getModel());
+        assert($metaModel instanceof IMetaModel);
+        $translator = $event->getEnvironment()->getTranslator();
+        assert($translator instanceof TranslatorInterface);
 
         Helper::prepareLanguageAwareWidget(
             $event->getEnvironment(),
             $event->getProperty(),
             $metaModel,
-            $event->getEnvironment()->getTranslator()->translate('name_langcode', 'tl_metamodel_dcasetting'),
-            $event->getEnvironment()->getTranslator()->translate('name_value', 'tl_metamodel_dcasetting'),
+            $translator->translate('name_langcode', 'tl_metamodel_dcasetting'),
+            $translator->translate('name_value', 'tl_metamodel_dcasetting'),
             false,
             StringUtil::deserialize($event->getModel()->getProperty('legendtitle'), true)
         );
@@ -107,10 +115,10 @@ class LegendTitleListener extends AbstractListener
         if (!parent::wantToHandle($event)) {
             return false;
         }
-        if (method_exists($event, 'getPropertyName') && ('legendtitle' !== $event->getPropertyName())) {
+        if (\method_exists($event, 'getPropertyName') && ('legendtitle' !== $event->getPropertyName())) {
             return false;
         }
-        if (method_exists($event, 'getProperty')) {
+        if (\method_exists($event, 'getProperty')) {
             $property = $event->getProperty();
             if ($property instanceof PropertyInterface) {
                 $property = $property->getName();

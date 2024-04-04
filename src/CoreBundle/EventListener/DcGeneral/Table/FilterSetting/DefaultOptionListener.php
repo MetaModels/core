@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -22,6 +22,7 @@
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\FilterSetting;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use MetaModels\Attribute\IAttribute;
 use MetaModels\Filter\Setting\IFilterSettingFactory;
 
@@ -35,7 +36,7 @@ class DefaultOptionListener
      *
      * @var IFilterSettingFactory
      */
-    private $filterFactory;
+    private IFilterSettingFactory $filterFactory;
 
     /**
      * Create a new instance.
@@ -56,8 +57,13 @@ class DefaultOptionListener
      */
     public function handle(GetPropertyOptionsEvent $event)
     {
-        if (('tl_metamodel_filtersetting' !== $event->getEnvironment()->getDataDefinition()->getName())
-            || ('defaultid' !== $event->getPropertyName())) {
+        $dataDefinition = $event->getEnvironment()->getDataDefinition();
+        assert($dataDefinition instanceof ContainerInterface);
+
+        if (
+            ('tl_metamodel_filtersetting' !== $dataDefinition->getName())
+            || ('defaultid' !== $event->getPropertyName())
+        ) {
             return;
         }
 
@@ -65,22 +71,20 @@ class DefaultOptionListener
         if (!($attributeId = $model->getProperty('attr_id'))) {
             return;
         }
-        if (null === $metaModel = $this->filterFactory->createCollection($model->getProperty('fid'))->getMetaModel()) {
-            return;
-        }
+
+        $metaModel = $this->filterFactory->createCollection($model->getProperty('fid'))->getMetaModel();
 
         if (null === $attribute = $metaModel->getAttributeById((int) $attributeId)) {
             return;
         }
 
-        $event->setOptions($this->getOptions($attribute, $model->getProperty('onlyused') ? true : false));
+        $event->setOptions($this->getOptions($attribute, (bool) $model->getProperty('onlyused')));
     }
 
     /**
      * Ensure that all options have a value.
      *
      * @param IAttribute $attribute The options to be cleaned.
-     *
      * @param bool       $onlyUsed  Determines if only "used" values shall be returned.
      *
      * @return array
@@ -91,7 +95,7 @@ class DefaultOptionListener
         $options = [];
         foreach ($attribute->getFilterOptions(null, $onlyUsed) as $key => $value) {
             // Remove html/php tags.
-            $value = trim(strip_tags($value));
+            $value = \trim(\strip_tags($value));
 
             if (!empty($value)) {
                 $options[$key] = $value;

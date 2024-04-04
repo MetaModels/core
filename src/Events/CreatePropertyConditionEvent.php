@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -28,10 +29,12 @@ use Symfony\Contracts\EventDispatcher\Event;
  * This event is dispatched, whenever a MetaModels property condition shall be transformed into an object instance.
  *
  * @deprecated Implement proper factories and create conditions within there.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class CreatePropertyConditionEvent extends Event
 {
-    const NAME = 'metamodels.events.create-property-condition-event';
+    public const NAME = 'metamodels.events.create-property-condition-event';
 
     /**
      * The array containing the meta information for the instance.
@@ -50,15 +53,14 @@ class CreatePropertyConditionEvent extends Event
     /**
      * The instance to be returned.
      *
-     * @var PropertyConditionInterface
+     * @var PropertyConditionInterface|null
      */
-    protected $instance;
+    protected $instance = null;
 
     /**
      * Create a new instance.
      *
      * @param array      $data      The meta information for the instance.
-     *
      * @param IMetaModel $metaModel The MetaModel instance the condition applies to.
      */
     public function __construct($data, IMetaModel $metaModel)
@@ -90,7 +92,7 @@ class CreatePropertyConditionEvent extends Event
     /**
      * Retrieve the instance.
      *
-     * @return PropertyConditionInterface
+     * @return PropertyConditionInterface|null
      */
     public function getInstance()
     {

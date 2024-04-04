@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,17 +15,25 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels;
 
+use Closure;
 use Contao\BackendUser;
+use Contao\Database;
 use Contao\FrontendUser;
+use Contao\System;
+use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use Doctrine\Common\Cache\Cache;
+use Doctrine\DBAL\Connection;
+use InvalidArgumentException;
 use MetaModels\Attribute\IAttributeFactory;
+use MetaModels\BackendIntegration\ViewCombinations;
 use MetaModels\Filter\Setting\IFilterSettingFactory;
 use MetaModels\Render\Setting\IRenderSettingFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -34,62 +42,67 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * Reference implementation of IMetaModelsServiceContainer.
  *
  * @deprecated The service container will get removed, use the symfony service container instead.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @psalm-suppress DeprecatedInterface
+ * @psalm-suppress MissingConstructor
  */
 class MetaModelsServiceContainer implements IMetaModelsServiceContainer
 {
     /**
      * The factory to use.
      *
-     * @var IFactory
+     * @var IFactory|callable
      */
     protected $factory;
 
     /**
      * The factory to use.
      *
-     * @var IAttributeFactory
+     * @var IAttributeFactory|callable
      */
     protected $attributeFactory;
 
     /**
      * The filter setting factory.
      *
-     * @var IFilterSettingFactory
+     * @var IFilterSettingFactory|callable
      */
     protected $filterFactory;
 
     /**
      * The render setting factory.
      *
-     * @var IRenderSettingFactory
+     * @var IRenderSettingFactory|callable
      */
     protected $renderFactory;
 
     /**
      * The event dispatcher.
      *
-     * @var EventDispatcherInterface
+     * @var EventDispatcherInterface|callable
      */
     protected $dispatcher;
 
     /**
      * The Contao database instance to use.
      *
-     * @var \Contao\Database
+     * @var Database|callable
      */
     protected $database;
 
     /**
      * The cache in use.
      *
-     * @var Cache
+     * @var Cache|callable
      */
     protected $cache;
 
     /**
      * Registered services.
      *
-     * @var object[]
+     * @var array<string, object|callable|mixed>
      */
     protected $services;
 
@@ -123,6 +136,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
 
         if (\is_callable($this->factory)) {
             $this->factory = \call_user_func($this->factory);
+            /** @psalm-suppress DeprecatedMethod */
             $this->factory->setServiceContainer($this, false);
         }
 
@@ -159,6 +173,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
 
         if (\is_callable($this->attributeFactory)) {
             $this->attributeFactory = \call_user_func($this->attributeFactory);
+            /** @psalm-suppress DeprecatedMethod */
             $this->attributeFactory->setServiceContainer($this, false);
         }
 
@@ -195,6 +210,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
 
         if (\is_callable($this->filterFactory)) {
             $this->filterFactory = \call_user_func($this->filterFactory);
+            /** @psalm-suppress DeprecatedMethod */
             $this->filterFactory->setServiceContainer($this, false);
         }
 
@@ -231,6 +247,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
 
         if (\is_callable($this->renderFactory)) {
             $this->renderFactory = \call_user_func($this->renderFactory);
+            /** @psalm-suppress DeprecatedMethod */
             $this->renderFactory->setServiceContainer($this, false);
         }
 
@@ -275,7 +292,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
     /**
      * Set the Contao database instance.
      *
-     * @param \Contao\Database|callable $database The contao database instance.
+     * @param Database|callable $database The contao database instance.
      *
      * @return MetaModelsServiceContainer
      */
@@ -347,7 +364,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
     /**
      * {@inheritdoc}
      *
-     * @throws \InvalidArgumentException When the passed service is not an object and no service name has been passed.
+     * @throws InvalidArgumentException When the passed service is not an object and no service name has been passed.
      *
      * @deprecated The service container will get removed, use the symfony service container instead.
      */
@@ -360,8 +377,8 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
         );
         // @codingStandardsIgnoreEnd
         if ($serviceName === null) {
-            if (!\is_object($service) || $service instanceof \Closure) {
-                throw new \InvalidArgumentException(
+            if (!\is_object($service) || $service instanceof Closure) {
+                throw new InvalidArgumentException(
                     'Service name must be given to ' . __CLASS__ . '::setService when not passing a class instance.'
                 );
             }
@@ -392,29 +409,34 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
         // @codingStandardsIgnoreEnd
 
         // Hacked in here as initialization is dead now.
-        if (!isset($this->services[(string) $serviceName]) && 'metamodels-view-combinations' === $serviceName) {
-            $determinator = \System::getContainer()->get('cca.dc-general.scope-matcher');
+        if (!isset($this->services[$serviceName]) && 'metamodels-view-combinations' === $serviceName) {
+            $determinator = System::getContainer()->get('cca.dc-general.scope-matcher');
+            assert($determinator instanceof RequestScopeDeterminator);
+            $connection = System::getContainer()->get('database_connection');
+            assert($connection instanceof Connection);
             switch (true) {
                 case $determinator->currentScopeIsFrontend():
+                    /** @psalm-suppress DeprecatedClass */
                     $this->services['metamodels-view-combinations'] =
-                        new \MetaModels\FrontendIntegration\ViewCombinations(
+                        new FrontendIntegration\ViewCombinations(
                             $this,
                             FrontendUser::getInstance(),
-                            \System::getContainer()->get('database_connection')
+                            $connection
                         );
                     break;
                 case $determinator->currentScopeIsBackend():
+                    /** @psalm-suppress DeprecatedClass */
                     $this->services['metamodels-view-combinations'] =
-                        new \MetaModels\BackendIntegration\ViewCombinations(
+                        new ViewCombinations(
                             $this,
                             BackendUser::getInstance(),
-                            \System::getContainer()->get('database_connection')
+                            $connection
                         );
                     break;
                 default:
             }
         }
 
-        return ($this->services[(string) $serviceName] ?? null);
+        return ($this->services[$serviceName] ?? null);
     }
 }

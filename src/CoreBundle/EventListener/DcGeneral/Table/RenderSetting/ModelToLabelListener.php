@@ -27,6 +27,7 @@ use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\IAttributeFactory;
 use MetaModels\CoreBundle\Assets\IconBuilder;
 use MetaModels\IFactory;
+use MetaModels\IMetaModel;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -94,6 +95,7 @@ class ModelToLabelListener extends AbstractListener
 
         $model     = $event->getModel();
         $metaModel = $this->getMetaModelFromModel($model);
+        assert($metaModel instanceof IMetaModel);
         $attribute = $metaModel->getAttributeById((int) $model->getProperty('attr_id'));
 
         if ($attribute) {
@@ -115,6 +117,7 @@ class ModelToLabelListener extends AbstractListener
             $colName = $this->trans('error_unknown_column');
         }
 
+        /** @psalm-suppress InvalidArgument */
         $event
             ->setLabel('<div class="field_heading cte_type %s"><strong>%s</strong> <em>[%s%s]</em></div>
                 <div class="field_type block">

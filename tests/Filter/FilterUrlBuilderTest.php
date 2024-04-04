@@ -50,7 +50,6 @@ class FilterUrlBuilderTest extends TestCase
                 'expectedUrl' => 'page-alias/auto/slug/sluggy',
                 'expectedParameters' => [
                     'get2' => 'value',
-                    '_locale' => 'en',
                 ],
                 'page' => [
                     'alias' => 'page-alias',
@@ -71,7 +70,7 @@ class FilterUrlBuilderTest extends TestCase
                 'expectedUrl' => 'alias/auto/slug/sluggy',
                 'expectedParameters' => [
                     'get2' => 'value',
-                    '_locale' => 'en',
+                    'get-param' => 'get-value',
                 ],
                 'page' => [
                 ],
@@ -134,7 +133,7 @@ class FilterUrlBuilderTest extends TestCase
         $adapter      = $this->getMockBuilder(Adapter::class)->disableOriginalConstructor()->getMock();
         $requestStack = $this->mockRequestStack($requestGet, $requestUrl);
 
-        $builder = new FilterUrlBuilder($generator, $requestStack, true, '.html', $adapter);
+        $builder = new FilterUrlBuilder($generator, $requestStack, true, '.html', $adapter, true);
 
         self::assertSame('success', $builder->generate($filterUrl));
     }
@@ -155,20 +154,20 @@ class FilterUrlBuilderTest extends TestCase
         $generator
             ->expects(self::once())
             ->method('generate')
-            ->with('folder/page/auto/slug/sluggy', ['get2' => 'value', '_locale' => 'en'])
+            ->with('folder/page/auto/slug/sluggy', ['get2' => 'value', 'get-param' => 'get-value'])
             ->willReturn('success');
 
         $adapter      = $this
             ->getMockBuilder(Adapter::class)
-            ->setMethods(['findByAliases'])
+            ->addMethods(['findByAliases'])
             ->disableOriginalConstructor()
             ->getMock();
         $requestStack = $this->getMockBuilder(RequestStack::class)->getMock();
-        $requestStack->method('getMasterRequest')->willReturn(
+        $requestStack->method('getCurrentRequest')->willReturn(
             new Request(
                 ['get-param' => 'get-value'],
                 [],
-                ['_locale' => 'en'],
+                [],
                 [],
                 [],
                 [
@@ -196,7 +195,7 @@ class FilterUrlBuilderTest extends TestCase
             ->with(['folder/page', 'folder'])
             ->willReturn($pages);
 
-        $builder = new FilterUrlBuilder($generator, $requestStack, true, '.html', $adapter);
+        $builder = new FilterUrlBuilder($generator, $requestStack, false, '.html', $adapter, true);
 
         $prevFolderUrl = Config::get('folderUrl');
         Config::set('folderUrl', true);
@@ -212,13 +211,11 @@ class FilterUrlBuilderTest extends TestCase
      *
      * @param array  $requestGet The current GET parameters.
      * @param string $requestUrl The request URL.
-     *
-     * @return RequestStack
      */
     private function mockRequestStack(array $requestGet, string $requestUrl): RequestStack
     {
         $requestStack = $this->getMockBuilder(RequestStack::class)->getMock();
-        $requestStack->method('getMasterRequest')->willReturn(
+        $requestStack->method('getCurrentRequest')->willReturn(
             new Request($requestGet, [], [], [], [], ['REQUEST_URI' => $requestUrl])
         );
 

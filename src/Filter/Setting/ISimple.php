@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,8 @@
  * @author     David Maack <david.maack@arcor.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -49,9 +50,8 @@ interface ISimple
      * A filter url hereby is a simple hash of name => value layout, it may eventually be interpreted
      * by attributes via IMetaModelAttribute::searchFor() method.
      *
-     * @param IFilter  $objFilter    The filter to append the rules to.
-     *
-     * @param string[] $arrFilterUrl The parameters to evaluate.
+     * @param IFilter              $objFilter    The filter to append the rules to.
+     * @param array<string, mixed> $arrFilterUrl The parameters to evaluate.
      *
      * @return void
      */
@@ -64,17 +64,18 @@ interface ISimple
      * parameters have to be fetched.
      *
      * @param IItem           $objItem          The item to fetch the values from.
-     *
      * @param IRenderSettings $objRenderSetting The render setting to be applied.
      *
-     * @return array An array containing all the URL parameters needed by this filter setting.
+     * @return array<string, string> An array containing all the URL parameters needed by this filter setting.
+     *
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function generateFilterUrlFrom(IItem $objItem, IRenderSettings $objRenderSetting);
 
     /**
      * Retrieve a list of all registered parameters from the setting.
      *
-     * @return array
+     * @return list<string>
      */
     public function getParameters();
 
@@ -83,29 +84,28 @@ interface ISimple
      *
      * These parameters may be overridden by modules and content elements and the like.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function getParameterDCA();
 
     /**
      * Retrieve the names of all parameters for listing in frontend filter configuration.
      *
-     * @return string[] the parameters as array. parametername => label
+     * @return array<string, string> the parameters as array. parametername => label
      */
     public function getParameterFilterNames();
 
     /**
      * Retrieve a list of filter widgets for all registered parameters as form field arrays.
      *
-     * @param string[]|null         $arrIds                   The ids matching the current filter values.
-     *
-     * @param array                 $arrFilterUrl             The current filter url.
-     *
-     * @param array                 $arrJumpTo                The jumpTo page (array, row data from tl_page).
-     *
+     * @param list<string>|null     $arrIds                   The ids matching the current filter values.
+     * @param array<string, mixed>  $arrFilterUrl             The current filter url.
+     * @param array<string, mixed>  $arrJumpTo                The jumpTo page (array, row data from tl_page).
      * @param FrontendFilterOptions $objFrontendFilterOptions The frontend filter options.
      *
-     * @return array
+     * @return array<string, mixed>
+     *
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function getParameterFilterWidgets(
         $arrIds,
@@ -117,7 +117,7 @@ interface ISimple
     /**
      * Retrieve a list of all referenced attributes within the filter setting.
      *
-     * @return array
+     * @return list<string>
      */
     public function getReferencedAttributes();
 }

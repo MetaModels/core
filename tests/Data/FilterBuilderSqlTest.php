@@ -21,7 +21,7 @@
 namespace MetaModels\Test\Data;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Driver\ResultStatement;
+use Doctrine\DBAL\Result;
 use MetaModels\DcGeneral\Data\FilterBuilderSql;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -35,10 +35,8 @@ class FilterBuilderSqlTest extends TestCase
 {
     /**
      * Test that a new builder is empty.
-     *
-     * @return void
      */
-    public function testBuilderIsInitiallyEmpty()
+    public function testBuilderIsInitiallyEmpty(): void
     {
         $connection = $this->getMockBuilder(Connection::class)->disableOriginalConstructor()->getMock();
         $builder    = new FilterBuilderSql('mm_test', 'AND', $connection);
@@ -49,10 +47,8 @@ class FilterBuilderSqlTest extends TestCase
 
     /**
      * Data provider for testBuild()
-     *
-     * @return array
      */
-    public function buildTestProvider()
+    public function buildTestProvider(): array
     {
         return [
             'equality compare' => [
@@ -90,11 +86,9 @@ class FilterBuilderSqlTest extends TestCase
      * @param array  $expectedParams The expected parameters.
      * @param array  $filter         The filter input array.
      *
-     * @return void
-     *
      * @dataProvider buildTestProvider
      */
-    public function testBuild($expectedSql, $expectedParams, array $filter)
+    public function testBuild(string $expectedSql, array $expectedParams, array $filter): void
     {
         $connection = $this->mockConnection($expectedSql, $expectedParams, [['id' => 'succ'], ['id' => 'ess']]);
         $builder    = new FilterBuilderSql('mm_test', 'AND', $connection);
@@ -105,10 +99,8 @@ class FilterBuilderSqlTest extends TestCase
 
     /**
      * Test the build process.
-     *
-     * @return void
      */
-    public function testBuildMultiple()
+    public function testBuildMultiple(): void
     {
         $connection = $this->mockConnection(
             'SELECT t.id FROM mm_test AS t WHERE ((t.foo = ?) AND (t.bar = ?))',
@@ -125,10 +117,8 @@ class FilterBuilderSqlTest extends TestCase
 
     /**
      * Test the build process.
-     *
-     * @return void
      */
-    public function testAddSubProcedure()
+    public function testAddSubProcedure(): void
     {
         $child = new FilterBuilderSql(
             'mm_test',
@@ -157,27 +147,24 @@ class FilterBuilderSqlTest extends TestCase
      * @param string $queryString The expected SQL query.
      * @param array  $params      The expected parameters.
      * @param array  $result      The query result.
-     *
-     * @return MockObject|Connection
      */
-    private function mockConnection($queryString, $params, $result)
+    private function mockConnection(string $queryString, array $params, array $result): Connection&MockObject
     {
         $connection = $this->getMockBuilder(Connection::class)->disableOriginalConstructor()->getMock();
 
-        $statement = $this
-            ->getMockBuilder(ResultStatement::class)
+        $resultSet = $this
+            ->getMockBuilder(Result::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $statement
+        $resultSet
             ->expects(self::once())
-            ->method('fetchAll')
-            ->with(\PDO::FETCH_ASSOC)
+            ->method('fetchAllAssociative')
             ->willReturn($result);
         $connection
             ->expects(self::once())
             ->method('executeQuery')
             ->with($queryString, $params)
-            ->willReturn($statement);
+            ->willReturn($resultSet);
 
         return $connection;
     }

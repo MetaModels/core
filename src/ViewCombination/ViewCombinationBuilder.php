@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,13 +14,14 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\ViewCombination;
 
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use MetaModels\IFactory;
 
@@ -34,14 +35,14 @@ class ViewCombinationBuilder
      *
      * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * The MetaModels factory.
      *
      * @var IFactory
      */
-    private $factory;
+    private IFactory $factory;
 
     /**
      * Create a new instance.
@@ -67,7 +68,7 @@ class ViewCombinationBuilder
      */
     public function getCombinationsForUser($userGroups, $userType)
     {
-        $userType = strtolower($userType);
+        $userType = \strtolower($userType);
         if ('fe' !== $userType && 'be' !== $userType) {
             throw new \InvalidArgumentException('Unknown user type: ' . $userType);
         }
@@ -78,12 +79,12 @@ class ViewCombinationBuilder
     /**
      * Retrieve the palette combinations from the database.
      *
-     * @param string $userGroups The user groups of the user to fetch information for.
-     * @param string $userType   The user type.
+     * @param string[] $userGroups The user groups of the user to fetch information for.
+     * @param string   $userType   The user type.
      *
      * @return null|array
      */
-    private function getCombinationsFromDatabase($userGroups, $userType)
+    private function getCombinationsFromDatabase(array $userGroups, string $userType): ?array
     {
         if (empty($userGroups)) {
             return null;
@@ -94,10 +95,10 @@ class ViewCombinationBuilder
             ->createQueryBuilder();
 
         $combinations = $builder
-            ->select('*')
+            ->select('t.*')
             ->from('tl_metamodel_dca_combine', 't')
             ->where($builder->expr()->in('t.' . $userType . '_group', ':groupList'))
-            ->setParameter('groupList', $userGroups, Connection::PARAM_STR_ARRAY)
+            ->setParameter('groupList', $userGroups, ArrayParameterType::STRING)
             ->orWhere('t.' . $userType . '_group=0')
             ->orderBy('t.pid')
             ->addOrderBy('t.sorting')

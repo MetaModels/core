@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -24,10 +24,13 @@ namespace MetaModels\Helper;
 
 use Contao\System;
 use Contao\User;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\BackendIntegration\InputScreen\InputScreen;
 use MetaModels\IMetaModelsServiceContainer;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class ViewCombinations.
@@ -35,13 +38,15 @@ use MetaModels\IMetaModelsServiceContainer;
  * Retrieve combinations of view and input screens for the currently logged in user (either frontend or backend).
  *
  * @deprecated This will get removed.
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 abstract class ViewCombinations
 {
-    const COMBINATION   = 'combination';
-    const INPUTSCREEN   = 'inputscreen';
-    const RENDERSETTING = 'rendersetting';
-    const MODELID       = 'metamodel';
+    public const COMBINATION   = 'combination';
+    public const INPUTSCREEN   = 'inputscreen';
+    public const RENDERSETTING = 'rendersetting';
+    public const MODELID       = 'metamodel';
 
     /**
      * All MetaModel combinations for lookup.
@@ -85,14 +90,14 @@ abstract class ViewCombinations
      *
      * @var User
      */
-    private $user;
+    private User $user;
 
     /**
      * Database connection.
      *
      * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * Create a new instance.
@@ -119,19 +124,31 @@ abstract class ViewCombinations
             );
             // @codingStandardsIgnoreEnd
             $connection = System::getContainer()->get('database_connection');
+            assert($connection instanceof Connection);
         }
-
         $this->connection = $connection;
     }
 
     /**
      * Try to load the combinations from cache.
      *
-     * @return string|null
+     * @return string
      */
     protected function calculateCacheKey()
     {
-        $key = 'view_combination_' . strtolower(TL_MODE);
+        $tlMode = 'be';
+
+        if (
+            (bool) System::getContainer()
+            ->get('contao.routing.scope_matcher')
+            ?->isFrontendRequest(
+                System::getContainer()->get('request_stack')?->getCurrentRequest() ?? Request::create('')
+            )
+        ) {
+            $tlMode = 'fe';
+        }
+
+        $key = 'view_combination_' . $tlMode;
 
         // Authenticate the user - if this fails, we use an anonymous cache file.
         if ($this->authenticateUser()) {
@@ -173,7 +190,7 @@ abstract class ViewCombinations
         }
 
         // Perform loading now.
-        $data = json_decode($this->container->getCache()->fetch($key), true);
+        $data = \json_decode($this->container->getCache()->fetch($key), true);
 
         if (empty($data)) {
             return false;
@@ -196,13 +213,13 @@ abstract class ViewCombinations
     {
         // Pretty print only came available with php 5.4.
         $flags = 0;
-        if (defined('JSON_PRETTY_PRINT')) {
+        if (\defined('JSON_PRETTY_PRINT')) {
             $flags = JSON_PRETTY_PRINT;
         }
 
         return $this->container->getCache()->save(
             $this->calculateCacheKey(),
-            json_encode(
+            \json_encode(
                 array(
                     'information' => $this->information,
                     'tableMap'    => $this->tableMap,
@@ -217,7 +234,7 @@ abstract class ViewCombinations
     /**
      * Translate the MetaModel id to a valid table name.
      *
-     * @param int $metaModelId The id of the MetaModel to translate.
+     * @param string $metaModelId The id of the MetaModel to translate.
      *
      * @return string
      */
@@ -247,15 +264,12 @@ abstract class ViewCombinations
             );
         }
 
-        $found = $this->getPaletteCombinationRows();
-
-        if (!$found) {
-            $found = array();
-        }
+        $this->getPaletteCombinationRows();
 
         // Clean any undefined.
-        foreach (array_keys($this->information) as $tableName) {
-            if (empty($this->information[$tableName][self::COMBINATION])
+        foreach (\array_keys($this->information) as $tableName) {
+            if (
+                empty($this->information[$tableName][self::COMBINATION])
                 || empty($this->information[$tableName][self::COMBINATION]['dca_id'])
                 || empty($this->information[$tableName][self::COMBINATION]['view_id'])
             ) {
@@ -296,7 +310,7 @@ abstract class ViewCombinations
     /**
      * Retrieve the Contao database singleton instance.
      *
-     * @return \Database
+     * @return \Contao\Database
      */
     protected function getDatabase()
     {
@@ -320,7 +334,7 @@ abstract class ViewCombinations
     protected function getUserGroups()
     {
         /** @noinspection PhpUndefinedFieldInspection */
-        return $this->user->groups ? array_filter($this->user->groups) : array();
+        return $this->user->groups ? \array_filter($this->user->groups) : [];
     }
 
 
@@ -336,10 +350,22 @@ abstract class ViewCombinations
             return null;
         }
 
+        $tlMode = 'be';
+
+        if (
+            System::getContainer()
+            ->get('contao.routing.scope_matcher')
+            ?->isFrontendRequest(
+                System::getContainer()->get('request_stack')?->getCurrentRequest() ?? Request::create('')
+            )
+        ) {
+            $tlMode = 'fe';
+        }
+
         $statement = $this->connection->createQueryBuilder()
             ->select('t.*')
             ->from('tl_metamodel_dca_combine', 't')
-            ->where('t.' . strtolower(TL_MODE) . '_group IN (:groups)')
+            ->where('t.' . $tlMode . '_group IN (:groups)')
             ->orderBy('t.pid')
             ->addOrderBy('t.sorting', 'ASC')
             ->setParameter('groups', $groups)
@@ -353,21 +379,21 @@ abstract class ViewCombinations
      *
      * This returns the ids that have been resolved.
      *
-     * @return int[]
+     * @return list<string>
      */
     protected function getPaletteCombinationRows()
     {
         $combinations = $this->getCombinationsFromDatabase();
-        $success      = array();
+        $success      = [];
 
         // No combinations present, nothing to resolve.
         if (!$combinations) {
-            return array_keys($this->information);
+            return \array_keys($this->information);
         }
 
         foreach ($combinations as $combination) {
             /** @noinspection PhpUndefinedFieldInspection */
-            $modelId   = $combination['pid'];
+            $modelId   = (string) $combination['pid'];
             $modelName = $this->tableNameFromId($modelId);
 
             // Already a combination present, continue with next one.
@@ -379,10 +405,10 @@ abstract class ViewCombinations
             $this->information[$modelName][self::MODELID] = $modelId;
 
             /** @noinspection PhpUndefinedFieldInspection */
-            $this->information[$modelName][self::COMBINATION] = array(
+            $this->information[$modelName][self::COMBINATION] = [
                 'dca_id'  => $combination['dca_id'],
                 'view_id' => $combination['view_id']
-            );
+            ];
 
             $this->setTableMapping($modelId, $modelName);
 
@@ -398,7 +424,7 @@ abstract class ViewCombinations
      *
      * @return void
      *
-     * @throws \Doctrine\DBAL\DBALException When a database error occurs.
+     * @throws Exception
      */
     protected function fetchInputScreenDetails()
     {
@@ -416,14 +442,14 @@ abstract class ViewCombinations
             ->select('t.*')
             ->from('tl_metamodel_dca', 't')
             ->where('t.id IN (:ids)')
-            ->setParameter('id', $inputScreenIds, Connection::PARAM_STR_ARRAY)
+            ->setParameter('id', $inputScreenIds, ArrayParameterType::STRING)
             ->executeQuery();
 
-        while ($inputScreens = $statement->fetchAssociative()) {
+        while (false !== ($inputScreens = $statement->fetchAssociative())) {
             /** @noinspection PhpUndefinedFieldInspection */
             $screenId = $inputScreens['id'];
             /** @noinspection PhpUndefinedFieldInspection */
-            $metaModelId   = $inputScreens['pid'];
+            $metaModelId   = (string) $inputScreens['pid'];
             $metaModelName = $this->tableNameFromId($metaModelId);
 
             $propertyRows = $this->connection
@@ -438,7 +464,7 @@ abstract class ViewCombinations
 
             $conditions = $this->connection
                 ->createQueryBuilder()
-                ->select('cond.*, setting.attr_id AS setting_attr_id')
+                ->select('cond.*', 'setting.attr_id AS setting_attr_id')
                 ->from('tl_metamodel_dcasetting_condition', 'cond')
                 ->leftJoin('cond', 'tl_metamodel_dcasetti', 'setting', 'cond.settingId=setting.id')
                 ->leftJoin('setting', 'tl_metamodel_dca', 'dca', 'setting.pid=dca.id')
@@ -458,12 +484,12 @@ abstract class ViewCombinations
                 ->orderBy('t.sorting', 'ASC')
                 ->executeQuery();
 
-            $inputScreen = array(
+            $inputScreen = [
                 'row'        => $inputScreens->row(),
                 'properties' => $propertyRows->fetchAllAssociative(),
                 'conditions' => $conditions->fetchAllAssociative(),
                 'groupSort'  => $groupSort->fetchAllAssociative()
-            );
+            ];
 
             $this->information[$metaModelName][self::INPUTSCREEN] = $inputScreen;
             $this->information[$metaModelName][self::MODELID]     = $metaModelId;
@@ -488,7 +514,7 @@ abstract class ViewCombinations
         $metaModelName = $this->getMetaModelName($metaModel);
         $inputScreen   = $this->information[$metaModelName][self::INPUTSCREEN];
 
-        if (!is_object($inputScreen)) {
+        if (!\is_object($inputScreen)) {
             $inputScreen = $this->information[$metaModelName][self::INPUTSCREEN] = new InputScreen(
                 $this->container,
                 $inputScreen['row'],
@@ -512,8 +538,8 @@ abstract class ViewCombinations
     {
         $information = $this->information[$metaModel];
         $inputScreen = isset($information[self::INPUTSCREEN]) ? $information[self::INPUTSCREEN] : null;
-        if (!is_object($inputScreen)) {
-            return ($inputScreen['row']['rendertype'] == 'standalone');
+        if (!\is_object($inputScreen)) {
+            return ($inputScreen['row']['rendertype'] === 'standalone');
         }
 
         /** @var IInputScreen $inputScreen */
@@ -531,7 +557,7 @@ abstract class ViewCombinations
     {
         $metaModelName = $this->getMetaModelName($metaModel);
 
-        return ($this->information[$metaModelName][self::COMBINATION]['view_id'] ?? null);
+        return ($this->information[$metaModelName][self::COMBINATION]['view_id'] ?? 0);
     }
 
     /**
@@ -543,8 +569,7 @@ abstract class ViewCombinations
      */
     public function getInputScreen($metaModel)
     {
-        $inputScreen = $this->getInputScreenDetails($metaModel);
-        return $inputScreen ? $inputScreen->getId() : null;
+        return $this->getInputScreenDetails($metaModel)->getId();
     }
 
     /**
@@ -567,7 +592,7 @@ abstract class ViewCombinations
     public function getStandaloneInputScreens()
     {
         $result = [];
-        foreach (array_keys($this->information) as $modelName) {
+        foreach (\array_keys($this->information) as $modelName) {
             if ($this->isInputScreenStandalone($modelName)) {
                 $result[] = $this->getInputScreenDetails($modelName);
             }
@@ -587,7 +612,7 @@ abstract class ViewCombinations
     {
         $metaModelName = $this->getMetaModelName($metaModel);
 
-        return ($this->childMap[$metaModelName] ?? null);
+        return ($this->childMap[$metaModelName] ?? '');
     }
 
     /**
@@ -599,9 +624,9 @@ abstract class ViewCombinations
      */
     public function getParentedInputScreenNames($parent = null)
     {
-        $result = array();
+        $result = [];
 
-        if ($parent) {
+        if (null !== $parent) {
             if (!isset($this->parentMap[$parent])) {
                 return [];
             }
@@ -612,7 +637,7 @@ abstract class ViewCombinations
             return $result;
         }
 
-        foreach (array_keys($this->information) as $modelName) {
+        foreach (\array_keys($this->information) as $modelName) {
             if (!$this->isInputScreenStandalone($modelName)) {
                 $result[] = (isset($this->tableMap[$modelName])) ? $this->tableMap[$modelName] : $modelName;
             }
@@ -630,7 +655,7 @@ abstract class ViewCombinations
      */
     public function getParentedInputScreens($parent = null)
     {
-        $result = array();
+        $result = [];
 
         foreach ($this->getParentedInputScreenNames($parent) as $modelName) {
             $result[] = $this->getInputScreenDetails($modelName);

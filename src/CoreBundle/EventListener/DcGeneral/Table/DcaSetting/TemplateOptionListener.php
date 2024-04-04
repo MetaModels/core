@@ -21,6 +21,7 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\AbstractEnvironmentAwareEvent;
 use MetaModels\BackendIntegration\TemplateList;
 
@@ -86,8 +87,10 @@ class TemplateOptionListener
             return false;
         }
 
-        $environment = $event->getEnvironment();
-        if ('tl_metamodel_dcasetting' !== $environment->getDataDefinition()->getName()) {
+        $dataDefinition = $event->getEnvironment()->getDataDefinition();
+        assert($dataDefinition instanceof ContainerInterface);
+
+        if ('tl_metamodel_dcasetting' !== $dataDefinition->getName()) {
             return false;
         }
 

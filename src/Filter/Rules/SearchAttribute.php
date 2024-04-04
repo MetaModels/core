@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -35,32 +36,30 @@ class SearchAttribute extends FilterRule
      *
      * @var IAttribute|ITranslated|IComplex
      */
-    protected $objAttribute = null;
+    protected $objAttribute;
 
     /**
      * The value to search for.
      *
      * @var string
      */
-    protected $strValue = null;
+    protected $strValue = '';
 
     /**
      * The valid languages to match (only used when searching a translated attribute).
      *
-     * @var array
+     * @var list<non-empty-string>
      */
-    protected $arrValidLanguages = null;
+    protected $arrValidLanguages = [];
 
     /**
      * Creates an instance of a simple query filter rule.
      *
-     * @param IAttribute $objAttribute      The attribute to be searched.
-     *
-     * @param string     $strValue          The value to be searched for. Wildcards (* and ? allowed).
-     *
-     * @param array      $arrValidLanguages The list of valid languages to be searched in.
+     * @param IAttribute             $objAttribute      The attribute to be searched.
+     * @param string                 $strValue          The value to be searched for. Wildcards (* and ? allowed).
+     * @param list<non-empty-string> $arrValidLanguages The list of valid languages to be searched in.
      */
-    public function __construct($objAttribute, $strValue = '', $arrValidLanguages = array())
+    public function __construct($objAttribute, $strValue = '', $arrValidLanguages = [])
     {
         parent::__construct();
         $this->objAttribute      = $objAttribute;

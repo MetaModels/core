@@ -33,6 +33,8 @@ final class AttributeSorter
      * @param string $dir        The sort direction.
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.ShortVariable)
      */
     public function sortByName(array $attributes, string $dir = 'ASC'): array
     {
@@ -54,6 +56,8 @@ final class AttributeSorter
      * @param string $dir        The sort direction.
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.ShortVariable)
      */
     public function sortByColumnName(array $attributes, string $dir = 'ASC'): array
     {

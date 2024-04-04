@@ -31,7 +31,7 @@ class CollectMetaModelTableNamesEvent extends Event
     /**
      * The event name.
      */
-    const NAME = 'metamodels.metamodel.collect-table-names';
+    public const NAME = 'metamodels.metamodel.collect-table-names';
 
     /**
      * The factory calling the event.

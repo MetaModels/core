@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -37,6 +37,8 @@ use MetaModels\ViewCombination\ViewCombination;
 
 /**
  * This class handles the panel building.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PanelBuilder
 {
@@ -47,14 +49,14 @@ class PanelBuilder
      *
      * @var ViewCombination
      */
-    private $viewCombination;
+    private ViewCombination $viewCombination;
 
     /**
      * The input screen to use (only set during build phase).
      *
-     * @var array
+     * @var array|null
      */
-    private $inputScreen;
+    private ?array $inputScreen = null;
 
     /**
      * Create a new instance.
@@ -89,7 +91,7 @@ class PanelBuilder
         $panelLayout = $this->inputScreen['meta']['panelLayout'] ?? null;
 
         // Check if we have a layout.
-        if (empty($panelLayout)) {
+        if (null === $panelLayout) {
             return;
         }
 
@@ -102,7 +104,7 @@ class PanelBuilder
 
         foreach ($arrRows as $rowNo => $rowElements) {
             // Get the row, if we have one or create a new one.
-            if ($panelRows->getRowCount() < ($rowNo + 1)) {
+            if ($panelRows->getRowCount() < ((int) $rowNo + 1)) {
                 $panelRow = $panelRows->addRow();
             } else {
                 $panelRow = $panelRows->getRow($rowNo);
@@ -110,18 +112,18 @@ class PanelBuilder
 
             // Get the fields.
             $fields = StringUtil::trimsplit(',', $rowElements);
-            $fields = array_reverse($fields);
+            $fields = \array_reverse($fields);
 
             $this->parsePanelRow($fields, $panelRow);
 
             // If we have no entries for this row, remove it.
-            if ($panelRow->getCount() == 0) {
+            if ($panelRow->getCount() === 0) {
                 $panelRows->deleteRow($rowNo);
             }
         }
 
         $this->ensureSubmitElement($panelRows);
-        $this->inputScreen = null;
+        $this->inputScreen = [];
     }
 
     /**
@@ -133,7 +135,7 @@ class PanelBuilder
      *
      * @return void
      */
-    private function ensureSubmitElement($panelRows)
+    private function ensureSubmitElement(PanelRowCollectionInterface $panelRows): void
     {
         // Check if we have a submit button.
         $hasSubmit = false;
@@ -161,12 +163,11 @@ class PanelBuilder
      * Parse a single row with all elements.
      *
      * @param array             $fields   A list of fields for adding to the row.
-     *
      * @param PanelRowInterface $panelRow The row container itself.
      *
      * @return void
      */
-    private function parsePanelRow($fields, PanelRowInterface $panelRow)
+    private function parsePanelRow(array $fields, PanelRowInterface $panelRow): void
     {
         // Parse each type.
         foreach ($fields as $field) {
@@ -204,9 +205,9 @@ class PanelBuilder
      *
      * @return void
      */
-    private function parsePanelFilter(PanelRowInterface $row)
+    private function parsePanelFilter(PanelRowInterface $row): void
     {
-        foreach ($this->inputScreen['properties'] as $value) {
+        foreach ($this->inputScreen['properties'] ?? [] as $value) {
             if (!empty($value['filter'])) {
                 $element = new DefaultFilterElementInformation();
                 $element->setPropertyName($value['col_name']);
@@ -224,7 +225,7 @@ class PanelBuilder
      *
      * @return void
      */
-    private function parsePanelSort(PanelRowInterface $row)
+    private function parsePanelSort(PanelRowInterface $row): void
     {
         if (!$row->hasElement('sort')) {
             $element = new DefaultSortElementInformation();
@@ -241,7 +242,7 @@ class PanelBuilder
      *
      * @throws \InvalidArgumentException When the search element does not implement the correct interface.
      */
-    private function parsePanelSearch(PanelRowInterface $row)
+    private function parsePanelSearch(PanelRowInterface $row): void
     {
         if ($row->hasElement('search')) {
             $element = $row->getElement('search');
@@ -253,7 +254,7 @@ class PanelBuilder
             throw new \InvalidArgumentException('Search element does not implement the correct interface.');
         }
 
-        foreach ($this->inputScreen['properties'] as $value) {
+        foreach ($this->inputScreen['properties'] ?? [] as $value) {
             if (!empty($value['search'])) {
                 $element->addProperty($value['col_name']);
             }
@@ -271,7 +272,7 @@ class PanelBuilder
      *
      * @return void
      */
-    private function parsePanelLimit(PanelRowInterface $row)
+    private function parsePanelLimit(PanelRowInterface $row): void
     {
         if (!$row->hasElement('limit')) {
             $row->addElement(new DefaultLimitElementInformation());
@@ -285,7 +286,7 @@ class PanelBuilder
      *
      * @return void
      */
-    private function parsePanelSubmit(PanelRowInterface $row)
+    private function parsePanelSubmit(PanelRowInterface $row): void
     {
         if (!$row->hasElement('submit')) {
             $row->addElement(new DefaultSubmitElementInformation());

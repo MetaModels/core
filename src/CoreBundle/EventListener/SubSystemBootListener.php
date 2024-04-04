@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,8 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2021 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -36,41 +37,40 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class SubSystemBootListener
 {
-
     /**
      * The Contao framework.
      *
      * @var ContaoFramework
      */
-    private $contaoFramework;
+    private ContaoFramework $contaoFramework;
 
     /**
      * The database connection.
      *
      * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * The logger.
      *
      * @var LoggerInterface
      */
-    private $logger;
+    private LoggerInterface $logger;
 
     /**
      * The scope matcher.
      *
      * @var RequestScopeDeterminator
      */
-    private $scopeMatcher;
+    private RequestScopeDeterminator $scopeMatcher;
 
     /**
      * The event dispatcher.
      *
      * @var EventDispatcherInterface
      */
-    private $dispatcher;
+    private EventDispatcherInterface $dispatcher;
 
     /**
      * SubSystemBoot constructor.
@@ -102,7 +102,7 @@ class SubSystemBootListener
      */
     public function boot(): void
     {
-        /** @var Environment $environment */
+        /** @psalm-suppress InternalMethod - the ContaoFramework class is internal, not the method usage. */
         $environment = $this->contaoFramework->getAdapter(Environment::class);
         $script      = explode('?', $environment->get('relativeRequest'), 2)[0];
 
@@ -112,21 +112,23 @@ class SubSystemBootListener
         }
 
         try {
-            if (!$this->connection->getSchemaManager()->tablesExist(
-                [
-                    'tl_metamodel',
-                    'tl_metamodel_dca',
-                    'tl_metamodel_dca_sortgroup',
-                    'tl_metamodel_dcasetting',
-                    'tl_metamodel_dcasetting_condition',
-                    'tl_metamodel_attribute',
-                    'tl_metamodel_filter',
-                    'tl_metamodel_filtersetting',
-                    'tl_metamodel_rendersettings',
-                    'tl_metamodel_rendersetting',
-                    'tl_metamodel_dca_combine',
-                ]
-            )) {
+            if (
+                !$this->connection->createSchemaManager()->tablesExist(
+                    [
+                        'tl_metamodel',
+                        'tl_metamodel_dca',
+                        'tl_metamodel_dca_sortgroup',
+                        'tl_metamodel_dcasetting',
+                        'tl_metamodel_dcasetting_condition',
+                        'tl_metamodel_attribute',
+                        'tl_metamodel_filter',
+                        'tl_metamodel_filtersetting',
+                        'tl_metamodel_rendersettings',
+                        'tl_metamodel_rendersetting',
+                        'tl_metamodel_dca_combine',
+                    ]
+                )
+            ) {
                 $this->logger->error('MetaModels startup interrupted. Not all MetaModels tables have been created.');
                 return;
             }

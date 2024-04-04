@@ -31,6 +31,8 @@ class InputScreenGroupingAndSorting implements IInputScreenGroupingAndSorting
      * The parenting input screen.
      *
      * @var IInputScreen
+     *
+     * @psalm-suppress DeprecatedInterface
      */
     protected $inputScreen;
 
@@ -47,6 +49,8 @@ class InputScreenGroupingAndSorting implements IInputScreenGroupingAndSorting
      * @param array        $data        The information about the input screen.
      *
      * @param IInputScreen $inputScreen The information about all contained properties.
+     *
+     * @psalm-suppress DeprecatedInterface
      */
     public function __construct($data, IInputScreen $inputScreen)
     {
@@ -79,7 +83,7 @@ class InputScreenGroupingAndSorting implements IInputScreenGroupingAndSorting
      */
     public function getRenderGroupLength()
     {
-        return (int) $this->data['rendergrouplen'];
+        return (string) $this->data['rendergrouplen'];
     }
 
     /**
@@ -89,11 +93,9 @@ class InputScreenGroupingAndSorting implements IInputScreenGroupingAndSorting
     {
         if (!empty($this->data['rendergroupattr'])) {
             $metaModel = $this->getMetaModel();
-            if ($metaModel) {
-                $attribute = $metaModel->getAttributeById((int) $this->data['rendergroupattr']);
-                if ($attribute) {
-                    return $attribute->getColName();
-                }
+            $attribute = $metaModel->getAttributeById((int) $this->data['rendergroupattr']);
+            if ($attribute) {
+                return $attribute->getColName();
             }
         }
 
@@ -115,11 +117,9 @@ class InputScreenGroupingAndSorting implements IInputScreenGroupingAndSorting
     {
         if (!empty($this->data['rendersortattr'])) {
             $metaModel = $this->getMetaModel();
-            if ($metaModel) {
-                $attribute = $metaModel->getAttributeById((int) $this->data['rendersortattr']);
-                if ($attribute) {
-                    return $attribute->getColName();
-                }
+            $attribute = $metaModel->getAttributeById((int) $this->data['rendersortattr']);
+            if ($attribute) {
+                return $attribute->getColName();
             }
         }
 

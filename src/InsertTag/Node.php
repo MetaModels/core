@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,8 @@
  *
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2023 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -34,10 +35,10 @@ final class Node implements IteratorAggregate, NodeInterface
     /** @var list<NodeInterface> */
     private array $parts;
 
-    /** @param list<NodeInterface> ...$parts */
+    /** @param NodeInterface ...$parts */
     public function __construct(NodeInterface ...$parts)
     {
-        $this->parts = $parts;
+        $this->parts = \array_values($parts);
     }
 
     /**
@@ -55,7 +56,7 @@ final class Node implements IteratorAggregate, NodeInterface
      */
     public function asString(): string
     {
-        return '{{' . array_reduce(
+        return '{{' . \array_reduce(
             $this->parts,
             fn($result, $arg) => $result . $arg->asString(),
             ''
