@@ -25,6 +25,7 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting;
 use Contao\Message;
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\BuildWidgetEvent;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use Doctrine\DBAL\Connection;
 use MetaModels\IFactory;
@@ -41,7 +42,7 @@ class DisableMandatoryListener extends AbstractListener
      *
      * @var TranslatorInterface
      */
-    private $translator;
+    private TranslatorInterface $translator;
 
     /**
      * Create a new instance.
@@ -81,7 +82,7 @@ class DisableMandatoryListener extends AbstractListener
         }
 
         $model = $event->getModel();
-        assert($model instanceof IMetaModel);
+        assert($model instanceof ModelInterface);
         $metaModel = $this->getMetaModelFromModel($model);
         assert($metaModel instanceof IMetaModel);
         $attribute = $metaModel->getAttributeById((int) $model->getProperty('attr_id'));

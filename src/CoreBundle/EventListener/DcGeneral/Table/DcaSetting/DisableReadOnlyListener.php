@@ -24,9 +24,9 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting;
 use Contao\Message;
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\BuildWidgetEvent;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use Doctrine\DBAL\Connection;
-use MetaModels\Attribute\IAttribute;
 use MetaModels\IFactory;
 use MetaModels\IMetaModel;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -82,8 +82,8 @@ class DisableReadOnlyListener extends AbstractListener
             return;
         }
 
-        $model     = $event->getModel();
-        assert($model instanceof IMetaModel);
+        $model = $event->getModel();
+        assert($model instanceof ModelInterface);
         $metaModel = $this->getMetaModelFromModel($model);
         assert($metaModel instanceof IMetaModel);
         $attribute = $metaModel->getAttributeById((int) $model->getProperty('attr_id'));
