@@ -267,9 +267,6 @@ class FilterSettingFactory implements IFilterSettingFactory
             ->setMaxResults(1)
             ->setParameter('id', $settingId)
             ->executeQuery();
-        if (0 === $query->rowCount()) {
-            throw new \RuntimeException('Could not retrieve filter setting');
-        }
 
         if (false !== ($information = $query->fetchAssociative())) {
             $metaModel = $this->factory->getMetaModel($this->factory->translateIdToMetaModelName($information['pid']));
