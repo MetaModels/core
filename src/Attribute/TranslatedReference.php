@@ -299,7 +299,9 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
 
         $this->buildWhere($queryBuilder, null, $arrLanguages, 't');
 
-        return $queryBuilder->executeQuery()->fetchFirstColumn();
+        $statement = $queryBuilder->executeQuery();
+
+        return \array_map(static fn (mixed $value) => (string) $value, $statement->fetchFirstColumn());
     }
 
     /**
@@ -366,24 +368,24 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
         $arrIds      = \array_keys($arrValues);
         $arrExisting = $this->fetchExistingIdsFor($arrIds, $strLangCode);
         $arrNewIds   = \array_diff($arrIds, $arrExisting);
+        $tableAlias  = $this->getValueTable();
 
         // Update existing values - delete if empty.
         foreach ($arrExisting as $intId) {
             $queryBuilder = $this->connection->createQueryBuilder();
-            $this->buildWhere($queryBuilder, $intId, [$strLangCode], 't');
+            $this->buildWhere($queryBuilder, $intId, [$strLangCode], $tableAlias);
             $itemValues = $arrValues[$intId] ?? [];
             if ($this->isValidItemValue($itemValues)) {
-                $queryBuilder->update($this->getValueTable(), 't');
+                $queryBuilder->update($this->getValueTable());
 
                 foreach ($this->getSetValues($itemValues, $intId, $strLangCode) as $name => $value) {
                     $queryBuilder
-                        ->set('t.' . $name, ':' . $name)
+                        ->set($tableAlias . '.' . $name, ':' . $name)
                         ->setParameter($name, $value);
                 }
             } else {
                 $queryBuilder->delete($this->getValueTable());
             }
-
             $queryBuilder->executeQuery();
         }
 
@@ -440,6 +442,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
         while ($value = $statement->fetchAssociative()) {
             $arrReturn[$value['item_id']] = $value;
         }
+
         return $arrReturn;
     }
 

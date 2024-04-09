@@ -1216,6 +1216,7 @@ class MetaModel implements IMetaModel
             } else {
                 $arrIds = array($item->get('id'));
             }
+
             $this->saveAttribute($objAttribute, $arrIds, $item->get($strAttributeId), $activeLanguage);
         }
     }
