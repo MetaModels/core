@@ -249,13 +249,15 @@ class BaseSimple extends Base implements ISimple
         // Base implementation, do a simple search on given column.
         $strPattern = \str_replace(['*', '?'], ['%', '_'], $strPattern);
 
-        return $this->connection->createQueryBuilder()
+        $result = $this->connection->createQueryBuilder()
             ->select('t.id')
             ->from($this->getMetaModel()->getTableName(), 't')
             ->where('t.' . $this->getColName() . ' LIKE :pattern')
             ->setParameter('pattern', $strPattern)
             ->executeQuery()
             ->fetchFirstColumn();
+
+        return \array_map(static fn (mixed $value) => (string) $value, $result);
     }
 
     /**
