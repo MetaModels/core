@@ -454,8 +454,8 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
         if ('' === $strLangCode) {
             throw new \InvalidArgumentException('Empty language code provided.');
         }
-        $queryBuilder = $this->connection->createQueryBuilder()->delete($this->getValueTable(), 't');
-        $this->buildWhere($queryBuilder, $arrIds, [$strLangCode], 't');
+        $queryBuilder = $this->connection->createQueryBuilder()->delete($this->getValueTable());
+        $this->buildWhere($queryBuilder, $arrIds, [$strLangCode], $this->getValueTable());
 
         $queryBuilder->executeQuery();
     }
