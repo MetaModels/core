@@ -190,7 +190,7 @@ trait ListControllerTrait
     private function getResponseInternal(Template $template, Model $model, Request $request): Response
     {
         /** @psalm-suppress UndefinedMagicPropertyFetch */
-        if (null === ($pageParam = $model->metamodel_page_param)) {
+        if ('' === ($pageParam = $model->metamodel_page_param)) {
             /** @psalm-suppress UndefinedMagicPropertyFetch */
             switch ($model->type) {
                 case 'metamodel_content':
