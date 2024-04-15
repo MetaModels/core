@@ -455,7 +455,7 @@ class FilterBuilder
     private function assertValidCompareOperation(array $filter): void
     {
         assert(\is_string($filter['property'] ?? null));
-        assert(\is_string($filter['value'] ?? null));
+        assert(\is_string($filter['value'] ?? null) || \is_int($filter['value'] ?? null));
         assert(\in_array($filter['operation'], ['<', '=', '>'], true));
     }
 
