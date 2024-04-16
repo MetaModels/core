@@ -455,11 +455,7 @@ class FilterBuilder
     private function assertValidCompareOperation(array $filter): void
     {
         assert(\is_string($filter['property'] ?? null));
-        assert(
-            \is_string($filter['value'] ?? null)
-            || \is_int($filter['value'] ?? null)
-            || \is_float($filter['value'] ?? null)
-        );
+        assert(\is_string($value = ($filter['value'] ?? null)) || \is_int($value) || \is_float($value));
         assert(\in_array($filter['operation'], ['<', '=', '>'], true));
     }
 
@@ -467,11 +463,7 @@ class FilterBuilder
     private function assertValidInList(array $filter): void
     {
         assert(\is_string($filter['property'] ?? null));
-        assert(
-            \is_string($filter['value'] ?? null)
-            || \is_int($filter['value'] ?? null)
-            || \is_float($filter['value'] ?? null)
-        );
+        assert(\is_string($value = ($filter['value'] ?? null)) || \is_int($value) || \is_float($value));
         assert($filter['operation'] === 'IN');
     }
 
