@@ -468,59 +468,6 @@ class PaginationLimitCalculator
     }
 
     /**
-     * Retrieve GET parameters.
-     *
-     * @return string|null
-     */
-    private function getGetPageParam(): ?string
-    {
-        $value = $this->filterUrl->getGet($this->pageParam);
-        if (\is_array($value)) {
-            return null;
-        }
-
-        return $value;
-    }
-
-    /**
-     * Calculate the limit and offset with pagination.
-     *
-     * @return void
-     */
-    private function calculatePaginated()
-    {
-        $this->calculatedTotal = $this->getTotalAmount();
-
-        // If a total limit has been defined, we need to honor that.
-        if (($this->calculatedLimit !== null) && ($this->calculatedTotal > $this->calculatedLimit)) {
-            $this->calculatedTotal -= $this->calculatedLimit;
-        }
-        if ($this->calculatedOffset !== null) {
-            $this->calculatedTotal -= $this->calculatedOffset;
-        }
-
-        // Get the current page.
-        $page = $this->getCurrentPage();
-
-        if ($page > ($this->calculatedTotal / $this->getPerPage())) {
-            $page = (int) \ceil($this->calculatedTotal / $this->getPerPage());
-        }
-
-        // Set limit and offset.
-        if (null !== $this->calculatedOffset) {
-            $this->calculatedOffset += ((\max($page, 1) - 1) * $this->getPerPage());
-        }
-        if ($this->calculatedLimit === null) {
-            $this->calculatedLimit = $this->getPerPage();
-        } else {
-            $this->calculatedLimit = \min(
-                ($this->calculatedLimit - ($this->calculatedOffset ?? 0)),
-                $this->getPerPage()
-            );
-        }
-    }
-
-    /**
      * Calculate the pagination based upon the offset, limit and total amount of items.
      *
      * @return void
@@ -562,5 +509,54 @@ class PaginationLimitCalculator
         if ($this->calculatedOffset === null) {
             $this->calculatedOffset = 0;
         }
+    }
+
+    /**
+     * Calculate the limit and offset with pagination.
+     *
+     * @return void
+     */
+    private function calculatePaginated(): void
+    {
+        $this->calculatedTotal = $this->getTotalAmount();
+
+        // If a total limit has been defined, we need to honor that.
+        if ($this->calculatedOffset !== null) {
+            $this->calculatedTotal -= $this->calculatedOffset;
+        }
+        if (($this->calculatedLimit !== null) && ($this->calculatedTotal > $this->calculatedLimit)) {
+            $this->calculatedTotal = $this->calculatedLimit;
+        }
+
+        // Get the current page.
+        $page    = $this->getCurrentPage();
+        $perPage = $this->getPerPage();
+
+        if ($page > ($this->calculatedTotal / $perPage)) {
+            $page = (int) \ceil($this->calculatedTotal / $perPage);
+        }
+
+        // Set offset and limit.
+        $this->calculatedOffset = ($this->calculatedOffset ?? 0) + ((\max($page, 1) - 1) * $perPage);
+        if (null === $this->calculatedLimit) {
+            $this->calculatedLimit = $perPage;
+        } else {
+            $this->calculatedLimit = \min($this->calculatedTotal, $perPage);
+        }
+    }
+
+    /**
+     * Retrieve GET parameters.
+     *
+     * @return string|null
+     */
+    private function getGetPageParam(): ?string
+    {
+        $value = $this->filterUrl->getGet($this->pageParam);
+        if (\is_array($value)) {
+            return null;
+        }
+
+        return $value;
     }
 }
