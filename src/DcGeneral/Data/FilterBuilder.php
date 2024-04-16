@@ -42,8 +42,8 @@ use MetaModels\ITranslatedMetaModel;
  * Class to generate a MetaModels filter from a data configuration.
  *
  * @psalm-type TFilterANDOR=array{operation: 'AND'|'OR', children: list<array<string, mixed>>}
- * @psalm-type TFilterCMP=array{operation: "="|">"|"<", property: string, value: string}
- * @psalm-type TFilterIN=array{operation: 'IN', property: string, values: list<string>}
+ * @psalm-type TFilterCMP=array{operation: "="|">"|"<", property: string, value: string|int|float}
+ * @psalm-type TFilterIN=array{operation: 'IN', property: string, values: list<string|int|float>}
  * @psalm-type TFilterLIKE=array{operation: 'LIKE', property: string, value: string}
  * @psalm-type TFilterForProperty=TFilterCMP|TFilterIN|TFilterLIKE
  * @psalm-type TFilter=TFilterANDOR|TFilterForProperty
@@ -455,7 +455,11 @@ class FilterBuilder
     private function assertValidCompareOperation(array $filter): void
     {
         assert(\is_string($filter['property'] ?? null));
-        assert(\is_string($filter['value'] ?? null) || \is_int($filter['value'] ?? null));
+        assert(
+            \is_string($filter['value'] ?? null)
+            || \is_int($filter['value'] ?? null)
+            || \is_float($filter['value'] ?? null)
+        );
         assert(\in_array($filter['operation'], ['<', '=', '>'], true));
     }
 
@@ -463,7 +467,11 @@ class FilterBuilder
     private function assertValidInList(array $filter): void
     {
         assert(\is_string($filter['property'] ?? null));
-        assert(\is_string($filter['value'] ?? null));
+        assert(
+            \is_string($filter['value'] ?? null)
+            || \is_int($filter['value'] ?? null)
+            || \is_float($filter['value'] ?? null)
+        );
         assert($filter['operation'] === 'IN');
     }
 
