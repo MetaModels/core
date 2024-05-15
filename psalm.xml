@@ -34,5 +34,29 @@
         <referencedFunction name="Doctrine\DBAL\Query\QueryBuilder::select"/>
       </errorLevel>
     </TooManyArguments>
+    <MissingClassConstType>
+      <errorLevel type="suppress">
+        <file name="src/Attribute/Events/CollectMetaModelAttributeInformationEvent.php"/>
+        <file name="src/Attribute/Events/CreateAttributeEvent.php"/>
+        <file name="src/Attribute/IAttributeFactory.php"/>
+        <file name="src/CoreBundle/DependencyInjection/CompilerPass/CollectDoctrineSchemaGeneratorsPass.php"/>
+        <file name="src/CoreBundle/DependencyInjection/CompilerPass/CollectFactoriesPass.php"/>
+        <file name="src/CoreBundle/DependencyInjection/CompilerPass/CollectSchemaGeneratorsPass.php"/>
+        <file name="src/CoreBundle/DependencyInjection/CompilerPass/CollectSchemaManagersPass.php"/>
+        <file name="src/CoreBundle/Migration/SetDefaultZeroMigration.php"/>
+        <file name="src/DcGeneral/DataDefinition/Definition/IMetaModelDefinition.php"/>
+        <file name="src/DcGeneral/Events/MetaModel/BuildAttributeEvent.php"/>
+        <file name="src/DcGeneral/Events/MetaModel/BuildMetaModelOperationsEvent.php"/>
+        <file name="src/DcGeneral/Events/MetaModel/PopulateAttributeEvent.php"/>
+        <file name="src/Events/CollectMetaModelTableNamesEvent.php"/>
+        <file name="src/Events/CreateMetaModelEvent.php"/>
+        <file name="src/Events/CreatePropertyConditionEvent.php"/>
+        <file name="src/Events/GetMetaModelNameFromIdEvent.php"/>
+        <file name="src/Exceptions/DifferentValuesException.php"/>
+        <file name="src/Helper/TableManipulation.php"/>
+        <file name="src/Helper/TableManipulator.php"/>
+        <file name="src/MetaModelsEvents.php"/>
+      </errorLevel>
+    </MissingClassConstType>
   </issueHandlers>
 </psalm>
