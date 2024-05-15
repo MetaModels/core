@@ -134,7 +134,7 @@ final class ResolveLanguageTag
                 return true;
             }
 
-            if (substr($lang, -1) === '*' && 0 === strncmp($pageLanguage, $lang, (\strlen($lang) - 1))) {
+            if (str_ends_with($lang, '*') && 0 === strncmp($pageLanguage, $lang, max(0, \strlen($lang) - 1))) {
                 return true;
             }
         }
