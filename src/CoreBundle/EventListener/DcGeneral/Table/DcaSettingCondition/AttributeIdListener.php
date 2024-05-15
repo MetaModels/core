@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2020 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -27,6 +27,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\Encod
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\AbstractEnvironmentAwareEvent;
 use Doctrine\DBAL\Connection;
+use MetaModels\Attribute\IAttribute;
 use MetaModels\CoreBundle\DcGeneral\PropertyConditionFactory;
 use MetaModels\CoreBundle\Formatter\SelectAttributeOptionLabelFormatter;
 use MetaModels\IFactory;
@@ -41,7 +42,7 @@ class AttributeIdListener extends AbstractConditionFactoryUsingListener
      *
      * @var SelectAttributeOptionLabelFormatter
      */
-    private $attributeLabelFormatter;
+    private SelectAttributeOptionLabelFormatter $labelFormatter;
 
     /**
      * {@inheritDoc}
@@ -51,10 +52,10 @@ class AttributeIdListener extends AbstractConditionFactoryUsingListener
         IFactory $factory,
         Connection $connection,
         PropertyConditionFactory $conditionFactory,
-        SelectAttributeOptionLabelFormatter $attributeLabelFormatter
+        SelectAttributeOptionLabelFormatter $labelFormatter
     ) {
         parent::__construct($scopeDeterminator, $factory, $connection, $conditionFactory);
-        $this->attributeLabelFormatter = $attributeLabelFormatter;
+        $this->labelFormatter = $labelFormatter;
     }
 
     /**
@@ -81,8 +82,8 @@ class AttributeIdListener extends AbstractConditionFactoryUsingListener
             }
 
             $colName               = $attribute->getColName();
-            $strSelectVal          = $metaModel->getTableName() .'_' . $colName;
-            $result[$strSelectVal] = $this->attributeLabelFormatter->formatLabel($attribute);
+            $strSelectVal          = $metaModel->getTableName() . '_' . $colName;
+            $result[$strSelectVal] = $this->labelFormatter->formatLabel($attribute);
         }
 
         $event->setOptions($result);
@@ -104,19 +105,19 @@ class AttributeIdListener extends AbstractConditionFactoryUsingListener
         $metaModel = $this->getMetaModel($event->getEnvironment());
         $value     = $event->getValue();
 
-        if (!($metaModel && $value)) {
+        if (!$value) {
             $event->setValue(null);
             return;
         }
 
-        $attribute = $metaModel->getAttributeById($value);
+        $attribute = $metaModel->getAttributeById((int) $value);
         if ($attribute) {
-            $event->setValue($metaModel->getTableName() .'_' . $attribute->getColName());
+            $event->setValue($metaModel->getTableName() . '_' . $attribute->getColName());
         }
     }
 
     /**
-     * Translates an generated alias to the corresponding attribute id.
+     * Translates a generated alias to the corresponding attribute id.
      *
      * @param EncodePropertyValueFromWidgetEvent $event The event.
      *
@@ -131,18 +132,17 @@ class AttributeIdListener extends AbstractConditionFactoryUsingListener
         $metaModel = $this->getMetaModel($event->getEnvironment());
         $value     = $event->getValue();
 
-        if (!($metaModel && $value)) {
+        if (!$value) {
             return;
         }
 
         // Cut off the 'mm_xyz_' prefix.
-        $value = substr($value, \strlen($metaModel->getTableName() . '_'));
+        $value = \substr($value, \strlen($metaModel->getTableName() . '_'));
 
         $attribute = $metaModel->getAttribute($value);
+        assert($attribute instanceof IAttribute);
 
-        if ($attribute) {
-            $event->setValue($attribute->get('id'));
-        }
+        $event->setValue($attribute->get('id'));
     }
 
     /**
@@ -153,10 +153,10 @@ class AttributeIdListener extends AbstractConditionFactoryUsingListener
         if (!parent::wantToHandle($event)) {
             return false;
         }
-        if (method_exists($event, 'getPropertyName') && ('attr_id' !== $event->getPropertyName())) {
+        if (\method_exists($event, 'getPropertyName') && ('attr_id' !== $event->getPropertyName())) {
             return false;
         }
-        if (method_exists($event, 'getProperty') && ('attr_id' !== $event->getProperty())) {
+        if (\method_exists($event, 'getProperty') && ('attr_id' !== $event->getProperty())) {
             return false;
         }
 

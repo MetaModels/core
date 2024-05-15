@@ -9,3 +9,19 @@ metamodels.support_screen:
 metamodels.rendersetting.add_all:
     path: /contao/metamodels/rendersetting/add-all/{metaModel}/{renderSetting}
     defaults: { _controller: metamodels.controller.rendersetting.add_all, _scope: backend, _token_check: true }
+
+metamodels.configuration:
+  path: /contao/metamodels
+  defaults:
+    _controller: MetaModels\CoreBundle\Controller\Backend\ConfigurationController
+    _scope: backend
+    _dcg_referer_update: true
+    _token_check: true
+
+metamodels.metamodel:
+  path: /contao/metamodel/{tableName}
+  defaults:
+    _controller: MetaModels\CoreBundle\Controller\Backend\MetaModelController
+    _scope: backend
+    _dcg_referer_update: true
+    _token_check: true

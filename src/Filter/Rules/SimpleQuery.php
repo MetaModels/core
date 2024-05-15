@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -37,47 +38,47 @@ class SimpleQuery extends FilterRule
      *
      * @var string
      */
-    private $queryString;
+    private string $queryString;
 
     /**
      * The query parameters.
      *
      * @var array
      */
-    private $params;
+    private array $params;
 
     /**
      * The name of the id column in the query.
      *
      * @var string
      */
-    private $idColumn;
+    private string $idColumn;
 
     /**
      * The database instance to use.
      *
      * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * The parameter types.
      *
      * @var array
      */
-    private $types;
+    private array $types;
 
     /**
      * Create a rule instance from the passed query builder.
      *
      * @param QueryBuilder $builder    The builder to extract query information from.
-     *
      * @param string       $columnName The column to retrieve.
      *
      * @return SimpleQuery
      */
     public static function createFromQueryBuilder(QueryBuilder $builder, $columnName = 'id')
     {
+        /** @psalm-suppress DeprecatedMethod */
         return new self(
             $builder->getSQL(),
             $builder->getParameters(),
@@ -108,9 +109,10 @@ class SimpleQuery extends FilterRule
 
         $this->queryString = $queryString;
         $this->params      = $params;
-        $this->idColumn    = (string) $idColumn;
-        $this->connection  = $this->sanitizeConnection($connection);
-        $this->types       = $types;
+        $this->idColumn    = $idColumn;
+        /** @psalm-suppress DeprecatedMethod */
+        $this->connection = $this->sanitizeConnection($connection);
+        $this->types      = $types;
     }
 
     /**
@@ -120,8 +122,8 @@ class SimpleQuery extends FilterRule
     {
         $matches = $this->connection->executeQuery($this->queryString, $this->params, $this->types);
         $ids     = [];
-        foreach ($matches->fetchAll(\PDO::FETCH_ASSOC) as $value) {
-            $ids[] = $value[$this->idColumn];
+        foreach ($matches->fetchAllAssociative() as $value) {
+            $ids[] = (string) $value[$this->idColumn];
         }
 
         return $ids;
@@ -130,7 +132,7 @@ class SimpleQuery extends FilterRule
     /**
      * Sanitize the connection value
      *
-     * @param Connection|\Contao\Database $connection The connection value.
+     * @param Connection|\Contao\Database|null $connection The connection value.
      *
      * @return Connection
      *
@@ -144,9 +146,10 @@ class SimpleQuery extends FilterRule
             return $connection;
         }
 
+        // @codingStandardsIgnoreStart
+        // @codeCoverageIgnoreStart
         // BC layer - we used to accept a Contao database instance here.
         if ($connection instanceof Database) {
-            // @codingStandardsIgnoreStart
             @trigger_error(
                 '"' . __METHOD__ . '" now accepts doctrine instances - ' .
                 'passing Contao database instances is deprecated.',
@@ -155,8 +158,10 @@ class SimpleQuery extends FilterRule
             // @codingStandardsIgnoreEnd
             $reflection = new \ReflectionProperty(Database::class, 'resConnection');
             $reflection->setAccessible(true);
+
             return $reflection->getValue($connection);
         }
+
         if (null === $connection) {
             // @codingStandardsIgnoreStart
             @trigger_error(
@@ -172,5 +177,7 @@ class SimpleQuery extends FilterRule
         }
 
         return $connection;
+        // @codeCoverageIgnoreEnd
+        // @codingStandardsIgnoreEnd
     }
 }

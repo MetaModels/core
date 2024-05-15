@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -29,7 +30,10 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\Encod
 use MetaModels\Attribute\IAttributeFactory;
 use MetaModels\Dca\Helper;
 use MetaModels\IFactory;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
+
+use function in_array;
+use function unserialize;
 
 /**
  * This class provides the attribute type names.
@@ -41,7 +45,7 @@ class NameAndDescriptionListener extends BaseListener
      *
      * @var TranslatorInterface
      */
-    private $translator;
+    private TranslatorInterface $translator;
 
     /**
      * Create a new instance.
@@ -70,7 +74,7 @@ class NameAndDescriptionListener extends BaseListener
      */
     public function decodeValue(DecodePropertyValueForWidgetEvent $event)
     {
-        if (!($this->wantToHandle($event) && \in_array($event->getProperty(), ['name', 'description']))) {
+        if (!($this->wantToHandle($event) && in_array($event->getProperty(), ['name', 'description']))) {
             return;
         }
 
@@ -89,7 +93,7 @@ class NameAndDescriptionListener extends BaseListener
      */
     public function encodeValue(EncodePropertyValueFromWidgetEvent $event)
     {
-        if (!($this->wantToHandle($event) && \in_array($event->getProperty(), ['name', 'description']))) {
+        if (!($this->wantToHandle($event) && in_array($event->getProperty(), ['name', 'description']))) {
             return;
         }
         $metaModel = $this->getMetaModelByModelPid($event->getModel());
@@ -107,7 +111,7 @@ class NameAndDescriptionListener extends BaseListener
      */
     public function buildWidget(BuildWidgetEvent $event)
     {
-        if (!($this->wantToHandle($event) && \in_array($event->getProperty()->getName(), ['name', 'description']))) {
+        if (!($this->wantToHandle($event) && in_array($event->getProperty()->getName(), ['name', 'description']))) {
             return;
         }
 
@@ -117,8 +121,8 @@ class NameAndDescriptionListener extends BaseListener
             $event->getEnvironment(),
             $event->getProperty(),
             $metaModel,
-            $this->translator->trans('tl_metamodel_attribute.name_langcode', [], 'contao_tl_metamodel_attribute'),
-            $this->translator->trans('tl_metamodel_attribute.name_value', [], 'contao_tl_metamodel_attribute'),
+            'name_langcode',
+            'name_value',
             false,
             StringUtil::deserialize($event->getModel()->getProperty($event->getProperty()->getName()), true)
         );

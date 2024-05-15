@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -26,12 +26,14 @@ namespace MetaModels\Helper;
 
 use Contao\System;
 use ContaoCommunityAlliance\DcGeneral\Contao\InputProvider;
+use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\MetaModelsServiceContainer;
 
 /**
  * This is the class for table manipulations like creation/renaming/deleting of tables and columns.
  *
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.LongVariable)
  */
 class TableManipulation
 {
@@ -39,7 +41,7 @@ class TableManipulation
      * SQL statement template to create a table.
      * First parameter is the table name.
      */
-    const STATEMENT_CREATE_TABLE = '
+    public const STATEMENT_CREATE_TABLE = '
             CREATE TABLE `%s` (
                 `id` int(10) unsigned NOT NULL auto_increment,
                 `pid` int(10) unsigned NOT NULL,
@@ -52,13 +54,13 @@ class TableManipulation
      * SQL statement template to rename a table.
      * First parameter is the old name, second parameter is the new name.
      */
-    const STATEMENT_RENAME_TABLE = 'ALTER TABLE `%s` RENAME TO `%s`';
+    public const STATEMENT_RENAME_TABLE = 'ALTER TABLE `%s` RENAME TO `%s`';
 
     /**
      * SQL statement template to drop a table.
      * First parameter is the table name of the table to drop.
      */
-    const STATEMENT_DROP_TABLE = 'DROP TABLE `%s`';
+    public const STATEMENT_DROP_TABLE = 'DROP TABLE `%s`';
 
     /**
      * SQL statement template to rename a column of a table.
@@ -67,7 +69,7 @@ class TableManipulation
      * Third parameter is the new name of the column.
      * Fourth parameter is the new type of the column.
      */
-    const STATEMENT_RENAME_COLUMN = 'ALTER TABLE `%s` CHANGE COLUMN %s %s %s';
+    public const STATEMENT_RENAME_COLUMN = 'ALTER TABLE `%s` CHANGE COLUMN %s %s %s';
 
     /**
      * SQL statement template to add a column to a table.
@@ -75,13 +77,13 @@ class TableManipulation
      * Second parameter is the column name.
      * Third parameter is the type of the new column.
      */
-    const STATEMENT_CREATE_COLUMN = 'ALTER TABLE `%s` ADD %s %s';
+    public const STATEMENT_CREATE_COLUMN = 'ALTER TABLE `%s` ADD %s %s';
 
     /**
      * SQL statement template to delete a column from a table.
      * First parameter is the name of the column.
      */
-    const STATEMENT_DROP_COLUMN = 'ALTER TABLE `%s` DROP COLUMN %s';
+    public const STATEMENT_DROP_COLUMN = 'ALTER TABLE `%s` DROP COLUMN %s';
 
     /**
      * SQL statement template to add a index to a column of a table.
@@ -89,14 +91,14 @@ class TableManipulation
      * second parameter is indextype
      * third parameter is name of the column.
      */
-    const STATEMENT_ADD_INDEX_COLUMN = 'ALTER TABLE `%s` ADD %s(%s)';
+    public const STATEMENT_ADD_INDEX_COLUMN = 'ALTER TABLE `%s` ADD %s(%s)';
 
     /**
      * List of reserved column post fix.
      *
      * @var string[]
      */
-    protected static $reservedColumnPostFix = array('__sort');
+    protected static $reservedColumnPostFix = ['__sort'];
 
     /**
      * All system columns that always are defined in a MetaModel table.
@@ -116,7 +118,11 @@ class TableManipulation
      */
     protected static function getDB()
     {
-        return System::getContainer()->get(MetaModelsServiceContainer::class)->getDatabase();
+        /** @psalm-suppress DeprecatedClass */
+        $serviceContainer = System::getContainer()->get(MetaModelsServiceContainer::class);
+        assert($serviceContainer instanceof IMetaModelsServiceContainer);
+        /** @psalm-suppress DeprecatedMethod */
+        return $serviceContainer->getDatabase();
     }
 
     /**
@@ -130,14 +136,15 @@ class TableManipulation
     {
         $inputProvider = new InputProvider();
 
-        if (!$inputProvider->hasValue('colname')
-            || strtolower($strColName) !== strtolower($inputProvider->getValue('colname'))
+        if (
+            !$inputProvider->hasValue('colname')
+            || \strtolower($strColName) !== \strtolower($inputProvider->getValue('colname'))
         ) {
             return false;
         }
 
         foreach (self::$reservedColumnPostFix as $postFix) {
-            if ($postFix !== strtolower(substr($strColName, -strlen($postFix)))) {
+            if ($postFix !== \strtolower(\substr($strColName, -\strlen($postFix)))) {
                 continue;
             }
 
@@ -158,7 +165,7 @@ class TableManipulation
     {
         // Match for valid table/column name, according to MySQL, a table name must start
         // with a letter and must be combined of letters, decimals and underscore.
-        return (1 == preg_match('/^[a-z_][a-z\d_]*$/i', $strName));
+        return (1 === \preg_match('/^[a-z_][a-z\d_]*$/i', $strName));
     }
 
     /**
@@ -197,7 +204,7 @@ class TableManipulation
      */
     public static function isSystemColumn($strColName)
     {
-        return in_array($strColName, $GLOBALS['METAMODELS_SYSTEM_COLUMNS']);
+        return \in_array($strColName, $GLOBALS['METAMODELS_SYSTEM_COLUMNS']);
     }
 
     /**
@@ -215,7 +222,7 @@ class TableManipulation
     public static function checkTablename($strTableName)
     {
         if (!self::isValidTablename($strTableName)) {
-            throw new \Exception(sprintf($GLOBALS['TL_LANG']['ERR']['invalidTableName'], $strTableName));
+            throw new \Exception(\sprintf($GLOBALS['TL_LANG']['ERR']['invalidTableName'], $strTableName));
         }
     }
 
@@ -225,7 +232,6 @@ class TableManipulation
      * If there is any problem, an Exception is raised, stating the nature of the error in the Exception message.
      *
      * @param string  $strColName        The name of the column.
-     *
      * @param boolean $blnAllowSystemCol If this is set to true, no system column name checking will be applied.
      *
      * @return void
@@ -240,11 +246,11 @@ class TableManipulation
     public static function checkColumnName($strColName, $blnAllowSystemCol = false)
     {
         if (!self::isValidColumnName($strColName)) {
-            throw new \Exception(sprintf($GLOBALS['TL_LANG']['ERR']['invalidColumnName'], $strColName));
+            throw new \Exception(\sprintf($GLOBALS['TL_LANG']['ERR']['invalidColumnName'], $strColName));
         }
 
         if ((!$blnAllowSystemCol) && self::isSystemColumn($strColName)) {
-            throw new \Exception(sprintf($GLOBALS['TL_LANG']['ERR']['systemColumn'], $strColName));
+            throw new \Exception(\sprintf($GLOBALS['TL_LANG']['ERR']['systemColumn'], $strColName));
         }
     }
 
@@ -263,8 +269,9 @@ class TableManipulation
     public static function checkTableExists($strTableName)
     {
         self::checkTablename($strTableName);
+        /** @psalm-suppress DeprecatedMethod */
         if (!self::getDB()->tableExists($strTableName, null, true)) {
-            throw new \Exception(sprintf($GLOBALS['TL_LANG']['ERR']['tableDoesNotExist'], $strTableName));
+            throw new \Exception(\sprintf($GLOBALS['TL_LANG']['ERR']['tableDoesNotExist'], $strTableName));
         }
     }
 
@@ -283,8 +290,9 @@ class TableManipulation
     public static function checkTableDoesNotExist($strTableName)
     {
         self::checkTablename($strTableName);
+        /** @psalm-suppress DeprecatedMethod */
         if (self::getDB()->tableExists($strTableName, null, true)) {
-            throw new \Exception(sprintf($GLOBALS['TL_LANG']['ERR']['tableExists'], $strTableName));
+            throw new \Exception(\sprintf($GLOBALS['TL_LANG']['ERR']['tableExists'], $strTableName));
         }
     }
 
@@ -300,14 +308,14 @@ class TableManipulation
     public static function createTable($strTableName)
     {
         self::checkTableDoesNotExist($strTableName);
-        self::getDB()->execute(sprintf(self::STATEMENT_CREATE_TABLE, $strTableName));
+        /** @psalm-suppress DeprecatedMethod */
+        self::getDB()->execute(\sprintf(self::STATEMENT_CREATE_TABLE, $strTableName));
     }
 
     /**
      * Renames a table with the given name to the given new name.
      *
      * @param string $strTableName    The name of the table to rename.
-     *
      * @param string $strNewTableName The name to which the table shall be renamed to.
      *
      * @return void
@@ -318,8 +326,8 @@ class TableManipulation
     {
         self::checkTableExists($strTableName);
         self::checkTableDoesNotExist($strNewTableName);
-
-        self::getDB()->execute(sprintf(self::STATEMENT_RENAME_TABLE, $strTableName, $strNewTableName));
+        /** @psalm-suppress DeprecatedMethod */
+        self::getDB()->execute(\sprintf(self::STATEMENT_RENAME_TABLE, $strTableName, $strNewTableName));
     }
 
     /**
@@ -334,17 +342,15 @@ class TableManipulation
     public static function deleteTable($strTableName)
     {
         self::checkTableExists($strTableName);
-
-        self::getDB()->execute(sprintf(self::STATEMENT_DROP_TABLE, $strTableName));
+        /** @psalm-suppress DeprecatedMethod */
+        self::getDB()->execute(\sprintf(self::STATEMENT_DROP_TABLE, $strTableName));
     }
 
     /**
      * Add a index to given tablename for specified columnname
      *
      * @param string $strTableName The table name.
-     *
      * @param string $strIndexType The index type.
-     *
      * @param string $strColName   The column name to add a index.
      *
      * @return void
@@ -355,8 +361,9 @@ class TableManipulation
     public static function addIndex($strTableName, $strIndexType, $strColName)
     {
         self::checkColumnExists($strTableName, $strColName);
+        /** @psalm-suppress DeprecatedMethod */
         self::getDB()->execute(
-            sprintf(
+            \sprintf(
                 self::STATEMENT_ADD_INDEX_COLUMN,
                 $strTableName,
                 $strIndexType,
@@ -369,9 +376,7 @@ class TableManipulation
      * Checks whether the given table exists.
      *
      * @param string  $strTableName      The table name to check.
-     *
      * @param string  $strColName        The column name to check.
-     *
      * @param boolean $blnAllowSystemCol If this is set to true, no system column name checking will be applied.
      *
      * @return void
@@ -386,8 +391,11 @@ class TableManipulation
     {
         self::checkTableExists($strTableName);
         self::checkColumnName($strColName, $blnAllowSystemCol);
+        /** @psalm-suppress DeprecatedMethod */
         if (!self::getDB()->fieldExists($strColName, $strTableName, true)) {
-            throw new \Exception(sprintf($GLOBALS['TL_LANG']['ERR']['columnDoesNotExist'], $strColName, $strTableName));
+            throw new \Exception(
+                \sprintf($GLOBALS['TL_LANG']['ERR']['columnDoesNotExist'], $strColName, $strTableName)
+            );
         }
     }
 
@@ -395,9 +403,7 @@ class TableManipulation
      * Checks whether the given column does not exist.
      *
      * @param string  $strTableName      The table name to check.
-     *
      * @param string  $strColName        The column name to check.
-     *
      * @param boolean $blnAllowSystemCol If this is set to true, no system column name checking will be applied.
      *
      * @return void
@@ -412,8 +418,9 @@ class TableManipulation
     {
         self::checkTableExists($strTableName);
         self::checkColumnName($strColName, $blnAllowSystemCol);
+        /** @psalm-suppress DeprecatedMethod */
         if (self::getDB()->fieldExists($strColName, $strTableName, true)) {
-            throw new \Exception(sprintf($GLOBALS['TL_LANG']['ERR']['columnExists'], $strColName, $strTableName));
+            throw new \Exception(\sprintf($GLOBALS['TL_LANG']['ERR']['columnExists'], $strColName, $strTableName));
         }
     }
 
@@ -423,9 +430,7 @@ class TableManipulation
      * Throws Exception if the table does not exist, the column name is invalid or the column already exists.
      *
      * @param string  $strTableName      The name of the table to add the column to.
-     *
      * @param string  $strColumnName     The name of the new column.
-     *
      * @param string  $strType           The SQL type notation of the new column.
      *
      * @param boolean $blnAllowSystemCol If this is set to true, no system column name checking will be applied.
@@ -435,8 +440,9 @@ class TableManipulation
     public static function createColumn($strTableName, $strColumnName, $strType, $blnAllowSystemCol = false)
     {
         self::checkColumnDoesNotExist($strTableName, $strColumnName, $blnAllowSystemCol);
+        /** @psalm-suppress DeprecatedMethod */
         self::getDB()->execute(
-            sprintf(
+            \sprintf(
                 self::STATEMENT_CREATE_COLUMN,
                 $strTableName,
                 $strColumnName,
@@ -451,13 +457,9 @@ class TableManipulation
      * Throws Exception if the table does not exist, the column name is invalid or the column already exists.
      *
      * @param string  $strTableName      The name of the table the column is in.
-     *
      * @param string  $strColumnName     The current name of the column to be renamed.
-     *
      * @param string  $strNewColumnName  The new name for the column.
-     *
      * @param string  $strNewType        The new SQL type notation of the column.
-     *
      * @param boolean $blnAllowSystemCol If this is set to true, no system column name checking will be applied.
      *
      * @return void
@@ -473,8 +475,9 @@ class TableManipulation
             self::checkColumnExists($strTableName, $strColumnName, $blnAllowSystemCol);
             self::checkColumnDoesNotExist($strTableName, $strNewColumnName, $blnAllowSystemCol);
         }
+        /** @psalm-suppress DeprecatedMethod */
         self::getDB()->execute(
-            sprintf(
+            \sprintf(
                 self::STATEMENT_RENAME_COLUMN,
                 $strTableName,
                 $strColumnName,
@@ -490,9 +493,7 @@ class TableManipulation
      * Throws Exception if the table does not exist, the column name is invalid or the column does not exist.
      *
      * @param string  $strTableName      The name of the table the column is in.
-     *
      * @param string  $strColumnName     The name of the column to drop.
-     *
      * @param boolean $blnAllowSystemCol If this is set to true, no system column name checking will be applied.
      *
      * @return void
@@ -500,8 +501,9 @@ class TableManipulation
     public static function dropColumn($strTableName, $strColumnName, $blnAllowSystemCol = false)
     {
         self::checkColumnExists($strTableName, $strColumnName, $blnAllowSystemCol);
+        /** @psalm-suppress DeprecatedMethod */
         self::getDB()->execute(
-            sprintf(
+            \sprintf(
                 self::STATEMENT_DROP_COLUMN,
                 $strTableName,
                 $strColumnName
@@ -520,7 +522,9 @@ class TableManipulation
     public static function setVariantSupport($strTableName, $blnVariantSupport)
     {
         if ($blnVariantSupport) {
-            if (self::getDB()->tableExists($strTableName, null, true)
+            /** @psalm-suppress DeprecatedMethod */
+            if (
+                self::getDB()->tableExists($strTableName, null, true)
                 && (!self::getDB()->fieldExists('varbase', $strTableName, true))
             ) {
                 self::createColumn($strTableName, 'varbase', 'char(1) NOT NULL default \'\'', true);
@@ -528,10 +532,13 @@ class TableManipulation
 
                 // If there is pre-existing data in the table, we need to provide a separate 'vargroup' value to all of
                 // them, we can do this safely by setting all vargroups to the id of the base item.
-                self::getDB()->execute(sprintf('UPDATE `%s` t SET t.vargroup=id, t.varbase=1', $strTableName));
+                /** @psalm-suppress DeprecatedMethod */
+                self::getDB()->execute(\sprintf('UPDATE `%s` t SET t.vargroup=id, t.varbase=1', $strTableName));
             }
         } else {
-            if (self::getDB()->tableExists($strTableName, null, true)
+            /** @psalm-suppress DeprecatedMethod */
+            if (
+                self::getDB()->tableExists($strTableName, null, true)
                 && self::getDB()->fieldExists('varbase', $strTableName, true)
             ) {
                 self::dropColumn($strTableName, 'varbase', true);

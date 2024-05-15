@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -41,7 +41,7 @@ $GLOBALS['TL_LANG']['tl_module']['metamodel_offset'][1]                      =
     'Please specify the offset value (i.e. 10 to skip the first 10 items).';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_limit'][0]                       = 'Maximum number of items';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_limit'][1]                       =
-    'Please enter the maximum number of items. Enter 0 to show all items and therefore disable the pagination.';
+    'Please enter the maximum number of items - enter 0 to show all items.';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_sortby'][0]                      = 'Order by';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_sortby'][1]                      = 'Please choose the sort order.';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_sortby_direction'][0]            = 'Order by direction';
@@ -61,6 +61,9 @@ $GLOBALS['TL_LANG']['tl_module']['metamodel_order_by_param'][1]              =
 $GLOBALS['TL_LANG']['tl_module']['metamodel_order_dir_param'][0]             = 'Override key for order direction';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_order_dir_param'][1]             =
     'You can override the default key \'orderDir\'.';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_sort_urlfragment'][0]            = 'URL fragment';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_sort_urlfragment'][1]            =
+    'Add URL fragment to jump to anchor or id.';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_filtering'][0]                   = 'Filter settings to apply';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_filtering'][1]                   =
     'Select the filter settings that shall get applied when compiling the list.';
@@ -81,9 +84,9 @@ $GLOBALS['TL_LANG']['tl_module']['metamodel_noparsing'][1]                   =
 $GLOBALS['TL_LANG']['tl_module']['metamodel_page_param_type'][0]             = 'URL-Type for pagination';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_page_param_type'][1]             =
     'Please specify the type of URL parameters als slug (key\value) or GET (key=value).';
-$GLOBALS['TL_LANG']['tl_module']['metamodel_maxpaginationlinks'][0]         =
+$GLOBALS['TL_LANG']['tl_module']['metamodel_maxpaginationlinks'][0]          =
     'Maximum number of pagination links';
-$GLOBALS['TL_LANG']['tl_module']['metamodel_maxpaginationlinks'][1]         =
+$GLOBALS['TL_LANG']['tl_module']['metamodel_maxpaginationlinks'][1]          =
     'Please enter the maximum number pagination links. Enter 0 to show the default value from Contao e.g. 7.';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_pagination'][0]                  =
     'Custom template to use for pagination';
@@ -105,6 +108,10 @@ $GLOBALS['TL_LANG']['tl_module']['metamodel_filterparams_use_get'][1]        = '
 $GLOBALS['TL_LANG']['tl_module']['metamodel_jumpTo'][0]                      = 'Redirect page';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_jumpTo'][1]                      =
     'Please choose the page to which visitors will be redirected when clicking a link or submitting a form.';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_fef_id'][0]                      = 'Form ID';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_fef_id'][1]                      =
+    'Set ID as own postfix for "FORM_SUBMIT" value e.g. to use redirect and another filter -' .
+    ' in which case the value must be the same. ';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_fef_urlfragment'][0]             = 'URL fragment';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_fef_urlfragment'][1]             =
     'Add URL fragment to jump to anchor or id.';
@@ -142,9 +149,3 @@ $GLOBALS['TL_LANG']['tl_module']['metamodel_meta_title'][1]                  =
 $GLOBALS['TL_LANG']['tl_module']['metamodel_meta_description'][0]            = 'Meta Description';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_meta_description'][1]            =
     'Set this attribute as the meta-description of the page.';
-$GLOBALS['TL_LANG']['tl_module']['editmetamodel'][0]                         = 'Edit MetaModel';
-$GLOBALS['TL_LANG']['tl_module']['editmetamodel'][1]                         = 'Edit the MetaModel ID %s.';
-$GLOBALS['TL_LANG']['tl_module']['editrendersetting'][0]                     = 'Edit render setting';
-$GLOBALS['TL_LANG']['tl_module']['editrendersetting'][1]                     = 'Edit the render setting ID %s.';
-$GLOBALS['TL_LANG']['tl_module']['editfiltersetting'][0]                     = 'Edit filter setting';
-$GLOBALS['TL_LANG']['tl_module']['editfiltersetting'][1]                     = 'Edit the filter setting ID %s.';

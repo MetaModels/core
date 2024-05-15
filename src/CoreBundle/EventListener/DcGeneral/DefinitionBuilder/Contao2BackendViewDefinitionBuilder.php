@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -36,6 +37,10 @@ use MetaModels\ViewCombination\ViewCombination;
 
 /**
  * This class builds the Contao2 backend view definition.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class Contao2BackendViewDefinitionBuilder
 {
@@ -46,56 +51,56 @@ class Contao2BackendViewDefinitionBuilder
      *
      * @var ViewCombination
      */
-    private $viewCombination;
+    private ViewCombination $viewCombination;
 
     /**
      * The render setting factory.
      *
      * @var IRenderSettingFactory
      */
-    private $renderSettingFactory;
+    private IRenderSettingFactory $renderSettingFactory;
 
     /**
      * The container being built (only set during build phase).
      *
-     * @var IMetaModelDataDefinition
+     * @var IMetaModelDataDefinition|null
      */
-    private $container;
+    private IMetaModelDataDefinition|null $container;
 
     /**
      * The backend view definition (only set during build phase).
      *
-     * @var Contao2BackendViewDefinitionInterface
+     * @var Contao2BackendViewDefinitionInterface|null
      */
-    private $definition;
+    private Contao2BackendViewDefinitionInterface|null $definition;
 
     /**
      * The input screen (only set during build phase).
      *
-     * @var array
+     * @var array|null
      */
-    private $inputScreen;
+    private array|null $inputScreen;
 
     /**
      * The MetaModel that is the scope (only set during build phase).
      *
-     * @var IMetaModel
+     * @var IMetaModel|null
      */
-    private $metaModel;
+    private IMetaModel|null $metaModel;
 
     /**
      * The MetaModels factory.
      *
      * @var IFactory
      */
-    private $factory;
+    private IFactory $factory;
 
     /**
      * The icon builder.
      *
      * @var IconBuilder
      */
-    private $iconBuilder;
+    private IconBuilder $iconBuilder;
 
     /**
      * Create a new instance.
@@ -148,8 +153,9 @@ class Contao2BackendViewDefinitionBuilder
      *
      * @throws DcGeneralInvalidArgumentException When the contained view definition is of invalid type.
      */
-    private function getOrCreateDefinition()
+    private function getOrCreateDefinition(): Contao2BackendViewDefinitionInterface
     {
+        assert($this->container instanceof IMetaModelDataDefinition);
         if ($this->container->hasDefinition(Contao2BackendViewDefinitionInterface::NAME)) {
             $view = $this->container->getDefinition(Contao2BackendViewDefinitionInterface::NAME);
             if (!$view instanceof Contao2BackendViewDefinitionInterface) {
@@ -157,8 +163,10 @@ class Contao2BackendViewDefinitionBuilder
                     'Configured BackendViewDefinition does not implement Contao2BackendViewDefinitionInterface.'
                 );
             }
+
             return $view;
         }
+
         $this->container->setDefinition(
             Contao2BackendViewDefinitionInterface::NAME,
             $view = new Contao2BackendViewDefinition()
@@ -172,22 +180,31 @@ class Contao2BackendViewDefinitionBuilder
      *
      * @return void
      */
-    private function parseListing()
+    private function parseListing(): void
     {
+        assert($this->definition instanceof Contao2BackendViewDefinitionInterface);
+        assert($this->metaModel instanceof IMetaModel);
+        if (null === $this->inputScreen) {
+            return;
+        }
+
         $listing = $this->definition->getListingConfig();
+
 
         if (null === $listing->getRootLabel()) {
             $listing->setRootLabel($this->metaModel->get('name'));
         }
 
         if (null === $listing->getRootIcon()) {
-            $listing->setRootIcon($this->iconBuilder->getBackendIcon($this->inputScreen['meta']['backendicon']));
+            $listing->setRootIcon(
+                $this->iconBuilder->getBackendIcon(($this->inputScreen['meta']['backendicon'] ?? ''))
+            );
         }
 
         $this->parseListSorting($listing);
         $this->parseListLabel($listing);
 
-        $listing->setShowColumns((bool) $this->inputScreen['meta']['showColumns']);
+        $listing->setShowColumns((bool) ($this->inputScreen['meta']['showColumns'] ?? false));
     }
 
     /**
@@ -197,24 +214,30 @@ class Contao2BackendViewDefinitionBuilder
      *
      * @return void
      */
-    private function parseListSorting(ListingConfigInterface $listing)
+    private function parseListSorting(ListingConfigInterface $listing): void
     {
         if (null === $this->inputScreen) {
             return;
         }
+
         $definitions = $listing->getGroupAndSortingDefinition();
         foreach ($this->inputScreen['groupSort'] as $information) {
+            if (empty($information['published'])) {
+                continue;
+            }
+
             $definition = $definitions->add();
             $definition->setName($information['name']);
-            if ($information['isdefault'] && !$definitions->hasDefault()) {
+            if (!empty($information['isdefault']) && !$definitions->hasDefault()) {
                 $definitions->markDefault($definition);
             }
 
             $this->handleSorting($information, $definition);
 
             $groupType = $this->convertRenderGroupType($information['rendergrouptype']);
-            if ($groupType !== GroupAndSortingInformationInterface::GROUP_NONE
-                && $information['col_name']
+            if (
+                $groupType !== GroupAndSortingInformationInterface::GROUP_NONE
+                && !empty($information['col_name'])
             ) {
                 $propertyInformation = $definition->add(0);
                 $propertyInformation
@@ -235,10 +258,10 @@ class Contao2BackendViewDefinitionBuilder
      * @return void
      */
     private function handleSorting(
-        $information,
+        array $information,
         GroupAndSortingDefinitionInterface $definition
-    ) {
-        if ($information['ismanualsort']) {
+    ): void {
+        if (!empty($information['ismanualsort'])) {
             $definition
                 ->add()
                 ->setManualSorting()
@@ -246,7 +269,7 @@ class Contao2BackendViewDefinitionBuilder
                 ->setSortingMode(GroupAndSortingInformationInterface::SORT_ASC);
             return;
         }
-        if ($information['col_name']) {
+        if (!empty($information['col_name'])) {
             $definition
                 ->add()
                 ->setProperty($information['col_name'])
@@ -261,7 +284,7 @@ class Contao2BackendViewDefinitionBuilder
      *
      * @return string
      */
-    private function convertRenderGroupType($type)
+    private function convertRenderGroupType(string $type): string
     {
         $lookup = [
             'char'    => GroupAndSortingInformationInterface::GROUP_CHAR,
@@ -272,7 +295,8 @@ class Contao2BackendViewDefinitionBuilder
             'month'   => GroupAndSortingInformationInterface::GROUP_MONTH,
             'year'    => GroupAndSortingInformationInterface::GROUP_YEAR,
         ];
-        if (array_key_exists($type, $lookup)) {
+
+        if (\array_key_exists($type, $lookup)) {
             return $lookup[$type];
         }
 
@@ -286,9 +310,12 @@ class Contao2BackendViewDefinitionBuilder
      *
      * @return void
      */
-    private function parseListLabel(ListingConfigInterface $listing)
+    private function parseListLabel(ListingConfigInterface $listing): void
     {
+        assert($this->container instanceof IMetaModelDataDefinition);
+        assert($this->metaModel instanceof IMetaModel);
         $providerName = $this->container->getBasicDefinition()->getDataProvider();
+        assert(\is_string($providerName));
         if (!$listing->hasLabelFormatter($providerName)) {
             $formatter = new DefaultModelFormatterConfig();
             $listing->setLabelFormatter($providerName, $formatter);
@@ -302,9 +329,9 @@ class Contao2BackendViewDefinitionBuilder
         );
 
         $formatter->setPropertyNames(
-            array_merge($formatter->getPropertyNames(), $renderSetting->getSettingNames())
+            \array_merge($formatter->getPropertyNames(), $renderSetting->getSettingNames())
         );
 
-        $formatter->setFormat(str_repeat('%s ', count($formatter->getPropertyNames())));
+        $formatter->setFormat(\str_repeat('%s ', \count($formatter->getPropertyNames())));
     }
 }

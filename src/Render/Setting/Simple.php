@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -32,21 +33,21 @@ class Simple implements ISimple
      *
      * @var array
      */
-    protected $arrBase = array();
+    protected $arrBase = [];
 
     /**
      * The parenting instance.
      *
-     * @var ICollection
+     * @var ICollection|null
      */
-    protected $parent;
+    protected $parent = null;
 
     /**
      * Create a new instance.
      *
      * @param array $arrInformation The array that holds all base information for the new instance.
      */
-    public function __construct($arrInformation = array())
+    public function __construct($arrInformation = [])
     {
         foreach ($arrInformation as $strKey => $varValue) {
             $this->set($strKey, StringUtil::deserialize($varValue));
@@ -74,6 +75,10 @@ class Simple implements ISimple
      */
     public function getParent()
     {
+        if (null === $this->parent) {
+            throw new \RuntimeException('Parent has not been set');
+        }
+
         return $this->parent;
     }
 
@@ -93,7 +98,6 @@ class Simple implements ISimple
      * Set a base property in the settings object.
      *
      * @param string $strName    The name of the setting to set.
-     *
      * @param mixed  $varSetting The value to use.
      *
      * @return ISimple The setting itself.
@@ -111,6 +115,6 @@ class Simple implements ISimple
      */
     public function getKeys()
     {
-        return array_keys($this->arrBase);
+        return \array_keys($this->arrBase);
     }
 }

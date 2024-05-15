@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2020 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -34,6 +35,8 @@ use Symfony\Component\HttpFoundation\Response;
  * The item list front end module.
  *
  * @FrontendModule("metamodel_list", category="metamodels")
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 final class ItemListController extends AbstractFrontendModuleController
 {
@@ -57,7 +60,12 @@ final class ItemListController extends AbstractFrontendModuleController
         array $classes = null,
         PageModel $pageModel = null
     ): Response {
-        if (!empty($model->metamodel_layout)) {
+        if ($this->scopeMatcher->isBackendRequest($request)) {
+            return $this->getBackendWildcard($model);
+        }
+
+        /** @psalm-suppress UndefinedMagicPropertyFetch */
+        if (null !== $model->metamodel_layout) {
             $model->customTpl = $model->metamodel_layout;
         }
 
@@ -73,8 +81,8 @@ final class ItemListController extends AbstractFrontendModuleController
      */
     protected function getBackendWildcard(ModuleModel $module): Response
     {
-        $name = $this->get('translator')->trans('FMD.'.$this->getType().'.0', [], 'contao_modules');
-        $href = $this->get('router')->generate(
+        $name = $this->translator->trans($this->getType(), [], 'metamodels_wildcard');
+        $href = $this->router->generate(
             'contao_backend',
             ['do' => 'themes', 'table' => 'tl_module', 'act' => 'edit', 'id' => $module->id]
         );
@@ -91,7 +99,7 @@ final class ItemListController extends AbstractFrontendModuleController
      *
      * @return Response The response.
      */
-    protected function getResponse(Template $template, ModuleModel $model, Request $request): ?Response
+    protected function getResponse(Template $template, ModuleModel $model, Request $request): Response
     {
         return $this->getResponseInternal($template, $model, $request);
     }

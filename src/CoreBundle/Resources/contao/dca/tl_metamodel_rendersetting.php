@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,229 +20,191 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2021 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
-$GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
-(
-    'config'       => array
-    (
+$GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = [
+    'config'       => [
         'dataContainer'    => 'General',
         'ptable'           => 'tl_metamodel_rendersettings',
         'switchToEdit'     => true,
         'enableVersioning' => false,
-        'sql'              => array
-        (
-            'keys' => array
-            (
+        'sql'              => [
+            'keys' => [
                 'id'  => 'primary',
                 'pid' => 'index'
-            ),
-        )
-    ),
-    'dca_config'   => array
-    (
-        'data_provider'  => array
-        (
-            'default'      => array
-            (
+            ],
+        ]
+    ],
+    'dca_config'   => [
+        'data_provider'  => [
+            'default'      => [
                 'source' => 'tl_metamodel_rendersetting'
-            ),
-            'parent'       => array
-            (
+            ],
+            'parent'       => [
                 'source' => 'tl_metamodel_rendersettings'
-            ),
-            'tl_metamodel' => array
-            (
+            ],
+            'tl_metamodel' => [
                 'source' => 'tl_metamodel'
-            )
-        ),
-        'childCondition' => array
-        (
-            array(
-                'from'   => 'tl_metamodel_rendersettings',
-                'to'     => 'tl_metamodel_rendersetting',
-                'setOn'  => array
-                (
-                    array
-                    (
+            ]
+        ],
+        'childCondition' => [
+            [
+                'from'    => 'tl_metamodel_rendersettings',
+                'to'      => 'tl_metamodel_rendersetting',
+                'setOn'   => [
+                    [
                         'to_field'   => 'pid',
                         'from_field' => 'id',
-                    ),
-                ),
-                'filter' => array
-                (
-                    array
-                    (
+                    ],
+                ],
+                'filter'  => [
+                    [
                         'local'     => 'pid',
                         'remote'    => 'id',
                         'operation' => '=',
-                    ),
-                ),
-                'inverse' => array
-                (
-                    array
-                    (
+                    ],
+                ],
+                'inverse' => [
+                    [
                         'local'     => 'pid',
                         'remote'    => 'id',
                         'operation' => '=',
-                    ),
-                )
-            ),
-            array(
+                    ],
+                ]
+            ],
+            [
                 'from'    => 'tl_metamodel',
                 'to'      => 'tl_metamodel_rendersettings',
-                'setOn'   => array
-                (
-                    array
-                    (
+                'setOn'   => [
+                    [
                         'to_field'   => 'pid',
                         'from_field' => 'id',
-                    ),
-                ),
-                'filter'  => array
-                (
-                    array
-                    (
+                    ],
+                ],
+                'filter'  => [
+                    [
                         'local'     => 'pid',
                         'remote'    => 'id',
                         'operation' => '=',
-                    ),
-                ),
-                'inverse' => array
-                (
-                    array
-                    (
+                    ],
+                ],
+                'inverse' => [
+                    [
                         'local'     => 'pid',
                         'remote'    => 'id',
                         'operation' => '=',
-                    ),
-                )
-            )
-        ),
-        'child_list'     => array
-        (
-            'tl_metamodel_rendersetting' => array
-            (
-                'fields' => array
-                (
+                    ],
+                ]
+            ]
+        ],
+        'child_list'     => [
+            'tl_metamodel_rendersetting' => [
+                'fields' => [
                     'type',
                     'attr_id',
                     'urlparam',
                     'comment'
-                ),
+                ],
                 'format' => '%s %s',
-            ),
-        ),
-    ),
-    'list'         => array
-    (
-        'sorting'           => array
-        (
+            ],
+        ],
+    ],
+    'list'         => [
+        'sorting'           => [
             'mode'         => 4,
-            'fields'       => array('sorting'),
+            'fields'       => ['sorting'],
             'panelLayout'  => 'limit',
-            'headerFields' => array('name'),
-        ),
-        'global_operations' => array
-        (
-            'addall' => array
-            (
-                'label'      => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addall'],
-                'class'      => 'header_add_all rendersetting_add_all',
-                'attributes' => 'onclick="Backend.getScrollOffset();"'
-            ),
-            'all'    => array
-            (
-                'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
-                'href'       => 'act=select',
-                'class'      => 'header_edit_all',
-                'attributes' => 'onclick="Backend.getScrollOffset();"'
-            )
-        ),
-        'operations'        => array
-        (
-            'edit'   => array
-            (
-                'label' => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['edit'],
-                'href'  => 'act=edit',
-                'icon'  => 'edit.svg'
-            ),
-            'cut'    => array
-            (
-                'label' => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['cut'],
-                'icon'  => 'cut.svg'
-            ),
-            'delete' => array
-            (
-                'label'      => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['delete'],
-                'href'       => 'act=delete',
-                'icon'       => 'delete.svg',
-                'attributes' => sprintf(
-                    'onclick="if (!confirm(\'%s\')) return false; Backend.getScrollOffset();"',
-                    $GLOBALS['TL_LANG']['MSC']['deleteConfirm']
-                )
-            ),
-            'show'   => array
-            (
-                'label' => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['show'],
-                'href'  => 'act=show',
-                'icon'  => 'show.svg'
-            ),
-            'toggle' => array
-            (
-                'label'          => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['toggle'],
+            'headerFields' => ['name'],
+        ],
+        'global_operations' => [
+            'addall' => [
+                'label'       => 'addall.label',
+                'description' => 'addall.description',
+                'class'       => 'header_add_all rendersetting_add_all',
+                'attributes'  => 'onclick="Backend.getScrollOffset();"'
+            ],
+            'all'    => [
+                'label'       => 'all.label',
+                'description' => 'all.description',
+                'href'        => 'act=select',
+                'class'       => 'header_edit_all',
+                'attributes'  => 'onclick="Backend.getScrollOffset();"'
+            ]
+        ],
+        'operations'        => [
+            'edit'   => [
+                'label'       => 'edit.label',
+                'description' => 'edit.description',
+                'href'        => 'act=edit',
+                'icon'        => 'edit.svg'
+            ],
+            'cut'    => [
+                'label'       => 'cut.label',
+                'description' => 'cut.description',
+                'icon'        => 'cut.svg'
+            ],
+            'delete' => [
+                'label'       => 'delete.label',
+                'description' => 'delete.description',
+                'href'        => 'act=delete',
+                'icon'        => 'delete.svg',
+                'attributes'  => 'onclick="if (!confirm(this.dataset.msgConfirm)) return false; Backend.getScrollOffset();"',
+            ],
+            'show'   => [
+                'label'       => 'show.label',
+                'description' => 'show.description',
+                'href'        => 'act=show',
+                'icon'        => 'show.svg'
+            ],
+            'toggle' => [
+                'label'          => 'toggle.label',
+                'description'    => 'toggle.description',
                 'icon'           => 'visible.svg',
                 'toggleProperty' => 'enabled',
-            )
-        )
-    ),
-    'palettes'     => array
-    (
-        '__selector__' => array
-        (
+            ]
+        ]
+    ],
+    'palettes'     => [
+        '__selector__' => [
             'attr_id'
-        )
-    ),
-    'metapalettes' => array
-    (
-        'default' => array
-        (
-            'title' => array
-            (
+        ]
+    ],
+    'metapalettes' => [
+        'default' => [
+            'title' => [
                 'attr_id',
                 'template',
                 'additional_class'
-            )
-        ),
-    ),
+            ]
+        ],
+    ],
     // Fields.
-    'fields'       => array
-    (
-        'id'               => array
-        (
-            'sql' => 'int(10) unsigned NOT NULL auto_increment'
-        ),
-        'pid'              => array
-        (
-            'sql' => "int(10) unsigned NOT NULL default '0'"
-        ),
-        'sorting'          => array
-        (
-            'sql' => "int(10) unsigned NOT NULL default '0'"
-        ),
-        'tstamp'           => array
-        (
-            'sql' => "int(10) unsigned NOT NULL default '0'"
-        ),
-        'attr_id'          => array
-        (
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['attr_id'],
-            'exclude'   => true,
-            'inputType' => 'select',
-            'eval'      => array(
+    'fields'       => [
+        'id'               => [
+            'label' => 'id.label',
+            'sql'   => 'int(10) unsigned NOT NULL auto_increment'
+        ],
+        'pid'              => [
+            'label' => 'pid.label',
+            'sql'   => "int(10) unsigned NOT NULL default '0'"
+        ],
+        'sorting'          => [
+            'label' => 'sorting.label',
+            'sql'   => "int(10) unsigned NOT NULL default '0'"
+        ],
+        'tstamp'           => [
+            'label' => 'tstamp.label',
+            'sql'   => "int(10) unsigned NOT NULL default '0'"
+        ],
+        'attr_id'          => [
+            'label'       => 'attr_id.label',
+            'description' => 'attr_id.description',
+            'exclude'     => true,
+            'inputType'   => 'select',
+            'eval'        => [
                 'doNotSaveEmpty'     => true,
                 'alwaysSave'         => true,
                 'submitOnChange'     => true,
@@ -250,38 +212,37 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
                 'mandatory'          => true,
                 'chosen'             => true,
                 'tl_class'           => 'w50'
-            ),
-            'sql'       => "int(10) unsigned NOT NULL default '0'"
-        ),
-        'template'         => array
-        (
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['template'],
-            'exclude'   => true,
-            'inputType' => 'select',
-            'eval'      => array
-            (
+            ],
+            'sql'         => "int(10) unsigned NOT NULL default '0'"
+        ],
+        'template'         => [
+            'label'       => 'template.label',
+            'description' => 'template.description',
+            'exclude'     => true,
+            'inputType'   => 'select',
+            'eval'        => [
                 'tl_class'           => 'w50',
                 'chosen'             => true,
                 'includeBlankOption' => true,
-            ),
-            'sql'       => "varchar(64) NOT NULL default ''"
-        ),
-        'additional_class' => array
-        (
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['additional_class'],
-            'exclude'   => true,
-            'inputType' => 'text',
-            'eval'      => array
-            (
+            ],
+            'sql'         => "varchar(64) NOT NULL default ''"
+        ],
+        'additional_class' => [
+            'label'       => 'additional_class.label',
+            'description' => 'additional_class.description',
+            'exclude'     => true,
+            'inputType'   => 'text',
+            'eval'        => [
                 'tl_class'  => 'w50',
                 'maxlength' => 64,
-            ),
-            'sql'       => "varchar(64) NOT NULL default ''"
-        ),
-        'enabled'          => array
-        (
-            'default' => 1,
-            'sql'     => "char(1) NOT NULL default ''"
-        )
-    )
-);
+            ],
+            'sql'         => "varchar(64) NOT NULL default ''"
+        ],
+        'enabled'          => [
+            'label'       => 'enabled.label',
+            'description' => 'enabled.description',
+            'default'     => 1,
+            'sql'         => "char(1) NOT NULL default ''"
+        ]
+    ]
+];

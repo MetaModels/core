@@ -169,6 +169,8 @@ class BaseTest extends TestCase
      * Test that the attribute does not accept config keys not specified via getAttributeSettingNames().
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function testGetFieldDefinition()
     {

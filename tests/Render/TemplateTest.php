@@ -130,6 +130,8 @@ final class TemplateTest extends TestCase
      * Test different caches for custom paths.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function testCacheForEachCustomPathInstances(): void
     {

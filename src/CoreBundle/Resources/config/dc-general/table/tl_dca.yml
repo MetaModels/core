@@ -1,6 +1,10 @@
 services:
     metamodels.dc_general.table.tl_metamodel_dca.backend_section_options:
         class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\Dca\BackendSectionOptionListener
+        arguments:
+          - '@contao.menu.backend_builder'
+          - '@translator'
+          - '@contao.framework'
         tags:
             - name: kernel.event_listener
               event: dc-general.view.contao2backend.get-property-options
@@ -36,3 +40,11 @@ services:
             - name: kernel.event_listener
               event: dc-general.view.contao2backend.get-property-options
               method: handle
+
+    MetaModels\CoreBundle\EventListener\DcGeneral\Table\Dca\RenderModeHintListener:
+        arguments:
+          - "@translator"
+        tags:
+          - name: kernel.event_listener
+            event: dc-general.view.contao2backend.build-widget
+            method: handle

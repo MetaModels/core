@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@
  * @package    MetaModels/core
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -25,6 +25,7 @@ namespace MetaModels\CoreBundle\Migration;
 use Contao\CoreBundle\Migration\AbstractMigration;
 use Contao\CoreBundle\Migration\MigrationResult;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 
 /**
  * This migration changes collation of all mm_* databases to the collation from the default table options
@@ -37,14 +38,14 @@ class TableCollationMigration extends AbstractMigration
      *
      * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * The default table options.
      *
      * @var array
      */
-    private $defaultTableOptions;
+    private array $defaultTableOptions;
 
     /**
      * Create a new instance.
@@ -67,7 +68,7 @@ class TableCollationMigration extends AbstractMigration
     {
         return \sprintf(
             'Change collation to %1$s and/or DB engine to %2$s of all mm_* tables.',
-            $this->defaultTableOptions['collate'],
+            $this->defaultTableOptions['collation'],
             $this->defaultTableOptions['engine']
         );
     }
@@ -76,9 +77,10 @@ class TableCollationMigration extends AbstractMigration
      * Must only run if:
      * - the mm_* tables are present AND
      * - there collation is not utf8mb4_unicode_ci OR
-     * - these engine is not InnoDB.
+     * - the engine is not InnoDB.
      *
      * @return bool
+     * @throws Exception
      */
     public function shouldRun(): bool
     {
@@ -94,6 +96,7 @@ class TableCollationMigration extends AbstractMigration
      * Collect the tables to be updated and update them.
      *
      * @return MigrationResult
+     * @throws Exception
      */
     public function run(): MigrationResult
     {
@@ -104,33 +107,38 @@ class TableCollationMigration extends AbstractMigration
             $message[] = $table;
         }
 
-        return new MigrationResult(true, 'Adjusted table(s): ' . implode(', ', $message));
+        return new MigrationResult(true, 'Adjusted table(s): ' . \implode(', ', $message));
     }
 
     /**
      * Fetch all tables that are not right collection or DB engine yet.
      *
      * @return array
+     * @throws Exception
      */
     private function fetchPendingTables(): array
     {
-        $schemaManager = $this->connection->getSchemaManager();
+        $schemaManager = $this->connection->createSchemaManager();
         $tableNames    = $schemaManager->listTableNames();
 
         $results = [];
         foreach ($tableNames as $tableName) {
             // Only MM model tables.
-            if ('mm_' !== substr($tableName, 0, 3)) {
+            if (!\str_starts_with($tableName, 'mm_')) {
                 continue;
             }
 
             // Retrieve table data.
             $result = $this->connection
                 ->executeQuery(sprintf('SHOW TABLE STATUS LIKE \'%1$s\'', $tableName))
-                ->fetch();
+                ->fetchAssociative();
+            if (false === $result) {
+                continue;
+            }
 
             // Check collation and DB engine and collect tables with false data.
-            if (($this->defaultTableOptions['collate'] !== $result['Collation'])
+            if (
+                ($this->defaultTableOptions['collation'] !== $result['Collation'])
                 || ($this->defaultTableOptions['engine'] !== $result['Engine'])
             ) {
                 $results[] = $tableName;
@@ -146,11 +154,12 @@ class TableCollationMigration extends AbstractMigration
      * @param string $tableName The name of the table.
      *
      * @return void
+     * @throws Exception
      */
     private function fixTable(string $tableName): void
     {
         $this->connection->executeQuery(
-            sprintf(
+            \sprintf(
                 'ALTER TABLE %1$s
                 ENGINE=%2$s
                 DEFAULT CHARSET=%3$s COLLATE %4$s
@@ -158,7 +167,7 @@ class TableCollationMigration extends AbstractMigration
                 $tableName,
                 $this->defaultTableOptions['engine'],
                 $this->defaultTableOptions['charset'],
-                $this->defaultTableOptions['collate']
+                $this->defaultTableOptions['collation']
             )
         );
     }

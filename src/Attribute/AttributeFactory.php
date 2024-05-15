@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2021 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -32,15 +33,19 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * This is the implementation of the Field factory to query instances of fields.
  *
  * Usually this is only used internally by {@link MetaModels\Factory}
+ *
+ * @psalm-suppress DeprecatedInterface
  */
 class AttributeFactory implements IAttributeFactory
 {
     /**
      * The service container.
      *
-     * @var IMetaModelsServiceContainer
+     * @var IMetaModelsServiceContainer|null
+     *
+     * @psalm-suppress DeprecatedInterface
      */
-    protected $serviceContainer;
+    protected $serviceContainer = null;
 
     /**
      * The event dispatcher.
@@ -54,7 +59,7 @@ class AttributeFactory implements IAttributeFactory
      *
      * @var IAttributeTypeFactory[]
      */
-    protected $typeFactories = array();
+    protected $typeFactories = [];
 
     /**
      * Create a new instance.
@@ -70,10 +75,11 @@ class AttributeFactory implements IAttributeFactory
      * Set the service container.
      *
      * @param IMetaModelsServiceContainer $serviceContainer  The service container to use.
-     *
      * @param bool                        $deprecationNotice Determine deprecated notice.
      *
      * @return AttributeFactory
+     *
+     * @psalm-suppress DeprecatedInterface
      *
      * @deprecated The service container will get removed, use the symfony service container instead.
      */
@@ -113,6 +119,8 @@ class AttributeFactory implements IAttributeFactory
      *
      * @return IMetaModelsServiceContainer
      *
+     * @psalm-suppress DeprecatedInterface
+     *
      * @deprecated The service container will get removed, use the symfony service container instead.
      */
     public function getServiceContainer()
@@ -123,6 +131,10 @@ class AttributeFactory implements IAttributeFactory
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
+        if (null === $this->serviceContainer) {
+            throw new \RuntimeException('The deprecated service container has not been set anymore.');
+        }
+
         return $this->serviceContainer;
     }
 
@@ -130,7 +142,6 @@ class AttributeFactory implements IAttributeFactory
      * Create an attribute instance from an information array.
      *
      * @param array      $information The attribute information.
-     *
      * @param IMetaModel $metaModel   The MetaModel instance for which the attribute shall be created.
      *
      * @return IAttribute|null
@@ -143,8 +154,11 @@ class AttributeFactory implements IAttributeFactory
         if ($event->getAttribute()) {
             return $event->getAttribute();
         }
+        if (null === ($type = $information['type'] ?? null)) {
+            return null;
+        }
 
-        $factory = $this->getTypeFactory($information['type']);
+        $factory = $this->getTypeFactory($type);
 
         if (!$factory) {
             return null;
@@ -175,15 +189,18 @@ class AttributeFactory implements IAttributeFactory
      */
     public function getTypeFactory($typeFactory)
     {
-        return isset($this->typeFactories[(string) $typeFactory]) ? $this->typeFactories[(string) $typeFactory] : null;
+        return $this->typeFactories[$typeFactory] ?? null;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function attributeTypeMatchesFlags($name, $flags)
+    public function attributeTypeMatchesFlags($factory, $flags)
     {
-        $factory = $this->getTypeFactory($name);
+        $factory = $this->getTypeFactory($factory);
+        if (null === $factory) {
+            return false;
+        }
 
         // Shortcut, if all are valid, return all. :)
         if ($flags === self::FLAG_ALL) {
@@ -204,8 +221,8 @@ class AttributeFactory implements IAttributeFactory
             $flags = self::FLAG_ALL;
         }
 
-        $result = array();
-        foreach (array_keys($this->typeFactories) as $name) {
+        $result = [];
+        foreach (\array_keys($this->typeFactories) as $name) {
             if (!$this->attributeTypeMatchesFlags($name, $flags)) {
                 continue;
             }
@@ -249,6 +266,6 @@ class AttributeFactory implements IAttributeFactory
      */
     public function getIconForType($type)
     {
-        return isset($this->typeFactories[(string) $type]) ? $this->typeFactories[(string) $type]->getTypeIcon() : null;
+        return isset($this->typeFactories[$type]) ? $this->typeFactories[$type]->getTypeIcon() : '';
     }
 }

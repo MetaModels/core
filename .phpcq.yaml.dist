@@ -1,0 +1,111 @@
+phpcq:
+  repositories:
+    - https://phpcq.github.io/repository/repository.json
+  directories:
+    - src
+    - tests
+  artifact: .phpcq/build
+  composer:
+    autodiscover: false
+
+  plugins:
+    phpunit:
+      version: ^1.0
+      signed: false
+    psalm:
+      version: ^1.0
+      signed: false
+    composer-require-checker:
+      version: ^1.0
+      signed: false
+    phpmd:
+      version: ^1.0
+      signed: false
+    phpcpd:
+      version: ^1.1
+      signed: false
+    phploc:
+      version: ^1.0
+      signed: false
+    phpcs:
+      version: ^1.0
+      signed: false
+    composer-normalize:
+      version: ^1.0
+      signed: false
+  trusted-keys:
+    # composer-require-checker
+    - 033E5F8D801A2F8D
+    # sb@sebastian-bergmann.de
+    - 4AA394086372C20A
+    # psalm
+    - 8A03EA3B385DBAA1
+    - 12CE0F1D262429A5
+    # magl@magll.net
+    - D2CCAC42F6295E7D
+    # PHP_CodeSniffer
+    - 31C7E470E2138192
+    # Composer normalize
+    - C00543248C87FB13
+    # phpmd
+    - A4E55EA12C7C085C
+
+tasks:
+  fix:
+    - composer-normalize-fix
+    - phpcbf
+
+  verify:
+    - composer-require-checker
+    - composer-normalize
+
+  analyze:
+    - phploc
+    - phpcpd
+    - phpmd
+    - phpcs
+    - psalm
+    - phpunit
+
+  default:
+    - verify
+    - analyze
+
+  phpcpd:
+    plugin: phpcpd
+    config:
+      exclude:
+        - tests
+        - src/CoreBundle/EventListener/DcGeneral/DefinitionBuilder
+        - src/CoreBundle/Resources/contao/dca
+
+  phpmd:
+    plugin: phpmd
+    config:
+      ruleset:
+        - ./.phpmd.xml
+
+  composer-require-checker:
+    plugin: composer-require-checker
+    config:
+      config_file: '.composer-require-checker.json'
+
+  phpcs:
+    plugin: phpcs
+    config: &phpcs-config
+      standard: PSR12
+      excluded:
+        - '*/CoreBundle/Resources/contao/dca/*'
+        - '*/CoreBundle/Resources/contao/languages/*'
+        - '*/CoreBundle/Resources/public/*'
+
+  phpcbf:
+    plugin: phpcs
+    config:
+      <<: *phpcs-config
+      fix: true
+
+  composer-normalize-fix:
+    plugin: composer-normalize
+    config:
+      dry_run: false

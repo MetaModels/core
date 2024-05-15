@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2020 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -32,11 +32,13 @@ use MetaModels\Render\Setting\ICollection as IRenderSettings;
 
 /**
  * This is the ICollection reference implementation.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class Collection implements ICollection
 {
     /**
-     * The additional meta data for this filter setting collection.
+     * The additional meta-data for this filter setting collection.
      *
      * @var array
      */
@@ -97,13 +99,7 @@ class Collection implements ICollection
      */
     public function getMetaModel()
     {
-        if ($this->metaModel) {
-            return $this->metaModel;
-        }
-
-        throw new \RuntimeException(
-            sprintf('Error: Filter setting %d not attached to a MetaModel', $this->arrData['id'])
-        );
+        return $this->metaModel;
     }
 
     /**
@@ -127,7 +123,7 @@ class Collection implements ICollection
     {
         foreach ($this->arrSettings as $objSetting) {
             // If the setting is on the ignore list skip it.
-            if (in_array($objSetting->get('id'), $arrIgnoredFilter, false)) {
+            if (\in_array($objSetting->get('id'), $arrIgnoredFilter, false)) {
                 continue;
             }
 
@@ -145,7 +141,7 @@ class Collection implements ICollection
             $filterUrl[] = $objSetting->generateFilterUrlFrom($objItem, $objRenderSetting);
         }
 
-        return [] === $filterUrl ? [] : array_merge(...$filterUrl);
+        return [] === $filterUrl ? [] : \array_merge(...$filterUrl);
     }
 
     /**
@@ -158,7 +154,7 @@ class Collection implements ICollection
             $parameters[] = $objSetting->getParameters();
         }
 
-        return [] === $parameters ? [] : array_merge(...$parameters);
+        return [] === $parameters ? [] : \array_merge(...$parameters);
     }
 
     /**
@@ -171,7 +167,7 @@ class Collection implements ICollection
             $parameters[] = $objSetting->getParameterDCA();
         }
 
-        return [] === $parameters ? [] : array_merge(...$parameters);
+        return [] === $parameters ? [] : \array_merge(...$parameters);
     }
 
     /**
@@ -181,14 +177,18 @@ class Collection implements ICollection
     {
         $parameters = [];
         foreach ($this->arrSettings as $objSetting) {
-            $parameters[] = $objSetting->getParameterFilterNames();
+            $filterNames  = $objSetting->getParameterFilterNames();
+            $filterType   = $objSetting->get('type');
+            $parameters[] = \array_map(fn (string $name): string => $name . ' [' . $filterType . ']', $filterNames);
         }
 
-        return [] === $parameters ? [] : array_merge(...$parameters);
+        return [] === $parameters ? [] : \array_merge(...$parameters);
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function getParameterFilterWidgets(
         $arrFilterUrl,
@@ -216,7 +216,7 @@ class Collection implements ICollection
                 $setting->getParameterFilterWidgets($ids, $arrFilterUrl, $arrJumpTo, $objFrontendFilterOptions);
         }
 
-        return [] === $parameters ? [] : array_merge(...$parameters);
+        return [] === $parameters ? [] : \array_merge(...$parameters);
     }
 
     /**
@@ -229,6 +229,6 @@ class Collection implements ICollection
             $attributes[] = $setting->getReferencedAttributes();
         }
 
-        return [] === $attributes ? [] : array_merge(...$attributes);
+        return [] === $attributes ? [] : \array_merge(...$attributes);
     }
 }

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -24,9 +24,11 @@ namespace MetaModels\CoreBundle\Assets;
 
 use Contao\CoreBundle\Framework\Adapter;
 use Contao\CoreBundle\Image\ImageFactoryInterface;
+use Contao\FilesModel;
+use Contao\Image;
 use Contao\Validator;
 use Symfony\Component\Filesystem\Filesystem;
-use Webmozart\PathUtil\Path;
+use Symfony\Component\Filesystem\Path;
 
 /**
  * This class takes care of building icons for the backend.
@@ -38,59 +40,59 @@ class IconBuilder
      *
      * @var string
      */
-    private $rootPath;
+    private string $rootPath;
 
     /**
      * The output path for assets.
      *
      * @var string
      */
-    private $outputPath;
+    private string $outputPath;
 
     /**
      * The web reachable path for assets.
      *
      * @var string
      */
-    private $webPath;
+    private string $webPath;
 
     /**
      * The project web reachable path for assets.
      *
      * @var string
      */
-    private $projectWebPath;
+    private string $projectWebPath;
 
     /**
      * Adapter to the Contao\FilesModel class.
      *
-     * @var \Contao\FilesModel|Adapter
+     * @var Adapter<FilesModel>
      */
-    private $filesAdapter;
+    private Adapter $filesAdapter;
 
     /**
      * The image factory.
      *
      * @var ImageFactoryInterface
      */
-    private $imageFactory;
+    private ImageFactoryInterface $imageFactory;
 
     /**
      * The image adapter.
      *
-     * @var \Contao\Image|Adapter
+     * @var Adapter<Image>
      */
-    private $image;
+    private Adapter $image;
 
     /**
      * Create a new instance.
      *
-     * @param Adapter               $filesAdapter   Adapter to the Contao files model class.
+     * @param Adapter<FilesModel>   $filesAdapter   Adapter to the Contao files model class.
      * @param ImageFactoryInterface $imageFactory   The image factory for resizing images.
      * @param string                $rootPath       The root path of the application.
      * @param string                $outputPath     The output path for assets.
      * @param string                $webPath        The web reachable path for assets.
-     * @param Adapter               $imageAdapter   The image adapter to generate HTML code images.
+     * @param Adapter<Image>        $imageAdapter   The image adapter to generate HTML code images.
      * @param string                $projectWebPath The project web reachable path for assets.
      */
     public function __construct(
@@ -126,10 +128,10 @@ class IconBuilder
     public function getBackendIcon($icon, $defaultIcon = 'bundles/metamodelscore/images/icons/metamodels.png')
     {
         $realIcon   = $this->convertValueToPath($icon, $defaultIcon);
-        $targetPath = $this->outputPath . '/' . basename($realIcon);
+        $targetPath = $this->outputPath . '/' . \basename($realIcon);
 
         if (\file_exists($targetPath)) {
-            return $this->webPath . '/' . basename($realIcon);
+            return $this->webPath . '/' . \basename($realIcon);
         }
 
         if (!Path::isAbsolute($realIcon)) {
@@ -138,7 +140,7 @@ class IconBuilder
 
         $this->imageFactory->create($realIcon, [16, 16, 'center_center'], $targetPath);
 
-        return $this->webPath . '/' . basename($realIcon);
+        return $this->webPath . '/' . \basename($realIcon);
     }
 
     /**
@@ -157,6 +159,7 @@ class IconBuilder
         $attributes = '',
         $defaultIcon = 'bundles/metamodelscore/images/icons/metamodels.png'
     ) {
+        /** @psalm-suppress InternalMethod - Class Adapter is internal, not the __call() method. Blame Contao. */
         return $this->image->getHtml($this->getBackendIcon($icon, $defaultIcon), $alt, $attributes);
     }
 
@@ -171,13 +174,16 @@ class IconBuilder
     public function convertValueToPath($varValue, $fallback)
     {
         if (Validator::isUuid($varValue)) {
+            /** @psalm-suppress InternalMethod - Class Adapter is internal, not the __call() method. Blame Contao. */
             $model = $this->filesAdapter->findByPk($varValue);
-            if ($model !== null && file_exists($this->rootPath . '/' . $model->path)) {
+            if (($model instanceof FilesModel) && \file_exists($this->rootPath . '/' . $model->path)) {
                 return $model->path;
             }
+
             return $fallback;
         }
-        if (file_exists($varValue)) {
+
+        if (\file_exists($varValue)) {
             return $varValue;
         }
 

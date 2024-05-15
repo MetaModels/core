@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -22,6 +23,8 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\RenderSetting;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetGlobalButtonEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
+use ContaoCommunityAlliance\DcGeneral\InputProviderInterface;
 use Doctrine\DBAL\Connection;
 use MetaModels\IFactory;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -36,21 +39,21 @@ class AddAllButtonListener
      *
      * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * The MetaModels factory.
      *
      * @var IFactory
      */
-    private $factory;
+    private IFactory $factory;
 
     /**
      * The URL generator.
      *
      * @var UrlGeneratorInterface
      */
-    private $urlGenerator;
+    private UrlGeneratorInterface $urlGenerator;
 
     /**
      * Create a new instance.
@@ -72,24 +75,38 @@ class AddAllButtonListener
      * @param GetGlobalButtonEvent $event The event.
      *
      * @return void
+     *
+     * @throws \Doctrine\DBAL\Exception
      */
     public function getGlobalButton(GetGlobalButtonEvent $event)
     {
-        $environment = $event->getEnvironment();
-        if ('addall' !== $event->getKey()
-        || 'tl_metamodel_rendersetting' !== $environment->getDataDefinition()->getName()) {
+        $environment    = $event->getEnvironment();
+        $dataDefinition = $environment->getDataDefinition();
+        assert($dataDefinition instanceof ContainerInterface);
+
+        if (
+            'addall' !== $event->getKey()
+            || 'tl_metamodel_rendersetting' !== $dataDefinition->getName()
+        ) {
             return;
         }
 
-        $renderSetting = ModelId::fromSerialized($environment->getInputProvider()->getParameter('pid'))->getId();
+        $inputProvider = $environment->getInputProvider();
+        assert($inputProvider instanceof InputProviderInterface);
+
+        $renderSetting = ModelId::fromSerialized($inputProvider->getParameter('pid'))->getId();
 
         $modelId = $this->connection->createQueryBuilder()
             ->select('r.pid')
             ->from('tl_metamodel_rendersettings', 'r')
             ->where('r.id=:pid')
             ->setParameter('pid', $renderSetting)
-            ->execute()
-            ->fetchColumn();
+            ->executeQuery()
+            ->fetchOne();
+
+        if (false === $modelId) {
+            return;
+        }
 
         $name = $this->factory->translateIdToMetaModelName($modelId);
 

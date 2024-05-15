@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,13 +17,15 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Andreas Nölke <zero@brothers-project.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\FrontendIntegration;
 
+use Contao\Database\Result;
+use Contao\FrontendTemplate;
 use Contao\System;
 use MetaModels\Filter\FilterUrlBuilder;
 use MetaModels\Filter\Setting\ICollection;
@@ -32,14 +34,18 @@ use MetaModels\Filter\Setting\IFilterSettingFactory;
 /**
  * FE-module for FE-filtering.
  *
- * @property \FrontendTemplate $Template
- * @property string            $metamodel_jumpTo
- * @property string            $metamodel_fef_template
- * @property bool              $metamodel_fef_autosubmit
- * @property bool              $metamodel_fef_hideclearfilter
- * @property bool              $metamodel_available_values
- * @property string            $metamodel_fef_params
- * @property int               $id
+ * @property FrontendTemplate $Template
+ * @property string           $metamodel_jumpTo
+ * @property string           $metamodel_fef_template
+ * @property bool             $metamodel_fef_autosubmit
+ * @property bool             $metamodel_fef_hideclearfilter
+ * @property bool             $metamodel_available_values
+ * @property string           $metamodel_fef_params
+ * @property string           $metamodel_fef_urlfragment
+ * @property int              $id
+ *
+ * @psalm-suppress DeprecatedClass
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class HybridFilterBlock extends MetaModelHybrid
 {
@@ -53,23 +59,23 @@ class HybridFilterBlock extends MetaModelHybrid
     /**
      * The jumpTo page.
      *
-     * @var array
+     * @var array|null
      */
-    private $arrJumpTo;
+    private ?array $arrJumpTo = null;
 
     /**
      * The database connection.
      *
-     * @var IFilterSettingFactory
+     * @var IFilterSettingFactory|null
      */
-    private $filterFactory;
+    private ?IFilterSettingFactory $filterFactory = null;
 
     /**
      * The filter URL builder.
      *
-     * @var FilterUrlBuilder
+     * @var FilterUrlBuilder|null
      */
-    private $filterUrlBuilder;
+    private ?FilterUrlBuilder $filterUrlBuilder = null;
 
     /**
      * Get the jump to page data.
@@ -81,26 +87,28 @@ class HybridFilterBlock extends MetaModelHybrid
      */
     public function getJumpTo()
     {
-        if (!isset($this->arrJumpTo)) {
-            /** @var \Database\Result $page */
-            $page = $GLOBALS['objPage'];
-            $this->setJumpTo($page->row());
-
+        if (null === $this->arrJumpTo) {
             if ($this->metamodel_jumpTo) {
                 // Page to jump to when filter submit.
                 $statement = $this->getConnection()
                     ->createQueryBuilder()
-                    ->select('t.id, t.alias')
+                    ->select('t.id', 't.alias')
                     ->from('tl_page', 't')
                     ->where('t.id=:id')
                     ->setParameter('id', $this->metamodel_jumpTo)
                     ->setMaxResults(1)
-                    ->execute();
+                    ->executeQuery();
 
-                if ($statement->rowCount()) {
-                    $this->setJumpTo($statement->fetch(\PDO::FETCH_ASSOC));
+                if (false !== ($row = $statement->fetchAssociative())) {
+                    $this->arrJumpTo = $row;
+
+                    return $this->arrJumpTo;
                 }
             }
+
+            /** @var Result $page */
+            $page = $GLOBALS['objPage'];
+            $this->arrJumpTo = $page->row();
         }
 
         return $this->arrJumpTo;
@@ -127,6 +135,7 @@ class HybridFilterBlock extends MetaModelHybrid
      */
     public function getFilterCollection()
     {
+        /** @psalm-suppress UndefinedThisPropertyFetch */
         return $this
             ->getFilterFactory()
             ->createCollection($this->metamodel_filtering);
@@ -144,6 +153,7 @@ class HybridFilterBlock extends MetaModelHybrid
             $this->strTemplate = $this->metamodel_fef_template;
         }
 
+        /** @psalm-suppress DeprecatedClass */
         return parent::generate();
     }
 
@@ -157,7 +167,8 @@ class HybridFilterBlock extends MetaModelHybrid
         $objFilter = new FrontendFilter($this->getConnection(), $this->getFilterUrlBuilder());
         $arrFilter = $objFilter->getMetaModelFrontendFilter($this);
 
-        $this->Template->setData(array_merge($this->Template->getData(), $arrFilter));
+        $this->Template->setData(\array_merge($this->Template->getData(), $arrFilter));
+        /** @psalm-suppress UndefinedMagicPropertyAssignment */
         $this->Template->submit = $arrFilter['submit'];
     }
 
@@ -169,7 +180,10 @@ class HybridFilterBlock extends MetaModelHybrid
     private function getFilterFactory(): IFilterSettingFactory
     {
         if (null === $this->filterFactory) {
-            return $this->filterFactory = System::getContainer()->get('metamodels.filter_setting_factory');
+            $filterSettingFactory = System::getContainer()->get('metamodels.filter_setting_factory');
+            assert($filterSettingFactory instanceof IFilterSettingFactory);
+
+            return $this->filterFactory = $filterSettingFactory;
         }
 
         return $this->filterFactory;
@@ -183,7 +197,10 @@ class HybridFilterBlock extends MetaModelHybrid
     private function getFilterUrlBuilder(): FilterUrlBuilder
     {
         if (null === $this->filterUrlBuilder) {
-            return $this->filterUrlBuilder = System::getContainer()->get('metamodels.filter_url');
+            $filterUrl = System::getContainer()->get('metamodels.filter_url');
+            assert($filterUrl instanceof FilterUrlBuilder);
+
+            return $this->filterUrlBuilder = $filterUrl;
         }
 
         return $this->filterUrlBuilder;

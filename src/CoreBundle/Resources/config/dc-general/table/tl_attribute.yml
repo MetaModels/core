@@ -40,22 +40,6 @@ services:
               event: dc-general.model.pre-edit-model
               method: handle
 
-    metamodels.listener.table.tl_metamodel_attribute.attribute_saved_listener:
-        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\Attribute\AttributeSavedListener
-        parent: metamodels.listener.table.tl_metamodel_attribute.listener_base
-        tags:
-            - name: kernel.event_listener
-              event: dc-general.model.post-persist
-              method: handle
-
-    metamodels.listener.table.tl_metamodel_attribute.attribute_deleted_listener:
-        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\Attribute\AttributeDeletedListener
-        parent: metamodels.listener.table.tl_metamodel_attribute.listener_base
-        tags:
-            - name: kernel.event_listener
-              event: dc-general.model.pre-delete
-              method: handle
-
     metamodels.dc_general.table.tl_metamodel_attribute.type_renderer:
         class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\Attribute\AttributeRendererListener
         parent: metamodels.listener.table.tl_metamodel_attribute.listener_base
@@ -80,3 +64,19 @@ services:
             - name: kernel.event_listener
               event: dc-general.view.contao2backend.encode-property-value-from-widget
               method: encodeValue
+
+    MetaModels\CoreBundle\EventListener\DcGeneral\Table\Attribute\GetVariantListener:
+        parent: metamodels.listener.table.tl_metamodel_attribute.listener_base
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.build-widget
+              method: buildWidget
+
+    MetaModels\CoreBundle\EventListener\DcGeneral\Table\Attribute\AttributeSchemaManagerHintListener:
+        parent: metamodels.listener.table.tl_metamodel_attribute.listener_base
+        arguments:
+            - "@translator"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.model.pre-edit-model
+              method: handle

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,7 +19,7 @@
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2021 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -38,13 +38,14 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * Interface for a MetaModel item.
  *
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Item implements IItem
 {
     /**
      * The MetaModel instance attached to the item.
      *
-     * Get's populated with the first call to getMetaModel() (lazy initialization).
+     * Gets populated with the first call to getMetaModel() (lazy initialization).
      *
      * @var IMetaModel
      */
@@ -55,14 +56,14 @@ class Item implements IItem
      *
      * @var array
      */
-    protected $arrData = array();
+    protected $arrData = [];
 
     /**
      * The event dispatcher.
      *
      * @var null|EventDispatcherInterface
      */
-    private $dispatcher;
+    private ?EventDispatcherInterface $dispatcher;
 
     /**
      * Create a new instance.
@@ -73,7 +74,6 @@ class Item implements IItem
      */
     public function __construct(IMetaModel $objMetaModel, $arrData, EventDispatcherInterface $dispatcher = null)
     {
-        $this->arrData    = $arrData;
         $this->metaModel  = $objMetaModel;
         $this->dispatcher = $dispatcher;
 
@@ -104,6 +104,8 @@ class Item implements IItem
      * Retrieve the service container.
      *
      * @return IMetaModelsServiceContainer
+     *
+     * @psalm-suppress DeprecatedInterface
      */
     public function getServiceContainer()
     {
@@ -113,6 +115,7 @@ class Item implements IItem
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
+        /** @psalm-suppress DeprecatedMethod */
         return $this->getMetaModel()->getServiceContainer();
     }
 
@@ -127,6 +130,7 @@ class Item implements IItem
             return $this->dispatcher;
         }
 
+        /** @psalm-suppress DeprecatedMethod */
         return $this->getServiceContainer()->getEventDispatcher();
     }
 
@@ -134,9 +138,7 @@ class Item implements IItem
      * Helper function for {@see MetaModelItem::parseValue()} and {@see MetaModelItem::parseAttribute()}.
      *
      * @param IAttribute       $objAttribute    The attribute to parse.
-     *
      * @param string           $strOutputFormat The desired output format.
-     *
      * @param ICollection|null $objSettings     The settings object to be applied.
      *
      * @return array The parsed information for the given attribute.
@@ -144,30 +146,32 @@ class Item implements IItem
     public function internalParseAttribute($objAttribute, $strOutputFormat, $objSettings)
     {
         if ($objAttribute instanceof IInternal) {
-            return array();
+            return [];
         }
 
-        $arrResult = array();
+        $arrResult = [];
 
-        if ($objAttribute) {
-            // Extract view settings for this attribute.
-            if ($objSettings) {
-                $objAttributeSettings = $objSettings->getSetting($objAttribute->getColName());
-            } else {
-                $objAttributeSettings = null;
-            }
-            foreach ($objAttribute->parseValue(
+        // Extract view settings for this attribute.
+        if ($objSettings) {
+            $objAttributeSettings = $objSettings->getSetting($objAttribute->getColName());
+        } else {
+            $objAttributeSettings = null;
+        }
+
+        foreach (
+            $objAttribute->parseValue(
                 $this->arrData,
                 $strOutputFormat,
                 $objAttributeSettings
-            ) as $strKey => $varValue) {
-                $arrResult[$strKey] = $varValue;
-            }
+            ) as $strKey => $varValue
+        ) {
+            $arrResult[$strKey] = $varValue;
         }
 
         // If "hideEmptyValues" is true and the raw is empty remove text and output format.
-        if (($objSettings instanceof ICollection)
-            && $objSettings->get('hideEmptyValues')
+        if (
+            ($objSettings instanceof ICollection)
+            && (bool) $objSettings->get('hideEmptyValues')
             && EmptyTest::isEmptyValue($arrResult['raw'])
         ) {
             unset($arrResult[$strOutputFormat]);
@@ -215,7 +219,8 @@ class Item implements IItem
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
-        if (!is_array($arrArray)) {
+        /** @psalm-suppress DocblockTypeContradiction */
+        if (!\is_array($arrArray)) {
             // This should never happen but was possible before.
             return EmptyTest::isEmptyValue($arrArray);
         }
@@ -232,14 +237,13 @@ class Item implements IItem
      */
     public function get($strAttributeName)
     {
-        return array_key_exists($strAttributeName, $this->arrData) ? $this->arrData[$strAttributeName] : null;
+        return \array_key_exists($strAttributeName, $this->arrData) ? $this->arrData[$strAttributeName] : null;
     }
 
     /**
      * Set the native value of an Attribute.
      *
      * @param string $strAttributeName The name of the attribute.
-     *
      * @param mixed  $varValue         The value of the attribute.
      *
      * @return IItem
@@ -266,7 +270,7 @@ class Item implements IItem
      *
      * @param string $strAttributeName The name of the attribute.
      *
-     * @return IAttribute The instance.
+     * @return null|IAttribute the instance or null if not found.
      */
     public function getAttribute($strAttributeName)
     {
@@ -274,7 +278,7 @@ class Item implements IItem
     }
 
     /**
-     * Check if the given attribute is set. This mean if in the data array
+     * Check if the given attribute is set. This was mean if in the data array
      * is the filed set or not. If the attribute is not loaded the function
      * will return false.
      *
@@ -285,7 +289,7 @@ class Item implements IItem
      */
     public function isAttributeSet($strAttributeName)
     {
-        return array_key_exists($strAttributeName, $this->arrData);
+        return \array_key_exists($strAttributeName, $this->arrData);
     }
 
     /**
@@ -296,13 +300,13 @@ class Item implements IItem
      */
     public function getSetAttributes()
     {
-        return array_keys($this->arrData);
+        return \array_keys($this->arrData);
     }
 
     /**
      * Determines if this item is a variant of another item.
      *
-     * @return bool True if it is an variant, false otherwise.
+     * @return bool True if it is a variant, false otherwise.
      */
     public function isVariant()
     {
@@ -316,7 +320,7 @@ class Item implements IItem
      * this item. It merely simply states, that this item is able
      * to function as variant base for other items.
      *
-     * @return bool True if it is an variant base, false otherwise.
+     * @return bool True if it is a variant base, false otherwise.
      */
     public function isVariantBase()
     {
@@ -324,7 +328,7 @@ class Item implements IItem
     }
 
     /**
-     * Fetch the meta model variants for this item.
+     * Fetch the MetaModel variants for this item.
      *
      * @param IFilter $objFilter The filter settings to be applied.
      *
@@ -333,14 +337,14 @@ class Item implements IItem
     public function getVariants($objFilter)
     {
         if ($this->isVariantBase()) {
-            return $this->getMetaModel()->findVariants(array($this->get('id')), $objFilter);
+            return $this->getMetaModel()->findVariants([$this->get('id')], $objFilter);
         }
 
         return null;
     }
 
     /**
-     * Fetch the meta model variant base for this item.
+     * Fetch the MetaModel variant base for this item.
      *
      * Note: For a non-variant item the variant base is the item itself.
      *
@@ -349,7 +353,12 @@ class Item implements IItem
     public function getVariantBase()
     {
         if ($this->getMetaModel()->hasVariants() && !$this->isVariantBase()) {
-            return $this->getMetaModel()->findById($this->get('vargroup'));
+            $base = $this->getMetaModel()->findById($this->get('vargroup'));
+            if (null === $base) {
+                throw new \RuntimeException('Database corruption, missing base item for variant.');
+            }
+
+            return $base;
         }
 
         return $this;
@@ -369,7 +378,8 @@ class Item implements IItem
         if (!$this->getMetaModel()->hasVariants()) {
             return null;
         }
-        return $this->getMetaModel()->findVariantsWithBase(array($this->get('id')), $objFilter);
+
+        return $this->getMetaModel()->findVariantsWithBase([$this->get('id')], $objFilter);
     }
 
     /**
@@ -414,7 +424,7 @@ class Item implements IItem
         $arrCss = $objSettings->get('additionalCss');
 
         foreach ((array) $arrCss as $arrFile) {
-            if ($arrFile['published']) {
+            if (isset($arrFile['published']) && $arrFile['published']) {
                 $GLOBALS['TL_CSS'][md5($arrFile['file'])] = $arrFile['file'];
             }
         }
@@ -423,7 +433,7 @@ class Item implements IItem
         $arrJs = $objSettings->get('additionalJs');
 
         foreach ((array) $arrJs as $arrFile) {
-            if ($arrFile['published']) {
+            if (isset($arrFile['published']) && $arrFile['published']) {
                 $GLOBALS['TL_JAVASCRIPT'][md5($arrFile['file'])] = $arrFile['file'];
             }
         }
@@ -433,10 +443,11 @@ class Item implements IItem
      * Renders the item in the given output format.
      *
      * @param string      $strOutputFormat The desired output format (optional - default: text).
-     *
      * @param ICollection $objSettings     The render settings to use (optional - default: null).
      *
      * @return array attribute name => format => value
+     *
+     * @psalm-suppress InvalidArrayOffset
      */
     public function parseValue($strOutputFormat = 'text', $objSettings = null)
     {
@@ -462,18 +473,19 @@ class Item implements IItem
             return $arrResult;
         }
 
-        // Add jumpTo link
+        // Add jumpTo link.
         $jumpTo = $this->buildJumpToLink($objSettings);
-        if ($jumpTo['url']) {
+        if ('' !== ($jumpTo['url'] ?? '')) {
             $arrResult['actions']['jumpTo'] = [
                 'href'  => $jumpTo['url'],
                 'deep'  => $jumpTo['deep'],
-                'label' => $this->getCaptionText('details'),
+                'label' => $jumpTo['label'],
                 'class' => 'details'
             ];
         }
 
         // Just here for backwards compatibility with templates. See #1087
+        // @deprecated usage of array key 'jumpTo' - remove in MM 3.0.
         $arrResult['jumpTo'] = $jumpTo;
 
         // First, parse the values in the same order as they are in the render settings.
@@ -481,11 +493,13 @@ class Item implements IItem
             $objAttribute = $this->getMetaModel()->getAttribute($strAttrName);
             if ($objAttribute) {
                 $arrResult['attributes'][$objAttribute->getColName()] = $objAttribute->getName();
-                foreach ($this->internalParseAttribute(
-                    $objAttribute,
-                    $strOutputFormat,
-                    $objSettings
-                ) as $strKey => $varValue) {
+                foreach (
+                    $this->internalParseAttribute(
+                        $objAttribute,
+                        $strOutputFormat,
+                        $objSettings
+                    ) as $strKey => $varValue
+                ) {
                     $arrResult[$strKey][$objAttribute->getColName()] = $varValue;
                 }
             }
@@ -508,7 +522,7 @@ class Item implements IItem
      *
      * The returning array will hold the following keys:
      * * params - the url parameter (only if a valid filter setting could be determined).
-     * * deep   - boolean true, if parameters are non empty, false otherwise.
+     * * deep   - boolean true, if parameters are non-empty, false otherwise.
      * * page   - id of the jumpTo page.
      * * url    - the complete generated url
      *
@@ -518,10 +532,6 @@ class Item implements IItem
      */
     public function buildJumpToLink($objSettings)
     {
-        if (!$objSettings) {
-            return null;
-        }
-
         return $objSettings->buildJumpToUrlFor($this);
     }
 
@@ -529,16 +539,19 @@ class Item implements IItem
      * Renders a single attribute in the given output format.
      *
      * @param string      $strAttributeName The desired attribute.
-     *
      * @param string      $strOutputFormat  The desired output format (optional - default: text).
-     *
      * @param ICollection $objSettings      The render settings to use (optional - default: null).
      *
      * @return array format=>value
      */
     public function parseAttribute($strAttributeName, $strOutputFormat = 'text', $objSettings = null)
     {
-        return $this->internalParseAttribute($this->getAttribute($strAttributeName), $strOutputFormat, $objSettings);
+        $attribute = $this->getAttribute($strAttributeName);
+        if (!$attribute instanceof IAttribute) {
+            return [];
+        }
+
+        return $this->internalParseAttribute($attribute, $strOutputFormat, $objSettings);
     }
 
     /**
@@ -555,6 +568,7 @@ class Item implements IItem
         unset($arrNewData['id']);
         unset($arrNewData['tstamp']);
         unset($arrNewData['vargroup']);
+
         return new Item($this->getMetaModel(), $arrNewData, $this->dispatcher);
     }
 
@@ -564,7 +578,7 @@ class Item implements IItem
      * Additionally, the item will be a variant child of this item.
      *
      * NOTE: if this item is not a variant base itself, this item will return a item
-     * that is a child of this items variant base. i.e. exact clone.
+     * that is a child of these items variant base. i.e. exact clone.
      *
      * @return \MetaModels\IItem the new copy.
      */
@@ -579,40 +593,8 @@ class Item implements IItem
             $objNewItem->set('vargroup', $this->get('vargroup'));
             $objNewItem->set('varbase', '0');
         }
+
         return $objNewItem;
-    }
-
-
-    /**
-     * Retrieve the translation string for the given lang key.
-     *
-     * In order to achieve the correct caption text, the function tries several translation strings sequentially.
-     * The first language key that is set will win, even if it is to be considered empty.
-     *
-     * This message is looked up in the following order:
-     * 1. $GLOBALS['TL_LANG']['MSC'][<mm tablename>][<render settings id>][$langKey]
-     * 2. $GLOBALS['TL_LANG']['MSC'][<mm tablename>][$langKey]
-     * 3. $GLOBALS['TL_LANG']['MSC'][$langKey]
-     *
-     * @param string $langKey The language key to retrieve.
-     *
-     * @return string
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    private function getCaptionText($langKey)
-    {
-        $tableName = $this->getMetaModel()->getTableName();
-        if (isset($this->objView)
-            && isset($GLOBALS['TL_LANG']['MSC'][$tableName][$this->objView->get('id')][$langKey])
-        ) {
-            return $GLOBALS['TL_LANG']['MSC'][$tableName][$this->objView->get('id')][$langKey];
-        } elseif (isset($GLOBALS['TL_LANG']['MSC'][$tableName][$langKey])) {
-            return $GLOBALS['TL_LANG']['MSC'][$tableName][$langKey];
-        }
-
-        return $GLOBALS['TL_LANG']['MSC'][$langKey];
     }
 
     /**
@@ -628,7 +610,7 @@ class Item implements IItem
         if ($this->isVariantBase()) {
             $result = 'varbase';
 
-            if (0 !== $this->getVariants(null)->getCount()) {
+            if (0 !== ($this->getVariants($this->getMetaModel()->getEmptyFilter())?->getCount() ?? 0)) {
                 $result .= ' varbase-with-variants';
             }
             return $result;

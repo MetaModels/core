@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2020 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -26,7 +27,9 @@ use ContaoCommunityAlliance\DcGeneral\Event\AbstractEnvironmentAwareEvent;
 use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\IInternal;
 use MetaModels\CoreBundle\Formatter\SelectAttributeOptionLabelFormatter;
+use MetaModels\CoreBundle\Sorter\AttributeSorter;
 use MetaModels\IFactory;
+use MetaModels\IMetaModel;
 
 /**
  * This provides the attribute name options.
@@ -38,21 +41,31 @@ class AttributeOptionsListener extends AbstractListener
      *
      * @var SelectAttributeOptionLabelFormatter
      */
-    private $attributeLabelFormatter;
+    private SelectAttributeOptionLabelFormatter $labelFormatter;
+
+    /**
+     * The attribute sorter.
+     *
+     * @var AttributeSorter
+     */
+    private AttributeSorter $attributeSorter;
 
     /**
      * {@inheritDoc}
      *
-     * @param SelectAttributeOptionLabelFormatter $attributeLabelFormatter The attribute select option label formatter.
+     * @param SelectAttributeOptionLabelFormatter $labelFormatter  The attribute select option label formatter.
+     * @param AttributeSorter                     $attributeSorter The attribute sorter.
      */
     public function __construct(
         RequestScopeDeterminator $scopeDeterminator,
         IFactory $factory,
         Connection $connection,
-        SelectAttributeOptionLabelFormatter $attributeLabelFormatter
+        SelectAttributeOptionLabelFormatter $labelFormatter,
+        AttributeSorter $attributeSorter
     ) {
         parent::__construct($scopeDeterminator, $factory, $connection);
-        $this->attributeLabelFormatter = $attributeLabelFormatter;
+        $this->labelFormatter  = $labelFormatter;
+        $this->attributeSorter = $attributeSorter;
     }
 
     /**
@@ -68,14 +81,17 @@ class AttributeOptionsListener extends AbstractListener
             return;
         }
 
-        $result    = [];
-        $metaModel = $this->getMetaModelFromModel($event->getModel());
+        $result     = [];
+        $metaModel  = $this->getMetaModelFromModel($event->getModel());
+        assert($metaModel instanceof IMetaModel);
+        $attributes = $metaModel->getAttributes();
+        $attributes = $this->attributeSorter->sortByName($attributes);
 
-        foreach ($metaModel->getAttributes() as $attribute) {
+        foreach ($attributes as $attribute) {
             if ($attribute instanceof IInternal) {
                 continue;
             }
-            $result[$attribute->get('id')] = $this->attributeLabelFormatter->formatLabel($attribute);
+            $result[$attribute->get('id')] = $this->labelFormatter->formatLabel($attribute);
         }
 
         $event->setOptions($result);

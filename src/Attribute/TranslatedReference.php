@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,7 +19,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Andreas Fischer <anfischer@kaffee-partner.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -27,14 +27,16 @@
 namespace MetaModels\Attribute;
 
 use Contao\System;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use MetaModels\Filter\Rules\SimpleQuery;
 use MetaModels\IMetaModel;
 use MetaModels\ITranslatedMetaModel;
 
 /**
  * This is the MetaModelAttribute class for handling translated attributes that reference another table.
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 abstract class TranslatedReference extends BaseComplex implements ITranslated
 {
@@ -50,11 +52,11 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      *
      * Note that you should not use this directly but use the factory classes to instantiate attributes.
      *
-     * @param IMetaModel $objMetaModel The MetaModel instance this attribute belongs to.
-     * @param array      $arrData      The information array, for attribute information, refer to documentation of
-     *                                 table tl_metamodel_attribute and documentation of the certain attribute classes
-     *                                 for information what values are understood.
-     * @param Connection $connection   Database connection.
+     * @param IMetaModel      $objMetaModel The MetaModel instance this attribute belongs to.
+     * @param array           $arrData      The information array, for attribute information, refer to documentation of
+     *                                      table tl_metamodel_attribute and documentation of the certain attribute
+     *                                      classes for information what values are understood.
+     * @param Connection|null $connection   Database connection.
      */
     public function __construct(IMetaModel $objMetaModel, $arrData = [], Connection $connection = null)
     {
@@ -68,8 +70,8 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
             );
             // @codingStandardsIgnoreEnd
             $connection = System::getContainer()->get('database_connection');
+            assert($connection instanceof Connection);
         }
-
         $this->connection = $connection;
     }
 
@@ -83,54 +85,52 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
     /**
      * Build a where clause for the given id(s) and language code.
      *
-     * @param QueryBuilder         $queryBuilder The query builder for the query  being build.
-     * @param string[]|string|null $mixIds       One, none or many ids to use.
-     * @param string|string[]      $mixLangCode  The language code/s to use, optional.
+     * @param QueryBuilder             $queryBuilder           The query builder for the query  being build.
+     * @param list<string>|string|null $mixIds                 One, none or many ids to use.
+     * @param list<non-empty-string>   $mixLangCode            The language code/s to use, optional.
      *
      * @return void
      */
-    private function buildWhere(QueryBuilder $queryBuilder, $mixIds, $mixLangCode = '')
-    {
-        $alias = '';
-        if (null !== $firstFromAlias = $queryBuilder->getQueryPart('from')[0]['alias']) {
-            $alias = $firstFromAlias . '.';
-        }
-
+    private function buildWhere(
+        QueryBuilder $queryBuilder,
+        array|string|null $mixIds,
+        array $mixLangCode,
+        string $alias
+    ): void {
         $queryBuilder
-            ->andWhere($alias . 'att_id = :att_id')
+            ->andWhere($alias . '.att_id = :att_id')
             ->setParameter('att_id', $this->get('id'));
 
-        if (!empty($mixIds)) {
-            if (is_array($mixIds)) {
-                $queryBuilder
-                    ->andWhere($alias . 'item_id IN (:item_ids)')
-                    ->setParameter('item_ids', $mixIds, Connection::PARAM_STR_ARRAY);
+        if (null !== $mixIds) {
+            if (\is_array($mixIds)) {
+                if ([] === $mixIds) {
+                    $queryBuilder
+                        ->andWhere('1=0');
+                } else {
+                    $queryBuilder
+                        ->andWhere($alias . '.item_id IN (:item_ids)')
+                        ->setParameter('item_ids', $mixIds, ArrayParameterType::STRING);
+                }
             } else {
                 $queryBuilder
-                    ->andWhere($alias . 'item_id = :item_id')
+                    ->andWhere($alias . '.item_id = :item_id')
                     ->setParameter('item_id', $mixIds);
             }
         }
 
-        if (!empty($mixLangCode)) {
-            if (is_array($mixLangCode)) {
-                $queryBuilder
-                    ->andWhere($alias . 'langcode IN (:langcode)')
-                    ->setParameter('langcode', $mixLangCode, Connection::PARAM_STR_ARRAY);
-            } else {
-                $queryBuilder
-                    ->andWhere($alias . 'langcode = :langcode')
-                    ->setParameter('langcode', $mixLangCode);
-            }
+        if ([] !== $mixLangCode) {
+            $queryBuilder
+                ->andWhere($alias . '.langcode IN (:langcode)')
+                ->setParameter('langcode', $mixLangCode, ArrayParameterType::STRING);
         }
     }
 
     /**
      * Retrieve the values to be used in the INSERT or UPDATE SQL for the given parameters.
      *
-     * @param array  $arrValue    The native value of the attribute.
-     * @param int    $intId       The id of the item to be saved.
-     * @param string $strLangCode The language code of the language the value is in.
+     * @param array{value: mixed, ...<string, mixed>} $arrValue    The native value of the attribute.
+     * @param string                                  $intId       The id of the item to be saved.
+     * @param string                                  $strLangCode The language code of the language the value is in.
      *
      * @return array
      *
@@ -138,18 +138,22 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     protected function getSetValues($arrValue, $intId, $strLangCode)
     {
-        if (($arrValue !== null) && !is_array($arrValue)) {
-            throw new \InvalidArgumentException(sprintf('Invalid value provided: %s', var_export($arrValue, true)));
+        /**
+         * @psalm-suppress DocblockTypeContradiction
+         * @psalm-suppress RedundantConditionGivenDocblockType
+         * Remove when we have strict type hints in the method signature.
+         */
+        if (($arrValue === null) || !\is_array($arrValue)) {
+            throw new \InvalidArgumentException(\sprintf('Invalid value provided: %s', \var_export($arrValue, true)));
         }
 
-        return array
-        (
-            'tstamp' => time(),
-            'value' => (string) $arrValue['value'],
-            'att_id' => $this->get('id'),
+        return [
+            'tstamp'   => \time(),
+            'value'    => (string) $arrValue['value'],
+            'att_id'   => $this->get('id'),
             'langcode' => $strLangCode,
-            'item_id' => $intId,
-        );
+            'item_id'  => $intId,
+        ];
     }
 
     /**
@@ -161,10 +165,10 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     protected function getOptionizer()
     {
-        return array(
-            'key' => 'value',
+        return [
+            'key'   => 'value',
             'value' => 'value'
-        );
+        ];
     }
 
 
@@ -173,7 +177,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     public function valueToWidget($varValue)
     {
-        return $varValue['value'];
+        return $varValue['value'] ?? null;
     }
 
     /**
@@ -183,12 +187,11 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     public function widgetToValue($varValue, $itemId)
     {
-        return array
-        (
-            'tstamp' => time(),
+        return [
+            'tstamp' => \time(),
             'value'  => $varValue,
             'att_id' => $this->get('id'),
-        );
+        ];
     }
 
     /**
@@ -196,35 +199,38 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     public function getDataFor($arrIds)
     {
-        $strActiveLanguage   = $this->getActiveLanguage();
+        /** @psalm-suppress DeprecatedMethod */
+        $strActiveLanguage = $this->getActiveLanguage();
+        /** @psalm-suppress DeprecatedMethod */
         $strFallbackLanguage = $this->getFallbackLanguage();
 
         $arrReturn = $this->getTranslatedDataFor($arrIds, $strActiveLanguage);
 
         // Second round, fetch fallback languages if not all items could be resolved.
-        if ((count($arrReturn) < count($arrIds)) && ($strActiveLanguage != $strFallbackLanguage)) {
-            $arrFallbackIds = array();
+        if (($strActiveLanguage !== $strFallbackLanguage) && (\count($arrReturn) < \count($arrIds))) {
+            $arrFallbackIds = [];
             foreach ($arrIds as $intId) {
-                if (empty($arrReturn[$intId])) {
+                if (!\array_key_exists($intId, $arrReturn)) {
                     $arrFallbackIds[] = $intId;
                 }
             }
 
             if ($arrFallbackIds) {
-                $arrFallbackData = $this->getTranslatedDataFor($arrFallbackIds, $strFallbackLanguage);
+                $arrFallbackData = $this->getTranslatedDataFor($arrFallbackIds, $strFallbackLanguage ?? '');
                 // Cannot use array_merge here as it would renumber the keys.
                 foreach ($arrFallbackData as $intId => $arrValue) {
                     $arrReturn[$intId] = $arrValue;
                 }
             }
         }
+
         return $arrReturn;
     }
 
     /**
      * Determine the available languages.
      *
-     * @return null|\string[]
+     * @return list<string>
      *
      * @throws \RuntimeException When an untranslated MetaModel is encountered.
      */
@@ -235,12 +241,14 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
             return $metaModel->getLanguages();
         }
 
+        /** @psalm-suppress DeprecatedMethod */
         $languages = $this->getMetaModel()->getAvailableLanguages();
         if ($languages === null) {
             throw new \RuntimeException(
                 'MetaModel ' . $this->getMetaModel()->getName() . ' does not seem to be translated.'
             );
         }
+
         return $languages;
     }
 
@@ -269,17 +277,20 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     public function searchFor($strPattern)
     {
-        return $this->searchForInLanguages($strPattern, array($this->getActiveLanguage()));
+        return $this->searchForInLanguages($strPattern, [$this->getActiveLanguage()]);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function searchForInLanguages($strPattern, $arrLanguages = array())
+    public function searchForInLanguages($strPattern, $arrLanguages = [])
     {
-        $optionizer = $this->getOptionizer();
+        if (empty($optionizer = $this->getOptionizer())) {
+            return [];
+        }
+
         $procedure  = 't.' . $optionizer['value'] . ' LIKE :pattern';
-        $strPattern = str_replace(['*', '?'], ['%', '_'], $strPattern);
+        $strPattern = \str_replace(['*', '?'], ['%', '_'], $strPattern);
 
         $queryBuilder = $this->connection->createQueryBuilder()
             ->select('DISTINCT t.item_id')
@@ -287,11 +298,12 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
             ->andWhere($procedure)
             ->setParameter('pattern', $strPattern);
 
-        $this->buildWhere($queryBuilder, null, $arrLanguages);
+        $this->buildWhere($queryBuilder, null, $arrLanguages, 't');
 
-        $filterRule = SimpleQuery::createFromQueryBuilder($queryBuilder, 'item_id');
+        $statement = $queryBuilder->executeQuery();
 
-        return $filterRule->getMatchingIds();
+        // Return value list as list<mixed>, parent function wants a list<string> so we make a cast.
+        return \array_map(static fn (mixed $value) => (string) $value, $statement->fetchFirstColumn());
     }
 
     /**
@@ -299,42 +311,33 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     public function sortIds($idList, $strDirection)
     {
-        $langSet = sprintf(
-            '\'%s\',\'%s\'',
-            $this->getActiveLanguage(),
-            $this->getFallbackLanguage()
-        );
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $expr         = $queryBuilder->expr();
+        $queryBuilder
+            ->select('IF(t2.item_id IS NOT NULL, t2.item_id, t1.item_id)')
+            ->from($this->getValueTable(), 't1')
+            ->leftJoin(
+                't1',
+                $this->getValueTable(),
+                't2',
+                (string) $expr->and(
+                    $expr->eq('t1.att_id', 't2.att_id'),
+                    $expr->eq('t1.item_id', 't2.item_id'),
+                    $expr->eq('t2.langcode', ':langcode'),
+                )
+            )
+            ->where($expr->eq('t1.att_id', ':att_id'))
+            ->andWhere($expr->in('t1.item_id', ':id_list'))
+            ->andWhere($expr->in('t1.langcode', ':langfallbackcode'))
+            ->setParameter('langcode', $this->getActiveLanguage())
+            ->setParameter('langfallbackcode', $this->getFallbackLanguage())
+            ->setParameter('att_id', $this->get('id'))
+            ->setParameter('id_list', \array_unique($idList), ArrayParameterType::STRING);
 
-        $statement = $this->connection
-            ->executeQuery(
-                sprintf(
-                    'SELECT t1.item_id
-                       FROM %1$s AS t1
-                       INNER JOIN %1$s as t3 ON (t1.id = (SELECT
-                           t2.id
-                           FROM %1$s AS t2
-                           WHERE (t2.att_id=%2$s)
-                           AND langcode IN (%3$s)
-                           AND (t2.item_id=t1.item_id)
-                           ORDER BY FIELD(t2.langcode,%3$s)
-                           LIMIT 1
-                       ))
-                       WHERE (t1.item_id IN (?))
-                       AND (t3.item_id IN (?))
-                       GROUP BY t1.id
-                       ORDER BY t1.value %4$s',
-                    // @codingStandardsIgnoreStart - we want to keep the numbers at the end of the lines below.
-                    $this->getValueTable(),                    // 1
-                    $this->get('id'),                          // 2
-                    $langSet,                                  // 3
-                    $strDirection                              // 4
-                    // @codingStandardsIgnoreEnd
-                ),
-                [$idList, $idList],
-                [Connection::PARAM_STR_ARRAY, Connection::PARAM_STR_ARRAY]
-            );
+        $statement = $queryBuilder->executeQuery();
 
-        return $statement->fetchAll(\PDO::FETCH_COLUMN, 0);
+        // Return value list as list<mixed>, parent function wants a list<string> so we make a cast.
+        return \array_map(static fn(mixed $value) => (string) $value, $statement->fetchFirstColumn());
     }
 
     /**
@@ -346,14 +349,14 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
             ->select('t.*')
             ->from($this->getValueTable(), 't');
 
-        $this->buildWhere($queryBuilder, $idList, $this->getActiveLanguage());
+        $this->buildWhere($queryBuilder, $idList, [$this->getActiveLanguage()], 't');
 
-        $statement     = $queryBuilder->execute();
+        $statement     = $queryBuilder->executeQuery();
         $arrOptionizer = $this->getOptionizer();
 
         $arrReturn = [];
-        while ($objValue = $statement->fetch(\PDO::FETCH_OBJ)) {
-            $arrReturn[$objValue->{$arrOptionizer['key']}] = $objValue->{$arrOptionizer['value']};
+        while ($objValue = $statement->fetchAssociative()) {
+            $arrReturn[$objValue[$arrOptionizer['key']]] = $objValue[$arrOptionizer['value']];
         }
         return $arrReturn;
     }
@@ -363,64 +366,66 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     public function setTranslatedDataFor($arrValues, $strLangCode)
     {
+        if ('' === $strLangCode) {
+            throw new \InvalidArgumentException('Empty language code provided.');
+        }
         // First off determine those to be updated and those to be inserted.
-        $arrIds      = array_keys($arrValues);
+        $arrIds      = \array_keys($arrValues);
         $arrExisting = $this->fetchExistingIdsFor($arrIds, $strLangCode);
-        $arrNewIds   = array_diff($arrIds, $arrExisting);
+        $arrNewIds   = \array_diff($arrIds, $arrExisting);
+        $tableAlias  = $this->getValueTable();
 
         // Update existing values - delete if empty.
         foreach ($arrExisting as $intId) {
             $queryBuilder = $this->connection->createQueryBuilder();
-            $this->buildWhere($queryBuilder, $intId, $strLangCode);
+            $this->buildWhere($queryBuilder, $intId, [$strLangCode], $tableAlias);
+            $itemValues = $arrValues[$intId] ?? [];
+            if ($this->isValidItemValue($itemValues)) {
+                $queryBuilder->update($this->getValueTable());
 
-            if ($arrValues[$intId]['value'] != '') {
-                $queryBuilder->update($this->getValueTable(), 't');
-
-                foreach ($this->getSetValues($arrValues[$intId], $intId, $strLangCode) as $name => $value) {
+                foreach ($this->getSetValues($itemValues, $intId, $strLangCode) as $name => $value) {
                     $queryBuilder
-                        ->set('t.' . $name, ':' . $name)
+                        ->set($tableAlias . '.' . $name, ':' . $name)
                         ->setParameter($name, $value);
                 }
             } else {
                 $queryBuilder->delete($this->getValueTable());
             }
-
-            $queryBuilder->execute();
+            $queryBuilder->executeQuery();
         }
 
         // Insert the new values.
         foreach ($arrNewIds as $intId) {
-            if ($arrValues[$intId]['value'] == '') {
+            $itemValues = $arrValues[$intId] ?? [];
+            if (!$this->isValidItemValue($itemValues)) {
                 continue;
             }
 
-            $this->connection->insert(
-                $this->getValueTable(),
-                $this->getSetValues($arrValues[$intId], $intId, $strLangCode)
-            );
+            $this->connection->insert($this->getValueTable(), $this->getSetValues($itemValues, $intId, $strLangCode));
         }
     }
 
     /**
      * Filter the item ids for ids that exist in the database.
      *
-     * @param array  $idList   The id list.
-     * @param string $langCode The language code.
+     * @param list<string> $idList   The id list.
+     * @param string       $langCode The language code.
      *
      * @return string[]
      */
     protected function fetchExistingIdsFor($idList, $langCode)
     {
+        if ('' === $langCode) {
+            throw new \InvalidArgumentException('Empty language code provided.');
+        }
         $queryBuilder = $this
             ->connection
             ->createQueryBuilder()
             ->select('t.item_id')
             ->from($this->getValueTable(), 't');
-        $this->buildWhere($queryBuilder, $idList, $langCode);
+        $this->buildWhere($queryBuilder, $idList, [$langCode], 't');
 
-        $statement = $queryBuilder->execute();
-
-        return $statement->fetchAll(\PDO::FETCH_COLUMN);
+        return $queryBuilder->executeQuery()->fetchFirstColumn();
     }
 
     /**
@@ -428,18 +433,21 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     public function getTranslatedDataFor($arrIds, $strLangCode)
     {
+        if ('' === $strLangCode) {
+            throw new \InvalidArgumentException('Empty language code provided.');
+        }
         $queryBuilder = $this->connection->createQueryBuilder()
             ->select('t.*')
             ->from($this->getValueTable(), 't');
 
-        $this->buildWhere($queryBuilder, $arrIds, $strLangCode);
+        $this->buildWhere($queryBuilder, $arrIds, [$strLangCode], 't');
 
-        $statement = $queryBuilder->execute();
+        $statement = $queryBuilder->executeQuery();
         $arrReturn = [];
-        while ($value = $statement->fetch(\PDO::FETCH_ASSOC)) {
-            /** @noinspection PhpUndefinedFieldInspection */
+        while ($value = $statement->fetchAssociative()) {
             $arrReturn[$value['item_id']] = $value;
         }
+
         return $arrReturn;
     }
 
@@ -448,39 +456,57 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     public function unsetValueFor($arrIds, $strLangCode)
     {
+        if ('' === $strLangCode) {
+            throw new \InvalidArgumentException('Empty language code provided.');
+        }
         $queryBuilder = $this->connection->createQueryBuilder()->delete($this->getValueTable());
-        $this->buildWhere($queryBuilder, $arrIds, $strLangCode);
+        $this->buildWhere($queryBuilder, $arrIds, [$strLangCode], $this->getValueTable());
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
     }
 
     /**
      * Retrieve the current language of the MetaModel we are attached to.
      *
-     * @return string
+     * @return non-empty-string
      */
-    private function getActiveLanguage()
+    private function getActiveLanguage(): string
     {
         $metaModel = $this->getMetaModel();
         if (!$metaModel instanceof ITranslatedMetaModel) {
-            return $metaModel->getActiveLanguage();
-        }
+            /** @psalm-suppress DeprecatedMethod */
+            $activeLanguage = $metaModel->getActiveLanguage();
+            assert('' !== $activeLanguage);
 
-        return $metaModel->getLanguage();
+            return $activeLanguage;
+        }
+        $activeLanguage = $metaModel->getLanguage();
+        assert('' !== $activeLanguage);
+
+        return $activeLanguage;
     }
 
     /**
      * Retrieve the main language of the MetaModel we are attached to.
      *
-     * @return string
+     * @return string|null
      */
-    private function getFallbackLanguage()
+    private function getFallbackLanguage(): ?string
     {
         $metaModel = $this->getMetaModel();
         if (!$metaModel instanceof ITranslatedMetaModel) {
+            /** @psalm-suppress DeprecatedMethod */
             return $metaModel->getFallbackLanguage();
         }
 
         return $metaModel->getMainLanguage();
+    }
+
+    /** @psalm-assert-if-true array{value: non-empty-string, ...<string, mixed>} $itemValues */
+    private function isValidItemValue(array $itemValues): bool
+    {
+        return \array_key_exists('value', $itemValues)
+               && \is_string($itemValues['value'])
+               && '' !== $itemValues['value'];
     }
 }

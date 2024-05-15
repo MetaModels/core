@@ -59,7 +59,8 @@ class PurgeListener
     public function checkPurge(AbstractModelAwareEvent $event)
     {
         $table = $event->getModel()->getProviderName();
-        if (($table == 'tl_metamodel') ||
+        if (
+            ($table == 'tl_metamodel') ||
             ($table == 'tl_metamodel_dca') ||
             ($table == 'tl_metamodel_dca_sortgroup') ||
             ($table == 'tl_metamodel_dcasetting') ||

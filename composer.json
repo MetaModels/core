@@ -1,19 +1,18 @@
 {
   "name": "metamodels/core",
   "description": "MetaModels core",
+  "license": "LGPL-3.0-or-later",
+  "type": "contao-bundle",
   "keywords": [
     "contao",
     "metamodels",
     "core"
   ],
-  "type": "contao-bundle",
-  "homepage": "http://now.metamodel.me/",
-  "license": "LGPL-3.0-or-later",
   "authors": [
     {
       "name": "Christian Schiffler",
       "email": "c.schiffler@cyberspectrum.de",
-      "homepage": "http://www.cyberspectrum.de",
+      "homepage": "https://www.cyberspectrum.de",
       "role": "Developer"
     },
     {
@@ -22,6 +21,7 @@
       "role": "Developer"
     }
   ],
+  "homepage": "https://now.metamodel.me/",
   "support": {
     "email": "mail@metamodel.me",
     "issues": "https://github.com/MetaModels/core/issues",
@@ -30,33 +30,46 @@
     "source": "https://github.com/MetaModels/core"
   },
   "require": {
-    "php": "^7.4",
-    "contao-community-alliance/dc-general": "^2.2",
-    "contao-community-alliance/events-contao-bindings": "^4.9",
-    "contao-community-alliance/meta-palettes": "~2.0",
-    "contao-community-alliance/translator": "^2.2",
-    "contao-community-alliance/url-builder": "~1.3",
-    "contao/core-bundle": "^4.9.0, <4.13.0",
-    "discordier/justtextwidgets": "^1.2",
-    "doctrine/cache": "~1.6",
-    "menatwork/contao-multicolumnwizard-bundle": "^3.4",
-    "symfony/asset": "^4.4.6",
-    "symfony/config": "^4.4.6",
-    "symfony/dependency-injection": "^4.4.6",
-    "symfony/event-dispatcher": "^4.4.6",
-    "symfony/filesystem": "^4.4.6",
-    "symfony/finder": "^4.4.6",
+    "php": "^8.1",
+    "ext-dom": "*",
+    "contao-community-alliance/dc-general": "^2.3.10",
+    "contao-community-alliance/events-contao-bindings": "^4.13.1",
+    "contao-community-alliance/meta-palettes": "^2.0.10",
+    "contao-community-alliance/translator": "^2.4.2",
+    "contao-community-alliance/url-builder": "^1.3.3",
+    "contao/core-bundle": "^4.13.5 <5.0",
+    "discordier/justtextwidgets": "^1.3",
+    "doctrine/cache": "^2.1",
+    "doctrine/dbal": "^3.6.0",
+    "doctrine/orm": "^2.16.0",
+    "menatwork/contao-multicolumnwizard-bundle": "^3.6.7",
+    "psr/container": "^1.1.2",
+    "psr/log": "^2.0.0",
+    "symfony/asset": "^5.4",
+    "symfony/cache": "^5.4",
+    "symfony/config": "^5.4",
+    "symfony/console": "^5.4",
+    "symfony/dependency-injection": "^5.4",
+    "symfony/deprecation-contracts": "^3.3.0",
+    "symfony/event-dispatcher": "^5.4",
+    "symfony/event-dispatcher-contracts": "^2.5.2",
+    "symfony/filesystem": "^5.4",
+    "symfony/finder": "^5.4",
+    "symfony/http-foundation": "^5.4",
+    "symfony/http-kernel": "^5.4",
+    "symfony/routing": "^5.4",
+    "symfony/security-core": "^5.4",
+    "symfony/service-contracts": "^2.5.2",
+    "symfony/translation": "^5.4",
+    "symfony/translation-contracts": "^2.5.2",
     "terminal42/service-annotation-bundle": "^1.0",
-    "webmozart/path-util": "~2.3"
+    "twig/twig": "^3.7.0"
   },
   "require-dev": {
+    "contao/manager-bundle": "^4.13.0 <5.0",
     "contao/manager-plugin": "^2.8",
-    "contao/manager-bundle": "^4.9.0, <4.13.0",
-    "doctrine/doctrine-bundle": "^1.8",
-    "phpcq/all-tasks": "^1.3"
-  },
-  "conflict": {
-    "contao/manager-bundle": "4.9.27"
+    "doctrine/doctrine-bundle": "^1.8.1 || ^2.8.3",
+    "phpcq/runner-bootstrap": "^1.0@dev"
   },
   "autoload": {
     "psr-4": {
@@ -68,20 +81,24 @@
       "MetaModels\\Test\\": "tests/"
     }
   },
-  "extra": {
-    "contao-manager-plugin": "MetaModels\\CoreBundle\\ContaoManager\\Plugin",
-    "contao": {
-      "runonce": [
-        "runonce/runonce.php"
-      ]
-    }
-  },
   "config": {
     "allow-plugins": {
       "contao-components/installer": false,
       "contao/manager-plugin": false,
-      "php-http/discovery": true
+      "php-http/discovery": false
     },
     "sort-packages": true
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-feature/2.3.0": "2.3.x-dev",
+      "dev-feature/translation_loader": "2.3.x-trans-dev"
+    },
+    "contao": {
+      "runonce": [
+        "runonce/runonce.php"
+      ]
+    },
+    "contao-manager-plugin": "MetaModels\\CoreBundle\\ContaoManager\\Plugin"
   }
 }

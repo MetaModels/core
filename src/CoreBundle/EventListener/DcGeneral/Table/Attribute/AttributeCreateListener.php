@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,7 @@
  *
  * @package    MetaModels/core
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -22,6 +22,7 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\Attribute;
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\Event\PreEditModelEvent;
+use ContaoCommunityAlliance\DcGeneral\InputProviderInterface;
 use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\IAttributeFactory;
 use MetaModels\IFactory;
@@ -69,9 +70,13 @@ class AttributeCreateListener extends BaseListener
             return;
         }
 
-        if ('create' !== $event->getEnvironment()->getInputProvider()->getParameter('act')
-            || 'snc' !== $event->getEnvironment()->getInputProvider()->getParameter('btn')
-            || !($after = $event->getEnvironment()->getInputProvider()->getParameter('after'))
+        $inputProvider = $event->getEnvironment()->getInputProvider();
+        assert($inputProvider instanceof InputProviderInterface);
+
+        if (
+            'create' !== $inputProvider->getParameter('act')
+            || 'snc' !== $inputProvider->getParameter('btn')
+            || !($after = $inputProvider->getParameter('after'))
         ) {
             return;
         }
@@ -87,7 +92,7 @@ class AttributeCreateListener extends BaseListener
             ->where('t.id=:id')
             ->setParameter('id', $previousAttributeId)
             ->setMaxResults(1)
-            ->execute()
+            ->executeQuery()
             ->fetchFirstColumn();
 
         if (empty($statement)) {

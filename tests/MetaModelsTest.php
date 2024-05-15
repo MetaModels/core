@@ -23,7 +23,7 @@ namespace MetaModels\Test;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\Expression\ExpressionBuilder;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Doctrine\DBAL\Statement;
+use Doctrine\DBAL\Result;
 use MetaModels\MetaModel;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -38,12 +38,10 @@ class MetaModelsTest extends TestCase
 {
     /**
      * Test instantiation of a MetaModel.
-     *
-     * @return void
      */
-    public function testCreation()
+    public function testCreation(): void
     {
-        $values = array(
+        $values = [
             'id'         => '1',
             'sorting'    => '1',
             'tstamp'     => '0',
@@ -51,12 +49,12 @@ class MetaModelsTest extends TestCase
             'tableName'  => 'mm_test',
             'mode'       => '',
             'translated' => '1',
-            'languages'  => array(
-                'en' => array('isfallback' => '1'),
-                'de' => array('isfallback' => '')
-            ),
+            'languages'  => [
+                'en' => ['isfallback' => '1'],
+                'de' => ['isfallback' => '']
+            ],
             'varsupport' => '1',
-        );
+        ];
 
         $serialized = array();
         foreach ($values as $key => $value) {
@@ -67,14 +65,22 @@ class MetaModelsTest extends TestCase
             }
         }
 
-        $metaModel = new MetaModel($serialized);
+        $metaModel = new MetaModel(
+            $serialized,
+            $this->getMockForAbstractClass(EventDispatcherInterface::class),
+            $this->mockConnection()
+        );
         self::assertEmpty($metaModel->getAttributes());
 
         foreach ($values as $key => $value) {
             self::assertEquals($value, $metaModel->get($key), $key);
         }
 
-        $metaModel = new MetaModel($values);
+        $metaModel = new MetaModel(
+            $values,
+            $this->getMockForAbstractClass(EventDispatcherInterface::class),
+            $this->mockConnection()
+        );
 
         foreach ($values as $key => $value) {
             self::assertEquals($value, $metaModel->get($key), $key);
@@ -83,26 +89,26 @@ class MetaModelsTest extends TestCase
 
     /**
      * Ensure the buildDatabaseParameterList works correctly.
-     *
-     * @return void
      */
-    public function testBuildDatabaseParameterList()
+    public function testBuildDatabaseParameterList(): void
     {
-        $metaModel = new MetaModel(array());
+        $metaModel = new MetaModel(
+            [],
+            $this->getMockForAbstractClass(EventDispatcherInterface::class),
+            $this->mockConnection()
+        );
 
         $reflection = new \ReflectionMethod($metaModel, 'buildDatabaseParameterList');
         $reflection->setAccessible(true);
-        self::assertEquals('?', $reflection->invoke($metaModel, array(1)));
-        self::assertEquals('?,?', $reflection->invoke($metaModel, array(1, 2)));
-        self::assertEquals('?,?,?,?,?,?', $reflection->invoke($metaModel, array(1, 2, 'fooo', 'bar', null, 'test')));
+        self::assertEquals('?', $reflection->invoke($metaModel, [1]));
+        self::assertEquals('?,?', $reflection->invoke($metaModel, [1, 2]));
+        self::assertEquals('?,?,?,?,?,?', $reflection->invoke($metaModel, [1, 2, 'fooo', 'bar', null, 'test']));
     }
 
     /**
      * Ensure the system columns are present. See issue #196.
-     *
-     * @return void
      */
-    public function testRetrieveSystemColumns()
+    public function testRetrieveSystemColumns(): void
     {
         $metaModel = new MetaModel(
             [
@@ -116,8 +122,8 @@ class MetaModelsTest extends TestCase
                 'varsupport' => '',
             ],
             $this->getMockForAbstractClass(EventDispatcherInterface::class),
-            $this->mockConnection([
-                \Closure::fromCallable(function () {
+            $this->mockConnection(
+                (function () {
                     $builder = $this
                         ->getMockBuilder(QueryBuilder::class)
                         ->disableOriginalConstructor()
@@ -136,7 +142,7 @@ class MetaModelsTest extends TestCase
                     $expr = $this
                         ->getMockBuilder(ExpressionBuilder::class)
                         ->disableOriginalConstructor()
-                        ->setMethods()
+                        ->onlyMethods([])
                         ->getMock();
 
                     $builder
@@ -162,31 +168,30 @@ class MetaModelsTest extends TestCase
                         ->with('FIELD(id, :values)')
                         ->willReturn($builder);
 
-                    $statement = $this
-                        ->getMockBuilder(Statement::class)
+                    $result = $this
+                        ->getMockBuilder(Result::class)
                         ->disableOriginalConstructor()
                         ->getMock();
-                    $statement
+                    $result
                         ->expects($this->exactly(2))
-                        ->method('fetch')
-                        ->with(\PDO::FETCH_ASSOC)
+                        ->method('fetchAssociative')
                         ->willReturnOnConsecutiveCalls([
                             'id'      => 1,
                             'pid'     => 0,
                             'sorting' => 1,
                             'tstamp'  => 343094400,
-                        ], null);
+                        ], false);
                     $builder
                         ->expects($this->once())
-                        ->method('execute')
-                        ->willReturn($statement);
+                        ->method('executeQuery')
+                        ->willReturn($result);
 
                     return $builder;
                 })->__invoke()
-            ])
+            )
         );
 
-        self::assertEquals($metaModel->getName(), 'Test RetrieveSystemColumns');
+        self::assertEquals('Test RetrieveSystemColumns', $metaModel->getName());
 
         $item = $metaModel->findById(1);
 
@@ -200,18 +205,16 @@ class MetaModelsTest extends TestCase
 
     /**
      * Ensure the getIdsFromFilter works correctly.
-     *
-     * @return void
      */
-    public function testGetIdsFromFilterSortedById()
+    public function testGetIdsFromFilterSortedById(): void
     {
         $metaModel = $this
             ->getMockBuilder(MetaModel::class)
-            ->setMethods(['getMatchingIds'])
+            ->onlyMethods(['getMatchingIds'])
             ->setConstructorArgs([
                 ['tableName' => 'mm_test_retrieve'],
                 $this->getMockForAbstractClass(EventDispatcherInterface::class),
-                $this->mockConnection([])
+                $this->mockConnection()
             ])
             ->getMock();
         $metaModel
@@ -219,7 +222,6 @@ class MetaModelsTest extends TestCase
             ->method('getMatchingIds')
             ->willReturn([4, 3, 2, 1]);
 
-        /** @var MetaModel $metaModel */
         self::assertSame([1, 2, 3, 4], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'id'));
         self::assertSame([1, 2], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'id', 0, 2));
         self::assertSame([3, 4], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'id', 2, 2));
@@ -230,19 +232,17 @@ class MetaModelsTest extends TestCase
 
     /**
      * Ensure the getIdsFromFilter works correctly when sorting by pid and slicing the results.
-     *
-     * @return void
      */
-    public function testGetIdsFromFilterSortedByPid()
+    public function testGetIdsFromFilterSortedByPid(): void
     {
         $metaModel = $this
             ->getMockBuilder(MetaModel::class)
-            ->setMethods(['getMatchingIds'])
+            ->onlyMethods(['getMatchingIds'])
             ->setConstructorArgs([
                 ['tableName' => 'mm_test_retrieve'],
                 $this->getMockForAbstractClass(EventDispatcherInterface::class),
-                $this->mockConnection([
-                    \Closure::fromCallable(function () {
+                $this->mockConnection(
+                    (function () {
                         $builder = $this
                             ->getMockBuilder(QueryBuilder::class)
                             ->disableOriginalConstructor()
@@ -261,7 +261,7 @@ class MetaModelsTest extends TestCase
                         $expr = $this
                             ->getMockBuilder(ExpressionBuilder::class)
                             ->disableOriginalConstructor()
-                            ->setMethods()
+                            ->onlyMethods([])
                             ->getMock();
 
                         $builder
@@ -287,23 +287,22 @@ class MetaModelsTest extends TestCase
                             ->with('pid', 'ASC')
                             ->willReturn($builder);
 
-                        $statement = $this
-                            ->getMockBuilder(Statement::class)
+                        $result = $this
+                            ->getMockBuilder(Result::class)
                             ->disableOriginalConstructor()
                             ->getMock();
-                        $statement
+                        $result
                             ->expects($this->once())
-                            ->method('fetchAll')
-                            ->with(\PDO::FETCH_COLUMN)
+                            ->method('fetchFirstColumn')
                             ->willReturn([1, 2, 3, 4]);
                         $builder
                             ->expects($this->once())
-                            ->method('execute')
-                            ->willReturn($statement);
+                            ->method('executeQuery')
+                            ->willReturn($result);
 
                         return $builder;
                     })->__invoke()
-                ])
+                )
             ])
             ->getMock();
         $metaModel
@@ -311,30 +310,27 @@ class MetaModelsTest extends TestCase
             ->method('getMatchingIds')
             ->willReturn([4, 3, 2, 1]);
 
-        /** @var MetaModel $metaModel */
-        self::assertSame(array(1, 2, 3, 4), $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid'));
-        self::assertSame(array(1, 2), $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid', 0, 2));
-        self::assertSame(array(3, 4), $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid', 2, 2));
-        self::assertSame(array(3), $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid', 2, 1));
-        self::assertSame(array(), $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid', 20, 0));
-        self::assertSame(array(2, 3, 4), $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid', 1, 10));
+        self::assertSame([1, 2, 3, 4], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid'));
+        self::assertSame([1, 2], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid', 0, 2));
+        self::assertSame([3, 4], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid', 2, 2));
+        self::assertSame([3], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid', 2, 1));
+        self::assertSame([], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid', 20, 0));
+        self::assertSame([2, 3, 4], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid', 1, 10));
     }
 
     /**
      * Ensure the getIdsFromFilter works correctly when the results have been cached.
-     *
-     * @return void
      */
-    public function testGetIdsFromFilterSortedByPidWithCache()
+    public function testGetIdsFromFilterSortedByPidWithCache(): void
     {
         $metaModel = $this
             ->getMockBuilder(MetaModel::class)
-            ->setMethods(['getMatchingIds'])
+            ->onlyMethods(['getMatchingIds'])
             ->setConstructorArgs([
                 ['tableName' => 'mm_test_retrieve'],
                 $this->getMockForAbstractClass(EventDispatcherInterface::class),
-                $this->mockConnection([
-                    \Closure::fromCallable(function () {
+                $this->mockConnection(
+                    (function () {
                         $builder = $this
                             ->getMockBuilder(QueryBuilder::class)
                             ->disableOriginalConstructor()
@@ -353,7 +349,7 @@ class MetaModelsTest extends TestCase
                         $expr = $this
                             ->getMockBuilder(ExpressionBuilder::class)
                             ->disableOriginalConstructor()
-                            ->setMethods()
+                            ->onlyMethods([])
                             ->getMock();
 
                         $builder
@@ -379,23 +375,22 @@ class MetaModelsTest extends TestCase
                             ->with('pid', 'ASC')
                             ->willReturn($builder);
 
-                        $statement = $this
-                            ->getMockBuilder(Statement::class)
+                        $result = $this
+                            ->getMockBuilder(Result::class)
                             ->disableOriginalConstructor()
                             ->getMock();
-                        $statement
+                        $result
                             ->expects($this->once())
-                            ->method('fetchAll')
-                            ->with(\PDO::FETCH_COLUMN)
+                            ->method('fetchFirstColumn')
                             ->willReturn([1, 2, 3, 4]);
                         $builder
                             ->expects($this->once())
-                            ->method('execute')
-                            ->willReturn($statement);
+                            ->method('executeQuery')
+                            ->willReturn($result);
 
                         return $builder;
                     })->__invoke()
-                ])
+                )
             ])
             ->getMock();
         $metaModel
@@ -403,26 +398,23 @@ class MetaModelsTest extends TestCase
             ->method('getMatchingIds')
             ->willReturnOnConsecutiveCalls([4, 3, 2, 1], [3, 2]);
 
-        /** @var MetaModel $metaModel */
         self::assertSame([1, 2, 3, 4], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid'));
         self::assertSame([2, 3], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid'));
     }
 
     /**
      * Ensure the getCount works correctly.
-     *
-     * @return void
      */
-    public function testGetCountForEmptyList()
+    public function testGetCountForEmptyList(): void
     {
         $metaModel = $this
             ->getMockBuilder(MetaModel::class)
-            ->setMethods(['getMatchingIds'])
+            ->onlyMethods(['getMatchingIds'])
             ->setConstructorArgs(
                 [
                     ['tableName' => 'mm_test_retrieve'],
                     $this->getMockForAbstractClass(EventDispatcherInterface::class),
-                    $this->mockConnection([])
+                    $this->mockConnection()
                 ]
             )
             ->getMock();
@@ -437,18 +429,16 @@ class MetaModelsTest extends TestCase
 
     /**
      * Ensure the getCount works correctly.
-     *
-     * @return void
      */
-    public function testGetCountForNonEmptyList()
+    public function testGetCountForNonEmptyList(): void
     {
         $metaModel = $this->getMockBuilder(MetaModel::class)
-            ->setMethods(['getMatchingIds'])
+            ->onlyMethods(['getMatchingIds'])
             ->setConstructorArgs([
                 ['tableName' => 'mm_test_retrieve'],
                 $this->getMockForAbstractClass(EventDispatcherInterface::class),
-                $this->mockConnection([
-                    \Closure::fromCallable(function () {
+                $this->mockConnection(
+                    (function () {
                         $builder = $this
                             ->getMockBuilder(QueryBuilder::class)
                             ->disableOriginalConstructor()
@@ -467,7 +457,7 @@ class MetaModelsTest extends TestCase
                         $expr = $this
                             ->getMockBuilder(ExpressionBuilder::class)
                             ->disableOriginalConstructor()
-                            ->setMethods()
+                            ->onlyMethods([])
                             ->getMock();
 
                         $builder
@@ -487,23 +477,22 @@ class MetaModelsTest extends TestCase
                             ->with('values', [4, 3, 2, 1], Connection::PARAM_STR_ARRAY)
                             ->willReturn($builder);
 
-                        $statement = $this
-                            ->getMockBuilder(Statement::class)
+                        $result = $this
+                            ->getMockBuilder(Result::class)
                             ->disableOriginalConstructor()
                             ->getMock();
-                        $statement
+                        $result
                             ->expects($this->once())
-                            ->method('fetch')
-                            ->with(\PDO::FETCH_COLUMN)
+                            ->method('fetchOne')
                             ->willReturn(4);
                         $builder
                             ->expects($this->once())
-                            ->method('execute')
-                            ->willReturn($statement);
+                            ->method('executeQuery')
+                            ->willReturn($result);
 
                         return $builder;
                     })->__invoke()
-                ])
+                )
             ])
             ->getMock();
         $metaModel
@@ -511,18 +500,15 @@ class MetaModelsTest extends TestCase
             ->method('getMatchingIds')
             ->willReturn([4, 3, 2, 1]);
 
-        /** @var MetaModel $metaModel */
         self::assertEquals(4, $metaModel->getCount($metaModel->getEmptyFilter()));
     }
 
     /**
      * Mock a database connection with hte passed query builders.
      *
-     * @param array $queryBuilders The query builder list.
-     *
-     * @return MockObject|Connection
+     * @param QueryBuilder ...$queryBuilders The query builder list.
      */
-    private function mockConnection(array $queryBuilders)
+    private function mockConnection(QueryBuilder ...$queryBuilders): Connection&MockObject
     {
         $connection = $this->getMockBuilder(Connection::class)->disableOriginalConstructor()->getMock();
 

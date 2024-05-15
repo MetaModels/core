@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2021 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -26,6 +26,12 @@ use Contao\Widget;
 
 /**
  * Form field "tags", based on form field by Leo Feyer.
+ *
+ * @psalm-type TTagOption=array{value: string, label: string}
+ *
+ * @property list<TTagOption>|null $options
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class TagsWidget extends Widget
 {
@@ -35,7 +41,6 @@ class TagsWidget extends Widget
      * @var string
      */
     protected $strTemplate = 'form_tags';
-
 
     /**
      * {@inheritDoc}
@@ -74,11 +79,11 @@ class TagsWidget extends Widget
      */
     protected function validator($varInput)
     {
-        if (is_array($varInput)) {
+        if (\is_array($varInput)) {
             return parent::validator($varInput);
         }
 
-        return parent::validator(trim($varInput));
+        return parent::validator(\trim((string) ($varInput ?? '')));
     }
 
     /**
@@ -88,51 +93,50 @@ class TagsWidget extends Widget
      *
      * @return string
      */
-    protected function getClassForOption($index)
+    protected function getClassForOption(int $index): string
     {
         // If true we need another offset.
         $intSub   = ($this->arrConfiguration['includeBlankOption'] ? 1 : 0);
-        $intSub  += ($this->arrConfiguration['showSelectAll']
-                      || null === $this->arrConfiguration['showSelectAll'] ? 1 : 0);
+        $intSub  += ((isset($this->arrConfiguration['showSelectAll'])
+                      && null !== $this->arrConfiguration['showSelectAll']) ? 0 : 1);
         $strClass = $this->strName;
 
-        if ($index == 0) {
+        if ($index === 0) {
             $strClass .= ' first';
-        } elseif ($index === (count($this->options) - 1 + $intSub)) {
+        } elseif ($index === (\count($this->options ?? []) - 1 + $intSub)) {
             $strClass .= ' last';
         }
 
-        if (($index % 2) == 1) {
+        if (($index % 2) === 1) {
             $strClass .= ' even';
         } else {
             $strClass .= ' odd';
         }
 
-        return ((strlen($this->strClass)) ? $this->strClass . ' ' : '') . $strClass;
+        return ((\strlen($this->strClass)) ? $this->strClass . ' ' : '') . $strClass;
     }
 
     /**
      * Generate a single checkbox.
      *
-     * @param array $val   The value array (needs keys "value" and "label").
-     *
-     * @param int   $index The sequence number of this option (used for even/odd determination).
+     * @param TTagOption $val   The value array (needs keys "value" and "label").
+     * @param int        $index The sequence number of this option (used for even/odd determination).
      *
      * @return string
      */
-    protected function generateOption($val, $index)
+    protected function generateOption(array $val, int $index): string
     {
         $checked = '';
-        if (is_array($this->varValue) && in_array($val['value'], $this->varValue)) {
+        if (\is_array($this->varValue) && \in_array($val['value'], $this->varValue)) {
             $checked = ' checked="checked"';
         }
 
-        return sprintf(
+        return \sprintf(
             '<span class="%1$s opt_%2$s">' .
             '<input type="checkbox" name="%8$s[]" id="opt_%3$s" class="checkbox" value="%4$s"%5$s%6$s ' .
             '<label id="lbl_%3$s" for="opt_%3$s">%7$s</label></span>',
             // @codingStandardsIgnoreStart - Keep the comments.
-            $this->getClassForOption($index),      // 1
+            $this->getClassForOption($index),     // 1
             $index,                                       // 2
             $this->strName . '_' . $index,                // 3
             $val['value'],                                // 4
@@ -140,7 +144,7 @@ class TagsWidget extends Widget
             $this->getAttributes() . $this->strTagEnding, // 6
             $val['label'],                                // 7
             $this->strName                                // 8
-        // @codingStandardsIgnoreEnd
+            // @codingStandardsIgnoreEnd
         );
     }
 
@@ -150,9 +154,9 @@ class TagsWidget extends Widget
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function generate()
+    public function generate(): string
     {
-        $return = sprintf(
+        $return = \sprintf(
             '<fieldset id="ctrl_%s" class="checkbox_container">
 ',
             $this->strName
@@ -160,21 +164,27 @@ class TagsWidget extends Widget
 
         $count = 0;
 
-        if ($this->options && is_array($this->options)) {
+        /** @psalm-suppress MixedAssignment */
+        $langBase = $GLOBALS['TL_LANG']['metamodels_frontendfilter'] ?? [];
+        assert(\is_array($langBase));
+        if (\is_array($this->options) && [] !== $this->options) {
             // Show not filter option.
-            if ($this->arrConfiguration['includeBlankOption']) {
+            if ((bool) $this->arrConfiguration['includeBlankOption']) {
                 $return .= $this->generateOption(
-                    ['value' => '--none--', 'label' => $this->arrConfiguration['blankOptionLabel']],
+                    [
+                        'value' => '--none--',
+                        'label' => (string) ($this->arrConfiguration['blankOptionLabel'] ?? '')
+                    ],
                     $count++
                 );
             }
 
             // Show select all checkbox - check null as BC-Layer.
-            if ($this->arrConfiguration['showSelectAll'] || null === $this->arrConfiguration['showSelectAll']) {
+            if ((bool) $this->arrConfiguration['showSelectAll']) {
                 $return .= $this->generateOption(
                     [
                         'value' => '--all--',
-                        'label' => $GLOBALS['TL_LANG']['metamodels_frontendfilter']['select_all']
+                        'label' => (string) ($langBase['select_all'] ?? '')
                     ],
                     $count++
                 );
@@ -184,7 +194,7 @@ class TagsWidget extends Widget
                 $return .= $this->generateOption($val, $count++);
             }
         } else {
-            $return .= '<span>' . $GLOBALS['TL_LANG']['metamodels_frontendfilter']['no_combinations'] . '</span>';
+            $return .= '<span>' . (string) ($langBase['no_combinations'] ?? '') . '</span>';
         }
 
         $return .= '</fieldset>';

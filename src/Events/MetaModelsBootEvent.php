@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -24,7 +25,7 @@ namespace MetaModels\Events;
 use Contao\System;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\MetaModelsServiceContainer;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * This event is triggered when a metamodels sub system is booted.
@@ -43,6 +44,8 @@ class MetaModelsBootEvent extends Event
      * @return IMetaModelsServiceContainer
      *
      * @deprecated
+     *
+     * @psalm-suppress DeprecatedInterface
      */
     public function getServiceContainer(): IMetaModelsServiceContainer
     {
@@ -52,6 +55,11 @@ class MetaModelsBootEvent extends Event
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
-        return System::getContainer()->get(MetaModelsServiceContainer::class);
+
+        /** @psalm-suppress DeprecatedClass */
+        $serviceContainer = System::getContainer()->get(MetaModelsServiceContainer::class);
+        assert($serviceContainer instanceof IMetaModelsServiceContainer);
+
+        return $serviceContainer;
     }
 }

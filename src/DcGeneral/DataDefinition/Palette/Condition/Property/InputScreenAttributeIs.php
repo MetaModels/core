@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,8 @@
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -58,6 +59,7 @@ class InputScreenAttributeIs extends AttributeByIdIsOfType
             );
             // @codingStandardsIgnoreEnd
             $connection = System::getContainer()->get('database_connection');
+            assert($connection instanceof Connection);
         }
 
         parent::__construct($attributeType, $connection, 'attr_id');
@@ -69,9 +71,15 @@ class InputScreenAttributeIs extends AttributeByIdIsOfType
      * @return IMetaModelsServiceContainer
      *
      * @deprecated
+     *
+     * @psalm-suppress DeprecatedInterface
      */
     protected function getServiceContainer(): IMetaModelsServiceContainer
     {
-        return System::getContainer()->get(MetaModelsServiceContainer::class);
+        /** @psalm-suppress DeprecatedClass */
+        $serviceContainer = System::getContainer()->get(MetaModelsServiceContainer::class);
+        assert($serviceContainer instanceof IMetaModelsServiceContainer);
+
+        return $serviceContainer;
     }
 }

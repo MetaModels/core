@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -22,10 +23,15 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\MetaModel;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
+use ContaoCommunityAlliance\DcGeneral\Data\DataProviderInterface;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
+use ContaoCommunityAlliance\Translator\TranslatorInterface;
+use MetaModels\Exceptions\Database\InvalidTableNameException;
 use MetaModels\Helper\TableManipulator;
+use MetaModels\IFactory;
 
 /**
- * This prefixes all tables with "mm_".
+ * This prefixes all tables with "mm_" and check if exists.
  */
 class TableNamePrefixingListener extends AbstractAbstainingListener
 {
@@ -34,18 +40,30 @@ class TableNamePrefixingListener extends AbstractAbstainingListener
      *
      * @var TableManipulator
      */
-    private $tableManipulator;
+    private TableManipulator $tableManipulator;
+
+    /**
+     * The MetaModel factory.
+     *
+     * @var IFactory
+     */
+    private IFactory $factory;
 
     /**
      * Create a new instance.
      *
      * @param RequestScopeDeterminator $scopeDeterminator The scope determinator.
      * @param TableManipulator         $tableManipulator  The table manipulator.
+     * @param IFactory                 $factory           The MetaModel factory.
      */
-    public function __construct(RequestScopeDeterminator $scopeDeterminator, TableManipulator $tableManipulator)
-    {
+    public function __construct(
+        RequestScopeDeterminator $scopeDeterminator,
+        TableManipulator $tableManipulator,
+        IFactory $factory
+    ) {
         parent::__construct($scopeDeterminator);
         $this->tableManipulator = $tableManipulator;
+        $this->factory          = $factory;
     }
 
     /**
@@ -60,42 +78,61 @@ class TableNamePrefixingListener extends AbstractAbstainingListener
      *
      * @throws \RuntimeException On invalid table names.
      */
-    public function handle(EncodePropertyValueFromWidgetEvent $event)
+    public function handle(EncodePropertyValueFromWidgetEvent $event): void
     {
         if (!$this->wantToHandle($event) || ($event->getProperty() !== 'tableName')) {
             return;
         }
 
-        // See #49.
-        $tableName = strtolower($event->getValue());
+        // See #49 (We can no longer find the correct issue number... :().
+        $tableName = \strtolower($event->getValue());
 
-        if (!strlen($tableName)) {
-            throw new \RuntimeException('Table name not given');
+        $translator = $event->getEnvironment()->getTranslator();
+        assert($translator instanceof TranslatorInterface);
+
+        if ('' === $tableName) {
+            throw new \RuntimeException($translator->translate('ERR.tableNameNotGiven', 'tl_metamodel'));
         }
 
         // Force mm_ prefix.
-        if (substr($tableName, 0, 3) !== 'mm_') {
+        if (!\str_starts_with($tableName, 'mm_')) {
             $tableName = 'mm_' . $tableName;
         }
 
-        $dataProvider = $event->getEnvironment()->getDataProvider('tl_metamodel');
+        // New model, ensure the table does not exist.
+        if (!$event->getModel()->getId()) {
+            $this->checkTableName($tableName, $translator);
+        } else {
+            $dataProvider = $event->getEnvironment()->getDataProvider('tl_metamodel');
+            assert($dataProvider instanceof DataProviderInterface);
 
-        try {
-            // New model, ensure the table does not exist.
-            if (!$event->getModel()->getId()) {
-                $this->tableManipulator->checkTableDoesNotExist($tableName);
-            } else {
-                // Edited model, ensure the value is unique and then that the table does not exist.
-                $oldVersion = $dataProvider->fetch($dataProvider->getEmptyConfig()->setId($event->getModel()->getId()));
-
-                if ($oldVersion->getProperty('tableName') !== $event->getModel()->getProperty('tableName')) {
-                    $this->tableManipulator->checkTableDoesNotExist($tableName);
-                }
+            // Edited model, ensure the value is unique and then that the table does not exist.
+            $oldVersion = $dataProvider->fetch($dataProvider->getEmptyConfig()->setId($event->getModel()->getId()));
+            assert($oldVersion instanceof ModelInterface);
+            if ($oldVersion->getProperty('tableName') !== $event->getModel()->getProperty('tableName')) {
+                $this->checkTableName($tableName, $translator);
             }
-        } catch (\Exception $exception) {
-            throw new \RuntimeException($exception->getMessage(), $exception->getCode(), $exception);
         }
 
         $event->setValue($tableName);
+    }
+
+    private function checkTableName(string $tableName, TranslatorInterface $translator): void
+    {
+        try {
+            $this->tableManipulator->checkTablename($tableName);
+        } catch (InvalidTableNameException $exception) {
+            throw new \RuntimeException(
+                $translator->translate('ERR.invalidTableName', 'tl_metamodel', ['%table_name%' => $tableName]),
+                $exception->getCode(),
+                $exception
+            );
+        }
+        $model = $this->factory->getMetaModel($tableName);
+        if (null !== $model) {
+            throw new \RuntimeException(
+                $translator->translate('ERR.tableExists', 'tl_metamodel', ['%table_name%' => $tableName])
+            );
+        }
     }
 }

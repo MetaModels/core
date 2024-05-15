@@ -21,7 +21,7 @@
 namespace MetaModels\Events;
 
 use MetaModels\IFactory;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * This event is triggered to collect the names of all known MetaModels.
@@ -31,7 +31,7 @@ class CollectMetaModelTableNamesEvent extends Event
     /**
      * The event name.
      */
-    const NAME = 'metamodels.metamodel.collect-table-names';
+    public const NAME = 'metamodels.metamodel.collect-table-names';
 
     /**
      * The factory calling the event.

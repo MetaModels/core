@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,13 +15,15 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2021 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\BackendIntegration;
 
+use Contao\CoreBundle\Monolog\ContaoContext;
+use Contao\Folder;
 use Contao\System;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\System\LogEvent;
@@ -44,13 +46,14 @@ class PurgeAssets
     {
         foreach ($GLOBALS['TL_PURGE']['folders']['metamodels_assets']['affected'] as $folderName) {
             // Purge the folder
-            $folder = new \Folder($folderName);
+            $folder = new Folder($folderName);
             $folder->purge();
         }
 
         $dispatcher = System::getContainer()->get('event_dispatcher');
+        assert($dispatcher instanceof EventDispatcherInterface);
         $dispatcher->dispatch(
-            new LogEvent('Purged the MetaModels assets', __METHOD__, TL_CRON),
+            new LogEvent('Purged the MetaModels assets', __METHOD__, ContaoContext::CRON),
             ContaoEvents::SYSTEM_LOG
         );
     }

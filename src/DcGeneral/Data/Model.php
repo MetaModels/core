@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -25,6 +26,7 @@ use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\PropertyValueBagInterface;
 use ContaoCommunityAlliance\DcGeneral\Exception\DcGeneralInvalidArgumentException;
 use ContaoCommunityAlliance\DcGeneral\Exception\DcGeneralInvalidPropertyValueException;
+use MetaModels\Attribute\IAttribute;
 use MetaModels\Exceptions\DifferentValuesException;
 use MetaModels\IItem;
 use MetaModels\ITranslatedMetaModel;
@@ -34,11 +36,10 @@ use MetaModels\ITranslatedMetaModel;
  */
 class Model implements ModelInterface
 {
-
     /**
      * The MetaModel item accessible via this instance.
      *
-     * @var IItem
+     * @var IItem|null
      */
     protected $objItem = null;
 
@@ -47,7 +48,7 @@ class Model implements ModelInterface
      *
      * @var array
      */
-    protected $arrMetaInformation = array();
+    protected $arrMetaInformation = [];
 
     /**
      * The language of the contained data.
@@ -63,20 +64,23 @@ class Model implements ModelInterface
      */
     protected function getPropertyNames()
     {
-        $propertyNames = array('id', 'pid', 'tstamp', 'sorting');
+        $propertyNames = ['id', 'pid', 'tstamp', 'sorting'];
 
-        if ($this->getItem()->getMetaModel()->hasVariants()) {
+        $item = $this->getItem();
+        assert($item instanceof IItem);
+
+        if ($item->getMetaModel()->hasVariants()) {
             $propertyNames[] = 'varbase';
             $propertyNames[] = 'vargroup';
         }
 
-        return array_merge($propertyNames, array_keys($this->getItem()->getMetaModel()->getAttributes()));
+        return \array_merge($propertyNames, \array_keys($item->getMetaModel()->getAttributes()));
     }
 
     /**
      * Returns the native IMetaModelItem instance encapsulated within this abstraction.
      *
-     * @return IItem
+     * @return IItem|null
      */
     public function getItem()
     {
@@ -99,7 +103,9 @@ class Model implements ModelInterface
      */
     public function __clone()
     {
-        $this->objItem = $this->getItem()->copy();
+        $item = $this->getItem();
+        assert($item instanceof IItem);
+        $this->objItem = $item->copy();
     }
 
     /**
@@ -107,24 +113,28 @@ class Model implements ModelInterface
      */
     public function getId()
     {
-        return $this->getItem()->get('id');
+        $item = $this->getItem();
+        assert($item instanceof IItem);
+
+        return $item->get('id');
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getProperty($strPropertyName)
+    public function getProperty($propertyName)
     {
-        if ($this->getItem()) {
-            $varValue = $this->getItem()->get($strPropertyName);
+        if (null !== ($item = $this->getItem())) {
+            $varValue = $item->get($propertyName);
             // Test if it is an attribute, if so, let it transform the data for the widget.
-            $objAttribute = $this->getItem()->getAttribute($strPropertyName);
+            $objAttribute = $item->getAttribute($propertyName);
             if ($objAttribute) {
                 $varValue = $objAttribute->valueToWidget($varValue);
             }
 
             return $varValue;
         }
+
         return null;
     }
 
@@ -133,11 +143,12 @@ class Model implements ModelInterface
      */
     public function getPropertiesAsArray()
     {
-        $arrResult = array();
+        $arrResult = [];
 
         foreach ($this->getPropertyNames() as $strKey) {
             $arrResult[$strKey] = $this->getProperty($strKey);
         }
+
         return $arrResult;
     }
 
@@ -146,19 +157,22 @@ class Model implements ModelInterface
      */
     public function getMeta($strMetaName)
     {
-        if (array_key_exists($strMetaName, $this->arrMetaInformation)) {
+        if (\array_key_exists($strMetaName, $this->arrMetaInformation)) {
             return $this->arrMetaInformation[$strMetaName];
         }
+
         return null;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setId($mixID)
+    public function setId($mixId)
     {
-        if ($this->getId() == null) {
-            $this->getItem()->set('id', $mixID);
+        if ($this->getId() === null) {
+            $item = $this->getItem();
+            assert($item instanceof IItem);
+            $item->set('id', $mixId);
             $this->setMeta(static::IS_CHANGED, true);
         }
     }
@@ -173,38 +187,40 @@ class Model implements ModelInterface
      */
     public function setProperty($strPropertyName, $varValue)
     {
-        if ($this->getItem()) {
+        if (null !== ($item = $this->getItem())) {
             $varInternalValue = $varValue;
             // Test if it is an attribute, if so, let it transform the data for the widget.
-            $objAttribute = $this->getItem()->getAttribute($strPropertyName);
+            $objAttribute = $item->getAttribute($strPropertyName);
 
-            if ($objAttribute) {
+            if (null !== $objAttribute) {
                 $model            = $objAttribute->getMetaModel();
                 $originalLanguage = null;
+                /** @psalm-suppress DeprecatedMethod */
                 if (null !== $this->language) {
                     if ($model instanceof ITranslatedMetaModel) {
                         $originalLanguage = $model->selectLanguage($this->language);
+                        /** @psalm-suppress DeprecatedMethod */
                     } elseif ($model->isTranslated()) {
                         $originalLanguage       = $GLOBALS['TL_LANGUAGE'];
                         $GLOBALS['TL_LANGUAGE'] = $this->language;
                     }
                 }
 
-                $varInternalValue = $objAttribute->widgetToValue($varValue, $this->getItem()->get('id'));
+                $varInternalValue = $objAttribute->widgetToValue($varValue, $item->get('id'));
             }
 
             try {
                 if ($varValue !== $this->getProperty($strPropertyName)) {
                     $this->setMeta(static::IS_CHANGED, true);
-                    $this->getItem()->set($strPropertyName, $varInternalValue);
+                    $item->set($strPropertyName, $varInternalValue);
                     try {
                         DifferentValuesException::compare($varValue, $this->getProperty($strPropertyName), false);
                     } catch (DifferentValuesException $exception) {
                         throw new DcGeneralInvalidPropertyValueException(
-                            sprintf(
+                            \sprintf(
                                 'Property %s (%s) did not accept the value (%s).',
                                 $strPropertyName,
-                                $objAttribute->get('type'),
+                                $objAttribute ? ((string) $objAttribute->get('type')) : '?',
                                 $exception->getLongMessage()
                             ),
                             1,
@@ -227,9 +243,9 @@ class Model implements ModelInterface
     /**
      * {@inheritDoc}
      */
-    public function setPropertiesAsArray($arrProperties)
+    public function setPropertiesAsArray($properties)
     {
-        foreach ($arrProperties as $strKey => $varValue) {
+        foreach ($properties as $strKey => $varValue) {
             $this->setProperty($strKey, $varValue);
         }
     }
@@ -247,12 +263,15 @@ class Model implements ModelInterface
      */
     public function hasProperties()
     {
-        return ($this->getItem()) ? true : false;
+        return (bool) $this->getItem();
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @return \Traversable<string, mixed>
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new ModelIterator($this);
@@ -263,7 +282,10 @@ class Model implements ModelInterface
      */
     public function getProviderName()
     {
-        return $this->getItem()->getMetaModel()->getTableName();
+        $item = $this->getItem();
+        assert($item instanceof IItem);
+
+        return $item->getMetaModel()->getTableName();
     }
 
     /**
@@ -284,6 +306,8 @@ class Model implements ModelInterface
 
             $this->setProperty($property, $valueBag->getPropertyValue($property));
         }
+
+        return $this;
     }
 
     /**
@@ -298,5 +322,7 @@ class Model implements ModelInterface
 
             $valueBag->setPropertyValue($property, $this->getProperty($property));
         }
+
+        return $this;
     }
 }

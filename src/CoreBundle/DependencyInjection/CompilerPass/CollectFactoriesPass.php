@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -32,22 +33,22 @@ class CollectFactoriesPass implements CompilerPassInterface
     /**
      * The tag name to use for attribute factories.
      */
-    const TAG_ATTRIBUTE_FACTORY = 'metamodels.attribute_factory';
+    public const TAG_ATTRIBUTE_FACTORY = 'metamodels.attribute_factory';
 
     /**
      * The tag name to use for filter factories.
      */
-    const TAG_FILTER_FACTORY = 'metamodels.filter_factory';
+    public const TAG_FILTER_FACTORY = 'metamodels.filter_factory';
 
     /**
      * The tag name to use for property condition factories.
      */
-    const TAG_PROPERTY_CONDITION_FACTORY = 'metamodels.condition_factory';
+    public const TAG_PROPERTY_CONDITION_FACTORY = 'metamodels.condition_factory';
 
     /**
      * {@inheritDoc}
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $this->collectAttributeFactories($container);
         $this->collectFilterFactories($container);
@@ -61,10 +62,10 @@ class CollectFactoriesPass implements CompilerPassInterface
      *
      * @return void
      */
-    private function collectAttributeFactories($container)
+    private function collectAttributeFactories(ContainerBuilder $container): void
     {
         $attributeFactory = $container->getDefinition('metamodels.attribute_factory');
-        foreach (array_keys($container->findTaggedServiceIds(self::TAG_ATTRIBUTE_FACTORY)) as $factory) {
+        foreach (\array_keys($container->findTaggedServiceIds(self::TAG_ATTRIBUTE_FACTORY)) as $factory) {
             $attributeFactory->addMethodCall('addTypeFactory', [new Reference($factory)]);
         }
     }
@@ -76,10 +77,10 @@ class CollectFactoriesPass implements CompilerPassInterface
      *
      * @return void
      */
-    private function collectFilterFactories($container)
+    private function collectFilterFactories(ContainerBuilder $container): void
     {
         $attributeFactory = $container->getDefinition('metamodels.filter_setting_factory');
-        foreach (array_keys($container->findTaggedServiceIds(self::TAG_FILTER_FACTORY)) as $factory) {
+        foreach (\array_keys($container->findTaggedServiceIds(self::TAG_FILTER_FACTORY)) as $factory) {
             $attributeFactory->addMethodCall('addTypeFactory', [new Reference($factory)]);
         }
     }
@@ -91,7 +92,7 @@ class CollectFactoriesPass implements CompilerPassInterface
      *
      * @return void
      */
-    private function collectPropertyConditionFactories($container)
+    private function collectPropertyConditionFactories(ContainerBuilder $container): void
     {
         $factories = $container->getDefinition('metamodels.core_bundle.dc_general.property_condition_factories');
         $args      = $factories->getArgument(0);

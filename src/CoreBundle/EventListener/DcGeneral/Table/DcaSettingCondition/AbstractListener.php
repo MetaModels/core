@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -23,11 +23,15 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSettingConditio
 
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\AbstractEnvironmentAwareEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\AbstractModelAwareEvent;
+use ContaoCommunityAlliance\DcGeneral\InputProviderInterface;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use MetaModels\IFactory;
+use MetaModels\IMetaModel;
 
 /**
  * This provides a way to obtain a MetaModel.
@@ -39,7 +43,7 @@ abstract class AbstractListener
      *
      * @var RequestScopeDeterminator
      */
-    private $scopeDeterminator;
+    private RequestScopeDeterminator $scopeDeterminator;
 
     /**
      * The MetaModel factory.
@@ -53,7 +57,7 @@ abstract class AbstractListener
      *
      * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * Create a new instance.
@@ -77,23 +81,31 @@ abstract class AbstractListener
      *
      * @param EnvironmentInterface $interface The environment.
      *
-     * @return \MetaModels\IMetaModel
+     * @return IMetaModel
      *
-     * @throws \RuntimeException Throws if could not retrieve metamodel.
+     * @throws \RuntimeException Throws if you could not retrieve metamodel.
+     * @throws Exception
      */
     public function getMetaModel(EnvironmentInterface $interface)
     {
+        $inputProvider = $interface->getInputProvider();
+        assert($inputProvider instanceof InputProviderInterface);
+
         $metaModelId = $this->connection
             ->createQueryBuilder()
             ->select('d.pid')
             ->from('tl_metamodel_dca', 'd')
             ->leftJoin('d', 'tl_metamodel_dcasetting', 's', 'd.id=s.pid')
             ->where('s.id=:id')
-            ->setParameter('id', ModelId::fromSerialized($interface->getInputProvider()->getParameter('pid'))->getId())
-            ->execute();
+            ->setParameter('id', ModelId::fromSerialized($inputProvider->getParameter('pid'))->getId())
+            ->executeQuery();
 
-        if ($tableName = $this->factory->translateIdToMetaModelName($metaModelId = $metaModelId->fetchColumn())) {
-            return $this->factory->getMetaModel($tableName);
+        if (
+            false !== ($metaModelId = $metaModelId->fetchOne())
+            && ($tableName = $this->factory->translateIdToMetaModelName($metaModelId))
+            && null !== ($metaModel = $this->factory->getMetaModel($tableName))
+        ) {
+            return $metaModel;
         }
 
         throw new \RuntimeException('Could not retrieve MetaModel ' . $metaModelId);
@@ -112,13 +124,15 @@ abstract class AbstractListener
             return false;
         }
 
-        $environment = $event->getEnvironment();
-        if ('tl_metamodel_dcasetting_condition' !== $environment->getDataDefinition()->getName()) {
+        $environment    = $event->getEnvironment();
+        $dataDefinition = $environment->getDataDefinition();
+        assert($dataDefinition instanceof ContainerInterface);
+        if ('tl_metamodel_dcasetting_condition' !== $dataDefinition->getName()) {
             return false;
         }
 
         if ($event instanceof AbstractModelAwareEvent) {
-            if ($event->getEnvironment()->getDataDefinition()->getName() !== $event->getModel()->getProviderName()) {
+            if ($dataDefinition->getName() !== $event->getModel()->getProviderName()) {
                 return false;
             }
         }

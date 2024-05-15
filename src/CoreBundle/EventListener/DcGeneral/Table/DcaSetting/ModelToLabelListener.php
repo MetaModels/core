@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -28,7 +28,8 @@ use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\IAttributeFactory;
 use MetaModels\CoreBundle\Assets\IconBuilder;
 use MetaModels\IFactory;
-use Symfony\Component\Translation\TranslatorInterface;
+use MetaModels\IMetaModel;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * This handles the rendering of models to labels.
@@ -40,21 +41,21 @@ class ModelToLabelListener extends AbstractListener
      *
      * @var IAttributeFactory
      */
-    private $attributeFactory;
+    private IAttributeFactory $attributeFactory;
 
     /**
      * The icon builder.
      *
      * @var IconBuilder
      */
-    private $iconBuilder;
+    private IconBuilder $iconBuilder;
 
     /**
      * The translator.
      *
      * @var TranslatorInterface
      */
-    private $translator;
+    private TranslatorInterface $translator;
 
     /**
      * Create a new instance.
@@ -120,7 +121,8 @@ class ModelToLabelListener extends AbstractListener
     {
         $model     = $event->getModel();
         $metaModel = $this->getMetaModelFromModel($model);
-        $attribute = $metaModel->getAttributeById($model->getProperty('attr_id'));
+        assert($metaModel instanceof IMetaModel);
+        $attribute = $metaModel->getAttributeById((int) $model->getProperty('attr_id'));
 
         if ($attribute) {
             $type     = $attribute->get('type');
@@ -133,7 +135,7 @@ class ModelToLabelListener extends AbstractListener
             $variant  = ($metaModel->hasVariants() && $attribute->get('isvariant')) ? ', variant' : '';
             $name     = $attribute->getName();
             $colName  = $attribute->getColName();
-            $isUnique = $attribute->get('isunique');
+            $isUnique = (bool) $attribute->get('isunique');
         } else {
             $type     = 'unknown ID: ' . $model->getProperty('attr_id');
             $image    = $this->iconBuilder->getBackendIconImageTag('bundles/metamodelscore/images/icons/fields.png');
@@ -143,6 +145,7 @@ class ModelToLabelListener extends AbstractListener
             $isUnique = false;
         }
 
+        /** @psalm-suppress InvalidArgument */
         $event
             ->setLabel('<div class="field_heading cte_type %s"><strong>%s</strong> <em>[%s%s]</em></div>
                 <div class="field_type block">
@@ -155,11 +158,11 @@ class ModelToLabelListener extends AbstractListener
                 $variant,
                 $image,
                 $name,
-                // unique attributes are automatically mandatory
-                $model->getProperty('mandatory') || $isUnique
-                    ? ' ['. $this->trans('mandatory.0') . ']'
+                // unique attributes are automatically mandatory.
+                (bool) $model->getProperty('mandatory') || $isUnique
+                    ? ' [' . $this->trans('mandatory.label') . ']'
                     : '',
-                $model->getProperty('tl_class') ? sprintf('[%s]', $model->getProperty('tl_class')) : ''
+                $model->getProperty('tl_class') ? \sprintf('[%s]', $model->getProperty('tl_class')) : ''
             ]);
     }
 
@@ -174,24 +177,27 @@ class ModelToLabelListener extends AbstractListener
     {
         $model     = $event->getModel();
         $metaModel = $this->getMetaModelFromModel($model);
-        if (is_array($legend = StringUtil::deserialize($model->getProperty('legendtitle')))) {
+        assert($metaModel instanceof IMetaModel);
+        if (\is_array($legend = StringUtil::deserialize($model->getProperty('legendtitle')))) {
+            /** @psalm-suppress DeprecatedMethod */
             foreach ([$metaModel->getActiveLanguage(), $metaModel->getFallbackLanguage()] as $language) {
-                if (array_key_exists($language, $legend) && !empty($legend[$language])) {
+                if (\array_key_exists($language ?? '', $legend) && !empty($legend[$language])) {
                     $legend = $legend[$language];
                     break;
                 }
             }
         }
-        if (empty($legend)) {
+        if (null === $legend) {
             $legend = 'legend';
         }
 
+        /** @psalm-suppress InvalidArgument */
         $event
             ->setLabel('<div class="field_heading cte_type %s"><strong>%s</strong></div>
                 <div class="dca_palette">%s%s</div>')
             ->setArgs([
                 $model->getProperty('published') ? 'published' : 'unpublished',
-                $this->trans('dcatypes.legend'),
+                $this->translator->trans('dcatypes.legend', [], 'tl_metamodel_dcasetting'),
                 $legend,
                 $model->getProperty('legendhide') ? ':hide' : ''
             ]);
@@ -206,6 +212,6 @@ class ModelToLabelListener extends AbstractListener
      */
     private function trans($key)
     {
-        return $this->translator->trans('tl_metamodel_dcasetting.' . $key, [], 'contao_tl_metamodel_dcasetting');
+        return $this->translator->trans($key, [], 'tl_metamodel_dcasetting');
     }
 }

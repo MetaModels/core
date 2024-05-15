@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2021 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -30,11 +31,14 @@ use MetaModels\Attribute\ITranslated;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\DcGeneral\Events\MetaModel\BuildAttributeEvent;
 use MetaModels\IFactory;
+use MetaModels\IMetaModel;
 use MetaModels\ViewCombination\ViewCombination;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * This class builds the property information.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PropertyDefinitionBuilder
 {
@@ -45,21 +49,21 @@ class PropertyDefinitionBuilder
      *
      * @var EventDispatcherInterface
      */
-    private $dispatcher;
+    private EventDispatcherInterface $dispatcher;
 
     /**
      * The view combinations.
      *
      * @var ViewCombination
      */
-    private $viewCombination;
+    private ViewCombination $viewCombination;
 
     /**
      * The MetaModels factory.
      *
      * @var IFactory
      */
-    private $factory;
+    private IFactory $factory;
 
     /**
      * Create a new instance.
@@ -88,7 +92,7 @@ class PropertyDefinitionBuilder
     protected function build(IMetaModelDataDefinition $container)
     {
         $inputScreen = $this->viewCombination->getScreen($container->getName());
-        if (!$inputScreen) {
+        if (null === $inputScreen) {
             return;
         }
 
@@ -100,6 +104,7 @@ class PropertyDefinitionBuilder
         }
 
         $metaModel = $this->factory->getMetaModel($container->getName());
+        assert($metaModel instanceof IMetaModel);
 
         // If the current metamodel has variants add the varbase and vargroup to the definition.
         if ($metaModel->hasVariants()) {
@@ -140,15 +145,14 @@ class PropertyDefinitionBuilder
      *
      * @return void
      */
-    private function buildProperty(PropertiesDefinitionInterface $definition, IAttribute $attribute, array $propInfo)
-    {
-        if (!$attribute) {
-            return;
-        }
-
+    private function buildProperty(
+        PropertiesDefinitionInterface $definition,
+        IAttribute $attribute,
+        array $propInfo
+    ): void {
         $property = $this->getOrCreateProperty($definition, $attribute->getColName());
-        $this->setLabel($property, $propInfo, $attribute);
-        $this->setDescription($property, $propInfo);
+        $this->setLabel($property);
+        $this->setDescription($property);
         $this->setDefaultValue($property, $propInfo);
         $this->setExcluded($property, $propInfo);
         $this->setSearchable($property, $propInfo);
@@ -168,11 +172,12 @@ class PropertyDefinitionBuilder
      *
      * @return PropertyInterface
      */
-    private function getOrCreateProperty(PropertiesDefinitionInterface $definition, $propName)
+    private function getOrCreateProperty(PropertiesDefinitionInterface $definition, string $propName): PropertyInterface
     {
         if ($definition->hasProperty($propName)) {
             return $definition->getProperty($propName);
         }
+
         $property = new DefaultProperty($propName);
         $definition->addProperty($property);
 
@@ -183,44 +188,30 @@ class PropertyDefinitionBuilder
      * Set the label in the property.
      *
      * @param PropertyInterface $property  The property definition.
-     * @param array             $propInfo  The property info array.
-     * @param IAttribute        $attribute The attribute.
      *
      * @return void
      */
-    private function setLabel(PropertyInterface $property, $propInfo, IAttribute $attribute)
+    private function setLabel(PropertyInterface $property): void
     {
         if ($property->getLabel()) {
             return;
         }
-        if (!isset($propInfo['label'])) {
-            $property->setLabel($attribute->getName());
-            return;
-        }
-        $lang = $propInfo['label'];
-        if (is_array($lang)) {
-            $property->setLabel(reset($lang));
-            $property->setDescription(next($lang));
-            return;
-        }
-        $property->setLabel($lang);
+        $property->setLabel($property->getName() . '.label');
     }
 
     /**
      * Set the description in the property.
      *
      * @param PropertyInterface $property The property definition.
-     * @param array             $propInfo The property info array.
      *
      * @return void
      */
-    private function setDescription(PropertyInterface $property, $propInfo)
+    private function setDescription(PropertyInterface $property): void
     {
-        if ($property->getDescription() || !isset($propInfo['description'])) {
+        if ($property->getDescription()) {
             return;
         }
-
-        $property->setDescription($propInfo['description']);
+        $property->setDescription($property->getName() . '.description');
     }
 
     /**
@@ -231,7 +222,7 @@ class PropertyDefinitionBuilder
      *
      * @return void
      */
-    private function setDefaultValue(PropertyInterface $property, $propInfo)
+    private function setDefaultValue(PropertyInterface $property, array $propInfo): void
     {
         if (!isset($propInfo['default'])) {
             return;
@@ -247,7 +238,7 @@ class PropertyDefinitionBuilder
      *
      * @return void
      */
-    private function setExcluded(PropertyInterface $property, $propInfo)
+    private function setExcluded(PropertyInterface $property, array $propInfo): void
     {
         if (!isset($propInfo['exclude'])) {
             return;
@@ -263,7 +254,7 @@ class PropertyDefinitionBuilder
      *
      * @return void
      */
-    private function setSearchable(PropertyInterface $property, $propInfo)
+    private function setSearchable(PropertyInterface $property, array $propInfo): void
     {
         if (!isset($propInfo['search'])) {
             return;
@@ -279,7 +270,7 @@ class PropertyDefinitionBuilder
      *
      * @return void
      */
-    private function setFilterable(PropertyInterface $property, $propInfo)
+    private function setFilterable(PropertyInterface $property, array $propInfo): void
     {
         if (!isset($propInfo['filter'])) {
             return;
@@ -295,9 +286,9 @@ class PropertyDefinitionBuilder
      *
      * @return void
      */
-    private function setWidgetType(PropertyInterface $property, $propInfo)
+    private function setWidgetType(PropertyInterface $property, array $propInfo): void
     {
-        if (null !== $property->getWidgetType() || !isset($propInfo['inputType'])) {
+        if ('' !== ($property->getWidgetType()) || !isset($propInfo['inputType'])) {
             return;
         }
 
@@ -312,7 +303,7 @@ class PropertyDefinitionBuilder
      *
      * @return void
      */
-    private function setOptions(PropertyInterface $property, $propInfo)
+    private function setOptions(PropertyInterface $property, array $propInfo): void
     {
         if (null !== $property->getOptions() || !isset($propInfo['options'])) {
             return;
@@ -329,7 +320,7 @@ class PropertyDefinitionBuilder
      *
      * @return void
      */
-    private function setExplanation(PropertyInterface $property, $propInfo)
+    private function setExplanation(PropertyInterface $property, array $propInfo): void
     {
         if ($property->getExplanation() || !isset($propInfo['explanation'])) {
             return;
@@ -347,14 +338,14 @@ class PropertyDefinitionBuilder
      *
      * @return void
      */
-    private function setEval($property, $propInfo, $isTranslated)
+    private function setEval(PropertyInterface $property, array $propInfo, bool $isTranslated): void
     {
-        $extra = isset($propInfo['eval']) ? $propInfo['eval'] : [];
+        $extra = $propInfo['eval'] ?? [];
         if ($isTranslated) {
             $extra['tl_class'] = 'translat-attr' . (!empty($extra['tl_class']) ? ' ' . $extra['tl_class'] : '');
         }
 
-        $property->setExtra(array_merge((array) $property->getExtra(), $extra));
+        $property->setExtra(\array_merge($property->getExtra(), $extra));
     }
 
     /**
@@ -365,9 +356,9 @@ class PropertyDefinitionBuilder
      *
      * @return void
      */
-    private function setEmptyValue(PropertyInterface $property, array $propInfo)
+    private function setEmptyValue(PropertyInterface $property, array $propInfo): void
     {
-        if (!array_key_exists('empty_value', $propInfo) || !($property instanceof EmptyValueAwarePropertyInterface)) {
+        if (!\array_key_exists('empty_value', $propInfo) || !($property instanceof EmptyValueAwarePropertyInterface)) {
             return;
         }
         $property->setEmptyValue($propInfo['empty_value']);

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -23,6 +23,7 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\MetaModel;
 
 use Contao\System;
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use MenAtWork\MultiColumnWizardBundle\Event\GetOptionsEvent;
 
 /**
@@ -35,7 +36,7 @@ class LanguageOptionsListener
      *
      * @var RequestScopeDeterminator
      */
-    private $scopeDeterminator;
+    private RequestScopeDeterminator $scopeDeterminator;
 
     /**
      * Create a new instance.
@@ -54,12 +55,13 @@ class LanguageOptionsListener
      *
      * @return void
      */
-    public function handle(GetOptionsEvent $event)
+    public function handle(GetOptionsEvent $event): void
     {
         if (!$this->wantToHandle($event)) {
             return;
         }
 
+        /** @psalm-suppress DeprecatedMethod */
         $languages           = System::getLanguages();
         $hasTerritorySupport = (bool) $event->getModel()->getProperty('localeterritorysupport');
         $languageOptions     = [];
@@ -73,7 +75,7 @@ class LanguageOptionsListener
             $languageOptions[$langKey] = \sprintf(
                 '%s [%s]',
                 $langValue,
-                $hasTerritory ? \substr_replace($langKey, '-', 2, 1) : $langKey
+                $langKey
             );
         }
 
@@ -87,7 +89,7 @@ class LanguageOptionsListener
      *
      * @return bool
      */
-    protected function wantToHandle(GetOptionsEvent $event)
+    protected function wantToHandle(GetOptionsEvent $event): bool
     {
         if ($event->getOptions() !== null) {
             return false;
@@ -97,12 +99,13 @@ class LanguageOptionsListener
             return false;
         }
 
-        $environment = $event->getEnvironment();
-        if ('tl_metamodel' !== $environment->getDataDefinition()->getName()) {
+        $dataDefinition = $event->getEnvironment()->getDataDefinition();
+        assert($dataDefinition instanceof ContainerInterface);
+        if ('tl_metamodel' !== $dataDefinition->getName()) {
             return false;
         }
 
-        if ($event->getEnvironment()->getDataDefinition()->getName() !== $event->getModel()->getProviderName()) {
+        if ($dataDefinition->getName() !== $event->getModel()->getProviderName()) {
             return false;
         }
 

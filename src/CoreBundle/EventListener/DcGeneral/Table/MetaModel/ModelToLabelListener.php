@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -24,7 +24,7 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\MetaModel;
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use Doctrine\DBAL\Connection;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * This handles the rendering of models to labels.
@@ -36,14 +36,14 @@ class ModelToLabelListener extends AbstractAbstainingListener
      *
      * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * The translator.
      *
      * @var TranslatorInterface
      */
-    private $translator;
+    private TranslatorInterface $translator;
 
     /**
      * Create a new instance.
@@ -69,8 +69,10 @@ class ModelToLabelListener extends AbstractAbstainingListener
      * @param ModelToLabelEvent $event The event.
      *
      * @return void
+     *
+     * @throws \Doctrine\DBAL\Exception
      */
-    public function handle(ModelToLabelEvent $event)
+    public function handle(ModelToLabelEvent $event): void
     {
         if (!$this->wantToHandle($event)) {
             return;
@@ -79,31 +81,21 @@ class ModelToLabelListener extends AbstractAbstainingListener
         $model     = $event->getModel();
         $tableName = $model->getProperty('tableName');
 
-        if (!($model && !empty($tableName) && $this->connection->getSchemaManager()->tablesExist([$tableName]))) {
-            return;
+        $count   = -1;
+        if (!empty($tableName) && $this->connection->createSchemaManager()->tablesExist([$tableName])) {
+            $count = $this->connection
+                ->createQueryBuilder()
+                ->select('COUNT(t.id) AS itemCount')
+                ->from($tableName, 't')
+                ->executeQuery()
+                ->fetchOne();
         }
 
         // Keep the previous label.
-        $label = vsprintf($event->getLabel(), $event->getArgs());
+        $label = \vsprintf($event->getLabel(), $event->getArgs());
         $image = ((bool) $model->getProperty('translated')) ? 'locale.png' : 'locale_1.png';
-        $count = $this->connection
-            ->createQueryBuilder()
-            ->select('COUNT(t.id) AS itemCount')
-            ->from($tableName, 't')
-            ->execute()
-            ->fetchColumn();
 
-        switch ($count) {
-            case 0:
-                $transId = 'tl_metamodel.itemFormatCount.0';
-                break;
-            case 1:
-                $transId = 'tl_metamodel.itemFormatCount.1';
-                break;
-            default:
-                $transId = 'tl_metamodel.itemFormatCount.2:';
-        }
-
+        /** @psalm-suppress InvalidArgument */
         $event
             ->setLabel('
     <span class="name">
@@ -115,7 +107,7 @@ class ModelToLabelListener extends AbstractAbstainingListener
                 $image,
                 $label,
                 $tableName,
-                $this->translator->trans($transId, [$count], 'contao_tl_metamodel')
+                $this->translator->trans('itemFormatCount.label', ['%count%' => $count], 'tl_metamodel')
             ]);
     }
 }

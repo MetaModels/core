@@ -26,46 +26,10 @@
  * @filesource
  */
 
-// Preserve values by extensions but insert as first entry after 'system'.
-$arrOld = isset($GLOBALS['BE_MOD']['metamodels']) ? $GLOBALS['BE_MOD']['metamodels'] : array();
-unset($GLOBALS['BE_MOD']['metamodels']);
-array_insert(
-    $GLOBALS['BE_MOD'],
-    (array_search('accounts', array_keys($GLOBALS['BE_MOD'])) + 1),
-    array
-    (
-        'metamodels' => array_replace_recursive(
-            array
-            (
-                'metamodels' => array
-                (
-                    'tables' => array
-                    (
-                        'tl_metamodel',
-                        'tl_metamodel_attribute',
-                        'tl_metamodel_filter',
-                        'tl_metamodel_filtersetting',
-                        'tl_metamodel_rendersettings',
-                        'tl_metamodel_rendersetting',
-                        'tl_metamodel_dca_sortgroup',
-                        'tl_metamodel_dca',
-                        'tl_metamodel_dcasetting',
-                        'tl_metamodel_dca_combine',
-                        'tl_metamodel_dcasetting_condition',
-                        'tl_metamodel_searchable_pages'
-                    ),
-                    'icon'                  => 'bundles/metamodelscore/images/backend/logo.png',
-                    'callback'              => 'MetaModels\BackendIntegration\Module'
-                )
-            ),
-            // Append all previous data here.
-            $arrOld
-        )
-    )
-);
+$container = \Contao\System::getContainer();
 
 // @deprecated Use the config parameter metamodels.system_columns instead.
-$GLOBALS['METAMODELS_SYSTEM_COLUMNS'] = \Contao\System::getContainer()->getParameter('metamodels.system_columns');
+$GLOBALS['METAMODELS_SYSTEM_COLUMNS'] = $container->getParameter('metamodels.system_columns');
 
 // Front-end modules.
 $GLOBALS['FE_MOD']['metamodels']['metamodels_frontendfilter']   = 'MetaModels\FrontendIntegration\Module\Filter';
@@ -86,10 +50,10 @@ $GLOBALS['TL_HOOKS']['outputFrontendTemplate'][] =
     array('MetaModels\FrontendIntegration\FrontendFilter', 'generateClearAll');
 
 // Add cache only if dir defined in container (and therefore we are using the cache).
-if ($cacheDir = \Contao\System::getContainer()->getParameter('metamodels.cache_dir')) {
+if ($cacheDir = $container->getParameter('metamodels.cache_dir')) {
     // We need to translate the cache dir - otherwise the backend view is distorted. See \Contao\PurgeData::run().
     $GLOBALS['TL_PURGE']['folders']['metamodels']['affected'] = [str_replace(
-        \Contao\System::getContainer()->getParameter('kernel.cache_dir') . '/',
+        $container->getParameter('kernel.cache_dir') . '/',
         '%s/',
         $cacheDir
     )];
@@ -114,7 +78,7 @@ $GLOBALS['METAMODELS']['metainformation']['allowedDescription'][] = 'longtext';
 $GLOBALS['METAMODELS']['metainformation']['allowedDescription'][] = 'translatedlongtext';
 $GLOBALS['METAMODELS']['metainformation']['allowedDescription'][] = 'combinedvalues';
 
-array_insert($GLOBALS['BE_FFL'], 15, array
+\Contao\ArrayUtil::arrayInsert($GLOBALS['BE_FFL'], 15, array
 (
     'mm_subdca'    => 'MetaModels\Widgets\SubDcaWidget'
 ));

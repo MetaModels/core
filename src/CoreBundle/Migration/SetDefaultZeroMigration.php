@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@
  * @package    MetaModels/core
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2021 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -25,6 +25,7 @@ namespace MetaModels\CoreBundle\Migration;
 use Contao\CoreBundle\Migration\AbstractMigration;
 use Contao\CoreBundle\Migration\MigrationResult;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Schema\Table;
 
 /**
@@ -94,6 +95,7 @@ class SetDefaultZeroMigration extends AbstractMigration
      * - default zero values for system columns values not set.
      *
      * @return bool
+     * @throws Exception
      */
     public function shouldRun(): bool
     {
@@ -109,6 +111,7 @@ class SetDefaultZeroMigration extends AbstractMigration
      * Collect the columns to be updated and update them.
      *
      * @return MigrationResult
+     * @throws Exception
      */
     public function run(): MigrationResult
     {
@@ -121,13 +124,14 @@ class SetDefaultZeroMigration extends AbstractMigration
             }
         }
 
-        return new MigrationResult(true, 'Adjusted column(s): ' . implode(', ', $message));
+        return new MigrationResult(true, 'Adjusted column(s): ' . \implode(', ', $message));
     }
 
     /**
      * Fetch all columns that are not nullable yet.
      *
      * @return array<string, array<string, TColumnInformation>>
+     * @throws Exception
      */
     private function fetchNonDefaultZeroColumns(): array
     {
@@ -135,14 +139,14 @@ class SetDefaultZeroMigration extends AbstractMigration
         if (empty($tables)) {
             return [];
         }
-        $schemaManager = $this->connection->getSchemaManager();
+        $schemaManager = $this->connection->createSchemaManager();
 
         $result = [];
         foreach ($tables as $tableName) {
             $columns = $schemaManager->listTableColumns($tableName);
             foreach ($columns as $column) {
                 $columnName = $column->getName();
-                if (!array_key_exists($columnName, self::COLUMN_NAMES)) {
+                if (!\array_key_exists($columnName, self::COLUMN_NAMES)) {
                     continue;
                 }
                 $default = self::COLUMN_NAMES[$columnName]['default'];
@@ -162,26 +166,23 @@ class SetDefaultZeroMigration extends AbstractMigration
      * Obtain the names of table columns.
      *
      * @return list<string>
+     * @throws Exception
      */
     private function fetchTableNames(): array
     {
-        return array_map(
-            function (Table $table): string {
-                return $table->getName();
-            },
-            array_filter(
-                $this
-                    ->connection
-                    ->getSchemaManager()
-                    ->listTables(),
-                function (Table $table): bool {
-                    return 'mm_' === substr($table->getName(), 0, 3);
-                }
+        return \array_values(
+            \array_map(
+                static fn (Table $table): string => $table->getName(),
+                \array_filter(
+                    $this->connection->createSchemaManager()->listTables(),
+                    static fn (Table $table): bool => \str_starts_with($table->getName(), 'mm_')
+                )
             )
         );
     }
 
     // @codingStandardsIgnoreStart
+
     /**
      * Fix a table column.
      *
@@ -190,16 +191,17 @@ class SetDefaultZeroMigration extends AbstractMigration
      * @param TColumnInformation $information The column information.
      *
      * @return void
+     * @throws Exception
      */
     private function fixColumn(string $tableName, string $columnName, array $information): void
     {
         $this->connection->executeQuery(
-            sprintf(
+            \sprintf(
                 'ALTER TABLE `%1$s` CHANGE COLUMN `%2$s` `%2$s` %3$s NOT NULL DEFAULT %4$s',
                 $tableName,
                 $columnName,
                 $information['type'],
-                var_export($information['default'], true),
+                \var_export($information['default'], true),
             )
         );
     }

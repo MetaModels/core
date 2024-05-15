@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2021 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -26,6 +26,8 @@ use Contao\Widget;
 
 /**
  * Form field with more than 1 input, based on form field by Leo Feyer.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class MultiTextWidget extends Widget
 {
@@ -47,7 +49,6 @@ class MultiTextWidget extends Widget
      * Add specific attributes.
      *
      * @param string $strKey   Name of the key to set.
-     *
      * @param mixed  $varValue The value to use.
      *
      * @return void
@@ -89,8 +90,8 @@ class MultiTextWidget extends Widget
      */
     protected function validator($varInput)
     {
-        if (is_array($varInput)) {
-            $value = array();
+        if (\is_array($varInput)) {
+            $value = [];
             foreach ($varInput as $key => $input) {
                 $value[$key] = parent::validator($input);
             }
@@ -110,16 +111,17 @@ class MultiTextWidget extends Widget
     public function generate()
     {
         $return = '';
+        /** @psalm-suppress UndefinedThisPropertyFetch */
         for ($i = 0; $i < $this->size; $i++) {
-            $return .= sprintf(
+            $return .= \sprintf(
                 '<input type="%s" name="%s[]" id="ctrl_%s_%s" class="text%s%s" value="%s"%s%s',
                 'text',
                 $this->strName,
                 $this->strId,
                 $i,
                 '',
-                (strlen($this->strClass) ? ' ' . $this->strClass : ''),
-                StringUtil::specialchars($this->varValue[$i]),
+                (\strlen($this->strClass) ? ' ' . $this->strClass : ''),
+                StringUtil::specialchars($this->varValue[$i] ?? ''),
                 $this->getAttributes(),
                 $this->strTagEnding
             );

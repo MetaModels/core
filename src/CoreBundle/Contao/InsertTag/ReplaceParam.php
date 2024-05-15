@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@
  * @author     Oliver Hoff <oliver@hofff.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -27,8 +27,10 @@ declare(strict_types=1);
 namespace MetaModels\CoreBundle\Contao\InsertTag;
 
 use Contao\CoreBundle\Framework\Adapter;
+use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\Input;
-use Contao\Session;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
 
 /**
  * This replaces the insert tag param.
@@ -36,29 +38,36 @@ use Contao\Session;
 final class ReplaceParam
 {
     /**
-     * The input.
+     * The input framework.
      *
-     * @var Input
+     * @var ContaoFramework
      */
-    private $input;
+    private ContaoFramework $framework;
 
     /**
-     * The session.
+     * The adapter.
      *
-     * @var Session
+     * @var Adapter|null
      */
-    private $session;
+    private ?Adapter $input = null;
+
+    /**
+     * The request stack.
+     *
+     * @var RequestStack
+     */
+    private RequestStack $requestStack;
 
     /**
      * ReplaceParam constructor.
      *
-     * @param Adapter $input   The input.
-     * @param Session $session The session.
+     * @param ContaoFramework $framework    The input framework.
+     * @param RequestStack    $requestStack The session.
      */
-    public function __construct(Adapter $input, Session $session)
+    public function __construct(ContaoFramework $framework, RequestStack $requestStack)
     {
-        $this->input   = $input;
-        $this->session = $session;
+        $this->framework    = $framework;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -71,7 +80,9 @@ final class ReplaceParam
      */
     public function replace(string $content): ?string
     {
-        if (false === \strpos($content, '{{')
+        $tags = [];
+        if (
+            !\str_contains($content, '{{')
             || !($tags = preg_split('@\{\{(.*)\}\}@', $content, -1, PREG_SPLIT_DELIM_CAPTURE))
             || (\count($tags) < 2)
         ) {
@@ -80,7 +91,8 @@ final class ReplaceParam
 
         $newContent = null;
         foreach ($tags as $tag) {
-            if (!(2 === \count($chunks = \explode('::', $tag, 2)))
+            if (
+                !(2 === \count($chunks = \explode('::', $tag, 2)))
                 || !('param' === $chunks[0])
                 || !($this->isParameterSupported($chunks[1], ['get', 'post', 'cookie', 'session', 'filter']))
             ) {
@@ -96,28 +108,33 @@ final class ReplaceParam
     /**
      * Replace the insert tag with the input value.
      *
-     * @param array       $chunks  The chunks.
-     * @param string|null $content The content.
-     * @param string      $tag     The tag.
+     * @param list<string> $chunks  The chunks.
+     * @param string|null  $content The content.
+     * @param string       $tag     The tag.
      *
      * @return string|null
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function replaceInputParameter(array $chunks, ?string $content, string $tag): ?string
     {
-        if ((null === $content)
-            || !($this->isParameterSupported($chunks[1], ['get', 'post', 'cookie']))
-            || !($arguments = $this->splitParameter($chunks[1]))
-        ) {
+        if (null === ($arguments = $this->getArguments($chunks[1], $content, ['get', 'post', 'cookie']))) {
             return $content;
         }
+        assert(\is_string($content));
 
-        if ((false === \strpos($tag, '&default='))) {
+        if (null === $this->input) {
+            /** @psalm-suppress InternalMethod - Class ContaoFramework is internal, not the getAdapter() method. */
+            $this->input = $this->framework->getAdapter(Input::class);
+        }
+
+        if ((!\str_contains($tag, '&default='))) {
             if (null === ($result = $this->input->{$arguments[0]}($arguments[1]))) {
                 return null;
             }
             return \str_replace(
                 '{{' . $tag . '}}',
-                \is_array($result) ? \serialize($result) : $result,
+                \is_array($result) ? \serialize($result) : ($result ?? ''),
                 $content
             );
         }
@@ -125,7 +142,7 @@ final class ReplaceParam
         $result = ($this->input->{$arguments[0]}($arguments[1]) ?: $arguments[2]);
         return \str_replace(
             '{{' . $tag . '}}',
-            \is_array($result) ? \serialize($result) : $result,
+            \is_array($result) ? \serialize($result) : ($result ?? ''),
             $content
         );
     }
@@ -133,23 +150,24 @@ final class ReplaceParam
     /**
      * Replace the insert tag with the session value.
      *
-     * @param array       $chunks  The chunks.
-     * @param string|null $content The content.
-     * @param string      $tag     The tag.
+     * @param list<string> $chunks  The chunks.
+     * @param string|null  $content The content.
+     * @param string       $tag     The tag.
      *
      * @return string|null
      */
     private function replaceSessionParameter(array $chunks, ?string $content, string $tag): ?string
     {
-        if ((null === $content)
-            || !($this->isParameterSupported($chunks[1], ['session']))
-            || !($arguments = $this->splitParameter($chunks[1]))
-        ) {
+        if (null === ($arguments = $this->getArguments($chunks[1], $content, ['session']))) {
             return $content;
         }
+        assert(\is_string($content));
 
-        if ((false === \strpos($tag, '&default='))) {
-            $result = $this->session->get($arguments[1]);
+        $sessionBag = $this->requestStack->getSession()->getBag('contao_frontend');
+        assert($sessionBag instanceof AttributeBagInterface);
+
+        if ((!\str_contains($tag, '&default='))) {
+            $result = $sessionBag->get($arguments[1]);
             return \str_replace(
                 '{{' . $tag . '}}',
                 \is_array($result) ? \serialize($result) : (string) $result,
@@ -157,7 +175,7 @@ final class ReplaceParam
             );
         }
 
-        $result = ($this->session->get($arguments[1]) ?: $arguments[2]);
+        $result = ($sessionBag->get($arguments[1]) ?: $arguments[2]);
         return \str_replace(
             '{{' . $tag . '}}',
             \is_array($result) ? \serialize($result) : (string) $result,
@@ -166,21 +184,40 @@ final class ReplaceParam
     }
 
     /**
+     * @param list<string> $supported
+     *
+     * @return list<string>|null
+     */
+    private function getArguments(string $chunk, ?string $content, array $supported): ?array
+    {
+        if ((null === $content) || !$this->isParameterSupported($chunk, $supported)) {
+            return null;
+        }
+        $arguments = $this->splitParameter($chunk);
+        if ((null === $arguments) || ([] === $arguments)) {
+            return null;
+        }
+
+        return $arguments;
+    }
+
+    /**
      * Split the parameter.
      *
      * @param string $parameter The parameter.
      *
-     * @return array|null
+     * @return list<string>|null
      */
     private function splitParameter(string $parameter): ?array
     {
-        if ((2 !== \count($chunks = \explode('?', $parameter)))
-            || (0 !== \strpos($chunks[1], 'name='))
+        if (
+            (2 !== \count($chunks = \explode('?', $parameter)))
+            || (!\str_starts_with($chunks[1], 'name='))
         ) {
             return null;
         }
 
-        if (false === \strpos($chunks[1], '&default=')) {
+        if (!\str_contains($chunks[1], '&default=')) {
             return [$chunks[0], \substr($chunks[1], \strlen('name='))];
         }
 
@@ -203,7 +240,7 @@ final class ReplaceParam
     {
         $isSupported = false;
         foreach ($supported as $name) {
-            if (0 !== \strpos($parameter, $name)) {
+            if (!\str_starts_with($parameter, $name)) {
                 continue;
             }
 

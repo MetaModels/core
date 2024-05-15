@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext"
+        original="src/CoreBundle/Resources/translations/metamodels_navigation.en.xlf">
+    <body>
+      <trans-unit id="menuGroup.metamodels.label" resname="menuGroup.metamodels.label">
+        <source>MetaModels</source>
+      </trans-unit>
+      <trans-unit id="menu.metamodels.label" resname="menu.metamodels.label">
+        <source>MetaModels</source>
+      </trans-unit>
+      <trans-unit id="menu.metamodels.title" resname="menu.metamodels.title">
+        <source>The MetaModels extension allows you to create own data models.</source>
+      </trans-unit>
+      <trans-unit id="metamodel" resname="metamodel">
+        <source>MetaModels</source>
+      </trans-unit>
+      <trans-unit id="metamodel_attribute" resname="metamodel_attribute">
+        <source>Attributes of "%s"</source>
+      </trans-unit>
+      <trans-unit id="metamodel_rendersettings" resname="metamodel_rendersettings">
+        <source>All render setting of "%s"</source>
+      </trans-unit>
+      <trans-unit id="metamodel_rendersetting" resname="metamodel_rendersetting">
+        <source>Render settings in "%s"</source>
+      </trans-unit>
+      <trans-unit id="metamodel_dca_sortgroup" resname="metamodel_dca_sortgroup">
+        <source>Sorting and grouping in "%s"</source>
+      </trans-unit>
+      <trans-unit id="metamodel_dca" resname="metamodel_dca">
+        <source>All input screens of "%s"</source>
+      </trans-unit>
+      <trans-unit id="metamodel_dcasetting" resname="metamodel_dcasetting">
+        <source>Input screens in "%s"</source>
+      </trans-unit>
+      <trans-unit id="metamodel_dca_combine" resname="metamodel_dca_combine">
+        <source>Input screen and render setting combination for "%s"</source>
+      </trans-unit>
+      <trans-unit id="metamodel_dcasetting_condition" resname="metamodel_dcasetting_condition">
+        <source>Visibility conditions for attribute "%s"</source>
+      </trans-unit>
+      <trans-unit id="metamodel_filter" resname="metamodel_filter">
+        <source>All filter of "%s"</source>
+      </trans-unit>
+      <trans-unit id="metamodel_filtersetting" resname="metamodel_filtersetting">
+        <source>Filter settings in "%s"</source>
+      </trans-unit>
+      <trans-unit id="metamodel_searchable_pages" resname="metamodel_searchable_pages">
+        <source>All indexes of "%s"</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

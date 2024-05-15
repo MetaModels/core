@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext"
+        original="src/CoreBundle/Resources/translations/tl_metamodel_rendersetting.en.xlf">
+    <body>
+      <trans-unit id="backend-module.headline" resname="backend-module.headline">
+        <source>All render setting settings</source>
+      </trans-unit>
+      <trans-unit id="id.label" resname="id.label">
+        <source>Id</source>
+      </trans-unit>
+      <trans-unit id="pid.label" resname="pid.label">
+        <source>Pid</source>
+      </trans-unit>
+      <trans-unit id="tstamp.label" resname="tstamp.label">
+        <source>Revision date</source>
+      </trans-unit>
+      <trans-unit id="sorting.label" resname="sorting.label">
+        <source>Sorting</source>
+      </trans-unit>
+      <trans-unit id="new.label" resname="new.label">
+        <source>New attribute</source>
+      </trans-unit>
+      <trans-unit id="new.description" resname="new.description">
+        <source>Add a new attribute for render setting</source>
+      </trans-unit>
+      <trans-unit id="all.label" resname="all.label">
+        <source>Edit multiple</source>
+      </trans-unit>
+      <trans-unit id="all.description" resname="all.description">
+        <source>Edit multiple elements at once</source>
+      </trans-unit>
+      <trans-unit id="pastenew.label" resname="pastenew.label">
+        <source>Create a new element at the top</source>
+      </trans-unit>
+      <trans-unit id="pastenew.description" resname="pastenew.description">
+        <source>Create a new element after element ID %id%</source>
+      </trans-unit>
+      <trans-unit id="pasteafter.label" resname="pasteafter.label">
+        <source>Paste at the top</source>
+      </trans-unit>
+      <trans-unit id="pasteafter.description" resname="pasteafter.description">
+        <source>Paste after element ID %id%</source>
+      </trans-unit>
+      <trans-unit id="backBT" resname="backBT">
+        <source>Go back</source>
+      </trans-unit>
+      <trans-unit id="backBTTitle" resname="backBTTitle">
+        <source>Back to the previous page</source>
+      </trans-unit>
+      <trans-unit id="continue" resname="continue">
+        <source>Continue</source>
+      </trans-unit>
+      <trans-unit id="selectAll" resname="selectAll">
+        <source>Select all</source>
+      </trans-unit>
+      <trans-unit id="save" resname="save">
+        <source>Save</source>
+      </trans-unit>
+      <trans-unit id="saveNclose" resname="saveNclose">
+        <source>Save and close</source>
+      </trans-unit>
+      <trans-unit id="saveNcreate" resname="saveNcreate">
+        <source>Save and new</source>
+      </trans-unit>
+      <trans-unit id="saveNback" resname="saveNback">
+        <source>Save and go back</source>
+      </trans-unit>
+      <trans-unit id="editRecord" resname="editRecord">
+        <source>Edit record %id%</source>
+      </trans-unit>
+      <trans-unit id="attr_id.label" resname="attr_id.label">
+        <source>Attribute</source>
+      </trans-unit>
+      <trans-unit id="attr_id.description" resname="attr_id.description">
+        <source>Attribute this setting relates to.</source>
+      </trans-unit>
+      <trans-unit id="template.label" resname="template.label">
+        <source>Custom template to use for generating</source>
+      </trans-unit>
+      <trans-unit id="template.description" resname="template.description">
+        <source>Select the template that shall be used for the selected attribute. Valid template files start with "mm_&amp;lt;type&amp;gt;"
+          where the type name is put for &amp;lt;type&amp;gt;
+        </source>
+      </trans-unit>
+      <trans-unit id="additional_class.label" resname="additional_class.label">
+        <source>Custom CSS class</source>
+      </trans-unit>
+      <trans-unit id="additional_class.description" resname="additional_class.description">
+        <source>Enter any CSS classes that you want get added to the output of this attribute</source>
+      </trans-unit>
+      <trans-unit id="title_legend" resname="title_legend">
+        <source>Type</source>
+      </trans-unit>
+      <trans-unit id="advanced_legend" resname="advanced_legend">
+        <source>Advanced</source>
+      </trans-unit>
+      <trans-unit id="edit.label" resname="edit.label">
+        <source>Edit setting</source>
+      </trans-unit>
+      <trans-unit id="edit.description" resname="edit.description">
+        <source>Edit render setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="cut.label" resname="cut.label">
+        <source>Cut render setting definition</source>
+      </trans-unit>
+      <trans-unit id="cut.description" resname="cut.description">
+        <source>Cut the render setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="copy.label" resname="copy.label">
+        <source>Copy render setting definition</source>
+      </trans-unit>
+      <trans-unit id="copy.description" resname="copy.description">
+        <source>Copy the render setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="delete.label" resname="delete.label">
+        <source>Delete render setting</source>
+      </trans-unit>
+      <trans-unit id="delete.description" resname="delete.description">
+        <source>Delete the render setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="delete.confirm" resname="delete.confirm">
+        <source>Do you really want to delete element ID %id%?</source>
+      </trans-unit>
+      <trans-unit id="show.label" resname="show.label">
+        <source>Render setting details</source>
+      </trans-unit>
+      <trans-unit id="show.description" resname="show.description">
+        <source>Show details of render setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="toggle.label" resname="toggle.label">
+        <source>Toggle</source>
+      </trans-unit>
+      <trans-unit id="toggle.description" resname="toggle.description">
+        <source>Toggle the state of render setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="addall.label" resname="addall.label">
+        <source>Add all</source>
+      </trans-unit>
+      <trans-unit id="addall.description" resname="addall.description">
+        <source>Add all attributes to render setting</source>
+      </trans-unit>
+      <trans-unit id="tl_metamodel_filtersetting.row" resname="tl_metamodel_filtersetting.row">
+        <source>%id% &lt;strong&gt;%id%&lt;/strong&gt; &lt;em&gt;[%id%]&lt;/em&gt;</source>
+      </trans-unit>
+      <trans-unit id="addAll_willadd" resname="addAll_willadd">
+        <source>Will add the attribute "%name%" [%type%, "%colName%"] to the input screen.</source>
+      </trans-unit>
+      <trans-unit id="addAll_alreadycontained" resname="addAll_alreadycontained">
+        <source>Attribute "%name%" [%type%, "%colName%"] is already contained in input screen.</source>
+      </trans-unit>
+      <trans-unit id="addAll_addsuccess" resname="addAll_addsuccess">
+        <source>Added the attribute "%name%" [%type%, "%colName%"] to the input screen.</source>
+      </trans-unit>
+      <trans-unit id="addAll_activate" resname="addAll_activate">
+        <source>Add new settings enabled.</source>
+      </trans-unit>
+      <trans-unit id="deleteConfirm" resname="deleteConfirm">
+        <source>Do you really want to render filter setting ID %id%?</source>
+      </trans-unit>
+      <trans-unit id="enabled.label" resname="enabled.label">
+        <source>Enabled</source>
+      </trans-unit>
+      <trans-unit id="enabled.description" resname="enabled.description">
+        <source>Enable this filter setting.</source>
+      </trans-unit>
+      <trans-unit id="showRecord" resname="showRecord">
+        <source>Show the details of record %id%</source>
+      </trans-unit>
+      <trans-unit id="closeAll.label" resname="closeAll.label">
+        <source>Cancel</source>
+      </trans-unit>
+      <trans-unit id="closeAll.description" resname="closeAll.description">
+        <source>Cancel multiple processing.</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,24 +13,27 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\Events;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * This event is triggered when a MetaModel id must get translated to a MetaModel name.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class GetMetaModelNameFromIdEvent extends Event
 {
     /**
      * The event name.
      */
-    const NAME = 'metamodels.metamodel.get-metamodel-name-from-id';
+    public const NAME = 'metamodels.metamodel.get-metamodel-name-from-id';
 
     /**
      * The MetaModel id to be translated.
@@ -42,9 +45,9 @@ class GetMetaModelNameFromIdEvent extends Event
     /**
      * The name of the MetaModel.
      *
-     * @var string
+     * @var string|null
      */
-    protected $metaModelName;
+    protected $metaModelName = null;
 
     /**
      * Create a new instance.
@@ -69,7 +72,7 @@ class GetMetaModelNameFromIdEvent extends Event
     /**
      * Retrieve the MetaModel name.
      *
-     * @return string
+     * @return string|null
      */
     public function getMetaModelName()
     {

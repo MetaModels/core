@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext"
+        original="src/CoreBundle/Resources/translations/tl_metamodel_dca_combine.en.xlf">
+    <body>
+      <trans-unit id="backend-module.headline" resname="backend-module.headline">
+        <source>All input/output combinations</source>
+      </trans-unit>
+      <trans-unit id="save" resname="save">
+        <source>Save</source>
+      </trans-unit>
+      <trans-unit id="saveNclose" resname="saveNclose">
+        <source>Save and close</source>
+      </trans-unit>
+      <trans-unit id="saveNcreate" resname="saveNcreate">
+        <source>Save and new</source>
+      </trans-unit>
+      <trans-unit id="saveNback" resname="saveNback">
+        <source>Save and go back</source>
+      </trans-unit>
+      <trans-unit id="backBT" resname="backBT">
+        <source>Go back</source>
+      </trans-unit>
+      <trans-unit id="backBTTitle" resname="backBTTitle">
+        <source>Back to the previous page</source>
+      </trans-unit>
+      <trans-unit id="editRecord" resname="editRecord">
+        <source>Edit record %id%</source>
+      </trans-unit>
+      <trans-unit id="dca_combiner_legend" resname="dca_combiner_legend">
+        <source>Combination configuration</source>
+      </trans-unit>
+      <trans-unit id="dca_combiner.label" resname="dca_combiner.label">
+        <source>Permissions for input screen and views</source>
+      </trans-unit>
+      <trans-unit id="dca_combiner.description" resname="dca_combiner.description">
+        <source>For selected frontend user group (if any) and selected backend user group (if any) use the selected
+          palette and the selected view.
+        </source>
+      </trans-unit>
+      <trans-unit id="fe_group.label" resname="fe_group.label">
+        <source>Frontend group</source>
+      </trans-unit>
+      <trans-unit id="fe_group.description" resname="fe_group.description">
+        <source>The frontend user group the combination applies to; * is 'catch all'.</source>
+      </trans-unit>
+      <trans-unit id="be_group.label" resname="be_group.label">
+        <source>Backend group</source>
+      </trans-unit>
+      <trans-unit id="be_group.description" resname="be_group.description">
+        <source>The backend user group the combination applies to; * is 'catch all'.</source>
+      </trans-unit>
+      <trans-unit id="dca_id.label" resname="dca_id.label">
+        <source>Input screen</source>
+      </trans-unit>
+      <trans-unit id="dca_id.description" resname="dca_id.description">
+        <source>The input screen the combination applies to.</source>
+      </trans-unit>
+      <trans-unit id="view_id.label" resname="view_id.label">
+        <source>Render setting</source>
+      </trans-unit>
+      <trans-unit id="view_id.description" resname="view_id.description">
+        <source>The view the combination applies to.</source>
+      </trans-unit>
+      <trans-unit id="sysadmin" resname="sysadmin">
+        <source>Administrator</source>
+      </trans-unit>
+      <trans-unit id="anonymous" resname="anonymous">
+        <source>Anonymous</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

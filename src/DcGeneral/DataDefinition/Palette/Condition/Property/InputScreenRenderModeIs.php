@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -30,12 +30,15 @@ use ContaoCommunityAlliance\DcGeneral\Data\PropertyValueBag;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\LegendInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PropertyInterface;
-use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\MetaModelsServiceContainer;
 
 /**
  * Condition for the default palette.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 class InputScreenRenderModeIs implements PropertyConditionInterface
 {
@@ -58,13 +61,12 @@ class InputScreenRenderModeIs implements PropertyConditionInterface
      *
      * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * Create a new instance.
      *
      * @param string          $desiredState The desired state.
-     *
      * @param Connection|null $connection   Database connection.
      */
     public function __construct($desiredState, Connection $connection = null)
@@ -79,8 +81,8 @@ class InputScreenRenderModeIs implements PropertyConditionInterface
             );
             // @codingStandardsIgnoreEnd
             $connection = System::getContainer()->get('database_connection');
+            assert($connection instanceof Connection);
         }
-
         $this->connection = $connection;
     }
 
@@ -114,20 +116,26 @@ class InputScreenRenderModeIs implements PropertyConditionInterface
      * @param int $value The id of an input screen.
      *
      * @return string
+     *
+     * @throws Exception
      */
     public function getInputScreenRenderMode($value)
     {
         if (!isset(self::$stateBuffer[$value])) {
-            $statement =$this->connection
+            $statement = $this->connection
                 ->createQueryBuilder()
                 ->select('t.rendermode')
                 ->from('tl_metamodel_dca', 't')
                 ->where('t.id=:id')
                 ->setParameter('id', $value)
                 ->setMaxResults(1)
-                ->execute();
+                ->executeQuery();
 
-            self::$stateBuffer[$value] = $statement->fetch(\PDO::FETCH_OBJ)->rendermode;
+            if (false === ($result = $statement->fetchAssociative())) {
+                return new Exception('Failed to load attribute for input screen setting.');
+            }
+
+            self::$stateBuffer[$value] = $result['rendermode'];
         }
 
         return self::$stateBuffer[$value];
@@ -166,9 +174,15 @@ class InputScreenRenderModeIs implements PropertyConditionInterface
      * @return IMetaModelsServiceContainer
      *
      * @deprecated
+     *
+     * @psalm-suppress DeprecatedInterface
      */
     protected function getServiceContainer(): IMetaModelsServiceContainer
     {
-        return System::getContainer()->get(MetaModelsServiceContainer::class);
+        /** @psalm-suppress DeprecatedClass */
+        $serviceContainer = System::getContainer()->get(MetaModelsServiceContainer::class);
+        assert($serviceContainer instanceof IMetaModelsServiceContainer);
+
+        return $serviceContainer;
     }
 }

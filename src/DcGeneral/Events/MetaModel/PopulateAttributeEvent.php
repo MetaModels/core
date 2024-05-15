@@ -33,7 +33,7 @@ class PopulateAttributeEvent extends AbstractEnvironmentAwareEvent
     /**
      * The event name.
      */
-    const NAME = 'metamodels.dc-general.events.metamodel.populate.attribute';
+    public const NAME = 'metamodels.dc-general.events.metamodel.populate.attribute';
 
     /**
      * The Attribute.

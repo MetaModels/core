@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2020 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -23,6 +24,8 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\FilterSetting;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
+use MetaModels\Attribute\IAttribute;
 use MetaModels\CoreBundle\Formatter\SelectAttributeOptionLabelFormatter;
 use MetaModels\Filter\Setting\IFilterSettingFactory;
 
@@ -36,27 +39,27 @@ class AttributeListener
      *
      * @var IFilterSettingFactory
      */
-    private $filterFactory;
+    private IFilterSettingFactory $filterFactory;
 
     /**
      * The attribute select option label formatter.
      *
      * @var SelectAttributeOptionLabelFormatter
      */
-    private $attributeLabelFormatter;
+    private SelectAttributeOptionLabelFormatter $labelFormatter;
 
     /**
      * Create a new instance.
      *
-     * @param IFilterSettingFactory               $filterFactory           The filter setting factory.
-     * @param SelectAttributeOptionLabelFormatter $attributeLabelFormatter The attribute select option label formatter.
+     * @param IFilterSettingFactory               $filterFactory  The filter setting factory.
+     * @param SelectAttributeOptionLabelFormatter $labelFormatter The attribute select option label formatter.
      */
     public function __construct(
         IFilterSettingFactory $filterFactory,
-        SelectAttributeOptionLabelFormatter $attributeLabelFormatter
+        SelectAttributeOptionLabelFormatter $labelFormatter
     ) {
-        $this->filterFactory           = $filterFactory;
-        $this->attributeLabelFormatter = $attributeLabelFormatter;
+        $this->filterFactory  = $filterFactory;
+        $this->labelFormatter = $labelFormatter;
     }
 
     /**
@@ -66,10 +69,16 @@ class AttributeListener
      *
      * @return void
      */
-    public function getOptions(GetPropertyOptionsEvent $event)
+    public function getOptions(GetPropertyOptionsEvent $event): void
     {
-        if (('tl_metamodel_filtersetting' !== $event->getEnvironment()->getDataDefinition()->getName())
-            || ('attr_id' !== $event->getPropertyName())) {
+        $dataDefinition = $event->getEnvironment()->getDataDefinition();
+        assert($dataDefinition instanceof ContainerInterface);
+
+        if (
+            ('tl_metamodel_filtersetting' !== $dataDefinition->getName())
+            || ('attr_id' !== $event->getPropertyName())
+            || null !== $event->getOptions()
+        ) {
             return;
         }
 
@@ -84,12 +93,12 @@ class AttributeListener
         }
 
         foreach ($metaModel->getAttributes() as $attribute) {
-            if ($typeFilter && (!in_array($attribute->get('type'), $typeFilter))) {
+            if (null !== $typeFilter && (!\in_array((string) $attribute->get('type'), $typeFilter))) {
                 continue;
             }
 
-            $strSelectVal          = $metaModel->getTableName() .'_' . $attribute->getColName();
-            $result[$strSelectVal] = $this->attributeLabelFormatter->formatLabel($attribute);
+            $strSelectVal          = $metaModel->getTableName() . '_' . $attribute->getColName();
+            $result[$strSelectVal] = $this->labelFormatter->formatLabel($attribute);
         }
 
         $event->setOptions($result);
@@ -102,10 +111,15 @@ class AttributeListener
      *
      * @return void
      */
-    public function decodeValue(DecodePropertyValueForWidgetEvent $event)
+    public function decodeValue(DecodePropertyValueForWidgetEvent $event): void
     {
-        if (('tl_metamodel_filtersetting' !== $event->getEnvironment()->getDataDefinition()->getName())
-            || ('attr_id' !== $event->getProperty())) {
+        $dataDefinition = $event->getEnvironment()->getDataDefinition();
+        assert($dataDefinition instanceof ContainerInterface);
+
+        if (
+            ('tl_metamodel_filtersetting' !== $dataDefinition->getName())
+            || ('attr_id' !== $event->getProperty())
+        ) {
             return;
         }
 
@@ -113,13 +127,13 @@ class AttributeListener
         $metaModel = $this->filterFactory->createCollection($model->getProperty('fid'))->getMetaModel();
         $value     = $event->getValue();
 
-        if (!($metaModel && $value)) {
+        if (!$value) {
             return;
         }
 
-        $attribute = $metaModel->getAttributeById($value);
+        $attribute = $metaModel->getAttributeById((int) $value);
         if ($attribute) {
-            $event->setValue($metaModel->getTableName() .'_' . $attribute->getColName());
+            $event->setValue($metaModel->getTableName() . '_' . $attribute->getColName());
         }
     }
 
@@ -130,10 +144,15 @@ class AttributeListener
      *
      * @return void
      */
-    public function encodeValue(EncodePropertyValueFromWidgetEvent $event)
+    public function encodeValue(EncodePropertyValueFromWidgetEvent $event): void
     {
-        if (('tl_metamodel_filtersetting' !== $event->getEnvironment()->getDataDefinition()->getName())
-            || ('attr_id' !== $event->getProperty())) {
+        $dataDefinition = $event->getEnvironment()->getDataDefinition();
+        assert($dataDefinition instanceof ContainerInterface);
+
+        if (
+            ('tl_metamodel_filtersetting' !== $dataDefinition->getName())
+            || ('attr_id' !== $event->getProperty())
+        ) {
             return;
         }
 
@@ -141,16 +160,14 @@ class AttributeListener
         $metaModel = $this->filterFactory->createCollection($model->getProperty('fid'))->getMetaModel();
         $value     = $event->getValue();
 
-        if (!($metaModel && $value)) {
+        if (!$value) {
             return;
         }
 
-        $value = substr($value, strlen($metaModel->getTableName() . '_'));
+        $value = \substr($value, \strlen($metaModel->getTableName() . '_'));
 
         $attribute = $metaModel->getAttribute($value);
-
-        if ($attribute) {
-            $event->setValue($attribute->get('id'));
-        }
+        assert($attribute instanceof IAttribute);
+        $event->setValue($attribute->get('id'));
     }
 }

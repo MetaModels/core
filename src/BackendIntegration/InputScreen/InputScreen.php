@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -32,19 +32,30 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionInterface;
 use MetaModels\Events\CreatePropertyConditionEvent;
+use MetaModels\Helper\LocaleUtil;
 use MetaModels\IMetaModel;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\ITranslatedMetaModel;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Implementation of IInputScreen.
  *
+ * @psalm-import-type TLegend from IInputScreen
+ *
  * @deprecated This class will get removed.
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @psalm-suppress DeprecatedInterface
  */
 class InputScreen implements IInputScreen
 {
     /**
      * The service container.
+     *
+     * @psalm-suppress DeprecatedInterface
      *
      * @var IMetaModelsServiceContainer
      */
@@ -60,57 +71,55 @@ class InputScreen implements IInputScreen
     /**
      * The legends contained within the input screen.
      *
-     * @var array
+     * @var array<string, TLegend>
      */
-    protected $legends = array();
+    protected $legends = [];
 
     /**
      * The properties contained within the input screen.
      *
      * @var array
      */
-    protected $properties = array();
+    protected $properties = [];
 
     /**
      * The conditions.
      *
      * @var ConditionChainInterface[]
      */
-    protected $conditions = array();
+    protected $conditions = [];
 
     /**
      * Grouping and sorting information.
      *
-     * @var IInputScreenGroupingAndSorting[]
+     * @var list<IInputScreenGroupingAndSorting>
      */
-    protected $groupSort = array();
+    protected $groupSort = [];
 
     /**
      * Simple map from property setting id to property name.
      *
      * @var array
      */
-    protected $propertyMap = array();
+    protected $propertyMap = [];
 
     /**
      * Simple map from property name to property setting id.
      *
      * @var array
      */
-    protected $propertyMap2 = array();
+    protected $propertyMap2 = [];
 
     /**
      * Create a new instance.
      *
      * @param IMetaModelsServiceContainer $container    The service container.
-     *
      * @param array                       $data         The information about the input screen.
-     *
      * @param array                       $propertyRows The information about all contained properties.
-     *
      * @param array                       $conditions   The property condition information.
-     *
      * @param array                       $groupSort    The grouping and sorting information.
+     *
+     * @psalm-suppress DeprecatedInterface
      */
     public function __construct($container, $data, $propertyRows, $conditions, $groupSort)
     {
@@ -126,7 +135,6 @@ class InputScreen implements IInputScreen
      * Transform a legend information into the property legends.
      *
      * @param array      $legend    The legend to transform.
-     *
      * @param IMetaModel $metaModel The metamodel the legend belongs to.
      *
      * @return string
@@ -138,20 +146,19 @@ class InputScreen implements IInputScreen
     protected function translateLegend($legend, $metaModel)
     {
         $arrLegend = StringUtil::deserialize($legend['legendtitle']);
-        if (is_array($arrLegend)) {
-            $strLegend = $this->extractLegendName($arrLegend);
+        if (\is_array($arrLegend)) {
+            $strLegend = $this->extractLegendName($arrLegend, $metaModel);
         } else {
-            $strLegend = $legend['legendtitle'] ? $legend['legendtitle'] : 'legend';
+            $strLegend = $legend['legendtitle'] ?: 'legend';
         }
 
         $legendName = StringUtil::standardize($strLegend);
 
-        $this->legends[$legendName] = array
-        (
+        $this->legends[$legendName] = [
             'name'       => $strLegend,
             'visible'    => !(isset($legend['legendhide']) && (bool) $legend['legendhide']),
-            'properties' => array()
-        );
+            'properties' => []
+        ];
 
         return $legendName;
     }
@@ -170,14 +177,15 @@ class InputScreen implements IInputScreen
     private function extractLegendName(array $legend, IMetaModel $metaModel): string
     {
         // Current backend language.
-        $language = \str_replace('-', '_', $GLOBALS['TL_LANGUAGE']);
+        // @deprecated usage of TL_LANGUAGE - remove for Contao 5.0.
+        $language = LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE']);
         if (null !== ($result = $legend[$language] ?? null)) {
             return $result;
         }
         // Is it a regional locale?
-        if (false !== strpos($language, '_')) {
-            $chunks   = explode('_', $language);
-            $language = array_shift($chunks);
+        if (\str_contains($language, '_')) {
+            $chunks   = \explode('_', $language);
+            $language = \array_shift($chunks);
             unset($chunks);
             if (null !== ($result = $legend[$language] ?? null)) {
                 return $result;
@@ -186,33 +194,32 @@ class InputScreen implements IInputScreen
 
         // Try fallback language then.
         if ($metaModel instanceof ITranslatedMetaModel) {
-            if (null !== ($result = $legend[$metaModel->getMainLanguage()] ?? null)) {
+            if (null !== ($result = ($legend[$metaModel->getMainLanguage()] ?? null))) {
                 return $result;
             }
         } else {
-            if (null !== ($result = $legend[$metaModel->getFallbackLanguage()] ?? null)) {
+            /** @psalm-suppress DeprecatedMethod */
+            if (null !== ($result = ($legend[(string) $metaModel->getFallbackLanguage()] ?? null))) {
                 return $result;
             }
         }
 
         // Last resort, simply "legend". See issue #926.
-        return 'legend' . (count($this->legends) + 1);
+        return 'legend' . (\count($this->legends) + 1);
     }
 
     /**
      * Translate a property.
      *
      * @param array      $property  The property information to transform.
-     *
      * @param IMetaModel $metaModel The MetaModel the property belongs to.
-     *
      * @param string     $legend    The legend the property belongs to.
      *
      * @return bool
      */
     protected function translateProperty($property, $metaModel, $legend)
     {
-        $attribute = $metaModel->getAttributeById($property['attr_id']);
+        $attribute = $metaModel->getAttributeById((int) $property['attr_id']);
 
         // Dead meat.
         if (!$attribute) {
@@ -223,10 +230,9 @@ class InputScreen implements IInputScreen
 
         $this->legends[$legend]['properties'][] = $propName;
 
-        $this->properties[$propName] = array
-        (
-            'info'       => $attribute->getFieldDefinition($property),
-        );
+        $this->properties[$propName] = [
+            'info' => $attribute->getFieldDefinition($property),
+        ];
 
         return true;
     }
@@ -267,19 +273,19 @@ class InputScreen implements IInputScreen
     {
         $metaModel      = $this->getMetaModel();
         $activeLegend   = $this->translateLegend(
-            array('legendtitle' => $metaModel->getName(), 'legendhide' => false),
+            ['legendtitle' => $metaModel->getName(), 'legendhide' => false],
             $metaModel
         );
         $activeLegendId = null;
 
         // First pass, fetch all attribute names.
-        $columnNames = array();
+        $columnNames = [];
         foreach ($rows as $row) {
             if ($row['dcatype'] != 'attribute') {
                 continue;
             }
 
-            $attribute = $metaModel->getAttributeById($row['attr_id']);
+            $attribute = $metaModel->getAttributeById((int) $row['attr_id']);
             if ($attribute) {
                 $columnNames[$row['id']] = $attribute->getColName();
             }
@@ -299,7 +305,7 @@ class InputScreen implements IInputScreen
                 case 'attribute':
                     $exists = $this->translateProperty($row, $metaModel, $activeLegend);
 
-                    if ($exists && $activeLegendId) {
+                    if ($exists && null !== $activeLegendId) {
                         $this->applyLegendConditions($row['id'], $activeLegendId);
                     }
 
@@ -323,19 +329,25 @@ class InputScreen implements IInputScreen
     protected function transformCondition($condition)
     {
         $dispatcher = System::getContainer()->get('event_dispatcher');
-        $event      = new CreatePropertyConditionEvent($condition, $this->getMetaModel());
+        assert($dispatcher instanceof EventDispatcherInterface);
 
-        /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
+        /** @psalm-suppress DeprecatedClass */
+        $event = new CreatePropertyConditionEvent($condition, $this->getMetaModel());
+
+        /**
+         * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
+         * @psalm-suppress DeprecatedClass
+         */
         $dispatcher->dispatch($event, CreatePropertyConditionEvent::NAME);
 
-        if ($event->getInstance() === null) {
-            throw new \RuntimeException(sprintf(
+        if (($instance = $event->getInstance()) === null) {
+            throw new \RuntimeException(\sprintf(
                 'Condition of type %s could not be transformed to an instance.',
                 $condition['type']
             ));
         }
 
-        return $event->getInstance();
+        return $instance;
     }
 
     /**
@@ -348,14 +360,14 @@ class InputScreen implements IInputScreen
     protected function transformConditions($conditions)
     {
         // First pass, sort them into pid.
-        $sorted = array();
-        $byPid  = array();
-        foreach ($conditions as $i => $condition) {
-            $sorted[$condition['id']]   = $conditions[$i];
+        $sorted = [];
+        $byPid  = [];
+        foreach ($conditions as $condition) {
+            $sorted[$condition['id']]   = $condition;
             $byPid[$condition['pid']][] = $condition['id'];
         }
 
-        $instances = array();
+        $instances = [];
         // Second pass, handle them.
         foreach ($sorted as $id => $condition) {
             $instances[$id] = $this->transformCondition($condition);
@@ -370,7 +382,7 @@ class InputScreen implements IInputScreen
                 }
                 $result    = $this->conditions[$settingId];
                 $condition = $instances[$id];
-                $parent    = ($pid == 0) ? $result : $instances[$pid];
+                $parent    = ($pid === 0) ? $result : $instances[$pid];
 
                 // have other classes in the future.
                 if ($parent instanceof ConditionChainInterface) {
@@ -401,7 +413,7 @@ class InputScreen implements IInputScreen
      */
     public function getId()
     {
-        return $this->data['id'];
+        return (int) $this->data['id'];
     }
 
     /**
@@ -417,7 +429,7 @@ class InputScreen implements IInputScreen
      */
     public function getLegendNames()
     {
-        return array_keys($this->legends);
+        return \array_keys($this->legends);
     }
 
     /**
@@ -441,7 +453,7 @@ class InputScreen implements IInputScreen
      */
     public function getProperty($name)
     {
-        return isset($this->properties[$name]) ? $this->properties[$name] : null;
+        return $this->properties[$name];
     }
 
     /**
@@ -449,9 +461,9 @@ class InputScreen implements IInputScreen
      */
     public function getPropertyNames()
     {
-        $result = array();
+        $result = [];
         foreach ($this->getLegends() as $legend) {
-            $result = array_merge($result, $legend['properties']);
+            $result = \array_merge($result, $legend['properties']);
         }
 
         return $result;
@@ -463,7 +475,8 @@ class InputScreen implements IInputScreen
     public function getConditionsFor($name)
     {
         $property = $this->propertyMap2[$name];
-        return isset($this->conditions[$property]) ? $this->conditions[$property] : null;
+
+        return $this->conditions[$property] ?? null;
     }
 
     /**
@@ -481,12 +494,14 @@ class InputScreen implements IInputScreen
      */
     public function getMetaModel()
     {
+        /** @psalm-suppress DocblockTypeContradiction */
         if (null === $this->data) {
             throw new \RuntimeException(
                 'No input screen data available, did you forget to define the view combinations?'
             );
         }
 
+        /** @psalm-suppress DeprecatedMethod */
         $factory   = $this->container->getFactory();
         $metaModel = $factory->getMetaModel($factory->translateIdToMetaModelName($this->data['pid']));
 
@@ -507,7 +522,7 @@ class InputScreen implements IInputScreen
             return $this->data['backendicon'];
         }
 
-        return null;
+        return '';
     }
 
     /**
@@ -515,7 +530,7 @@ class InputScreen implements IInputScreen
      */
     public function getBackendSection()
     {
-        return trim($this->data['backendsection']);
+        return trim($this->data['backendsection'] ?? '');
     }
 
     /**
@@ -523,7 +538,7 @@ class InputScreen implements IInputScreen
      */
     public function getBackendCaption()
     {
-        return StringUtil::deserialize($this->data['backendcaption'], true);
+        return StringUtil::deserialize($this->data['backendcaption'] ?? [], true);
     }
 
     /**
@@ -531,7 +546,7 @@ class InputScreen implements IInputScreen
      */
     public function getParentTable()
     {
-        return $this->data['ptable'];
+        return $this->data['ptable'] ?? null;
     }
 
     /**
@@ -553,7 +568,7 @@ class InputScreen implements IInputScreen
             return 'hierarchical';
         }
 
-        return $this->data['rendermode'];
+        return $this->data['rendermode'] ?? '';
     }
 
     /**
@@ -609,7 +624,7 @@ class InputScreen implements IInputScreen
      */
     public function getPanelLayout()
     {
-        return $this->data['panelLayout'];
+        return $this->data['panelLayout'] ?? '';
     }
 
     /**

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,8 @@
  *
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2023 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -23,7 +24,6 @@ namespace MetaModels\InsertTag;
 
 use LogicException;
 
-use function preg_match;
 use function strlen;
 use function strpos;
 use function substr;
@@ -77,9 +77,7 @@ final class Parser
      */
     public static function parse(string $content): NodeList
     {
-        $instance = new self($content);
-
-        return $instance->parseInternal();
+        return (new self($content))->parseInternal();
     }
 
     /**
@@ -93,13 +91,11 @@ final class Parser
     {
         $buffer = [];
 
-        while (null !== $nextOpening = $this->findNextOpenTagPosition()) {
-            if (null !== $nextOpening) {
-                if ($nextOpening > $this->position) {
-                    $buffer[] = new LiteralNode($this->read($nextOpening - $this->position));
-                }
-                $buffer[] = $this->readTag();
+        while (null !== ($nextOpening = $this->findNextOpenTagPosition())) {
+            if ($nextOpening > $this->position) {
+                $buffer[] = new LiteralNode($this->read($nextOpening - $this->position));
             }
+            $buffer[] = $this->readTag();
         }
 
         if ($this->position < $this->length) {
@@ -122,6 +118,7 @@ final class Parser
         if (!$this->isAtOpening()) {
             throw new LogicException('Expected to be at opening of insert tag.');
         }
+
         $this->read(2);
         // Read anything up to the next open or close tag.
         $parts       = [];
@@ -138,11 +135,12 @@ final class Parser
         // Tag is closed, end here.
         if ($this->isAtClosing()) {
             $this->read(2);
+
             return new Node(...$parts);
         }
 
         // 2. a close tag => this tag is complete.
-        if ($nextClosing > $this->position) {
+        if ((null !== $nextClosing) && $nextClosing > $this->position) {
             $parts[] = new LiteralNode($this->read($nextClosing - $this->position));
         }
 
@@ -192,6 +190,7 @@ final class Parser
         if (false === $next = strpos($this->content, '{{', $this->position)) {
             return null;
         }
+
         return $next;
     }
 
@@ -205,6 +204,7 @@ final class Parser
         if (false === $next = strpos($this->content, '}}', $this->position)) {
             return null;
         }
+
         return $next;
     }
 

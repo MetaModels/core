@@ -1,20 +1,20 @@
+<?php
+$translator = \Contao\System::getContainer()->get('translator');
+?>
 <?php if ($this->items->getCount()): ?>
     <div class="layout_full">
         <?php foreach ($this->items->parseAll($this->getFormat(), $this->view) as $arrItem): ?>
             <?php $this->block('item'); ?>
             <div class="item <?= $arrItem['class'] ?>">
 
-                <?php foreach ($this->items->getItem()->getMetaModel()->getAttributes() as $field => $objAttribute): ?>
-                    <?php if (($strValue = $arrItem[$this->getFormat()][$field])
-                              || ($strValue = $arrItem['text'][$field])): ?>
+                <?php foreach ($this->items->getItem()->getMetaModel()->getAttributes() as $field => $attribute): ?>
+                    <?php if ((null !== ($value = $arrItem[$this->getFormat()][$field] ?? null))
+                               || (null !== ($value = $arrItem['text'][$field] ?? null))): ?>
                         <div class="field <?= $field ?>">
                             <?php if (!$this->view->get('hideLabels')): ?>
-                                <div class="label"><?= sprintf(
-                                        $GLOBALS['TL_LANG']['MSC']['field_label'],
-                                        $objAttribute->getName()
-                                    ) ?></div>
+                                <div class="label"><?= $translator->trans('field_label', ['%field_label%' => $attribute->getName()], 'metamodels_list') ?></div>
                             <?php endif; ?>
-                            <div class="value"> <?= $strValue ?></div>
+                            <div class="value"> <?= $value ?></div>
                         </div>
                     <?php endif; ?>
                 <?php endforeach; ?>

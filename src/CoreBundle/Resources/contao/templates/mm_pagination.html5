@@ -1,5 +1,5 @@
 <?php
-$translator = System::getContainer()->get('translator');
+$translator = \Contao\System::getContainer()->get('translator');
 
 $paginationFragment = $this->paginationFragment ? '#' . $this->paginationFragment : '';
 ?>

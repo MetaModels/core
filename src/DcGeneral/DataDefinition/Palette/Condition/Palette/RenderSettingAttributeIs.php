@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -29,6 +29,7 @@ use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\PropertyValueBag;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Palette\AbstractWeightAwarePaletteCondition;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\MetaModelsServiceContainer;
 
@@ -49,20 +50,19 @@ class RenderSettingAttributeIs extends AbstractWeightAwarePaletteCondition
      *
      * @var array
      */
-    protected static $attributeTypes = array();
+    protected static $attributeTypes = [];
 
     /**
      * Database connection.
      *
      * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * Create a new instance.
      *
      * @param string          $attributeType The attribute type name.
-     *
      * @param int             $weight        The weight of this condition to apply.
      *
      * @param Connection|null $connection    Database connection.
@@ -80,8 +80,8 @@ class RenderSettingAttributeIs extends AbstractWeightAwarePaletteCondition
             );
             // @codingStandardsIgnoreEnd
             $connection = System::getContainer()->get('database_connection');
+            assert($connection instanceof Connection);
         }
-
         $this->connection = $connection;
     }
 
@@ -116,10 +116,11 @@ class RenderSettingAttributeIs extends AbstractWeightAwarePaletteCondition
      *
      * @return string
      *
-     * @throws \Doctrine\DBAL\DBALException When an database error occurs.
+     * @throws Exception When an database error occurs.
      */
     public function getTypeOfAttribute($value)
     {
+
         if (!isset(self::$attributeTypes[$value])) {
             $statement = $this->connection
                 ->createQueryBuilder()
@@ -128,9 +129,13 @@ class RenderSettingAttributeIs extends AbstractWeightAwarePaletteCondition
                 ->where('t.id=:id')
                 ->setParameter('id', $value)
                 ->setMaxResults(1)
-                ->execute();
+                ->executeQuery();
 
-            self::$attributeTypes[$value] = $statement->fetch(\PDO::FETCH_OBJ)->type;
+            if (false === ($result = $statement->fetchAssociative())) {
+                return new Exception('Failed to load attribute for render setting.');
+            }
+
+            self::$attributeTypes[$value] = $result['type'];
         }
 
         return self::$attributeTypes[$value];
@@ -141,11 +146,16 @@ class RenderSettingAttributeIs extends AbstractWeightAwarePaletteCondition
      */
     public function getMatchCount(ModelInterface $model = null, PropertyValueBag $input = null)
     {
+        $value = null;
         if ($input && $input->hasPropertyValue('attr_id')) {
             $value = $input->getPropertyValue('attr_id');
         } elseif ($model) {
             $value = $model->getProperty('attr_id');
         } else {
+            return false;
+        }
+
+        if (null === $value) {
             return false;
         }
 
@@ -165,9 +175,15 @@ class RenderSettingAttributeIs extends AbstractWeightAwarePaletteCondition
      * @return IMetaModelsServiceContainer
      *
      * @deprecated
+     *
+     * @psalm-suppress DeprecatedInterface
+     * @psalm-suppress DeprecatedClass
      */
     protected function getServiceContainer(): IMetaModelsServiceContainer
     {
-        return System::getContainer()->get(MetaModelsServiceContainer::class);
+        $serviceContainer = System::getContainer()->get(MetaModelsServiceContainer::class);
+        assert($serviceContainer instanceof IMetaModelsServiceContainer);
+
+        return $serviceContainer;
     }
 }

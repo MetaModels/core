@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext"
+        original="src/CoreBundle/Resources/translations/tl_metamodel_searchable_pages.en.xlf">
+    <body>
+      <trans-unit id="backend-module.headline" resname="backend-module.headline">
+        <source>All search settings</source>
+      </trans-unit>
+      <trans-unit id="id.label" resname="id.label">
+        <source>Id</source>
+      </trans-unit>
+      <trans-unit id="pid.label" resname="pid.label">
+        <source>Pid</source>
+      </trans-unit>
+      <trans-unit id="new.label" resname="new.label">
+        <source>New index</source>
+      </trans-unit>
+      <trans-unit id="new.description" resname="new.description">
+        <source>Create a new searchable page setting</source>
+      </trans-unit>
+      <trans-unit id="all.label" resname="all.label">
+        <source>Edit multiple</source>
+      </trans-unit>
+      <trans-unit id="all.description" resname="all.description">
+        <source>Edit multiple elements at once</source>
+      </trans-unit>
+      <trans-unit id="pastenew.label" resname="pastenew.label">
+        <source>Create a new element at the top</source>
+      </trans-unit>
+      <trans-unit id="pastenew.description" resname="pastenew.description">
+        <source>Create a new element after element ID %id%</source>
+      </trans-unit>
+      <trans-unit id="pasteafter.label" resname="pasteafter.label">
+        <source>Paste at the top</source>
+      </trans-unit>
+      <trans-unit id="pasteafter.description" resname="pasteafter.description">
+        <source>Paste after element ID %id%</source>
+      </trans-unit>
+      <trans-unit id="backBT" resname="backBT">
+        <source>Go back</source>
+      </trans-unit>
+      <trans-unit id="backBTTitle" resname="backBTTitle">
+        <source>Back to the previous page</source>
+      </trans-unit>
+      <trans-unit id="showRecord" resname="showRecord">
+        <source>Show the details of record %id%</source>
+      </trans-unit>
+      <trans-unit id="name.label" resname="name.label">
+        <source>Name</source>
+      </trans-unit>
+      <trans-unit id="name.description" resname="name.description">
+        <source>Name of the searchable page setting</source>
+      </trans-unit>
+      <trans-unit id="tstamp.label" resname="tstamp.label">
+        <source>Revision date</source>
+      </trans-unit>
+      <trans-unit id="tstamp.description" resname="tstamp.description">
+        <source>Date and time of the latest revision.</source>
+      </trans-unit>
+      <trans-unit id="rendersetting.label" resname="rendersetting.label">
+        <source>Rendersetting</source>
+      </trans-unit>
+      <trans-unit id="rendersetting.description" resname="rendersetting.description">
+        <source>Choose the rendersetting which will be used for the search rendering.</source>
+      </trans-unit>
+      <trans-unit id="filter.label" resname="filter.label">
+        <source>Filtersetting</source>
+      </trans-unit>
+      <trans-unit id="filter.description" resname="filter.description">
+        <source>Choose the filtersetting which will be used for the search rendering.</source>
+      </trans-unit>
+      <trans-unit id="filterparams.label" resname="filterparams.label">
+        <source>Filter parameter override</source>
+      </trans-unit>
+      <trans-unit id="filterparams.description" resname="filterparams.description">
+        <source>Filter parameter override</source>
+      </trans-unit>
+      <trans-unit id="title_legend" resname="title_legend">
+        <source>Name</source>
+      </trans-unit>
+      <trans-unit id="general_legend" resname="general_legend">
+        <source>General settings</source>
+      </trans-unit>
+      <trans-unit id="edit.label" resname="edit.label">
+        <source>Edit searchable page</source>
+      </trans-unit>
+      <trans-unit id="edit.description" resname="edit.description">
+        <source>Edit the searchable page setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="copy.label" resname="copy.label">
+        <source>Copy searchable page</source>
+      </trans-unit>
+      <trans-unit id="copy.description" resname="copy.description">
+        <source>Copy definition of searchable page setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="delete.label" resname="delete.label">
+        <source>Delete searchable page</source>
+      </trans-unit>
+      <trans-unit id="delete.description" resname="delete.description">
+        <source>Delete searchable page setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="delete.confirm" resname="delete.confirm">
+        <source>Do you really want to delete element ID %id%?</source>
+      </trans-unit>
+      <trans-unit id="show.label" resname="show.label">
+        <source>Searchable page setting details</source>
+      </trans-unit>
+      <trans-unit id="show.description" resname="show.description">
+        <source>Show details of searchable page setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="toggle.label" resname="toggle.label">
+        <source>Toggle</source>
+      </trans-unit>
+      <trans-unit id="toggle.description" resname="toggle.description">
+        <source>Toggle the state of searchable page setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="settings.label" resname="settings.label">
+        <source>Searchable page settings</source>
+      </trans-unit>
+      <trans-unit id="settings.description" resname="settings.description">
+        <source>Edit the settings of searchable page setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="published.label" resname="published.label">
+        <source>Searchable page settings</source>
+      </trans-unit>
+      <trans-unit id="published.description" resname="published.description">
+        <source>Published</source>
+      </trans-unit>
+      <trans-unit id="deleteConfirm" resname="deleteConfirm">
+        <source>Do you really want to render setting ID %id%?</source>
+      </trans-unit>
+      <trans-unit id="closeAll.label" resname="closeAll.label">
+        <source>Cancel</source>
+      </trans-unit>
+      <trans-unit id="closeAll.description" resname="closeAll.description">
+        <source>Cancel multiple processing.</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

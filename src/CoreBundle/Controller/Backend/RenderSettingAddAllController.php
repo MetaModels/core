@@ -49,7 +49,7 @@ class RenderSettingAddAllController extends AbstractAddAllController
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function createEmptyDataFor(IAttribute $attribute, $parentId, $activate, $sort)
+    protected function createEmptyDataFor(IAttribute $attribute, $parentId, $activate, $sort, $tlclass = '')
     {
         $result   = [
             'attr_id' => $attribute->get('id'),

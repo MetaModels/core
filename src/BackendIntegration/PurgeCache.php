@@ -75,7 +75,7 @@ class PurgeCache
         $this->logger->log(
             LogLevel::INFO,
             'Purged the MetaModels cache',
-            ['contao' => new ContaoContext(__METHOD__, TL_CRON)]
+            ['contao' => new ContaoContext(__METHOD__, ContaoContext::CRON)]
         );
     }
 }

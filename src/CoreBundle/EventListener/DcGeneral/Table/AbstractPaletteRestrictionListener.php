@@ -34,7 +34,6 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PropertyInterface;
  */
 class AbstractPaletteRestrictionListener
 {
-
     /**
      * Retrieve the legend with the given name.
      *
@@ -94,7 +93,8 @@ class AbstractPaletteRestrictionListener
     protected function addCondition($property, $condition)
     {
         $currentCondition = $property->getVisibleCondition();
-        if ((!($currentCondition instanceof ConditionChainInterface))
+        if (
+            (!($currentCondition instanceof ConditionChainInterface))
             || (ConditionChainInterface::OR_CONJUNCTION !== $currentCondition->getConjunction())
         ) {
             if ($currentCondition === null) {

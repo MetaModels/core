@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext"
+        original="src/CoreBundle/Resources/translations/tl_metamodel_dca.en.xlf">
+    <body>
+      <trans-unit id="backend-module.headline" resname="backend-module.headline">
+        <source>All input screens</source>
+      </trans-unit>
+      <trans-unit id="id.label" resname="id.label">
+        <source>Id</source>
+      </trans-unit>
+      <trans-unit id="pid.label" resname="pid.label">
+        <source>Pid</source>
+      </trans-unit>
+      <trans-unit id="sorting.label" resname="sorting.label">
+        <source>Sorting</source>
+      </trans-unit>
+      <trans-unit id="new.label" resname="new.label">
+        <source>New input screen</source>
+      </trans-unit>
+      <trans-unit id="new.description" resname="new.description">
+        <source>Create a new input screen</source>
+      </trans-unit>
+      <trans-unit id="all.label" resname="all.label">
+        <source>Edit multiple</source>
+      </trans-unit>
+      <trans-unit id="all.description" resname="all.description">
+        <source>Edit multiple elements at once</source>
+      </trans-unit>
+      <trans-unit id="pastenew.label" resname="pastenew.label">
+        <source>Create a new element at the top</source>
+      </trans-unit>
+      <trans-unit id="pastenew.description" resname="pastenew.description">
+        <source>Create a new element after element ID %id%</source>
+      </trans-unit>
+      <trans-unit id="pasteafter.label" resname="pasteafter.label">
+        <source>Paste at the top</source>
+      </trans-unit>
+      <trans-unit id="pasteafter.description" resname="pasteafter.description">
+        <source>Paste after element ID %id%</source>
+      </trans-unit>
+      <trans-unit id="save" resname="save">
+        <source>Save</source>
+      </trans-unit>
+      <trans-unit id="saveNclose" resname="saveNclose">
+        <source>Save and close</source>
+      </trans-unit>
+      <trans-unit id="saveNcreate" resname="saveNcreate">
+        <source>Save and new</source>
+      </trans-unit>
+      <trans-unit id="saveNback" resname="saveNback">
+        <source>Save and go back</source>
+      </trans-unit>
+      <trans-unit id="backBT" resname="backBT">
+        <source>Go back</source>
+      </trans-unit>
+      <trans-unit id="backBTTitle" resname="backBTTitle">
+        <source>Back to the previous page</source>
+      </trans-unit>
+      <trans-unit id="showRecord" resname="showRecord">
+        <source>Show the details of record %id%</source>
+      </trans-unit>
+      <trans-unit id="editRecord" resname="editRecord">
+        <source>Edit record %id%</source>
+      </trans-unit>
+      <trans-unit id="editheader.label" resname="editheader.label">
+        <source>Edit MetaModel</source>
+      </trans-unit>
+      <trans-unit id="editheader.description" resname="editheader.description">
+        <source>Edit the MetaModel ID %id%</source>
+      </trans-unit>
+      <trans-unit id="name.label" resname="name.label">
+        <source>Name</source>
+      </trans-unit>
+      <trans-unit id="name.description" resname="name.description">
+        <source>Name of the input screen.</source>
+      </trans-unit>
+      <trans-unit id="tstamp.label" resname="tstamp.label">
+        <source>Revision date</source>
+      </trans-unit>
+      <trans-unit id="tstamp.description" resname="tstamp.description">
+        <source>Date and time of the latest revision.</source>
+      </trans-unit>
+      <trans-unit id="rendertype.label" resname="rendertype.label">
+        <source>Integration</source>
+      </trans-unit>
+      <trans-unit id="rendertype.description" resname="rendertype.description">
+        <source>Select the desired type of integration.</source>
+      </trans-unit>
+      <trans-unit id="rendermode.label" resname="rendermode.label">
+        <source>Render mode</source>
+      </trans-unit>
+      <trans-unit id="rendermode.description" resname="rendermode.description">
+        <source>Select the desired render mode.</source>
+      </trans-unit>
+      <trans-unit id="ptable.label" resname="ptable.label">
+        <source>Parent table name</source>
+      </trans-unit>
+      <trans-unit id="ptable.description" resname="ptable.description">
+        <source>Name of the database table that shall be referred to as parent table.</source>
+      </trans-unit>
+      <trans-unit id="showColumns.label" resname="showColumns.label">
+        <source>Use column based layout</source>
+      </trans-unit>
+      <trans-unit id="showColumns.description" resname="showColumns.description">
+        <source>If selected a table header will be generated with column names.</source>
+      </trans-unit>
+      <trans-unit id="backendsection.label" resname="backendsection.label">
+        <source>Backend section</source>
+      </trans-unit>
+      <trans-unit id="backendsection.description" resname="backendsection.description">
+        <source>Select the desired backend section where you want the MetaModel appear. For models that shall be edited
+          by end users, the "content" section most likely will be appropriate.
+        </source>
+      </trans-unit>
+      <trans-unit id="backendicon.label" resname="backendicon.label">
+        <source>Backend icon</source>
+      </trans-unit>
+      <trans-unit id="backendicon.description" resname="backendicon.description">
+        <source>Select the desired backend icon.This icon will get used to draw an image in the parent list if you have
+          a integration as child table.
+        </source>
+      </trans-unit>
+      <trans-unit id="backendcaption.label" resname="backendcaption.label">
+        <source>Backend caption</source>
+      </trans-unit>
+      <trans-unit id="backendcaption.description" resname="backendcaption.description">
+        <source>The text you specify in here, will get used as the label and description text in the backend menu.
+        </source>
+      </trans-unit>
+      <trans-unit id="becap_langcode.label" resname="becap_langcode.label">
+        <source>Language</source>
+      </trans-unit>
+      <trans-unit id="becap_langcode.description" resname="becap_langcode.description">
+        <source>Select the languages you want to provide.</source>
+      </trans-unit>
+      <trans-unit id="becap_label.label" resname="becap_label.label">
+        <source>Label text</source>
+      </trans-unit>
+      <trans-unit id="becap_label.description" resname="becap_label.description">
+        <source>The text you specify in here, will get used as the menu label in the backend menu.</source>
+      </trans-unit>
+      <trans-unit id="becap_description.label" resname="becap_description.label">
+        <source>Description text</source>
+      </trans-unit>
+      <trans-unit id="becap_description.description" resname="becap_description.description">
+        <source>The text you specify in here, will get used as the description (hover title) in the backend menu.
+        </source>
+      </trans-unit>
+      <trans-unit id="panelLayout.label" resname="panelLayout.label">
+        <source>Panel layout</source>
+      </trans-unit>
+      <trans-unit id="panelLayout.description" resname="panelLayout.description">
+        <source>Separate panel options with comma (= space) and semicolon (= new line) like
+          "filter;search;sort,limit".
+        </source>
+      </trans-unit>
+      <trans-unit id="panelpicker" resname="panelpicker">
+        <source>Panelpicker</source>
+      </trans-unit>
+      <trans-unit id="use_limitview.label" resname="use_limitview.label">
+        <source>View limitation</source>
+      </trans-unit>
+      <trans-unit id="use_limitview.description" resname="use_limitview.description">
+        <source>Activate the view limitation.</source>
+      </trans-unit>
+      <trans-unit id="limit_rendersetting.label" resname="limit_rendersetting.label">
+        <source>Limit the render setting</source>
+      </trans-unit>
+      <trans-unit id="limit_rendersetting.description" resname="limit_rendersetting.description">
+        <source>Choose between front end or backend.</source>
+      </trans-unit>
+      <trans-unit id="iseditable.label" resname="iseditable.label">
+        <source>Allow editing of items</source>
+      </trans-unit>
+      <trans-unit id="iseditable.description" resname="iseditable.description">
+        <source>If checked, this input screen allows the editing of items.</source>
+      </trans-unit>
+      <trans-unit id="iscreatable.label" resname="iscreatable.label">
+        <source>Allow creating of items</source>
+      </trans-unit>
+      <trans-unit id="iscreatable.description" resname="iscreatable.description">
+        <source>If checked, this input screen allows the creating of items.</source>
+      </trans-unit>
+      <trans-unit id="isdeleteable.label" resname="isdeleteable.label">
+        <source>Allow deleting of items</source>
+      </trans-unit>
+      <trans-unit id="isdeleteable.description" resname="isdeleteable.description">
+        <source>If checked, this input screen allows the deleting of items.</source>
+      </trans-unit>
+      <trans-unit id="title_legend" resname="title_legend">
+        <source>Name</source>
+      </trans-unit>
+      <trans-unit id="view_legend" resname="view_legend">
+        <source>View settings</source>
+      </trans-unit>
+      <trans-unit id="backend_legend" resname="backend_legend">
+        <source>Backend integration</source>
+      </trans-unit>
+      <trans-unit id="display_legend" resname="display_legend">
+        <source>Data display settings</source>
+      </trans-unit>
+      <trans-unit id="permissions_legend" resname="permissions_legend">
+        <source>Data manipulation permissions</source>
+      </trans-unit>
+      <trans-unit id="edit.label" resname="edit.label">
+        <source>Edit input screen</source>
+      </trans-unit>
+      <trans-unit id="edit.description" resname="edit.description">
+        <source>Edit the input screen ID %id%</source>
+      </trans-unit>
+      <trans-unit id="copy.label" resname="copy.label">
+        <source>Copy input screen definition</source>
+      </trans-unit>
+      <trans-unit id="copy.description" resname="copy.description">
+        <source>Copy definition of input screen ID %id%</source>
+      </trans-unit>
+      <trans-unit id="delete.label" resname="delete.label">
+        <source>Delete input screen</source>
+      </trans-unit>
+      <trans-unit id="delete.description" resname="delete.description">
+        <source>Delete input screen ID %id%</source>
+      </trans-unit>
+      <trans-unit id="delete.confirm" resname="delete.confirm">
+        <source>Do you really want to delete element ID %id%?</source>
+      </trans-unit>
+      <trans-unit id="show.label" resname="show.label">
+        <source>Input screen details</source>
+      </trans-unit>
+      <trans-unit id="show.description" resname="show.description">
+        <source>Show details of input screen ID %id%</source>
+      </trans-unit>
+      <trans-unit id="settings.label" resname="settings.label">
+        <source>Input screen settings</source>
+      </trans-unit>
+      <trans-unit id="settings.description" resname="settings.description">
+        <source>Edit the settings of input screen ID %id%</source>
+      </trans-unit>
+      <trans-unit id="groupsort_settings.label" resname="groupsort_settings.label">
+        <source>Grouping and sorting</source>
+      </trans-unit>
+      <trans-unit id="groupsort_settings.description" resname="groupsort_settings.description">
+        <source>Edit the grouping and sorting settings of input screen ID %id%</source>
+      </trans-unit>
+      <trans-unit id="subheadline.label" resname="subheadline.label">
+        <source>Additions to the mask-heading</source>
+      </trans-unit>
+      <trans-unit id="subheadline.description" resname="subheadline.description">
+        <source>The field can be used to adapt the heading of the mask at edit and replaces the output of the ID.You can
+          use simple tokens e.g. ##model_name##, ##model_firstname## [##model_id##]
+        </source>
+      </trans-unit>
+      <trans-unit id="rendertypes.standalone" resname="rendertypes.standalone">
+        <source>Standalone</source>
+      </trans-unit>
+      <trans-unit id="rendertypes.ctable" resname="rendertypes.ctable">
+        <source>As child table</source>
+      </trans-unit>
+      <trans-unit id="rendermodes.flat" resname="rendermodes.flat">
+        <source>Flat</source>
+      </trans-unit>
+      <trans-unit id="rendermodes.parented" resname="rendermodes.parented">
+        <source>Parented</source>
+      </trans-unit>
+      <trans-unit id="rendermodes.hierarchical" resname="rendermodes.hierarchical">
+        <source>Hierarchical</source>
+      </trans-unit>
+      <trans-unit id="hint_rendermode_hierarchical" resname="hint_rendermode_hierarchical">
+        <source>When using the "Hierarchical" render mode, the current sort must be enable to "Manual sorting" as
+          default.
+        </source>
+      </trans-unit>
+      <trans-unit id="deleteConfirm" resname="deleteConfirm">
+        <source>Do you really want to delete input screen ID %id%?</source>
+      </trans-unit>
+      <trans-unit id="closeAll.label" resname="closeAll.label">
+        <source>Cancel</source>
+      </trans-unit>
+      <trans-unit id="closeAll.description" resname="closeAll.description">
+        <source>Cancel multiple processing.</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

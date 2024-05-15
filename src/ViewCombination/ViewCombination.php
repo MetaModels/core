@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -36,28 +37,28 @@ class ViewCombination
      *
      * @var Cache
      */
-    private $cache;
+    private Cache $cache;
 
     /**
      * The token storage.
      *
      * @var TokenStorageInterface
      */
-    private $tokenStorage;
+    private TokenStorageInterface $tokenStorage;
 
     /**
      * The combination builder.
      *
      * @var ViewCombinationBuilder
      */
-    private $builder;
+    private ViewCombinationBuilder $builder;
 
     /**
      * The input screen information builder.
      *
      * @var InputScreenInformationBuilder
      */
-    private $inputScreens;
+    private InputScreenInformationBuilder $inputScreens;
 
     /**
      * Create a new instance.
@@ -93,11 +94,11 @@ class ViewCombination
                 $mode = 'be';
                 // Try to get the group(s)
                 // there might be a NULL in there as BE admins have no groups and
-                // user might have one but it is not mandatory.
+                // user might have one, but it is not mandatory.
                 // I would prefer a default group for both, fe and be groups.
                 $groups = $user->groups;
                 // Special case in combinations, admins have the implicit group id -1.
-                if ($user->admin) {
+                if ((bool) $user->admin) {
                     $groups[] = -1;
                 }
 
@@ -117,9 +118,9 @@ class ViewCombination
                 $groups = [-1];
         }
 
-        $groups = array_filter($groups);
+        $groups = \array_filter($groups);
 
-        if ($this->cache->contains($cacheKey = 'combinations_' . $mode . '_' . implode(',', $groups))) {
+        if ($this->cache->contains($cacheKey = 'combinations_' . $mode . '_' . \implode(',', $groups))) {
             return $this->cache->fetch($cacheKey);
         }
 
@@ -140,21 +141,18 @@ class ViewCombination
     public function getCombination($tableName)
     {
         $combinations = $this->getCombinations();
-        if (isset($combinations['byName'][$tableName])) {
-            return $combinations['byName'][$tableName];
-        }
 
-        return null;
+        return $combinations['byName'][$tableName] ?? null;
     }
 
     /**
-     * Obtain stand alone input screens.
+     * Obtain stand-alone input screens.
      *
      * @return array
      */
     public function getStandalone()
     {
-        $inputScreens = array_filter($this->getInputScreens(), function ($inputScreen) {
+        $inputScreens = \array_filter($this->getInputScreens(), static function ($inputScreen) {
             return $inputScreen['meta']['rendertype'] === 'standalone';
         });
 
@@ -168,7 +166,7 @@ class ViewCombination
      */
     public function getParented()
     {
-        $inputScreens = array_filter($this->getInputScreens(), function ($inputScreen) {
+        $inputScreens = \array_filter($this->getInputScreens(), static function ($inputScreen) {
             return $inputScreen['meta']['rendertype'] === 'ctable';
         });
 
@@ -184,7 +182,7 @@ class ViewCombination
      */
     public function getChildrenOf($parentTable)
     {
-        $inputScreens = array_filter($this->getInputScreens(), function ($inputScreen) use ($parentTable) {
+        $inputScreens = \array_filter($this->getInputScreens(), static function ($inputScreen) use ($parentTable) {
             return ($inputScreen['meta']['rendertype'] === 'ctable')
                    && ($inputScreen['meta']['ptable'] === $parentTable);
         });
@@ -202,11 +200,8 @@ class ViewCombination
     public function getScreen($tableName)
     {
         $inputScreens = $this->getInputScreens();
-        if (isset($inputScreens[$tableName])) {
-            return $inputScreens[$tableName];
-        }
 
-        return null;
+        return $inputScreens[$tableName] ?? null;
     }
 
     /**
@@ -221,11 +216,11 @@ class ViewCombination
             return [];
         }
 
-        $screenIds = array_map(function ($combination) {
+        $screenIds = \array_map(static function (array $combination): mixed {
             return $combination['dca_id'];
         }, $combinations['byName']);
 
-        if ($this->cache->contains($cacheKey = 'screens_' . implode(',', $screenIds))) {
+        if ($this->cache->contains($cacheKey = 'screens_' . \implode(',', $screenIds))) {
             return $this->cache->fetch($cacheKey);
         }
 

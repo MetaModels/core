@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,19 +14,23 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\EnvironmentPopulator;
 
-use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
-use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
+use Contao\System;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\Translator\StaticTranslator;
+use ContaoCommunityAlliance\Translator\SymfonyTranslatorBridge;
 use ContaoCommunityAlliance\Translator\TranslatorChain;
+use ContaoCommunityAlliance\Translator\TranslatorInterface;
+use MetaModels\Helper\LocaleUtil;
 use MetaModels\ViewCombination\ViewCombination;
+use Symfony\Contracts\Translation\TranslatorInterface as SymfonyTranslator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -37,29 +41,17 @@ class TranslatorPopulator
     use MetaModelPopulatorTrait;
 
     /**
-     * The event dispatcher.
-     *
-     * @var EventDispatcherInterface
-     */
-    private $dispatcher;
-
-    /**
-     * The view combination.
-     *
-     * @var ViewCombination
-     */
-    private $viewCombination;
-
-    /**
      * Create a new instance.
      *
      * @param EventDispatcherInterface $dispatcher      The event dispatcher.
      * @param ViewCombination          $viewCombination The view combination.
+     * @param SymfonyTranslator        $translator      The translator.
      */
-    public function __construct(EventDispatcherInterface $dispatcher, ViewCombination $viewCombination)
-    {
-        $this->dispatcher      = $dispatcher;
-        $this->viewCombination = $viewCombination;
+    public function __construct(
+        private EventDispatcherInterface $dispatcher,
+        private ViewCombination $viewCombination,
+        private SymfonyTranslator $translator
+    ) {
     }
 
     /**
@@ -75,6 +67,8 @@ class TranslatorPopulator
     protected function populate(EnvironmentInterface $environment)
     {
         $translator = $environment->getTranslator();
+        assert($translator instanceof TranslatorInterface);
+
         if (!($translator instanceof TranslatorChain)) {
             $translatorChain = new TranslatorChain();
             $translatorChain->add($translator);
@@ -82,20 +76,12 @@ class TranslatorPopulator
         } else {
             $translatorChain = $translator;
         }
+        $translatorChain->add(new SymfonyTranslatorBridge($this->translator));
         $translatorChain->add($translator = new StaticTranslator());
+        $dataDefinition = $environment->getDataDefinition();
+        assert($dataDefinition instanceof ContainerInterface);
+        $definitionName = $dataDefinition->getName();
 
-        // Map the tl_metamodel_item domain over to this domain.
-        $this->dispatcher->dispatch(
-            new LoadLanguageFileEvent('tl_metamodel_item'),
-            ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE
-        );
-
-        $definitionName = $environment->getDataDefinition()->getName();
-        $this->mapTranslations(
-            $GLOBALS['TL_LANG']['tl_metamodel_item'],
-            $definitionName,
-            $translator
-        );
         if (null === $inputScreen = $this->viewCombination->getScreen($definitionName)) {
             return;
         }
@@ -121,7 +107,7 @@ class TranslatorPopulator
     {
         foreach ($array as $key => $value) {
             $newKey = ($baseKey ? $baseKey . '.' : '') . $key;
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $this->mapTranslations($value, $domain, $translator, $newKey);
             } else {
                 $translator->setValue($newKey, $value, $domain);
@@ -144,10 +130,11 @@ class TranslatorPopulator
     private function addInputScreenTranslations(StaticTranslator $translator, $inputScreen, $containerName)
     {
         // Either 2 or 5 char long language code.
-        $currentLocale = \str_replace('-', '_', $GLOBALS['TL_LANGUAGE']);
+        // @deprecated usage of TL_LANGUAGE - remove for Contao 5.0.
+        $currentLocale = LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE']);
         // Either 2 char language code or null.
-        $shortLocale = (false !== strpos($currentLocale, '_'))
-            ? explode('_', $currentLocale, 2)[0]
+        $shortLocale = (\str_contains($currentLocale, '_'))
+            ? \explode('_', $currentLocale, 2)[0]
             : null;
 
         foreach ($inputScreen['legends'] as $legendName => $legendInfo) {
@@ -159,21 +146,24 @@ class TranslatorPopulator
             );
 
             $fallbackLocales = [$currentLocale];
-            if ($shortLocale && !in_array($currentLocale, array_keys($legendInfo['label']), true)) {
+            if ((null !== $shortLocale) && !\array_key_exists($currentLocale, $legendInfo['label'])) {
                 $fallbackLocales[] = $shortLocale;
             }
+
             foreach ($legendInfo['label'] as $langCode => $label) {
                 // Default is already handled above, do not overwrite!
                 if ($langCode === 'default') {
                     continue;
                 }
+
                 $translator->setValue(
                     $legendName . '_legend',
                     $label,
                     $containerName,
                     $langCode
                 );
-                if (in_array($langCode, $fallbackLocales)) {
+
+                if (\in_array($langCode, $fallbackLocales)) {
                     $translator->setValue(
                         $legendName . '_legend',
                         $label,

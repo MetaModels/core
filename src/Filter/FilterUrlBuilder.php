@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,82 +16,107 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Andreas Fischer <anfischer@kaffee-partner.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\Filter;
 
+use Contao\ArrayUtil;
 use Contao\Config;
 use Contao\CoreBundle\Framework\Adapter;
-use Contao\CoreBundle\Routing\UrlGenerator;
+use Contao\Model\Collection;
 use Contao\PageModel;
 use Contao\System;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\Route;
 
 /**
  * This class builds filter URLs.
+ *
+ * @psalm-type TFilterUrlOptions=array{
+ *   postAsSlug?: list<string>,
+ *   postAsGet?: list<string>,
+ *   preserveGet?: bool,
+ *   removeGetOnSlug?: bool
+ * }
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FilterUrlBuilder
 {
     /**
      * The URL generator.
      *
-     * @var UrlGenerator
+     * @var UrlGeneratorInterface
      */
-    private $urlGenerator;
+    private UrlGeneratorInterface $urlGenerator;
 
     /**
      * The request stack.
      *
      * @var RequestStack
      */
-    private $requestStack;
+    private RequestStack $requestStack;
 
     /**
      * Flag if the locale is prepended.
      *
      * @var bool
      */
-    private $isLocalePrepended = true;
+    private bool $isLocalePrepended = true;
 
     /**
      * The Contao URL suffix.
      *
      * @var string
      */
-    private $urlSuffix = '.html';
+    private string $urlSuffix = '.html';
 
     /**
      * The page model adapter.
      *
-     * @var Adapter|PageModel
+     * @var Adapter<PageModel>
      */
-    private $pageModelAdapter;
+    private Adapter $pageModelAdapter;
+
+    /**
+     * Flag if legacy routing is active.
+     *
+     * @var bool
+     */
+    private bool $hasLegacyRouting;
 
     /**
      * Create a new instance.
      *
-     * @param UrlGenerator $urlGenerator      The Contao URL generator.
-     * @param RequestStack $requestStack      The request stack.
-     * @param bool         $isLocalePrepended Flag if the locale is prepended to the URL.
-     * @param string       $urlSuffix         The URL suffix.
-     * @param Adapter      $pageModelAdapter  The page model adapter.
+     * @param UrlGeneratorInterface $urlGenerator      The Contao URL generator.
+     * @param RequestStack          $requestStack      The request stack.
+     * @param bool                  $isLocalePrepended Flag if the locale is prepended to the URL.
+     * @param string                $urlSuffix         The URL suffix.
+     * @param Adapter<PageModel>    $pageModelAdapter  The page model adapter.
+     * @param bool                  $hasLegacyRouting  Flag if legacy routing is active.
      */
     public function __construct(
-        UrlGenerator $urlGenerator,
+        UrlGeneratorInterface $urlGenerator,
         RequestStack $requestStack,
         bool $isLocalePrepended,
         string $urlSuffix,
-        Adapter $pageModelAdapter
+        Adapter $pageModelAdapter,
+        bool $hasLegacyRouting
     ) {
         $this->urlGenerator      = $urlGenerator;
         $this->requestStack      = $requestStack;
         $this->isLocalePrepended = $isLocalePrepended;
         $this->urlSuffix         = $urlSuffix;
         $this->pageModelAdapter  = $pageModelAdapter;
+        $this->hasLegacyRouting  = $hasLegacyRouting;
     }
 
     /**
@@ -104,7 +129,7 @@ class FilterUrlBuilder
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public function generate(FilterUrl $filterUrl)
+    public function generate(FilterUrl $filterUrl): string
     {
         $jumpTo = $filterUrl->getPage();
 
@@ -114,31 +139,28 @@ class FilterUrlBuilder
 
             $jumpTo = $filterUrl->getPage();
         }
-        $alias = $jumpTo['alias'];
 
         $parameters = $filterUrl->getGetParameters();
 
-        $url = $alias;
-        if ($filterUrl->hasSlug('auto_item')) {
-            $url .= '/' . $this->encodeForAllowEncodedSlashes($filterUrl->getSlug('auto_item'));
+        $url = '';
+        if ($filterUrl->hasSlug('auto_item') && '' !== ($slug = (string) $filterUrl->getSlug('auto_item'))) {
+            $url .= '/' . $this->encodeForAllowEncodedSlashes($slug);
         }
 
-        if (!empty($jumpTo['domain'])) {
-            $parameters['_domain'] = $jumpTo['domain'];
+        if ($this->hasLegacyRouting) {
+            if (!empty($jumpTo['domain'])) {
+                $parameters['_domain'] = $jumpTo['domain'];
+            }
+            if (!empty($jumpTo['rootUseSSL'])) {
+                $parameters['_ssl'] = (bool) $jumpTo['rootUseSSL'];
+            }
         }
-        if (!empty($jumpTo['rootUseSSL'])) {
-            $parameters['_ssl'] = (bool) $jumpTo['rootUseSSL'];
-        }
-
-        // Initialize with current language - locale is MANDATORY.
-        // See https://github.com/contao/contao/pull/4119
-        $parameters['_locale'] = $GLOBALS['TL_LANGUAGE'];
 
         if (null !== ($locale = $jumpTo['language'] ?? null)) {
             $parameters['_locale'] = $locale;
         }
         foreach ($filterUrl->getSlugParameters() as $name => $value) {
-            if (in_array($name, ['auto_item'])) {
+            if ($name === 'auto_item') {
                 continue;
             }
 
@@ -149,17 +171,23 @@ class FilterUrlBuilder
                 '/' . $this->encodeForAllowEncodedSlashes($value);
         }
 
-        return $this->urlGenerator->generate($url, $parameters);
+        if ($this->hasLegacyRouting) {
+            return $this->urlGenerator->generate($jumpTo['alias'] . $url, $parameters);
+        }
+
+        $parameters['parameters'] = $url;
+        return $this->urlGenerator->generate('tl_page.' . $jumpTo['id'], $parameters);
     }
 
     /**
      * Generate a filter URL from the current request.
      *
-     * @param array $options The options for updating - for details see FilterUrlBuilder::addFromCurrentRequest().
+     * @param TFilterUrlOptions|null $options The options for updating - for details
+     *                                        see FilterUrlBuilder::addFromCurrentRequest().
      *
      * @return FilterUrl
      */
-    public function getCurrentFilterUrl($options = null): FilterUrl
+    public function getCurrentFilterUrl(array $options = null): FilterUrl
     {
         $this->addFromCurrentRequest($filterUrl = new FilterUrl(), $options);
 
@@ -172,44 +200,72 @@ class FilterUrlBuilder
      * This is mostly based on \Contao\Frontend::getPageIdFromUrl() but stripped off of some checks.
      *
      * Options may be:
-     *   bool postAsSlug  Fields of POST data that shall be added to the slug entries.
-     *                    default: []
-     *   bool postAsGet   Fields of POST data that shall be added to the GET entries.
-     *                    default: []
-     *   bool preserveGet Flag if the GET parameters shall be added to the filter URL.
-     *                    default: true
+     *   bool postAsSlug      Fields of POST data that shall be added to the slug entries.
+     *                        default: []
+     *   bool postAsGet       Fields of POST data that shall be added to the GET entries.
+     *                        default: []
+     *   bool preserveGet     Flag if the GET parameters shall be added to the filter URL.
+     *                        default: true
+     *   bool removeGetOnSlug Flag to remove GET parameters from the filter URL when a same named slug parameter exists.
+     *                        default: true
      *
-     * @param FilterUrl $filterUrl The filter URL to update.
-     * @param array     $options   The options for updating.
+     * @param FilterUrl  $filterUrl The filter URL to update.
+     * @param TFilterUrlOptions|null $options   The options for updating.
      *
      * @return void
      */
-    public function addFromCurrentRequest(FilterUrl $filterUrl, $options = null): void
+    public function addFromCurrentRequest(FilterUrl $filterUrl, array $options = null): void
     {
         if (null === $options) {
             $options = [
-                'postAsSlug'  => [],
-                'postAsGet'   => [],
-                'preserveGet' => true
+                'postAsSlug'      => [],
+                'postAsGet'       => [],
+                'preserveGet'     => true,
+                'removeGetOnSlug' => true
             ];
         }
 
-        $request = $this->requestStack->getMasterRequest();
+        $request = $this->requestStack->getCurrentRequest();
         if (null === $request) {
             return;
         }
 
-        if (isset($options['preserveGet'])) {
+        if ($options['preserveGet'] ?? true) {
             foreach ($request->query->all() as $name => $value) {
                 $filterUrl->setGet($name, $value);
             }
         }
 
-        if (null === $fragments = $this->determineFragments($request)) {
-            $filterUrl->setPageValue('alias', 'index');
-            $this->extractPostData($filterUrl, $options, $request);
+        if ($this->hasLegacyRouting) {
+            if (null === $fragments = $this->determineFragments($request)) {
+                $filterUrl->setPageValue('alias', 'index');
+                $this->extractPostData($filterUrl, $options, $request);
 
-            return;
+                return;
+            }
+        } else {
+            $routeName = $this->determineRouteName($request);
+
+            $filterUrl->setPageValue('id', \substr($routeName, 8));
+            $requestUri = \rawurldecode(\substr($request->getPathInfo(), 1));
+
+            if (null === ($route = $request->attributes->get('_route_object'))) {
+                return;
+            }
+            assert($route instanceof Route);
+
+            $pageModel = $route->getDefault('pageModel');
+            assert($pageModel instanceof PageModel);
+
+            $length    = $pageModel->urlSuffix ? -\strlen($pageModel->urlSuffix) : null;
+            $start     = ($pageModel->urlPrefix ? \strlen($pageModel->urlPrefix . '/') : 0)
+                         + \strlen($pageModel->alias . '/');
+            $fragments = \explode('/', \substr($requestUri, $start, $length));
+
+            if (1 === \count($fragments) % 2) {
+                \array_unshift($fragments, 'auto_item');
+            }
+            \array_unshift($fragments, $pageModel->alias);
         }
 
         // If alias part is empty, this means we have the 'index' page.
@@ -218,18 +274,22 @@ class FilterUrlBuilder
         }
 
         $filterUrl->setPageValue('alias', $fragments[0]);
-        // Add the fragments to the slug array
+        // Add the fragments to the slug array.
         for ($i = 1, $c = \count($fragments); $i < $c; $i += 2) {
-            // Skip key value pairs if the key is empty (see contao/core/#4702)
+            // Skip key value pairs if the key is empty (see contao/core/#4702).
             if ('' === $fragments[$i]) {
                 continue;
             }
 
             // Decode slashes in slugs - They got encoded in generate() above.
+            $name = $this->decodeForAllowEncodedSlashes($fragments[$i]);
             $filterUrl->setSlug(
-                $this->decodeForAllowEncodedSlashes($fragments[$i]),
+                $name,
                 $this->decodeForAllowEncodedSlashes($fragments[($i + 1)])
             );
+            if (($options['removeGetOnSlug'] ?? true) && $filterUrl->hasGet($name)) {
+                $filterUrl->setGet($name, '');
+            }
         }
 
         $this->extractPostData($filterUrl, $options, $request);
@@ -246,7 +306,7 @@ class FilterUrlBuilder
      */
     private function encodeForAllowEncodedSlashes(string $value): string
     {
-        return str_replace(['/', '\\'], ['%2F', '%5C'], $value);
+        return \str_replace(['/', '\\'], ['%2F', '%5C'], $value);
     }
 
     /**
@@ -260,7 +320,7 @@ class FilterUrlBuilder
      */
     private function decodeForAllowEncodedSlashes(string $value): string
     {
-        return str_replace(['%2F', '%5C'], ['/', '\\'], $value);
+        return \str_replace(['%2F', '%5C'], ['/', '\\'], $value);
     }
 
     /**
@@ -281,7 +341,7 @@ class FilterUrlBuilder
 
         $fragments = null;
         // Use folder-style URLs
-        if (Config::get('folderUrl') && false !== strpos($requestUri, '/')) {
+        if (Config::get('folderUrl') && \str_contains($requestUri, '/')) {
             $fragments = $this->getFolderUrlFragments(
                 $requestUri,
                 $request->getHttpHost(),
@@ -294,12 +354,12 @@ class FilterUrlBuilder
             if ('/' === $requestUri) {
                 return null;
             }
-            $fragments = explode('/', $requestUri);
+            $fragments = \explode('/', $requestUri);
         }
 
         // Add the second fragment as auto_item if the number of fragments is even
         if (Config::get('useAutoItem') && 0 === (\count($fragments) % 2)) {
-            array_insert($fragments, 1, ['auto_item']);
+            \array_splice($fragments, 1, 0, 'auto_item');
         }
 
         $fragments = $this->getPageIdFromUrlHook($fragments);
@@ -317,27 +377,29 @@ class FilterUrlBuilder
      *
      * @param Request $request The request.
      *
-     * @return string
+     * @return string|null
      */
     private function strippedUri(Request $request): ?string
     {
         // Strip leading slash.
-        if (null === $request || '' === $requestUri = rawurldecode(substr($request->getPathInfo(), 1))) {
+        if ('' === $requestUri = \rawurldecode(\substr($request->getPathInfo(), 1))) {
             return null;
         }
         if ($this->isLocalePrepended) {
             $matches = [];
             // Use the matches instead of substr() (thanks to Mario Müller)
-            if (preg_match('@^([a-z]{2}(-[A-Z]{2})?)/(.*)$@', $requestUri, $matches)) {
+            if (\preg_match('@^([a-z]{2}(-[A-Z]{2})?)/(.*)$@', $requestUri, $matches)) {
                 $requestUri = $matches[3];
             }
         }
 
         // Remove the URL suffix if not just a language root (e.g. en/) is requested
-        if ('' !== $this->urlSuffix && '' !== $requestUri && (
-                !$this->isLocalePrepended || !preg_match('@^[a-z]{2}(-[A-Z]{2})?/$@', $requestUri)
-            )) {
-            $requestUri = substr($requestUri, 0, -\strlen($this->urlSuffix));
+        if (
+            '' !== $this->urlSuffix && '' !== $requestUri && (
+                !$this->isLocalePrepended || !\preg_match('@^[a-z]{2}(-[A-Z]{2})?/$@', $requestUri)
+            )
+        ) {
+            $requestUri = \substr($requestUri, 0, -\strlen($this->urlSuffix));
         }
 
         return $requestUri;
@@ -350,7 +412,7 @@ class FilterUrlBuilder
      * @param string      $host   The host part of the current request.
      * @param string|null $locale The current locale or null if none requested.
      *
-     * @return array
+     * @return array|null
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -358,34 +420,30 @@ class FilterUrlBuilder
     {
         // Check if there are pages with a matching alias
         $pages = $this->getPageCandidates($alias);
-        if (null === $pages) {
+        if ([] === $pages) {
             return null;
         }
 
         // Look for a root page whose domain name matches the host name
-        if (isset($pages[$host])) {
-            $languages = $pages[$host];
-        } else {
+        $languages = $pages[$host]
             // empty domain
-            $languages = $pages['*'] ?: [];
-        }
+            ?? ($pages['*'] ?: []);
         unset($pages);
 
         $pages = [];
 
-        $locale = ($locale)
-            ? \str_replace('_', '-', $locale)
-            : $locale;
-
         if (!$this->isLocalePrepended) {
-            // Use the first result (see #4872)
-            $pages = current($languages);
-        } elseif ($locale && isset($languages[$locale])) {
+            // Use the first result (see #4872).
+            $pages = \current($languages);
+            if (false === $pages) {
+                $pages = [];
+            }
+        } elseif (null !== $locale && isset($languages[$locale])) {
             // Try to find a page matching the language parameter
             $pages = $languages[$locale];
         }
 
-        // Return if there are no matches
+        // Return if there are no matches.
         if (empty($pages)) {
             return null;
         }
@@ -394,12 +452,12 @@ class FilterUrlBuilder
         $page = $pages[0];
 
         // The request consists of the alias only
-        if ($alias == $page->alias) {
+        if ($alias === $page->alias) {
             $arrFragments = [$alias];
         } else {
             // Remove the alias from the request string, explode it and then re-insert it at the beginning.
-            $arrFragments = explode('/', substr($alias, (\strlen($page->alias) + 1)));
-            array_unshift($arrFragments, $page->alias);
+            $arrFragments = \explode('/', \substr($alias, (\strlen($page->alias) + 1)));
+            \array_unshift($arrFragments, $page->alias);
         }
 
         return $arrFragments;
@@ -410,24 +468,29 @@ class FilterUrlBuilder
      *
      * @param string $alias The requested alias.
      *
-     * @return array|null
+     * @return array<non-falsy-string, array<string, non-empty-list<PageModel>>>
      */
-    private function getPageCandidates(string $alias)
+    private function getPageCandidates(string $alias): array
     {
         $aliases = [$alias];
         // Compile all possible aliases by applying dirname() to the request.
-        while ('/' !== $alias && false !== strpos($alias, '/')) {
+        while ('/' !== $alias && \str_contains($alias, '/')) {
             $alias     = \dirname($alias);
             $aliases[] = $alias;
         }
 
-        // Check if there are pages with a matching alias
-        $pages = $this->pageModelAdapter->findByAliases($aliases);
-        if (null === $pages) {
-            return null;
-        }
+        // Check if there are pages with a matching alias - sort by priority desc and alias* desc.
+        // *: You can assume that if folderurl is enabled, the lower hierarchy pages will have a
+        // longer alias string - hence descending sorting.
+        /** @psalm-suppress InternalMethod */
+        $pages = $this->pageModelAdapter->findByAliases(
+            $aliases,
+            ['order' => 'tl_page.routePriority DESC, tl_page.alias DESC']
+        );
+        assert($pages instanceof Collection);
+
         $arrPages = [];
-        // Order by domain and language
+        // Order by domain and language.
         while ($pages->next()) {
             /** @var PageModel $objModel */
             $objModel = $pages->current();
@@ -435,11 +498,12 @@ class FilterUrlBuilder
             $domain   = $objPage->domain ?: '*';
 
             $arrPages[$domain][$objPage->rootLanguage][] = $objPage;
-            // Also store the fallback language
+            // Also store the fallback language.
             if ($objPage->rootIsFallback) {
                 $arrPages[$domain]['*'][] = $objPage;
             }
         }
+
         return $arrPages;
     }
 
@@ -474,7 +538,7 @@ class FilterUrlBuilder
      *
      * @return void
      */
-    private function extractPostData(FilterUrl $filterUrl, $options, Request $request): void
+    private function extractPostData(FilterUrl $filterUrl, array $options, Request $request): void
     {
         if (!$request->isMethod('POST')) {
             return;
@@ -485,15 +549,34 @@ class FilterUrlBuilder
         }
 
         foreach ($request->request->all() as $name => $value) {
-            if (is_array($value)) {
-                $value = implode(',', $value);
+            if (\is_array($value)) {
+                $value = \implode(',', $value);
             }
-            if (in_array($name, $options['postAsSlug'])) {
+            if (\in_array($name, $options['postAsSlug'])) {
                 $filterUrl->setSlug($name, $value);
             }
-            if (in_array($name, $options['postAsGet'])) {
+            if (\in_array($name, $options['postAsGet'])) {
                 $filterUrl->setGet($name, $value);
             }
         }
+    }
+
+    /**
+     * Determine route name.
+     *
+     * @param Request $request
+     *
+     * @return string
+     */
+    public function determineRouteName(Request $request): string
+    {
+        $pageModel = $request->attributes->get('pageModel');
+
+        return 'tl_page.' . match (true) {
+            ($pageModel instanceof PageModel) => $pageModel->id,
+            \is_int($pageModel) => (string) $pageModel,
+            default =>
+                throw new \RuntimeException('Unknown page model encountered: ' . \get_debug_type($pageModel)),
+        };
     }
 }

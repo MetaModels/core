@@ -10,7 +10,7 @@
         <div class="formbody">
 
             <?php foreach ((is_array($this->filters) ? $this->filters : []) as $filter): ?>
-                <div class="widget <?= $filter['class'] ?>"<?= $filter['cssID'] ?>>
+                <div class="widget <?= $filter['class'] ?? '' ?>"<?= $filter['cssID'] ?? '' ?>>
                     <?= $filter['value'] ?>
                 </div>
             <?php endforeach; ?>

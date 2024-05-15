@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -47,7 +47,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['metamodels_frontendfilter'] =
     '{type_legend},type,headline;' .
     '{mm_filter_legend},metamodel,metamodel_filtering,metamodel_fef_template,metamodel_fef_params,' .
     'metamodel_fef_autosubmit,metamodel_fef_hideclearfilter,metamodel_available_values,' .
-    'metamodel_jumpTo,metamodel_fef_urlfragment;' .
+    'metamodel_jumpTo,metamodel_fef_id,metamodel_fef_urlfragment;' .
     '{protected_legend:hide},protected;' .
     '{expert_legend:hide},guests,cssID,space;' .
     '{invisible_legend:hide},invisible,start,stop';
@@ -64,18 +64,18 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_sort
 $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_parameters';
 
 // Insert new Subpalettes after position 1.
-array_insert(
+\Contao\ArrayUtil::arrayInsert(
     $GLOBALS['TL_DCA']['tl_content']['subpalettes'],
     1,
     [
         'metamodel_use_limit'      => 'metamodel_offset,metamodel_limit',
-        'metamodel_sort_override'  => 'metamodel_sort_param_type,metamodel_order_by_param,metamodel_order_dir_param',
+        'metamodel_sort_override'  => 'metamodel_sort_param_type,metamodel_order_by_param,metamodel_order_dir_param,metamodel_sort_urlfragment',
         'metamodel_use_parameters' => 'metamodel_parameters'
     ]
 );
 
 // Fields.
-array_insert(
+\Contao\ArrayUtil::arrayInsert(
     $GLOBALS['TL_DCA']['tl_content']['fields'],
     1,
     [
@@ -266,6 +266,16 @@ array_insert(
             ],
             'sql'       => "varchar(64) NOT NULL default ''"
         ],
+        'metamodel_sort_urlfragment'          => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_sort_urlfragment'],
+            'exclude'   => true,
+            'inputType' => 'text',
+            'eval'      => [
+                'tl_class' => 'clr w50',
+                'rgxp'     => 'alias'
+            ],
+            'sql'       => "char(255) NOT NULL default ''"
+        ],
         'metamodel_filtering'           =>
             [
                 'label'            => &$GLOBALS['TL_LANG']['tl_content']['metamodel_filtering'],
@@ -345,12 +355,22 @@ array_insert(
             ],
             'sql'       => "int(10) unsigned NOT NULL default '0'"
         ],
+        'metamodel_fef_id'          => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_fef_id'],
+            'exclude'   => true,
+            'inputType' => 'text',
+            'eval'      => [
+                'tl_class' => 'w50',
+                'rgxp'     => 'alias'
+            ],
+            'sql'       => "char(255) NOT NULL default ''"
+        ],
         'metamodel_fef_urlfragment'          => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_fef_urlfragment'],
             'exclude'   => true,
             'inputType' => 'text',
             'eval'      => [
-                'tl_class' => 'w50',
+                'tl_class' => 'clr w50',
                 'rgxp'     => 'alias'
             ],
             'sql'       => "char(255) NOT NULL default ''"

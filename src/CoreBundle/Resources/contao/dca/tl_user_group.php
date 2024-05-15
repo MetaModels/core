@@ -17,7 +17,18 @@
  * @filesource
  */
 
-use MetaModels\CoreBundle\Contao\Hooks\FixupUserGroupModules;
+use ContaoCommunityAlliance\DcGeneral\Contao\Callback\Callbacks;
 
-$GLOBALS['TL_DCA']['tl_user_group']['fields']['modules']['options_callback'] =
-    [FixupUserGroupModules::class, 'fixupModules'];
+$prefCallback = $GLOBALS['TL_DCA']['tl_user_group']['fields']['alexf']['options_callback'] ?? null;
+// Filter all MetaModels tables from user group permissions - only Admins MUST edit MetaModels.
+$GLOBALS['TL_DCA']['tl_user_group']['fields']['alexf']['options_callback'] =
+static function () use ($prefCallback): array {
+    $options = (null === $prefCallback) ? [] : Callbacks::call($prefCallback);
+    foreach (\array_keys($options) as $tableName) {
+        if (str_starts_with($tableName, 'tl_metamodel')) {
+            unset($options[$tableName]);
+        }
+    }
+
+    return $options;
+};

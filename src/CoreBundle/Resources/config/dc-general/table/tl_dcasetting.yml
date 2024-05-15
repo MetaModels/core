@@ -115,3 +115,29 @@ services:
         event: dc-general.view.contao2backend.get-operation-button
         method: handle
         priority: 2048
+
+  MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\EditMaskSubHeadlineListener:
+    arguments:
+      - "@metamodels.view_combination.input_screen_information_builder"
+      - "@contao.string.simple_token_parser"
+      - "@translator"
+    tags:
+      - name: kernel.event_listener
+        event: dc-general.view.contao2backend.get-edit-mask-subheadline
+
+  MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\TemplateOptionListener:
+    arguments:
+      - "@cca.dc-general.scope-matcher"
+      - "@metamodels.template_list"
+    tags:
+      - name: kernel.event_listener
+        event: dc-general.view.contao2backend.get-property-options
+        method: handle
+
+  MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\ManipulateWidgetListener:
+    arguments:
+      - "@cca.dc-general.scope-matcher"
+    tags:
+      - name: kernel.event_listener
+        event: dc-general.view.contao2backend.manipulate-widget
+        method: handle

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2020 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -27,9 +27,11 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\Build
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use Doctrine\DBAL\Connection;
 use MetaModels\IFactory;
-use Symfony\Component\Translation\TranslatorInterface;
+use MetaModels\IMetaModel;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * This handles the rendering of models to labels.
@@ -41,21 +43,21 @@ class JumpToListener extends AbstractAbstainingListener
      *
      * @var IFactory
      */
-    private $factory;
+    private IFactory $factory;
 
     /**
      * The connection.
      *
      * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * The translator.
      *
      * @var TranslatorInterface
      */
-    private $translator;
+    private TranslatorInterface $translator;
 
     /**
      * Create a new instance.
@@ -90,23 +92,27 @@ class JumpToListener extends AbstractAbstainingListener
             return;
         }
 
-        $propInfo = $event->getEnvironment()->getDataDefinition()->getPropertiesDefinition()->getProperty('jumpTo');
+        $dataDefinition = $event->getEnvironment()->getDataDefinition();
+        assert($dataDefinition instanceof ContainerInterface);
+
+        $propInfo = $dataDefinition->getPropertiesDefinition()->getProperty('jumpTo');
         $value    = StringUtil::deserialize($event->getValue(), true);
         $extra    = $propInfo->getExtra();
 
         $newValues = [];
-        $languages = $extra['columnFields']['langcode']['options'];
-        foreach (array_keys($languages) as $key) {
+        /** @var array<string, mixed> $languages */
+        $languages = $extra['columnFields']['langcode']['options'] ?? [];
+        foreach (\array_keys($languages) as $key) {
             $newValue = '';
             $filter   = 0;
             if ($value) {
                 foreach ($value as $arr) {
-                    if (!is_array($arr)) {
+                    if (!\is_array($arr)) {
                         break;
                     }
 
                     // Set the new value and exit the loop.
-                    if (array_search($key, $arr) !== false) {
+                    if (\in_array($key, $arr, true)) {
                         $newValue = '{{link_url::' . $arr['value'] . '}}';
                         $filter   = $arr['filter'];
                         break;
@@ -141,10 +147,10 @@ class JumpToListener extends AbstractAbstainingListener
         $value = StringUtil::deserialize($event->getValue(), true);
 
         foreach ($value as $k => $v) {
-            $value[$k]['value'] = str_replace(['{{link_url::', '}}'], ['', ''], $v['value']);
+            $value[$k]['value'] = \str_replace(['{{link_url::', '}}'], ['', ''], $v['value']);
         }
 
-        $event->setValue(serialize($value));
+        $event->setValue(\serialize($value));
     }
 
     /**
@@ -166,21 +172,29 @@ class JumpToListener extends AbstractAbstainingListener
         $model     = $event->getModel();
         $metaModel =
             $this->factory->getMetaModel($this->factory->translateIdToMetaModelName($model->getProperty('pid')));
+        assert($metaModel instanceof IMetaModel);
 
         $extra = $event->getProperty()->getExtra();
 
+        /** @psalm-suppress DeprecatedMethod */
         if ($metaModel->isTranslated()) {
+            /** @psalm-suppress DeprecatedMethod */
+            $fallback = $metaModel->getFallbackLanguage();
+
             $arrLanguages = [];
+            $rowClasses   = [];
+            /** @psalm-suppress DeprecatedMethod */
             foreach ((array) $metaModel->getAvailableLanguages() as $strLangCode) {
                 $arrLanguages[$strLangCode] = $this->translator
-                    ->trans('LNG.'. $strLangCode, [], 'contao_languages');
+                    ->trans('LNG.' . $strLangCode, [], 'contao_languages');
+                $rowClasses[] = ($strLangCode === $fallback) ? 'fallback_language' : 'normal_language';
             }
-            asort($arrLanguages);
 
-            $extra['minCount'] = count($arrLanguages);
-            $extra['maxCount'] = count($arrLanguages);
+            $extra['minCount'] = \count($arrLanguages);
+            $extra['maxCount'] = \count($arrLanguages);
 
-            $extra['columnFields']['langcode']['options'] = $arrLanguages;
+            $extra['columnFields']['langcode']['options']            = $arrLanguages;
+            $extra['columnFields']['langcode']['eval']['rowClasses'] = $rowClasses;
         } else {
             $extra['minCount'] = 1;
             $extra['maxCount'] = 1;
@@ -188,9 +202,9 @@ class JumpToListener extends AbstractAbstainingListener
             $extra['columnFields']['langcode']['options'] = [
                 'xx' => $this->translator
                     ->trans(
-                        'tl_metamodel_rendersettings.jumpTo_allLanguages',
+                        'jumpTo_allLanguages',
                         [],
-                        'contao_tl_metamodel_rendersettings'
+                        'tl_metamodel_rendersettings'
                     )
             ];
         }
@@ -216,8 +230,8 @@ class JumpToListener extends AbstractAbstainingListener
             ->from('tl_metamodel_filter', 't')
             ->where('t.pid=:id')
             ->setParameter('id', $model->getProperty('pid'))
-            ->execute()
-            ->fetchAll(\PDO::FETCH_ASSOC);
+            ->executeQuery()
+            ->fetchAllAssociative();
 
         $result = [];
         foreach ($filters as $filter) {

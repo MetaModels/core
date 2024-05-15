@@ -41,19 +41,17 @@ services:
         arguments:
             - "@cca.dc-general.scope-matcher"
             - "@metamodels.table_manipulator"
+            - "@metamodels.factory"
         tags:
             - name: kernel.event_listener
               event: dc-general.view.contao2backend.encode-property-value-from-widget
               method: handle
-    metamodels.listener.table.tl_metamodel.table_updater:
-        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\MetaModel\TableUpdatingListener
+
+    MetaModels\CoreBundle\EventListener\DcGeneral\Table\MetaModel\ModelSchemaManagerHintListener:
         arguments:
             - "@cca.dc-general.scope-matcher"
-            - "@metamodels.table_manipulator"
+            - "@translator"
         tags:
             - name: kernel.event_listener
-              event: dc-general.model.pre-delete
-              method: handleDelete
-            - name: kernel.event_listener
-              event: dc-general.model.post-persist
-              method: handleUpdate
+              event: dc-general.model.pre-edit-model
+              method: handle

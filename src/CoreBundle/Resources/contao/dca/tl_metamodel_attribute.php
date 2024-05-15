@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -31,21 +31,22 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = [
         'enableVersioning' => false,
         'sql'              => [
             'keys' => [
-                'id'      => 'primary',
-                'pid'     => 'index',
-                'colname' => 'index'
+                'id'          => 'primary',
+                'pid'         => 'index',
+                'colname'     => 'index',
+                'pid,colname' => 'unique',
             ],
         ],
     ],
     'dca_config'   => [
         'data_provider'  => [
-            'default' => [
+            'default'                           => [
                 'source' => 'tl_metamodel_attribute'
             ],
-            'parent' => [
+            'parent'                            => [
                 'source' => 'tl_metamodel'
             ],
-            'tl_metamodel_rendersetting' => [
+            'tl_metamodel_rendersetting'        => [
                 'source' => 'tl_metamodel_rendersetting'
             ],
             'tl_metamodel_dcasetting'           => [
@@ -54,7 +55,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = [
             'tl_metamodel_dcasetting_condition' => [
                 'source' => 'tl_metamodel_dcasetting_condition'
             ],
-            'tl_metamodel_dca_sortgroup' => [
+            'tl_metamodel_dca_sortgroup'        => [
                 'source' => 'tl_metamodel_dca_sortgroup'
             ]
         ],
@@ -174,37 +175,39 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = [
         ],
         'global_operations' => [
             'all' => [
-                'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
-                'href'       => 'act=select',
-                'class'      => 'header_edit_all',
-                'attributes' => 'onclick="Backend.getScrollOffset();"'
+                'label'       => 'all.label',
+                'description' => 'all.description',
+                'href'        => 'act=select',
+                'class'       => 'header_edit_all',
+                'attributes'  => 'onclick="Backend.getScrollOffset();"'
             ]
         ],
         'operations'        => [
             'edit'   => [
-                'label' => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['edit'],
-                'href'  => 'act=edit',
-                'icon'  => 'edit.svg'
+                'label'       => 'edit.label',
+                'description' => 'edit.description',
+                'href'        => 'act=edit',
+                'icon'        => 'edit.svg'
             ],
             'cut'    => [
-                'label'      => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['cut'],
-                'href'       => 'act=paste&amp;mode=cut',
-                'icon'       => 'cut.svg',
-                'attributes' => 'onclick="Backend.getScrollOffset();"'
+                'label'       => 'cut.label',
+                'description' => 'cut.description',
+                'href'        => 'act=paste&amp;mode=cut',
+                'icon'        => 'cut.svg',
+                'attributes'  => 'onclick="Backend.getScrollOffset();"'
             ],
             'delete' => [
-                'label'      => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['delete'],
-                'href'       => 'act=delete',
-                'icon'       => 'delete.svg',
-                'attributes' => sprintf(
-                    'onclick="if (!confirm(\'%s\')) return false; Backend.getScrollOffset();"',
-                    $GLOBALS['TL_LANG']['MSC']['deleteConfirm']
-                )
+                'label'       => 'delete.label',
+                'description' => 'delete.description',
+                'href'        => 'act=delete',
+                'icon'        => 'delete.svg',
+                'attributes'  => 'onclick="if (!confirm(this.dataset.msgConfirm)) return false; Backend.getScrollOffset();"',
             ],
             'show'   => [
-                'label' => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['show'],
-                'href'  => 'act=show',
-                'icon'  => 'show.svg'
+                'label'       => 'show.label',
+                'description' => 'show.description',
+                'href'        => 'act=show',
+                'icon'        => 'show.svg'
             ],
         ]
     ],
@@ -227,8 +230,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = [
                 'isvariant',
                 'isunique'
             ],
-            'metamodeloverview' => [],
-            'backenddisplay'    => [],
         ],
         // Default palette for MetaModelAttributeSimple derived types.
         // WARNING: even though it is empty, we have to keep it as otherwise
@@ -248,23 +249,28 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = [
     // Fields.
     'fields'       => [
         'id'          => [
-            'sql' => 'int(10) unsigned NOT NULL auto_increment'
+            'label' => 'id.label',
+            'sql'   => 'int(10) unsigned NOT NULL auto_increment'
         ],
         'pid'         => [
-            'sql' => "int(10) unsigned NOT NULL default '0'"
+            'label' => 'pid.label',
+            'sql'   => "int(10) unsigned NOT NULL default '0'"
         ],
         'sorting'     => [
+            'label'   => 'sorting.label',
             'sorting' => true,
             'sql'     => "int(10) unsigned NOT NULL default '0'"
         ],
         'tstamp'      => [
-            'sql' => "int(10) unsigned NOT NULL default '0'"
+            'label' => 'tstamp.label',
+            'sql'   => "int(10) unsigned NOT NULL default '0'"
         ],
         'type'        => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['type'],
-            'exclude'   => true,
-            'inputType' => 'select',
-            'eval'      => [
+            'label'       => 'type.label',
+            'description' => 'type.description',
+            'exclude'     => true,
+            'inputType'   => 'select',
+            'eval'        => [
                 'includeBlankOption' => true,
                 'doNotSaveEmpty'     => true,
                 'alwaysSave'         => true,
@@ -273,61 +279,65 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = [
                 'tl_class'           => 'w50',
                 'chosen'             => true
             ],
-            'filter'    => true,
-            'search'    => true,
-            'sql'       => "varchar(64) NOT NULL default ''"
+            'filter'      => true,
+            'search'      => true,
+            'sql'         => "varchar(64) NOT NULL default ''"
         ],
         'name'        => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name'],
-            'exclude'   => true,
-            'inputType' => 'text',
-            'eval'      => [
+            'label'       => 'name.label',
+            'description' => 'name.description',
+            'exclude'     => true,
+            'inputType'   => 'text',
+            'eval'        => [
                 'tl_class' => 'clr'
             ],
-            'search'    => true,
-            'sql'       => 'text NULL'
+            'search'      => true,
+            'sql'         => 'text NULL'
         ],
         'description' => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['description'],
-            'exclude'   => true,
-            'inputType' => 'text',
-            'eval'      => [
+            'label'       => 'description.label',
+            'description' => 'description.description',
+            'exclude'     => true,
+            'inputType'   => 'text',
+            'eval'        => [
                 'tl_class' => 'clr'
             ],
-            'sql'       => 'text NULL'
+            'sql'         => 'text NULL'
         ],
         // AVOID: doNotCopy => true, as child records won't be copied when copy metamodel.
         'colname'     => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['colname'],
-            'exclude'   => true,
-            'inputType' => 'text',
-            'eval'      => [
+            'label'       => 'colname.label',
+            'description' => 'colname.description',
+            'exclude'     => true,
+            'inputType'   => 'text',
+            'eval'        => [
                 'mandatory'             => true,
                 'maxlength'             => 64,
                 'tl_class'              => 'w50',
                 // Hide at overrideAll.
                 'doNotOverrideMultiple' => true
             ],
-            'search'    => true,
-            'sql'       => "varchar(64) NOT NULL default ''"
+            'search'      => true,
+            'sql'         => "varchar(64) NOT NULL default ''"
         ],
         'isvariant'   => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['isvariant'],
-            'inputType' => 'checkbox',
-            'eval'      => [
-                'submitOnChange' => true,
-                'tl_class'       => 'w50 cbx m12'
-            ],
-            'filter'    => true,
-            'sql'       => "char(1) NOT NULL default ''"
-        ],
-        'isunique'    => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['isunique'],
-            'inputType' => 'checkbox',
-            'eval'      => [
+            'label'       => 'isvariant.label',
+            'description' => 'isvariant.description',
+            'inputType'   => 'checkbox',
+            'eval'        => [
                 'tl_class' => 'w50 cbx m12'
             ],
-            'sql'       => "char(1) NOT NULL default ''"
+            'filter'      => true,
+            'sql'         => "char(1) NOT NULL default ''"
+        ],
+        'isunique'    => [
+            'label'       => 'isunique.label',
+            'description' => 'isunique.description',
+            'inputType'   => 'checkbox',
+            'eval'        => [
+                'tl_class' => 'w50 cbx m12'
+            ],
+            'sql'         => "char(1) NOT NULL default ''"
         ],
     ]
 ];

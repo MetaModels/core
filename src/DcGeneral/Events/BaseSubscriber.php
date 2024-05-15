@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -34,6 +35,8 @@ class BaseSubscriber
      * The MetaModel service container.
      *
      * @var IMetaModelsServiceContainer
+     *
+     * @psalm-suppress DeprecatedInterface
      */
     protected $serviceContainer;
 
@@ -41,6 +44,8 @@ class BaseSubscriber
      * Create a new instance.
      *
      * @param IMetaModelsServiceContainer $serviceContainer The MetaModel service container.
+     *
+     * @psalm-suppress DeprecatedInterface
      */
     public function __construct(IMetaModelsServiceContainer $serviceContainer)
     {
@@ -53,6 +58,8 @@ class BaseSubscriber
      * Retrieve the service container.
      *
      * @return IMetaModelsServiceContainer
+     *
+     * @psalm-suppress DeprecatedInterface
      */
     protected function getServiceContainer()
     {
@@ -66,6 +73,7 @@ class BaseSubscriber
      */
     protected function getDatabase()
     {
+        /** @psalm-suppress DeprecatedMethod */
         return $this->getServiceContainer()->getDatabase();
     }
 
@@ -83,15 +91,14 @@ class BaseSubscriber
      * Register multiple event listeners.
      *
      * @param string   $eventName The event name to register.
-     *
      * @param callable $listener  The listener to register.
-     *
      * @param int      $priority  The priority.
      *
      * @return BaseSubscriber
      */
     public function addListener($eventName, $listener, $priority = 200)
     {
+        /** @psalm-suppress DeprecatedMethod */
         $dispatcher = $this->getServiceContainer()->getEventDispatcher();
         $dispatcher->addListener($eventName, $listener, $priority);
 
@@ -101,13 +108,14 @@ class BaseSubscriber
     /**
      * Retrieve the MetaModel with the given id.
      *
-     * @param int $modelId The model being processed.
+     * @param string $modelId The model being processed.
      *
-     * @return IMetaModel
+     * @return IMetaModel|null
      */
     protected function getMetaModelById($modelId)
     {
-        $services     = $this->getServiceContainer();
+        $services = $this->getServiceContainer();
+        /** @psalm-suppress DeprecatedMethod */
         $modelFactory = $services->getFactory();
         $name         = $modelFactory->translateIdToMetaModelName($modelId);
 

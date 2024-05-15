@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,8 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Christopher Boelter <christopher@boelter.eu>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -24,6 +25,7 @@ namespace MetaModels\DcGeneral\Events\MetaModel;
 
 use ContaoCommunityAlliance\DcGeneral\Event\PreDuplicateModelEvent;
 use MetaModels\IFactory;
+use MetaModels\IMetaModel;
 
 /**
  * This class handles the paste into or after handling for variants.
@@ -35,7 +37,7 @@ class DuplicateModel
      *
      * @var IFactory
      */
-    private $factory;
+    private IFactory $factory;
 
     /**
      * Create a new instance.
@@ -60,7 +62,7 @@ class DuplicateModel
 
         $metaModel = $this->factory->getMetaModel($model->getProviderName());
 
-        if (!$metaModel || !$metaModel->hasVariants()) {
+        if (null === $metaModel || !$metaModel->hasVariants()) {
             return;
         }
 

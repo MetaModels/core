@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Maack <david.maack@arcor.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -38,14 +39,14 @@ class Filter implements IFilter
     /**
      * The contained filter rules.
      *
-     * @var array
+     * @var list<IFilterRule>
      */
-    protected $arrFilterRules = array();
+    protected $arrFilterRules = [];
 
     /**
      * The cached result after this filter has been evaluated.
      *
-     * @var string[]|null
+     * @var list<string>|null
      */
     protected $arrMatches = null;
 
@@ -56,9 +57,7 @@ class Filter implements IFilter
      */
     public function __construct(IMetaModel $objMetaModel)
     {
-        if ($objMetaModel) {
-            $this->strMetaModel = $objMetaModel->getTableName();
-        }
+        $this->strMetaModel = $objMetaModel->getTableName();
     }
 
     /**
@@ -70,7 +69,7 @@ class Filter implements IFilter
     {
         $this->arrMatches     = null;
         $arrOld               = $this->arrFilterRules;
-        $this->arrFilterRules = array();
+        $this->arrFilterRules = [];
         foreach ($arrOld as $objFilterRule) {
             $this->addFilterRule(clone $objFilterRule);
         }
@@ -83,9 +82,7 @@ class Filter implements IFilter
      */
     public function createCopy()
     {
-        $objCopy = clone $this;
-
-        return $objCopy;
+        return clone $this;
     }
 
     /**
@@ -112,7 +109,6 @@ class Filter implements IFilter
 
         $arrIds = null;
         foreach ($this->arrFilterRules as $objFilterRule) {
-            /** @var IFilterRule $objFilterRule */
             $arrRuleIds = $objFilterRule->getMatchingIds();
             if ($arrRuleIds === null) {
                 continue;
@@ -122,13 +118,15 @@ class Filter implements IFilter
                 $arrIds = $arrRuleIds;
             } else {
                 // NOTE: all rules are implicitely "AND"-ed together.
-                $arrIds = array_intersect($arrIds, $arrRuleIds);
-                // When no ids are left any more, the result will stay empty, do not evaluate any further rules.
-                if (count($arrIds) == 0) {
+                $arrIds = \array_intersect($arrIds, $arrRuleIds);
+                // When no ids are left anymore, the result will stay empty, do not evaluate any further rules.
+                if (\count($arrIds) === 0) {
                     break;
                 }
             }
         }
+        $arrIds = (null !== $arrIds) ? \array_values($arrIds) : null;
+
         $this->arrMatches = $arrIds;
 
         return $arrIds;

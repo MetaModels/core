@@ -1,7 +1,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Carolina Koehn <ck@kikmedia.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -43,7 +44,7 @@
     color: #8ab858;
     margin: 6px 0;
     padding-left: 24px;
-    background: url("../../../../themes/flexible/images/palOpen.gif") 3px center no-repeat;
+    background: url("/system/themes/flexible/icons/navcol.svg") 3px center no-repeat;
 }
 
 .mm_problem_display {
@@ -153,7 +154,8 @@ form[id^=mm_] .sort_hint {
 }
 
 .widget.translat-attr > h3 > label,
-.widget.translat-attr > fieldset > legend {
+.widget.translat-attr > fieldset > legend,
+.widget.translat-attr > .tl_checkbox_single_container label {
   padding-left: 20px;
   display: inline-block;
   background: url("../images/icons/locale.png") no-repeat left center;

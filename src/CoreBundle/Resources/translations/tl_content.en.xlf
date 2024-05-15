@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="src/CoreBundle/Resources/translations/tl_content.en.xlf">
+    <body>
+      <trans-unit id="editmetamodel.label" resname="editmetamodel.label">
+        <source>Edit MetaModel</source>
+      </trans-unit>
+      <trans-unit id="editmetamodel.description" resname="editmetamodel.description">
+        <source>Edit the MetaModel ID %id%.</source>
+      </trans-unit>
+      <trans-unit id="editrendersetting.label" resname="editrendersetting.label">
+        <source>Edit render setting</source>
+      </trans-unit>
+      <trans-unit id="editrendersetting.description" resname="editrendersetting.description">
+        <source>Edit the render setting ID %id%.</source>
+      </trans-unit>
+      <trans-unit id="editfiltersetting.label" resname="editfiltersetting.label">
+        <source>Edit filter setting</source>
+      </trans-unit>
+      <trans-unit id="editfiltersetting.description" resname="editfiltersetting.description">
+        <source>Edit the filter setting ID %id%.</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

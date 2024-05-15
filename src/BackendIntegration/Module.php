@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,20 +15,25 @@
  * @author     Andreas Isaak <info@andreas-isaak.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\BackendIntegration;
 
+use Contao\Input;
 use ContaoCommunityAlliance\DcGeneral\Action;
+use ContaoCommunityAlliance\DcGeneral\Controller\ControllerInterface;
 use ContaoCommunityAlliance\DcGeneral\DataContainerInterface;
 use ContaoCommunityAlliance\DcGeneral\Contao\Callback\Callbacks;
 
 /**
  * Implementation of the MetaModel Backend Module that allowing access to MetaModel configuration etc. Everything below
- * http://..../contao?do=metamodels&.... ends up here.
+ * https://..../contao/metamodels?.... ends up here.
+ *
+ * @deprecated Not in use anymore since 2.3.
  */
 class Module
 {
@@ -37,7 +42,7 @@ class Module
      *
      * @var DataContainerInterface
      */
-    private $dataContainer;
+    private DataContainerInterface $dataContainer;
 
     /**
      * Create a new instance.
@@ -62,15 +67,18 @@ class Module
         $GLOBALS['TL_CSS'][] = 'bundles/metamodelscore/css/style.css';
         $arrModule           = $GLOBALS['BE_MOD']['metamodels']['metamodels'];
         // Custom action (if key is not defined in config.php the default action will be called).
-        if (\Input::get('key') && isset($arrModule[\Input::get('key')])) {
-            Callbacks::call($arrModule[\Input::get('key')], $this, $arrModule);
+        if (Input::get('key') && isset($arrModule[Input::get('key')])) {
+            Callbacks::call($arrModule[Input::get('key')], $this, $arrModule);
         }
 
-        $act = \Input::get('act');
-        if (!strlen($act)) {
+        $act = Input::get('act');
+        if (!\strlen($act)) {
             $act = 'showAll';
         }
 
-        return $this->dataContainer->getEnvironment()->getController()->handle(new Action($act));
+        $controller = $this->dataContainer->getEnvironment()->getController();
+        assert($controller instanceof ControllerInterface);
+
+        return $controller->handle(new Action($act));
     }
 }

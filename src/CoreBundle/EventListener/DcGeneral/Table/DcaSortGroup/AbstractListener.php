@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -25,6 +25,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\Exception\DcGeneralInvalidArgumentException;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use MetaModels\IFactory;
 use MetaModels\IMetaModel;
 
@@ -69,15 +70,16 @@ abstract class AbstractListener extends AbstractAbstainingListener
      *
      * @param ModelInterface $model The input screen model for which to retrieve the MetaModel.
      *
-     * @return IMetaModel
+     * @return IMetaModel|null
      *
      * @throws DcGeneralInvalidArgumentException When an invalid model has been passed or the model does not have an id.
+     * @throws Exception
      */
     protected function getMetaModelFromModel(ModelInterface $model)
     {
-        if (!(($model->getProviderName() == 'tl_metamodel_dca_sortgroup') && $model->getProperty('pid'))) {
+        if (!(($model->getProviderName() === 'tl_metamodel_dca_sortgroup') && $model->getProperty('pid'))) {
             throw new DcGeneralInvalidArgumentException(
-                sprintf(
+                \sprintf(
                     'Model must originate from tl_metamodel_dca_sortgroup and be saved, this one originates from %s ' .
                     'and has pid %s',
                     $model->getProviderName(),
@@ -92,8 +94,12 @@ abstract class AbstractListener extends AbstractAbstainingListener
             ->from('tl_metamodel_dca', 't')
             ->where('t.id=:id')
             ->setParameter('id', $model->getProperty('pid'))
-            ->execute()
-            ->fetchColumn();
+            ->executeQuery()
+            ->fetchOne();
+
+        if (false === $metaModelId) {
+            return null;
+        }
 
         $tableName = $this->factory->translateIdToMetaModelName($metaModelId);
 

@@ -19,6 +19,7 @@ services:
             - '@database_connection'
             - '@metamodels.template_list'
             - '@request_stack'
+            - '@translator'
         public: true
 
     MetaModels\CoreBundle\Contao\Hooks\ModuleCallback:
@@ -30,6 +31,7 @@ services:
             - '@database_connection'
             - '@metamodels.template_list'
             - '@request_stack'
+            - '@translator'
         public: true
 
     MetaModels\CoreBundle\EventListener\GetSearchablePagesListener:
@@ -39,6 +41,8 @@ services:
             - '@event_dispatcher'
             - '@metamodels.filter_setting_factory'
             - '@metamodels.render_setting_factory'
+        tags:
+          - { name: 'kernel.event_listener', event: 'contao.sitemap' }
 
     MetaModels\CoreBundle\EventListener\InsertTagsListener:
         arguments:
@@ -46,6 +50,9 @@ services:
             - '@metamodels.factory'
             - '@metamodels.render_setting_factory'
             - '@metamodels.filter_setting_factory'
+            - '@?logger'
+        tags:
+            - { name: contao.hook, hook: replaceInsertTags }
 
     MetaModels\CoreBundle\Contao\Hooks\FixupUserGroupModules:
         arguments:

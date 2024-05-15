@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext"
+        original="src/CoreBundle/Resources/translations/tl_metamodel_dcasetting_condition.en.xlf">
+    <body>
+      <trans-unit id="backend-module.headline" resname="backend-module.headline">
+        <source>All input screen conditions</source>
+      </trans-unit>
+      <trans-unit id="id.label" resname="id.label">
+        <source>Id</source>
+      </trans-unit>
+      <trans-unit id="pid.label" resname="pid.label">
+        <source>Pid</source>
+      </trans-unit>
+      <trans-unit id="fid.label" resname="fid.label">
+        <source>Fid</source>
+      </trans-unit>
+      <trans-unit id="sorting.label" resname="sorting.label">
+        <source>Sorting</source>
+      </trans-unit>
+      <trans-unit id="tstamp.label" resname="tstamp.label">
+        <source>Revision date</source>
+      </trans-unit>
+      <trans-unit id="new.label" resname="new.label">
+        <source>New condition</source>
+      </trans-unit>
+      <trans-unit id="new.description" resname="new.description">
+        <source>Add a new visibility condition</source>
+      </trans-unit>
+      <trans-unit id="all.label" resname="all.label">
+        <source>Edit multiple</source>
+      </trans-unit>
+      <trans-unit id="all.description" resname="all.description">
+        <source>Edit multiple elements at once</source>
+      </trans-unit>
+      <trans-unit id="backBT" resname="backBT">
+        <source>Go back</source>
+      </trans-unit>
+      <trans-unit id="backBTTitle" resname="backBTTitle">
+        <source>Back to the previous page</source>
+      </trans-unit>
+      <trans-unit id="list_label.label" resname="list_label.label">
+        <source>Visibility conditons</source>
+      </trans-unit>
+      <trans-unit id="basic_legend" resname="basic_legend">
+        <source>Basic configuration</source>
+      </trans-unit>
+      <trans-unit id="config_legend" resname="config_legend">
+        <source>Condition configuration</source>
+      </trans-unit>
+      <trans-unit id="type.label" resname="type.label">
+        <source>Type</source>
+      </trans-unit>
+      <trans-unit id="type.description" resname="type.description">
+        <source>Select the condition type.</source>
+      </trans-unit>
+      <trans-unit id="enabled.label" resname="enabled.label">
+        <source>Enabled</source>
+      </trans-unit>
+      <trans-unit id="enabled.description" resname="enabled.description">
+        <source>Check to enable this condition.</source>
+      </trans-unit>
+      <trans-unit id="comment.label" resname="comment.label">
+        <source>Comment</source>
+      </trans-unit>
+      <trans-unit id="comment.description" resname="comment.description">
+        <source>Enter a comment to describe the purpose of this condition.</source>
+      </trans-unit>
+      <trans-unit id="attr_id.label" resname="attr_id.label">
+        <source>Attribute</source>
+      </trans-unit>
+      <trans-unit id="attr_id.description" resname="attr_id.description">
+        <source>Select the attribute to use for this condition.</source>
+      </trans-unit>
+      <trans-unit id="value.label" resname="value.label">
+        <source>Value</source>
+      </trans-unit>
+      <trans-unit id="value.description" resname="value.description">
+        <source>Please select the desired value.</source>
+      </trans-unit>
+      <trans-unit id="edit.label" resname="edit.label">
+        <source>Edit setting</source>
+      </trans-unit>
+      <trans-unit id="edit.description" resname="edit.description">
+        <source>Edit the setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="cut.label" resname="cut.label">
+        <source>Cut setting definition</source>
+      </trans-unit>
+      <trans-unit id="cut.description" resname="cut.description">
+        <source>Cut the setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="copy.label" resname="copy.label">
+        <source>Copy setting definition</source>
+      </trans-unit>
+      <trans-unit id="copy.description" resname="copy.description">
+        <source>Copy the setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="delete.label" resname="delete.label">
+        <source>Delete setting</source>
+      </trans-unit>
+      <trans-unit id="delete.description" resname="delete.description">
+        <source>Delete the setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="delete.confirm" resname="delete.confirm">
+        <source>Do you really want to delete element ID %id%?</source>
+      </trans-unit>
+      <trans-unit id="conditions.label" resname="conditions.label">
+        <source>Manage conditions</source>
+      </trans-unit>
+      <trans-unit id="conditions.description" resname="conditions.description">
+        <source>Manage the conditions of property ID %id%</source>
+      </trans-unit>
+      <trans-unit id="show.label" resname="show.label">
+        <source>Setting details</source>
+      </trans-unit>
+      <trans-unit id="show.description" resname="show.description">
+        <source>Show details of setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="toggle.label" resname="toggle.label">
+        <source>Toggle</source>
+      </trans-unit>
+      <trans-unit id="toggle.description" resname="toggle.description">
+        <source>Toggle the state of setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="addall.label" resname="addall.label">
+        <source>Add all</source>
+      </trans-unit>
+      <trans-unit id="addall.description" resname="addall.description">
+        <source>Add all attributes to input screen</source>
+      </trans-unit>
+      <trans-unit id="pastenew.label" resname="pastenew.label">
+        <source>Add new at the top</source>
+      </trans-unit>
+      <trans-unit id="pastenew.description" resname="pastenew.description">
+        <source>Add new after setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="pasteafter.label" resname="pasteafter.label">
+        <source>Create new after setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="pasteafter.description" resname="pasteafter.description">
+        <source>Create new after setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="pasteinto.label" resname="pasteinto.label">
+        <source>Create new setting at the top</source>
+      </trans-unit>
+      <trans-unit id="pasteinto.description" resname="pasteinto.description">
+        <source>Create new at the top of setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="conditionnames.conditionpropertyvalueis" resname="conditionnames.conditionpropertyvalueis">
+        <source>Attribute value is...</source>
+      </trans-unit>
+      <trans-unit id="conditionnames.conditionpropertycontainanyof" resname="conditionnames.conditionpropertycontainanyof">
+        <source>Attribute values contain any of...</source>
+      </trans-unit>
+      <trans-unit id="conditionnames.conditionpropertyvisible" resname="conditionnames.conditionpropertyvisible">
+        <source>Is attribute visible...</source>
+      </trans-unit>
+      <trans-unit id="conditionnames.conditionor" resname="conditionnames.conditionor">
+        <source>OR</source>
+      </trans-unit>
+      <trans-unit id="conditionnames.conditionand" resname="conditionnames.conditionand">
+        <source>AND</source>
+      </trans-unit>
+      <trans-unit id="conditionnames.conditionnot" resname="conditionnames.conditionnot">
+        <source>NOT</source>
+      </trans-unit>
+      <trans-unit id="typedesc._default_" resname="typedesc._default_">
+        <source>%icon% &lt;strong&gt;%name%&lt;/strong&gt; - for attribute &lt;em&gt;%attribute%&lt;/em&gt; (Parameter: %value%)%comment%
+        </source>
+      </trans-unit>
+      <trans-unit id="typedesc.conditionor" resname="typedesc.conditionor">
+        <source>%icon% &lt;strong&gt;%name%&lt;/strong&gt; - any sub conditions must be fulfilled%comment%</source>
+      </trans-unit>
+      <trans-unit id="typedesc.conditionand" resname="typedesc.conditionand">
+        <source>%icon% &lt;strong&gt;%name%&lt;/strong&gt; - all sub conditions must be fulfilled%comment%</source>
+      </trans-unit>
+      <trans-unit id="typedesc.conditionnot" resname="typedesc.conditionnot">
+        <source>%icon% &lt;strong&gt;%name%&lt;/strong&gt; - invert the result of the contained condition%comment%</source>
+      </trans-unit>
+      <trans-unit id="typedesc.conditionpropertyvalueis" resname="typedesc.conditionpropertyvalueis">
+        <source>%icon% &lt;strong&gt;%attribute%&lt;/strong&gt; value is %value%%comment%</source>
+      </trans-unit>
+      <trans-unit id="deleteConfirm" resname="deleteConfirm">
+        <source>Do you really want to delete setting ID %id%?</source>
+      </trans-unit>
+      <trans-unit id="showRecord" resname="showRecord">
+        <source>Show the details of record %id%</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -13,6 +13,7 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Oliver Willmes <info@oliverwillmes.de>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -60,14 +61,15 @@ final class ResolveLanguageTag
     public function resolve(string $queryString): string
     {
         // @codingStandardsIgnoreStart
-        if (\strpos($queryString, '{{iflng') === false && \strpos($queryString, '{{ifnlng') === false) {
+        if (!\str_contains($queryString, '{{iflng') && !\str_contains($queryString, '{{ifnlng')) {
             return $queryString;
         }
         $tags = \preg_split('~{{(ifn?lng[^{}]*)}}~', $queryString, -1, PREG_SPLIT_DELIM_CAPTURE );
 
         $strBuffer = '';
+        $arrCache  = [];
 
-        for ($_rit=0, $_cnt=\count($tags); $_rit<$_cnt; $_rit+=2) {
+        for ($_rit = 0, $_cnt = \count($tags); $_rit < $_cnt; $_rit += 2) {
             $strBuffer .= $tags[$_rit];
 
             if (!isset($tags[$_rit+1])) {
@@ -81,12 +83,12 @@ final class ResolveLanguageTag
 
             $flags    = \explode('|', $strTag);
             $tag      = \array_shift($flags);
-            $elements = \explode('::', $tag);
+            $elements = \array_merge(\explode('::', $tag), ['']);
 
             $arrCache[$strTag] = '';
 
             if (
-                !empty($elements[1]) &&
+                '' !== $elements[1] &&
                 $this->languageMatches($elements[1]) === (\strtolower($elements[0]) === 'ifnlng')
             ) {
                 for (; $_rit<$_cnt; $_rit+=2) {

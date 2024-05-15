@@ -35,7 +35,7 @@ class ServiceContainerInitializer
      *
      * @var ContainerInterface
      */
-    private $container;
+    private ContainerInterface $container;
 
     /**
      * Create a new instance.
@@ -53,6 +53,8 @@ class ServiceContainerInitializer
      * @param MetaModelsServiceContainer $serviceContainer The container to configure.
      *
      * @return MetaModelsServiceContainer
+     *
+     * @psalm-suppress DeprecatedClass
      */
     public function configure(MetaModelsServiceContainer $serviceContainer)
     {

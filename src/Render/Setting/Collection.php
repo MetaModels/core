@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2021 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -35,6 +35,7 @@ use MetaModels\IItem;
 use MetaModels\IMetaModel;
 use MetaModels\ITranslatedMetaModel;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Base implementation for render settings.
@@ -53,42 +54,42 @@ class Collection implements ICollection
      *
      * @var EventDispatcherInterface
      */
-    private $dispatcher;
+    private EventDispatcherInterface $dispatcher;
 
     /**
      * The filter setting factory.
      *
      * @var IFilterSettingFactory
      */
-    private $filterFactory;
+    private IFilterSettingFactory $filterFactory;
 
     /**
      * The filter URL builder.
      *
      * @var FilterUrlBuilder
      */
-    private $filterUrlBuilder;
+    private FilterUrlBuilder $filterUrlBuilder;
 
     /**
      * The base information for this render settings object.
      *
      * @var array
      */
-    protected $arrBase = array();
+    protected $arrBase = [];
 
     /**
      * The sub settings for all attributes.
      *
      * @var array
      */
-    protected $arrSettings = array();
+    protected $arrSettings = [];
 
     /**
      * The jump to information buffered in this setting.
      *
      * @var array
      */
-    protected $jumpToCache;
+    protected $jumpToCache = [];
 
     /**
      * Create a new instance.
@@ -97,11 +98,11 @@ class Collection implements ICollection
      * @param array                    $arrInformation   The array that holds all base information for the new instance.
      * @param EventDispatcherInterface $dispatcher       The event dispatcher.
      * @param IFilterSettingFactory    $filterFactory    The filter setting factory.
-     * @param FilterUrlBuilder         $filterUrlBuilder The filter URL builder.
+     * @param FilterUrlBuilder|null    $filterUrlBuilder The filter URL builder.
      */
     public function __construct(
         IMetaModel $metaModel,
-        $arrInformation,
+        array $arrInformation,
         EventDispatcherInterface $dispatcher,
         IFilterSettingFactory $filterFactory,
         FilterUrlBuilder $filterUrlBuilder = null
@@ -109,26 +110,7 @@ class Collection implements ICollection
         $this->metaModel     = $metaModel;
         $this->dispatcher    = $dispatcher;
         $this->filterFactory = $filterFactory;
-        if (null === $this->dispatcher) {
-            // @codingStandardsIgnoreStart
-            @trigger_error(
-                'Not passing the event dispatcher as 3rd argument to "' . __METHOD__ . '" is deprecated ' .
-                'and will cause an error in MetaModels 3.0',
-                E_USER_DEPRECATED
-            );
-            // @codingStandardsIgnoreEnd
-            $this->dispatcher = System::getContainer()->get('event_dispatcher');
-        }
-        if (null === $this->filterFactory) {
-            // @codingStandardsIgnoreStart
-            @trigger_error(
-                'Not passing the filter setting factory as 4th argument to "' . __METHOD__ . '" is deprecated ' .
-                'and will cause an error in MetaModels 3.0',
-                E_USER_DEPRECATED
-            );
-            // @codingStandardsIgnoreEnd
-            $this->filterFactory = System::getContainer()->get('metamodels.filter_setting_factory');
-        }
+
         if (null === $filterUrlBuilder) {
             // @codingStandardsIgnoreStart
             @trigger_error(
@@ -138,6 +120,7 @@ class Collection implements ICollection
             );
             // @codingStandardsIgnoreEnd
             $filterUrlBuilder = System::getContainer()->get('metamodels.filter_url');
+            assert($filterUrlBuilder instanceof FilterUrlBuilder);
         }
         $this->filterUrlBuilder = $filterUrlBuilder;
 
@@ -151,7 +134,7 @@ class Collection implements ICollection
      */
     public function get($strName)
     {
-        return $this->arrBase[$strName];
+        return $this->arrBase[$strName] ?? null;
     }
 
     /**
@@ -191,7 +174,7 @@ class Collection implements ICollection
      */
     public function getSettingNames()
     {
-        return array_keys($this->arrSettings);
+        return \array_keys($this->arrSettings);
     }
 
     /**
@@ -201,14 +184,23 @@ class Collection implements ICollection
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @psalm-suppress PossiblyNullArrayOffset
      */
     private function getJumpToLabel()
     {
         $tableName = $this->metaModel->getTableName();
+        if (
+            null !== ($label = ($GLOBALS['TL_LANG']['MSC'][$tableName][$this->get('id')]['details'] ??
+            ($GLOBALS['TL_LANG']['MSC'][$tableName]['details'] ??
+            ($GLOBALS['TL_LANG']['MSC']['details'] ?? null))))
+        ) {
+            return $label;
+        }
 
-        return ($GLOBALS['TL_LANG']['MSC'][$tableName][$this->get('id')]['details'] ??
-               ($GLOBALS['TL_LANG']['MSC'][$tableName]['details'] ??
-               $GLOBALS['TL_LANG']['MSC']['details']));
+        $translator = System::getContainer()->get('translator');
+        assert($translator instanceof TranslatorInterface);
+
+        return $translator->trans('details', [], $tableName);
     }
 
     /**
@@ -218,16 +210,16 @@ class Collection implements ICollection
      *
      * @return array
      */
-    private function getPageDetails($pageId): array
+    private function getPageDetails(string $pageId): array
     {
         if (empty($pageId)) {
             return [];
         }
 
-        $event = new GetPageDetailsEvent($pageId);
+        $event = new GetPageDetailsEvent((int) $pageId);
         $this->dispatcher->dispatch($event, ContaoEvents::CONTROLLER_GET_PAGE_DETAILS);
 
-        return ($event->getPageDetails() ?? []);
+        return $event->getPageDetails();
     }
 
     /**
@@ -241,11 +233,14 @@ class Collection implements ICollection
         $translated       = false;
         $desiredLanguage  = null;
         $fallbackLanguage = null;
+
+        /** @psalm-suppress DeprecatedMethod */
         if ($this->metaModel instanceof ITranslatedMetaModel) {
             $translated       = true;
             $desiredLanguage  = $this->metaModel->getLanguage();
             $fallbackLanguage = $this->metaModel->getMainLanguage();
-        } elseif ($this->metaModel->isTranslated(false)) {
+            /** @psalm-suppress DeprecatedMethod */
+        } elseif ($this->metaModel->isTranslated()) {
             // @coverageIgnoreStart
             // @codingStandardsIgnoreStart
             @\trigger_error(
@@ -255,12 +250,14 @@ class Collection implements ICollection
             );
             // @codingStandardsIgnoreEnd
             $translated       = true;
-            $desiredLanguage  = $this->metaModel->getActiveLanguage();
+            /** @psalm-suppress DeprecatedMethod */
+            $desiredLanguage = $this->metaModel->getActiveLanguage();
+            /** @psalm-suppress DeprecatedMethod */
             $fallbackLanguage = $this->metaModel->getFallbackLanguage();
             // @coverageIgnoreEnd
         }
 
-        $cacheKey = $desiredLanguage . '.' . $fallbackLanguage;
+        $cacheKey = ($desiredLanguage ?? '') . '.' . ($fallbackLanguage ?? '');
         if (!isset($this->jumpToCache[$cacheKey])) {
             $this->jumpToCache[$cacheKey] = $this->lookupJumpTo($translated, $desiredLanguage, $fallbackLanguage);
         }
@@ -282,13 +279,13 @@ class Collection implements ICollection
         $jumpToPageId    = '';
         $filterSettingId = '';
         foreach ((array) $this->get('jumpTo') as $jumpTo) {
-            $langCode = $jumpTo['langcode'];
+            $langCode = $jumpTo['langcode'] ?? null;
             // If either desired language or fallback, keep the result.
             if (!$translated || ($langCode === $desired) || ($langCode === $fallback)) {
-                $jumpToPageId    = $jumpTo['value'];
-                $filterSettingId = $jumpTo['filter'];
+                $jumpToPageId    = $jumpTo['value'] ?? '';
+                $filterSettingId = (string) ($jumpTo['filter'] ?? '');
                 // If the desired language, break.
-                // Otherwise try to get the desired one until all have been evaluated.
+                // Otherwise, try to get the desired one until all have been evaluated.
                 if (!$translated || ($desired === $jumpTo['langcode'])) {
                     break;
                 }
@@ -306,7 +303,7 @@ class Collection implements ICollection
             'filter'        => $filterSettingId,
             'filterSetting' => $filterSetting,
             // Mask out the "all languages" language key (See #687).
-            'language'      => $pageDetails['language'],
+            'language'      => $pageDetails['language'] ?? '',
             'label'         => $this->getJumpToLabel()
         ];
     }
@@ -318,7 +315,7 @@ class Collection implements ICollection
     {
         $information = $this->determineJumpToInformation();
         if (empty($information['pageDetails'])) {
-            return array();
+            return [];
         }
 
         $result        = $information;
@@ -337,7 +334,7 @@ class Collection implements ICollection
             foreach ($parameterList as $strKey => $strValue) {
                 // Sadly the filter values are currently encoded due to legacy reasons.
                 // For MetaModels 3, they should be passed around decoded everywhere.
-                $filterUrl->setSlug($strKey, rawurldecode($strValue));
+                $filterUrl->setSlug($strKey, \rawurldecode($strValue))->setGet($strKey, '');
             }
         }
 

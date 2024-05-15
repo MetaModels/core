@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -32,55 +32,59 @@ use MetaModels\IMetaModel;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment as TwigEnvironment;
 
 /**
  * This controller provides the base for the add-all handlers for input screens and render settings.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 abstract class AbstractAddAllController
 {
     /**
      * Adapter to the Contao\System class.
      *
-     * @var System
+     * @var Adapter<System>
      */
-    private $systemAdapter;
+    private Adapter $systemAdapter;
 
     /**
      * The translator.
      *
      * @var TranslatorInterface
      */
-    private $translator;
+    private TranslatorInterface $translator;
 
     /**
      * The MetaModels factory.
      *
      * @var IFactory
      */
-    private $factory;
+    private IFactory $factory;
 
     /**
      * The database connection.
      *
      * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * The cache purger.
      *
      * @var PurgeCache
      */
-    private $purger;
+    private PurgeCache $purger;
 
     /**
      * The list of known attributes.
      *
      * @var array
      */
-    private $knownAttributes;
+    private array $knownAttributes;
 
     /**
      * The twig engine.
@@ -94,7 +98,7 @@ abstract class AbstractAddAllController
      *
      * @var int
      */
-    private $startSort;
+    private int $startSort;
 
     /**
      * Create a new instance.
@@ -103,7 +107,7 @@ abstract class AbstractAddAllController
      * @param TranslatorInterface $translator    The translator.
      * @param IFactory            $factory       The MetaModels factory.
      * @param Connection          $connection    The database connection.
-     * @param Adapter             $systemAdapter Adapter to the Contao\System class.
+     * @param Adapter<System>     $systemAdapter Adapter to the Contao\System class.
      * @param PurgeCache          $purger        The cache purger.
      */
     public function __construct(
@@ -129,10 +133,11 @@ abstract class AbstractAddAllController
      * @param string     $parentId  The parent id.
      * @param bool       $activate  Flag if the setting shall get activated.
      * @param int        $sort      The sorting value.
+     * @param string     $tlclass   The CSS class.
      *
      * @return array
      */
-    abstract protected function createEmptyDataFor(IAttribute $attribute, $parentId, $activate, $sort);
+    abstract protected function createEmptyDataFor(IAttribute $attribute, $parentId, $activate, $sort, $tlclass = '');
 
     /**
      * Test if the passed attribute is acceptable.
@@ -194,18 +199,18 @@ abstract class AbstractAddAllController
 
         return [
             'action'        => '',
-            'requestToken'  => REQUEST_TOKEN,
+            'requestToken'  => System::getContainer()->get('contao.csrf.token_manager')?->getDefaultTokenValue(),
             'href'          => $this->getReferer($request, $table, true),
-            'backBt'        => $this->translator->trans('MSC.backBT', [], 'contao_default'),
-            'add'           => $this->translator->trans('MSC.continue', [], 'contao_default'),
-            'saveNclose'    => $this->translator->trans('MSC.saveNclose', [], 'contao_default'),
-            'activate'      => $this->translator->trans($table . '.addAll_activate', [], 'contao_' . $table),
+            'backBt'        => $this->translator->trans('backBT', [], $table),
+            'add'           => $this->translator->trans('continue', [], $table),
+            'saveNclose'    => $this->translator->trans('saveNclose', [], $table),
+            'activate'      => $this->translator->trans('addAll_activate', [], $table),
             'tlclass'       => '',
-            'headline'      => $this->translator->trans($table . '.addall.1', [], 'contao_' . $table),
-            'selectAll'     => $this->translator->trans('MSC.selectAll', [], 'contao_default') . '.',
+            'headline'      => $this->translator->trans('addall.description', [], $table),
+            'selectAll'     => $this->translator->trans('selectAll', [], $table) . '.',
             'cacheMessage'  => '',
             'updateMessage' => '',
-            'hasCheckbox'   => count($fields) > 0,
+            'hasCheckbox'   => \count($fields) > 0,
             'fields'        => $fields,
             'stylesheets'   => ['bundles/metamodelscore/css/style.css']
         ];
@@ -219,7 +224,7 @@ abstract class AbstractAddAllController
      *
      * @return array
      */
-    private function fetchExisting($table, $parentId)
+    private function fetchExisting(string $table, string $parentId): array
     {
         // Keep the sorting value.
         $this->startSort       = 0;
@@ -232,9 +237,9 @@ abstract class AbstractAddAllController
             ->where('t.pid=:pid')
             ->setParameter('pid', $parentId)
             ->orderBy('t.sorting')
-            ->execute();
+            ->executeQuery();
 
-        foreach ($alreadyExisting->fetchAll(\PDO::FETCH_ASSOC) as $item) {
+        foreach ($alreadyExisting->fetchAllAssociative() as $item) {
             $this->knownAttributes[$item['attr_id']] = $item;
             $this->startSort                         = $item['sorting'];
         }
@@ -249,9 +254,9 @@ abstract class AbstractAddAllController
      *
      * @return bool
      */
-    private function knowsAttribute($attribute)
+    private function knowsAttribute(IAttribute $attribute): bool
     {
-        return array_key_exists($attribute->get('id'), $this->knownAttributes);
+        return \array_key_exists($attribute->get('id'), $this->knownAttributes);
     }
 
     /**
@@ -263,7 +268,7 @@ abstract class AbstractAddAllController
      *
      * @return array
      */
-    private function generateForm($table, $metaModel, Request $request)
+    private function generateForm(string $table, IMetaModel $metaModel, Request $request): array
     {
         $fields = [];
         // Loop over all attributes now.
@@ -312,12 +317,16 @@ abstract class AbstractAddAllController
      *
      * @return string
      */
-    private function checkboxCaption($key, $table, IAttribute $attribute)
+    private function checkboxCaption(string $key, string $table, IAttribute $attribute): string
     {
         return $this->translator->trans(
-            $table . '.' . $key,
-            [$attribute->getName(), $attribute->get('type'), $attribute->getColName()],
-            'contao_' . $table
+            $key,
+            [
+                '%name%'    => $attribute->getName(),
+                '%type%'    => $attribute->get('type'),
+                '%colName%' => $attribute->getColName()
+            ],
+            $table
         );
     }
 
@@ -329,7 +338,7 @@ abstract class AbstractAddAllController
      *
      * @return bool
      */
-    private function isAttributeSubmitted($attributeId, Request $request)
+    private function isAttributeSubmitted(string $attributeId, Request $request): bool
     {
         return $request->request->has('attribute_' . $attributeId);
     }
@@ -344,37 +353,41 @@ abstract class AbstractAddAllController
      *
      * @return void
      */
-    private function perform($table, Request $request, $metaModel, $parentId)
+    private function perform(string $table, Request $request, IMetaModel $metaModel, string $parentId): void
     {
         $activate = (bool) $request->request->get('activate');
-        $tlclass  = $request->request->get('tlclass');
+        $tlclass  = (string) $request->request->get('tlclass');
 
         $query = $this
             ->connection
             ->createQueryBuilder()
             ->insert($table);
         foreach ($metaModel->getAttributes() as $attribute) {
-            if ($this->knowsAttribute($attribute)
+            if (
+                $this->knowsAttribute($attribute)
                 || !($this->accepts($attribute) && $this->isAttributeSubmitted($attribute->get('id'), $request))
             ) {
                 continue;
             }
 
             $data = [];
-            foreach ($this->createEmptyDataFor(
-                $attribute,
-                $parentId,
-                $activate,
-                $this->startSort,
-                $tlclass
-            ) as $key => $value) {
+            foreach (
+                $this->createEmptyDataFor(
+                    $attribute,
+                    $parentId,
+                    $activate,
+                    $this->startSort,
+                    $tlclass
+                ) as $key => $value
+            ) {
                 $data[$key] = ':' . $key;
                 $query->setParameter($key, $value);
             }
 
-            $query->values($data)->execute();
+            $query->values($data)->executeQuery();
             $this->startSort += 128;
         }
+
         $this->purger->purge();
     }
 
@@ -387,7 +400,7 @@ abstract class AbstractAddAllController
      *
      * @return string
      */
-    private function getReferer(Request $request, $table, $encodeAmp = false)
+    private function getReferer(Request $request, string $table, bool $encodeAmp = false): string
     {
         $uri = $this->systemAdapter->getReferer($encodeAmp, $table);
         // Make the location an absolute URL

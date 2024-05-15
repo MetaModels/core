@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,25 +14,34 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2020 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\CoreBundle\EventListener;
 
-use Contao\BackendUser;
 use Contao\CoreBundle\Event\MenuEvent;
-use Contao\StringUtil;
+use Knp\Menu\FactoryInterface;
+use Knp\Menu\ItemInterface;
 use MetaModels\ViewCombination\ViewCombination;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
+
+use function array_key_exists;
+use function array_map;
+use function in_array;
+use function is_array;
 
 /**
  * This registers the backend navigation of MetaModels.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BackendNavigationListener
 {
@@ -48,28 +57,35 @@ class BackendNavigationListener
      *
      * @var TranslatorInterface
      */
-    private $translator;
+    private TranslatorInterface $translator;
 
     /**
      * The translator in use.
      *
      * @var ViewCombination
      */
-    private $viewCombination;
+    private ViewCombination $viewCombination;
 
     /**
      * The token storage.
      *
      * @var TokenStorageInterface
      */
-    private $tokenStorage;
+    private TokenStorageInterface $tokenStorage;
 
     /**
      * The router.
      *
      * @var RouterInterface
      */
-    private $router;
+    private RouterInterface $router;
+
+    /**
+     * The session.
+     *
+     * @var Session
+     */
+    private Session $session;
 
     /**
      * Create a new instance.
@@ -79,19 +95,22 @@ class BackendNavigationListener
      * @param ViewCombination       $viewCombination The view combination.
      * @param TokenStorageInterface $tokenStorage    The token storage.
      * @param RouterInterface       $router          The router.
+     * @param Session               $session         The session.
      */
     public function __construct(
         TranslatorInterface $translator,
         RequestStack $requestStack,
         ViewCombination $viewCombination,
         TokenStorageInterface $tokenStorage,
-        RouterInterface $router
+        RouterInterface $router,
+        Session $session,
     ) {
         $this->requestStack    = $requestStack;
         $this->translator      = $translator;
         $this->viewCombination = $viewCombination;
         $this->tokenStorage    = $tokenStorage;
         $this->router          = $router;
+        $this->session         = $session;
     }
 
     /**
@@ -113,40 +132,38 @@ class BackendNavigationListener
             return;
         }
 
-        if (null === $request = $this->requestStack->getCurrentRequest()) {
+        if (null === ($request = $this->requestStack->getCurrentRequest())) {
+            return;
+        }
+
+        if (null === ($user = $this->tokenStorage->getToken())) {
             return;
         }
 
         $this->addBackendCss();
 
-        if (null !== ($user = $this->tokenStorage->getToken())) {
-            $userRights = $this->extractUserRights($user);
+        $isAdmin = in_array('ROLE_ADMIN', $user->getRoleNames(), true);
+
+        $metaModelsNode = $this->getRootNode($tree, $factory);
+
+        $names = array_map(static fn(ItemInterface $item): string => $item->getName(), $metaModelsNode->getChildren());
+
+        // Show MetaModels config only for Admins.
+        if ($isAdmin) {
+            $metaModelsNode->addChild($configNode = $this->buildConfigNode($factory, $request));
+            array_unshift($names, $configNode->getName());
         }
 
-        $isAdmin = \in_array('ROLE_ADMIN', $user->getRoleNames(), true);
+        $metaModelsNode->reorderChildren($names);
 
-        $metaModelsNode = $tree->getChild('metamodels');
-        if (null !== $metaModelsNode && ($isAdmin || isset($userRights['support_metamodels']))) {
-            $node = $factory
-                ->createItem('support_screen')
-                ->setUri($this->router->generate('metamodels.support_screen'))
-                ->setLabel($this->translator->trans('MOD.support_metamodels.0', [], 'contao_modules'))
-                ->setLinkAttribute('title', $this->translator->trans('MOD.support_metamodels.1', [], 'contao_modules'))
-                ->setLinkAttribute('class', 'support_screen')
-                ->setCurrent('metamodels.support_screen' === $request->get('_route'));
-
-            $metaModelsNode->addChild($node);
+        $currentMetaModel = '';
+        if ($request->attributes->get('_route') === 'metamodels.metamodel') {
+            $currentMetaModel = (string) (($request->attributes->get('_route_params', []))['tableName'] ?? '');
         }
 
-        $locale = $request->getLocale();
         foreach ($this->viewCombination->getStandalone() as $metaModelName => $screen) {
-            $moduleName = 'metamodel_' . $metaModelName;
-            if (!$isAdmin && !isset($userRights[$moduleName])) {
-                continue;
-            }
-
-            $sectionNode = $tree->getChild($screen['meta']['backendsection']);
-            if (null === $sectionNode) {
+            if (null === $sectionNode = $this->getSectionNode($factory, $tree, $screen['meta']['backendsection'])) {
+                // Rien ne vas plus.
                 continue;
             }
 
@@ -154,56 +171,35 @@ class BackendNavigationListener
 
             $node = $factory
                 ->createItem($item)
-                ->setUri($this->router->generate('contao_backend', ['do' => $item]))
-                ->setLabel($this->extractLanguageValue($screen['label'], $locale))
-                ->setLinkAttribute('title', $this->extractLanguageValue($screen['description'], $locale))
+                ->setUri($this->router->generate('metamodels.metamodel', ['tableName' => $metaModelName]))
+                ->setLabel('inputscreen.' . $screen['meta']['id'] . '.menu.label')
+                ->setExtra('translation_domain', $metaModelName)
+                ->setLinkAttribute(
+                    'title',
+                    $this->translator->trans(
+                        'inputscreen.' . $screen['meta']['id'] . '.menu.description',
+                        [],
+                        $metaModelName
+                    )
+                )
                 ->setLinkAttribute('class', $item)
-                ->setCurrent($request->get('_route') === 'contao_backend' && $request->query->get('do') === $item);
+                ->setCurrent($currentMetaModel === $metaModelName);
 
             $sectionNode->addChild($node);
         }
-    }
 
-    /**
-     * Extract the permissions from the Contao backend user.
-     *
-     * @param TokenInterface $token The token.
-     *
-     * @return array
-     */
-    private function extractUserRights(TokenInterface $token): array
-    {
-        $beUser = $token->getUser();
-        if (!($beUser instanceof BackendUser)) {
-            return [];
+        if ($isAdmin) {
+            $node = $factory
+                ->createItem('support_screen')
+                ->setUri($this->router->generate('metamodels.support_screen'))
+                ->setLabel('menu.label')
+                ->setExtra('translation_domain', 'metamodels_support')
+                ->setLinkAttribute('title', $this->translator->trans('menu.description', [], 'metamodels_support'))
+                ->setLinkAttribute('class', 'support_screen')
+                ->setCurrent('metamodels.support_screen' === $request->attributes->get('_route'));
+
+            $metaModelsNode->addChild($node);
         }
-
-        $allowedModules = $beUser->modules;
-        switch (true) {
-            case \is_string($allowedModules):
-                $allowedModules = StringUtil::deserialize($allowedModules, true);
-                break;
-            case null === $allowedModules:
-                $allowedModules = [];
-                break;
-            default:
-        }
-
-        return array_flip($allowedModules);
-    }
-
-    /**
-     * Extract the language value.
-     *
-     * @param string[] $values The values.
-     *
-     * @param string   $locale The current locale.
-     *
-     * @return string
-     */
-    private function extractLanguageValue($values, $locale): string
-    {
-        return html_entity_decode(($values[$locale] ?? $values['']));
     }
 
     /**
@@ -218,5 +214,189 @@ class BackendNavigationListener
     {
         // BE group icon.
         $GLOBALS['TL_CSS']['metamodels'] = 'bundles/metamodelscore/css/be_logo_svg.css';
+    }
+
+    /**
+     * Get root node.
+     *
+     * @param ItemInterface    $tree    The tree.
+     * @param FactoryInterface $factory The factory.
+     *
+     * @return ItemInterface
+     */
+    private function getRootNode(ItemInterface $tree, FactoryInterface $factory): ItemInterface
+    {
+        $names          =
+            $this->getChildNamesFromTree($tree);
+        $insertPos      = (int) array_search('accounts', $names, true) + 1;
+        $metaModelsNode = $tree->getChild('metamodels');
+        if (null === $metaModelsNode) {
+            $metaModelsNode = $factory->createItem('metamodels');
+            $tree->addChild($metaModelsNode);
+        }
+
+        $metaModelsNode
+            ->setLabel('menuGroup.metamodels.label')
+            ->setExtra('translation_domain', 'metamodels_navigation');
+
+        $this->updateCollapsedState($metaModelsNode);
+
+        // Resort if already existing.
+        $names = array_values(array_filter($names, static fn(string $name): bool => 'metamodels' !== $name));
+
+        array_splice($names, $insertPos, 0, 'metamodels');
+        $tree->reorderChildren($names);
+
+        return $metaModelsNode;
+    }
+
+    /**
+     * Generate build config.
+     *
+     * @param FactoryInterface $factory The factory.
+     * @param Request          $request The request.
+     *
+     * @return ItemInterface
+     */
+    private function buildConfigNode(FactoryInterface $factory, Request $request): ItemInterface
+    {
+        $configNode = $factory->createItem('metamodels');
+
+        $configNode
+            ->setUri($this->router->generate('metamodels.configuration'))
+            ->setLabel('menu.metamodels.label')
+            ->setExtra('translation_domain', 'metamodels_navigation')
+            ->setLinkAttribute('title', $this->translator->trans('menu.metamodels.title', [], 'metamodels_navigation'))
+            ->setLinkAttribute('class', 'metamodel_config')
+            ->setCurrent('metamodels.configuration' === $request->attributes->get('_route'));
+
+        return $configNode;
+    }
+
+    /**
+     * Update collapsed state of navigation groups.
+     *
+     * @param ItemInterface $metaModelsNode
+     *
+     * @return void
+     */
+    private function updateCollapsedState(ItemInterface $metaModelsNode): void
+    {
+        $nodeName    = $metaModelsNode->getName();
+        $sessionBag  = $this->session->getBag('contao_backend');
+        $status      = ($sessionBag instanceof AttributeBagInterface) ? $sessionBag->get('backend_modules') : [];
+        $isCollapsed = ($status[$nodeName] ?? 1) < 1;
+        $path        = $this->router->generate('contao_backend');
+
+        $metaModelsNode
+            ->setLinkAttribute('class', 'group-' . $nodeName)
+            ->setLinkAttribute(
+                'onclick',
+                "return AjaxRequest.toggleNavigation(this, '" . $nodeName . "', '" . $path . "')"
+            )
+            ->setLinkAttribute('aria-controls', $nodeName)
+            ->setChildrenAttribute('id', $nodeName)
+            ->setLinkAttribute(
+                'title',
+                $this->translator->trans('MSC.' . ($isCollapsed ? 'expand' : 'collapse') . 'Node', [], 'contao_default')
+            )
+            ->setLinkAttribute('aria-expanded', $isCollapsed ? 'false' : 'true');
+
+        if ($isCollapsed) {
+            $metaModelsNode->setAttribute('class', 'collapsed');
+        }
+
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
+            return;
+        }
+
+        $uri = $this->router->generate(
+            'contao_backend',
+            [
+                'do'  => $request->query->get('do'),
+                'mtg' => $nodeName,
+                'ref' => $request->attributes->get('_contao_referer_id')
+            ]
+        );
+
+        $metaModelsNode->setUri($uri);
+    }
+
+    /**
+     * Get section node.
+     *
+     * @param FactoryInterface $factory        The factory.
+     * @param ItemInterface    $tree           The item interface.
+     * @param string           $backendSection The backend section.
+     *
+     * @return ItemInterface|null
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    private function getSectionNode(
+        FactoryInterface $factory,
+        ItemInterface $tree,
+        string $backendSection
+    ): ?ItemInterface {
+        if (null !== $sectionNode = $tree->getChild($backendSection)) {
+            return $sectionNode;
+        }
+
+        // Somehow it disappeared - try to generate it via BE_MOD.
+        if (!array_key_exists($backendSection, $GLOBALS['BE_MOD'])) {
+            return null;
+        }
+        $navigation = array_keys($GLOBALS['BE_MOD']);
+        // Keep child names before adding the new child.
+        $namesInMenu   = $this->getChildNamesFromTree($tree);
+        $sectionNode   = $factory->createItem($backendSection);
+        $tree->addChild($sectionNode);
+        $sectionNode
+            ->setLabel($this->getLabelForSection($backendSection))
+            ->setExtra('translation_domain', false);
+
+        $this->updateCollapsedState($sectionNode);
+
+        // Search the position in the already existing menu by starting at offset in BE_MOD and walking up to the start.
+        $start = (int) array_search($backendSection, $navigation, true);
+        while (0 <= --$start) {
+            /** @psalm-suppress InvalidArrayOffset */
+            if (in_array($navigation[$start], $namesInMenu, true)) {
+                array_splice($namesInMenu, $start + 1, 0, [$backendSection]);
+                break;
+            }
+        }
+        // If we did not find a position in existing menu, append at the end.
+        if (!in_array($backendSection, $namesInMenu)) {
+            $namesInMenu[] = $backendSection;
+        }
+        $tree->reorderChildren($namesInMenu);
+
+        return $sectionNode;
+    }
+
+    /**
+     * @param ItemInterface $tree
+     *
+     * @return list<string>
+     */
+    private function getChildNamesFromTree(ItemInterface $tree): array
+    {
+        return array_values(
+            array_map(static fn(ItemInterface $item): string => $item->getName(), $tree->getChildren())
+        );
+    }
+
+    /** @SuppressWarnings(PHPMD.Superglobals) */
+    public function getLabelForSection(string $backendSection): string
+    {
+        /** @var null|list<string>|string $langValue */
+        $langValue = $GLOBALS['TL_LANG']['MOD'][$backendSection] ?? null;
+        if (is_array($langValue)) {
+            return $langValue[0] ?? $backendSection;
+        }
+
+        return $langValue ?? $backendSection;
     }
 }

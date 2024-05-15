@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -24,7 +24,7 @@ namespace MetaModels\CoreBundle\EventListener;
 use Contao\CoreBundle\Routing\ScopeMatcher;
 use MetaModels\BackendIntegration\Module;
 use MetaModels\ViewCombination\ViewCombination;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolverInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
@@ -38,68 +38,68 @@ class UserListener
      *
      * @var TokenStorageInterface
      */
-    private $tokenStorage;
+    private TokenStorageInterface $tokenStorage;
 
     /**
      * The authentication resolver.
      *
      * @var AuthenticationTrustResolverInterface
      */
-    private $authenticationTrustResolver;
+    private AuthenticationTrustResolverInterface $trustResolver;
 
     /**
      * The scope matcher.
      *
      * @var ScopeMatcher
      */
-    private $scopeMatcher;
+    private ScopeMatcher $scopeMatcher;
 
     /**
      * The view combination.
      *
      * @var ViewCombination
      */
-    private $viewCombination;
+    private ViewCombination $viewCombination;
 
     /**
      * Constructor.
      *
-     * @param TokenStorageInterface                $tokenStorage                The token storage.
-     * @param AuthenticationTrustResolverInterface $authenticationTrustResolver The authentication resolver.
-     * @param ScopeMatcher                         $scopeMatcher                The scope matche.
-     * @param ViewCombination                      $viewCombination             The view combination.
+     * @param TokenStorageInterface                $tokenStorage    The token storage.
+     * @param AuthenticationTrustResolverInterface $trustResolver   The authentication resolver.
+     * @param ScopeMatcher                         $scopeMatcher    The scope matche.
+     * @param ViewCombination                      $viewCombination The view combination.
      */
     public function __construct(
         TokenStorageInterface $tokenStorage,
-        AuthenticationTrustResolverInterface $authenticationTrustResolver,
+        AuthenticationTrustResolverInterface $trustResolver,
         ScopeMatcher $scopeMatcher,
         ViewCombination $viewCombination
     ) {
-        $this->tokenStorage                = $tokenStorage;
-        $this->authenticationTrustResolver = $authenticationTrustResolver;
-        $this->scopeMatcher                = $scopeMatcher;
-        $this->viewCombination             = $viewCombination;
+        $this->tokenStorage    = $tokenStorage;
+        $this->trustResolver   = $trustResolver;
+        $this->scopeMatcher    = $scopeMatcher;
+        $this->viewCombination = $viewCombination;
     }
 
     /**
      * Replaces the current session data with the stored session data.
      *
-     * @param GetResponseEvent $event The event.
+     * @param RequestEvent $event The event.
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      *
      * @return void
      */
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(RequestEvent $event)
     {
-        if (!$this->scopeMatcher->isBackendMasterRequest($event)) {
+        if (!$this->scopeMatcher->isBackendMainRequest($event)) {
             return;
         }
 
         $token = $this->tokenStorage->getToken();
 
-        if (null === $token || $this->authenticationTrustResolver->isAnonymous($token)) {
+        if (null === $token || !$this->trustResolver->isAuthenticated($token)) {
             return;
         }
 
@@ -119,6 +119,7 @@ class UserListener
      */
     private function buildBackendModules(&$localMenu)
     {
+        return;
         foreach ($this->viewCombination->getStandalone() as $metaModelName => $screen) {
             $section = $screen['meta']['backendsection'];
             if (!isset($localMenu[$section])) {
@@ -128,7 +129,7 @@ class UserListener
                 $localMenu[$section]['metamodel_' . $metaModelName] = ['tables' => []];
             }
             $localMenu[$section]['metamodel_' . $metaModelName]['callback'] = Module::class;
-            array_unshift($localMenu[$section]['metamodel_' . $metaModelName]['tables'], $metaModelName);
+            \array_unshift($localMenu[$section]['metamodel_' . $metaModelName]['tables'], $metaModelName);
             $GLOBALS['TL_LANG']['MOD']['metamodel_' . $metaModelName] = [
                 ($screen['label'][$GLOBALS['TL_LANGUAGE']] ?? ($screen['label'][''] ?? ''))
             ];
@@ -145,12 +146,12 @@ class UserListener
     private function injectChildTables(&$localMenu)
     {
         $parented  = $this->viewCombination->getParented();
-        $lastCount = count($parented);
+        $lastCount = \count($parented);
         while ($parented) {
             foreach ($parented as $metaModelName => $child) {
                 foreach ($localMenu as $groupName => $modules) {
                     foreach ($modules as $moduleName => $module) {
-                        if (isset($module['tables']) && in_array($child['meta']['ptable'], $module['tables'])) {
+                        if (isset($module['tables']) && \in_array($child['meta']['ptable'], $module['tables'])) {
                             $localMenu[$groupName][$moduleName]['tables'][] = $metaModelName;
                             unset($parented[$metaModelName]);
                             break;
@@ -159,10 +160,10 @@ class UserListener
                 }
             }
             // If the dependencies can not be resolved any further, we give up here to prevent an endless loop.
-            if (count($parented) == $lastCount) {
+            if (\count($parented) === $lastCount) {
                 break;
             }
-            $lastCount = count($parented);
+            $lastCount = \count($parented);
         }
     }
 }

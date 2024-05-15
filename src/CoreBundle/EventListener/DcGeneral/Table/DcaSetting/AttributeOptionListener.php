@@ -38,7 +38,7 @@ class AttributeOptionListener extends AbstractListener
      *
      * @var SelectAttributeOptionLabelFormatter
      */
-    private $attributeLabelFormatter;
+    private SelectAttributeOptionLabelFormatter $labelFormatter;
 
     /**
      * {@inheritDoc}
@@ -47,10 +47,10 @@ class AttributeOptionListener extends AbstractListener
         RequestScopeDeterminator $scopeDeterminator,
         IFactory $factory,
         Connection $connection,
-        SelectAttributeOptionLabelFormatter $attributeLabelFormatter
+        SelectAttributeOptionLabelFormatter $labelFormatter
     ) {
         parent::__construct($scopeDeterminator, $factory, $connection);
-        $this->attributeLabelFormatter = $attributeLabelFormatter;
+        $this->labelFormatter = $labelFormatter;
     }
 
     /**
@@ -69,7 +69,7 @@ class AttributeOptionListener extends AbstractListener
         $model     = $event->getModel();
         $metaModel = $this->getMetaModelFromModel($model);
 
-        if (!$metaModel) {
+        if (null === $metaModel) {
             return;
         }
 
@@ -90,13 +90,13 @@ class AttributeOptionListener extends AbstractListener
                 ->andWhere('t.attr_id<>:id')
                 ->setParameter('id', $attributeId);
         }
-        $alreadyTaken = $alreadyTaken->execute()->fetchAll(\PDO::FETCH_COLUMN);
+        $alreadyTaken = $alreadyTaken->executeQuery()->fetchFirstColumn();
 
         foreach ($metaModel->getAttributes() as $attribute) {
             if ($attribute instanceof IInternal || in_array($attribute->get('id'), $alreadyTaken)) {
                 continue;
             }
-            $options[$attribute->get('id')] = $this->attributeLabelFormatter->formatLabel($attribute);
+            $options[$attribute->get('id')] = $this->labelFormatter->formatLabel($attribute);
         }
 
         $event->setOptions($options);

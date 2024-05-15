@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,13 +14,15 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaCombine;
 
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
+use ContaoCommunityAlliance\Translator\TranslatorInterface;
 use Doctrine\DBAL\Connection;
 use MenAtWork\MultiColumnWizardBundle\Event\GetOptionsEvent;
 
@@ -34,7 +36,7 @@ class GroupOptionListener
      *
      * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * Create a new instance.
@@ -55,9 +57,14 @@ class GroupOptionListener
      */
     public function handle(GetOptionsEvent $event)
     {
-        if (('tl_metamodel_dca_combine' !== $event->getEnvironment()->getDataDefinition()->getName())
+        $dataDefinition = $event->getEnvironment()->getDataDefinition();
+        assert($dataDefinition instanceof ContainerInterface);
+
+        if (
+            ('tl_metamodel_dca_combine' !== $dataDefinition->getName())
             || ('rows' !== $event->getPropertyName())
-            || !in_array($event->getSubPropertyName(), ['be_group', 'fe_group'])) {
+            || !\in_array($event->getSubPropertyName(), ['be_group', 'fe_group'])
+        ) {
             return;
         }
 
@@ -68,11 +75,14 @@ class GroupOptionListener
             ->select('t.id')
             ->addSelect('t.name')
             ->from($isBackend ? 'tl_user_group' : 'tl_member_group', 't')
-            ->execute()
-            ->fetchAll(\PDO::FETCH_ASSOC);
+            ->executeQuery()
+            ->fetchAllAssociative();
+
+        $translator = $event->getEnvironment()->getTranslator();
+        assert($translator instanceof TranslatorInterface);
 
         $result     = [];
-        $result[-1] = $event->getEnvironment()->getTranslator()->translate(
+        $result[-1] = $translator->translate(
             $isBackend ? 'sysadmin' : 'anonymous',
             'tl_metamodel_dca_combine'
         );
