@@ -26,6 +26,8 @@
  * @filesource
  */
 
+use Contao\System;
+
 $GLOBALS['TL_DCA']['tl_metamodel_dca'] = [
     'config'                => [
         'dataContainer'    => 'General',
@@ -344,7 +346,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = [
                         'description' => 'becap_langcode.description',
                         'exclude'     => true,
                         'inputType'   => 'select',
-                        'options'     => $this->getLanguages(),
+                        'options'     => static fn () => System::getContainer()->get('contao.intl.locales')->getLocales(),
                         'eval'        => [
                             'tl_class' => '',
                             'style'    => 'width:400px',
