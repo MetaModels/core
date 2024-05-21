@@ -66,20 +66,6 @@ class FilterUrlBuilder
     private RequestStack $requestStack;
 
     /**
-     * Flag if the locale is prepended.
-     *
-     * @var bool
-     */
-    private bool $isLocalePrepended = true;
-
-    /**
-     * The Contao URL suffix.
-     *
-     * @var string
-     */
-    private string $urlSuffix = '.html';
-
-    /**
      * The page model adapter.
      *
      * @var Adapter<PageModel>
@@ -87,50 +73,33 @@ class FilterUrlBuilder
     private Adapter $pageModelAdapter;
 
     /**
-     * Flag if legacy routing is active.
-     *
-     * @var bool
-     */
-    private bool $hasLegacyRouting;
-
-    /**
      * Create a new instance.
      *
      * @param UrlGeneratorInterface $urlGenerator      The Contao URL generator.
      * @param RequestStack          $requestStack      The request stack.
-     * @param bool                  $isLocalePrepended Flag if the locale is prepended to the URL.
-     * @param string                $urlSuffix         The URL suffix.
      * @param Adapter<PageModel>    $pageModelAdapter  The page model adapter.
-     * @param bool                  $hasLegacyRouting  Flag if legacy routing is active.
      */
     public function __construct(
         UrlGeneratorInterface $urlGenerator,
         RequestStack $requestStack,
-        bool $isLocalePrepended,
-        string $urlSuffix,
-        Adapter $pageModelAdapter,
-        bool $hasLegacyRouting
+        Adapter $pageModelAdapter
     ) {
         $this->urlGenerator      = $urlGenerator;
         $this->requestStack      = $requestStack;
-        $this->isLocalePrepended = $isLocalePrepended;
-        $this->urlSuffix         = $urlSuffix;
         $this->pageModelAdapter  = $pageModelAdapter;
-        $this->hasLegacyRouting  = $hasLegacyRouting;
     }
 
     /**
      * Generate a frontend url.
      *
-     * @param FilterUrl $filterUrl     The filter URL.
-     * @param int       $referenceType The url reference type.
+     * @param FilterUrl $filterUrl The filter URL.
      *
      * @return string
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public function generate(FilterUrl $filterUrl, int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH): string
+    public function generate(FilterUrl $filterUrl): string
     {
         $jumpTo = $filterUrl->getPage();
 
@@ -148,15 +117,6 @@ class FilterUrlBuilder
             $url .= '/' . $this->encodeForAllowEncodedSlashes($slug);
         }
 
-        if ($this->hasLegacyRouting) {
-            if (!empty($jumpTo['domain'])) {
-                $parameters['_domain'] = $jumpTo['domain'];
-            }
-            if (!empty($jumpTo['rootUseSSL'])) {
-                $parameters['_ssl'] = (bool) $jumpTo['rootUseSSL'];
-            }
-        }
-
         if (null !== ($locale = $jumpTo['language'] ?? null)) {
             $parameters['_locale'] = $locale;
         }
@@ -172,12 +132,8 @@ class FilterUrlBuilder
                 '/' . $this->encodeForAllowEncodedSlashes($value);
         }
 
-        if ($this->hasLegacyRouting) {
-            return $this->urlGenerator->generate($jumpTo['alias'] . $url, $parameters, $referenceType);
-        }
-
         $parameters['parameters'] = $url;
-        return $this->urlGenerator->generate('tl_page.' . $jumpTo['id'], $parameters, $referenceType);
+        return $this->urlGenerator->generate('tl_page.' . $jumpTo['id'], $parameters);
     }
 
     /**
@@ -237,37 +193,28 @@ class FilterUrlBuilder
             }
         }
 
-        if ($this->hasLegacyRouting) {
-            if (null === $fragments = $this->determineFragments($request)) {
-                $filterUrl->setPageValue('alias', 'index');
-                $this->extractPostData($filterUrl, $options, $request);
+        $routeName = $this->determineRouteName($request);
 
-                return;
-            }
-        } else {
-            $routeName = $this->determineRouteName($request);
+        $filterUrl->setPageValue('id', \substr($routeName, 8));
+        $requestUri = \rawurldecode(\substr($request->getPathInfo(), 1));
 
-            $filterUrl->setPageValue('id', \substr($routeName, 8));
-            $requestUri = \rawurldecode(\substr($request->getPathInfo(), 1));
-
-            if (null === ($route = $request->attributes->get('_route_object'))) {
-                return;
-            }
-            assert($route instanceof Route);
-
-            $pageModel = $route->getDefault('pageModel');
-            assert($pageModel instanceof PageModel);
-
-            $length    = $pageModel->urlSuffix ? -\strlen($pageModel->urlSuffix) : null;
-            $start     = ($pageModel->urlPrefix ? \strlen($pageModel->urlPrefix . '/') : 0)
-                         + \strlen($pageModel->alias . '/');
-            $fragments = \explode('/', \substr($requestUri, $start, $length));
-
-            if (1 === \count($fragments) % 2) {
-                \array_unshift($fragments, 'auto_item');
-            }
-            \array_unshift($fragments, $pageModel->alias);
+        if (null === ($route = $request->attributes->get('_route_object'))) {
+            return;
         }
+        assert($route instanceof Route);
+
+        $pageModel = $route->getDefault('pageModel');
+        assert($pageModel instanceof PageModel);
+
+        $length    = $pageModel->urlSuffix ? -\strlen($pageModel->urlSuffix) : null;
+        $start     = ($pageModel->urlPrefix ? \strlen($pageModel->urlPrefix . '/') : 0)
+                     + \strlen($pageModel->alias . '/');
+        $fragments = \explode('/', \substr($requestUri, $start, $length));
+
+        if (1 === \count($fragments) % 2) {
+            \array_unshift($fragments, 'auto_item');
+        }
+        \array_unshift($fragments, $pageModel->alias);
 
         // If alias part is empty, this means we have the 'index' page.
         if (empty($fragments[0])) {
@@ -386,22 +333,6 @@ class FilterUrlBuilder
         if ('' === $requestUri = \rawurldecode(\substr($request->getPathInfo(), 1))) {
             return null;
         }
-        if ($this->isLocalePrepended) {
-            $matches = [];
-            // Use the matches instead of substr() (thanks to Mario Müller)
-            if (\preg_match('@^([a-z]{2}(-[A-Z]{2})?)/(.*)$@', $requestUri, $matches)) {
-                $requestUri = $matches[3];
-            }
-        }
-
-        // Remove the URL suffix if not just a language root (e.g. en/) is requested
-        if (
-            '' !== $this->urlSuffix && '' !== $requestUri && (
-                !$this->isLocalePrepended || !\preg_match('@^[a-z]{2}(-[A-Z]{2})?/$@', $requestUri)
-            )
-        ) {
-            $requestUri = \substr($requestUri, 0, -\strlen($this->urlSuffix));
-        }
 
         return $requestUri;
     }
@@ -428,18 +359,12 @@ class FilterUrlBuilder
         // Look for a root page whose domain name matches the host name
         $languages = $pages[$host]
             // empty domain
-            ?? ($pages['*'] ?? []);
+            ?? ($pages['*'] ?: []);
         unset($pages);
 
         $pages = [];
 
-        if (!$this->isLocalePrepended) {
-            // Use the first result (see #4872).
-            $pages = \current($languages);
-            if (false === $pages) {
-                $pages = [];
-            }
-        } elseif (null !== $locale && isset($languages[$locale])) {
+        if (null !== $locale && isset($languages[$locale])) {
             // Try to find a page matching the language parameter
             $pages = $languages[$locale];
         }
