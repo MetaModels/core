@@ -76,7 +76,7 @@ trait DcGeneralControllerTrait
             ->createDcGeneral();
 
         $environment = $general->getEnvironment();
-        $clipboard = $environment->getClipboard();
+        $clipboard   = $environment->getClipboard();
         assert($clipboard instanceof ClipboardInterface);
 
         // Load the clipboard.
