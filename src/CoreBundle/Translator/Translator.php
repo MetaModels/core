@@ -68,4 +68,19 @@ final class Translator implements TranslatorInterface, TranslatorBagInterface, L
     {
         return $this->translator->getCatalogue($locale);
     }
+
+    public function getCatalogues(): array
+    {
+        if (!method_exists($this->translator, 'getCatalogues')) {
+            return [];
+        }
+
+        $catalogues = [];
+
+        foreach ($this->translator->getCatalogues() as $catalogue) {
+            $catalogues[] = $this->getCatalogue($catalogue->getLocale());
+        }
+
+        return $catalogues;
+    }
 }
