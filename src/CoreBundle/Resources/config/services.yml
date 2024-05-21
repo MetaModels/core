@@ -117,10 +117,7 @@ services:
         arguments:
             - '@contao.routing.page_url_generator'
             - '@request_stack'
-            - '%contao.prepend_locale%'
-            - '%contao.url_suffix%'
             - "@=service('contao.framework').getAdapter('Contao\\\\PageModel')"
-            - '%contao.legacy_routing%'
 
     # Please inject the service "MetaModels\Filter\FilterUrlBuilder" directly.
     metamodels.filter_url:
