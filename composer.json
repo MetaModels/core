@@ -26,6 +26,7 @@
     "email": "mail@metamodel.me",
     "issues": "https://github.com/MetaModels/core/issues",
     "wiki": "https://de.contaowiki.org/MetaModels",
+    "irc": "irc://irc.freenode.org/contao.mm",
     "source": "https://github.com/MetaModels/core"
   },
   "require": {
@@ -37,11 +38,11 @@
     "contao-community-alliance/translator": "^2.5@dev",
     "contao-community-alliance/url-builder": "^2.0@dev",
     "contao/core-bundle": "^5.3 <5.7",
-    "discordier/justtextwidgets": "^2.0",
+    "discordier/justtextwidgets": "dev-release/2.0.0 as 2.0.0",
     "doctrine/cache": "^2.1",
     "doctrine/dbal": "^3.6.0",
     "doctrine/orm": "^2.17.0",
-    "menatwork/contao-multicolumnwizard-bundle": "^3.6.8",
+    "menatwork/contao-multicolumnwizard-bundle": "^3.6.7",
     "psr/container": "^2.0",
     "psr/log": "^2.0 || ^3.0",
     "symfony/asset": "^6.4",
@@ -70,12 +71,6 @@
     "doctrine/doctrine-bundle": "^2.8.3",
     "phpcq/runner-bootstrap": "^1.0@dev"
   },
-  "repositories": [
-    {
-      "type": "git",
-      "url": "git@github.com:zonky2/justtextwidgets.git"
-    }
-  ],
   "autoload": {
     "psr-4": {
       "MetaModels\\": "src/"
@@ -86,6 +81,12 @@
       "MetaModels\\Test\\": "tests/"
     }
   },
+  "repositories": [
+    {
+      "type": "git",
+      "url": "git@github.com:zonky2/justtextwidgets.git"
+    }
+  ],
   "config": {
     "allow-plugins": {
       "contao-components/installer": false,
