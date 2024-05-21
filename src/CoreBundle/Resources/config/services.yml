@@ -14,7 +14,7 @@ services:
         class: MetaModels\CoreBundle\Assets\IconBuilder
         arguments:
             - "@=service('contao.framework').getAdapter('Contao\\\\FilesModel')"
-            - "@contao.image.image_factory"
+            - "@contao.image.factory"
             - "%kernel.project_dir%"
             - "%metamodels.assets_dir%"
             - "%metamodels.assets_web%"
@@ -113,10 +113,7 @@ services:
         arguments:
             - '@contao.routing.page_url_generator'
             - '@request_stack'
-            - '%contao.prepend_locale%'
-            - '%contao.url_suffix%'
             - "@=service('contao.framework').getAdapter('Contao\\\\PageModel')"
-            - '%contao.legacy_routing%'
 
     # Please inject the service "MetaModels\Filter\FilterUrlBuilder" directly.
     metamodels.filter_url:
@@ -185,7 +182,10 @@ services:
             - "@metamodels.view_combination.input_screen_information_builder"
 
     MetaModels\MetaModelsServiceContainer:
-        deprecated: 'The service "%service_id%" is deprecated and to be removed in MetaModels 3 - inject needed services directly.'
+        deprecated:
+            package: metamodels/core
+            version: 2.3
+            message: 'The service "%service_id%" is deprecated and to be removed in MetaModels 3 - inject needed services directly.'
         configurator: ['@MetaModels\CoreBundle\LegacyCompat\ServiceContainerInitializer', 'configure']
         public: true
 
@@ -292,11 +292,11 @@ services:
     MetaModels\Helper\ToolboxFile:
         public: false
         arguments:
-            - "@contao.image.image_factory"
+            - "@contao.image.factory"
             - "%kernel.project_dir%"
             - "@contao.assets.files_context"
             - "@contao.image.picture_factory"
-            - "@session"
+            - "@request_stack"
 
     MetaModels\CoreBundle\Translator\MetaModelTranslatorConfigurator:
       arguments:
