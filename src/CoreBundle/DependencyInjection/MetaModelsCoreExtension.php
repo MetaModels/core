@@ -24,7 +24,6 @@
 namespace MetaModels\CoreBundle\DependencyInjection;
 
 use MetaModels\CoreBundle\Migration\TableCollationMigration;
-use MetaModels\Filter\FilterUrlBuilder;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\FileLocator;
@@ -32,7 +31,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * This is the class that loads and manages the bundle configuration
@@ -107,11 +105,6 @@ class MetaModelsCoreExtension extends Extension implements PrependExtensionInter
 
         $container->getDefinition(TableCollationMigration::class)
             ->setArgument('$defaultTableOptions', $this->defaultTableOptions);
-
-        if ((bool) $container->getParameter('contao.legacy_routing')) {
-            $container->getDefinition(FilterUrlBuilder::class)
-                ->setArgument(0, new Reference('contao.routing.url_generator'));
-        }
     }
 
     /**
