@@ -48,8 +48,9 @@ use Contao\Validator;
 use InvalidArgumentException;
 use Symfony\Component\Asset\Context\ContextInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
-use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * This class provides various methods for handling file collection within Contao.
@@ -99,11 +100,18 @@ class ToolboxFile
     private PictureFactoryInterface $pictureFactory;
 
     /**
-     * Symfony session object
+     * The request stack.
      *
-     * @var Session
+     * @var RequestStack
      */
-    private Session $session;
+    protected $requestStack;
+
+    /**
+     * The session.
+     *
+     * @var SessionInterface
+     */
+    private SessionInterface $session;
 
     /**
      * Allowed file extensions.
@@ -210,7 +218,7 @@ class ToolboxFile
      * @param string|null                                         $rootDir        The root path of the installation.
      * @param ContextInterface|null                               $filesContext   The assets file context.
      * @param PictureFactoryInterface|null                        $pictureFactory The picture factory.
-     * @param Session|null                                        $session        The session.
+     * @param RequestStack                                        $requestStack   The request stack.
      *
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -221,7 +229,7 @@ class ToolboxFile
         string $rootDir = null,
         ContextInterface $filesContext = null,
         PictureFactoryInterface $pictureFactory = null,
-        Session $session = null
+        RequestStack $requestStack
     ) {
         switch (true) {
             case ($imageFactory instanceof ImageFactoryInterface) && (null !== $rootDir):
@@ -290,17 +298,8 @@ class ToolboxFile
         }
         $this->pictureFactory = $pictureFactory;
 
-        if (null === $session) {
-            // @codingStandardsIgnoreStart
-            @trigger_error(
-                'Not passing a "Session" is deprecated.',
-                E_USER_DEPRECATED
-            );
-            // @codingStandardsIgnoreEnd
-            $session = System::getContainer()->get('session');
-            assert($session instanceof Session);
-        }
-        $this->session = $session;
+        $this->requestStack = $requestStack;
+        $this->session      = $this->requestStack->getSession();
     }
 
     /**

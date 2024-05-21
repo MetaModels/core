@@ -28,7 +28,7 @@ use MetaModels\ViewCombination\ViewCombination;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
-use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -84,9 +84,9 @@ class BackendNavigationListener
     /**
      * The session.
      *
-     * @var Session
+     * @var SessionInterface
      */
-    private Session $session;
+    private SessionInterface $session;
 
     /**
      * Create a new instance.
@@ -96,22 +96,20 @@ class BackendNavigationListener
      * @param ViewCombination       $viewCombination The view combination.
      * @param TokenStorageInterface $tokenStorage    The token storage.
      * @param RouterInterface       $router          The router.
-     * @param Session               $session         The session.
      */
     public function __construct(
         TranslatorInterface $translator,
         RequestStack $requestStack,
         ViewCombination $viewCombination,
         TokenStorageInterface $tokenStorage,
-        RouterInterface $router,
-        Session $session,
+        RouterInterface $router
     ) {
         $this->requestStack    = $requestStack;
         $this->translator      = $translator;
         $this->viewCombination = $viewCombination;
         $this->tokenStorage    = $tokenStorage;
         $this->router          = $router;
-        $this->session         = $session;
+        $this->session         = $this->requestStack->getSession();
     }
 
     /**
