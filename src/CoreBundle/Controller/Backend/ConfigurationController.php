@@ -20,6 +20,7 @@
 
 namespace MetaModels\CoreBundle\Controller\Backend;
 
+use Contao\CoreBundle\Controller\AbstractBackendController;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use ContaoCommunityAlliance\DcGeneral\Factory\DcGeneralFactoryService;
 use ContaoCommunityAlliance\Translator\TranslatorInterface;
@@ -31,7 +32,7 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-final class ConfigurationController
+final class ConfigurationController extends AbstractBackendController
 {
     use DcGeneralControllerTrait;
 
@@ -67,15 +68,15 @@ final class ConfigurationController
         );
         $headline         = $this->determineHeadline($containerName, $translator);
 
-        return new Response(
-            $twig->render(
-                '@MetaModelsCore/Backend/be_config.html.twig',
-                [
-                    'headline'    => $headline,
-                    'body'        => $controllerResult,
-                    'stylesheets' => ['bundles/metamodelscore/css/style.css']
-                ]
-            )
+        $GLOBALS['TL_CSS']['metamodels.core'] = '/bundles/metamodelscore/css/style.css';
+
+        return $this->render(
+            '@MetaModelsCore/Backend/be_config.html.twig',
+            [
+                'title'       => $headline,
+                'headline'    => $headline,
+                'body'        => $controllerResult,
+            ]
         );
     }
 

@@ -1,7 +1,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,48 +14,48 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Carolina Koehn <ck@kikmedia.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 .mm_support_display {
-	padding: 15px;
+  padding: 15px;
 }
 
 .mm_support_display .logo {
-	display: block;
-	height: 38px;
-	text-indent: -99999px;
-	width: 169px;
-	background: white url("https://now.metamodel.me/files/standard/layout/images/metamodels.png") no-repeat top left;
+  display: block;
+  height: 80px;
+  text-indent: -99999px;
+  background: white url("/bundles/metamodelscore/images/backend/metamodels-logo.png") no-repeat top left;
+  background-size: contain;
 }
 
 .mm_support_display h1 {
-	margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .mm_support_display .colset {
-	width: 100%;
-	padding-top: 10px;
-	padding-bottom: 10px;
-	overflow: hidden;
-	clear: both;
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  overflow: hidden;
+  clear: both;
 }
 
 .mm_support_display .colset form {
-	padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .mm_support_display .colset .left {
-	width: 35%;
-	float: left;
+  width: 35%;
+  float: left;
 }
 
 .mm_support_display .colset .right {
-	float: right;
-	width: 60%;
+  float: right;
+  width: 60%;
 }
 
 .mm_support_display a {
-	text-decoration: underline;
+  text-decoration: underline;
 }

@@ -22,6 +22,7 @@
 
 namespace MetaModels\CoreBundle\Controller\Backend;
 
+use Contao\CoreBundle\Controller\AbstractBackendController;
 use Contao\CoreBundle\Framework\Adapter;
 use Contao\System;
 use Doctrine\DBAL\Connection;
@@ -42,7 +43,7 @@ use Twig\Environment as TwigEnvironment;
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-abstract class AbstractAddAllController
+abstract class AbstractAddAllController extends AbstractBackendController
 {
     /**
      * Adapter to the Contao\System class.
@@ -176,12 +177,17 @@ abstract class AbstractAddAllController
             }
         }
 
-        return new Response(
-            $this->twig->render(
-                '@MetaModelsCore/Backend/add-all.html.twig',
-                $this->render($table, $metaModel, $request)
-            )
+        return $this->render(
+            '@MetaModelsCore/Backend/add-all.html.twig',
+            $this->renderOutput($table, $metaModel, $request)
         );
+
+//        return new Response(
+//            $this->twig->render(
+//                '@MetaModelsCore/Backend/add-all.html.twig',
+//                $this->render($table, $metaModel, $request)
+//            )
+//        );
     }
 
     /**
@@ -193,11 +199,15 @@ abstract class AbstractAddAllController
      *
      * @return array
      */
-    protected function render($table, $metaModel, Request $request)
+    protected function renderOutput($table, $metaModel, Request $request)
     {
-        $fields = $this->generateForm($table, $metaModel, $request);
+        $fields   = $this->generateForm($table, $metaModel, $request);
+        $headline = $this->translator->trans('addall.description', [], $table);
+
+        $GLOBALS['TL_CSS']['metamodels.core'] = '/bundles/metamodelscore/css/style.css';
 
         return [
+            'title'         => $headline,
             'action'        => '',
             'requestToken'  => System::getContainer()->get('contao.csrf.token_manager')?->getDefaultTokenValue(),
             'href'          => $this->getReferer($request, $table, true),
@@ -206,13 +216,12 @@ abstract class AbstractAddAllController
             'saveNclose'    => $this->translator->trans('saveNclose', [], $table),
             'activate'      => $this->translator->trans('addAll_activate', [], $table),
             'tlclass'       => '',
-            'headline'      => $this->translator->trans('addall.description', [], $table),
+            'headline'      => $headline,
             'selectAll'     => $this->translator->trans('selectAll', [], $table) . '.',
             'cacheMessage'  => '',
             'updateMessage' => '',
             'hasCheckbox'   => \count($fields) > 0,
             'fields'        => $fields,
-            'stylesheets'   => ['bundles/metamodelscore/css/style.css']
         ];
     }
 
