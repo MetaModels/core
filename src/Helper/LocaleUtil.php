@@ -19,8 +19,8 @@
 
 namespace MetaModels\Helper;
 
+use Composer\InstalledVersions;
 use Contao\CoreBundle\Util\LocaleUtil as ContaoLocaleUtil;
-use Contao\System;
 
 final class LocaleUtil
 {
@@ -36,9 +36,11 @@ final class LocaleUtil
      */
     public static function formatAsLanguageTag(string $localeId): string
     {
-        $packages = System::getContainer()->getParameter('kernel.packages');
-        assert(is_array($packages));
-        $coreVersion = $packages['contao/core-bundle'] ?? '';
+//        $packages = System::getContainer()->getParameter('kernel.packages');
+//        assert(is_array($packages));
+//        $coreVersion = $packages['contao/core-bundle'] ?? '';
+
+        $coreVersion = InstalledVersions::getPrettyVersion('contao/core-bundle');
 
         if (\version_compare($coreVersion, '4.13', '>=')) {
             return self::formatAsLocale($localeId);
