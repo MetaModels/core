@@ -61,8 +61,7 @@ class LanguageOptionsListener
             return;
         }
 
-        /** @psalm-suppress DeprecatedMethod */
-        $languages           = System::getLanguages();
+        $languages           = System::getContainer()->get('contao.intl.locales')->getLocales();
         $hasTerritorySupport = (bool) $event->getModel()->getProperty('localeterritorysupport');
         $languageOptions     = [];
 
