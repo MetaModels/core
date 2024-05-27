@@ -195,7 +195,7 @@ abstract class AbstractAddAllController extends AbstractBackendController
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    protected function renderOutput($table, $metaModel, Request $request)
+    protected function render($table, $metaModel, Request $request)
     {
         $fields   = $this->generateForm($table, $metaModel, $request);
         $headline = $this->translator->trans('addall.description', [], $table);
