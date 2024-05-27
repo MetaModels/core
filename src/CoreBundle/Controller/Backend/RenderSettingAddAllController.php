@@ -55,7 +55,7 @@ class RenderSettingAddAllController extends AbstractAddAllController
             'attr_id' => $attribute->get('id'),
             'pid'     => $parentId,
             'sorting' => $sort,
-            'tstamp'  => time(),
+            'tstamp'  => \time(),
             'enabled' => $activate ? '1' : ''
         ];
         $defaults = $attribute->getDefaultRenderSettings();

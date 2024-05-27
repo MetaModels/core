@@ -128,6 +128,8 @@ services:
 
     metamodels.controller.abstract.add_all:
         abstract: true
+        calls:
+            - setContainer: ['@service_container']
         arguments:
             - "@twig"
             - "@contao.translation.translator"
@@ -145,15 +147,21 @@ services:
         tags: ['controller.service_arguments']
 
     MetaModels\CoreBundle\Controller\Backend\ConfigurationController:
+      calls:
+        - setContainer: ['@service_container']
       tags: ['controller.service_arguments']
 
     MetaModels\CoreBundle\Controller\Backend\MetaModelController:
+      calls:
+        - setContainer: ['@service_container']
       arguments:
         - '@contao.menu.backend_builder'
       tags: ['controller.service_arguments']
 
     metamodels.controller.support_screen:
         class: MetaModels\CoreBundle\Controller\Backend\SupportMetaModelsController
+        calls:
+            - setContainer: ['@service_container']
         arguments:
             - "@twig"
             - "@contao.translation.translator"

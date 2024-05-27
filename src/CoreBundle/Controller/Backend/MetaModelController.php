@@ -20,6 +20,7 @@
 
 namespace MetaModels\CoreBundle\Controller\Backend;
 
+use Contao\CoreBundle\Controller\AbstractBackendController;
 use Contao\CoreBundle\Exception\AccessDeniedException;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\CoreBundle\Menu\BackendMenuBuilder;
@@ -31,7 +32,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment as TwigEnvironment;
 
-final class MetaModelController
+final class MetaModelController extends AbstractBackendController
 {
     use DcGeneralControllerTrait;
 
@@ -83,15 +84,15 @@ final class MetaModelController
         );
         $headline         = $this->determineHeadline($containerName, $inputScreenId, $translator);
 
-        return new Response(
-            $twig->render(
-                '@MetaModelsCore/Backend/be_config.html.twig',
-                [
-                    'headline'    => $headline,
-                    'body'        => $controllerResult,
-                    'stylesheets' => ['bundles/metamodelscore/css/style.css']
-                ]
-            )
+        $GLOBALS['TL_CSS']['metamodels.core'] = '/bundles/metamodelscore/css/style.css';
+
+        return $this->render(
+            '@MetaModelsCore/Backend/be_config.html.twig',
+            [
+                'title'       => $headline,
+                'headline'    => $headline,
+                'body'        => $controllerResult,
+            ]
         );
     }
 

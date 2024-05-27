@@ -1,7 +1,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Carolina Koehn <ck@kikmedia.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -23,39 +23,46 @@
 $white: rgba(255, 255, 255, 1);
 
 //urls
-$url_metamodels: url('https://now.metamodel.me/files/standard/layout/images/metamodels.png');
+$url_metamodels: url('/bundles/metamodelscore/images/backend/metamodels-logo.png');
 
 .mm_support_display {
-	padding: 15px;
-	.logo {
-		display: block;
-		height: 38px;
-		text-indent: -99999px;
-		width: 169px;
-		background: $white $url_metamodels no-repeat top left;
-	}
-	h1 {
-		margin-bottom: 20px;
-	}
-	.colset {
-		width: 100%;
-		padding-top: 10px;
-		padding-bottom: 10px;
-		overflow: hidden;
-		clear: both;
-		form {
-			padding-top: 10px;
-		}
-		.left {
-			width: 35%;
-			float: left;
-		}
-		.right {
-			float: right;
-			width: 60%;
-		}
-	}
-	a {
-		text-decoration: underline;
-	}
+  padding: 15px;
+
+  .logo {
+    display: block;
+    height: 80px;
+    text-indent: -99999px;
+    background: $white $url_metamodels no-repeat top left;
+    background-size: contain;
+  }
+
+  h1 {
+    margin-bottom: 20px;
+  }
+
+  .colset {
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    overflow: hidden;
+    clear: both;
+
+    form {
+      padding-bottom: 10px;
+    }
+
+    .left {
+      width: 35%;
+      float: left;
+    }
+
+    .right {
+      float: right;
+      width: 60%;
+    }
+  }
+
+  a {
+    text-decoration: underline;
+  }
 }

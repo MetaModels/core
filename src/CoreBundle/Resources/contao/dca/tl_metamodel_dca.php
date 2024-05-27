@@ -342,12 +342,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = [
                 'tl_class'      => 'clr',
                 'columnFields'  => [
                     'langcode'    => [
-                        'label'       => 'becap_langcode.label',
-                        'description' => 'becap_langcode.description',
-                        'exclude'     => true,
-                        'inputType'   => 'select',
-                        'options'     => static fn () => System::getContainer()->get('contao.intl.locales')->getLocales(),
-                        'eval'        => [
+                        'label'            => 'becap_langcode.label',
+                        'description'      => 'becap_langcode.description',
+                        'exclude'          => true,
+                        'inputType'        => 'select',
+                        'options_callback' => static fn() => System::getContainer()
+                            ->get('contao.intl.locales')
+                            ->getLocales(),
+                        'eval'             => [
                             'tl_class' => '',
                             'style'    => 'width:400px',
                             'chosen'   => 'true'

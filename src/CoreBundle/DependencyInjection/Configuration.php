@@ -87,7 +87,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->scalarNode('assets_web')
                     ->cannotBeEmpty()
-                    ->defaultValue('assets/metamodels')
+                    ->defaultValue('/assets/metamodels')
                 ->end()
             ->end();
 

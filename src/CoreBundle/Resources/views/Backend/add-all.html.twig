@@ -1,6 +1,6 @@
 {% extends "@MetaModelsCore/Backend/be_base.html.twig" %}
 
-{% block headline %}
+{% block main_headline %}
     {{ headline }}
 {% endblock %}
 
@@ -10,7 +10,7 @@
     {%- endif -%}
 {% endblock %}
 
-{% block main %}
+{% block main_content %}
     <div id="tl_buttons">
         <a href="{{ href }}" class="header_back twig" title="{{ backBt }}">{{ backBt }}</a>
     </div>
