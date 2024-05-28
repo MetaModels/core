@@ -26,6 +26,7 @@ use Contao\System;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use ContaoCommunityAlliance\Translator\TranslatorInterface;
 use MetaModels\ITranslatedMetaModel;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * This renders attribute information in the backend listing.
@@ -77,7 +78,9 @@ class AttributeRendererListener extends BaseListener
         $name           = $attribute->getName();
         $arrDescription = StringUtil::deserialize($attribute->get('description'));
         if (\is_array($arrDescription)) {
-            $locale      = (string) System::getContainer()->get('request_stack')?->getCurrentRequest()?->getLocale();
+            $requestStack = System::getContainer()->get('request_stack');
+            assert($requestStack instanceof RequestStack);
+            $locale      = (string) $requestStack->getCurrentRequest()?->getLocale();
             $description = $arrDescription[$locale] ?? null;
             /** @psalm-suppress DeprecatedMethod */
             if (null === $description) {

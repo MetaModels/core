@@ -80,6 +80,8 @@ class SupportMetaModelsController extends AbstractBackendController
      * Invoke this.
      *
      * @return Response The template data.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function __invoke()
     {
