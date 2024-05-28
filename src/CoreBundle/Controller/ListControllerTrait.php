@@ -42,6 +42,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -186,6 +187,8 @@ trait ListControllerTrait
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     *
+     * @psalm-suppress DeprecatedClass
      */
     private function getResponseInternal(Template $template, Model $model, Request $request): Response
     {
@@ -430,7 +433,7 @@ trait ListControllerTrait
             return 'Unknown MetaModel: ' . $model->metamodel;
         }
         // Add CSS file.
-        $GLOBALS['TL_CSS'][] = 'bundles/metamodelscore/css/style.css';
+        $GLOBALS['TL_CSS'][] = '/bundles/metamodelscore/css/style.css';
 
         // Retrieve name of MetaModel.
         $infoTemplate =
@@ -439,12 +442,15 @@ trait ListControllerTrait
         $metaModel = $this->factory->getMetaModel($metaModelName);
         assert($metaModel instanceof IMetaModel);
 
+        $tokenManager = System::getContainer()->get('contao.csrf.token_manager');
+        assert($tokenManager instanceof CsrfTokenManagerInterface);
+
         $header = $metaModel->getName();
         if ($href) {
             $header .= \sprintf(
                 ' (<a href="%1$s&amp;rt=%2$s" class="tl_gray">ID: %3$s</a>)',
                 $href,
-                System::getContainer()->get('contao.csrf.token_manager')?->getDefaultTokenValue() ?? '',
+                $tokenManager->getDefaultTokenValue() ?? '',
                 (string) $model->id
             );
         }

@@ -84,7 +84,7 @@ class CustomSqlTest extends AutoLoadingTestCase
         if (!isset($services[InsertTags::class])) {
             $services[InsertTags::class] = $insertTags = $this
                 ->getMockBuilder(InsertTags::class)
-                ->onlyMethods(['replace'])
+                ->addMethods(['replace'])
                 ->disableOriginalConstructor()
                 ->getMock();
 

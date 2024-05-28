@@ -30,7 +30,6 @@ use MetaModels\ViewCombination\ViewCombination;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Twig\Environment as TwigEnvironment;
 
 final class MetaModelController extends AbstractBackendController
 {
@@ -48,17 +47,17 @@ final class MetaModelController extends AbstractBackendController
 
     /**
      * @param Request                  $request        The request.
-     * @param TwigEnvironment          $twig           The twig environment.
      * @param DcGeneralFactoryService  $factoryFactory The DCG factory
      * @param EventDispatcherInterface $dispatcher     The event dispatcher.
      * @param TranslatorInterface      $translator     The translator.
      * @param ContaoFramework          $framework      The Contao framework
      *
      * @return Response
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function __invoke(
         Request $request,
-        TwigEnvironment $twig,
         DcGeneralFactoryService $factoryFactory,
         EventDispatcherInterface $dispatcher,
         TranslatorInterface $translator,

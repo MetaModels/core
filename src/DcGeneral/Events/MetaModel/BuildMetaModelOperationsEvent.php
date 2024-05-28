@@ -103,7 +103,7 @@ class BuildMetaModelOperationsEvent extends AbstractContainerAwareEvent
      */
     public function getInputScreen()
     {
-        $serviceContainer = System::getContainer()->get('cca.legacy_dic')?->getService('metamodels-service-container');
+        $serviceContainer = System::getContainer()->get('cca.legacy_dic')->getService('metamodels-service-container');
         assert($serviceContainer instanceof IMetaModelsServiceContainer);
 
         return new InputScreen(

@@ -98,7 +98,7 @@ class ViewCombination
                 // I would prefer a default group for both, fe and be groups.
                 $groups = $user->groups;
                 // Special case in combinations, admins have the implicit group id -1.
-                if ((bool) $user->admin) {
+                if ($user->admin) {
                     $groups[] = -1;
                 }
 

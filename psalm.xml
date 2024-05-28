@@ -21,12 +21,12 @@
   <issueHandlers>
     <PossiblyNullArgument>
       <errorLevel type="suppress">
-        <file name="vendor/contao/core-bundle/src/Resources/contao/library/Contao/Widget.php"/>
+        <file name="vendor/contao/core-bundle/contao/library/Contao/Widget.php"/>
       </errorLevel>
     </PossiblyNullArgument>
     <MixedAssignment>
       <errorLevel type="suppress">
-        <file name="vendor/contao/core-bundle/src/Resources/contao/library/Contao/Widget.php"/>
+        <file name="vendor/contao/core-bundle/contao/library/Contao/Widget.php"/>
       </errorLevel>
     </MixedAssignment>
     <TooManyArguments>

@@ -53,6 +53,7 @@ use MetaModels\Render\Template;
 use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 use function array_key_exists;
@@ -581,6 +582,7 @@ class ItemList
     /**
      * The list template (ce_ or mod_).
      *
+     * @psalm-suppress DeprecatedClass
      * @var ContaoTemplate|null
      */
     private $listTemplate = null;
@@ -761,6 +763,8 @@ class ItemList
      * Get the template of the module or content element.
      *
      * @return ContaoTemplate
+     *
+     * @psalm-suppress DeprecatedClass
      */
     public function getListTemplate(): ?ContaoTemplate
     {
@@ -773,6 +777,8 @@ class ItemList
      * @param ContaoTemplate $template The template.
      *
      * @return self
+     *
+     * @psalm-suppress DeprecatedClass
      */
     public function setListTemplate(ContaoTemplate $template): self
     {
@@ -858,8 +864,10 @@ class ItemList
             $fallbackLanguage = $metaModel->getFallbackLanguage();
             $isTranslated     = true;
         } else {
+            $requestStack = System::getContainer()->get('request_stack');
+            assert($requestStack instanceof RequestStack);
             $desiredLanguage  =
-            $fallbackLanguage = System::getContainer()->get('request_stack')?->getCurrentRequest()?->getLocale();
+            $fallbackLanguage = $requestStack->getCurrentRequest()?->getLocale();
             $isTranslated     = false;
         }
 

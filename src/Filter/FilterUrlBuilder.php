@@ -278,8 +278,9 @@ class FilterUrlBuilder
      *
      * @return array|null
      *
-     * @@SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @@SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function determineFragments(Request $request): ?array
     {
@@ -288,7 +289,7 @@ class FilterUrlBuilder
         }
 
         $fragments = null;
-        // Use folder-style URLs
+        // Use folder-style URLs.
         if (Config::get('folderUrl') && \str_contains($requestUri, '/')) {
             $fragments = $this->getFolderUrlFragments(
                 $requestUri,
