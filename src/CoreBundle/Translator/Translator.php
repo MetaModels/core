@@ -54,7 +54,7 @@ final class Translator implements TranslatorInterface, TranslatorBagInterface, L
         return $this->translator->trans($id, $parameters, $domain, $locale);
     }
 
-    public function setLocale($locale): void
+    public function setLocale(string $locale): void
     {
         $this->translator->setLocale($locale);
     }

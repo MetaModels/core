@@ -23,6 +23,7 @@
 namespace MetaModels\CoreBundle\Controller\Backend;
 
 use Contao\CoreBundle\Controller\AbstractBackendController;
+use Contao\CoreBundle\Csrf\ContaoCsrfTokenManager;
 use Contao\CoreBundle\Framework\Adapter;
 use Contao\System;
 use Doctrine\DBAL\Connection;
@@ -181,13 +182,6 @@ abstract class AbstractAddAllController extends AbstractBackendController
             '@MetaModelsCore/Backend/add-all.html.twig',
             $this->renderOutput($table, $metaModel, $request)
         );
-
-//        return new Response(
-//            $this->twig->render(
-//                '@MetaModelsCore/Backend/add-all.html.twig',
-//                $this->render($table, $metaModel, $request)
-//            )
-//        );
     }
 
     /**
@@ -198,18 +192,23 @@ abstract class AbstractAddAllController extends AbstractBackendController
      * @param Request    $request   The request.
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     protected function renderOutput($table, $metaModel, Request $request)
     {
         $fields   = $this->generateForm($table, $metaModel, $request);
         $headline = $this->translator->trans('addall.description', [], $table);
 
+        $tokenManager = System::getContainer()->get('contao.csrf.token_manager');
+        assert($tokenManager instanceof ContaoCsrfTokenManager);
+
         $GLOBALS['TL_CSS']['metamodels.core'] = '/bundles/metamodelscore/css/style.css';
 
         return [
             'title'         => $headline,
             'action'        => '',
-            'requestToken'  => System::getContainer()->get('contao.csrf.token_manager')?->getDefaultTokenValue(),
+            'requestToken'  => $tokenManager->getDefaultTokenValue(),
             'href'          => $this->getReferer($request, $table, true),
             'backBt'        => $this->translator->trans('backBT', [], $table),
             'add'           => $this->translator->trans('continue', [], $table),

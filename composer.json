@@ -70,6 +70,12 @@
     "doctrine/doctrine-bundle": "^2.8.3",
     "phpcq/runner-bootstrap": "^1.0@dev"
   },
+  "repositories": [
+    {
+      "type": "git",
+      "url": "git@github.com:zonky2/justtextwidgets.git"
+    }
+  ],
   "autoload": {
     "psr-4": {
       "MetaModels\\": "src/"
