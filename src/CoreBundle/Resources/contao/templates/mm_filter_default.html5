@@ -5,7 +5,7 @@
     <?php endif; ?>
 
     <form<?php if ($this->action): ?> action="<?= $this->action ?>"<?php endif; ?> method="post">
-        <input name="REQUEST_TOKEN" type="hidden" value="{{request_token}}"/>
+        <input name="REQUEST_TOKEN" type="hidden" value="<?= $this->requestToken ?>"/>
         <input type="hidden" name="FORM_SUBMIT" value="<?= $this->formid ?>">
         <div class="formbody">
 
