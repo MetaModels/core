@@ -43,6 +43,7 @@ use MetaModels\FrontendIntegration\Module\FilterClearAll as ModuleFilterClearAll
 use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * FE-filtering for Contao MetaModels.
@@ -203,7 +204,7 @@ class FrontendFilter
 
             if (\strlen($strValue)) {
                 // Shift auto_item to the front.
-                if ($strName == 'auto_item') {
+                if ($strName === 'auto_item') {
                     $strFilterAction = '/' . \rawurlencode(\rawurlencode($strValue)) . $strFilterAction;
                     continue;
                 }
@@ -456,16 +457,20 @@ class FrontendFilter
             }
         }
 
+        $tokenManager = System::getContainer()->get('contao.csrf.token_manager');
+        assert($tokenManager instanceof CsrfTokenManagerInterface);
+
         // Return filter data.
         /** @psalm-suppress UndefinedMagicPropertyFetch */
         return [
-            'action'  => $this->filterUrlBuilder->generate($other)
-                         . ($this->objFilterConfig->metamodel_fef_urlfragment
+            'requestToken' => $tokenManager->getDefaultTokenValue(),
+            'action'       => $this->filterUrlBuilder->generate($other)
+                              . ($this->objFilterConfig->metamodel_fef_urlfragment
                     ? '#' . $this->objFilterConfig->metamodel_fef_urlfragment
                     : ''),
-            'formid'  => $this->formId,
-            'filters' => $renderedWidgets,
-            'submit'  => ($filterOptions->isAutoSubmit()
+            'formid'       => $this->formId,
+            'filters'      => $renderedWidgets,
+            'submit'       => ($filterOptions->isAutoSubmit()
                 ? ''
                 : $this->translator->trans('submit', [], 'metamodels_filter')
             )
