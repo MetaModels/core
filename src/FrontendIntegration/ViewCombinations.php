@@ -49,7 +49,7 @@ class ViewCombinations extends \MetaModels\Helper\ViewCombinations
     protected function getUserGroups()
     {
         // Special case in combinations, anonymous frontend users have the implicit group id -1.
-        if (0 === (int) $this->getUser()->id) {
+        if (0 === $this->getUser()->id) {
             return [-1];
         }
 

@@ -133,6 +133,7 @@ class FilterUrlBuilder
         }
 
         $parameters['parameters'] = $url;
+
         return $this->urlGenerator->generate('tl_page.' . $jumpTo['id'], $parameters);
     }
 
