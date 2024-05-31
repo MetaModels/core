@@ -27,7 +27,7 @@ use Contao\System;
 /**
  * Class ViewCombinations.
  *
- * Retrieve combinations of view and input screens for the currently logged in user (either frontend or backend).
+ * Retrieve combinations of view and input screens for the currently logged-in user (either frontend or backend).
  *
  * @deprecated This will get removed.
  *
@@ -81,7 +81,7 @@ class ViewCombinations extends \MetaModels\Helper\ViewCombinations
 
         /** @noinspection PhpUndefinedFieldInspection */
         // Special case in combinations, admins have the implicit group id -1.
-        if ((bool) $this->getUser()->admin) {
+        if ($this->getUser()->admin) {
             $groups[] = -1;
         }
 

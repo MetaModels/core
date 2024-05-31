@@ -14,6 +14,7 @@
     "Knp\\Menu\\ItemInterface",
     "Symfony\\Bundle\\FrameworkBundle\\Translation\\Translator",
     "Symfony\\Contracts\\Cache\\CacheInterface",
+    "Symfony\\Component\\Security\\Csrf\\CsrfTokenManagerInterface",
     "TL_PATH",
     "tl_user_group"
   ]

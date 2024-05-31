@@ -450,7 +450,7 @@ trait ListControllerTrait
             $header .= \sprintf(
                 ' (<a href="%1$s&amp;rt=%2$s" class="tl_gray">ID: %3$s</a>)',
                 $href,
-                $tokenManager->getDefaultTokenValue() ?? '',
+                $tokenManager->getDefaultTokenValue(),
                 (string) $model->id
             );
         }

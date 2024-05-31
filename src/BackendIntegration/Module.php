@@ -64,14 +64,16 @@ class Module
      */
     public function generate()
     {
-        $GLOBALS['TL_CSS'][] = 'bundles/metamodelscore/css/style.css';
+        $GLOBALS['TL_CSS'][] = '/bundles/metamodelscore/css/style.css';
         $arrModule           = $GLOBALS['BE_MOD']['metamodels']['metamodels'];
         // Custom action (if key is not defined in config.php the default action will be called).
-        if (Input::get('key') && isset($arrModule[Input::get('key')])) {
-            Callbacks::call($arrModule[Input::get('key')], $this, $arrModule);
+        if (null !== ($key = Input::get('key')) && isset($arrModule[$key])) {
+            Callbacks::call($arrModule[$key], $this, $arrModule);
         }
 
-        $act = Input::get('act');
+        $act = Input::get('act') ?? '';
+        assert(\is_string($act));
+
         if (!\strlen($act)) {
             $act = 'showAll';
         }
