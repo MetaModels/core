@@ -1,0 +1,192 @@
+[main]
+host = https://app.transifex.com
+
+[o:metamodels:p:metamodels-core:r:metamodels_default]
+file_filter            = src/CoreBundle/Resources/translations/metamodels_default.<lang>.xlf
+source_file            = src/CoreBundle/Resources/translations/metamodels_default.en.xlf
+type                   = XLIFF
+minimum_perc           = 0
+resource_name          = metamodels_default
+replace_edited_strings = false
+keep_translations      = false
+
+[o:metamodels:p:metamodels-core:r:metamodels_filter]
+file_filter            = src/CoreBundle/Resources/translations/metamodels_filter.<lang>.xlf
+source_file            = src/CoreBundle/Resources/translations/metamodels_filter.en.xlf
+type                   = XLIFF
+minimum_perc           = 0
+resource_name          = metamodels_filter
+replace_edited_strings = false
+keep_translations      = false
+
+[o:metamodels:p:metamodels-core:r:metamodels_list]
+file_filter            = src/CoreBundle/Resources/translations/metamodels_list.<lang>.xlf
+source_file            = src/CoreBundle/Resources/translations/metamodels_list.en.xlf
+type                   = XLIFF
+minimum_perc           = 0
+resource_name          = metamodels_list
+replace_edited_strings = false
+keep_translations      = false
+
+[o:metamodels:p:metamodels-core:r:metamodels_navigation]
+file_filter            = src/CoreBundle/Resources/translations/metamodels_navigation.<lang>.xlf
+source_file            = src/CoreBundle/Resources/translations/metamodels_navigation.en.xlf
+type                   = XLIFF
+minimum_perc           = 0
+resource_name          = metamodels_navigation
+replace_edited_strings = false
+keep_translations      = false
+
+[o:metamodels:p:metamodels-core:r:metamodels_support]
+file_filter            = src/CoreBundle/Resources/translations/metamodels_support.<lang>.xlf
+source_file            = src/CoreBundle/Resources/translations/metamodels_support.en.xlf
+type                   = XLIFF
+minimum_perc           = 0
+resource_name          = metamodels_support
+replace_edited_strings = false
+keep_translations      = false
+
+[o:metamodels:p:metamodels-core:r:metamodels_wildcard]
+file_filter            = src/CoreBundle/Resources/translations/metamodels_wildcard.<lang>.xlf
+source_file            = src/CoreBundle/Resources/translations/metamodels_wildcard.en.xlf
+type                   = XLIFF
+minimum_perc           = 0
+resource_name          = metamodels_wildcard
+replace_edited_strings = false
+keep_translations      = false
+
+[o:metamodels:p:metamodels-core:r:tl_content]
+file_filter            = src/CoreBundle/Resources/translations/tl_content.<lang>.xlf
+source_file            = src/CoreBundle/Resources/translations/tl_content.en.xlf
+type                   = XLIFF
+minimum_perc           = 0
+resource_name          = tl_content
+replace_edited_strings = false
+keep_translations      = false
+
+[o:metamodels:p:metamodels-core:r:tl_metamodel]
+file_filter            = src/CoreBundle/Resources/translations/tl_metamodel.<lang>.xlf
+source_file            = src/CoreBundle/Resources/translations/tl_metamodel.en.xlf
+type                   = XLIFF
+minimum_perc           = 0
+resource_name          = tl_metamodel
+replace_edited_strings = false
+keep_translations      = false
+
+[o:metamodels:p:metamodels-core:r:tl_metamodel_attribute]
+file_filter            = src/CoreBundle/Resources/translations/tl_metamodel_attribute.<lang>.xlf
+source_file            = src/CoreBundle/Resources/translations/tl_metamodel_attribute.en.xlf
+type                   = XLIFF
+minimum_perc           = 0
+resource_name          = tl_metamodel_attribute
+replace_edited_strings = false
+keep_translations      = false
+
+[o:metamodels:p:metamodels-core:r:tl_metamodel_dca]
+file_filter            = src/CoreBundle/Resources/translations/tl_metamodel_dca.<lang>.xlf
+source_file            = src/CoreBundle/Resources/translations/tl_metamodel_dca.en.xlf
+type                   = XLIFF
+minimum_perc           = 0
+resource_name          = tl_metamodel_dca
+replace_edited_strings = false
+keep_translations      = false
+
+[o:metamodels:p:metamodels-core:r:tl_metamodel_dca_combine]
+file_filter            = src/CoreBundle/Resources/translations/tl_metamodel_dca_combine.<lang>.xlf
+source_file            = src/CoreBundle/Resources/translations/tl_metamodel_dca_combine.en.xlf
+type                   = XLIFF
+minimum_perc           = 0
+resource_name          = tl_metamodel_dca_combine
+replace_edited_strings = false
+keep_translations      = false
+
+[o:metamodels:p:metamodels-core:r:tl_metamodel_dcasetting]
+file_filter            = src/CoreBundle/Resources/translations/tl_metamodel_dcasetting.<lang>.xlf
+source_file            = src/CoreBundle/Resources/translations/tl_metamodel_dcasetting.en.xlf
+type                   = XLIFF
+minimum_perc           = 0
+resource_name          = tl_metamodel_dcasetting
+replace_edited_strings = false
+keep_translations      = false
+
+[o:metamodels:p:metamodels-core:r:tl_metamodel_dcasetting_condition]
+file_filter            = src/CoreBundle/Resources/translations/tl_metamodel_dcasetting_condition.<lang>.xlf
+source_file            = src/CoreBundle/Resources/translations/tl_metamodel_dcasetting_condition.en.xlf
+type                   = XLIFF
+minimum_perc           = 0
+resource_name          = tl_metamodel_dcasetting_condition
+replace_edited_strings = false
+keep_translations      = false
+
+[o:metamodels:p:metamodels-core:r:tl_metamodel_dca_sortgroup]
+file_filter            = src/CoreBundle/Resources/translations/tl_metamodel_dca_sortgroup.<lang>.xlf
+source_file            = src/CoreBundle/Resources/translations/tl_metamodel_dca_sortgroup.en.xlf
+type                   = XLIFF
+minimum_perc           = 0
+resource_name          = tl_metamodel_dca_sortgroup
+replace_edited_strings = false
+keep_translations      = false
+
+[o:metamodels:p:metamodels-core:r:tl_metamodel_filter]
+file_filter            = src/CoreBundle/Resources/translations/tl_metamodel_filter.<lang>.xlf
+source_file            = src/CoreBundle/Resources/translations/tl_metamodel_filter.en.xlf
+type                   = XLIFF
+minimum_perc           = 0
+resource_name          = tl_metamodel_filter
+replace_edited_strings = false
+keep_translations      = false
+
+[o:metamodels:p:metamodels-core:r:tl_metamodel_filtersetting]
+file_filter            = src/CoreBundle/Resources/translations/tl_metamodel_filtersetting.<lang>.xlf
+source_file            = src/CoreBundle/Resources/translations/tl_metamodel_filtersetting.en.xlf
+type                   = XLIFF
+minimum_perc           = 0
+resource_name          = tl_metamodel_filtersetting
+replace_edited_strings = false
+keep_translations      = false
+
+[o:metamodels:p:metamodels-core:r:tl_metamodel_item]
+file_filter            = src/CoreBundle/Resources/translations/tl_metamodel_item.<lang>.xlf
+source_file            = src/CoreBundle/Resources/translations/tl_metamodel_item.en.xlf
+type                   = XLIFF
+minimum_perc           = 0
+resource_name          = tl_metamodel_item
+replace_edited_strings = false
+keep_translations      = false
+
+[o:metamodels:p:metamodels-core:r:tl_metamodel_rendersetting]
+file_filter            = src/CoreBundle/Resources/translations/tl_metamodel_rendersetting.<lang>.xlf
+source_file            = src/CoreBundle/Resources/translations/tl_metamodel_rendersetting.en.xlf
+type                   = XLIFF
+minimum_perc           = 0
+resource_name          = tl_metamodel_rendersetting
+replace_edited_strings = false
+keep_translations      = false
+
+[o:metamodels:p:metamodels-core:r:tl_metamodel_rendersettings]
+file_filter            = src/CoreBundle/Resources/translations/tl_metamodel_rendersettings.<lang>.xlf
+source_file            = src/CoreBundle/Resources/translations/tl_metamodel_rendersettings.en.xlf
+type                   = XLIFF
+minimum_perc           = 0
+resource_name          = tl_metamodel_rendersettings
+replace_edited_strings = false
+keep_translations      = false
+
+[o:metamodels:p:metamodels-core:r:tl_metamodel_searchable_pages]
+file_filter            = src/CoreBundle/Resources/translations/tl_metamodel_searchable_pages.<lang>.xlf
+source_file            = src/CoreBundle/Resources/translations/tl_metamodel_searchable_pages.en.xlf
+type                   = XLIFF
+minimum_perc           = 0
+resource_name          = tl_metamodel_searchable_pages
+replace_edited_strings = false
+keep_translations      = false
+
+[o:metamodels:p:metamodels-core:r:tl_modules]
+file_filter            = src/CoreBundle/Resources/translations/tl_modules.<lang>.xlf
+source_file            = src/CoreBundle/Resources/translations/tl_modules.en.xlf
+type                   = XLIFF
+minimum_perc           = 0
+resource_name          = tl_modules
+replace_edited_strings = false
+keep_translations      = false
+
