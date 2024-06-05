@@ -251,7 +251,7 @@ final class MetaModelTranslationLoader implements LoaderInterface
             }
         }
 
-        if ('en' === $locale && null === $fallback && (null !== $default = ($value[''] ?? null))) {
+        if ('en' === $locale && null === $fallback && (null !== $default = ($value['default'] ?? $value[''] ?? null))) {
             return $default;
         }
 
