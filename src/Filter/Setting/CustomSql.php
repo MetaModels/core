@@ -541,7 +541,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     {
         $parts = \explode('::', $tag, 2);
         if (!\array_key_exists(1, $parts)) {
-            return $tag;
+            return $this->parseInsertTagsInternal('{{' . $tag . '}}');
         }
 
         switch ($parts[0]) {
