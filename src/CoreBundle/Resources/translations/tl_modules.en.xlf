@@ -20,6 +20,9 @@
       <trans-unit id="editfiltersetting.description" resname="editfiltersetting.description">
         <source>Edit the filter setting ID %id%.</source>
       </trans-unit>
+      <trans-unit id="filter_option.null" resname="filter_option.null">
+        <source>- no value [null] -</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

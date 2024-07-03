@@ -387,10 +387,12 @@ abstract class AbstractContentElementAndModuleCallback
             return;
         }
 
+        $translatedNull = $this->translator->trans('filter_option.null', [], self::$tableName);
+
         $collection = $this->filterFactory->createCollection($filterId);
         $dca        = $collection->getParameterDCA();
         foreach ($dca as $fieldName => $subField) {
-            $options = [];
+            $options = ['--null--' => $translatedNull];
             foreach (($subField['options'] ?? []) as $key => $value) {
                 $newKey = $this->loadCallback($key);
                 if (null !== $newKey) {
@@ -416,7 +418,7 @@ abstract class AbstractContentElementAndModuleCallback
      */
     public function saveCallback(string $value = null)
     {
-        return null === $value ? null : base64_decode($value);
+        return null === $value ? '--null--' : base64_decode($value);
     }
 
     /**
@@ -428,7 +430,7 @@ abstract class AbstractContentElementAndModuleCallback
      */
     public function loadCallback(string $value = null)
     {
-        return null === $value ? null : trim(base64_encode($value), '=');
+        return null === $value ? '--null--' : trim(base64_encode($value), '=');
     }
 
     /**
