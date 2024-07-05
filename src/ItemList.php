@@ -901,7 +901,8 @@ class ItemList
         if (null !== $this->objItems) {
             return $this;
         }
-        $metaModel = $this->getMetaModel();
+        $metaModel        = $this->getMetaModel();
+        $previousLanguage = $this->setLanguageInMetaModel($metaModel);
 
         // Create an empty filter object if not done before.
         if (!isset($this->objFilter)) {
@@ -922,24 +923,6 @@ class ItemList
             $this->objTemplate->total = $total;
         }
 
-        if ($metaModel instanceof TranslatedMetaModel) {
-            if (null === $this->language) {
-                // @codingStandardsIgnoreStart
-                @trigger_error(
-                    sprintf(
-                        'Not setting a language code in "%s" is deprecated since MetaModels 2.3 and will fail in 3.0',
-                        __CLASS__
-                    ),
-                    E_USER_DEPRECATED
-                );
-                // @codingStandardsIgnoreEnd
-
-                // @deprecated usage of TL_LANGUAGE - remove for Contao 5.0.
-                $this->language = LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE'] ?? 'en');
-            }
-            $previousLanguage = $metaModel->selectLanguage($this->language);
-        }
-
         $this->objItems = $metaModel->findByFilter(
             $this->objFilter,
             $this->strSortBy,
@@ -949,9 +932,7 @@ class ItemList
             $this->getAttributeNames()
         );
 
-        if (isset($previousLanguage) && ($metaModel instanceof TranslatedMetaModel)) {
-            $metaModel->selectLanguage($previousLanguage);
-        }
+        $this->resetLanguageInMetaModel($metaModel, $previousLanguage);
 
         return $this;
     }
@@ -1231,7 +1212,11 @@ class ItemList
         $outputFormat = $this->getOutputFormat();
 
         if (!$isNoNativeParsing && null !== $this->objItems && $this->objItems->getCount()) {
+            $metaModel = $this->getMetaModel();
+            $previousLanguage = $this->setLanguageInMetaModel($metaModel);
             $this->objTemplate->data = $this->objItems->parseAll($outputFormat, $this->objView);
+            $this->resetLanguageInMetaModel($metaModel, $previousLanguage);
+            unset($previousLanguage);
         } else {
             $this->objTemplate->data = [];
         }
@@ -1271,5 +1256,44 @@ class ItemList
         $this->objTemplate->parameter           = $this->templateParameter;
 
         return $this->objTemplate->parse($outputFormat);
+    }
+
+    /**
+     * @param IMetaModel $metaModel
+     *
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    public function setLanguageInMetaModel(IMetaModel $metaModel): ?string
+    {
+        if (!$metaModel instanceof ITranslatedMetaModel) {
+            return null;
+        }
+        if (null === $this->language) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                sprintf(
+                    'Not setting a language code in "%s" is deprecated since MetaModels 2.3 and will fail in 3.0',
+                    __CLASS__
+                ),
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+
+            // @deprecated usage of TL_LANGUAGE - remove for Contao 5.0.
+            $this->language = LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE'] ?? 'en');
+        }
+
+        return $metaModel->selectLanguage($this->language);
+    }
+
+    private function resetLanguageInMetaModel(IMetaModel $metaModel, ?string $previousLanguage): void
+    {
+        if ((null === $previousLanguage) || !$metaModel instanceof ITranslatedMetaModel) {
+            return;
+        }
+
+        $metaModel->selectLanguage($previousLanguage);
     }
 }

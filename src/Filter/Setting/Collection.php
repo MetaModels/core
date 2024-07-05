@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -28,6 +28,7 @@ use MetaModels\FrontendIntegration\FrontendFilterOptions;
 use MetaModels\IItem;
 use MetaModels\Filter\IFilter;
 use MetaModels\IMetaModel;
+use MetaModels\ITranslatedMetaModel;
 use MetaModels\Render\Setting\ICollection as IRenderSettings;
 
 /**
@@ -195,25 +196,34 @@ class Collection implements ICollection
         $arrJumpTo,
         FrontendFilterOptions $objFrontendFilterOptions
     ) {
-        $parameters = [];
+        $parameters       = [];
+        $metaModel        = $this->getMetaModel();
+        $previousLanguage = ($metaModel instanceof ITranslatedMetaModel)
+            ? $metaModel->selectLanguage($arrJumpTo['lang'] ?? $metaModel->getMainLanguage())
+            : null;
+        try {
+            // Get the id with all enabled filter.
+            $objFilter = $this->getMetaModel()->getEmptyFilter();
+            $this->addRules($objFilter, $arrFilterUrl);
 
-        // Get the id with all enabled filter.
-        $objFilter = $this->getMetaModel()->getEmptyFilter();
-        $this->addRules($objFilter, $arrFilterUrl);
+            $arrBaseIds = $objFilter->getMatchingIds();
 
-        $arrBaseIds = $objFilter->getMatchingIds();
+            foreach ($this->arrSettings as $setting) {
+                if ($setting->get('skipfilteroptions')) {
+                    $objFilter = $this->getMetaModel()->getEmptyFilter();
+                    $this->addRules($objFilter, $arrFilterUrl, array($setting->get('id')));
+                    $ids = $objFilter->getMatchingIds();
+                } else {
+                    $ids = $arrBaseIds;
+                }
 
-        foreach ($this->arrSettings as $setting) {
-            if ($setting->get('skipfilteroptions')) {
-                $objFilter = $this->getMetaModel()->getEmptyFilter();
-                $this->addRules($objFilter, $arrFilterUrl, array($setting->get('id')));
-                $ids = $objFilter->getMatchingIds();
-            } else {
-                $ids = $arrBaseIds;
+                $parameters[] =
+                    $setting->getParameterFilterWidgets($ids, $arrFilterUrl, $arrJumpTo, $objFrontendFilterOptions);
             }
-
-            $parameters[] =
-                $setting->getParameterFilterWidgets($ids, $arrFilterUrl, $arrJumpTo, $objFrontendFilterOptions);
+        } finally {
+            if (null !== $previousLanguage && ($metaModel instanceof ITranslatedMetaModel)) {
+                $metaModel->selectLanguage($previousLanguage);
+            }
         }
 
         return [] === $parameters ? [] : \array_merge(...$parameters);

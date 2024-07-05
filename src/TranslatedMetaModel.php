@@ -114,7 +114,7 @@ class TranslatedMetaModel extends MetaModel implements ITranslatedMetaModel
         $previousLanguage = $this->getLanguage();
 
         if (!$this->hasTerritorySupport) {
-            $previousLanguage = \substr($previousLanguage, 0, 2);
+            $activeLanguage = \substr($activeLanguage, 0, 2);
         }
 
         $this->activeLanguage = $activeLanguage;
