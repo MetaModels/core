@@ -253,10 +253,6 @@ class ToolboxFile
                 /** @psalm-suppress DeprecatedProperty */
                 $this->dispatcher = $dispatcher;
         }
-        // Initialize some values to sane base.
-        if (isset($GLOBALS['TL_CONFIG']) && isset($GLOBALS['TL_CONFIG']['allowedDownload'])) {
-            $this->setAcceptedExtensions(StringUtil::trimsplit(',', $GLOBALS['TL_CONFIG']['allowedDownload']));
-        }
 
         if (null === $rootDir) {
             // @codingStandardsIgnoreStart
@@ -518,6 +514,11 @@ class ToolboxFile
      */
     protected function collectFiles()
     {
+        // Initialize accepted extensions if not done yet.
+        if ([] === $this->getAcceptedExtensions() && isset($GLOBALS['TL_CONFIG']['allowedDownload'])) {
+            $this->setAcceptedExtensions(StringUtil::trimsplit(',', $GLOBALS['TL_CONFIG']['allowedDownload']));
+        }
+
         $table = FilesModel::getTable();
 
         $conditions = [];
