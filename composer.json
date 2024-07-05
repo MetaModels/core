@@ -38,7 +38,7 @@
     "contao-community-alliance/translator": "^2.5@dev",
     "contao-community-alliance/url-builder": "^2.0@dev",
     "contao/core-bundle": "^5.3 <5.7",
-    "discordier/justtextwidgets": "dev-release/2.0.0 as 2.0.0",
+    "discordier/justtextwidgets": "^2.0",
     "doctrine/cache": "^2.1",
     "doctrine/dbal": "^3.6.0",
     "doctrine/orm": "^2.17.0",
