@@ -212,7 +212,6 @@ class ToolboxFile
      * @param PictureFactoryInterface|null                        $pictureFactory The picture factory.
      * @param Session|null                                        $session        The session.
      *
-     * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -515,6 +514,8 @@ class ToolboxFile
      * Walks the list of pending folders via ToolboxFile::addPath().
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     protected function collectFiles()
     {
