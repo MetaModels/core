@@ -1,0 +1,92 @@
+<?xml version="1.0" ?><xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="src/CoreBundle/Resources/translations/tl_metamodel_dca_combine.en.xlf" target-language="de">
+    <body>
+      <trans-unit id="backend-module.headline" resname="backend-module.headline">
+        <source>All input/output combinations</source>
+        <target>Alle Kombinationen der Eingabemaske und Ansichten</target>
+      </trans-unit>
+      <trans-unit id="save" resname="save">
+        <source>Save</source>
+        <target>Speichern</target>
+      </trans-unit>
+      <trans-unit id="saveNclose" resname="saveNclose">
+        <source>Save and close</source>
+        <target>Speichern und schliessen</target>
+      </trans-unit>
+      <trans-unit id="saveNcreate" resname="saveNcreate">
+        <source>Save and new</source>
+        <target>Speichern und neu</target>
+      </trans-unit>
+      <trans-unit id="saveNback" resname="saveNback">
+        <source>Save and go back</source>
+        <target>Speichern und zurück</target>
+      </trans-unit>
+      <trans-unit id="backBT" resname="backBT">
+        <source>Go back</source>
+        <target>Zurück</target>
+      </trans-unit>
+      <trans-unit id="backBTTitle" resname="backBTTitle">
+        <source>Back to the previous page</source>
+        <target>Zurück zur vorherigen Seite navigieren</target>
+      </trans-unit>
+      <trans-unit id="editRecord" resname="editRecord">
+        <source>Edit record %id%</source>
+        <target>Datensatz %id% bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="dca_combiner_legend" resname="dca_combiner_legend">
+        <source>Combination configuration</source>
+        <target>Konfiguration der Kombination</target>
+      </trans-unit>
+      <trans-unit id="dca_combiner.label" resname="dca_combiner.label">
+        <source>Permissions for input screen and views</source>
+        <target>Rechte für Eingabemaske und Ansichten</target>
+      </trans-unit>
+      <trans-unit id="dca_combiner.description" resname="dca_combiner.description">
+        <source>For selected frontend user group (if any) and selected backend user group (if any) use the selected
+          palette and the selected view.
+        </source>
+        <target>Benutzen Sie die ausgewählte Palette und Ansicht für eine Mitglieder- und / oder Benutzergruppe (falls vorhanden).</target>
+      </trans-unit>
+      <trans-unit id="fe_group.label" resname="fe_group.label">
+        <source>Frontend group</source>
+        <target>Mitgliedergruppe</target>
+      </trans-unit>
+      <trans-unit id="fe_group.description" resname="fe_group.description">
+        <source>The frontend user group the combination applies to; * is 'catch all'.</source>
+        <target>Die Mitgliedergruppe, für die die Kombination gilt; * ist &quot;catch all&quot;.</target>
+      </trans-unit>
+      <trans-unit id="be_group.label" resname="be_group.label">
+        <source>Backend group</source>
+        <target>Benutzergruppe</target>
+      </trans-unit>
+      <trans-unit id="be_group.description" resname="be_group.description">
+        <source>The backend user group the combination applies to; * is 'catch all'.</source>
+        <target>Die Benutzergruppe, für die die Kombination gilt; * ist &quot;catch all&quot;.</target>
+      </trans-unit>
+      <trans-unit id="dca_id.label" resname="dca_id.label">
+        <source>Input screen</source>
+        <target>Eingabemaske</target>
+      </trans-unit>
+      <trans-unit id="dca_id.description" resname="dca_id.description">
+        <source>The input screen the combination applies to.</source>
+        <target>Geben Sie die Eingabemaske an, für die diese Kombination gelten soll.</target>
+      </trans-unit>
+      <trans-unit id="view_id.label" resname="view_id.label">
+        <source>Render setting</source>
+        <target>Render-Einstellung</target>
+      </trans-unit>
+      <trans-unit id="view_id.description" resname="view_id.description">
+        <source>The view the combination applies to.</source>
+        <target>Anzuwendende Ansicht.</target>
+      </trans-unit>
+      <trans-unit id="sysadmin" resname="sysadmin">
+        <source>Administrator</source>
+        <target>Administrator</target>
+      </trans-unit>
+      <trans-unit id="anonymous" resname="anonymous">
+        <source>Anonymous</source>
+        <target>&quot;Gäste&quot;</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

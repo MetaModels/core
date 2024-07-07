@@ -1,0 +1,303 @@
+<?xml version="1.0" ?><xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="src/CoreBundle/Resources/translations/tl_metamodel_dca_sortgroup.en.xlf" target-language="de">
+    <body>
+      <trans-unit id="backend-module.headline" resname="backend-module.headline">
+        <source>All grouping and sorting settings</source>
+        <target>Einstellungen Gruppierung und Sortierung</target>
+      </trans-unit>
+      <trans-unit id="id.label" resname="id.label">
+        <source>Id</source>
+        <target>ID</target>
+      </trans-unit>
+      <trans-unit id="pid.label" resname="pid.label">
+        <source>Pid</source>
+        <target>PID</target>
+      </trans-unit>
+      <trans-unit id="tstamp.label" resname="tstamp.label">
+        <source>Revision date</source>
+        <target>Aktualisierungsdatum</target>
+      </trans-unit>
+      <trans-unit id="sorting.label" resname="sorting.label">
+        <source>Sorting</source>
+        <target>Sortierung</target>
+      </trans-unit>
+      <trans-unit id="published.label" resname="published.label">
+        <source>Published</source>
+        <target>Veröffentlicht</target>
+      </trans-unit>
+      <trans-unit id="new.label" resname="new.label">
+        <source>New Sorting and grouping</source>
+        <target>Neue Sortierung und Gruppierung</target>
+      </trans-unit>
+      <trans-unit id="new.description" resname="new.description">
+        <source>Create a new Sorting and grouping</source>
+        <target>Erstellt eine Sortierung und Gruppierung.</target>
+      </trans-unit>
+      <trans-unit id="all.label" resname="all.label">
+        <source>Edit multiple</source>
+        <target>Mehrere bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="all.description" resname="all.description">
+        <source>Edit multiple elements at once</source>
+        <target>Mehrere Elemente auf einmal bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="pastenew.label" resname="pastenew.label">
+        <source>Create a new element at the top</source>
+        <target>Ein neues Element oben erstellen</target>
+      </trans-unit>
+      <trans-unit id="pastenew.description" resname="pastenew.description">
+        <source>Create a new element after element ID %id%</source>
+        <target>Erstellt ein neues Element nach dem Element mit der ID %id%</target>
+      </trans-unit>
+      <trans-unit id="pasteafter.label" resname="pasteafter.label">
+        <source>Paste at the top</source>
+        <target>Oben einfügen</target>
+      </trans-unit>
+      <trans-unit id="pasteafter.description" resname="pasteafter.description">
+        <source>Paste after element ID %id%</source>
+        <target>Nach dem Element mit der ID %id% einfügen</target>
+      </trans-unit>
+      <trans-unit id="backBT" resname="backBT">
+        <source>Go back</source>
+        <target>Zurück</target>
+      </trans-unit>
+      <trans-unit id="backBTTitle" resname="backBTTitle">
+        <source>Back to the previous page</source>
+        <target>Zurück zur vorherigen Seite navigieren</target>
+      </trans-unit>
+      <trans-unit id="save" resname="save">
+        <source>Save</source>
+        <target>Speichern</target>
+      </trans-unit>
+      <trans-unit id="saveNclose" resname="saveNclose">
+        <source>Save and close</source>
+        <target>Speichern und schliessen</target>
+      </trans-unit>
+      <trans-unit id="saveNcreate" resname="saveNcreate">
+        <source>Save and new</source>
+        <target>Speichern und Neu</target>
+      </trans-unit>
+      <trans-unit id="saveNback" resname="saveNback">
+        <source>Save and go back</source>
+        <target>Speichern und zurück</target>
+      </trans-unit>
+      <trans-unit id="editRecord" resname="editRecord">
+        <source>Edit record %id%</source>
+        <target>Datensatz %id% bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="name.label" resname="name.label">
+        <source>Name</source>
+        <target>Name</target>
+      </trans-unit>
+      <trans-unit id="name.description" resname="name.description">
+        <source>Name of the sorting group.</source>
+        <target>Name der Sortierungsruppe</target>
+      </trans-unit>
+      <trans-unit id="isdefault.label" resname="isdefault.label">
+        <source>Is default</source>
+        <target>Als Standard verwenden</target>
+      </trans-unit>
+      <trans-unit id="isdefault.description" resname="isdefault.description">
+        <source>Determines that this input screen shall be used as default for the parenting MetaModel.</source>
+        <target>Bestimmt, dass diese Eingabemaske als Standard für das Eltern-MetaModel benutzt wird.</target>
+      </trans-unit>
+      <trans-unit id="rendermode.label" resname="rendermode.label">
+        <source>Render mode</source>
+        <target>Render-Modus</target>
+      </trans-unit>
+      <trans-unit id="rendermode.description" resname="rendermode.description">
+        <source>Select the desired render mode.</source>
+        <target>Wählen Sie eine gewünschte Render-Einstellung aus..</target>
+      </trans-unit>
+      <trans-unit id="becap_langcode.label" resname="becap_langcode.label">
+        <source>Language</source>
+        <target>Sprache</target>
+      </trans-unit>
+      <trans-unit id="becap_langcode.description" resname="becap_langcode.description">
+        <source>Select the languages you want to provide.</source>
+        <target>Wählen Sie die Sprachen aus, die Sie zur Verfügung stellen wollen.</target>
+      </trans-unit>
+      <trans-unit id="becap_label.label" resname="becap_label.label">
+        <source>Label text</source>
+        <target>Labeltext</target>
+      </trans-unit>
+      <trans-unit id="becap_label.description" resname="becap_label.description">
+        <source>The text you specify in here, will get used as the menu label in the backend menu.</source>
+        <target>Dieser Text wird als Menü-Label im Backend benutzt.</target>
+      </trans-unit>
+      <trans-unit id="becap_description.label" resname="becap_description.label">
+        <source>Description text</source>
+        <target>Beschreibungstext</target>
+      </trans-unit>
+      <trans-unit id="becap_description.description" resname="becap_description.description">
+        <source>The text you specify in here, will get used as the description (hover title) in the backend menu.
+        </source>
+        <target>Dieser Text wird als Beschreibung (Hover) im Backend benutzt.</target>
+      </trans-unit>
+      <trans-unit id="rendergrouptype.label" resname="rendergrouptype.label">
+        <source>Grouping type</source>
+        <target>Gruppierungstyp</target>
+      </trans-unit>
+      <trans-unit id="rendergrouptype.description" resname="rendergrouptype.description">
+        <source>The grouping type to use in the item view.</source>
+        <target>Gruppierungstyp für die Item-Ansicht</target>
+      </trans-unit>
+      <trans-unit id="rendergroupattr.label" resname="rendergroupattr.label">
+        <source>Grouping attribute</source>
+        <target>Attribute der Gruppierung</target>
+      </trans-unit>
+      <trans-unit id="rendergroupattr.description" resname="rendergroupattr.description">
+        <source>The attribute to use for grouping in the item view.</source>
+        <target>Attribute für die Gruppierung in der Item-Ansicht.</target>
+      </trans-unit>
+      <trans-unit id="rendergrouplen.label" resname="rendergrouplen.label">
+        <source>Grouping length</source>
+        <target>Gruppierungslänge</target>
+      </trans-unit>
+      <trans-unit id="rendergrouplen.description" resname="rendergrouplen.description">
+        <source>The amount of characters to use for grouping.</source>
+        <target>Die Anzahl an Buchstaben, welche für die Gruppierung eingesetzt wird.</target>
+      </trans-unit>
+      <trans-unit id="rendersortattr.label" resname="rendersortattr.label">
+        <source>Sorting attribute</source>
+        <target>Attribut der Sortierung</target>
+      </trans-unit>
+      <trans-unit id="rendersortattr.description" resname="rendersortattr.description">
+        <source>The attribute to sort by.</source>
+        <target>Attribut nach dem sortiert wird.</target>
+      </trans-unit>
+      <trans-unit id="rendersort.label" resname="rendersort.label">
+        <source>Sorting direction</source>
+        <target>Sortierrichtung</target>
+      </trans-unit>
+      <trans-unit id="rendersort.description" resname="rendersort.description">
+        <source>The sorting direction.</source>
+        <target>Richtung der Sortierung.</target>
+      </trans-unit>
+      <trans-unit id="ismanualsort.label" resname="ismanualsort.label">
+        <source>Enable manual sorting</source>
+        <target>Manuelle Sortierung aktivieren</target>
+      </trans-unit>
+      <trans-unit id="ismanualsort.description" resname="ismanualsort.description">
+        <source>If this is enabled, the user will be able to perform manual sorting.</source>
+        <target>Wenn aktiviert, kann der Nutzer eine manuelle Sortierung vornehmen.</target>
+      </trans-unit>
+      <trans-unit id="title_legend" resname="title_legend">
+        <source>Name</source>
+        <target>Name</target>
+      </trans-unit>
+      <trans-unit id="display_legend" resname="display_legend">
+        <source>Data display settings</source>
+        <target>Anzeigeeinstellungen</target>
+      </trans-unit>
+      <trans-unit id="edit.label" resname="edit.label">
+        <source>Edit definition</source>
+        <target>Einstellung bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="edit.description" resname="edit.description">
+        <source>Edit the definition ID %id%</source>
+        <target>Bearbeitung der Definition ID %id%.</target>
+      </trans-unit>
+      <trans-unit id="copy.label" resname="copy.label">
+        <source>Copy definition</source>
+        <target>Kopiere Definition</target>
+      </trans-unit>
+      <trans-unit id="copy.description" resname="copy.description">
+        <source>Copy the definition ID %id%</source>
+        <target>Kopieren Sie die Definition ID %id%.</target>
+      </trans-unit>
+      <trans-unit id="delete.label" resname="delete.label">
+        <source>Delete definition</source>
+        <target>Definition löschen</target>
+      </trans-unit>
+      <trans-unit id="delete.description" resname="delete.description">
+        <source>Delete the definition ID %id%</source>
+        <target>Löschen Sie die Definition ID %id%.</target>
+      </trans-unit>
+      <trans-unit id="delete.confirm" resname="delete.confirm">
+        <source>Do you really want to delete element ID %id%?</source>
+        <target>Soll das Element ID %id% wirklich gelöscht werden?</target>
+      </trans-unit>
+      <trans-unit id="show.label" resname="show.label">
+        <source>Definition details</source>
+        <target>Details der Definition</target>
+      </trans-unit>
+      <trans-unit id="show.description" resname="show.description">
+        <source>Show details of definition ID %id%</source>
+        <target>Zeige Details der Definition ID %id%.</target>
+      </trans-unit>
+      <trans-unit id="toggle.label" resname="toggle.label">
+        <source>Toggle</source>
+        <target>Wechseln</target>
+      </trans-unit>
+      <trans-unit id="toggle.description" resname="toggle.description">
+        <source>Toggle the state of definition ID %id%</source>
+        <target>Umschaltung des Status für die Definition ID %id%.</target>
+      </trans-unit>
+      <trans-unit id="settings.label" resname="settings.label">
+        <source>Definition settings</source>
+        <target>Einstellungen der Definition</target>
+      </trans-unit>
+      <trans-unit id="settings.description" resname="settings.description">
+        <source>Edit the settings of definition ID %id%</source>
+        <target>Bearbeiten Sie ein Einstellungen der Definition ID %id%.</target>
+      </trans-unit>
+      <trans-unit id="rendergrouptypes.none" resname="rendergrouptypes.none">
+        <source>Do not group</source>
+        <target>Nicht gruppieren</target>
+      </trans-unit>
+      <trans-unit id="rendergrouptypes.char" resname="rendergrouptypes.char">
+        <source>Group by initial letter(s)</source>
+        <target>Gruppiere nach Anfangsbuchstabe(n)</target>
+      </trans-unit>
+      <trans-unit id="rendergrouptypes.digit" resname="rendergrouptypes.digit">
+        <source>Group by numeric order</source>
+        <target>Gruppiere nach Zahlen</target>
+      </trans-unit>
+      <trans-unit id="rendergrouptypes.day" resname="rendergrouptypes.day">
+        <source>Group by day of date</source>
+        <target>Gruppiere nach Tag des Datums</target>
+      </trans-unit>
+      <trans-unit id="rendergrouptypes.weekday" resname="rendergrouptypes.weekday">
+        <source>Group by weekday of date</source>
+        <target>Gruppiere nach Wochentag des Datums</target>
+      </trans-unit>
+      <trans-unit id="rendergrouptypes.week" resname="rendergrouptypes.week">
+        <source>Group by week of year</source>
+        <target>Gruppiere nach Woche des Jahres eines Datums</target>
+      </trans-unit>
+      <trans-unit id="rendergrouptypes.month" resname="rendergrouptypes.month">
+        <source>Group by month of date</source>
+        <target>Gruppiere nach Monat des Datums</target>
+      </trans-unit>
+      <trans-unit id="rendergrouptypes.year" resname="rendergrouptypes.year">
+        <source>Group by year of date</source>
+        <target>Gruppiere nach Jahr des Datums</target>
+      </trans-unit>
+      <trans-unit id="rendersortdirections.asc" resname="rendersortdirections.asc">
+        <source>Ascending</source>
+        <target>Aufsteigend</target>
+      </trans-unit>
+      <trans-unit id="rendersortdirections.desc" resname="rendersortdirections.desc">
+        <source>Descending</source>
+        <target>Absteigend</target>
+      </trans-unit>
+      <trans-unit id="deleteConfirm" resname="deleteConfirm">
+        <source>Do you really want to delete definition ID %id%?</source>
+        <target>Soll die Definition ID %id% wirklich gelöscht werden?</target>
+      </trans-unit>
+      <trans-unit id="showRecord" resname="showRecord">
+        <source>Show the details of record %id%</source>
+        <target>Die Details des Datensatzes %id% anzeigen</target>
+      </trans-unit>
+      <trans-unit id="closeAll.label" resname="closeAll.label">
+        <source>Cancel</source>
+        <target>Abbrechen</target>
+      </trans-unit>
+      <trans-unit id="closeAll.description" resname="closeAll.description">
+        <source>Cancel multiple processing.</source>
+        <target>Mehrfachbearbeitung abbrechen</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

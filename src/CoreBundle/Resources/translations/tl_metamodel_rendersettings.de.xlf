@@ -1,0 +1,294 @@
+<?xml version="1.0" ?><xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="src/CoreBundle/Resources/translations/tl_metamodel_rendersettings.en.xlf" target-language="de">
+    <body>
+      <trans-unit id="backend-module.headline" resname="backend-module.headline">
+        <source>All render settings</source>
+        <target>Render-Einstellungen</target>
+      </trans-unit>
+      <trans-unit id="id.label" resname="id.label">
+        <source>Id</source>
+        <target>ID</target>
+      </trans-unit>
+      <trans-unit id="pid.label" resname="pid.label">
+        <source>Pid</source>
+        <target>PID</target>
+      </trans-unit>
+      <trans-unit id="tstamp.label" resname="tstamp.label">
+        <source>Revision date</source>
+        <target>Aktualisierungsdatum</target>
+      </trans-unit>
+      <trans-unit id="new.label" resname="new.label">
+        <source>New render setting</source>
+        <target>Neue Render-Einstellungen</target>
+      </trans-unit>
+      <trans-unit id="new.description" resname="new.description">
+        <source>Create a new render setting</source>
+        <target>Erstellt eine neue Render-Einstellung.</target>
+      </trans-unit>
+      <trans-unit id="all.label" resname="all.label">
+        <source>Edit multiple</source>
+        <target>Mehrere bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="all.description" resname="all.description">
+        <source>Edit multiple elements at once</source>
+        <target>Mehrere Elemente auf einmal bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="pastenew.label" resname="pastenew.label">
+        <source>Create a new element at the top</source>
+        <target>Ein neues Element oben erstellen</target>
+      </trans-unit>
+      <trans-unit id="pastenew.description" resname="pastenew.description">
+        <source>Create a new element after element ID %id%</source>
+        <target>Erstellt ein neues Element nach dem Element mit der ID %id%</target>
+      </trans-unit>
+      <trans-unit id="pasteafter.label" resname="pasteafter.label">
+        <source>Paste at the top</source>
+        <target>Oben einfügen</target>
+      </trans-unit>
+      <trans-unit id="pasteafter.description" resname="pasteafter.description">
+        <source>Paste after element ID %id%</source>
+        <target>Nach dem Element mit der ID %id% einfügen</target>
+      </trans-unit>
+      <trans-unit id="backBT" resname="backBT">
+        <source>Go back</source>
+        <target>Zurück</target>
+      </trans-unit>
+      <trans-unit id="backBTTitle" resname="backBTTitle">
+        <source>Back to the previous page</source>
+        <target>Zurück zur vorherigen Seite navigieren</target>
+      </trans-unit>
+      <trans-unit id="editheader.label" resname="editheader.label">
+        <source>Edit MetaModel</source>
+        <target>MetaModel bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="editheader.description" resname="editheader.description">
+        <source>Edit the MetaModel ID %id%</source>
+        <target>Das MetaModel mit der ID %id% bearbeiten.</target>
+      </trans-unit>
+      <trans-unit id="title_legend" resname="title_legend">
+        <source>Name</source>
+        <target>Name</target>
+      </trans-unit>
+      <trans-unit id="general_legend" resname="general_legend">
+        <source>General settings</source>
+        <target>Grundeinstellungen</target>
+      </trans-unit>
+      <trans-unit id="expert_legend" resname="expert_legend">
+        <source>Expert settings</source>
+        <target>Experteneinstellungen</target>
+      </trans-unit>
+      <trans-unit id="jumpto_legend" resname="jumpto_legend">
+        <source>Frontend jump-to settings</source>
+        <target>Einstellungen der Weiterleitung (jump-to)</target>
+      </trans-unit>
+      <trans-unit id="additional_legend" resname="additional_legend">
+        <source>Additional files</source>
+        <target>Zusätzliche Dateien</target>
+      </trans-unit>
+      <trans-unit id="name.label" resname="name.label">
+        <source>Name</source>
+        <target>Name</target>
+      </trans-unit>
+      <trans-unit id="name.description" resname="name.description">
+        <source>Setting name.</source>
+        <target>Einstellungsname</target>
+      </trans-unit>
+      <trans-unit id="template.label" resname="template.label">
+        <source>Template</source>
+        <target>Template</target>
+      </trans-unit>
+      <trans-unit id="template.description" resname="template.description">
+        <source>The template to use to render the items.</source>
+        <target>Geben Sie das Template an, das für die Render-Einstellung der Einträge benutzt werden soll. Das kann auch ein angepasstes Template sein.</target>
+      </trans-unit>
+      <trans-unit id="format.label" resname="format.label">
+        <source>Output format</source>
+        <target>Ausgabeformat</target>
+      </trans-unit>
+      <trans-unit id="format.description" resname="format.description">
+        <source>Define the output format. Leave empty to use the format used by current page.</source>
+        <target>Legen Sie das Ausgabeformat fest. Lassen Sie die Definition leer, um das Format zu verwenden, das von der aktuellen Seite benutzt wird.</target>
+      </trans-unit>
+      <trans-unit id="formatOptions.html5" resname="formatOptions.html5">
+        <source>HTML5</source>
+        <target>HTML5</target>
+      </trans-unit>
+      <trans-unit id="formatOptions.text" resname="formatOptions.text">
+        <source>Text</source>
+        <target>Text</target>
+      </trans-unit>
+      <trans-unit id="jumpTo.label" resname="jumpTo.label">
+        <source>JumpTo page</source>
+        <target>Weiterleitungsseite (jumpTo)</target>
+      </trans-unit>
+      <trans-unit id="jumpTo.description" resname="jumpTo.description">
+        <source>The page that shall be used as &quot;show details&quot; urls. Note that the detailed URL params will get generated
+          by the filter setting that is currently in use.
+        </source>
+        <target>Wählen Sie die Seite aus, die für die Detailansicht verwendet werden soll. Beachten Sie, dass die genauen URL-Parameter durch die verwendete Filtereinstellung bestimmt werden.</target>
+      </trans-unit>
+      <trans-unit id="jumpTo_allLanguages" resname="jumpTo_allLanguages">
+        <source>All languages</source>
+        <target>Alle Sprachen</target>
+      </trans-unit>
+      <trans-unit id="jumpTo_language.label" resname="jumpTo_language.label">
+        <source>Language</source>
+        <target>Sprache</target>
+      </trans-unit>
+      <trans-unit id="jumpTo_language.description" resname="jumpTo_language.description">
+        <source>The language for the jump to page.</source>
+        <target>Sprache der Weiterleitungsseite.</target>
+      </trans-unit>
+      <trans-unit id="jumpTo_page.label" resname="jumpTo_page.label">
+        <source>Jump to page</source>
+        <target>Springe zu Seite</target>
+      </trans-unit>
+      <trans-unit id="jumpTo_page.description" resname="jumpTo_page.description">
+        <source>The page to use for detail links.</source>
+        <target>Geben Sie die Seite an, die für die Links zur Detailseite verwendet werden soll.</target>
+      </trans-unit>
+      <trans-unit id="jumpTo_filter.label" resname="jumpTo_filter.label">
+        <source>Filter settings</source>
+        <target>Filtereinstellungen</target>
+      </trans-unit>
+      <trans-unit id="jumpTo_filter.description" resname="jumpTo_filter.description">
+        <source>The filter settings that define how the target (the reader/lister on the detail page) will filter the
+          items.
+        </source>
+        <target>Wählen Sie die Filtereinstellungen aus, die bestimmen, wie das Ziel (also die Listen- oder Reader-Seite) passende Datensätze erkennt.</target>
+      </trans-unit>
+      <trans-unit id="hideEmptyValues.label" resname="hideEmptyValues.label">
+        <source>Hide empty values</source>
+        <target>Leere Einträge verbergen</target>
+      </trans-unit>
+      <trans-unit id="hideEmptyValues.description" resname="hideEmptyValues.description">
+        <source>Hide empty values in backend and frontend.</source>
+        <target>Verbirgt leere Einträge im Backend und im Frontend.</target>
+      </trans-unit>
+      <trans-unit id="hideLabels.label" resname="hideLabels.label">
+        <source>Hide labels</source>
+        <target>Labels verbergen</target>
+      </trans-unit>
+      <trans-unit id="hideLabels.description" resname="hideLabels.description">
+        <source>Hide all labels in backend and frontend.</source>
+        <target>Mit dieser Einstellung werden im Backend und im Frontend alle Labels verborgen.</target>
+      </trans-unit>
+      <trans-unit id="additionalCss.label" resname="additionalCss.label">
+        <source>Additional css files</source>
+        <target>Zusätzliche CSS-Dateien</target>
+      </trans-unit>
+      <trans-unit id="additionalCss.description" resname="additionalCss.description">
+        <source>Choose this, if you want to include additional css files.</source>
+        <target>Wählen Sie diese Option, wenn Sie zusätzliche CSS-Dateien ausgeben möchten.</target>
+      </trans-unit>
+      <trans-unit id="additionalJs.label" resname="additionalJs.label">
+        <source>Additional javascript files</source>
+        <target>Zusätzliche Javascript-Dateien</target>
+      </trans-unit>
+      <trans-unit id="additionalJs.description" resname="additionalJs.description">
+        <source>Choose this, if you want to include additional javascript files.</source>
+        <target>Wählen Sie diese Option, wenn Sie zusätzliche JavaScript-Dateien ausgeben möchten.</target>
+      </trans-unit>
+      <trans-unit id="file.label" resname="file.label">
+        <source>File</source>
+        <target>Datei</target>
+      </trans-unit>
+      <trans-unit id="file.description" resname="file.description">
+        <source>Choose a file</source>
+        <target>Datei auswählen</target>
+      </trans-unit>
+      <trans-unit id="publish.label" resname="publish.label">
+        <source>Publish</source>
+        <target>Veröffentlichen</target>
+      </trans-unit>
+      <trans-unit id="publish.description" resname="publish.description">
+        <source>Check to publish the file.</source>
+        <target>Prüfen Sie, ob die Datei veröffentlicht werden soll.</target>
+      </trans-unit>
+      <trans-unit id="edit.label" resname="edit.label">
+        <source>Edit setting</source>
+        <target>Einstellung bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="edit.description" resname="edit.description">
+        <source>Edit the setting ID %id%</source>
+        <target>Bearbeiten Sie die Einstellungen ID %id%.</target>
+      </trans-unit>
+      <trans-unit id="copy.label" resname="copy.label">
+        <source>Copy setting definition</source>
+        <target>Einstellung kopieren</target>
+      </trans-unit>
+      <trans-unit id="copy.description" resname="copy.description">
+        <source>Copy the setting ID %id%</source>
+        <target>Kopieren Sie die Einstellung ID %id%</target>
+      </trans-unit>
+      <trans-unit id="delete.label" resname="delete.label">
+        <source>Delete setting</source>
+        <target>Einstellung löschen</target>
+      </trans-unit>
+      <trans-unit id="delete.description" resname="delete.description">
+        <source>Delete the setting ID %id%</source>
+        <target>Löschen Sie die Einstellung ID %id%</target>
+      </trans-unit>
+      <trans-unit id="delete.confirm" resname="delete.confirm">
+        <source>Do you really want to delete element ID %id%?</source>
+        <target>Wollen Sie wirklich die Einstellung mit der ID %id% löschen?</target>
+      </trans-unit>
+      <trans-unit id="show.label" resname="show.label">
+        <source>Filter details</source>
+        <target>Filterdetails</target>
+      </trans-unit>
+      <trans-unit id="show.description" resname="show.description">
+        <source>Show details of setting ID %id%</source>
+        <target>Zeige Details der Einstellung ID %id%</target>
+      </trans-unit>
+      <trans-unit id="settings.label" resname="settings.label">
+        <source>Define attribute settings</source>
+        <target>Attributseinstellungen festlegen</target>
+      </trans-unit>
+      <trans-unit id="settings.description" resname="settings.description">
+        <source>Define attribute settings for setting ID %id%</source>
+        <target>Legen Sie die Attributseinstellungen für die Filtereinstellung ID %id% fest.</target>
+      </trans-unit>
+      <trans-unit id="error_unknown_id" resname="error_unknown_id">
+        <source>Unknown ID: %id%</source>
+        <target>Unbekannte ID: %id%</target>
+      </trans-unit>
+      <trans-unit id="error_unknown_attribute" resname="error_unknown_attribute">
+        <source>unknown attribute</source>
+        <target>Unbekanntes Attribut</target>
+      </trans-unit>
+      <trans-unit id="error_unknown_column" resname="error_unknown_column">
+        <source>Unknown column</source>
+        <target>Unbekannte Spalte</target>
+      </trans-unit>
+      <trans-unit id="deleteConfirm" resname="deleteConfirm">
+        <source>Do you really want to render setting ID %id%?</source>
+        <target>Wollen Sie die Einstellung ID %id% wirklich rendern?</target>
+      </trans-unit>
+      <trans-unit id="showRecord" resname="showRecord">
+        <source>Show the details of record %id%</source>
+        <target>Die Details des Datensatzes %id% anzeigen</target>
+      </trans-unit>
+      <trans-unit id="editRecord" resname="editRecord">
+        <source>Edit record %id%</source>
+        <target>Datensatz %id% bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="save" resname="save">
+        <source>Save</source>
+        <target>Speichern</target>
+      </trans-unit>
+      <trans-unit id="saveNclose" resname="saveNclose">
+        <source>Save and close</source>
+        <target>Speichern und schliessen</target>
+      </trans-unit>
+      <trans-unit id="saveNcreate" resname="saveNcreate">
+        <source>Save and new</source>
+        <target>Speichern und Neu</target>
+      </trans-unit>
+      <trans-unit id="saveNback" resname="saveNback">
+        <source>Save and go back</source>
+        <target>Speichern und zurück</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

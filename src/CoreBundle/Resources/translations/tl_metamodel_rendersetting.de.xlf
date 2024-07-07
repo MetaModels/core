@@ -1,0 +1,232 @@
+<?xml version="1.0" ?><xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="src/CoreBundle/Resources/translations/tl_metamodel_rendersetting.en.xlf" target-language="de">
+    <body>
+      <trans-unit id="backend-module.headline" resname="backend-module.headline">
+        <source>All render setting settings</source>
+        <target>Alle Einstellungen des Render-Settings</target>
+      </trans-unit>
+      <trans-unit id="id.label" resname="id.label">
+        <source>Id</source>
+        <target>ID</target>
+      </trans-unit>
+      <trans-unit id="pid.label" resname="pid.label">
+        <source>Pid</source>
+        <target>PID</target>
+      </trans-unit>
+      <trans-unit id="tstamp.label" resname="tstamp.label">
+        <source>Revision date</source>
+        <target>Aktualisierungsdatum</target>
+      </trans-unit>
+      <trans-unit id="sorting.label" resname="sorting.label">
+        <source>Sorting</source>
+        <target>Sortierung</target>
+      </trans-unit>
+      <trans-unit id="new.label" resname="new.label">
+        <source>New attribute</source>
+        <target>Neues Attribut</target>
+      </trans-unit>
+      <trans-unit id="new.description" resname="new.description">
+        <source>Add a new attribute for render setting</source>
+        <target>Ein neues Attribut für die Render-Settings hinzufügen.</target>
+      </trans-unit>
+      <trans-unit id="all.label" resname="all.label">
+        <source>Edit multiple</source>
+        <target>Mehrere bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="all.description" resname="all.description">
+        <source>Edit multiple elements at once</source>
+        <target>Mehrere Elemente auf einmal bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="pastenew.label" resname="pastenew.label">
+        <source>Create a new element at the top</source>
+        <target>Erstellt ein neues Element oben</target>
+      </trans-unit>
+      <trans-unit id="pastenew.description" resname="pastenew.description">
+        <source>Create a new element after element ID %id%</source>
+        <target>Erstellt ein neues Element nach dem Element mit der ID %id%</target>
+      </trans-unit>
+      <trans-unit id="pasteafter.label" resname="pasteafter.label">
+        <source>Paste at the top</source>
+        <target>Oben einfügen</target>
+      </trans-unit>
+      <trans-unit id="pasteafter.description" resname="pasteafter.description">
+        <source>Paste after element ID %id%</source>
+        <target>Nach dem Element mit der ID %id% einfügen</target>
+      </trans-unit>
+      <trans-unit id="backBT" resname="backBT">
+        <source>Go back</source>
+        <target>Zurück</target>
+      </trans-unit>
+      <trans-unit id="backBTTitle" resname="backBTTitle">
+        <source>Back to the previous page</source>
+        <target>Zurück zur vorherigen Seite navigieren</target>
+      </trans-unit>
+      <trans-unit id="continue" resname="continue">
+        <source>Continue</source>
+        <target>Fortfahren</target>
+      </trans-unit>
+      <trans-unit id="selectAll" resname="selectAll">
+        <source>Select all</source>
+        <target>Alles auswählen</target>
+      </trans-unit>
+      <trans-unit id="save" resname="save">
+        <source>Save</source>
+        <target>Speichern</target>
+      </trans-unit>
+      <trans-unit id="saveNclose" resname="saveNclose">
+        <source>Save and close</source>
+        <target>Speichern und schliessen</target>
+      </trans-unit>
+      <trans-unit id="saveNcreate" resname="saveNcreate">
+        <source>Save and new</source>
+        <target>Speichern und neu</target>
+      </trans-unit>
+      <trans-unit id="saveNback" resname="saveNback">
+        <source>Save and go back</source>
+        <target>Speichern und zurück</target>
+      </trans-unit>
+      <trans-unit id="editRecord" resname="editRecord">
+        <source>Edit record %id%</source>
+        <target>Datensatz %id% bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="attr_id.label" resname="attr_id.label">
+        <source>Attribute</source>
+        <target>Attribut</target>
+      </trans-unit>
+      <trans-unit id="attr_id.description" resname="attr_id.description">
+        <source>Attribute this setting relates to.</source>
+        <target>Attribut, auf das sich diese Einstellung bezieht.</target>
+      </trans-unit>
+      <trans-unit id="template.label" resname="template.label">
+        <source>Custom template to use for generating</source>
+        <target>Angepasstes Template für die Ausgabe</target>
+      </trans-unit>
+      <trans-unit id="template.description" resname="template.description">
+        <source>Select the template that shall be used for the selected attribute. Valid template files start with &quot;mm_&amp;lt;type&amp;gt;&quot;
+          where the type name is put for &amp;lt;type&amp;gt;
+        </source>
+        <target>Wählen Sie das Template aus, das für das gewählte Attribut verwendet werden soll. Gültige Dateinamen für das Template beginnen mit &quot;mm_&amp;lt;typ&amp;gt;&quot;, wobei &amp;lt;typ&amp;gt; für den Typ steht.</target>
+      </trans-unit>
+      <trans-unit id="additional_class.label" resname="additional_class.label">
+        <source>Custom CSS class</source>
+        <target>Individuelle CSS-Klasse</target>
+      </trans-unit>
+      <trans-unit id="additional_class.description" resname="additional_class.description">
+        <source>Enter any CSS classes that you want get added to the output of this attribute</source>
+        <target>Eingabe einer CSS-Klasse, wenn diese mit dem Attribut ausgegeben werden soll.</target>
+      </trans-unit>
+      <trans-unit id="title_legend" resname="title_legend">
+        <source>Type</source>
+        <target>Typ</target>
+      </trans-unit>
+      <trans-unit id="advanced_legend" resname="advanced_legend">
+        <source>Advanced</source>
+        <target>Erweitert</target>
+      </trans-unit>
+      <trans-unit id="edit.label" resname="edit.label">
+        <source>Edit setting</source>
+        <target>Einstellung bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="edit.description" resname="edit.description">
+        <source>Edit render setting ID %id%</source>
+        <target>Render-Einstellung ID %id% bearbeiten.</target>
+      </trans-unit>
+      <trans-unit id="cut.label" resname="cut.label">
+        <source>Cut render setting definition</source>
+        <target>Render-Einstellung ausschneiden</target>
+      </trans-unit>
+      <trans-unit id="cut.description" resname="cut.description">
+        <source>Cut the render setting ID %id%</source>
+        <target>Ausschneiden der Render-Einstellung ID %id%.</target>
+      </trans-unit>
+      <trans-unit id="copy.label" resname="copy.label">
+        <source>Copy render setting definition</source>
+        <target>Render-Einstellung kopieren</target>
+      </trans-unit>
+      <trans-unit id="copy.description" resname="copy.description">
+        <source>Copy the render setting ID %id%</source>
+        <target>Kopieren Sie die Render-Einstellung ID %id%.</target>
+      </trans-unit>
+      <trans-unit id="delete.label" resname="delete.label">
+        <source>Delete render setting</source>
+        <target>Render-Einstellung löschen</target>
+      </trans-unit>
+      <trans-unit id="delete.description" resname="delete.description">
+        <source>Delete the render setting ID %id%</source>
+        <target>Löschen der Render-Einstellung ID %id%.</target>
+      </trans-unit>
+      <trans-unit id="delete.confirm" resname="delete.confirm">
+        <source>Do you really want to delete element ID %id%?</source>
+        <target>Soll das Element ID %id% wirklich gelöscht werden?</target>
+      </trans-unit>
+      <trans-unit id="show.label" resname="show.label">
+        <source>Render setting details</source>
+        <target>Details der Render-Einstellung</target>
+      </trans-unit>
+      <trans-unit id="show.description" resname="show.description">
+        <source>Show details of render setting ID %id%</source>
+        <target>Anzeige Details der Render-Einstellung ID %id%.</target>
+      </trans-unit>
+      <trans-unit id="toggle.label" resname="toggle.label">
+        <source>Toggle</source>
+        <target>Wechseln</target>
+      </trans-unit>
+      <trans-unit id="toggle.description" resname="toggle.description">
+        <source>Toggle the state of render setting ID %id%</source>
+        <target>Wechseln des Status für die Render-Einstellung ID %id%.</target>
+      </trans-unit>
+      <trans-unit id="addall.label" resname="addall.label">
+        <source>Add all</source>
+        <target>Alle hinzufügen</target>
+      </trans-unit>
+      <trans-unit id="addall.description" resname="addall.description">
+        <source>Add all attributes to render setting</source>
+        <target>Alle Attribute der Render-Einstellung hinzufügen.</target>
+      </trans-unit>
+      <trans-unit id="tl_metamodel_filtersetting.row" resname="tl_metamodel_filtersetting.row">
+        <source>%id% &lt;strong&gt;%id%&lt;/strong&gt; &lt;em&gt;[%id%]&lt;/em&gt;</source>
+        <target>%id% &lt;strong&gt;%id%&lt;/strong&gt; &lt;em&gt;[%id%]&lt;/em&gt;</target>
+      </trans-unit>
+      <trans-unit id="addAll_willadd" resname="addAll_willadd">
+        <source>Will add the attribute &quot;%name%&quot; [%type%, &quot;%colName%&quot;] to the input screen.</source>
+        <target>Fügt das Attribut &quot;%name%&quot; [%type%, &quot;%colName%&quot;] den Render-Einstellung hinzu.</target>
+      </trans-unit>
+      <trans-unit id="addAll_alreadycontained" resname="addAll_alreadycontained">
+        <source>Attribute &quot;%name%&quot; [%type%, &quot;%colName%&quot;] is already contained in input screen.</source>
+        <target>Das Attribut &quot;%name%&quot; [%type%, &quot;%colName%&quot;] ist bereits in der Render-Einstellung vorhanden.</target>
+      </trans-unit>
+      <trans-unit id="addAll_addsuccess" resname="addAll_addsuccess">
+        <source>Added the attribute &quot;%name%&quot; [%type%, &quot;%colName%&quot;] to the input screen.</source>
+        <target>Das Attribut &quot;%name%&quot; [%type%, &quot;%colName%&quot;] wurde der Render-Einstellung hinzugefügt.</target>
+      </trans-unit>
+      <trans-unit id="addAll_activate" resname="addAll_activate">
+        <source>Add new settings enabled.</source>
+        <target>Neue Einstellung aktivieren.</target>
+      </trans-unit>
+      <trans-unit id="deleteConfirm" resname="deleteConfirm">
+        <source>Do you really want to render filter setting ID %id%?</source>
+        <target>Soll die Einstellung mit ID %id% wirklich gelöscht werden?</target>
+      </trans-unit>
+      <trans-unit id="enabled.label" resname="enabled.label">
+        <source>Enabled</source>
+        <target>Aktivieren</target>
+      </trans-unit>
+      <trans-unit id="enabled.description" resname="enabled.description">
+        <source>Enable this filter setting.</source>
+        <target>Aktiviert die Filtereinstellung</target>
+      </trans-unit>
+      <trans-unit id="showRecord" resname="showRecord">
+        <source>Show the details of record %id%</source>
+        <target>Die Details des Datensatzes %id% anzeigen</target>
+      </trans-unit>
+      <trans-unit id="closeAll.label" resname="closeAll.label">
+        <source>Cancel</source>
+        <target>Abbrechen</target>
+      </trans-unit>
+      <trans-unit id="closeAll.description" resname="closeAll.description">
+        <source>Cancel multiple processing.</source>
+        <target>Mehrfachbearbeitung abbrechen</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

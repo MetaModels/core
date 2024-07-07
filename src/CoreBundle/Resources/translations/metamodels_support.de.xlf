@@ -1,0 +1,72 @@
+<?xml version="1.0" ?><xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="src/CoreBundle/Resources/translations/metamodel_support.en.xlf" target-language="de">
+    <body>
+      <trans-unit id="menu.label" resname="menu.label">
+        <source>Support MetaModels</source>
+        <target>MetaModels unterstützen</target>
+      </trans-unit>
+      <trans-unit id="menu.description" resname="menu.description">
+        <source>Support information for the MetaModels extension.</source>
+        <target>Informieren Sie sich darüber, wie Sie die Entwicklung der MetaModels-Extension unterstützen können.</target>
+      </trans-unit>
+      <trans-unit id="main_text" resname="main_text">
+        <source>As the developers of this project, we receive no compensation for our work.
+          Much of our valuable time is freely given to the MetaModels project. Any
+          donations towards the MetaModels project would allow us to work on the
+          project during our working hours, speeding up development significantly.
+          &lt;br /&gt;&lt;br /&gt; We guarantee to spend any donations only on this project.
+          If you have any specific requirements or features requests, you are free
+          to hire a member from our &lt;a target=&quot;_blank&quot;
+          href=&quot;https://now.metamodel.me/en/about/team&quot;&gt;team&lt;/a&gt;, who will gladly
+          help you.&lt;br /&gt;&lt;br /&gt;A big thanks to all our &lt;a target=&quot;_blank&quot;
+          href=&quot;https://now.metamodel.me/en/supporters&quot;&gt;existing supporters and
+          sponsors&lt;/a&gt;. Please consider joining our list of sponsors. We could not
+          create such a popular open source project without the support of the
+          community.&lt;br /&gt;&lt;br /&gt;&lt;a target=&quot;_blank&quot;
+          href=&quot;https://now.metamodel.me/en/supporters/donate&quot;&gt;More informations&lt;/a&gt;
+        </source>
+        <target>Als Entwickler dieses Projektes erhalten wir keine Vergütung für unsere Arbeit. Ein Großteil unserer wertvollen Zeit widmen wir dem MetaModels-Projekt. Jede Spende an das MetaModels-Projekt würde es uns ermöglichen, während unserer regulären Arbeitszeit an dem Projekt zu arbeiten, was die Entwicklung erheblich beschleunigen würde. Deshalb bitten wir um eine Unterstützung für das MetaModels-Projekt.
+&lt;br /&gt;&lt;br /&gt; Wir garantieren, dass Spendengelder nur für dieses Projekt ausgegeben werden. Sollten Sie spezielle Wünsche oder Anforderungen haben, können Sie gerne ein Mitglied unseres &lt;a target=&quot;_blank&quot; href=&quot;https://now.metamodel.me/de/ueber-uns/team&quot;&gt;Teams&lt;/a&gt;, anfragen, das Ihnen gerne weiterhilft.
+&lt;br /&gt;&lt;br /&gt;Ein großes Dankeschön an alle &lt;a target=&quot;_blank&quot; href=&quot;https://now.metamodel.me/de/unterstuetzung&quot;&gt;bestehenden Supporter und Sponsoren&lt;/a&gt;. Bitte beachten Sie unsere Spendenseite. Ein solches umfangreiches Open Source Projekt konnten wir ohne die Unterstützung der Community nicht realisieren.&lt;br /&gt;&lt;br /&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://now.metamodel.me/de/unterstuetzer/spenden&quot;&gt;Mehr Infos&lt;/a&gt;</target>
+      </trans-unit>
+      <trans-unit id="main_headline" resname="main_headline">
+        <source>We are calling for your help!</source>
+        <target>Bitte unterstützen Sie uns!</target>
+      </trans-unit>
+      <trans-unit id="contributor_headline" resname="contributor_headline">
+        <source>Thanks to these users for tickets, suggestions and translations</source>
+        <target>Wir danken diesen Benutzerinnen und Benutzern für Tickets, Anregungen und Übersetzungen:</target>
+      </trans-unit>
+      <trans-unit id="purpose" resname="purpose">
+        <source>Purpose</source>
+        <target>Verwendungszweck</target>
+      </trans-unit>
+      <trans-unit id="other_donations" resname="other_donations">
+        <source>For donations check also our
+          &lt;a target=&quot;_blank&quot; href=&quot;https://now.metamodel.me/en/supporters/fundraising&quot;&gt;
+          fundraisings&lt;/a&gt; or consider
+          &lt;a target=&quot;_blank&quot; href=&quot;https://now.metamodel.me/en/supporters/donate&quot;&gt;
+          donating for the manual&lt;/a&gt;.
+        </source>
+        <target>Für Spenden besuchen Sie auch unsere &lt;a target=&quot;_blank&quot; href=&quot;https://now.metamodel.me/de/unterstuetzer/fundraising&quot;&gt;Fundraisings&lt;/a&gt; oder beachten Sie &lt;a target=&quot;_blank&quot; href=&quot;https://now.metamodel.me/de/unterstuetzer/spenden&quot;&gt;Spenden für das Handbuch&lt;/a&gt;.</target>
+      </trans-unit>
+      <trans-unit id="help_headline" resname="help_headline">
+        <source>Help for your MetaModels projects</source>
+        <target>Hilfe für Dein MetaModels Projekt</target>
+      </trans-unit>
+      <trans-unit id="help_text" resname="help_text">
+        <source>On our &lt;a target=&quot;_blank&quot; href=&quot;https://now.metamodel.me/en/help&quot;&gt;help
+          website as guide to MetaModels&lt;/a&gt; you can find the manual, all support
+          channels, videos tutorials and our newsletter service.&lt;br /&gt;&lt;br /&gt;
+          &lt;a target=&quot;_blank&quot; href=&quot;https://metamodels.readthedocs.io/en/latest/&quot;&gt;
+          Direct link to the MetaModels manual...&lt;/a&gt;
+        </source>
+        <target>Auf unserer &lt;a target=&quot;_blank&quot; href=&quot;https://now.metamodel.me/de/hilfe&quot;&gt;Hilfe-Website&lt;/a&gt; finden Sie als Leitfaden zu MetaModels das Handbuch, alle Support-Kanäle, Videos und unseren Newsletter-Service.&lt;br /&gt;&lt;br /&gt;&lt;a target=&quot;_blank&quot; href=&quot;https://metamodels.readthedocs.io/de/latest/&quot;&gt;Direkter Link zum MetaModels Handbuch...&lt;/a&gt;</target>
+      </trans-unit>
+      <trans-unit id="contributor_link" resname="contributor_link">
+        <source>See contributors at github...</source>
+        <target>Mitwirkende bei Github...</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
