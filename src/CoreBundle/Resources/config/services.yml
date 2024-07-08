@@ -127,6 +127,7 @@ services:
         arguments:
             - '@database_connection'
             - '@MetaModels\Filter\FilterUrlBuilder'
+            - '@translator'
         public: true
 
     metamodels.controller.abstract.add_all:

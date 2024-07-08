@@ -42,6 +42,7 @@ use MetaModels\FrontendIntegration\Content\FilterClearAll as ContentElementFilte
 use MetaModels\FrontendIntegration\Module\FilterClearAll as ModuleFilterClearAll;
 use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * FE-filtering for Contao MetaModels.
@@ -82,13 +83,24 @@ class FrontendFilter
     private FilterUrlBuilder $filterUrlBuilder;
 
     /**
+     * The translator.
+     *
+     * @var TranslatorInterface
+     */
+    private TranslatorInterface $translator;
+
+    /**
      * FrontendFilter constructor.
      *
      * @param Connection|null       $connection       Database connection.
      * @param FilterUrlBuilder|null $filterUrlBuilder The filter URL builder.
+     * @param TranslatorInterface   $translator       The translator.
      */
-    public function __construct(Connection $connection = null, FilterUrlBuilder $filterUrlBuilder = null)
-    {
+    public function __construct(
+        Connection $connection = null,
+        FilterUrlBuilder $filterUrlBuilder = null,
+        TranslatorInterface $translator = null
+    ) {
         if (null === $connection) {
             // @codingStandardsIgnoreStart
             @trigger_error(
@@ -112,6 +124,18 @@ class FrontendFilter
             assert($filterUrlBuilder instanceof FilterUrlBuilder);
         }
         $this->filterUrlBuilder = $filterUrlBuilder;
+
+        if (null === $translator) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Translator is missing. It has to be passed in the constructor. Fallback will be dropped.',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            $translator = System::getContainer()->get('translator');
+            assert($translator instanceof TranslatorInterface);
+        }
+        $this->translator = $translator;
     }
 
     /**
@@ -443,7 +467,7 @@ class FrontendFilter
             'filters' => $renderedWidgets,
             'submit'  => ($filterOptions->isAutoSubmit()
                 ? ''
-                : $GLOBALS['TL_LANG']['metamodels_frontendfilter']['submit'] ?? ''
+                : $this->translator->trans('submit', [], 'metamodels_filter')
             )
         ];
     }
