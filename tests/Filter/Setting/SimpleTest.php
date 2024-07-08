@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2021 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -27,6 +28,7 @@ use MetaModels\Filter\Setting\Simple;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Test simple filter settings.
@@ -47,10 +49,11 @@ class SimpleTest extends TestCase
         $filterSetting    = $this->getMockForAbstractClass(ICollection::class);
         $eventDispatcher  = $this->getMockForAbstractClass(EventDispatcherInterface::class);
         $filterUrlBuilder = $this->getMockBuilder(FilterUrlBuilder::class)->disableOriginalConstructor()->getMock();
+        $translator       = $this->getMockForAbstractClass(TranslatorInterface::class);
 
         $setting = $this
             ->getMockBuilder(Simple::class)
-            ->setConstructorArgs([$filterSetting, $properties, $eventDispatcher, $filterUrlBuilder])
+            ->setConstructorArgs([$filterSetting, $properties, $eventDispatcher, $filterUrlBuilder, $translator])
             ->getMockForAbstractClass();
 
         return $setting;
@@ -60,11 +63,8 @@ class SimpleTest extends TestCase
      * Add a parameter to the url, if it is auto_item, it will get prepended.
      *
      * @param Simple $instance The instance.
-     *
      * @param string $url      The url built so far.
-     *
      * @param string $name     The parameter name.
-     *
      * @param string $value    The parameter value.
      *
      * @return string.
@@ -80,9 +80,7 @@ class SimpleTest extends TestCase
      * Internal convenience method to call the protected generateSql method on the customSql instance.
      *
      * @param Simple $instance  The instance.
-     *
      * @param array  $params    The filter url parameter array.
-     *
      * @param string $paramName The filter url parameter name.
      *
      * @return string
