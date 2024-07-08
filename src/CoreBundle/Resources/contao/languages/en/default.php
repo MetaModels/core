@@ -31,12 +31,3 @@ $GLOBALS['TL_LANG']['CTE']['metamodels_frontendfilter'][1]   =
 $GLOBALS['TL_LANG']['CTE']['metamodels_frontendclearall'][0] = 'MetaModels clear all';
 $GLOBALS['TL_LANG']['CTE']['metamodels_frontendclearall'][1] =
     'Adds a clear all for all frontend filter.';
-
-$GLOBALS['TL_LANG']['metamodels_frontendfilter']['submit']          = 'Filter';
-$GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter']   = 'No filtering';
-$GLOBALS['TL_LANG']['metamodels_frontendfilter']['select_all']      = 'Select all';
-$GLOBALS['TL_LANG']['metamodels_frontendfilter']['clear_all']       = 'Clear all filter';
-$GLOBALS['TL_LANG']['metamodels_frontendfilter']['action_add']      = '+';
-$GLOBALS['TL_LANG']['metamodels_frontendfilter']['action_remove']   = '-';
-$GLOBALS['TL_LANG']['metamodels_frontendfilter']['no_combinations'] =
-    ' (No matching combinations found.)';

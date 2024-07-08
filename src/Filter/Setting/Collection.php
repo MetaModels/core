@@ -199,7 +199,7 @@ class Collection implements ICollection
         $parameters       = [];
         $metaModel        = $this->getMetaModel();
         $previousLanguage = ($metaModel instanceof ITranslatedMetaModel)
-            ? $metaModel->selectLanguage($arrJumpTo['lang'] ?? $metaModel->getMainLanguage())
+            ? $metaModel->selectLanguage($arrJumpTo['language'] ?? $metaModel->getMainLanguage())
             : null;
         try {
             // Get the id with all enabled filter.

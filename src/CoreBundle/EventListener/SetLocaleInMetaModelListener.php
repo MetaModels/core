@@ -26,6 +26,7 @@ use MetaModels\ITranslatedMetaModel;
 
 final class SetLocaleInMetaModelListener
 {
+    /** @SuppressWarnings(PHPMD.Superglobals) */
     public function __invoke(CreateMetaModelEvent $event): void
     {
         $metaModel = $event->getMetaModel();
