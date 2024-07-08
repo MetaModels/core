@@ -7,23 +7,23 @@
       </trans-unit>
       <trans-unit id="editmetamodel.description" resname="editmetamodel.description">
         <source>Edit the MetaModel ID %id%.</source>
-        <target>Das MetaModel mit der ID %id% bearbeiten.</target>
+        <target>Bearbeite MetaModel ID %id%.</target>
       </trans-unit>
       <trans-unit id="editrendersetting.label" resname="editrendersetting.label">
         <source>Edit render setting</source>
-        <target>Render-Einstellungen</target>
+        <target>Render-Einstellungen bearbeiten</target>
       </trans-unit>
       <trans-unit id="editrendersetting.description" resname="editrendersetting.description">
         <source>Edit the render setting ID %id%.</source>
-        <target>Render-Einstellungen bearbeiten mit der ID %id%.</target>
+        <target>Bearbeite Render-Einstellungen ID %id%.</target>
       </trans-unit>
       <trans-unit id="editfiltersetting.label" resname="editfiltersetting.label">
         <source>Edit filter setting</source>
-        <target>Filter bearbeiten</target>
+        <target>Filtereinstellungen bearbeiten</target>
       </trans-unit>
       <trans-unit id="editfiltersetting.description" resname="editfiltersetting.description">
         <source>Edit the filter setting ID %id%.</source>
-        <target>Den Filter mit der ID %id% bearbeiten.</target>
+        <target>Bearbeite Filtereinstellungen ID %id%.</target>
       </trans-unit>
       <trans-unit id="filter_option.null" resname="filter_option.null">
         <source>- no value [null] -</source>
