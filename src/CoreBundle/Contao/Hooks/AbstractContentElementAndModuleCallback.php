@@ -418,7 +418,7 @@ abstract class AbstractContentElementAndModuleCallback
      */
     public function saveCallback(string $value = null)
     {
-        return null === $value ? '--null--' : base64_decode($value);
+        return '--null--' === $value ? null : base64_decode($value);
     }
 
     /**
