@@ -1,0 +1,251 @@
+<?xml version="1.0" ?><xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="src/CoreBundle/Resources/translations/tl_metamodel_dcasetting_condition.en.xlf" target-language="de">
+    <body>
+      <trans-unit id="backend-module.headline" resname="backend-module.headline">
+        <source>All input screen conditions</source>
+        <target>Alle Ansichtsbedingenen</target>
+      </trans-unit>
+      <trans-unit id="id.label" resname="id.label">
+        <source>Id</source>
+        <target>ID</target>
+      </trans-unit>
+      <trans-unit id="pid.label" resname="pid.label">
+        <source>Pid</source>
+        <target>PID</target>
+      </trans-unit>
+      <trans-unit id="fid.label" resname="fid.label">
+        <source>Fid</source>
+        <target>FID</target>
+      </trans-unit>
+      <trans-unit id="sorting.label" resname="sorting.label">
+        <source>Sorting</source>
+        <target>Sortierung</target>
+      </trans-unit>
+      <trans-unit id="tstamp.label" resname="tstamp.label">
+        <source>Revision date</source>
+        <target>Aktualisierungsdatum</target>
+      </trans-unit>
+      <trans-unit id="new.label" resname="new.label">
+        <source>New condition</source>
+        <target>Neue Bedingung</target>
+      </trans-unit>
+      <trans-unit id="new.description" resname="new.description">
+        <source>Add a new visibility condition</source>
+        <target>Eine neue Bdingung zur Sichtbarkeit hinzufügen</target>
+      </trans-unit>
+      <trans-unit id="all.label" resname="all.label">
+        <source>Edit multiple</source>
+        <target>Mehrere bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="all.description" resname="all.description">
+        <source>Edit multiple elements at once</source>
+        <target>Mehrere Elemente auf einmal bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="backBT" resname="backBT">
+        <source>Go back</source>
+        <target>Zurück</target>
+      </trans-unit>
+      <trans-unit id="backBTTitle" resname="backBTTitle">
+        <source>Back to the previous page</source>
+        <target>Zurück zur vorherigen Seite navigieren</target>
+      </trans-unit>
+      <trans-unit id="list_label.label" resname="list_label.label">
+        <source>Visibility conditons</source>
+        <target>Sichtbarkeits-Bedingungen</target>
+      </trans-unit>
+      <trans-unit id="basic_legend" resname="basic_legend">
+        <source>Basic configuration</source>
+        <target>Grundkonfiguration</target>
+      </trans-unit>
+      <trans-unit id="config_legend" resname="config_legend">
+        <source>Condition configuration</source>
+        <target>Konfiguration der Bedingung</target>
+      </trans-unit>
+      <trans-unit id="type.label" resname="type.label">
+        <source>Type</source>
+        <target>Typ</target>
+      </trans-unit>
+      <trans-unit id="type.description" resname="type.description">
+        <source>Select the condition type.</source>
+        <target>Wählen Sie einen Bedingungstyp aus. Weitere Informationen erhalten Sie über den Hilfe-Assistenten.</target>
+      </trans-unit>
+      <trans-unit id="enabled.label" resname="enabled.label">
+        <source>Enabled</source>
+        <target>Aktiviert</target>
+      </trans-unit>
+      <trans-unit id="enabled.description" resname="enabled.description">
+        <source>Check to enable this condition.</source>
+        <target>Auswählen um die Bedingung zu aktivieren.</target>
+      </trans-unit>
+      <trans-unit id="comment.label" resname="comment.label">
+        <source>Comment</source>
+        <target>Kommentar</target>
+      </trans-unit>
+      <trans-unit id="comment.description" resname="comment.description">
+        <source>Enter a comment to describe the purpose of this condition.</source>
+        <target>Ein kurzer Kommentar, der den Zweck dieser Bedingung beschreibt.</target>
+      </trans-unit>
+      <trans-unit id="attr_id.label" resname="attr_id.label">
+        <source>Attribute</source>
+        <target>Attibut</target>
+      </trans-unit>
+      <trans-unit id="attr_id.description" resname="attr_id.description">
+        <source>Select the attribute to use for this condition.</source>
+        <target>Das Attribut auswählen, das in dieser Bedingung verwendet werden soll.</target>
+      </trans-unit>
+      <trans-unit id="value.label" resname="value.label">
+        <source>Value</source>
+        <target>Wert</target>
+      </trans-unit>
+      <trans-unit id="value.description" resname="value.description">
+        <source>Please select the desired value.</source>
+        <target>Bitte wählen Sie einen eigenen Wert aus.</target>
+      </trans-unit>
+      <trans-unit id="edit.label" resname="edit.label">
+        <source>Edit setting</source>
+        <target>Einstellung bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="edit.description" resname="edit.description">
+        <source>Edit the setting ID %id%</source>
+        <target>Bearbeiten Sie die Einstellungen ID %id%.</target>
+      </trans-unit>
+      <trans-unit id="cut.label" resname="cut.label">
+        <source>Cut setting definition</source>
+        <target>Einstellung ausschneiden</target>
+      </trans-unit>
+      <trans-unit id="cut.description" resname="cut.description">
+        <source>Cut the setting ID %id%</source>
+        <target>Ausschneiden der Einstellung ID %id%.</target>
+      </trans-unit>
+      <trans-unit id="copy.label" resname="copy.label">
+        <source>Copy setting definition</source>
+        <target>Einstellung kopieren</target>
+      </trans-unit>
+      <trans-unit id="copy.description" resname="copy.description">
+        <source>Copy the setting ID %id%</source>
+        <target>Kopieren Sie die Einstellung ID %id%.</target>
+      </trans-unit>
+      <trans-unit id="delete.label" resname="delete.label">
+        <source>Delete setting</source>
+        <target>Einstellung löschen</target>
+      </trans-unit>
+      <trans-unit id="delete.description" resname="delete.description">
+        <source>Delete the setting ID %id%</source>
+        <target>Löschen Sie die Einstellung ID %id%.</target>
+      </trans-unit>
+      <trans-unit id="delete.confirm" resname="delete.confirm">
+        <source>Do you really want to delete element ID %id%?</source>
+        <target>Soll das Element ID %id% wirklich gelöscht werden?</target>
+      </trans-unit>
+      <trans-unit id="conditions.label" resname="conditions.label">
+        <source>Manage conditions</source>
+        <target>Bedingungen verwalten</target>
+      </trans-unit>
+      <trans-unit id="conditions.description" resname="conditions.description">
+        <source>Manage the conditions of property ID %id%</source>
+        <target>Verwalten Sie die Bedingungen der Eigenschaft ID %id%.</target>
+      </trans-unit>
+      <trans-unit id="show.label" resname="show.label">
+        <source>Setting details</source>
+        <target>Einstellungsdetails</target>
+      </trans-unit>
+      <trans-unit id="show.description" resname="show.description">
+        <source>Show details of setting ID %id%</source>
+        <target>Zeige Details der Einstellung ID %id%.</target>
+      </trans-unit>
+      <trans-unit id="toggle.label" resname="toggle.label">
+        <source>Toggle</source>
+        <target>Wechseln</target>
+      </trans-unit>
+      <trans-unit id="toggle.description" resname="toggle.description">
+        <source>Toggle the state of setting ID %id%</source>
+        <target>Wechseln des Status der Einstellung ID %id%</target>
+      </trans-unit>
+      <trans-unit id="addall.label" resname="addall.label">
+        <source>Add all</source>
+        <target>Alle hinzufügen</target>
+      </trans-unit>
+      <trans-unit id="addall.description" resname="addall.description">
+        <source>Add all attributes to input screen</source>
+        <target>Alle Attribute der Eingabemaske hinzufügen</target>
+      </trans-unit>
+      <trans-unit id="pastenew.label" resname="pastenew.label">
+        <source>Add new at the top</source>
+        <target>Neue Einstellung oben erstellen.</target>
+      </trans-unit>
+      <trans-unit id="pastenew.description" resname="pastenew.description">
+        <source>Add new after setting ID %id%</source>
+        <target>Neues Einstellung nach dem Element ID %id% erstellen.</target>
+      </trans-unit>
+      <trans-unit id="pasteafter.label" resname="pasteafter.label">
+        <source>Create new after setting ID %id%</source>
+        <target>Neue Einstellung nach Element ID %id% anlegen.</target>
+      </trans-unit>
+      <trans-unit id="pasteafter.description" resname="pasteafter.description">
+        <source>Create new after setting ID %id%</source>
+        <target>Neue Einstellung nach Element ID %id% anlegen.</target>
+      </trans-unit>
+      <trans-unit id="pasteinto.label" resname="pasteinto.label">
+        <source>Create new setting at the top</source>
+        <target>Neue Einstellung oben anlegen.</target>
+      </trans-unit>
+      <trans-unit id="pasteinto.description" resname="pasteinto.description">
+        <source>Create new at the top of setting ID %id%</source>
+        <target>Neue Einstellung oberhalb von Einstellung ID %id% anlegen.</target>
+      </trans-unit>
+      <trans-unit id="conditionnames.conditionpropertyvalueis" resname="conditionnames.conditionpropertyvalueis">
+        <source>Attribute value is...</source>
+        <target>Eigenschaftswert ist...</target>
+      </trans-unit>
+      <trans-unit id="conditionnames.conditionpropertycontainanyof" resname="conditionnames.conditionpropertycontainanyof">
+        <source>Attribute values contain any of...</source>
+        <target>Eigenschaftswert kann beinhalten ...</target>
+      </trans-unit>
+      <trans-unit id="conditionnames.conditionpropertyvisible" resname="conditionnames.conditionpropertyvisible">
+        <source>Is attribute visible...</source>
+        <target>Eigenschaft ist sichtbar ...</target>
+      </trans-unit>
+      <trans-unit id="conditionnames.conditionor" resname="conditionnames.conditionor">
+        <source>OR</source>
+        <target>ODER</target>
+      </trans-unit>
+      <trans-unit id="conditionnames.conditionand" resname="conditionnames.conditionand">
+        <source>AND</source>
+        <target>UND</target>
+      </trans-unit>
+      <trans-unit id="conditionnames.conditionnot" resname="conditionnames.conditionnot">
+        <source>NOT</source>
+        <target>NICHT</target>
+      </trans-unit>
+      <trans-unit id="typedesc._default_" resname="typedesc._default_">
+        <source>%icon% &lt;strong&gt;%name%&lt;/strong&gt; - for attribute &lt;em&gt;%attribute%&lt;/em&gt; (Parameter: %value%)%comment%
+        </source>
+        <target>%icon% &lt;strong&gt;%name%&lt;/strong&gt; - für Attribut &lt;em&gt;%attribute%&lt;/em&gt; (Parameter: %value%)%comment%</target>
+      </trans-unit>
+      <trans-unit id="typedesc.conditionor" resname="typedesc.conditionor">
+        <source>%icon% &lt;strong&gt;%name%&lt;/strong&gt; - any sub conditions must be fulfilled%comment%</source>
+        <target>%icon% &lt;strong&gt;%name%&lt;/strong&gt; - eine beliebige Bedingung muss erfüllt sein. %comment%</target>
+      </trans-unit>
+      <trans-unit id="typedesc.conditionand" resname="typedesc.conditionand">
+        <source>%icon% &lt;strong&gt;%name%&lt;/strong&gt; - all sub conditions must be fulfilled%comment%</source>
+        <target>%icon% &lt;strong&gt;%name%&lt;/strong&gt; - alle Bedingungen müssen erfüllt sein. %comment%</target>
+      </trans-unit>
+      <trans-unit id="typedesc.conditionnot" resname="typedesc.conditionnot">
+        <source>%icon% &lt;strong&gt;%name%&lt;/strong&gt; - invert the result of the contained condition%comment%</source>
+        <target>%icon% &lt;strong&gt;%name%&lt;/strong&gt; - kehrt das Ergebnis der vorgegebenen Bedingung um. %comment%</target>
+      </trans-unit>
+      <trans-unit id="typedesc.conditionpropertyvalueis" resname="typedesc.conditionpropertyvalueis">
+        <source>%icon% &lt;strong&gt;%attribute%&lt;/strong&gt; value is %value%%comment%</source>
+        <target>%icon% &lt;strong&gt;%attribute%&lt;/strong&gt; Wert ist %value%%comment%</target>
+      </trans-unit>
+      <trans-unit id="deleteConfirm" resname="deleteConfirm">
+        <source>Do you really want to delete setting ID %id%?</source>
+        <target>Möchten Sie die Einstellung mit der ID %id% wirklich löschen?</target>
+      </trans-unit>
+      <trans-unit id="showRecord" resname="showRecord">
+        <source>Show the details of record %id%</source>
+        <target>Die Details des Datensatzes %id% anzeigen</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

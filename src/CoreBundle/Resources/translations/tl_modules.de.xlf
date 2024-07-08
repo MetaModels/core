@@ -1,0 +1,34 @@
+<?xml version="1.0" ?><xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="src/CoreBundle/Resources/translations/tl_modules.en.xlf" target-language="de">
+    <body>
+      <trans-unit id="editmetamodel.label" resname="editmetamodel.label">
+        <source>Edit MetaModel</source>
+        <target>MetaModel bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="editmetamodel.description" resname="editmetamodel.description">
+        <source>Edit the MetaModel ID %id%.</source>
+        <target>Das MetaModel mit der ID %id% bearbeiten.</target>
+      </trans-unit>
+      <trans-unit id="editrendersetting.label" resname="editrendersetting.label">
+        <source>Edit render setting</source>
+        <target>Render-Einstellungen</target>
+      </trans-unit>
+      <trans-unit id="editrendersetting.description" resname="editrendersetting.description">
+        <source>Edit the render setting ID %id%.</source>
+        <target>Render-Einstellungen bearbeiten mit der ID %id%.</target>
+      </trans-unit>
+      <trans-unit id="editfiltersetting.label" resname="editfiltersetting.label">
+        <source>Edit filter setting</source>
+        <target>Filter bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="editfiltersetting.description" resname="editfiltersetting.description">
+        <source>Edit the filter setting ID %id%.</source>
+        <target>Den Filter mit der ID %id% bearbeiten.</target>
+      </trans-unit>
+      <trans-unit id="filter_option.null" resname="filter_option.null">
+        <source>- no value [null] -</source>
+        <target>- ohne Datenwert [null] -</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
