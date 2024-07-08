@@ -387,7 +387,7 @@ abstract class AbstractContentElementAndModuleCallback
             return;
         }
 
-        $translatedNull = $this->translator->trans('filter_option.null', [], self::$tableName);
+        $translatedNull = $this->translator->trans('filter_option.null', [], static::$tableName);
 
         $collection = $this->filterFactory->createCollection($filterId);
         $dca        = $collection->getParameterDCA();
