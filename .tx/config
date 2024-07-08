@@ -181,12 +181,12 @@ resource_name          = tl_metamodel_searchable_pages
 replace_edited_strings = false
 keep_translations      = false
 
-[o:metamodels:p:metamodels-core:r:tl_modules]
-file_filter            = src/CoreBundle/Resources/translations/tl_modules.<lang>.xlf
-source_file            = src/CoreBundle/Resources/translations/tl_modules.en.xlf
+[o:metamodels:p:metamodels-core:r:tl_module]
+file_filter            = src/CoreBundle/Resources/translations/tl_module.<lang>.xlf
+source_file            = src/CoreBundle/Resources/translations/tl_module.en.xlf
 type                   = XLIFF
 minimum_perc           = 0
-resource_name          = tl_modules
+resource_name          = tl_module
 replace_edited_strings = false
 keep_translations      = false
 
