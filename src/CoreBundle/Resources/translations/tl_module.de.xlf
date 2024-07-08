@@ -1,5 +1,5 @@
 <?xml version="1.0" ?><xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file source-language="en" datatype="plaintext" original="src/CoreBundle/Resources/translations/tl_modules.en.xlf" target-language="de">
+  <file source-language="en" datatype="plaintext" original="src/CoreBundle/Resources/translations/tl_module.en.xlf" target-language="de">
     <body>
       <trans-unit id="editmetamodel.label" resname="editmetamodel.label">
         <source>Edit MetaModel</source>
