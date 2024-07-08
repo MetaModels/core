@@ -137,8 +137,6 @@ class LoadDataContainer
             return;
         }
 
-        $this->controller->loadLanguageFile('tl_metamodel_item');
-        $this->controller->loadDataContainer('tl_metamodel_item');
         if (!isset($GLOBALS['TL_DCA'][$tableName])) {
             $GLOBALS['TL_DCA'][$tableName] = [];
         }
