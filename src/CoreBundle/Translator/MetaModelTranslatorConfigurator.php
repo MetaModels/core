@@ -92,7 +92,7 @@ final class MetaModelTranslatorConfigurator
             function (): iterable {
                 $result = [];
 
-                $installedLanguages = $this->localeProvider->getEnabledLocaleIds();
+                $installedLanguages = \array_values($this->localeProvider->getEnabledLocaleIds());
                 foreach ($this->factory->collectNames() as $metamodelName) {
                     $instance = $this->factory->getMetaModel($metamodelName);
                     if (!$instance instanceof ITranslatedMetaModel) {

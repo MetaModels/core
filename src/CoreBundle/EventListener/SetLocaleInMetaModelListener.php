@@ -31,7 +31,7 @@ final class SetLocaleInMetaModelListener
     {
         $metaModel = $event->getMetaModel();
         $language  = $GLOBALS['TL_LANGUAGE'] ?? null;
-        if ($language && $metaModel instanceof ITranslatedMetaModel) {
+        if (null !== $language && $metaModel instanceof ITranslatedMetaModel) {
             $metaModel->selectLanguage($language);
         }
     }
