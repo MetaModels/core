@@ -15,7 +15,7 @@
       </trans-unit>
       <trans-unit id="edit.description" resname="edit.description">
         <source>Edit item ID %id%</source>
-        <target>Item ID %id% bearbeiten</target>
+        <target>Bearbeite Datensatz %id%</target>
       </trans-unit>
       <trans-unit id="editAll.label" resname="editAll.label">
         <source>Edit multiple</source>
@@ -118,8 +118,7 @@
         <target>Aktivieren wenn dies die Basis für die aktuelle Gruppe an Varianten sein soill</target>
       </trans-unit>
       <trans-unit id="editRecord" resname="editRecord">
-        <source>Edit item %item%</source>
-        <target>Item %item% bearbeiten</target>
+        <source>Edit item %id%</source>
       </trans-unit>
       <trans-unit id="newRecord" resname="newRecord">
         <source>Create a new item</source>
