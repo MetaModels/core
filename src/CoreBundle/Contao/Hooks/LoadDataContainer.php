@@ -142,7 +142,7 @@ class LoadDataContainer
         }
 
         $GLOBALS['TL_DCA'][$tableName] = \array_replace_recursive(
-            (array) $GLOBALS['TL_DCA']['tl_metamodel_item'],
+            (array) ($GLOBALS['TL_DCA']['tl_metamodel_item'] ?? []),
             (array) $GLOBALS['TL_DCA'][$tableName]
         );
     }
