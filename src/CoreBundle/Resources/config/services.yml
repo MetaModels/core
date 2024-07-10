@@ -303,6 +303,7 @@ services:
       arguments:
         $factory: '@metamodels.factory'
         $cache: '@metamodels.cache_internal'
+        $localeProvider: '@contao.intl.locales'
 
     MetaModels\CoreBundle\Translator\Translator:
       decorates: 'contao.translation.translator'

@@ -20,11 +20,17 @@
 
 namespace MetaModels\CoreBundle\Translator;
 
+use Contao\CoreBundle\Intl\Locales;
 use MetaModels\IFactory;
 use MetaModels\ITranslatedMetaModel;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Translation\Translator as SymfonyTranslator;
 use Symfony\Contracts\Cache\CacheInterface;
+
+use function array_unique;
+use function array_values;
+use function call_user_func;
+use function in_array;
 
 /** @psalm-type TDomainList=iterable<string, iterable<int, string>> */
 final class MetaModelTranslatorConfigurator
@@ -42,6 +48,7 @@ final class MetaModelTranslatorConfigurator
     public function __construct(
         private readonly IFactory $factory,
         private readonly CacheInterface $cache,
+        private readonly Locales $localeProvider,
         $previous = null
     ) {
         if (null !== $previous && !is_callable($previous)) {
@@ -61,7 +68,7 @@ final class MetaModelTranslatorConfigurator
     {
         // Apply previous configurator
         if (null !== $this->previous) {
-            \call_user_func($this->previous, $translator);
+            call_user_func($this->previous, $translator);
         }
 
         foreach ($this->fetchDomains() as $domain => $locales) {
@@ -84,22 +91,24 @@ final class MetaModelTranslatorConfigurator
             /** @return TDomainList */
             function (): iterable {
                 $result = [];
+
+                $installedLanguages = $this->localeProvider->getEnabledLocaleIds();
                 foreach ($this->factory->collectNames() as $metamodelName) {
                     $instance = $this->factory->getMetaModel($metamodelName);
                     if (!$instance instanceof ITranslatedMetaModel) {
-                        $result[$metamodelName] = ['en'];
+                        $result[$metamodelName] = $installedLanguages;
                         continue;
                     }
-                    $locales = [];
+                    $locales = $installedLanguages;
                     foreach ($instance->getLanguages() as $language) {
                         $locales[] = $language;
                     }
                     // Fix: Always add 'en' to the language domains, even if user only set 'af_NA' by quick save.
-                    if (!\in_array('en', $locales, true)) {
+                    if (!in_array('en', $locales, true)) {
                         array_unshift($locales, 'en');
                     }
 
-                    $result[$metamodelName] = $locales;
+                    $result[$metamodelName] = array_values(array_unique($locales));
                 }
 
                 return $result;
