@@ -184,9 +184,11 @@ final class MetaModelTranslationLoader implements LoaderInterface
         $prefix = 'inputscreen.' . $inputScreen['meta']['id'] . '.';
 
         foreach ($inputScreen['legends'] as $index => $legend) {
-            $value = $this->extractLangString($legend['label'], $locale, $mainLanguage) ?? '';
+            $value = $this->extractLangString($legend['label'], $locale, $mainLanguage);
             // Suffix '_legend' due to EditMask in DcGeneral.
-            $catalog->set($prefix . $index . '_legend', $value, $domain);
+            if (null !== $value) {
+                $catalog->set($prefix . $index . '_legend', $value, $domain);
+            }
         }
 
         if ('standalone' === $inputScreen['meta']['rendertype']) {
