@@ -53,7 +53,6 @@ Feel free to contribute the MetaModel Documentation in [EN](https://github.com/M
 ## Resources:
 
 * [MetaModels Website](https://now.metamodel.me)
-* [MetaModels Contao Wiki [DE]](https://de.contaowiki.org/MetaModels)
 * [MetaModels Contao Community Subforum [DE]](https://community.contao.org/de/forumdisplay.php?149-MetaModels)
 * [MetaModels Channel on Contao Slack #metamodels](https://contao.slack.com/archives/CKGEBDV60)
 
