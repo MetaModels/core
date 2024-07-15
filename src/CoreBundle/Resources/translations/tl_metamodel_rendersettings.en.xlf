@@ -107,6 +107,24 @@
       <trans-unit id="jumpTo_language.description" resname="jumpTo_language.description">
         <source>The language for the jump to page.</source>
       </trans-unit>
+      <trans-unit id="jumpTo_type.label" resname="jumpTo_type.label">
+        <source>URL type</source>
+      </trans-unit>
+      <trans-unit id="jumpTo_type.description" resname="jumpTo_type.description">
+        <source>The reference type to use when generating the URL.</source>
+      </trans-unit>
+      <trans-unit id="jumpTo_type.absolute_url" resname="jumpTo_type.absolute_url">
+        <source>Absolute URL, e.g. "https://example.com/dir/file".</source>
+      </trans-unit>
+      <trans-unit id="jumpTo_type.absolute_path" resname="jumpTo_type.absolute_path">
+        <source>Absolute path, e.g. "/dir/file".</source>
+      </trans-unit>
+      <trans-unit id="jumpTo_type.relative_path" resname="jumpTo_type.relative_path">
+        <source>Relative path based on the current request path, e.g. "../parent-file".</source>
+      </trans-unit>
+      <trans-unit id="jumpTo_type.network_path" resname="jumpTo_type.network_path">
+        <source>Network path, e.g. "//example.com/dir/file".</source>
+      </trans-unit>
       <trans-unit id="jumpTo_page.label" resname="jumpTo_page.label">
         <source>Jump to page</source>
       </trans-unit>

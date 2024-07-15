@@ -35,10 +35,13 @@ use MetaModels\IItem;
 use MetaModels\IMetaModel;
 use MetaModels\ITranslatedMetaModel;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Base implementation for render settings.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection implements ICollection
 {
@@ -278,12 +281,14 @@ class Collection implements ICollection
     {
         $jumpToPageId    = '';
         $filterSettingId = '';
+        $referenceType   = UrlGeneratorInterface::ABSOLUTE_PATH;
         foreach ((array) $this->get('jumpTo') as $jumpTo) {
             $langCode = $jumpTo['langcode'] ?? null;
             // If either desired language or fallback, keep the result.
             if (!$translated || ($langCode === $desired) || ($langCode === $fallback)) {
                 $jumpToPageId    = $jumpTo['value'] ?? '';
                 $filterSettingId = (string) ($jumpTo['filter'] ?? '');
+                $referenceType = (int) ($jumpTo['type'] ?? UrlGeneratorInterface::ABSOLUTE_PATH);
                 // If the desired language, break.
                 // Otherwise, try to get the desired one until all have been evaluated.
                 if (!$translated || ($desired === $jumpTo['langcode'])) {
@@ -302,6 +307,7 @@ class Collection implements ICollection
             'pageDetails'   => $pageDetails,
             'filter'        => $filterSettingId,
             'filterSetting' => $filterSetting,
+            'referenceType' => $referenceType,
             // Mask out the "all languages" language key (See #687).
             'language'      => $pageDetails['language'] ?? '',
             'label'         => $this->getJumpToLabel()
@@ -311,7 +317,7 @@ class Collection implements ICollection
     /**
      * {@inheritdoc}
      */
-    public function buildJumpToUrlFor(IItem $item)
+    public function buildJumpToUrlFor(IItem $item /**, int $referenceType */)
     {
         $information = $this->determineJumpToInformation();
         if (empty($information['pageDetails'])) {
@@ -341,7 +347,11 @@ class Collection implements ICollection
         $result['params'] = $parameterList;
         $result['deep']   = !empty($filterUrl->getSlugParameters());
 
-        $result['url'] = $this->filterUrlBuilder->generate($filterUrl);
+        $result['url'] = $this->filterUrlBuilder->generate(
+            $filterUrl,
+            $information['referenceType']
+                ?? ((1 < func_num_args()) ? (int) func_get_arg(1) : UrlGeneratorInterface::ABSOLUTE_PATH)
+        );
 
         return $result;
     }

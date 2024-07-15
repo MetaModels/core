@@ -16,5 +16,7 @@ vendor/
 composer.lock
 
 # build
-.phpunit.result.cache
+/.cache
+/.phpunit.result.cache
+/.pdepend/*
 /.phpcq/*
