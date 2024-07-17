@@ -35,6 +35,8 @@ use MetaModels\Render\Setting\ICollection;
  * @see MetaModelFactory::byId To instantiate a MetaModel by its ID.
  *
  * @see IFactory::getMetaModel To instantiate a MetaModel by its table name.
+ *
+ * @psalm-suppress DeprecatedInterface
  */
 interface IMetaModel
 {
@@ -44,8 +46,6 @@ interface IMetaModel
      * @return IMetaModelsServiceContainer
      *
      * @deprecated Inject services via constructor or setter.
-     *
-     * @psalm-suppress DeprecatedInterface
      */
     public function getServiceContainer();
 

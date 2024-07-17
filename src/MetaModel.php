@@ -193,8 +193,6 @@ class MetaModel implements IMetaModel
      * @return MetaModel
      *
      * @deprecated Inject services via constructor or setter.
-     *
-     * @psalm-suppress DeprecatedInterface
      */
     public function setServiceContainer($serviceContainer, $deprecationNotice = true)
     {
