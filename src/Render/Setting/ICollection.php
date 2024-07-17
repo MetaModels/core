@@ -78,9 +78,10 @@ interface ICollection
     /**
      * Render a filter url for the given item.
      *
-     * @param IItem $item The item to generate the filter url for.
+     * @param IItem $item          The item to generate the filter url for.
+     * @param int   $referenceType Optional reference type - mandatory from MetaModels 3.0 on.
      *
      * @return array
      */
-    public function buildJumpToUrlFor(IItem $item);
+    public function buildJumpToUrlFor(IItem $item /**, int $referenceType */);
 }

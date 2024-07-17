@@ -299,7 +299,7 @@ class SimpleLookup extends Simple
                 ),
                 'blankOptionLabel'   => $this->get('label_as_blankoption')
                     ? $this->getLabel()
-                    : $GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter'] ?? '',
+                    : $this->translator->trans('do_not_filter', [], 'metamodels_filter'),
                 'colname'            => $attribute->getColname(),
                 'urlparam'           => $paramName,
                 'onlyused'           => $this->get('onlyused'),

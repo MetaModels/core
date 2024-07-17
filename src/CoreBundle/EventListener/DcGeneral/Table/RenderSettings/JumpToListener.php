@@ -31,6 +31,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use Doctrine\DBAL\Connection;
 use MetaModels\IFactory;
 use MetaModels\IMetaModel;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -38,6 +39,22 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class JumpToListener extends AbstractAbstainingListener
 {
+    private const DEFAULT_TYPE = UrlGeneratorInterface::ABSOLUTE_PATH;
+
+    private const TYPE_MAP = [
+        'absolute_url' => UrlGeneratorInterface::ABSOLUTE_URL,
+        'absolute_path' => UrlGeneratorInterface::ABSOLUTE_PATH,
+        'relative_path' => UrlGeneratorInterface::RELATIVE_PATH,
+        'network_path' => UrlGeneratorInterface::NETWORK_PATH,
+    ];
+
+    private const TYPE_MAP_INVERSE = [
+        UrlGeneratorInterface::ABSOLUTE_URL => 'absolute_url',
+        UrlGeneratorInterface::ABSOLUTE_PATH => 'absolute_path',
+        UrlGeneratorInterface::RELATIVE_PATH => 'relative_path',
+        UrlGeneratorInterface::NETWORK_PATH => 'network_path',
+    ];
+
     /**
      * The MetaModel factory.
      *
@@ -105,6 +122,7 @@ class JumpToListener extends AbstractAbstainingListener
         foreach (\array_keys($languages) as $key) {
             $newValue = '';
             $filter   = 0;
+            $type     = self::TYPE_MAP_INVERSE[self::DEFAULT_TYPE];
             if ($value) {
                 foreach ($value as $arr) {
                     if (!\is_array($arr)) {
@@ -114,6 +132,7 @@ class JumpToListener extends AbstractAbstainingListener
                     // Set the new value and exit the loop.
                     if (\in_array($key, $arr, true)) {
                         $newValue = '{{link_url::' . $arr['value'] . '}}';
+                        $type     = self::TYPE_MAP_INVERSE[$arr['type'] ?? self::DEFAULT_TYPE];
                         $filter   = $arr['filter'];
                         break;
                     }
@@ -123,6 +142,7 @@ class JumpToListener extends AbstractAbstainingListener
             // Build the new array.
             $newValues[] = [
                 'langcode' => $key,
+                'type'     => $type,
                 'value'    => $newValue,
                 'filter'   => $filter
             ];
@@ -148,6 +168,7 @@ class JumpToListener extends AbstractAbstainingListener
 
         foreach ($value as $k => $v) {
             $value[$k]['value'] = \str_replace(['{{link_url::', '}}'], ['', ''], $v['value']);
+            $value[$k]['type'] = self::TYPE_MAP[$v['type']] ?? self::DEFAULT_TYPE;
         }
 
         $event->setValue(\serialize($value));
@@ -209,11 +230,26 @@ class JumpToListener extends AbstractAbstainingListener
             ];
         }
 
+        $extra['columnFields']['type']['options'] = $this->getUrlTypes();
         $extra['columnFields']['filter']['options'] = $this->getFilterSettings($model);
 
         $event->getProperty()->setExtra($extra);
     }
 
+
+    private function getUrlTypes(): array
+    {
+        $result = [];
+        foreach (self::TYPE_MAP_INVERSE as $typeName) {
+            $result[$typeName] = $this->translator->trans(
+                'jumpTo_type.' . $typeName,
+                [],
+                'tl_metamodel_rendersettings'
+            );
+        }
+
+        return $result;
+    }
 
     /**
      * Retrieve the model filters for the MCW.

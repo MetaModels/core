@@ -8,6 +8,21 @@
       <trans-unit id="simplelookup.description" resname="simplelookup.description">
         <source></source>
       </trans-unit>
+      <trans-unit id="submit" resname="submit">
+        <source>Filter</source>
+      </trans-unit>
+      <trans-unit id="do_not_filter" resname="do_not_filter">
+        <source>No filtering</source>
+      </trans-unit>
+      <trans-unit id="select_all" resname="select_all">
+        <source>Select all</source>
+      </trans-unit>
+      <trans-unit id="clear_all" resname="clear_all">
+        <source>Clear all filter</source>
+      </trans-unit>
+      <trans-unit id="no_combinations" resname="no_combinations">
+        <source>(No matching combinations found.)</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

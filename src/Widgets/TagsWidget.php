@@ -22,7 +22,9 @@
 
 namespace MetaModels\Widgets;
 
+use Contao\System;
 use Contao\Widget;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Form field "tags", based on form field by Leo Feyer.
@@ -164,9 +166,9 @@ class TagsWidget extends Widget
 
         $count = 0;
 
-        /** @psalm-suppress MixedAssignment */
-        $langBase = $GLOBALS['TL_LANG']['metamodels_frontendfilter'] ?? [];
-        assert(\is_array($langBase));
+        $translator = System::getContainer()->get('translator');
+        assert($translator instanceof TranslatorInterface);
+
         if (\is_array($this->options) && [] !== $this->options) {
             // Show not filter option.
             if ((bool) $this->arrConfiguration['includeBlankOption']) {
@@ -184,7 +186,7 @@ class TagsWidget extends Widget
                 $return .= $this->generateOption(
                     [
                         'value' => '--all--',
-                        'label' => (string) ($langBase['select_all'] ?? '')
+                        'label' => $translator->trans('select_all', [], 'metamodels_filter')
                     ],
                     $count++
                 );
@@ -194,7 +196,7 @@ class TagsWidget extends Widget
                 $return .= $this->generateOption($val, $count++);
             }
         } else {
-            $return .= '<span>' . (string) ($langBase['no_combinations'] ?? '') . '</span>';
+            $return .= '<span>' . $translator->trans('no_combinations', [], 'metamodels_filter') . '</span>';
         }
 
         $return .= '</fieldset>';

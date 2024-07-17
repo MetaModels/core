@@ -1,0 +1,320 @@
+<?xml version="1.0" ?><xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="src/CoreBundle/Resources/translations/tl_metamodel.en.xlf" target-language="de">
+    <body>
+      <trans-unit id="backend-module.headline" resname="backend-module.headline">
+        <source>All MetaModels</source>
+        <target>Alle MetaModels</target>
+      </trans-unit>
+      <trans-unit id="new.label" resname="new.label">
+        <source>New MetaModel</source>
+        <target>Neues MetaModel</target>
+      </trans-unit>
+      <trans-unit id="new.description" resname="new.description">
+        <source>Create a new MetaModel</source>
+        <target>Ein neues MetaModel erstellen</target>
+      </trans-unit>
+      <trans-unit id="all.label" resname="all.label">
+        <source>Edit multiple</source>
+        <target>Mehrere bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="all.description" resname="all.description">
+        <source>Edit multiple elements at once</source>
+        <target>Mehrere Elemente auf einmal bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="pastenew.label" resname="pastenew.label">
+        <source>Create a new element at the top</source>
+        <target>Ein neues Element oben erstellen</target>
+      </trans-unit>
+      <trans-unit id="pastenew.description" resname="pastenew.description">
+        <source>Create a new element after element ID %id%</source>
+        <target>Erstellt ein neues Element nach dem Element mit der ID %id%</target>
+      </trans-unit>
+      <trans-unit id="pasteafter.label" resname="pasteafter.label">
+        <source>Paste at the top</source>
+        <target>Oben einfügen</target>
+      </trans-unit>
+      <trans-unit id="pasteafter.description" resname="pasteafter.description">
+        <source>Paste after element ID %id%</source>
+        <target>Nach dem Element mit der ID %id% einfügen</target>
+      </trans-unit>
+      <trans-unit id="backBT" resname="backBT">
+        <source>Go back</source>
+        <target>Zurück</target>
+      </trans-unit>
+      <trans-unit id="backBTTitle" resname="backBTTitle">
+        <source>Back to the previous page</source>
+        <target>Zurück zur vorherigen Seite navigieren</target>
+      </trans-unit>
+      <trans-unit id="showRecord" resname="showRecord">
+          <source>Show the details of record %id%</source>
+          <target>Die Details des Datensatzes %id% anzeigen</target>
+      </trans-unit>
+      <trans-unit id="id.label" resname="id.label">
+        <source>Id</source>
+        <target>ID</target>
+      </trans-unit>
+      <trans-unit id="id.description" resname="id.description">
+        <source>Id of the MetaModel</source>
+        <target>ID des MetaModels</target>
+      </trans-unit>
+      <trans-unit id="name.label" resname="name.label">
+        <source>Name</source>
+        <target>Name</target>
+      </trans-unit>
+      <trans-unit id="name.description" resname="name.description">
+        <source>MetaModel name.</source>
+        <target>Name des MetaModels.</target>
+      </trans-unit>
+      <trans-unit id="tstamp.label" resname="tstamp.label">
+        <source>Revision date</source>
+        <target>Aktualisierungsdatum</target>
+      </trans-unit>
+      <trans-unit id="tstamp.description" resname="tstamp.description">
+        <source>Date and time of the latest revision</source>
+        <target>Datum und Zeit der letzten Aktualisierung</target>
+      </trans-unit>
+      <trans-unit id="tableName.label" resname="tableName.label">
+        <source>Table name</source>
+        <target>Tabellenname</target>
+      </trans-unit>
+      <trans-unit id="tableName.description" resname="tableName.description">
+        <source>Name of database table to store items to.</source>
+        <target>Name der Datenbanktabelle, in der Datensätze gespeichert werden.</target>
+      </trans-unit>
+      <trans-unit id="mode.label" resname="mode.label">
+        <source>Parent list mode</source>
+        <target>Elternteil Liste Modus</target>
+      </trans-unit>
+      <trans-unit id="mode.description" resname="mode.description">
+        <source>Mode to use for parent/child relationship.</source>
+        <target>Modus für Eltern / Kind-Beziehung verwenden. </target>
+      </trans-unit>
+      <trans-unit id="translated.label" resname="translated.label">
+        <source>Translation</source>
+        <target>Übersetzung</target>
+      </trans-unit>
+      <trans-unit id="translated.description" resname="translated.description">
+        <source>Check if this MetaModel shall support translation/multilingualism.</source>
+        <target>Auswählen, falls das MetaModel Übersetzungen / Mehrsprachigkeit unterstützen soll-</target>
+      </trans-unit>
+      <trans-unit id="languages.label" resname="languages.label">
+        <source>Languages to provide for translation</source>
+        <target>Sprachen für die Übersetzungen</target>
+      </trans-unit>
+      <trans-unit id="languages.description" resname="languages.description">
+        <source>Specify all languages that shall be available for translation.</source>
+        <target>Alle Sprachen angeben, die für Übersetzungen zur Verfügung stehen sollen.</target>
+      </trans-unit>
+      <trans-unit id="languages_langcode.label" resname="languages_langcode.label">
+        <source>Language</source>
+        <target>Sprache</target>
+      </trans-unit>
+      <trans-unit id="languages_langcode.description" resname="languages_langcode.description">
+        <source>Select the languages you want to provide.</source>
+        <target>Wählen Sie die Sprachen für die Übersetzungen aus.</target>
+      </trans-unit>
+      <trans-unit id="languages_isfallback.label" resname="languages_isfallback.label">
+        <source>Fallback language</source>
+        <target>Fallback-Sprache</target>
+      </trans-unit>
+      <trans-unit id="languages_isfallback.description" resname="languages_isfallback.description">
+        <source>Check the language that shall be used as fallback.</source>
+        <target>Wählen Sie die Sprache aus, die als Fallback verwendet werden soll, falls keine Übersetzung vorliegt.</target>
+      </trans-unit>
+      <trans-unit id="varsupport.label" resname="varsupport.label">
+        <source>Variant support</source>
+        <target>Varianten</target>
+      </trans-unit>
+      <trans-unit id="varsupport.description" resname="varsupport.description">
+        <source>Check if this MetaModel shall support variants of items.</source>
+        <target>Anwählen, falls dieses MetaModel Varianten der Items unterstützen soll.</target>
+      </trans-unit>
+      <trans-unit id="localeterritorysupport.label" resname="localeterritorysupport.label">
+        <source>Locale territory support</source>
+        <target>Support für Territory-Angabe in der Sprache</target>
+      </trans-unit>
+      <trans-unit id="localeterritorysupport.description" resname="localeterritorysupport.description">
+        <source>Check if this MetaModel shall support language territory at locale.</source>
+        <target>Mit der Checkbox wird die Territory-Angabe bei dem Sprachkey unterstützt.</target>
+      </trans-unit>
+      <trans-unit id="sorting.label" resname="sorting.label">
+        <source>Sorting</source>
+        <target>Sortierung</target>
+      </trans-unit>
+      <trans-unit id="sorting.description" resname="sorting.description">
+        <source>Sorting order of items.</source>
+        <target>Sortierreihenfolge der Datensätze.</target>
+      </trans-unit>
+      <trans-unit id="title_legend" resname="title_legend">
+        <source>Name and table</source>
+        <target>Name und Tabelle</target>
+      </trans-unit>
+      <trans-unit id="translated_legend" resname="translated_legend">
+        <source>Translation</source>
+        <target>Übersetzung</target>
+      </trans-unit>
+      <trans-unit id="advanced_legend" resname="advanced_legend">
+        <source>Advanced settings</source>
+        <target>Erweiterte Einstellungen</target>
+      </trans-unit>
+      <trans-unit id="closeAll.label" resname="closeAll.label">
+          <source>Cancel</source>
+          <target>Abbrechen</target>
+      </trans-unit>
+      <trans-unit id="closeAll.description" resname="closeAll.description">
+          <source>Cancel multiple processing.</source>
+          <target>Mehrfachbearbeitung abbrechen</target>
+      </trans-unit>
+      <trans-unit id="edit.label" resname="edit.label">
+        <source>Manage items</source>
+        <target>Items verwalten</target>
+      </trans-unit>
+      <trans-unit id="edit.description" resname="edit.description">
+        <source>Manage items of MetaModel ID %id%</source>
+        <target>Die Items für MetaModel ID %id% verwalten</target>
+      </trans-unit>
+      <trans-unit id="copy.label" resname="copy.label">
+        <source>Copy MetaModel definition</source>
+        <target>MetaModel-Definition kopieren</target>
+      </trans-unit>
+      <trans-unit id="copy.description" resname="copy.description">
+        <source>Copy definition of MetaModel ID %id%</source>
+        <target>Kopieren Sie die Definition des MetaModels ID %id%</target>
+      </trans-unit>
+      <trans-unit id="delete.label" resname="delete.label">
+        <source>Delete MetaModel</source>
+        <target>MetaModel löschen</target>
+      </trans-unit>
+      <trans-unit id="delete.description" resname="delete.description">
+        <source>Delete MetaModel ID %id%</source>
+        <target>Das MetaModel mit der ID %id% löschen.</target>
+      </trans-unit>
+      <trans-unit id="delete.confirm" resname="delete.confirm">
+        <source>Do you really want to delete element ID %id%?</source>
+        <target>Soll das Element ID %id% wirklich gelöscht werden?</target>
+      </trans-unit>
+      <trans-unit id="show.label" resname="show.label">
+        <source>MetaModel details</source>
+        <target>MetaModel-Details</target>
+      </trans-unit>
+      <trans-unit id="show.description" resname="show.description">
+        <source>Show details of MetaModel ID %id%</source>
+        <target>Die Details des MetaModel ID %id% anzeigen</target>
+      </trans-unit>
+      <trans-unit id="editheader.label" resname="editheader.label">
+        <source>Edit MetaModel</source>
+        <target>MetaModel bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="editheader.description" resname="editheader.description">
+        <source>Edit the MetaModel ID %id%</source>
+        <target>Das MetaModel mit der ID %id% bearbeiten.</target>
+      </trans-unit>
+      <trans-unit id="fields.label" resname="fields.label">
+        <source>Define attributes</source>
+        <target>Attribute definieren</target>
+      </trans-unit>
+      <trans-unit id="fields.description" resname="fields.description">
+        <source>Define attributes for MetaModel ID %id%</source>
+        <target>Die Attribute für MetaModel ID %id% festlegen</target>
+      </trans-unit>
+      <trans-unit id="filter.label" resname="filter.label">
+        <source>Define filters</source>
+        <target>Filter definieren</target>
+      </trans-unit>
+      <trans-unit id="filter.description" resname="filter.description">
+        <source>Define filters for MetaModel ID %id%</source>
+        <target>Die Filter für MetaModel ID %id% festlegen</target>
+      </trans-unit>
+      <trans-unit id="rendersettings.label" resname="rendersettings.label">
+        <source>Define render settings</source>
+        <target>Render-Einstellungen definieren</target>
+      </trans-unit>
+      <trans-unit id="rendersettings.description" resname="rendersettings.description">
+        <source>Define render settings for MetaModel ID %id%</source>
+        <target>Render-Einstellungen für MetaModel ID %id% definieren.</target>
+      </trans-unit>
+      <trans-unit id="dca.label" resname="dca.label">
+        <source>Define input screens</source>
+        <target>Eingabemasken definieren</target>
+      </trans-unit>
+      <trans-unit id="dca.description" resname="dca.description">
+        <source>Define input screens for MetaModel ID %id%</source>
+        <target>Die Eingabemasken für MetaModel ID %id% festlegen</target>
+      </trans-unit>
+      <trans-unit id="dca_combine.label" resname="dca_combine.label">
+        <source>Define input/output combinations</source>
+        <target>Eingabe-/Render-Zuordnungen definieren</target>
+      </trans-unit>
+      <trans-unit id="dca_combine.description" resname="dca_combine.description">
+        <source>Define input/output combinations for MetaModel ID %id%</source>
+        <target>Definieren der Eingabe-/Render-Zuordnungen für MetaModel ID %id%.</target>
+      </trans-unit>
+      <trans-unit id="cut.label" resname="cut.label">
+        <source>Move MetaModel</source>
+        <target>MetaModel verschieben</target>
+      </trans-unit>
+      <trans-unit id="cut.description" resname="cut.description">
+        <source>Define the order of your MetaModels.</source>
+        <target>Die Reihenfolge der MetaModels festlegen.</target>
+      </trans-unit>
+      <trans-unit id="searchable_pages.label" resname="searchable_pages.label">
+        <source>Define search settings</source>
+        <target>Sucheinstellungen festlegen</target>
+      </trans-unit>
+      <trans-unit id="searchable_pages.description" resname="searchable_pages.description">
+        <source>Define search settings for MetaModel ID %id%</source>
+        <target>Die Sucheinstellungen für MetaModel ID %id% festlegen</target>
+      </trans-unit>
+      <trans-unit id="itemFormatCount.label" resname="itemFormatCount.label">
+        <source>{-1} Table does not exist, run migration!| {0} No items|{1} 1 item|[2,Inf[ %count% items</source>
+        <target>{-1} Tabelle existiert nicht - Migration ausführen!| {0} Keine Items|{1} 1 Item|[2,Inf[ %count% Items</target>
+      </trans-unit>
+      <trans-unit id="deleteConfirm" resname="deleteConfirm">
+        <source>Do you really want to delete MetaModel ID %id%?</source>
+        <target>Soll das MetaModel ID %id% wirklich gelöscht werden?</target>
+      </trans-unit>
+      <trans-unit id="hint_schema_manager" resname="hint_schema_manager">
+        <source>After creating a model, the database must be migrated (console, Contao Manager) - even if the table
+          name is changed. When changing the table name, the user data itself must be transferred.
+        </source>
+        <target>Nach der Erstellung eines Modells muss die Datenbank migriert werden (Konsole, Contao Manager) - auch wenn der Tabellenname geändert wird. Bei der Änderung des Tabellennamens müssen die Daten selbst übertragen werden.</target>
+      </trans-unit>
+      <trans-unit id="newRecord" resname="newRecord">
+        <source>Create a new item</source>
+        <target>Neues Item erstellen</target>
+      </trans-unit>
+      <trans-unit id="editRecord" resname="editRecord">
+        <source>Edit record %id%</source>
+        <target>Bearbeite Datensatz %id%</target>
+      </trans-unit>
+      <trans-unit id="save" resname="save">
+        <source>Save</source>
+        <target>Speichern</target>
+      </trans-unit>
+      <trans-unit id="saveNclose" resname="saveNclose">
+        <source>Save and close</source>
+        <target>Speichern und schliessen</target>
+      </trans-unit>
+      <trans-unit id="saveNcreate" resname="saveNcreate">
+        <source>Save and new</source>
+        <target>Speichern und neu</target>
+      </trans-unit>
+      <trans-unit id="saveNback" resname="saveNback">
+        <source>Save and go back</source>
+        <target>Speichern und zurück</target>
+      </trans-unit>
+      <trans-unit id="ERR.tableNameNotGiven" resname="ERR.tableNameNotGiven">
+        <source>The table name is not given or empty.</source>
+        <target>Der Tabellenname wurde nicht gesetzt oder ist leer.</target>
+      </trans-unit>
+      <trans-unit id="ERR.invalidTableName" resname="ERR.invalidTableName">
+        <source>The table name &quot;%table_name%&quot; is invalid.</source>
+        <target>Der Tabellenname &quot;%col_name%&quot; ist ungültig.</target>
+      </trans-unit>
+      <trans-unit id="ERR.tableExists" resname="ERR.tableExists">
+        <source>Table &quot;%table_name%&quot; already exists.</source>
+        <target>Die Tabelle &quot;%table_name%&quot; existiert bereits.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

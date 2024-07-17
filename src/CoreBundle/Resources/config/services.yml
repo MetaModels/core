@@ -127,6 +127,7 @@ services:
         arguments:
             - '@database_connection'
             - '@MetaModels\Filter\FilterUrlBuilder'
+            - '@translator'
         public: true
 
     metamodels.controller.abstract.add_all:
@@ -302,6 +303,7 @@ services:
       arguments:
         $factory: '@metamodels.factory'
         $cache: '@metamodels.cache_internal'
+        $localeProvider: '@contao.intl.locales'
 
     MetaModels\CoreBundle\Translator\Translator:
       decorates: 'contao.translation.translator'

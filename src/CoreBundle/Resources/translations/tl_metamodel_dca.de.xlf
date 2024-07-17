@@ -1,0 +1,370 @@
+<?xml version="1.0" ?><xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="src/CoreBundle/Resources/translations/tl_metamodel_dca.en.xlf" target-language="de">
+    <body>
+      <trans-unit id="backend-module.headline" resname="backend-module.headline">
+        <source>All input screens</source>
+        <target>Alle Eingabemasken</target>
+      </trans-unit>
+      <trans-unit id="id.label" resname="id.label">
+        <source>Id</source>
+        <target>ID</target>
+      </trans-unit>
+      <trans-unit id="pid.label" resname="pid.label">
+        <source>Pid</source>
+        <target>PID</target>
+      </trans-unit>
+      <trans-unit id="sorting.label" resname="sorting.label">
+        <source>Sorting</source>
+        <target>Sortierung</target>
+      </trans-unit>
+      <trans-unit id="new.label" resname="new.label">
+        <source>New input screen</source>
+        <target>Neue Eingabemaske</target>
+      </trans-unit>
+      <trans-unit id="new.description" resname="new.description">
+        <source>Create a new input screen</source>
+        <target>Eine neue Eingabemaske erstellen</target>
+      </trans-unit>
+      <trans-unit id="all.label" resname="all.label">
+        <source>Edit multiple</source>
+        <target>Mehrere bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="all.description" resname="all.description">
+        <source>Edit multiple elements at once</source>
+        <target>Mehrere Elemente auf einmal bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="pastenew.label" resname="pastenew.label">
+        <source>Create a new element at the top</source>
+        <target>Ein neues Element oben erstellen</target>
+      </trans-unit>
+      <trans-unit id="pastenew.description" resname="pastenew.description">
+        <source>Create a new element after element ID %id%</source>
+        <target>Erstellt ein neues Element nach dem Element mit der ID%id%</target>
+      </trans-unit>
+      <trans-unit id="pasteafter.label" resname="pasteafter.label">
+        <source>Paste at the top</source>
+        <target>Oben einfügen</target>
+      </trans-unit>
+      <trans-unit id="pasteafter.description" resname="pasteafter.description">
+        <source>Paste after element ID %id%</source>
+        <target>Nach dem Element mit der ID %id% einfügen</target>
+      </trans-unit>
+      <trans-unit id="save" resname="save">
+        <source>Save</source>
+        <target>Speichern</target>
+      </trans-unit>
+      <trans-unit id="saveNclose" resname="saveNclose">
+        <source>Save and close</source>
+        <target>Speichern und schliessen</target>
+      </trans-unit>
+      <trans-unit id="saveNcreate" resname="saveNcreate">
+        <source>Save and new</source>
+        <target>Speichern und neu</target>
+      </trans-unit>
+      <trans-unit id="saveNback" resname="saveNback">
+        <source>Save and go back</source>
+        <target>Speichern und zurück</target>
+      </trans-unit>
+      <trans-unit id="backBT" resname="backBT">
+        <source>Go back</source>
+        <target>Zurück</target>
+      </trans-unit>
+      <trans-unit id="backBTTitle" resname="backBTTitle">
+        <source>Back to the previous page</source>
+        <target>Zurück zur vorherigen Seite navigieren</target>
+      </trans-unit>
+      <trans-unit id="showRecord" resname="showRecord">
+        <source>Show the details of record %id%</source>
+        <target>Die Details des Datensatzes %id% anzeigen</target>
+      </trans-unit>
+      <trans-unit id="editRecord" resname="editRecord">
+        <source>Edit record %id%</source>
+        <target>Datensatz %id% bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="editheader.label" resname="editheader.label">
+        <source>Edit MetaModel</source>
+        <target>MetaModel bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="editheader.description" resname="editheader.description">
+        <source>Edit the MetaModel ID %id%</source>
+        <target>Das MetaModel mit der ID %id% bearbeiten.</target>
+      </trans-unit>
+      <trans-unit id="name.label" resname="name.label">
+        <source>Name</source>
+        <target>Name</target>
+      </trans-unit>
+      <trans-unit id="name.description" resname="name.description">
+        <source>Name of the input screen.</source>
+        <target>Name der Eingabemaske</target>
+      </trans-unit>
+      <trans-unit id="tstamp.label" resname="tstamp.label">
+        <source>Revision date</source>
+        <target>Aktualisierungsdatum</target>
+      </trans-unit>
+      <trans-unit id="tstamp.description" resname="tstamp.description">
+        <source>Date and time of the latest revision.</source>
+        <target>Datum und Zeit der letzten Aktualisierung</target>
+      </trans-unit>
+      <trans-unit id="rendertype.label" resname="rendertype.label">
+        <source>Integration</source>
+        <target>Integration</target>
+      </trans-unit>
+      <trans-unit id="rendertype.description" resname="rendertype.description">
+        <source>Select the desired type of integration.</source>
+        <target>Die gewünschte Art der Integration auswählen</target>
+      </trans-unit>
+      <trans-unit id="rendermode.label" resname="rendermode.label">
+        <source>Render mode</source>
+        <target>Render-Modus</target>
+      </trans-unit>
+      <trans-unit id="rendermode.description" resname="rendermode.description">
+        <source>Select the desired render mode.</source>
+        <target>Wählen Sie eine gewünschte Render-Einstellung aus.</target>
+      </trans-unit>
+      <trans-unit id="ptable.label" resname="ptable.label">
+        <source>Parent table name</source>
+        <target>Name der Elterntabelle</target>
+      </trans-unit>
+      <trans-unit id="ptable.description" resname="ptable.description">
+        <source>Name of the database table that shall be referred to as parent table.</source>
+        <target>Name der Datenbanktabelle, die als Elterntabelle benutzt werden soll.</target>
+      </trans-unit>
+      <trans-unit id="showColumns.label" resname="showColumns.label">
+        <source>Use column based layout</source>
+        <target>Anzeige in Tabellenform</target>
+      </trans-unit>
+      <trans-unit id="showColumns.description" resname="showColumns.description">
+        <source>If selected a table header will be generated with column names.</source>
+        <target>Ist die Option ausgewählt, erfolgt die Anzeige in Form einer Tabelle.</target>
+      </trans-unit>
+      <trans-unit id="backendsection.label" resname="backendsection.label">
+        <source>Backend section</source>
+        <target>Backend-Bereich</target>
+      </trans-unit>
+      <trans-unit id="backendsection.description" resname="backendsection.description">
+        <source>Select the desired backend section where you want the MetaModel appear. For models that shall be edited
+          by end users, the &quot;content&quot; section most likely will be appropriate.
+        </source>
+        <target>Wählen Sie das gewünschte Backend-Symbol, das zum Zeichnen eines Icons in der übergeordneten Liste verwendet wird, wenn Sie eine Integration als Kindtabelle haben.</target>
+      </trans-unit>
+      <trans-unit id="backendicon.label" resname="backendicon.label">
+        <source>Backend icon</source>
+        <target>Backend-Icon</target>
+      </trans-unit>
+      <trans-unit id="backendicon.description" resname="backendicon.description">
+        <source>Select the desired backend icon.This icon will get used to draw an image in the parent list if you have
+          a integration as child table.
+        </source>
+        <target>Wählen Sie das gewünschte Backend-Symbol, das zum Zeichnen eines Icons in der übergeordneten Liste verwendet wird, wenn Sie eine Integration als Kindtabelle haben.</target>
+      </trans-unit>
+      <trans-unit id="backendcaption.label" resname="backendcaption.label">
+        <source>Backend caption</source>
+        <target>Backend-Hilfetext</target>
+      </trans-unit>
+      <trans-unit id="backendcaption.description" resname="backendcaption.description">
+        <source>The text you specify in here, will get used as the label and description text in the backend menu.
+        </source>
+        <target>Dieser Text wird als Label und Beschreibung im Backend benutzt.</target>
+      </trans-unit>
+      <trans-unit id="becap_langcode.label" resname="becap_langcode.label">
+        <source>Language</source>
+        <target>Sprache</target>
+      </trans-unit>
+      <trans-unit id="becap_langcode.description" resname="becap_langcode.description">
+        <source>Select the languages you want to provide.</source>
+        <target>Wählen Sie die Sprachen aus, die Sie zur Verfügung stellen wollen.</target>
+      </trans-unit>
+      <trans-unit id="becap_label.label" resname="becap_label.label">
+        <source>Label text</source>
+        <target>Labeltext</target>
+      </trans-unit>
+      <trans-unit id="becap_label.description" resname="becap_label.description">
+        <source>The text you specify in here, will get used as the menu label in the backend menu.</source>
+        <target>Dieser Text wird als Menü-Label im Backend benutzt.</target>
+      </trans-unit>
+      <trans-unit id="becap_description.label" resname="becap_description.label">
+        <source>Description text</source>
+        <target>Beschreibungstext</target>
+      </trans-unit>
+      <trans-unit id="becap_description.description" resname="becap_description.description">
+        <source>The text you specify in here, will get used as the description (hover title) in the backend menu.
+        </source>
+        <target>Dieser Text wird als Beschreibung (Hover) im Backend benutzt.</target>
+      </trans-unit>
+      <trans-unit id="panelLayout.label" resname="panelLayout.label">
+        <source>Panel layout</source>
+        <target>Panel-Layout </target>
+      </trans-unit>
+      <trans-unit id="panelLayout.description" resname="panelLayout.description">
+        <source>Separate panel options with comma (= space) and semicolon (= new line) like
+          &quot;filter;search;sort,limit&quot;.
+        </source>
+        <target>Fügen Sie eine oder mehrere Panel-Optionen hinzu und trennen Sie diese mit einem Komma (= Freiraum) oder Semikolon (= neue Zeile), z. B. &quot;filter;search;sort,limit&quot;.</target>
+      </trans-unit>
+      <trans-unit id="panelpicker" resname="panelpicker">
+        <source>Panelpicker</source>
+        <target>Panelpicker</target>
+      </trans-unit>
+      <trans-unit id="use_limitview.label" resname="use_limitview.label">
+        <source>View limitation</source>
+        <target>Limitierung anzeigen</target>
+      </trans-unit>
+      <trans-unit id="use_limitview.description" resname="use_limitview.description">
+        <source>Activate the view limitation.</source>
+        <target>Die Limitierungsansicht aktivieren.</target>
+      </trans-unit>
+      <trans-unit id="limit_rendersetting.label" resname="limit_rendersetting.label">
+        <source>Limit the render setting</source>
+        <target>Rendering-Einstellung begrenzen</target>
+      </trans-unit>
+      <trans-unit id="limit_rendersetting.description" resname="limit_rendersetting.description">
+        <source>Choose between front end or backend.</source>
+        <target>Wählen Sie zwischen Frontend und Backend aus.</target>
+      </trans-unit>
+      <trans-unit id="iseditable.label" resname="iseditable.label">
+        <source>Allow editing of items</source>
+        <target>Bearbeitung erlauben</target>
+      </trans-unit>
+      <trans-unit id="iseditable.description" resname="iseditable.description">
+        <source>If checked, this input screen allows the editing of items.</source>
+        <target>Falls ausgewählt erlaubt die Eingabemaske das Bearbeiten der Items.</target>
+      </trans-unit>
+      <trans-unit id="iscreatable.label" resname="iscreatable.label">
+        <source>Allow creating of items</source>
+        <target>Erstellung erlauben</target>
+      </trans-unit>
+      <trans-unit id="iscreatable.description" resname="iscreatable.description">
+        <source>If checked, this input screen allows the creating of items.</source>
+        <target>Falls ausgewählt erlaubt die Eingabemaske das Erstellen von Items.</target>
+      </trans-unit>
+      <trans-unit id="isdeleteable.label" resname="isdeleteable.label">
+        <source>Allow deleting of items</source>
+        <target>Löschung erlauben</target>
+      </trans-unit>
+      <trans-unit id="isdeleteable.description" resname="isdeleteable.description">
+        <source>If checked, this input screen allows the deleting of items.</source>
+        <target>Falls ausgewählt erlaubt die Eingabemaske das Löschen von Items.</target>
+      </trans-unit>
+      <trans-unit id="title_legend" resname="title_legend">
+        <source>Name</source>
+        <target>Name</target>
+      </trans-unit>
+      <trans-unit id="view_legend" resname="view_legend">
+        <source>View settings</source>
+        <target>Darstellungsoptionen</target>
+      </trans-unit>
+      <trans-unit id="backend_legend" resname="backend_legend">
+        <source>Backend integration</source>
+        <target>Backend-Integration</target>
+      </trans-unit>
+      <trans-unit id="display_legend" resname="display_legend">
+        <source>Data display settings</source>
+        <target>Anzeigeeinstellungen</target>
+      </trans-unit>
+      <trans-unit id="permissions_legend" resname="permissions_legend">
+        <source>Data manipulation permissions</source>
+        <target>Berechtigungen zur Datenanpassung</target>
+      </trans-unit>
+      <trans-unit id="edit.label" resname="edit.label">
+        <source>Edit input screen</source>
+        <target>Eingabemasken bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="edit.description" resname="edit.description">
+        <source>Edit the input screen ID %id%</source>
+        <target>Die Eingabemaske ID %id% bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="copy.label" resname="copy.label">
+        <source>Copy input screen definition</source>
+        <target>Eingabemaske kopieren</target>
+      </trans-unit>
+      <trans-unit id="copy.description" resname="copy.description">
+        <source>Copy definition of input screen ID %id%</source>
+        <target>Kopieren Sie die Definition der Eingabemaske ID %id%.</target>
+      </trans-unit>
+      <trans-unit id="delete.label" resname="delete.label">
+        <source>Delete input screen</source>
+        <target>Eingabemaske löschen</target>
+      </trans-unit>
+      <trans-unit id="delete.description" resname="delete.description">
+        <source>Delete input screen ID %id%</source>
+        <target>Die Eingabemaske ID %id% löschen</target>
+      </trans-unit>
+      <trans-unit id="delete.confirm" resname="delete.confirm">
+        <source>Do you really want to delete element ID %id%?</source>
+        <target>Soll das Element ID %id% wirklich gelöscht werden?</target>
+      </trans-unit>
+      <trans-unit id="show.label" resname="show.label">
+        <source>Input screen details</source>
+        <target>Eingabemasken-Details</target>
+      </trans-unit>
+      <trans-unit id="show.description" resname="show.description">
+        <source>Show details of input screen ID %id%</source>
+        <target>Die Details der Eingabemaske ID %id% anzeigen</target>
+      </trans-unit>
+      <trans-unit id="settings.label" resname="settings.label">
+        <source>Input screen settings</source>
+        <target>Eingabemasken-Einstellungen</target>
+      </trans-unit>
+      <trans-unit id="settings.description" resname="settings.description">
+        <source>Edit the settings of input screen ID %id%</source>
+        <target>Bearbeiten Sie die anzuzeigenden Felder der Eingabemaske ID %id%.</target>
+      </trans-unit>
+      <trans-unit id="groupsort_settings.label" resname="groupsort_settings.label">
+        <source>Grouping and sorting</source>
+        <target>Gruppieren und sortieren</target>
+      </trans-unit>
+      <trans-unit id="groupsort_settings.description" resname="groupsort_settings.description">
+        <source>Edit the grouping and sorting settings of input screen ID %id%</source>
+        <target>Bearbeiten Sie die Gruppierung und Sortierung der Eingabemaske ID %id%.</target>
+      </trans-unit>
+      <trans-unit id="subheadline.label" resname="subheadline.label">
+        <source>Additions to the mask-heading</source>
+        <target>Ergänzungen zur Maskenüberschrift</target>
+      </trans-unit>
+      <trans-unit id="subheadline.description" resname="subheadline.description">
+        <source>The field can be used to adapt the heading of the mask at edit and replaces the output of the ID.You can
+          use simple tokens e.g. ##model_name##, ##model_firstname## [##model_id##]
+        </source>
+        <target>Das Feld kann verwendet werden, um die Überschrift der Maske bei der Bearbeitung anzupassen und ersetzt die Ausgabe der ID. Sie können einfache Token verwenden, z. B. ##model_name##, ##model_firstname## [##model_id##]</target>
+      </trans-unit>
+      <trans-unit id="rendertypes.standalone" resname="rendertypes.standalone">
+        <source>Standalone</source>
+        <target>Unabhängig</target>
+      </trans-unit>
+      <trans-unit id="rendertypes.ctable" resname="rendertypes.ctable">
+        <source>As child table</source>
+        <target>Als Kind-Tabelle</target>
+      </trans-unit>
+      <trans-unit id="rendermodes.flat" resname="rendermodes.flat">
+        <source>Flat</source>
+        <target>Eine Ebene (ohne Hierarchie)</target>
+      </trans-unit>
+      <trans-unit id="rendermodes.parented" resname="rendermodes.parented">
+        <source>Parented</source>
+        <target>Elternelement vorhanden</target>
+      </trans-unit>
+      <trans-unit id="rendermodes.hierarchical" resname="rendermodes.hierarchical">
+        <source>Hierarchical</source>
+        <target>Hierarchie</target>
+      </trans-unit>
+      <trans-unit id="hint_rendermode_hierarchical" resname="hint_rendermode_hierarchical">
+        <source>When using the &quot;Hierarchical&quot; render mode, the current sort must be enable to &quot;Manual sorting&quot; as
+          default.
+        </source>
+        <target>Wenn Sie den Rendering-Modus &quot;Hierarchie&quot; verwenden, muss die aktuelle Sortierung standardmäßig auf &quot;Manuelle Sortierung&quot; eingestellt sein.</target>
+      </trans-unit>
+      <trans-unit id="deleteConfirm" resname="deleteConfirm">
+        <source>Do you really want to delete input screen ID %id%?</source>
+        <target>Soll die Eingabemaske ID %id% wirklich gelöscht werden?</target>
+      </trans-unit>
+      <trans-unit id="closeAll.label" resname="closeAll.label">
+        <source>Cancel</source>
+        <target>Abbrechen</target>
+      </trans-unit>
+      <trans-unit id="closeAll.description" resname="closeAll.description">
+        <source>Cancel multiple processing.</source>
+        <target>Mehrfachbearbeitung abbrechen</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

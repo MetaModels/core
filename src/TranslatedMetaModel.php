@@ -114,7 +114,7 @@ class TranslatedMetaModel extends MetaModel implements ITranslatedMetaModel
         $previousLanguage = $this->getLanguage();
 
         if (!$this->hasTerritorySupport) {
-            $previousLanguage = \substr($previousLanguage, 0, 2);
+            $activeLanguage = \substr($activeLanguage, 0, 2);
         }
 
         $this->activeLanguage = $activeLanguage;
@@ -136,7 +136,7 @@ class TranslatedMetaModel extends MetaModel implements ITranslatedMetaModel
     protected function fetchTranslatedAttributeValues(ITranslated $attribute, $ids)
     {
         // @deprecated usage of TL_LANGUAGE - remove for Contao 5.0.
-        $originalLanguage       = LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE']);
+        $originalLanguage       = LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE'] ?? 'en');
         $GLOBALS['TL_LANGUAGE'] = LocaleUtil::formatAsLanguageTag($this->getLanguage());
 
         try {

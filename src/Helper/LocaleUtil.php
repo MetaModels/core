@@ -36,16 +36,7 @@ final class LocaleUtil
      */
     public static function formatAsLanguageTag(string $localeId): string
     {
-        $packages = System::getContainer()->getParameter('kernel.packages');
-        assert(is_array($packages));
-        $coreVersion = $packages['contao/core-bundle'] ?? '';
-
-        if (\version_compare($coreVersion, '4.13', '>=')) {
-            return self::formatAsLocale($localeId);
-        }
-
-        // Legacy call.
-        return \str_replace('_', '-', ContaoLocaleUtil::formatAsLocale($localeId));
+        return self::formatAsLocale($localeId);
     }
 
     /**

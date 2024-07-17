@@ -91,7 +91,7 @@
         <source>Check this if you want to make this the base for the current variant group</source>
       </trans-unit>
       <trans-unit id="editRecord" resname="editRecord">
-        <source>Edit item %item%</source>
+        <source>Edit item %id%</source>
       </trans-unit>
       <trans-unit id="newRecord" resname="newRecord">
         <source>Create a new item</source>

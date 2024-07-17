@@ -1,0 +1,66 @@
+<?xml version="1.0" ?><xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="src/CoreBundle/Resources/translations/metamodels_navigation.en.xlf" target-language="de">
+    <body>
+      <trans-unit id="menuGroup.metamodels.label" resname="menuGroup.metamodels.label">
+        <source>MetaModels</source>
+        <target>MetaModels</target>
+      </trans-unit>
+      <trans-unit id="menu.metamodels.label" resname="menu.metamodels.label">
+        <source>MetaModels</source>
+        <target>MetaModels</target>
+      </trans-unit>
+      <trans-unit id="menu.metamodels.title" resname="menu.metamodels.title">
+        <source>The MetaModels extension allows you to create own data models.</source>
+        <target>Die MetaModels-Erweiterung ermöglicht es Ihnen, eigene Datenmodelle zu erstellen.</target>
+      </trans-unit>
+      <trans-unit id="metamodel" resname="metamodel">
+        <source>MetaModels</source>
+        <target>MetaModels</target>
+      </trans-unit>
+      <trans-unit id="metamodel_attribute" resname="metamodel_attribute">
+        <source>Attributes of &quot;%s&quot;</source>
+        <target>Attribute von &quot;%s&quot;</target>
+      </trans-unit>
+      <trans-unit id="metamodel_rendersettings" resname="metamodel_rendersettings">
+        <source>All render setting of &quot;%s&quot;</source>
+        <target>Alle Render-Einstellungen von &quot;%s&quot;</target>
+      </trans-unit>
+      <trans-unit id="metamodel_rendersetting" resname="metamodel_rendersetting">
+        <source>Render settings in &quot;%s&quot;</source>
+        <target>Render-Einstellungen in &quot;%s&quot;</target>
+      </trans-unit>
+      <trans-unit id="metamodel_dca_sortgroup" resname="metamodel_dca_sortgroup">
+        <source>Sorting and grouping in &quot;%s&quot;</source>
+        <target>Sortierung und Gruppierung in &quot;%s&quot;</target>
+      </trans-unit>
+      <trans-unit id="metamodel_dca" resname="metamodel_dca">
+        <source>All input screens of &quot;%s&quot;</source>
+        <target>Alle Eingabemasken von &quot;%s&quot;</target>
+      </trans-unit>
+      <trans-unit id="metamodel_dcasetting" resname="metamodel_dcasetting">
+        <source>Input screens in &quot;%s&quot;</source>
+        <target>Eingabemasken in &quot;%s&quot;</target>
+      </trans-unit>
+      <trans-unit id="metamodel_dca_combine" resname="metamodel_dca_combine">
+        <source>Input screen and render setting combination for &quot;%s&quot;</source>
+        <target>Eingabemaske und Render-Einstellung kombinieren für &quot;%s&quot;</target>
+      </trans-unit>
+      <trans-unit id="metamodel_dcasetting_condition" resname="metamodel_dcasetting_condition">
+        <source>Visibility conditions for attribute &quot;%s&quot;</source>
+        <target>Ansichtsbedingungen für Attribut &quot;%s&quot;</target>
+      </trans-unit>
+      <trans-unit id="metamodel_filter" resname="metamodel_filter">
+        <source>All filter of &quot;%s&quot;</source>
+        <target>Alle Filter von &quot;%s&quot;</target>
+      </trans-unit>
+      <trans-unit id="metamodel_filtersetting" resname="metamodel_filtersetting">
+        <source>Filter settings in &quot;%s&quot;</source>
+        <target>Filtereinstellungen in &quot;%s&quot;</target>
+      </trans-unit>
+      <trans-unit id="metamodel_searchable_pages" resname="metamodel_searchable_pages">
+        <source>All indexes of &quot;%s&quot;</source>
+        <target>Alle Indizes von &quot;%s&quot;</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

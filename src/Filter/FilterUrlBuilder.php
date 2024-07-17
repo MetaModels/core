@@ -122,14 +122,15 @@ class FilterUrlBuilder
     /**
      * Generate a frontend url.
      *
-     * @param FilterUrl $filterUrl The filter URL.
+     * @param FilterUrl $filterUrl     The filter URL.
+     * @param int       $referenceType The url reference type.
      *
      * @return string
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public function generate(FilterUrl $filterUrl): string
+    public function generate(FilterUrl $filterUrl, int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH): string
     {
         $jumpTo = $filterUrl->getPage();
 
@@ -172,11 +173,11 @@ class FilterUrlBuilder
         }
 
         if ($this->hasLegacyRouting) {
-            return $this->urlGenerator->generate($jumpTo['alias'] . $url, $parameters);
+            return $this->urlGenerator->generate($jumpTo['alias'] . $url, $parameters, $referenceType);
         }
 
         $parameters['parameters'] = $url;
-        return $this->urlGenerator->generate('tl_page.' . $jumpTo['id'], $parameters);
+        return $this->urlGenerator->generate('tl_page.' . $jumpTo['id'], $parameters, $referenceType);
     }
 
     /**

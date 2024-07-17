@@ -290,7 +290,17 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = [
                         'exclude'     => true,
                         'inputType'   => 'justtextoption',
                         'eval'        => [
+                            'tl_class' => 'jumpTo_language',
                             'valign' => 'center'
+                        ]
+                    ],
+                    'type'     => [
+                        'label'       => 'jumpTo_type.label',
+                        'description' => 'jumpTo_type.description',
+                        'exclude'     => true,
+                        'inputType'   => 'select',
+                        'eval'        => [
+                            'tl_class' => 'jumpTo_type',
                         ]
                     ],
                     'value'    => [
@@ -299,7 +309,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = [
                         'exclude'     => true,
                         'inputType'   => 'text',
                         'eval'        => [
-                            'style' => 'width:90%;'
+                            'tl_class' => 'jumpTo_page',
                         ]
                     ],
                     'filter'   => [
@@ -308,7 +318,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = [
                         'exclude'     => true,
                         'inputType'   => 'select',
                         'eval'        => [
-                            'style'              => 'width:100%;',
+                            'tl_class'           => 'jumpTo_filter',
                             'includeBlankOption' => true,
                             'chosen'             => true
                         ]

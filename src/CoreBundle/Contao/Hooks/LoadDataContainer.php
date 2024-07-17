@@ -137,14 +137,12 @@ class LoadDataContainer
             return;
         }
 
-        $this->controller->loadLanguageFile('tl_metamodel_item');
-        $this->controller->loadDataContainer('tl_metamodel_item');
         if (!isset($GLOBALS['TL_DCA'][$tableName])) {
             $GLOBALS['TL_DCA'][$tableName] = [];
         }
 
         $GLOBALS['TL_DCA'][$tableName] = \array_replace_recursive(
-            (array) $GLOBALS['TL_DCA']['tl_metamodel_item'],
+            (array) ($GLOBALS['TL_DCA']['tl_metamodel_item'] ?? []),
             (array) $GLOBALS['TL_DCA'][$tableName]
         );
     }

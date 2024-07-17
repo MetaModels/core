@@ -35,6 +35,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 use function array_key_exists;
 use function array_map;
+use function array_unshift;
 use function in_array;
 use function is_array;
 
@@ -150,8 +151,11 @@ class BackendNavigationListener
 
         // Show MetaModels config only for Admins.
         if ($isAdmin) {
+            // Add or override child - might have been introduced by parsing of legacy BE_MOD.
             $metaModelsNode->addChild($configNode = $this->buildConfigNode($factory, $request));
-            array_unshift($names, $configNode->getName());
+            if (!in_array($configNode->getName(), $names, true)) {
+                array_unshift($names, $configNode->getName());
+            }
         }
 
         $metaModelsNode->reorderChildren($names);

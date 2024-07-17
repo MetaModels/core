@@ -38,6 +38,7 @@ use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\Render\Setting\ICollection as IRenderSettings;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Base class for filter setting implementation.
@@ -76,18 +77,27 @@ abstract class Simple implements ISimple
     private FilterUrlBuilder $filterUrlBuilder;
 
     /**
+     * The translator.
+     *
+     * @var TranslatorInterface
+     */
+    protected TranslatorInterface $translator;
+
+    /**
      * Constructor - initialize the object and store the parameters.
      *
      * @param ICollection                   $collection       The parenting filter settings object.
      * @param array                         $data             The attributes for this filter setting.
      * @param EventDispatcherInterface|null $eventDispatcher  The event dispatcher.
      * @param FilterUrlBuilder|null         $filterUrlBuilder The filter URL builder.
+     * @param TranslatorInterface           $translator       The translator.
      */
     public function __construct(
         $collection,
         $data,
         EventDispatcherInterface $eventDispatcher = null,
-        FilterUrlBuilder $filterUrlBuilder = null
+        FilterUrlBuilder $filterUrlBuilder = null,
+        TranslatorInterface $translator = null
     ) {
         $this->collection = $collection;
         $this->data       = $data;
@@ -115,8 +125,20 @@ abstract class Simple implements ISimple
             assert($filterUrlBuilder instanceof FilterUrlBuilder);
         }
 
+        if (null === $translator) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Translator is missing. It has to be passed in the constructor. Fallback will be dropped.',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            $translator = System::getContainer()->get('translator');
+            assert($translator instanceof TranslatorInterface);
+        }
+
         $this->eventDispatcher  = $eventDispatcher;
         $this->filterUrlBuilder = $filterUrlBuilder;
+        $this->translator       = $translator;
     }
 
     /**
@@ -381,7 +403,7 @@ abstract class Simple implements ISimple
                 'key'    => '',
                 'value'  => (string) (
                     $arrWidget['eval']['blankOptionLabel']
-                    ?? ($GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter'] ?? '')
+                    ?? $this->translator->trans('do_not_filter', [], 'metamodels_filter')
                 ),
                 'href'   => $this->filterUrlBuilder->generate(
                     $filterUrl->clone()->setSlug($parameterName, '')->setGet($parameterName, '')

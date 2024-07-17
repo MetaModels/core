@@ -281,7 +281,7 @@ class InputScreen implements IInputScreen
         // First pass, fetch all attribute names.
         $columnNames = [];
         foreach ($rows as $row) {
-            if ($row['dcatype'] != 'attribute') {
+            if ($row['dcatype'] !== 'attribute') {
                 continue;
             }
 

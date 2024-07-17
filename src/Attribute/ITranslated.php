@@ -44,7 +44,7 @@ interface ITranslated extends IAttribute
      * @param list<non-empty-string> $arrLanguages Array of valid language codes that shall be searched.
      *                                             (optional) If empty, all languages will be taken into account.
      *
-     * @return list<string> the ids of matching items.
+     * @return list<string>|null The list of item ids of all items matching the condition or null if all match.
      */
     public function searchForInLanguages($strPattern, $arrLanguages = []);
 

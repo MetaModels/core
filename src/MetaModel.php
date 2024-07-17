@@ -53,6 +53,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @psalm-suppress DeprecatedInterface
  */
 class MetaModel implements IMetaModel
 {
@@ -78,8 +80,6 @@ class MetaModel implements IMetaModel
      * The service container.
      *
      * @var \Closure|IMetaModelsServiceContainer|null
-     *
-     * @psalm-suppress DeprecatedInterface
      */
     protected $serviceContainer = null;
 
@@ -193,8 +193,6 @@ class MetaModel implements IMetaModel
      * @return MetaModel
      *
      * @deprecated Inject services via constructor or setter.
-     *
-     * @psalm-suppress DeprecatedInterface
      */
     public function setServiceContainer($serviceContainer, $deprecationNotice = true)
     {

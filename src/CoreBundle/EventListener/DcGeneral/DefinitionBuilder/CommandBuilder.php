@@ -183,10 +183,11 @@ class CommandBuilder
             ->setLabel('editAll.label')
             ->setDescription('editAll.description');
 
-        $parameters        = $command->getParameters();
-        $parameters['act'] = 'select';
-        $extra             = $command->getExtra();
-        $extra['class']    = 'header_edit_all';
+        $parameters           = $command->getParameters();
+        $parameters['act']    = 'select';
+        $parameters['select'] = 'models';
+        $extra                = $command->getExtra();
+        $extra['class']       = 'header_edit_all';
 
         $commands->addCommand($command);
     }

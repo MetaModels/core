@@ -264,7 +264,7 @@ interface IAttribute
      *
      * @param string $strPattern The text to search for. This may contain wildcards.
      *
-     * @return list<string> The list of item ids of all items matching the condition or null if all match.
+     * @return list<string>|null The list of item ids of all items matching the condition or null if all match.
      */
     public function searchFor($strPattern);
 

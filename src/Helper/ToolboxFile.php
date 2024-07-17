@@ -212,7 +212,6 @@ class ToolboxFile
      * @param PictureFactoryInterface|null                        $pictureFactory The picture factory.
      * @param Session|null                                        $session        The session.
      *
-     * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -252,10 +251,6 @@ class ToolboxFile
                 assert($dispatcher instanceof EventDispatcherInterface);
                 /** @psalm-suppress DeprecatedProperty */
                 $this->dispatcher = $dispatcher;
-        }
-        // Initialize some values to sane base.
-        if (isset($GLOBALS['TL_CONFIG']) && isset($GLOBALS['TL_CONFIG']['allowedDownload'])) {
-            $this->setAcceptedExtensions(StringUtil::trimsplit(',', $GLOBALS['TL_CONFIG']['allowedDownload']));
         }
 
         if (null === $rootDir) {
@@ -515,9 +510,16 @@ class ToolboxFile
      * Walks the list of pending folders via ToolboxFile::addPath().
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     protected function collectFiles()
     {
+        // Initialize accepted extensions if not done yet.
+        if ([] === $this->getAcceptedExtensions() && isset($GLOBALS['TL_CONFIG']['allowedDownload'])) {
+            $this->setAcceptedExtensions(StringUtil::trimsplit(',', $GLOBALS['TL_CONFIG']['allowedDownload']));
+        }
+
         $table = FilesModel::getTable();
 
         $conditions = [];
