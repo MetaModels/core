@@ -159,12 +159,12 @@ form[id^=mm_] .sort_hint {
   .jumpTo_page {
     width: 15%;
     input {
-      width: 88%;
+      width: 83%;
     }
   }
   .jumpTo_filter {
     width: 55%;
-    select {
+    select, div.tl_select {
       width: 100%;
     }
   }

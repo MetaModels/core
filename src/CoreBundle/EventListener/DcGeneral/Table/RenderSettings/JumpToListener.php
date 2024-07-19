@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -42,17 +42,17 @@ class JumpToListener extends AbstractAbstainingListener
     private const DEFAULT_TYPE = UrlGeneratorInterface::ABSOLUTE_PATH;
 
     private const TYPE_MAP = [
-        'absolute_url' => UrlGeneratorInterface::ABSOLUTE_URL,
+        'absolute_url'  => UrlGeneratorInterface::ABSOLUTE_URL,
         'absolute_path' => UrlGeneratorInterface::ABSOLUTE_PATH,
         'relative_path' => UrlGeneratorInterface::RELATIVE_PATH,
-        'network_path' => UrlGeneratorInterface::NETWORK_PATH,
+        'network_path'  => UrlGeneratorInterface::NETWORK_PATH,
     ];
 
     private const TYPE_MAP_INVERSE = [
-        UrlGeneratorInterface::ABSOLUTE_URL => 'absolute_url',
+        UrlGeneratorInterface::ABSOLUTE_URL  => 'absolute_url',
         UrlGeneratorInterface::ABSOLUTE_PATH => 'absolute_path',
         UrlGeneratorInterface::RELATIVE_PATH => 'relative_path',
-        UrlGeneratorInterface::NETWORK_PATH => 'network_path',
+        UrlGeneratorInterface::NETWORK_PATH  => 'network_path',
     ];
 
     /**
@@ -168,7 +168,7 @@ class JumpToListener extends AbstractAbstainingListener
 
         foreach ($value as $k => $v) {
             $value[$k]['value'] = \str_replace(['{{link_url::', '}}'], ['', ''], $v['value']);
-            $value[$k]['type'] = self::TYPE_MAP[$v['type']] ?? self::DEFAULT_TYPE;
+            $value[$k]['type']  = self::TYPE_MAP[$v['type']] ?? self::DEFAULT_TYPE;
         }
 
         $event->setValue(\serialize($value));
@@ -208,7 +208,7 @@ class JumpToListener extends AbstractAbstainingListener
             foreach ((array) $metaModel->getAvailableLanguages() as $strLangCode) {
                 $arrLanguages[$strLangCode] = $this->translator
                     ->trans('LNG.' . $strLangCode, [], 'contao_languages');
-                $rowClasses[] = ($strLangCode === $fallback) ? 'fallback_language' : 'normal_language';
+                $rowClasses[]               = ($strLangCode === $fallback) ? 'fallback_language' : 'normal_language';
             }
 
             $extra['minCount'] = \count($arrLanguages);
@@ -221,16 +221,11 @@ class JumpToListener extends AbstractAbstainingListener
             $extra['maxCount'] = 1;
 
             $extra['columnFields']['langcode']['options'] = [
-                'xx' => $this->translator
-                    ->trans(
-                        'jumpTo_allLanguages',
-                        [],
-                        'tl_metamodel_rendersettings'
-                    )
+                'xx' => $this->translator->trans('jumpTo_allLanguages', [], 'tl_metamodel_rendersettings')
             ];
         }
 
-        $extra['columnFields']['type']['options'] = $this->getUrlTypes();
+        $extra['columnFields']['type']['options']   = $this->getUrlTypes();
         $extra['columnFields']['filter']['options'] = $this->getFilterSettings($model);
 
         $event->getProperty()->setExtra($extra);
