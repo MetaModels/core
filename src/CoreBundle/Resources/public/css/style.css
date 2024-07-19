@@ -179,12 +179,13 @@ form[id^=mm_] .sort_hint {
   width: 15%;
 }
 #tl_metamodel_rendersettings .jumpTo_page input {
-  width: 88%;
+  width: 83%;
 }
 #tl_metamodel_rendersettings .jumpTo_filter {
   width: 55%;
 }
-#tl_metamodel_rendersettings .jumpTo_filter select {
+#tl_metamodel_rendersettings .jumpTo_filter select,
+#tl_metamodel_rendersettings .jumpTo_filter div.tl_select {
   width: 100%;
 }
 #tl_metamodel_rendersettings .operations {
