@@ -218,12 +218,9 @@ class SimpleLookup extends Simple
 
         $arrOptions = $objAttribute->getFilterOptions(null, (bool) $this->get('onlyused'));
 
-        $translator = System::getContainer()->get('translator');
-        assert($translator instanceof TranslatorInterface);
-
         return [
             (string) $this->getParamName() => [
-                'label'     => $translator->trans(
+                'label'     => $this->translator->trans(
                     'simplelookup.label',
                     ['%id%' => $objAttribute->getName()],
                     'metamodels_filter'
