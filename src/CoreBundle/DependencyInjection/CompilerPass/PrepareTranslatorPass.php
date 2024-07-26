@@ -21,14 +21,20 @@ declare(strict_types=1);
 
 namespace MetaModels\CoreBundle\DependencyInjection\CompilerPass;
 
+use MetaModels\CoreBundle\Translator\MetaModelTranslationLoader;
 use MetaModels\CoreBundle\Translator\MetaModelTranslatorConfigurator;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\Compiler\PriorityTaggedServiceTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 final class PrepareTranslatorPass implements CompilerPassInterface
 {
+    use PriorityTaggedServiceTrait;
+
+    public const TAG_NAME = 'metamodels.translation-loader';
+
     public function process(ContainerBuilder $container): void
     {
         $definition = $container->getDefinition('translator.default');
@@ -43,5 +49,13 @@ final class PrepareTranslatorPass implements CompilerPassInterface
                 $previousConfigurator
             );
         }
+        $generator = $container->getDefinition(MetaModelTranslationLoader::class);
+        $generator->setArgument(
+            '$loaders',
+            array_merge(
+                $generator->getArgument('$loaders'),
+                $this->findAndSortTaggedServices(self::TAG_NAME, $container)
+            )
+        );
     }
 }

@@ -27,14 +27,14 @@ use MetaModels\ITranslatedMetaModel;
 use MetaModels\ViewCombination\InputScreenInformationBuilder;
 use MetaModels\ViewCombination\ViewCombination;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
-use Symfony\Component\Translation\Loader\LoaderInterface;
+use Symfony\Component\Translation\Loader\LoaderInterface as SymfonyLoaderInterface;
 use Symfony\Component\Translation\MessageCatalogue;
 use Symfony\Component\Translation\TranslatorBagInterface;
 
 use function is_array;
 use function sprintf;
 
-final class MetaModelTranslationLoader implements LoaderInterface
+final class MetaModelTranslationLoader implements SymfonyLoaderInterface
 {
     /**
      * The constructor.
@@ -43,12 +43,14 @@ final class MetaModelTranslationLoader implements LoaderInterface
      * @param IFactory                      $factory         The factory.
      * @param ViewCombination               $viewCombination The view combination.
      * @param InputScreenInformationBuilder $builder         The input screen builder.
+     * @param list<LoaderInterface>         $loaders         The loaders.
      */
     public function __construct(
         private readonly TranslatorBagInterface $baseTranslator,
         private readonly IFactory $factory,
         private readonly ViewCombination $viewCombination,
         private readonly InputScreenInformationBuilder $builder,
+        private readonly array $loaders
     ) {
     }
 
@@ -158,6 +160,12 @@ final class MetaModelTranslationLoader implements LoaderInterface
                 $catalog,
                 $tableName,
             );
+        }
+
+        foreach ($this->loaders as $loader) {
+            foreach ($loader->load($metaModel, $locale)->all($domain) as $key => $value) {
+                $catalog->set($key, $value, $domain);
+            }
         }
 
         return $catalog;

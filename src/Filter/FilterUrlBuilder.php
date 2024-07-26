@@ -428,7 +428,7 @@ class FilterUrlBuilder
         // Look for a root page whose domain name matches the host name
         $languages = $pages[$host]
             // empty domain
-            ?? ($pages['*'] ?: []);
+            ?? ($pages['*'] ?? []);
         unset($pages);
 
         $pages = [];
