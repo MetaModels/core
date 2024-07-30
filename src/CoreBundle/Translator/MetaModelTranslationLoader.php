@@ -67,6 +67,7 @@ final class MetaModelTranslationLoader implements SymfonyLoaderInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function load($resource, string $locale, string $domain = 'messages'): MessageCatalogue
     {
