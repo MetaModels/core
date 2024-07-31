@@ -241,16 +241,9 @@ class BaseSimple extends Base implements ISimple
     }
 
     /**
-     * Search all items that match the given expression.
+     * {@inheritdoc}
      *
      * Base implementation, perform string matching search.
-     * The standard wildcards * (many characters) and ? (a single character) are supported.
-     *
-     * @param string $strPattern The text to search for. This may contain wildcards.
-     *
-     * @return list<string> The ids of matching items.
-     *
-     * @throws Exception
      */
     public function searchFor($strPattern)
     {
