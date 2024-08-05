@@ -26,13 +26,12 @@
     "email": "mail@metamodel.me",
     "issues": "https://github.com/MetaModels/core/issues",
     "wiki": "https://de.contaowiki.org/MetaModels",
-    "irc": "irc://irc.freenode.org/contao.mm",
     "source": "https://github.com/MetaModels/core"
   },
   "require": {
     "php": "^8.1",
     "ext-dom": "*",
-    "contao-community-alliance/dc-general": "^2.3.16",
+    "contao-community-alliance/dc-general": "^2.3.17",
     "contao-community-alliance/events-contao-bindings": "^4.13.1",
     "contao-community-alliance/meta-palettes": "^2.0.10",
     "contao-community-alliance/translator": "^2.4.2",
