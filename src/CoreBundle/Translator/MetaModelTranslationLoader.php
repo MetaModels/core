@@ -124,43 +124,10 @@ final class MetaModelTranslationLoader implements SymfonyLoaderInterface
         }
 
         // Check if we have some children - add child button translations then.
-        foreach ($this->viewCombination->getChildrenOf($domain) as $tableName => $inputScreen) {
-            $subMetaModel = $this->factory->getMetaModel($tableName);
-            if (null === $subMetaModel) {
-                continue;
+        foreach (\array_keys($this->viewCombination->getChildrenOf($domain)) as $tableName) {
+            foreach ($this->builder->fetchAllInputScreensForTable($tableName) as $inputScreen) {
+                $this->handleChildInputScreen($domain, $tableName, $locale, $mainLanguage, $inputScreen, $catalog);
             }
-            $translationKey = 'metamodel_edit_as_child.' . $subMetaModel->getTableName();
-
-            if (
-                'metamodel_edit_as_child.label' !==
-                $baseValue = $catalog->get('metamodel_edit_as_child.label', $domain)
-            ) {
-                $catalog->set(
-                    $translationKey . '.label',
-                    strtr($baseValue, ['%child_name%' => $subMetaModel->getName()]),
-                    $domain,
-                );
-            }
-            if (
-                'metamodel_edit_as_child.description' !==
-                $baseValue = $catalog->get('metamodel_edit_as_child.description', $domain)
-            ) {
-                $catalog->set(
-                    $translationKey . '.description',
-                    strtr($baseValue, ['%child_name%' => $subMetaModel->getName()]),
-                    $domain,
-                );
-            }
-
-            $this->setTranslationLabelAndDescription(
-                $domain,
-                $locale,
-                $mainLanguage,
-                $translationKey,
-                $inputScreen,
-                $catalog,
-                $tableName,
-            );
         }
 
         foreach ($this->loaders as $loader) {
@@ -170,6 +137,53 @@ final class MetaModelTranslationLoader implements SymfonyLoaderInterface
         }
 
         return $catalog;
+    }
+
+    private function handleChildInputScreen(
+        string $domain,
+        string $tableName,
+        string $locale,
+        string $mainLanguage,
+        array $inputScreen,
+        MessageCatalogue $catalog
+    ): void {
+        $subMetaModel = $this->factory->getMetaModel($tableName);
+        if (null === $subMetaModel) {
+            return;
+        }
+        $translationKey = 'metamodel_edit_as_child.' . $tableName . '.' . $inputScreen['meta']['id'];
+
+        if (
+            'metamodel_edit_as_child.label' !==
+            $baseValue = $catalog->get('metamodel_edit_as_child.label', $domain)
+        ) {
+            $catalog->set(
+                $translationKey . '.label',
+                strtr($baseValue, ['%child_name%' => $subMetaModel->getName()]),
+                $domain,
+            );
+        }
+        if (
+            'metamodel_edit_as_child.description' !==
+            $baseValue = $catalog->get('metamodel_edit_as_child.description', $domain)
+        ) {
+            $catalog->set(
+                $translationKey . '.description',
+                strtr($baseValue, ['%child_name%' => $subMetaModel->getName()]),
+                $domain,
+            );
+        }
+
+        $this->setTranslationLabelAndDescription(
+            $domain,
+            $locale,
+            $mainLanguage,
+            $translationKey,
+            $inputScreen,
+            $catalog,
+            $tableName,
+            ['%child_name%' => $subMetaModel->getName()]
+        );
     }
 
     /**
@@ -209,10 +223,24 @@ final class MetaModelTranslationLoader implements SymfonyLoaderInterface
                 $inputScreen,
                 $catalog,
                 $domain,
+                [],
+            );
+            return;
+        }
+
+        if ('ctable' === $inputScreen['meta']['rendertype']) {
+            $this->handleChildInputScreen(
+                $inputScreen['meta']['ptable'],
+                $domain,
+                $locale,
+                $mainLanguage,
+                $inputScreen,
+                $catalog,
             );
         }
     }
 
+    /** @param array<string, string> $parameters The parameters. */
     private function setTranslationLabelAndDescription(
         string $domain,
         string $locale,
@@ -220,16 +248,20 @@ final class MetaModelTranslationLoader implements SymfonyLoaderInterface
         string $prefix,
         array $inputScreen,
         MessageCatalogue $catalog,
-        string $headlineDomain
+        string $headlineDomain,
+        array $parameters,
     ): void {
         $headlineKey = 'backend-module.' . $inputScreen['meta']['id'] . '.headline';
-        $catalog->set($prefix . '.description', '', $domain);
         if ('' !== $value = $this->extractLangString($inputScreen['description'], $locale, $mainLanguage) ?? '') {
+            $value = strtr($value, $parameters);
             $catalog->set($prefix . '.description', $value, $domain);
 
-            $catalog->set($headlineKey, $value, $headlineDomain);
+            if ($headlineKey === $catalog->get($headlineKey, $headlineDomain)) {
+                $catalog->set($headlineKey, $value, $headlineDomain);
+            }
         }
         if ('' !== $value = $this->extractLangString($inputScreen['label'], $locale, $mainLanguage) ?? '') {
+            $value = strtr($value, $parameters);
             $catalog->set($prefix . '.label', $value, $domain);
             if ($headlineKey === $catalog->get($headlineKey, $headlineDomain)) {
                 $catalog->set($headlineKey, $value, $headlineDomain);
