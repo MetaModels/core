@@ -42,7 +42,7 @@
     "doctrine/cache": "^2.1",
     "doctrine/dbal": "^3.6.0",
     "doctrine/orm": "^2.17.0",
-    "menatwork/contao-multicolumnwizard-bundle": "^3.6.7",
+    "menatwork/contao-multicolumnwizard-bundle": "^3.6.8",
     "psr/container": "^2.0",
     "psr/log": "^2.0 || ^3.0",
     "symfony/asset": "^6.4",
