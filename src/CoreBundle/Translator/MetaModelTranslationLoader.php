@@ -252,6 +252,9 @@ final class MetaModelTranslationLoader implements SymfonyLoaderInterface
         array $parameters,
     ): void {
         $headlineKey = 'backend-module.' . $inputScreen['meta']['id'] . '.headline';
+        if (!$catalog->has($prefix . '.description', $domain)) {
+            $catalog->set($prefix . '.description', '', $domain);
+        }
         if ('' !== $value = $this->extractLangString($inputScreen['description'], $locale, $mainLanguage) ?? '') {
             $value = strtr($value, $parameters);
             $catalog->set($prefix . '.description', $value, $domain);

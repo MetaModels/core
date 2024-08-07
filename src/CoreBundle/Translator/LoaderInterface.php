@@ -29,8 +29,8 @@ interface LoaderInterface
     /**
      * Loads a locale.
      *
-     * @param mixed  $resource A resource
-     * @param string $locale   A locale
+     * @param IMetaModel $metaModel A MetaModel
+     * @param string     $locale    A locale
      *
      * @return MessageCatalogue
      *

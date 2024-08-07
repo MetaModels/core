@@ -14,7 +14,7 @@ services:
         class: MetaModels\CoreBundle\Assets\IconBuilder
         arguments:
             - "@=service('contao.framework').getAdapter('Contao\\\\FilesModel')"
-            - "@contao.image.image_factory"
+            - "@contao.image.factory"
             - "%kernel.project_dir%"
             - "%metamodels.assets_dir%"
             - "%metamodels.assets_web%"
@@ -87,6 +87,10 @@ services:
             - 'Contao\Input'
 
     metamodels.contao_session:
+        deprecated:
+            package: metamodels/core
+            version: 2.3
+            message: 'The service "%service_id%" is deprecated and to be removed in MetaModels 3 - Use the symfony session instead.'
         class: Contao\Session
         factory: ['@MetaModels\CoreBundle\Contao\Compat\ContaoFactory', 'createInstance']
         arguments:
@@ -186,7 +190,10 @@ services:
             - "@metamodels.view_combination.input_screen_information_builder"
 
     MetaModels\MetaModelsServiceContainer:
-        deprecated: 'The service "%service_id%" is deprecated and to be removed in MetaModels 3 - inject needed services directly.'
+        deprecated:
+            package: metamodels/core
+            version: 2.3
+            message: 'The service "%service_id%" is deprecated and to be removed in MetaModels 3 - inject needed services directly.'
         configurator: ['@MetaModels\CoreBundle\LegacyCompat\ServiceContainerInitializer', 'configure']
         public: true
 
@@ -293,11 +300,11 @@ services:
     MetaModels\Helper\ToolboxFile:
         public: false
         arguments:
-            - "@contao.image.image_factory"
+            - "@contao.image.factory"
             - "%kernel.project_dir%"
             - "@contao.assets.files_context"
             - "@contao.image.picture_factory"
-            - "@session"
+            - "@request_stack"
 
     MetaModels\CoreBundle\Translator\MetaModelTranslatorConfigurator:
       arguments:
