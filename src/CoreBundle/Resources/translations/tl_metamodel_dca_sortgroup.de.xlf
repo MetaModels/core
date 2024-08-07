@@ -98,8 +98,8 @@
         <target>Als Standard verwenden</target>
       </trans-unit>
       <trans-unit id="isdefault.description" resname="isdefault.description">
-        <source>Determines that this input screen shall be used as default for the parenting MetaModel.</source>
-        <target>Bestimmt, dass diese Eingabemaske als Standard für das Eltern-MetaModel benutzt wird.</target>
+        <source>Determines that this grouping and sorting shall be used as default for the MetaModel.</source>
+        <target>Bestimmt, dass diese Einstellung als Standard für das Eltern-MetaModel benutzt wird.</target>
       </trans-unit>
       <trans-unit id="rendermode.label" resname="rendermode.label">
         <source>Render mode</source>
