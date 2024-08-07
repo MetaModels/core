@@ -26,6 +26,7 @@ namespace MetaModels\CoreBundle\DependencyInjection;
 use MetaModels\CoreBundle\Migration\TableCollationMigration;
 use MetaModels\Filter\FilterUrlBuilder;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -116,10 +117,11 @@ class MetaModelsCoreExtension extends Extension implements PrependExtensionInter
     /**
      * {@inheritdoc}
      */
-    public function getConfiguration(array $config, ContainerBuilder $container)
+    public function getConfiguration(array $config, ContainerBuilder $container): ?ConfigurationInterface
     {
         $projectDir = $container->getParameter('kernel.project_dir');
         assert(\is_string($projectDir));
+
         return new Configuration((bool) $container->getParameter('kernel.debug'), $projectDir);
     }
 
@@ -139,6 +141,7 @@ class MetaModelsCoreExtension extends Extension implements PrependExtensionInter
             $cache->setClass(ArrayAdapter::class);
             $cache->setArguments([]);
             $container->setParameter('metamodels.cache_dir', null);
+
             return;
         }
 

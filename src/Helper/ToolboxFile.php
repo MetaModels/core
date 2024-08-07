@@ -48,6 +48,7 @@ use Contao\Validator;
 use InvalidArgumentException;
 use Symfony\Component\Asset\Context\ContextInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 
@@ -99,11 +100,11 @@ class ToolboxFile
     private PictureFactoryInterface $pictureFactory;
 
     /**
-     * Symfony session object
+     * Symfony requestStack object
      *
-     * @var Session
+     * @var RequestStack
      */
-    private Session $session;
+    private RequestStack $requestStack;
 
     /**
      * Allowed file extensions.
@@ -210,7 +211,7 @@ class ToolboxFile
      * @param string|null                                         $rootDir        The root path of the installation.
      * @param ContextInterface|null                               $filesContext   The assets file context.
      * @param PictureFactoryInterface|null                        $pictureFactory The picture factory.
-     * @param Session|null                                        $session        The session.
+     * @param RequestStack|null                                   $requestStack   The requestStack.
      *
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -221,7 +222,7 @@ class ToolboxFile
         string $rootDir = null,
         ContextInterface $filesContext = null,
         PictureFactoryInterface $pictureFactory = null,
-        Session $session = null
+        RequestStack $requestStack = null
     ) {
         switch (true) {
             case ($imageFactory instanceof ImageFactoryInterface) && (null !== $rootDir):
@@ -290,17 +291,17 @@ class ToolboxFile
         }
         $this->pictureFactory = $pictureFactory;
 
-        if (null === $session) {
+        if (null === $requestStack) {
             // @codingStandardsIgnoreStart
             @trigger_error(
                 'Not passing a "Session" is deprecated.',
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
-            $session = System::getContainer()->get('session');
-            assert($session instanceof Session);
+            $requestStack = System::getContainer()->get('request_stack');
+            assert($requestStack instanceof RequestStack);
         }
-        $this->session = $session;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -573,8 +574,8 @@ class ToolboxFile
                 ->setQueryParameter('file', \urlencode($strFile))
                 ->getUrl();
         }
-
-        $bag = $this->session->getBag('attributes');
+        // Throws exception when running in CLI mode due to missing session.
+        $bag = $this->requestStack->getSession()->getBag('attributes');
         assert($bag instanceof AttributeBagInterface);
 
         $links = $bag->has('metaModels_downloads') ? $bag->get('metaModels_downloads') : [];
@@ -850,7 +851,8 @@ class ToolboxFile
 
         if (($file = Input::get('file'))) {
             if ($this->withDownloadKeys) {
-                $bag   = $this->session->getBag('attributes');
+                // Throws exception when running in CLI mode due to missing session.
+                $bag   = $this->requestStack->getSession()->getBag('attributes');
                 assert($bag instanceof AttributeBagInterface);
                 $links = $bag->has('metaModels_downloads') ? $bag->get('metaModels_downloads') : [];
 
