@@ -248,9 +248,12 @@ class DatabaseBackedListener
      */
     public function createMetaModel(CreateMetaModelEvent $event)
     {
-        if ($event->getMetaModel() !== null) {
-            /** @psalm-suppress DeprecatedMethod */
-            if (!($metaModel = $event->getMetaModel()) instanceof ITranslatedMetaModel && $metaModel->isTranslated()) {
+        if (null !== ($metaModel = $event->getMetaModel())) {
+            /**
+             * @psalm-suppress DeprecatedMethod
+             * @psalm-suppress TooManyArguments
+             */
+            if (!($metaModel instanceof ITranslatedMetaModel) && $metaModel->isTranslated(false)) {
                 // @codingStandardsIgnoreStart
                 @\trigger_error(
                     'Translated "\MetaModel\IMetamodel" instances are deprecated since MetaModels 2.2 ' .
@@ -259,6 +262,7 @@ class DatabaseBackedListener
                 );
                 // @codingStandardsIgnoreEnd
             }
+
             return;
         }
 

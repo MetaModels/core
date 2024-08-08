@@ -39,14 +39,18 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class JumpToListener extends AbstractAbstainingListener
 {
+    /** @psalm-suppress MissingClassConstType */
     private const DEFAULT_TYPE = UrlGeneratorInterface::ABSOLUTE_PATH;
 
+    /** @psalm-suppress MissingClassConstType */
     private const TYPE_MAP = [
         'absolute_url'  => UrlGeneratorInterface::ABSOLUTE_URL,
         'absolute_path' => UrlGeneratorInterface::ABSOLUTE_PATH,
         'relative_path' => UrlGeneratorInterface::RELATIVE_PATH,
         'network_path'  => UrlGeneratorInterface::NETWORK_PATH,
     ];
+
+    /** @psalm-suppress MissingClassConstType */
 
     private const TYPE_MAP_INVERSE = [
         UrlGeneratorInterface::ABSOLUTE_URL  => 'absolute_url',
