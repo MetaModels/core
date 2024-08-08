@@ -192,7 +192,7 @@ services:
     MetaModels\MetaModelsServiceContainer:
         deprecated:
             package: metamodels/core
-            version: 2.3
+            version: 2.2
             message: 'The service "%service_id%" is deprecated and to be removed in MetaModels 3 - inject needed services directly.'
         configurator: ['@MetaModels\CoreBundle\LegacyCompat\ServiceContainerInitializer', 'configure']
         public: true
