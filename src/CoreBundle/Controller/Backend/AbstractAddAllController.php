@@ -44,7 +44,7 @@ use Twig\Environment as TwigEnvironment;
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-abstract class AbstractAddAllController extends AbstractBackendController
+abstract class AbstractAddAllController
 {
     /**
      * Adapter to the Contao\System class.
@@ -178,9 +178,11 @@ abstract class AbstractAddAllController extends AbstractBackendController
             }
         }
 
-        return $this->render(
-            '@MetaModelsCore/Backend/add-all.html.twig',
-            $this->renderOutput($table, $metaModel, $request)
+        return new Response(
+            $this->twig->render(
+                '@MetaModelsCore/Backend/add-all.html.twig',
+                $this->render($table, $metaModel, $request)
+            )
         );
     }
 
@@ -197,30 +199,24 @@ abstract class AbstractAddAllController extends AbstractBackendController
      */
     protected function render($table, $metaModel, Request $request)
     {
-        $fields   = $this->generateForm($table, $metaModel, $request);
-        $headline = $this->translator->trans('addall.description', [], $table);
-
-        $tokenManager = System::getContainer()->get('contao.csrf.token_manager');
-        assert($tokenManager instanceof ContaoCsrfTokenManager);
-
-        $GLOBALS['TL_CSS']['metamodels.core'] = '/bundles/metamodelscore/css/style.css';
+        $fields = $this->generateForm($table, $metaModel, $request);
 
         return [
-            'title'         => $headline,
             'action'        => '',
-            'requestToken'  => $tokenManager->getDefaultTokenValue(),
+            'requestToken'  => System::getContainer()->get('contao.csrf.token_manager')?->getDefaultTokenValue(),
             'href'          => $this->getReferer($request, $table, true),
             'backBt'        => $this->translator->trans('backBT', [], $table),
             'add'           => $this->translator->trans('continue', [], $table),
             'saveNclose'    => $this->translator->trans('saveNclose', [], $table),
             'activate'      => $this->translator->trans('addAll_activate', [], $table),
             'tlclass'       => '',
-            'headline'      => $headline,
+            'headline'      => $this->translator->trans('addall.description', [], $table),
             'selectAll'     => $this->translator->trans('selectAll', [], $table) . '.',
             'cacheMessage'  => '',
             'updateMessage' => '',
             'hasCheckbox'   => \count($fields) > 0,
             'fields'        => $fields,
+            'stylesheets'   => ['/bundles/metamodelscore/css/style.css']
         ];
     }
 
