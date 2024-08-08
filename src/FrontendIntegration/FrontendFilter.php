@@ -42,6 +42,7 @@ use MetaModels\FrontendIntegration\Content\FilterClearAll as ContentElementFilte
 use MetaModels\FrontendIntegration\Module\FilterClearAll as ModuleFilterClearAll;
 use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
