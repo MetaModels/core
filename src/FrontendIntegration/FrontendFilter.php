@@ -44,7 +44,6 @@ use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * FE-filtering for Contao MetaModels.
