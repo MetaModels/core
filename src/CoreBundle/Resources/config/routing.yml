@@ -11,12 +11,13 @@ metamodels.rendersetting.add_all:
     defaults: { _controller: metamodels.controller.rendersetting.add_all, _scope: backend, _token_check: true }
 
 metamodels.configuration:
-  path: /contao/metamodels
+  path: /contao/metamodels/{tableName}
   defaults:
     _controller: MetaModels\CoreBundle\Controller\Backend\ConfigurationController
     _scope: backend
     _dcg_referer_update: true
     _token_check: true
+    tableName: ~
 
 metamodels.metamodel:
   path: /contao/metamodel/{tableName}
