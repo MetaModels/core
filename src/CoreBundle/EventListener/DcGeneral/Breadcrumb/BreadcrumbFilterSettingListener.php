@@ -87,7 +87,7 @@ class BreadcrumbFilterSettingListener extends AbstractBreadcrumbListener
                 $elements->getLabel('tl_metamodel_filtersetting'),
                 (null !== $filterId) ? $this->getRow($filterId, 'tl_metamodel_filter')->name : ''
             ),
-            'bundles/metamodelscore/images/icons/filter_setting.png'
+            '/bundles/metamodelscore/images/icons/filter_setting.png'
         );
     }
 }

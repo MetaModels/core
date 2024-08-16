@@ -170,14 +170,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = [
                 'label'       => 'groupsort_settings.label',
                 'description' => 'groupsort_settings.description',
                 'href'        => 'table=tl_metamodel_dca_sortgroup',
-                'icon'        => 'bundles/metamodelscore/images/icons/dca_groupsortsettings.png',
+                'icon'        => '/bundles/metamodelscore/images/icons/dca_groupsortsettings.png',
                 'idparam'     => 'pid'
             ],
             'settings'           => [
                 'label'       => 'settings.label',
                 'description' => 'settings.description',
                 'href'        => 'table=tl_metamodel_dcasetting',
-                'icon'        => 'bundles/metamodelscore/images/icons/dca_setting.png',
+                'icon'        => '/bundles/metamodelscore/images/icons/dca_setting.png',
                 'idparam'     => 'pid'
             ],
         ]

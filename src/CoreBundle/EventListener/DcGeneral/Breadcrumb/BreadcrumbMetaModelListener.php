@@ -53,7 +53,7 @@ class BreadcrumbMetaModelListener extends AbstractBreadcrumbListener
         $elements->push(
             '/contao/metamodels',
             'tl_metamodel',
-            'bundles/metamodelscore/images/backend/logo.png'
+            '/bundles/metamodelscore/images/backend/logo.png'
         );
     }
 }

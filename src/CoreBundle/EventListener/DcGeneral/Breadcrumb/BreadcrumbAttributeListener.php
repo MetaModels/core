@@ -76,7 +76,7 @@ class BreadcrumbAttributeListener extends AbstractBreadcrumbListener
                 $elements->getLabel('tl_metamodel_attribute'),
                 (null !== $modelId) ? $this->getMetaModel($modelId)->getName() : ''
             ),
-            'bundles/metamodelscore/images/icons/fields.png'
+            '/bundles/metamodelscore/images/icons/fields.png'
         );
     }
 }

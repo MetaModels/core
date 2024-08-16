@@ -77,7 +77,7 @@ class BreadcrumbDcaSortGroupListener extends AbstractBreadcrumbListener
                 $elements->getLabel('tl_metamodel_dca_sortgroup'),
                 (null !== $dcaId) ? $this->getRow($dcaId, 'tl_metamodel_dca')->name : ''
             ),
-            'bundles/metamodelscore/images/icons/dca_groupsortsettings.png'
+            '/bundles/metamodelscore/images/icons/dca_groupsortsettings.png'
         );
     }
 }

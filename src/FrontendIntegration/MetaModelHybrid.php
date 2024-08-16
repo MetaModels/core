@@ -192,7 +192,7 @@ abstract class MetaModelHybrid extends Hybrid
             $strInfo = '';
             if ($this->metamodel) {
                 // Add CSS file.
-                $GLOBALS['TL_CSS'][] = 'bundles/metamodelscore/css/style.css';
+                $GLOBALS['TL_CSS'][] = '/bundles/metamodelscore/css/style.css';
 
                 // Retrieve name of MetaModel.
                 $infoTemplate =

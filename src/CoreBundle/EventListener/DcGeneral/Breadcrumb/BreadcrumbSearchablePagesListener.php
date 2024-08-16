@@ -90,7 +90,7 @@ class BreadcrumbSearchablePagesListener extends AbstractBreadcrumbListener
                 $elements->getLabel('tl_metamodel_searchable_pages'),
                 (null !== $modelId) ? $this->getMetaModel($modelId)->getName() : ''
             ),
-            'bundles/metamodelscore/images/icons/searchable_pages.png'
+            '/bundles/metamodelscore/images/icons/searchable_pages.png'
         );
     }
 }

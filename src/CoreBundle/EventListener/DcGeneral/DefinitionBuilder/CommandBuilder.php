@@ -227,7 +227,7 @@ class CommandBuilder
                 $collection,
                 'createvariant',
                 ['act' => 'createvariant'],
-                'bundles/metamodelscore/images/icons/variants.png'
+                '/bundles/metamodelscore/images/icons/variants.png'
             );
         }
 

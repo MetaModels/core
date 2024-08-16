@@ -84,7 +84,7 @@ class BreadcrumbDcaSettingListener extends AbstractBreadcrumbListener
                 $elements->getLabel('tl_metamodel_dcasetting'),
                 (null !== $dcaId) ? $this->getRow($dcaId, 'tl_metamodel_dca')->name : ''
             ),
-            'bundles/metamodelscore/images/icons/dca_setting.png'
+            '/bundles/metamodelscore/images/icons/dca_setting.png'
         );
     }
 }

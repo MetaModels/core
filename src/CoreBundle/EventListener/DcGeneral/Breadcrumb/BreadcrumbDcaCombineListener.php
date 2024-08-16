@@ -76,7 +76,7 @@ class BreadcrumbDcaCombineListener extends AbstractBreadcrumbListener
                 $elements->getLabel('tl_metamodel_dca_combine'),
                 (null !== $modelId) ? $this->getMetaModel($modelId)->getName() : ''
             ),
-            'bundles/metamodelscore/images/icons/dca_combine.png'
+            '/bundles/metamodelscore/images/icons/dca_combine.png'
         );
     }
 }

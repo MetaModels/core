@@ -214,7 +214,7 @@ class BackendNavigationListener
     private function addBackendCss(): void
     {
         // BE group icon.
-        $GLOBALS['TL_CSS']['metamodels'] = 'bundles/metamodelscore/css/be_logo_svg.css';
+        $GLOBALS['TL_CSS']['metamodels'] = '/bundles/metamodelscore/css/be_logo_svg.css';
     }
 
     /**

@@ -223,7 +223,7 @@ abstract class AbstractAddAllController
             'hasCheckbox'   => \count($fields) > 0,
             'fields'        => $fields,
             'theme'         => 'flexible',
-            //'stylesheets'   => ['bundles/metamodelscore/css/style.css']
+            //'stylesheets'   => ['/bundles/metamodelscore/css/style.css']
         ];
     }
 

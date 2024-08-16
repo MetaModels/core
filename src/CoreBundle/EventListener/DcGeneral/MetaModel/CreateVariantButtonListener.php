@@ -234,7 +234,7 @@ class CreateVariantButtonListener
             return '';
         }
 
-        $GLOBALS['TL_CSS'][] = 'bundles/ccadcgeneral/css/generalBreadcrumb.css';
+        $GLOBALS['TL_CSS'][] = '/bundles/ccadcgeneral/css/generalBreadcrumb.css';
 
         $objTemplate           = new ContaoBackendViewTemplate('dcbe_general_breadcrumb');
         $objTemplate->set('elements', $arrReturn);

@@ -351,42 +351,42 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = [
                 'label'       => 'fields.label',
                 'description' => 'fields.description',
                 'href'        => 'table=tl_metamodel_attribute',
-                'icon'        => 'bundles/metamodelscore/images/icons/fields.png',
+                'icon'        => '/bundles/metamodelscore/images/icons/fields.png',
                 'idparam'     => 'pid'
             ],
             'rendersettings'   => [
                 'label'       => 'rendersettings.label',
                 'description' => 'rendersettings.description',
                 'href'        => 'table=tl_metamodel_rendersettings',
-                'icon'        => 'bundles/metamodelscore/images/icons/rendersettings.png',
+                'icon'        => '/bundles/metamodelscore/images/icons/rendersettings.png',
                 'idparam'     => 'pid'
             ],
             'dca'              => [
                 'label'       => 'dca.label',
                 'description' => 'dca.description',
                 'href'        => 'table=tl_metamodel_dca',
-                'icon'        => 'bundles/metamodelscore/images/icons/dca.png',
+                'icon'        => '/bundles/metamodelscore/images/icons/dca.png',
                 'idparam'     => 'pid'
             ],
             'searchable_pages' => [
                 'label'       => 'searchable_pages.label',
                 'description' => 'searchable_pages.description',
                 'href'        => 'table=tl_metamodel_searchable_pages',
-                'icon'        => 'bundles/metamodelscore/images/icons/searchable_pages.png',
+                'icon'        => '/bundles/metamodelscore/images/icons/searchable_pages.png',
                 'idparam'     => 'pid'
             ],
             'filter'           => [
                 'label'       => 'filter.label',
                 'description' => 'filter.description',
                 'href'        => 'table=tl_metamodel_filter',
-                'icon'        => 'bundles/metamodelscore/images/icons/filter.png',
+                'icon'        => '/bundles/metamodelscore/images/icons/filter.png',
                 'idparam'     => 'pid'
             ],
             'dca_combine'      => [
                 'label'       => 'dca_combine.label',
                 'description' => 'dca_combine.description',
                 'href'        => 'table=tl_metamodel_dca_combine&act=edit',
-                'icon'        => 'bundles/metamodelscore/images/icons/dca_combine.png',
+                'icon'        => '/bundles/metamodelscore/images/icons/dca_combine.png',
                 'idparam'     => 'pid'
             ],
         ]

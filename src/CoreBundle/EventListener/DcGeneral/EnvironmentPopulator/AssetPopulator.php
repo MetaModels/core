@@ -43,6 +43,6 @@ class AssetPopulator
      */
     public function populate(EnvironmentInterface $environment)
     {
-        $GLOBALS['TL_CSS'][] = 'bundles/metamodelscore/css/style.css';
+        $GLOBALS['TL_CSS'][] = '/bundles/metamodelscore/css/style.css';
     }
 }

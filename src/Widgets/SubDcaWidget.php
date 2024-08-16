@@ -562,7 +562,7 @@ class SubDcaWidget extends Widget
      */
     public function generate()
     {
-        $GLOBALS['TL_CSS'][] = 'bundles/metamodelscore/css/style.css';
+        $GLOBALS['TL_CSS'][] = '/bundles/metamodelscore/css/style.css';
 
         $this->prepareWidgets();
 

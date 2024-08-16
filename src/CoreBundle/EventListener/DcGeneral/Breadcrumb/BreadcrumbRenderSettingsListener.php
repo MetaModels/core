@@ -87,7 +87,7 @@ class BreadcrumbRenderSettingsListener extends AbstractBreadcrumbListener
                 $elements->getLabel('tl_metamodel_rendersettings'),
                 (null !== $modelId) ? $this->getMetaModel($modelId)->getName() : ''
             ),
-            'bundles/metamodelscore/images/icons/rendersettings.png'
+            '/bundles/metamodelscore/images/icons/rendersettings.png'
         );
     }
 }
