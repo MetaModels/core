@@ -82,7 +82,7 @@ class BreadcrumbDcaSettingConditionListener extends AbstractBreadcrumbListener
                 $elements->getLabel('tl_metamodel_dcasetting_condition'),
                 (null !== $dcaSettingId) ? $this->getConditionAttribute($dcaSettingId) : ''
             ),
-            '/bundles/metamodelscore/images/icons/dca_condition.png'
+            'bundles/metamodelscore/images/icons/dca_condition.png'
         );
     }
 

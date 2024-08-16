@@ -35,21 +35,21 @@ class BreadcrumbStoreFactory
      *
      * @var IconBuilder
      */
-    private $iconBuilder;
+    private IconBuilder $iconBuilder;
 
     /**
      * The translator.
      *
      * @var TranslatorInterface
      */
-    private $translator;
+    private TranslatorInterface $translator;
 
     /**
      * The request stack.
      *
      * @var RequestStack
      */
-    private $requestStack;
+    private RequestStack $requestStack;
 
     /**
      * Create a new instance.

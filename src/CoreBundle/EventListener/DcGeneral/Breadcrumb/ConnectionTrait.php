@@ -33,7 +33,7 @@ trait ConnectionTrait
      *
      * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * Set the database connection.
