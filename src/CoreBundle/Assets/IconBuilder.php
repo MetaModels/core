@@ -15,6 +15,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
+ * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
  * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -125,7 +126,7 @@ class IconBuilder
      *
      * @return string
      */
-    public function getBackendIcon($icon, $defaultIcon = '/bundles/metamodelscore/images/icons/metamodels.png')
+    public function getBackendIcon($icon, $defaultIcon = 'bundles/metamodelscore/images/icons/metamodels.png')
     {
         $realIcon   = $this->convertValueToPath($icon, $defaultIcon);
         $targetPath = $this->outputPath . '/' . \basename($realIcon);
