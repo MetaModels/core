@@ -171,7 +171,7 @@ class TagsWidget extends Widget
 
         if (\is_array($this->options) && [] !== $this->options) {
             // Show not filter option.
-            if ((bool) $this->arrConfiguration['includeBlankOption']) {
+            if ((bool) ($this->arrConfiguration['includeBlankOption'] ?? false)) {
                 $return .= $this->generateOption(
                     [
                         'value' => '--none--',
@@ -182,7 +182,7 @@ class TagsWidget extends Widget
             }
 
             // Show select all checkbox - check null as BC-Layer.
-            if ((bool) $this->arrConfiguration['showSelectAll']) {
+            if ((bool) ($this->arrConfiguration['showSelectAll'] ?? false)) {
                 $return .= $this->generateOption(
                     [
                         'value' => '--all--',
