@@ -750,7 +750,7 @@ class ToolboxFile
             return ['files' => [], 'source' => []];
         }
 
-        //uasort($arrFiles, ($blnAscending) ? $this->basenameNatcasecmp($arrFiles, $arrFiles) : $this->basenameNatcasercmp($arrFiles, $arrFiles));
+        uasort($arrFiles, [$this, ($blnAscending) ? 'basenameNatcasecmp' : 'basenameNatcasercmp']);
 
         return $this->remapSorting($arrFiles, $this->outputBuffer);
     }
