@@ -178,7 +178,7 @@ abstract class AbstractFilterSettingTypeRenderer
             $this->updateImageWithDisabled($model, $typeFactory->getTypeIcon()),
             '',
             '',
-            $this->updateImageWithDisabled($model, '/bundles/metamodelscore/images/icons/filter_default.png')
+            $this->updateImageWithDisabled($model, 'bundles/metamodelscore/images/icons/filter_default.png')
         );
 
         /** @var AddToUrlEvent $urlEvent */

@@ -100,10 +100,10 @@ class ModelToLabelListener extends AbstractListener
 
         $params = [
             '%icon%'      => $this->iconBuilder->getBackendIconImageTag(
-                '/bundles/metamodelscore/images/icons/filter_default.png',
+                'bundles/metamodelscore/images/icons/filter_default.png',
                 $name,
                 '',
-                '/bundles/metamodelscore/images/icons/filter_default.png'
+                'bundles/metamodelscore/images/icons/filter_default.png'
             ),
             '%name%'      => $name,
             '%attribute%' => $attribute ? $attribute->getName() : '' . $model->getProperty('attr_id'),
