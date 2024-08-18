@@ -22,11 +22,14 @@
 
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSettingCondition;
 
+use Contao\System;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ManipulateWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\DataProviderInterface;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
+use ContaoCommunityAlliance\DcGeneral\Data\MultiLanguageDataProviderInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\Properties\PropertyInterface;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\AbstractEnvironmentAwareEvent;
@@ -36,6 +39,12 @@ use MetaModels\Attribute\IAttribute;
 use MetaModels\IMetaModel;
 use MetaModels\ITranslatedMetaModel;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
+use function is_array;
+use function method_exists;
+use function str_replace;
+use function str_starts_with;
+use function substr;
 
 /**
  * This handles the rendering of models to labels.
@@ -68,7 +77,7 @@ class ValueListener extends AbstractListener
 
         $attribute = $metaModel->getAttributeById((int) $attributeId);
         if ($attribute) {
-            $options = $this->getOptionsViaDcGeneral($metaModel, $event->getEnvironment(), $attribute);
+            $options = $this->getOptionsViaDcGeneral($metaModel, $event->getEnvironment(), $attribute, $model);
             $mangled = [];
             foreach ($options as $key => $option) {
                 $mangled['value_' . $key] = $option;
@@ -104,7 +113,7 @@ class ValueListener extends AbstractListener
 
         $currentLanguage = $this->extractCurrentLanguageContext($metaModel);
 
-        if (\is_array($event->getValue())) {
+        if (is_array($event->getValue())) {
             $values = [];
 
             foreach ($event->getValue() as $value) {
@@ -133,17 +142,19 @@ class ValueListener extends AbstractListener
 
         $model     = $event->getPropertyValueBag();
         $metaModel = $this->getMetaModel($event->getEnvironment());
-        if (null === $attributeId = $model->getPropertyValue('attr_id')) {
+        if (null === $attributeOption = $model->getPropertyValue('attr_id')) {
             return;
         }
 
-        if (null === $attribute = $metaModel->getAttributeById((int) $attributeId)) {
+        // Cut off the 'mm_xyz_' prefix.
+        $attrColName = \substr($attributeOption, \strlen($metaModel->getTableName() . '_'));
+        if (null === $attribute = $metaModel->getAttribute($attrColName)) {
             return;
         }
 
         $currentLanguage = $this->extractCurrentLanguageContext($metaModel);
 
-        if (\is_array($event->getValue())) {
+        if (is_array($event->getValue())) {
             $values = [];
 
             foreach ($event->getValue() as $value) {
@@ -191,11 +202,11 @@ class ValueListener extends AbstractListener
         if (!parent::wantToHandle($event)) {
             return false;
         }
-        if (\method_exists($event, 'getPropertyName') && ('value' !== $event->getPropertyName())) {
+        if (method_exists($event, 'getPropertyName') && ('value' !== $event->getPropertyName())) {
             return false;
         }
 
-        if (\method_exists($event, 'getProperty')) {
+        if (method_exists($event, 'getProperty')) {
             $property = $event->getProperty();
             if ($property instanceof PropertyInterface) {
                 $property = $property->getName();
@@ -215,10 +226,11 @@ class ValueListener extends AbstractListener
      * @param IMetaModel           $metaModel   The metamodel instance to obtain the values from.
      * @param EnvironmentInterface $environment The environment used in the input screen table dc-general.
      * @param IAttribute           $attribute   The attribute to obtain the values for.
+     * @param ModelInterface       $model       The model being edited.
      *
      * @return array
      */
-    private function getOptionsViaDcGeneral($metaModel, $environment, $attribute)
+    private function getOptionsViaDcGeneral($metaModel, $environment, $attribute, $model)
     {
         $factory   = DcGeneralFactory::deriveEmptyFromEnvironment($environment)
             ->setContainerName($metaModel->getTableName());
@@ -227,6 +239,22 @@ class ValueListener extends AbstractListener
         $subEnv       = $dcGeneral->getEnvironment();
         $dataProvider = $subEnv->getDataProvider();
         assert($dataProvider instanceof DataProviderInterface);
+        if ($dataProvider instanceof MultiLanguageDataProviderInterface) {
+            // FIXME: check if language supported.
+            $locale    = System::getContainer()->get('request_stack')->getCurrentRequest()?->getLocale();
+            $languages = $dataProvider->getLanguages($model->getId());
+            $found = false;
+            foreach ($languages as $language) {
+                if ($language->getLocale() === $locale) {
+                    $dataProvider->setCurrentLanguage($locale);
+                    $found = true;
+                    break;
+                }
+            }
+            if (!$found) {
+                $dataProvider->setCurrentLanguage($dataProvider->getFallbackLanguage($model->getId()));
+            }
+        }
         $optEv  = new GetPropertyOptionsEvent($subEnv, $dataProvider->getEmptyModel());
         $optEv->setPropertyName($attribute->getColName());
         $dispatcher = $subEnv->getEventDispatcher();
@@ -244,18 +272,18 @@ class ValueListener extends AbstractListener
      * @param IAttribute $attribute The attribute.
      * @param string     $language  The language to used for the convertion.
      *
-     * @return string The value to be saved.
+     * @return string|null The value to be saved.
      */
-    private function aliasToId(string $alias, IAttribute $attribute, string $language): string
+    private function aliasToId(string $alias, IAttribute $attribute, string $language): ?string
     {
         if ($attribute instanceof IAliasConverter) {
-            $idForAlias = $attribute->getIdForAlias(\substr($alias, 6), $language);
+            $idForAlias = $attribute->getIdForAlias(substr($alias, 6), $language);
             if ($idForAlias !== null) {
                 return $idForAlias;
             }
         }
 
-        return \substr($alias, 6);
+        return substr($alias, 6);
     }
 
     /**
@@ -270,8 +298,9 @@ class ValueListener extends AbstractListener
      */
     private function idToAlias(string $idValue, IAttribute $attribute, string $language): string
     {
-        if (\str_starts_with($idValue, 'value_')) {
-            $idValue = \substr($idValue, 6);
+        // FIXME: When can this happen?
+        if (str_starts_with($idValue, 'value_')) {
+            $idValue = substr($idValue, 6);
         }
 
         if ($attribute instanceof IAliasConverter) {
@@ -309,6 +338,6 @@ class ValueListener extends AbstractListener
         }
 
         // Use the current backend language then.
-        return \str_replace('-', '_', (string) $GLOBALS['TL_LANGUAGE']);
+        return str_replace('-', '_', (string) $GLOBALS['TL_LANGUAGE']);
     }
 }

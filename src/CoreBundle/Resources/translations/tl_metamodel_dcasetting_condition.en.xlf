@@ -166,8 +166,7 @@
         <source>NOT</source>
       </trans-unit>
       <trans-unit id="typedesc._default_" resname="typedesc._default_">
-        <source>%icon% &lt;strong&gt;%name%&lt;/strong&gt; - for attribute &lt;em&gt;%attribute%&lt;/em&gt; (Parameter: %value%)%comment%
-        </source>
+        <source>%icon% &lt;strong&gt;%name%&lt;/strong&gt; - for attribute "%attribute%" (Parameter: "%value%")%comment%</source>
       </trans-unit>
       <trans-unit id="typedesc.conditionor" resname="typedesc.conditionor">
         <source>%icon% &lt;strong&gt;%name%&lt;/strong&gt; - any sub conditions must be fulfilled%comment%</source>
@@ -179,7 +178,13 @@
         <source>%icon% &lt;strong&gt;%name%&lt;/strong&gt; - invert the result of the contained condition%comment%</source>
       </trans-unit>
       <trans-unit id="typedesc.conditionpropertyvalueis" resname="typedesc.conditionpropertyvalueis">
-        <source>%icon% &lt;strong&gt;%attribute%&lt;/strong&gt; value is %value%%comment%</source>
+        <source>%icon% &lt;strong&gt;%name%&lt;/strong&gt; - for attribute "%attribute%" (Parameter: "%value%")%comment%</source>
+      </trans-unit>
+      <trans-unit id="typedesc.conditionpropertycontainanyof" resname="typedesc.conditionpropertycontainanyof">
+        <source>%icon% &lt;strong&gt;%name%&lt;/strong&gt; - for attribute "%attribute%" (Parameter(s): "%value%")%comment%</source>
+      </trans-unit>
+      <trans-unit id="typedesc.conditionpropertyvisible" resname="typedesc.conditionpropertyvisible">
+        <source>%icon% &lt;strong&gt;%name%&lt;/strong&gt; - for attribute or legend "%attribute%"%comment%</source>
       </trans-unit>
       <trans-unit id="deleteConfirm" resname="deleteConfirm">
         <source>Do you really want to delete setting ID %id%?</source>
