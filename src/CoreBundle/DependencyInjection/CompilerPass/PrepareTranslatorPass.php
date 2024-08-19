@@ -29,6 +29,9 @@ use Symfony\Component\DependencyInjection\Compiler\PriorityTaggedServiceTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
+use function array_keys;
+use function array_pop;
+
 final class PrepareTranslatorPass implements CompilerPassInterface
 {
     use PriorityTaggedServiceTrait;
@@ -57,5 +60,18 @@ final class PrepareTranslatorPass implements CompilerPassInterface
                 $this->findAndSortTaggedServices(self::TAG_NAME, $container)
             )
         );
+
+        // We need to keep us "first" to allow others to override the values from our loader.
+        if ($container->hasDefinition('translator.default')) {
+            $translator = $container->getDefinition('translator.default');
+            $loaders    = $translator->getArgument(3);
+            $keys       = array_keys($loaders);
+            $last       = array_pop($keys);
+            if ($last === MetaModelTranslationLoader::class) {
+                $value   = array_pop($loaders);
+                $loaders = [MetaModelTranslationLoader::class => $value] + $loaders;
+                $translator->replaceArgument(3, $loaders);
+            }
+        }
     }
 }

@@ -45,6 +45,6 @@ class MetaModelsCoreBundle extends Bundle
         $container->addCompilerPass(new CollectSchemaGeneratorsPass());
         $container->addCompilerPass(new CollectSchemaManagersPass());
         $container->addCompilerPass(new CollectDoctrineSchemaGeneratorsPass());
-        $container->addCompilerPass(new PrepareTranslatorPass());
+        $container->addCompilerPass(new PrepareTranslatorPass(), priority: -64);
     }
 }
