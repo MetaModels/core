@@ -241,8 +241,10 @@ class ValueListener extends AbstractListener
         assert($dataProvider instanceof DataProviderInterface);
         if ($dataProvider instanceof MultiLanguageDataProviderInterface) {
             // FIXME: check if language supported.
-            $locale    = System::getContainer()->get('request_stack')->getCurrentRequest()?->getLocale();
-            $languages = $dataProvider->getLanguages($model->getId());
+            $locale = System::getContainer()->get('request_stack')?->getCurrentRequest()?->getLocale();
+            if (null === ($languages = $dataProvider->getLanguages($model->getId()))) {
+                return [];
+            }
             $found = false;
             foreach ($languages as $language) {
                 if ($language->getLocale() === $locale) {
@@ -251,11 +253,11 @@ class ValueListener extends AbstractListener
                     break;
                 }
             }
-            if (!$found) {
-                $dataProvider->setCurrentLanguage($dataProvider->getFallbackLanguage($model->getId()));
+            if (!$found && null !== ($language = $dataProvider->getFallbackLanguage($model->getId()))) {
+                $dataProvider->setCurrentLanguage($language->getLocale());
             }
         }
-        $optEv  = new GetPropertyOptionsEvent($subEnv, $dataProvider->getEmptyModel());
+        $optEv = new GetPropertyOptionsEvent($subEnv, $dataProvider->getEmptyModel());
         $optEv->setPropertyName($attribute->getColName());
         $dispatcher = $subEnv->getEventDispatcher();
         assert($dispatcher instanceof EventDispatcherInterface);
@@ -272,9 +274,9 @@ class ValueListener extends AbstractListener
      * @param IAttribute $attribute The attribute.
      * @param string     $language  The language to used for the convertion.
      *
-     * @return string|null The value to be saved.
+     * @return string The value to be saved.
      */
-    private function aliasToId(string $alias, IAttribute $attribute, string $language): ?string
+    private function aliasToId(string $alias, IAttribute $attribute, string $language): string
     {
         if ($attribute instanceof IAliasConverter) {
             $idForAlias = $attribute->getIdForAlias(substr($alias, 6), $language);
