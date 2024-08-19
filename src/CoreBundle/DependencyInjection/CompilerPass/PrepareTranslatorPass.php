@@ -64,9 +64,10 @@ final class PrepareTranslatorPass implements CompilerPassInterface
         // We need to keep us "first" to allow others to override the values from our loader.
         if ($container->hasDefinition('translator.default')) {
             $translator = $container->getDefinition('translator.default');
-            $loaders    = $translator->getArgument(3);
-            $keys       = array_keys($loaders);
-            $last       = array_pop($keys);
+            /** @var array<string, list<string>> $loaders */
+            $loaders = $translator->getArgument(3);
+            $keys    = array_keys($loaders);
+            $last    = array_pop($keys);
             if ($last === MetaModelTranslationLoader::class) {
                 $value   = array_pop($loaders);
                 $loaders = [MetaModelTranslationLoader::class => $value] + $loaders;
