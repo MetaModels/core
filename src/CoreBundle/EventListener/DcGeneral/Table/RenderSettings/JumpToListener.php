@@ -148,15 +148,12 @@ class JumpToListener extends AbstractAbstainingListener
                         $newValue = '{{link_url::' . $arr['value'] . '}}';
                         $filter   = $arr['filter'];
 
-                        // ToDo: This seems to be wrong, since we should only get an int value here.
-                        // Maybe it's the value-differ-check?
-                        if (empty($arr['type']) || is_int($arr['type'])) {
-                            $type = self::TYPE_MAP_INVERSE[$arr['type'] ?? self::TYPE_MAP_INVERSE[self::DEFAULT_TYPE]]
-                                    ?? self::TYPE_MAP_INVERSE[self::DEFAULT_TYPE];
-                        } else {
-                            $type = (array_key_exists($arr['type'], self::TYPE_MAP))
-                                ? $arr['type']
-                                : self::TYPE_MAP_INVERSE[self::DEFAULT_TYPE];
+                        // Set the new value and exit the loop.
+                        if (\in_array($key, $arr, true)) {
+                            $newValue = '{{link_url::' . $arr['value'] . '}}';
+                            $type     = self::TYPE_MAP_INVERSE[$arr['type'] ?? self::DEFAULT_TYPE];
+                            $filter   = $arr['filter'];
+                            break;
                         }
                         break;
                     }
