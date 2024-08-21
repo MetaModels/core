@@ -44,7 +44,7 @@ use Twig\Environment as TwigEnvironment;
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-abstract class AbstractAddAllController
+abstract class AbstractAddAllController extends AbstractBackendController
 {
     /**
      * Adapter to the Contao\System class.
@@ -178,10 +178,12 @@ abstract class AbstractAddAllController
             }
         }
 
+        return $this->render('@MetaModelsCore/Backend/add-all.html.twig', $this->renderOutput($table, $metaModel, $request));
+
         return new Response(
             $this->twig->render(
                 '@MetaModelsCore/Backend/add-all.html.twig',
-                $this->render($table, $metaModel, $request)
+                $this->renderOutput($table, $metaModel, $request)
             )
         );
     }
@@ -197,14 +199,14 @@ abstract class AbstractAddAllController
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    protected function render($table, $metaModel, Request $request)
+    protected function renderOutput($table, $metaModel, Request $request)
     {
         $fields   = $this->generateForm($table, $metaModel, $request);
         $headline = $this->translator->trans('addall.description', [], $table);
 
         $GLOBALS['TL_CSS']['metamodels.core'] = '/bundles/metamodelscore/css/style.css';
 
-        \Contao\System::loadLanguageFile('default', 'de');
+        System::loadLanguageFile('default');
 
         return [
             'title'         => $headline,
