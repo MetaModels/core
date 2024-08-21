@@ -311,11 +311,11 @@ trait ListControllerTrait
          * @psalm-suppress UndefinedMagicPropertyAssignment
          * @psalm-suppress UndefinedMagicPropertyFetch
          */
-        $template->items         = StringUtil::encodeEmail($itemRenderer->render($model->metamodel_noparsing, $model));
+        $template->items = StringUtil::encodeEmail($itemRenderer->render($model->metamodel_noparsing, $model));
         /** @psalm-suppress UndefinedMagicPropertyAssignment */
         $template->numberOfItems = $itemRenderer->getItems()->getCount();
         /** @psalm-suppress UndefinedMagicPropertyAssignment */
-        $template->pagination    = $itemRenderer->getPagination();
+        $template->pagination = $itemRenderer->getPagination();
 
         $responseTags = \array_map(
             static function (IItem $item) {
