@@ -277,7 +277,12 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     public function searchFor($strPattern)
     {
-        return $this->searchForInLanguages($strPattern, [$this->getActiveLanguage()]);
+        $languages[] = $this->getActiveLanguage();
+        if ($this->getActiveLanguage() !== $this->getFallbackLanguage()) {
+            $languages[] = $this->getFallbackLanguage();
+        }
+
+        return $this->searchForInLanguages($strPattern, $languages);
     }
 
     /**
