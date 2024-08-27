@@ -1234,6 +1234,8 @@ class ToolboxFile
      * @param string $b
      *
      * @return integer
+     *
+     * @SuppressWarnings(PHPMD.ShortVariable)
      */
     private function basenameNatcasecmp(string $a, string $b): int
     {
@@ -1247,6 +1249,8 @@ class ToolboxFile
      * @param string $b
      *
      * @return integer
+     *
+     * @SuppressWarnings(PHPMD.ShortVariable)
      */
     private function basenameNatcasercmp(string $a, string $b): int
     {

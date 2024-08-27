@@ -218,7 +218,7 @@ class FilterUrlBuilder
         \array_unshift($fragments, $pageModel->alias);
 
         // If alias part is empty, this means we have the 'index' page.
-        if (empty($fragments[0])) {
+        if ('' === $fragments[0]) {
             $fragments[0] = 'index';
         }
 

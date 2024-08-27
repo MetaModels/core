@@ -82,13 +82,6 @@ class BackendNavigationListener
     private RouterInterface $router;
 
     /**
-     * The session.
-     *
-     * @var Session
-     */
-    private Session $session;
-
-    /**
      * Create a new instance.
      *
      * @param TranslatorInterface   $translator      The translator.

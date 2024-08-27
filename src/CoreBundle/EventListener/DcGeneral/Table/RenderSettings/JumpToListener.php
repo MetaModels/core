@@ -45,6 +45,8 @@ use function str_replace;
 
 /**
  * This handles the rendering of models to labels.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class JumpToListener extends AbstractAbstainingListener
 {

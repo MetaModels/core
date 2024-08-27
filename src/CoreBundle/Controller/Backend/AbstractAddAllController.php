@@ -178,7 +178,10 @@ abstract class AbstractAddAllController extends AbstractBackendController
             }
         }
 
-        return $this->render('@MetaModelsCore/Backend/add-all.html.twig', $this->renderOutput($table, $metaModel, $request));
+        return $this->render(
+            '@MetaModelsCore/Backend/add-all.html.twig',
+            $this->renderOutput($table, $metaModel, $request)
+        );
 
         return new Response(
             $this->twig->render(
