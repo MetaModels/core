@@ -127,7 +127,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      *
      * @return array<string, class-string>
      */
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return [
             Connection::class                  => Connection::class,
