@@ -283,8 +283,12 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
         }
 
         // Search at fallback language as alternative and return findings.
-        if ($this->getActiveLanguage() !== $this->getFallbackLanguage()) {
-            return $this->searchForInLanguages($strPattern, [$this->getFallbackLanguage()]);
+        if (
+            null !== ($fallbackLanguage = $this->getFallbackLanguage())
+            && '' !== $fallbackLanguage
+            && $this->getActiveLanguage() !== $fallbackLanguage
+        ) {
+            return $this->searchForInLanguages($strPattern, [$fallbackLanguage]);
         }
 
         // No finding in one language.
