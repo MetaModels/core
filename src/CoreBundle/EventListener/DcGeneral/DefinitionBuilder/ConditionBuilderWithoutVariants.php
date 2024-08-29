@@ -67,8 +67,8 @@ class ConditionBuilderWithoutVariants extends AbstractConditionBuilder
         $relationship = $this->getRootCondition();
 
         // NOTE: this might bear problems when the definition will get serialized as the input value will not change.
-        if (Input::get('pid')) {
-            $parentValue = ModelId::fromSerialized(Input::get('pid'))->getId();
+        if (null !== ($pid = Input::get('pid'))) {
+            $parentValue = ModelId::fromSerialized($pid)->getId();
         } else {
             $parentValue = '0';
         }
