@@ -178,9 +178,9 @@ class CreateVariantButtonListener
         if (!$view instanceof BackendViewInterface) {
             throw new \InvalidArgumentException('Invalid view registered in environment.');
         }
-        $newModel = clone $model;
+
         $editMask =
-            new EditMask($view, $newModel, $model, $preFunction, $postFunction, $this->breadcrumb($environment));
+            new EditMask($view, $model, $model, $preFunction, $postFunction, $this->breadcrumb($environment));
         $event->setResponse($editMask->execute());
     }
 

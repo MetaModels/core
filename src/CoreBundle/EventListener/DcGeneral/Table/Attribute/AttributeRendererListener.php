@@ -101,7 +101,7 @@ class AttributeRendererListener extends BaseListener
             ->setLabel(
                 '<div class="field_heading cte_type"><strong>%s</strong> <em>[%s%s]</em></div>
                 <div class="field_type block">
-                    %s<strong>%s</strong> - %s
+                    %s <strong>%s</strong> - %s
                 </div>'
             )
             ->setArgs([
