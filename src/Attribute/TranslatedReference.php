@@ -347,7 +347,8 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
             ->setParameter('langcode', $this->getActiveLanguage())
             ->setParameter('langfallbackcode', $this->getFallbackLanguage())
             ->setParameter('att_id', $this->get('id'))
-            ->setParameter('id_list', \array_unique($idList), ArrayParameterType::STRING);
+            ->setParameter('id_list', \array_unique($idList), ArrayParameterType::STRING)
+            ->orderBy('t1.value ', $strDirection);
 
         $statement = $queryBuilder->executeQuery();
 
