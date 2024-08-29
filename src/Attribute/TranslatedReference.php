@@ -85,9 +85,9 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
     /**
      * Build a where clause for the given id(s) and language code.
      *
-     * @param QueryBuilder             $queryBuilder           The query builder for the query  being build.
-     * @param list<string>|string|null $mixIds                 One, none or many ids to use.
-     * @param list<non-empty-string>   $mixLangCode            The language code/s to use, optional.
+     * @param QueryBuilder             $queryBuilder The query builder for the query  being build.
+     * @param list<string>|string|null $mixIds       One, none or many ids to use.
+     * @param list<non-empty-string>   $mixLangCode  The language code/s to use, optional.
      *
      * @return void
      */
@@ -318,7 +318,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
         $statement = $queryBuilder->executeQuery();
 
         // Return value list as list<mixed>, parent function wants a list<string> so we make a cast.
-        return \array_map(static fn (mixed $value) => (string) $value, $statement->fetchFirstColumn());
+        return \array_map(static fn(mixed $value) => (string) $value, $statement->fetchFirstColumn());
     }
 
     /**
@@ -329,7 +329,10 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
         $queryBuilder = $this->connection->createQueryBuilder();
         $expr         = $queryBuilder->expr();
         $queryBuilder
-            ->select('IF(t2.item_id IS NOT NULL, t2.item_id, t1.item_id)')
+            ->select(
+                'IF(t2.item_id IS NOT NULL, t2.item_id, t1.item_id),
+                IF(t2.item_id IS NOT NULL, t2.value, t1.value) AS item_value'
+            )
             ->from($this->getValueTable(), 't1')
             ->leftJoin(
                 't1',
@@ -348,7 +351,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
             ->setParameter('langfallbackcode', $this->getFallbackLanguage())
             ->setParameter('att_id', $this->get('id'))
             ->setParameter('id_list', \array_unique($idList), ArrayParameterType::STRING)
-            ->orderBy('t1.value ', $strDirection);
+            ->orderBy('item_value', $strDirection);
 
         $statement = $queryBuilder->executeQuery();
 
