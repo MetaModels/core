@@ -489,7 +489,7 @@ class FilterUrlBuilder
             ['order' => 'tl_page.routePriority DESC, tl_page.alias DESC']
         );
 
-        if(null === $pages){
+        if (null === $pages) {
             return [];
         }
 
