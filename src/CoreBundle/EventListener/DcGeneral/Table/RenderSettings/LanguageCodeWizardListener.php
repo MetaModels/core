@@ -109,6 +109,7 @@ class LanguageCodeWizardListener
             ->set('label', $translator->translate($event->getProperty()->getLabel(), $dataDefinition->getName()))
             ->set('id', $event->getWidget()->id);
 
+        /** @psalm-suppress UndefinedMagicPropertyAssignment */
         $event->getWidget()->wizard = $template->parse();
     }
 }

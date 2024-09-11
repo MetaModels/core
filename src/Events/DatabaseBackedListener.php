@@ -305,6 +305,10 @@ class DatabaseBackedListener
             return;
         }
 
+        if (!$this->database->createSchemaManager()->tablesExist(['tl_metamodel'])) {
+            return;
+        }
+
         $tables = $this
             ->database
             ->createQueryBuilder()
