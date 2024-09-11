@@ -25,7 +25,7 @@ services:
           -
             Doctrine\DBAL\Connection: '@database_connection'
             MetaModels\IMetaModelsServiceContainer: '@MetaModels\MetaModelsServiceContainer'
-            Contao\InsertTags: '@metamodels.insert_tags'
+            Contao\CoreBundle\InsertTag\InsertTagParser: '@contao.insert_tag.parser'
             MetaModels\CoreBundle\Contao\InsertTag\ReplaceTableName: '@MetaModels\CoreBundle\Contao\InsertTag\ReplaceTableName'
             MetaModels\CoreBundle\Contao\InsertTag\ReplaceParam: '@MetaModels\CoreBundle\Contao\InsertTag\ReplaceParam'
             MetaModels\CoreBundle\Contao\InsertTag\ResolveLanguageTag: '@MetaModels\CoreBundle\Contao\InsertTag\ResolveLanguageTag'

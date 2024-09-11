@@ -7,14 +7,6 @@
     "Contao\\ManagerPlugin\\Bundle\\Config\\BundleConfig",
     "Contao\\ManagerPlugin\\Bundle\\Parser\\ParserInterface",
     "Contao\\ManagerPlugin\\Routing\\RoutingPluginInterface",
-    "Contao\\CoreBundle\\Framework\\ContaoFrameworkInterface",
-    "Contao\\FileSelector",
-    "Doctrine\\Bundle\\DoctrineBundle\\DoctrineBundle",
-    "Knp\\Menu\\FactoryInterface",
-    "Knp\\Menu\\ItemInterface",
-    "Symfony\\Bundle\\FrameworkBundle\\Translation\\Translator",
-    "Symfony\\Contracts\\Cache\\CacheInterface",
-    "Symfony\\Component\\Security\\Csrf\\CsrfTokenManagerInterface",
     "TL_PATH",
     "tl_user_group"
   ]

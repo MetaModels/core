@@ -23,7 +23,7 @@
 namespace MetaModels\CoreBundle\Contao\Compat;
 
 use Contao\CoreBundle\Framework\Adapter;
-use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
+use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\InsertTags;
 
 /**
@@ -36,20 +36,20 @@ class ContaoFactory
     /**
      * The Contao framework.
      *
-     * @var ContaoFrameworkInterface
+     * @var ContaoFramework
      *
      * @psalm-suppress DeprecatedInterface
      */
-    private ContaoFrameworkInterface $framework;
+    private ContaoFramework $framework;
 
     /**
      * Create a new instance.
      *
-     * @param ContaoFrameworkInterface $framework The Contao framework.
+     * @param ContaoFramework $framework The Contao framework.
      *
      * @psalm-suppress DeprecatedInterface
      */
-    public function __construct(ContaoFrameworkInterface $framework)
+    public function __construct(ContaoFramework $framework)
     {
         $this->framework = $framework;
     }
