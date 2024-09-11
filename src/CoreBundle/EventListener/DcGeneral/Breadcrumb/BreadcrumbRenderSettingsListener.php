@@ -71,7 +71,6 @@ class BreadcrumbRenderSettingsListener extends AbstractBreadcrumbListener
         parent::getBreadcrumbElements($environment, $elements);
 
         $builder = UrlBuilder::fromUrl($elements->getUri())
-            ->setQueryParameter('do', 'metamodels')
             ->setQueryParameter('table', 'tl_metamodel_rendersettings')
             ->setQueryParameter(
                 'pid',
