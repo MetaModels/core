@@ -240,7 +240,7 @@ class ValueListener extends AbstractListener
         $subEnv       = $dcGeneral->getEnvironment();
         $dataProvider = $subEnv->getDataProvider();
         assert($dataProvider instanceof DataProviderInterface);
-        if ($dataProvider instanceof MultiLanguageDataProviderInterface) {
+        if ($dataProvider instanceof MultiLanguageDataProviderInterface && $metaModel instanceof ITranslatedMetaModel) {
             // FIXME: check if language supported.
             $locale = System::getContainer()->get('request_stack')?->getCurrentRequest()?->getLocale();
             if (null === ($languages = $dataProvider->getLanguages($model->getId()))) {
