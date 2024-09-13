@@ -3,7 +3,7 @@
     <body>
       <trans-unit id="backend-module.headline" resname="backend-module.headline">
         <source>All input screen conditions</source>
-        <target>Alle Ansichtsbedingenen</target>
+        <target>Alle Ansichtsbedingungen</target>
       </trans-unit>
       <trans-unit id="id.label" resname="id.label">
         <source>Id</source>
@@ -218,9 +218,8 @@
         <target>NICHT</target>
       </trans-unit>
       <trans-unit id="typedesc._default_" resname="typedesc._default_">
-        <source>%icon% &lt;strong&gt;%name%&lt;/strong&gt; - for attribute &lt;em&gt;%attribute%&lt;/em&gt; (Parameter: %value%)%comment%
-        </source>
-        <target>%icon% &lt;strong&gt;%name%&lt;/strong&gt; - für Attribut &lt;em&gt;%attribute%&lt;/em&gt; (Parameter: %value%)%comment%</target>
+        <source>%icon% &lt;strong&gt;%name%&lt;/strong&gt; - for attribute &quot;%attribute%&quot; (Parameter: &quot;%value%&quot;)%comment%</source>
+        <target>%icon% &lt;strong&gt;%name%&lt;/strong&gt; - für Attribut &quot;&lt;em&gt;%attribute%&lt;/em&gt;&quot; (Parameter: &quot;%value%&quot;)%comment%</target>
       </trans-unit>
       <trans-unit id="typedesc.conditionor" resname="typedesc.conditionor">
         <source>%icon% &lt;strong&gt;%name%&lt;/strong&gt; - any sub conditions must be fulfilled%comment%</source>
@@ -235,8 +234,16 @@
         <target>%icon% &lt;strong&gt;%name%&lt;/strong&gt; - kehrt das Ergebnis der vorgegebenen Bedingung um. %comment%</target>
       </trans-unit>
       <trans-unit id="typedesc.conditionpropertyvalueis" resname="typedesc.conditionpropertyvalueis">
-        <source>%icon% &lt;strong&gt;%attribute%&lt;/strong&gt; value is %value%%comment%</source>
-        <target>%icon% &lt;strong&gt;%attribute%&lt;/strong&gt; Wert ist %value%%comment%</target>
+        <source>%icon% &lt;strong&gt;%name%&lt;/strong&gt; - for attribute &quot;%attribute%&quot; (Parameter: &quot;%value%&quot;)%comment%</source>
+        <target>%icon% &lt;strong&gt;%name%&lt;/strong&gt; - für Attribut &quot;&lt;em&gt;%attribute%&lt;/em&gt;&quot; (Parameter: &quot;%value%&quot;)%comment%</target>
+      </trans-unit>
+      <trans-unit id="typedesc.conditionpropertycontainanyof" resname="typedesc.conditionpropertycontainanyof">
+        <source>%icon% &lt;strong&gt;%name%&lt;/strong&gt; - for attribute &quot;%attribute%&quot; (Parameter(s): &quot;%value%&quot;)%comment%</source>
+        <target>%icon% &lt;strong&gt;%name%&lt;/strong&gt; - für Attribut &quot;&lt;em&gt;%attribute%&lt;/em&gt;&quot; (Parameter: &quot;%value%&quot;)%comment%</target>
+      </trans-unit>
+      <trans-unit id="typedesc.conditionpropertyvisible" resname="typedesc.conditionpropertyvisible">
+        <source>%icon% &lt;strong&gt;%name%&lt;/strong&gt; - for attribute or legend &quot;%attribute%&quot;%comment%</source>
+        <target>%icon% &lt;strong&gt;%name%&lt;/strong&gt; - für Attribut oder Legende &quot;%attribute%&quot;%comment%</target>
       </trans-unit>
       <trans-unit id="deleteConfirm" resname="deleteConfirm">
         <source>Do you really want to delete setting ID %id%?</source>
