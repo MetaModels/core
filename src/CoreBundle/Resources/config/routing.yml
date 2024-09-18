@@ -1,6 +1,6 @@
 metamodels.inputscreen.add_all:
     path: /contao/metamodels/inputscreen/add-all/{metaModel}/{inputScreen}
-    defaults: { _controller: metamodels.controller.inputscreen.add_all, _scope: backend, _token_check: true }
+    defaults: { _controller: metamodels.controller.inputscreen.add_all, _scope: backend, _dcg_referer_update: true, _token_check: true }
 
 metamodels.support_screen:
     path: /contao/metamodels/support
@@ -8,7 +8,7 @@ metamodels.support_screen:
 
 metamodels.rendersetting.add_all:
     path: /contao/metamodels/rendersetting/add-all/{metaModel}/{renderSetting}
-    defaults: { _controller: metamodels.controller.rendersetting.add_all, _scope: backend, _token_check: true }
+    defaults: { _controller: metamodels.controller.rendersetting.add_all, _scope: backend, _dcg_referer_update: true, _token_check: true }
 
 metamodels.configuration:
   path: /contao/metamodels/{tableName}
