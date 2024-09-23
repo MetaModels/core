@@ -354,6 +354,12 @@ class BackendNavigationListener
 
         // Search the position in the already existing menu by starting at offset in BE_MOD and walking up to the start.
         $start = (int) array_search($backendSection, $navigation, true);
+
+        // Special location for node zero.
+        if (0 === $start) {
+            array_splice($namesInMenu, 0, 0, [$backendSection]);
+        }
+
         while (0 <= --$start) {
             /** @psalm-suppress InvalidArrayOffset */
             if (in_array($navigation[$start], $namesInMenu, true)) {
