@@ -36,34 +36,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class AddAllButtonListener
 {
     /**
-     * The database.
-     *
-     * @var Connection
-     */
-    private Connection $connection;
-
-    /**
-     * The MetaModels factory.
-     *
-     * @var IFactory
-     */
-    private IFactory $factory;
-
-    /**
-     * The URL generator.
-     *
-     * @var UrlGeneratorInterface
-     */
-    private UrlGeneratorInterface $urlGenerator;
-
-    /**
-     * The request stack.
-     *
-     * @var RequestStack
-     */
-    private RequestStack $requestStack;
-
-    /**
      * Create a new instance.
      *
      * @param Connection            $connection   The connection.
@@ -72,15 +44,11 @@ class AddAllButtonListener
      * @param RequestStack          $requestStack The session.
      */
     public function __construct(
-        Connection $connection,
-        IFactory $factory,
-        UrlGeneratorInterface $urlGenerator,
-        RequestStack $requestStack
+        private readonly Connection $connection,
+        private readonly IFactory $factory,
+        private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly RequestStack $requestStack
     ) {
-        $this->connection = $connection;
-        $this->factory = $factory;
-        $this->urlGenerator = $urlGenerator;
-        $this->requestStack = $requestStack;
     }
 
     /**
