@@ -27,6 +27,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use ContaoCommunityAlliance\DcGeneral\InputProviderInterface;
 use Doctrine\DBAL\Connection;
 use MetaModels\IFactory;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
@@ -56,17 +57,30 @@ class AddAllButtonListener
     private UrlGeneratorInterface $urlGenerator;
 
     /**
+     * The request stack.
+     *
+     * @var RequestStack
+     */
+    private RequestStack $requestStack;
+
+    /**
      * Create a new instance.
      *
      * @param Connection            $connection   The connection.
      * @param IFactory              $factory      The factory.
      * @param UrlGeneratorInterface $urlGenerator The url generator.
+     * @param RequestStack          $requestStack The session.
      */
-    public function __construct(Connection $connection, IFactory $factory, UrlGeneratorInterface $urlGenerator)
-    {
+    public function __construct(
+        Connection $connection,
+        IFactory $factory,
+        UrlGeneratorInterface $urlGenerator,
+        RequestStack $requestStack
+    ) {
         $this->connection   = $connection;
         $this->factory      = $factory;
         $this->urlGenerator = $urlGenerator;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -108,13 +122,15 @@ class AddAllButtonListener
             return;
         }
 
-        $name = $this->factory->translateIdToMetaModelName($modelId);
+        $name    = $this->factory->translateIdToMetaModelName($modelId);
+        $request = $this->requestStack->getCurrentRequest();
 
         $event->setHref(
             $this->urlGenerator->generate(
                 'metamodels.inputscreen.add_all',
                 ['metaModel' => $name, 'inputScreen' => $inputScreen]
             )
+            . '?ref=' . $request?->attributes->get('_contao_referer_id')
         );
     }
 }
