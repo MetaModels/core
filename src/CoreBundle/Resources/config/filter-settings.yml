@@ -1,6 +1,10 @@
 services:
     metamodels.filter_setting_factory.idlist:
         class: MetaModels\Filter\Setting\StaticIdListFilterSettingTypeFactory
+        arguments:
+          - '@event_dispatcher'
+          - '@MetaModels\Filter\FilterUrlBuilder'
+          - '@translator'
         tags:
           - { name: metamodels.filter_factory }
 
@@ -9,6 +13,7 @@ services:
         arguments:
           - '@event_dispatcher'
           - '@MetaModels\Filter\FilterUrlBuilder'
+          - '@translator'
         tags:
           - { name: metamodels.filter_factory }
 
@@ -34,10 +39,18 @@ services:
 
     metamodels.filter_setting_factory.conditionand:
         class: MetaModels\Filter\Setting\ConditionAndFilterSettingTypeFactory
+        arguments:
+          - '@event_dispatcher'
+          - '@MetaModels\Filter\FilterUrlBuilder'
+          - '@translator'
         tags:
           - { name: metamodels.filter_factory }
 
     metamodels.filter_setting_factory.conditionor:
         class: MetaModels\Filter\Setting\ConditionOrFilterSettingTypeFactory
+        arguments:
+          - '@event_dispatcher'
+          - '@MetaModels\Filter\FilterUrlBuilder'
+          - '@translator'
         tags:
           - { name: metamodels.filter_factory }
