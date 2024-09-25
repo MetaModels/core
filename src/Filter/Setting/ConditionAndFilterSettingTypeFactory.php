@@ -21,7 +21,10 @@
 
 namespace MetaModels\Filter\Setting;
 
+use MetaModels\Filter\FilterUrlBuilder;
 use MetaModels\Filter\Setting\Condition\ConditionAnd;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Attribute type factory for AND filter settings.
@@ -31,8 +34,11 @@ class ConditionAndFilterSettingTypeFactory extends AbstractFilterSettingTypeFact
     /**
      * {@inheritDoc}
      */
-    public function __construct()
-    {
+    public function __construct(
+        private readonly EventDispatcherInterface $dispatcher,
+        private readonly FilterUrlBuilder $filterUrlBuilder,
+        private readonly TranslatorInterface $translator,
+    ) {
         parent::__construct();
 
         $this
@@ -40,5 +46,19 @@ class ConditionAndFilterSettingTypeFactory extends AbstractFilterSettingTypeFact
             ->setTypeIcon('/bundles/metamodelscore/images/icons/filter_and.png')
             ->setTypeClass(ConditionAnd::class)
             ->allowAttributeTypes();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createInstance($information, $filterSettings)
+    {
+        return new ConditionAnd(
+            $filterSettings,
+            $information,
+            $this->dispatcher,
+            $this->filterUrlBuilder,
+            $this->translator
+        );
     }
 }
