@@ -5,6 +5,7 @@ services:
       - "@database_connection"
       - "@metamodels.factory"
       - "@router"
+      - "@request_stack"
     tags:
       - name: kernel.event_listener
         event: dc-general.view.contao2backend.get-global-button

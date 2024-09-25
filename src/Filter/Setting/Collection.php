@@ -55,9 +55,9 @@ class Collection implements ICollection
     /**
      * The attached MetaModel.
      *
-     * @var IMetaModel
+     * @var IMetaModel|null
      */
-    protected $metaModel;
+    protected $metaModel = null;
 
     /**
      * Create a new instance.
@@ -100,6 +100,10 @@ class Collection implements ICollection
      */
     public function getMetaModel()
     {
+        if (null === $this->metaModel) {
+            throw new \RuntimeException('Meta model not set');
+        }
+
         return $this->metaModel;
     }
 
