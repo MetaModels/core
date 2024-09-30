@@ -33,8 +33,11 @@
 namespace MetaModels;
 
 use Contao\ContentModel;
+use Contao\CoreBundle\Routing\ResponseContext\HtmlHeadBag\HtmlHeadBag;
+use Contao\Environment;
 use Contao\Model;
 use Contao\ModuleModel;
+use Contao\PageModel;
 use Contao\StringUtil;
 use Contao\System;
 use Contao\Template as ContaoTemplate;
@@ -1034,7 +1037,9 @@ class ItemList
                 System::getContainer()->get('request_stack')?->getCurrentRequest() ?? Request::create('')
             );
 
-        return ($isFrontend && is_object($page = $GLOBALS['objPage'])) ? $page : null;
+        $page = System::getContainer()->get('request_stack')?->getCurrentRequest()?->attributes->get('pageModel');
+
+        return ($isFrontend && ($page instanceof PageModel)) ? $page : null;
     }
 
     /**
@@ -1126,8 +1131,17 @@ class ItemList
      */
     private function setTitleAndDescription(): void
     {
-        $page = $this->getPage();
-        if ($page && null !== $this->objItems && $this->objItems->getCount()) {
+        if (
+            null === ($htmlDecoder = System::getContainer()->get('contao.string.html_decoder'))
+            || null === ($responseContext =
+                System::getContainer()->get('contao.routing.response_context_accessor')->getResponseContext())
+            || !$responseContext->has(HtmlHeadBag::class)
+        ) {
+            return;
+        }
+
+        $htmlHeadBag = $responseContext->get(HtmlHeadBag::class);
+        if (null !== $this->objItems && $this->objItems->getCount()) {
             // Add title if needed.
             if (!empty($this->strTitleAttribute)) {
                 while ($this->objItems->next()) {
@@ -1140,7 +1154,7 @@ class ItemList
                     );
 
                     if (!empty($titles['text'])) {
-                        $page->pageTitle = strip_tags($titles['text']);
+                        $htmlHeadBag->setTitle($htmlDecoder->inputEncodedToPlainText($titles['text']));
                         break;
                     }
                 }
@@ -1151,7 +1165,7 @@ class ItemList
             // Add description if needed.
             if (!empty($this->strDescriptionAttribute)) {
                 while ($this->objItems->next()) {
-                    $currentItem    = $this->objItems->current();
+                    $currentItem = $this->objItems->current();
                     $arrDescription = $currentItem->parseAttribute(
                         $this->strDescriptionAttribute,
                         'text',
@@ -1159,7 +1173,9 @@ class ItemList
                     );
 
                     if (!empty($arrDescription['text'])) {
-                        $page->description = StringUtil::substr($arrDescription['text'], 160);
+                        $htmlHeadBag->setMetaDescription(
+                            StringUtil::substr($htmlDecoder->htmlToPlainText($arrDescription['text']), 160)
+                        );
                         break;
                     }
                 }
@@ -1168,7 +1184,6 @@ class ItemList
             }
         }
     }
-
 
     /**
      * Setter for SortingLinkGenerator.
