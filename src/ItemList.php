@@ -34,6 +34,8 @@ namespace MetaModels;
 
 use Contao\ContentModel;
 use Contao\CoreBundle\Routing\ResponseContext\HtmlHeadBag\HtmlHeadBag;
+use Contao\CoreBundle\Routing\ResponseContext\ResponseContext;
+use Contao\CoreBundle\String\HtmlDecoder;
 use Contao\Environment;
 use Contao\Model;
 use Contao\ModuleModel;
@@ -1031,13 +1033,12 @@ class ItemList
      */
     private function getPage(): ?object
     {
+        $currentRequest = System::getContainer()->get('request_stack')?->getCurrentRequest();
         $isFrontend = (bool) System::getContainer()
             ->get('contao.routing.scope_matcher')
-            ?->isFrontendRequest(
-                System::getContainer()->get('request_stack')?->getCurrentRequest() ?? Request::create('')
-            );
+            ?->isFrontendRequest($currentRequest ?? Request::create(''));
 
-        $page = System::getContainer()->get('request_stack')?->getCurrentRequest()?->attributes->get('pageModel');
+        $page = $currentRequest?->attributes->get('pageModel');
 
         return ($isFrontend && ($page instanceof PageModel)) ? $page : null;
     }
@@ -1131,10 +1132,14 @@ class ItemList
      */
     private function setTitleAndDescription(): void
     {
+        if (empty($this->strTitleAttribute) && empty($this->strDescriptionAttribute)) {
+            return;
+        }
+
+        $container = System::getContainer();
         if (
-            null === ($htmlDecoder = System::getContainer()->get('contao.string.html_decoder'))
-            || null === ($responseContext =
-                System::getContainer()->get('contao.routing.response_context_accessor')->getResponseContext())
+            !($htmlDecoder = $container->get('contao.string.html_decoder')) instanceof HtmlDecoder
+            || !($responseContext = $container->get('contao.routing.response_context_accessor')?->getResponseContext()) instanceof ResponseContext
             || !$responseContext->has(HtmlHeadBag::class)
         ) {
             return;
