@@ -121,8 +121,8 @@ class IconBuilder
     /**
      * Get a 16x16 pixel resized icon of the passed image if it exists, return the default icon otherwise.
      *
-     * @param string $icon        The icon to resize.
-     * @param string $defaultIcon The default icon.
+     * @param string|null $icon        The icon to resize.
+     * @param string      $defaultIcon The default icon.
      *
      * @return string
      */
@@ -135,8 +135,8 @@ class IconBuilder
             return $this->webPath . '/' . \basename($realIcon);
         }
 
-        if (!Path::isAbsolute($realIcon)) {
-            $realIcon = $this->projectWebPath . '/' . $realIcon;
+        if (!Path::isAbsolute($realIcon) || !str_starts_with($realIcon, $this->projectWebPath)) {
+            $realIcon = $this->projectWebPath . '/' . ltrim($realIcon, '/');
         }
 
         $this->imageFactory->create($realIcon, [16, 16, 'center_center'], $targetPath);
@@ -167,13 +167,16 @@ class IconBuilder
     /**
      * Translate the file ID to file path.
      *
-     * @param string $varValue The file id.
-     * @param string $fallback The fallback file path.
+     * @param string|null $varValue The file id.
+     * @param string      $fallback The fallback file path.
      *
      * @return string
      */
     public function convertValueToPath($varValue, $fallback)
     {
+        if (null === $varValue) {
+            return $fallback;
+        }
         if (Validator::isUuid($varValue)) {
             /** @psalm-suppress InternalMethod - Class Adapter is internal, not the __call() method. Blame Contao. */
             $model = $this->filesAdapter->findByPk($varValue);
@@ -183,8 +186,12 @@ class IconBuilder
 
             return $fallback;
         }
+        $checkPath = $varValue;
+        if (!Path::isAbsolute($checkPath) || !str_starts_with($checkPath, $this->projectWebPath)) {
+            $checkPath = $this->projectWebPath . '/' . ltrim($checkPath, '/');
+        }
 
-        if (\file_exists($varValue)) {
+        if (\file_exists($checkPath)) {
             return $varValue;
         }
 
