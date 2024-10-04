@@ -319,7 +319,8 @@ class PasteButtonListener
             if ($this->hasVariants()) {
                 $this->checkModelWithVariants($containedModel);
             }
-            $this->checkModelWithoutVariants($containedModel);
+            $this->checkModelWithoutVariants($containedModel, $action);
+
             return;
         }
 
@@ -370,11 +371,20 @@ class PasteButtonListener
      * Check the PA and PI with a model and a normal flat build.
      *
      * @param ModelInterface $containedModel The model to check.
+     * @param string         $action         The action to be checked.
      *
      * @return void
      */
-    private function checkModelWithoutVariants(ModelInterface $containedModel): void
+    private function checkModelWithoutVariants(ModelInterface $containedModel, string $action): void
     {
+        // A copy can always be inserted after itself or into itself.
+        if ('copy' === $action) {
+            $this->disablePA = false;
+            $this->disablePI = false;
+
+            return;
+        }
+
         $environment = $this->environment;
         assert($environment instanceof EnvironmentInterface);
         $dataDefinition = $environment->getDataDefinition();
