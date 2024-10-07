@@ -141,6 +141,13 @@ class IconBuilder
 
         $this->imageFactory->create($realIcon, [16, 16, 'center_center'], $targetPath);
 
+        if (false !== ($lastDotAt = strrpos($realIcon, '.'))) {
+            $darkIcon = substr_replace($realIcon, '--dark', $lastDotAt, 0);
+            if (is_readable($darkIcon)) {
+                $this->imageFactory->create($darkIcon, [16, 16, 'center_center'], $this->outputPath . '/' . \basename($darkIcon));
+            }
+        }
+
         return $this->webPath . '/' . \basename($realIcon);
     }
 
