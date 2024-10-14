@@ -511,8 +511,10 @@ class Driver implements MultiLanguageDataProviderInterface
         $metaModel = $this->getMetaModel();
         assert($metaModel instanceof IMetaModel);
 
+        $backupLanguage = $this->setLanguage($this->getCurrentLanguage());
         $arrValues = $metaModel
             ->getAttributeOptions($arrProperties[0] ?? '', $objFilter);
+        $this->setLanguage($backupLanguage);
 
         $objCollection = new DefaultFilterOptionCollection();
         foreach ($arrValues as $strKey => $strValue) {
