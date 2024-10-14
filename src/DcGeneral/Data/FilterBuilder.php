@@ -437,12 +437,12 @@ class FilterBuilder
         $languages = [];
         $metaModel = $attribute->getMetaModel();
         if ($metaModel instanceof ITranslatedMetaModel) {
-            $languages = $metaModel->getLanguages();
+            $languages[] = $metaModel->getLanguage();
         } elseif ($metaModel->isTranslated(false)) {
-            $languages = $this->getMetaModel()->getAvailableLanguages() ?? [];
+            $languages[] = $metaModel->getActiveLanguage();
         }
 
-        return new SearchAttribute($attribute, $value, \array_values(\array_filter($languages)));
+        return new SearchAttribute($attribute, $value, \array_filter($languages));
     }
 
     /** @psalm-assert TFilterANDOR $filter */
