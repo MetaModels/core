@@ -181,6 +181,13 @@
           not encode allowed html tags" is true.
         </source>
       </trans-unit>
+      <trans-unit id="basicEntities.label" resname="basicEntities.label">
+        <source>Converted back Contao HTML entities.</source>
+      </trans-unit>
+      <trans-unit id="basicEntities.description" resname="basicEntities.description">
+        <source>If you select this, all Contao HTML entities like [-], [nbsp], etc. will be converted back.
+        </source>
+      </trans-unit>
       <trans-unit id="rte.label" resname="rte.label">
         <source>Enable richtext editor on this</source>
       </trans-unit>

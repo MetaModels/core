@@ -239,6 +239,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
             // * allowHtml          do not strip html content.
             // * preserveTags       do not encode html tags.
             // * decodeEntities     do decode HTML entities.
+            // * basicEntities      Contao HTML entities converted back.
             // * rte                enable richtext editor on this
             // * rows               amount of rows in longtext and tables.
             // * cols               amount of columns in longtext and tables.
@@ -247,6 +248,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
             // * includeBlankOption if true a blank option will be added to the options array.
             // * submitOnChange     submit on change value.
             // * readonly           readonly.
+            // * be_template        widget template for backend.
+            // * fe_template        form template for frontend.
         ]
     ],
     'fields'                => [
@@ -427,6 +430,17 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
                 'tl_class' => 'w50 cbx m12',
             ],
             'sql'         => "char(1) NOT NULL default ''"
+        ],
+        'basicEntities'     => [
+            'label'       => 'basicEntities.label',
+            'description' => 'basicEntities.description',
+            'exclude'     => true,
+            'inputType'   => 'checkbox',
+            'default'     => 1,
+            'eval'        => [
+                'tl_class' => 'w50 cbx m12',
+            ],
+            'sql'         => "char(1) NOT NULL default '1'"
         ],
         'rte'                => [
             'label'       => 'rte.label',

@@ -516,6 +516,7 @@ abstract class Base implements IAttribute
             'allowHtml',
             'preserveTags',
             'decodeEntities',
+            'basicEntities',
             'rte',
             'rows',
             'cols',
