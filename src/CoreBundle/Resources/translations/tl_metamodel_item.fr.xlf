@@ -1,0 +1,176 @@
+<?xml version="1.0" ?><xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="src/CoreBundle/Resources/translations/tl_metamodel_item.en.xlf" target-language="fr">
+    <body>
+      <trans-unit id="new.label" resname="new.label">
+        <source>New item</source>
+        <target>Nouvel élément</target>
+      </trans-unit>
+      <trans-unit id="new.description" resname="new.description">
+        <source>Create new item</source>
+        <target>Créer un nouvel élément</target>
+      </trans-unit>
+      <trans-unit id="edit.label" resname="edit.label">
+        <source>Edit item</source>
+        <target>Modifier l'élément</target>
+      </trans-unit>
+      <trans-unit id="edit.description" resname="edit.description">
+        <source>Edit item ID %id%</source>
+        <target>Modifier l'ID de l'élément %id%</target>
+      </trans-unit>
+      <trans-unit id="editAll.label" resname="editAll.label">
+        <source>Edit multiple</source>
+      </trans-unit>
+      <trans-unit id="editAll.description" resname="editAll.description">
+        <source>Edit multiple</source>
+      </trans-unit>
+      <trans-unit id="metamodel_edit_as_child.label" resname="metamodel_edit_as_child.label">
+        <source>Edit &quot;%child_name%&quot;</source>
+      </trans-unit>
+      <trans-unit id="metamodel_edit_as_child.description" resname="metamodel_edit_as_child.description">
+        <source>Edit &quot;%child_name%&quot; for item %id%</source>
+        <target>Modifier « %child_name% » pour l'élément %id%</target>
+      </trans-unit>
+      <trans-unit id="copy.label" resname="copy.label">
+        <source>Copy item</source>
+        <target>Copier l'élément</target>
+      </trans-unit>
+      <trans-unit id="copy.description" resname="copy.description">
+        <source>Copy item ID %id%</source>
+        <target>Copier l'ID de l'élément %id%</target>
+      </trans-unit>
+      <trans-unit id="createvariant.label" resname="createvariant.label">
+        <source>New variant</source>
+      </trans-unit>
+      <trans-unit id="createvariant.description" resname="createvariant.description">
+        <source>Create a new variant of item ID %id%</source>
+        <target>Créer une nouvelle variante de l'élément ID %id%</target>
+      </trans-unit>
+      <trans-unit id="cut.label" resname="cut.label">
+        <source>Move item</source>
+        <target>Déplacer l'élément</target>
+      </trans-unit>
+      <trans-unit id="cut.description" resname="cut.description">
+        <source>Move item ID %id%</source>
+        <target>Déplacer l'élément ID %id%</target>
+      </trans-unit>
+      <trans-unit id="delete.label" resname="delete.label">
+        <source>Delete item</source>
+        <target>Supprimer l'élément</target>
+      </trans-unit>
+      <trans-unit id="delete.description" resname="delete.description">
+        <source>Delete item ID %id%</source>
+        <target>Supprimer l'élément ID %id%</target>
+      </trans-unit>
+      <trans-unit id="delete.confirm" resname="delete.confirm">
+        <source>Do you really want to delete element ID %id%?</source>
+      </trans-unit>
+      <trans-unit id="show.label" resname="show.label">
+        <source>Item details</source>
+        <target>Détails de l'élément</target>
+      </trans-unit>
+      <trans-unit id="show.description" resname="show.description">
+        <source>Show details of item ID %id%</source>
+        <target>Afficher les détails de l'élément ID %id%</target>
+      </trans-unit>
+      <trans-unit id="editheader.label" resname="editheader.label">
+        <source>Edit item type</source>
+        <target>Modifier le type d'élément</target>
+      </trans-unit>
+      <trans-unit id="editheader.description" resname="editheader.description">
+        <source>Edit the item type</source>
+        <target>Modifier le type d'élément</target>
+      </trans-unit>
+      <trans-unit id="pasteafter.label" resname="pasteafter.label">
+        <source>Create new item</source>
+        <target>Créer un nouvel élément</target>
+      </trans-unit>
+      <trans-unit id="pasteafter.description" resname="pasteafter.description">
+        <source>Create a new item after item ID %id%</source>
+        <target>Créer un nouvel élément aprés l'élément ID %id%</target>
+      </trans-unit>
+      <trans-unit id="pasteinto.label" resname="pasteinto.label">
+        <source>Create new item</source>
+        <target>Créer un nouvel élément</target>
+      </trans-unit>
+      <trans-unit id="pasteinto.description" resname="pasteinto.description">
+        <source>Create a new item in item ID %id%</source>
+        <target>Créer un nouvel élément dans l'élément ID %id%</target>
+      </trans-unit>
+      <trans-unit id="pastenew.label" resname="pastenew.label">
+        <source>Add new at the top</source>
+      </trans-unit>
+      <trans-unit id="pastenew.description" resname="pastenew.description">
+        <source>Add new item after item ID %id%</source>
+        <target>Ajouter un nouvel élément après l'élément ID %id%</target>
+      </trans-unit>
+      <trans-unit id="varbase.label" resname="varbase.label">
+        <source>Is variant base</source>
+      </trans-unit>
+      <trans-unit id="varbase.description" resname="varbase.description">
+        <source>Check this if you want to make this the base for the current variant group</source>
+      </trans-unit>
+      <trans-unit id="editRecord" resname="editRecord">
+        <source>Edit item %id%</source>
+        <target>Modifier l'élément %id%</target>
+      </trans-unit>
+      <trans-unit id="newRecord" resname="newRecord">
+        <source>Create a new item</source>
+        <target>Créer un nouvel élément</target>
+      </trans-unit>
+      <trans-unit id="sorting.label" resname="sorting.label">
+        <source>Sorting</source>
+      </trans-unit>
+      <trans-unit id="sorting.description" resname="sorting.description">
+        <source>The manual sorting</source>
+      </trans-unit>
+      <trans-unit id="id.label" resname="id.label">
+        <source>ID of the item</source>
+        <target>ID de l'élément</target>
+      </trans-unit>
+      <trans-unit id="id.description" resname="id.description">
+        <source>The id of the item</source>
+        <target>ID de l'élément</target>
+      </trans-unit>
+      <trans-unit id="pid.label" resname="pid.label">
+        <source>Parent item id</source>
+        <target>ID de l'élément parent</target>
+      </trans-unit>
+      <trans-unit id="pid.description" resname="pid.description">
+        <source>The id of the parent item</source>
+        <target>ID de l'élément parent</target>
+      </trans-unit>
+      <trans-unit id="tstamp.label" resname="tstamp.label">
+        <source>Revision date</source>
+      </trans-unit>
+      <trans-unit id="tstamp.description" resname="tstamp.description">
+        <source>The date when the item revision was created</source>
+        <target>Date de création de la révision de l'élément</target>
+      </trans-unit>
+      <trans-unit id="details" resname="details">
+        <source>Details</source>
+        <note>Used in the frontend for the &quot;Details&quot; link caption.</note>
+      </trans-unit>
+      <trans-unit id="showRecord" resname="showRecord">
+        <source>Show the details of record %id%</source>
+      </trans-unit>
+      <trans-unit id="backBT" resname="backBT">
+        <source>Go back</source>
+      </trans-unit>
+      <trans-unit id="backBTTitle" resname="backBTTitle">
+        <source>Back to the previous page</source>
+      </trans-unit>
+      <trans-unit id="save" resname="save">
+        <source>Save</source>
+      </trans-unit>
+      <trans-unit id="saveNclose" resname="saveNclose">
+        <source>Save and close</source>
+      </trans-unit>
+      <trans-unit id="saveNcreate" resname="saveNcreate">
+        <source>Save and new</source>
+      </trans-unit>
+      <trans-unit id="saveNback" resname="saveNback">
+        <source>Save and go back</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
