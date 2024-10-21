@@ -34,6 +34,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Base event listener to boot up a MetaModelServiceContainer.
+ *
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 class SubSystemBootListener
 {
@@ -102,9 +104,19 @@ class SubSystemBootListener
      */
     public function boot(): void
     {
+        // Saves some DB queries.
+        /** @psalm-suppress DeprecatedConstant */
+        if (
+            !$this->dispatcher->hasListeners(MetaModelsEvents::SUBSYSTEM_BOOT)
+            && !$this->dispatcher->hasListeners(MetaModelsEvents::SUBSYSTEM_BOOT_FRONTEND)
+            && !$this->dispatcher->hasListeners(MetaModelsEvents::SUBSYSTEM_BOOT_BACKEND)
+        ) {
+            return;
+        }
+
         /** @psalm-suppress InternalMethod - the ContaoFramework class is internal, not the method usage. */
         $environment = $this->contaoFramework->getAdapter(Environment::class);
-        $script      = explode('?', $environment->get('relativeRequest'), 2)[0];
+        $script      = \explode('?', $environment->get('relativeRequest'), 2)[0];
 
         // There is no need to boot in login or install screen.
         if (('contao/login' === $script) || ('contao/install' === $script)) {
@@ -138,9 +150,12 @@ class SubSystemBootListener
             return;
         }
 
+        /** @psalm-suppress DeprecatedClass */
         $event = new MetaModelsBootEvent();
+        /** @psalm-suppress DeprecatedConstant */
         $this->tryDispatch(MetaModelsEvents::SUBSYSTEM_BOOT, $event);
 
+        /** @psalm-suppress DeprecatedConstant */
         switch (true) {
             case $this->scopeMatcher->currentScopeIsFrontend():
                 $this->tryDispatch(MetaModelsEvents::SUBSYSTEM_BOOT_FRONTEND, $event);
