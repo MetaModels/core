@@ -1,0 +1,243 @@
+<?xml version="1.0" ?><xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="src/CoreBundle/Resources/translations/tl_metamodel_rendersettings.en.xlf" target-language="fr">
+    <body>
+      <trans-unit id="backend-module.headline" resname="backend-module.headline">
+        <source>All render settings</source>
+      </trans-unit>
+      <trans-unit id="id.label" resname="id.label">
+        <source>Id</source>
+      </trans-unit>
+      <trans-unit id="pid.label" resname="pid.label">
+        <source>Pid</source>
+      </trans-unit>
+      <trans-unit id="tstamp.label" resname="tstamp.label">
+        <source>Revision date</source>
+      </trans-unit>
+      <trans-unit id="new.label" resname="new.label">
+        <source>New render setting</source>
+      </trans-unit>
+      <trans-unit id="new.description" resname="new.description">
+        <source>Create a new render setting</source>
+      </trans-unit>
+      <trans-unit id="all.label" resname="all.label">
+        <source>Edit multiple</source>
+      </trans-unit>
+      <trans-unit id="all.description" resname="all.description">
+        <source>Edit multiple elements at once</source>
+      </trans-unit>
+      <trans-unit id="pastenew.label" resname="pastenew.label">
+        <source>Create a new element at the top</source>
+      </trans-unit>
+      <trans-unit id="pastenew.description" resname="pastenew.description">
+        <source>Create a new element after element ID %id%</source>
+      </trans-unit>
+      <trans-unit id="pasteafter.label" resname="pasteafter.label">
+        <source>Paste at the top</source>
+      </trans-unit>
+      <trans-unit id="pasteafter.description" resname="pasteafter.description">
+        <source>Paste after element ID %id%</source>
+      </trans-unit>
+      <trans-unit id="backBT" resname="backBT">
+        <source>Go back</source>
+      </trans-unit>
+      <trans-unit id="backBTTitle" resname="backBTTitle">
+        <source>Back to the previous page</source>
+      </trans-unit>
+      <trans-unit id="editheader.label" resname="editheader.label">
+        <source>Edit MetaModel</source>
+      </trans-unit>
+      <trans-unit id="editheader.description" resname="editheader.description">
+        <source>Edit the MetaModel ID %id%</source>
+      </trans-unit>
+      <trans-unit id="title_legend" resname="title_legend">
+        <source>Name</source>
+      </trans-unit>
+      <trans-unit id="general_legend" resname="general_legend">
+        <source>General settings</source>
+      </trans-unit>
+      <trans-unit id="expert_legend" resname="expert_legend">
+        <source>Expert settings</source>
+      </trans-unit>
+      <trans-unit id="jumpto_legend" resname="jumpto_legend">
+        <source>Frontend jump-to settings</source>
+      </trans-unit>
+      <trans-unit id="additional_legend" resname="additional_legend">
+        <source>Additional files</source>
+      </trans-unit>
+      <trans-unit id="name.label" resname="name.label">
+        <source>Name</source>
+      </trans-unit>
+      <trans-unit id="name.description" resname="name.description">
+        <source>Setting name.</source>
+      </trans-unit>
+      <trans-unit id="template.label" resname="template.label">
+        <source>Template</source>
+      </trans-unit>
+      <trans-unit id="template.description" resname="template.description">
+        <source>The template to use to render the items.</source>
+        <target>Le modèle à utiliser pour le rendu des éléments.</target>
+      </trans-unit>
+      <trans-unit id="format.label" resname="format.label">
+        <source>Output format</source>
+      </trans-unit>
+      <trans-unit id="format.description" resname="format.description">
+        <source>Define the output format. Leave empty to use the format used by current page.</source>
+      </trans-unit>
+      <trans-unit id="formatOptions.html5" resname="formatOptions.html5">
+        <source>HTML5</source>
+      </trans-unit>
+      <trans-unit id="formatOptions.text" resname="formatOptions.text">
+        <source>Text</source>
+      </trans-unit>
+      <trans-unit id="jumpTo.label" resname="jumpTo.label">
+        <source>JumpTo page</source>
+      </trans-unit>
+      <trans-unit id="jumpTo.description" resname="jumpTo.description">
+        <source>The page that shall be used as &quot;show details&quot; urls. Note that the detailed URL params will get generated
+          by the filter setting that is currently in use.
+        </source>
+      </trans-unit>
+      <trans-unit id="jumpTo_allLanguages" resname="jumpTo_allLanguages">
+        <source>All languages</source>
+      </trans-unit>
+      <trans-unit id="jumpTo_language.label" resname="jumpTo_language.label">
+        <source>Language</source>
+      </trans-unit>
+      <trans-unit id="jumpTo_language.description" resname="jumpTo_language.description">
+        <source>The language for the jump to page.</source>
+      </trans-unit>
+      <trans-unit id="jumpTo_type.label" resname="jumpTo_type.label">
+        <source>URL type</source>
+      </trans-unit>
+      <trans-unit id="jumpTo_type.description" resname="jumpTo_type.description">
+        <source>The reference type to use when generating the URL.</source>
+      </trans-unit>
+      <trans-unit id="jumpTo_type.absolute_url" resname="jumpTo_type.absolute_url">
+        <source>Absolute URL, e.g. &quot;https://example.com/dir/file&quot;.</source>
+      </trans-unit>
+      <trans-unit id="jumpTo_type.absolute_path" resname="jumpTo_type.absolute_path">
+        <source>Absolute path, e.g. &quot;/dir/file&quot;.</source>
+      </trans-unit>
+      <trans-unit id="jumpTo_type.relative_path" resname="jumpTo_type.relative_path">
+        <source>Relative path based on the current request path, e.g. &quot;../parent-file&quot;.</source>
+      </trans-unit>
+      <trans-unit id="jumpTo_type.network_path" resname="jumpTo_type.network_path">
+        <source>Network path, e.g. &quot;//example.com/dir/file&quot;.</source>
+      </trans-unit>
+      <trans-unit id="jumpTo_page.label" resname="jumpTo_page.label">
+        <source>Jump to page</source>
+      </trans-unit>
+      <trans-unit id="jumpTo_page.description" resname="jumpTo_page.description">
+        <source>The page to use for detail links.</source>
+      </trans-unit>
+      <trans-unit id="jumpTo_filter.label" resname="jumpTo_filter.label">
+        <source>Filter settings</source>
+      </trans-unit>
+      <trans-unit id="jumpTo_filter.description" resname="jumpTo_filter.description">
+        <source>The filter settings that define how the target (the reader/lister on the detail page) will filter the
+          items.
+        </source>
+        <target>Les paramètres du filtre qui définissent comment la cible (le lecteur/listeur sur la page détaillée) filtrera les éléments. </target>
+      </trans-unit>
+      <trans-unit id="hideEmptyValues.label" resname="hideEmptyValues.label">
+        <source>Hide empty values</source>
+      </trans-unit>
+      <trans-unit id="hideEmptyValues.description" resname="hideEmptyValues.description">
+        <source>Hide empty values in backend and frontend.</source>
+      </trans-unit>
+      <trans-unit id="hideLabels.label" resname="hideLabels.label">
+        <source>Hide labels</source>
+      </trans-unit>
+      <trans-unit id="hideLabels.description" resname="hideLabels.description">
+        <source>Hide all labels in backend and frontend.</source>
+      </trans-unit>
+      <trans-unit id="additionalCss.label" resname="additionalCss.label">
+        <source>Additional css files</source>
+      </trans-unit>
+      <trans-unit id="additionalCss.description" resname="additionalCss.description">
+        <source>Choose this, if you want to include additional css files.</source>
+      </trans-unit>
+      <trans-unit id="additionalJs.label" resname="additionalJs.label">
+        <source>Additional javascript files</source>
+      </trans-unit>
+      <trans-unit id="additionalJs.description" resname="additionalJs.description">
+        <source>Choose this, if you want to include additional javascript files.</source>
+      </trans-unit>
+      <trans-unit id="file.label" resname="file.label">
+        <source>File</source>
+      </trans-unit>
+      <trans-unit id="file.description" resname="file.description">
+        <source>Choose a file</source>
+      </trans-unit>
+      <trans-unit id="publish.label" resname="publish.label">
+        <source>Publish</source>
+      </trans-unit>
+      <trans-unit id="publish.description" resname="publish.description">
+        <source>Check to publish the file.</source>
+      </trans-unit>
+      <trans-unit id="edit.label" resname="edit.label">
+        <source>Edit setting</source>
+      </trans-unit>
+      <trans-unit id="edit.description" resname="edit.description">
+        <source>Edit the setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="copy.label" resname="copy.label">
+        <source>Copy setting definition</source>
+      </trans-unit>
+      <trans-unit id="copy.description" resname="copy.description">
+        <source>Copy the setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="delete.label" resname="delete.label">
+        <source>Delete setting</source>
+      </trans-unit>
+      <trans-unit id="delete.description" resname="delete.description">
+        <source>Delete the setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="delete.confirm" resname="delete.confirm">
+        <source>Do you really want to delete element ID %id%?</source>
+      </trans-unit>
+      <trans-unit id="show.label" resname="show.label">
+        <source>Filter details</source>
+      </trans-unit>
+      <trans-unit id="show.description" resname="show.description">
+        <source>Show details of setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="settings.label" resname="settings.label">
+        <source>Define attribute settings</source>
+      </trans-unit>
+      <trans-unit id="settings.description" resname="settings.description">
+        <source>Define attribute settings for setting ID %id%</source>
+      </trans-unit>
+      <trans-unit id="error_unknown_id" resname="error_unknown_id">
+        <source>Unknown ID: %id%</source>
+      </trans-unit>
+      <trans-unit id="error_unknown_attribute" resname="error_unknown_attribute">
+        <source>unknown attribute</source>
+      </trans-unit>
+      <trans-unit id="error_unknown_column" resname="error_unknown_column">
+        <source>Unknown column</source>
+      </trans-unit>
+      <trans-unit id="deleteConfirm" resname="deleteConfirm">
+        <source>Do you really want to render setting ID %id%?</source>
+      </trans-unit>
+      <trans-unit id="showRecord" resname="showRecord">
+        <source>Show the details of record %id%</source>
+      </trans-unit>
+      <trans-unit id="editRecord" resname="editRecord">
+        <source>Edit record %id%</source>
+      </trans-unit>
+      <trans-unit id="save" resname="save">
+        <source>Save</source>
+      </trans-unit>
+      <trans-unit id="saveNclose" resname="saveNclose">
+        <source>Save and close</source>
+      </trans-unit>
+      <trans-unit id="saveNcreate" resname="saveNcreate">
+        <source>Save and new</source>
+      </trans-unit>
+      <trans-unit id="saveNback" resname="saveNback">
+        <source>Save and go back</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
