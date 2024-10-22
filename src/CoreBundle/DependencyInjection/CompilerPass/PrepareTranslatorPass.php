@@ -21,6 +21,7 @@ declare(strict_types=1);
 
 namespace MetaModels\CoreBundle\DependencyInjection\CompilerPass;
 
+use MetaModels\BackendIntegration\PurgeTranslator;
 use MetaModels\CoreBundle\Translator\MetaModelTranslationLoader;
 use MetaModels\CoreBundle\Translator\MetaModelTranslatorConfigurator;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
@@ -62,16 +63,23 @@ final class PrepareTranslatorPass implements CompilerPassInterface
         );
 
         // We need to keep us "first" to allow others to override the values from our loader.
-        if ($container->hasDefinition('translator.default')) {
-            $translator = $container->getDefinition('translator.default');
-            /** @var array<string, list<string>> $loaders */
-            $loaders = $translator->getArgument(3);
-            $keys    = array_keys($loaders);
-            $last    = array_pop($keys);
-            if ($last === MetaModelTranslationLoader::class) {
-                $value   = array_pop($loaders);
-                $loaders = [MetaModelTranslationLoader::class => $value] + $loaders;
-                $translator->replaceArgument(3, $loaders);
+        /** @var array<string, list<string>> $loaders */
+        $loaders = $definition->getArgument(3);
+        $keys    = array_keys($loaders);
+        $last    = array_pop($keys);
+
+        if ($last === MetaModelTranslationLoader::class) {
+            $value   = array_pop($loaders);
+            $loaders = [MetaModelTranslationLoader::class => $value] + $loaders;
+            $definition->replaceArgument(3, $loaders);
+        }
+
+        if ($container->hasDefinition(PurgeTranslator::class)) {
+            $options  = $definition->getArgument(4);
+            $cacheDir = $options['cache_dir'] ?? null;
+            if (null !== $cacheDir) {
+                $purger = $container->getDefinition(PurgeTranslator::class);
+                $purger->replaceArgument('$cacheDir', $cacheDir);
             }
         }
     }

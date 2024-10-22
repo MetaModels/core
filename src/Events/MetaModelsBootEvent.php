@@ -35,6 +35,8 @@ use Symfony\Contracts\EventDispatcher\Event;
  * @see MetaModelsEvents::SUBSYSTEM_BOOT
  * @see MetaModelsEvents::SUBSYSTEM_BOOT_FRONTEND
  * @see MetaModelsEvents::SUBSYSTEM_BOOT_BACKEND
+ *
+ * @deprecated
  */
 class MetaModelsBootEvent extends Event
 {

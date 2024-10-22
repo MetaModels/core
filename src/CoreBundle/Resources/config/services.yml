@@ -330,3 +330,9 @@ services:
         $builder: '@metamodels.view_combination.input_screen_information_builder'
         $loaders: []
       tags: [ { name: translation.loader, alias: 'metamodels' } ]
+
+    MetaModels\BackendIntegration\PurgeTranslator:
+      arguments:
+        $cacheDir: ~
+        $dispatcher: '@event_dispatcher'
+      public: true
