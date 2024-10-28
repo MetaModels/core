@@ -292,7 +292,7 @@ class ToolboxFile
             );
             // @codingStandardsIgnoreEnd
             $rootDir = System::getContainer()->getParameter('kernel.project_dir');
-            assert(is_string($rootDir));
+            assert(\is_string($rootDir));
         }
         $this->rootDir = $rootDir;
 
@@ -349,11 +349,11 @@ class ToolboxFile
         // We must not allow file extensions that are globally disabled.
         $allowedDownload = StringUtil::trimsplit(',', $GLOBALS['TL_CONFIG']['allowedDownload']);
 
-        if (!is_array($acceptedExtensions)) {
+        if (!\is_array($acceptedExtensions)) {
             $acceptedExtensions = StringUtil::trimsplit(',', $acceptedExtensions);
         }
 
-        $this->acceptedExtensions = array_map('strtolower', array_intersect($allowedDownload, $acceptedExtensions));
+        $this->acceptedExtensions = \array_map('strtolower', \array_intersect($allowedDownload, $acceptedExtensions));
     }
 
     /**
@@ -555,10 +555,10 @@ class ToolboxFile
 
         $conditions = [];
         $parameters = [];
-        if (count($this->pendingIds)) {
+        if (\count($this->pendingIds)) {
             $conditions[] = $table . '.uuid IN(' .
-                            implode(',', array_fill(0, count($this->pendingIds), 'UNHEX(?)')) . ')';
-            $parameters   = array_map('bin2hex', $this->pendingIds);
+                            \implode(',', \array_fill(0, \count($this->pendingIds), 'UNHEX(?)')) . ')';
+            $parameters   = \array_map('bin2hex', $this->pendingIds);
 
             $this->pendingIds = [];
         }
@@ -571,11 +571,11 @@ class ToolboxFile
             $this->pendingPaths = [];
         }
 
-        if (!count($conditions)) {
+        if (!\count($conditions)) {
             return;
         }
 
-        $files = FilesModel::findBy([implode(' OR ', $conditions)], $parameters);
+        $files = FilesModel::findBy([\implode(' OR ', $conditions)], $parameters);
         if ($files instanceof Collection) {
             $this->addFileModels($files);
         }
@@ -601,7 +601,7 @@ class ToolboxFile
     {
         if (!$this->withDownloadKeys) {
             return UrlBuilder::fromUrl(Environment::get('request'))
-                ->setQueryParameter('file', urlencode($strFile))
+                ->setQueryParameter('file', \urlencode($strFile))
                 ->getUrl();
         }
         // Throws exception when running in CLI mode due to missing session.
@@ -609,11 +609,11 @@ class ToolboxFile
         assert($bag instanceof AttributeBagInterface);
 
         $links = $bag->has('metaModels_downloads') ? $bag->get('metaModels_downloads') : [];
-        if (!is_array($links)) {
+        if (!\is_array($links)) {
             $links = [];
         }
         if (!isset($links[$strFile])) {
-            $links[$strFile] = md5(uniqid('', true));
+            $links[$strFile] = \md5(\uniqid('', true));
             $bag->set('metaModels_downloads', $links);
         }
 
@@ -664,7 +664,7 @@ class ToolboxFile
         $files  = [];
         $source = [];
 
-        foreach (array_keys($arrFiles) as $k) {
+        foreach (\array_keys($arrFiles) as $k) {
             $files[]  = $arrFiles[$k];
             $source[] = $arrSource[$k];
         }
@@ -727,8 +727,8 @@ class ToolboxFile
      */
     protected function addClasses(&$arrSource)
     {
-        $countFiles = count($arrSource);
-        foreach (array_keys($arrSource) as $k) {
+        $countFiles = \count($arrSource);
+        foreach (\array_keys($arrSource) as $k) {
             $arrSource[$k]['class'] = (($k === 0) ? ' first' : '') .
                                       (($k === ($countFiles - 1)) ? ' last' : '') .
                                       ((($k % 2) === 0) ? ' even' : ' odd');
@@ -750,7 +750,7 @@ class ToolboxFile
             return ['files' => [], 'source' => []];
         }
 
-        uasort($arrFiles, [$this, ($blnAscending) ? 'basenameNatcasecmp' : 'basenameNatcasercmp']);
+        \uasort($arrFiles, ($blnAscending) ? '\basename_natcasecmp' : '\basename_natcasercmp');
 
         return $this->remapSorting($arrFiles, $this->outputBuffer);
     }
@@ -772,9 +772,9 @@ class ToolboxFile
         }
 
         if ($blnAscending) {
-            array_multisort($arrFiles, SORT_NUMERIC, $arrDates, SORT_ASC);
+            \array_multisort($arrFiles, SORT_NUMERIC, $arrDates, SORT_ASC);
         } else {
-            array_multisort($arrFiles, SORT_NUMERIC, $arrDates, SORT_DESC);
+            \array_multisort($arrFiles, SORT_NUMERIC, $arrDates, SORT_DESC);
         }
 
         return $this->remapSorting($arrFiles, $this->outputBuffer);
@@ -793,7 +793,7 @@ class ToolboxFile
         if (!$fileMap) {
             return ['files' => [], 'source' => []];
         }
-        $fileKeys = array_flip(array_keys($this->uuidMap));
+        $fileKeys = \array_flip(\array_keys($this->uuidMap));
         $sorted   = [];
         foreach ($sortIds as $sortStringId) {
             $key          = $fileKeys[$sortStringId];
@@ -820,9 +820,9 @@ class ToolboxFile
             return ['files' => [], 'source' => []];
         }
 
-        $keys  = array_keys($arrFiles);
+        $keys  = \array_keys($arrFiles);
         $files = [];
-        shuffle($keys);
+        \shuffle($keys);
         foreach ($keys as $key) {
             $files[$key] = $arrFiles[$key];
         }
@@ -882,11 +882,11 @@ class ToolboxFile
         if (($file = Input::get('file'))) {
             if ($this->withDownloadKeys) {
                 // Throws exception when running in CLI mode due to missing session.
-                $bag = $this->requestStack->getSession()->getBag('attributes');
+                $bag   = $this->requestStack->getSession()->getBag('attributes');
                 assert($bag instanceof AttributeBagInterface);
                 $links = $bag->has('metaModels_downloads') ? $bag->get('metaModels_downloads') : [];
 
-                if (!is_array($links)) {
+                if (!\is_array($links)) {
                     $links = [];
                 }
                 // Check key and return 403 if mismatch
@@ -977,13 +977,13 @@ class ToolboxFile
     public static function convertValuesToMetaModels($values)
     {
         /** @psalm-suppress DocblockTypeContradiction */
-        if (!is_array($values)) {
+        if (!\is_array($values)) {
             throw new InvalidArgumentException('Invalid uuid list.');
         }
 
         // Convert UUIDs to binary and clean empty values out.
-        $values = array_filter(
-            array_map(function ($fileId) {
+        $values = \array_filter(
+            \array_map(function ($fileId) {
                 return Validator::isStringUuid($fileId) ? StringUtil::uuidToBin($fileId) : $fileId;
             }, $values)
         );
@@ -1033,7 +1033,7 @@ class ToolboxFile
      */
     public static function convertUuidsOrPathsToMetaModels($values)
     {
-        $values = array_filter($values);
+        $values = \array_filter($values);
         if (empty($values)) {
             return [
                 'bin'   => [],
@@ -1045,7 +1045,7 @@ class ToolboxFile
 
         foreach ($values as $key => $value) {
             if (!(Validator::isUuid($value))) {
-                if (!is_string($value)) {
+                if (!\is_string($value)) {
                     continue;
                 }
 
@@ -1145,14 +1145,25 @@ class ToolboxFile
 
         // Prepare GD images.
         if ($information['isGdImage'] = $file->isGdImage) {
-            $information['src'] = urldecode($this->resizeImage($fileName));
+            try {
+                $information['src'] = urldecode($this->resizeImage($fileName));
+            } catch (\Throwable $exception) {
+                // Broken image, keep original path.
+                $information['src'] = urldecode($fileName);
+                $information['isGdImage'] = false;
+            }
+
             $information['lb']  = 'lb_' . $this->getLightboxId();
-            if (file_exists($this->rootDir . '/' . $information['src'])) {
-                $size              = getimagesize($this->rootDir . '/' . $information['src']);
+
+            if (
+                file_exists($this->rootDir . '/' . $information['src'])
+                && (false !== ($size = getimagesize($this->rootDir . '/' . $information['src'])))
+            ) {
                 $information['w']  = $size[0];
                 $information['h']  = $size[1];
                 $information['wh'] = $size[3];
             }
+
             $information['imageUrl'] = $fileName;
         }
 
@@ -1163,30 +1174,33 @@ class ToolboxFile
         }
 
         // Prepare the picture for provide the image size.
-        if ($file->isImage && ($information['isPicture'] = (int) ($this->resizeImages[2] ?? 0))) {
+        if ($file->isImage && ($information['isPicture'] = (bool) ($this->resizeImages[2] ?? false))) {
             $projectDir = $this->rootDir;
             /** @psalm-suppress InternalMethod */
             $staticUrl = $this->filesContext->getStaticUrl();
-            $picture   = $this->pictureFactory->create($projectDir . '/' . $file->path, $this->getResizeImages());
 
-            $information['picture'] = [
-                'alt'     => $altText,
-                'title'   => $title,
-                'img'     => $picture->getImg($projectDir, $staticUrl),
-                'sources' => $picture->getSources($projectDir, $staticUrl)
-            ];
+            try {
+                $picture   = $this->pictureFactory->create($projectDir . '/' . $file->path, $this->getResizeImages());
+                $information['picture'] = [
+                    'alt'     => $altText,
+                    'title'   => $title,
+                    'img'     => $picture->getImg($projectDir, $staticUrl),
+                    'sources' => $picture->getSources($projectDir, $staticUrl)
+                ];
 
-            $information['imageUrl'] = $fileName;
-
-            if (isset($GLOBALS['objPage']->layoutId)) {
-                $lightboxSize                   = StringUtil::deserialize(
-                    (LayoutModel::findByPk($GLOBALS['objPage']->layoutId)->lightboxSize ?? null),
-                    true
-                );
-                $lightboxPicture                =
-                    $this->pictureFactory->create($projectDir . '/' . $file->path, $lightboxSize);
-                $information['lightboxPicture'] = $lightboxPicture;
-                $information['imageUrl']        = $lightboxPicture->getImg($projectDir, $staticUrl)['src'];
+                if (isset($GLOBALS['objPage']->layoutId)) {
+                    $lightboxSize                   = StringUtil::deserialize(
+                        (LayoutModel::findByPk($GLOBALS['objPage']->layoutId)->lightboxSize ?? null),
+                        true
+                    );
+                    $lightboxPicture                =
+                        $this->pictureFactory->create($projectDir . '/' . $file->path, $lightboxSize);
+                    $information['lightboxPicture'] = $lightboxPicture;
+                    $information['imageUrl']        = $lightboxPicture->getImg($projectDir, $staticUrl)['src'];
+                }
+            } catch (\Throwable $exception) {
+                // Unreadable broken image - ignore.
+                $information['isPicture'] = false;
             }
         }
 
@@ -1225,35 +1239,5 @@ class ToolboxFile
         }
 
         return $fileName;
-    }
-
-    /**
-     * Compare two file names using a case-insensitive "natural order" algorithm
-     *
-     * @param string $a
-     * @param string $b
-     *
-     * @return integer
-     *
-     * @SuppressWarnings(PHPMD.ShortVariable)
-     */
-    private function basenameNatcasecmp(string $a, string $b): int
-    {
-        return strnatcasecmp(basename($a), basename($b));
-    }
-
-    /**
-     * Compare two file names using a case-insensitive, reverse "natural order" algorithm
-     *
-     * @param string $a
-     * @param string $b
-     *
-     * @return integer
-     *
-     * @SuppressWarnings(PHPMD.ShortVariable)
-     */
-    private function basenameNatcasercmp(string $a, string $b): int
-    {
-        return -strnatcasecmp(basename($a), basename($b));
     }
 }
