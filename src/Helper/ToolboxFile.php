@@ -1115,14 +1115,25 @@ class ToolboxFile
 
         // Prepare GD images.
         if ($information['isGdImage'] = $file->isGdImage) {
-            $information['src'] = \urldecode($this->resizeImage($fileName));
+            try {
+                $information['src'] = urldecode($this->resizeImage($fileName));
+            } catch (\Throwable $exception) {
+                // Broken image, keep original path.
+                $information['src'] = urldecode($fileName);
+                $information['isGdImage'] = false;
+            }
+
             $information['lb']  = 'lb_' . $this->getLightboxId();
-            if (\file_exists($this->rootDir . '/' . $information['src'])) {
-                $size              = \getimagesize($this->rootDir . '/' . $information['src']);
+
+            if (
+                file_exists($this->rootDir . '/' . $information['src'])
+                && (false !== ($size = getimagesize($this->rootDir . '/' . $information['src'])))
+            ) {
                 $information['w']  = $size[0];
                 $information['h']  = $size[1];
                 $information['wh'] = $size[3];
             }
+
             $information['imageUrl'] = $fileName;
         }
 
@@ -1133,30 +1144,33 @@ class ToolboxFile
         }
 
         // Prepare the picture for provide the image size.
-        if ($file->isImage && ($information['isPicture'] = (int) ($this->resizeImages[2] ?? 0))) {
+        if ($file->isImage && ($information['isPicture'] = (bool) ($this->resizeImages[2] ?? false))) {
             $projectDir = $this->rootDir;
             /** @psalm-suppress InternalMethod */
-            $staticUrl  = $this->filesContext->getStaticUrl();
-            $picture    = $this->pictureFactory->create($projectDir . '/' . $file->path, $this->getResizeImages());
+            $staticUrl = $this->filesContext->getStaticUrl();
 
-            $information['picture'] = [
-                'alt'     => $altText,
-                'title'   => $title,
-                'img'     => $picture->getImg($projectDir, $staticUrl),
-                'sources' => $picture->getSources($projectDir, $staticUrl)
-            ];
+            try {
+                $picture   = $this->pictureFactory->create($projectDir . '/' . $file->path, $this->getResizeImages());
+                $information['picture'] = [
+                    'alt'     => $altText,
+                    'title'   => $title,
+                    'img'     => $picture->getImg($projectDir, $staticUrl),
+                    'sources' => $picture->getSources($projectDir, $staticUrl)
+                ];
 
-            $information['imageUrl'] = $fileName;
-
-            if (isset($GLOBALS['objPage']->layoutId)) {
-                $lightboxSize                   = StringUtil::deserialize(
-                    (LayoutModel::findByPk($GLOBALS['objPage']->layoutId)->lightboxSize ?? null),
-                    true
-                );
-                $lightboxPicture                =
-                    $this->pictureFactory->create($projectDir . '/' . $file->path, $lightboxSize);
-                $information['lightboxPicture'] = $lightboxPicture;
-                $information['imageUrl']        = $lightboxPicture->getImg($projectDir, $staticUrl)['src'];
+                if (isset($GLOBALS['objPage']->layoutId)) {
+                    $lightboxSize                   = StringUtil::deserialize(
+                        (LayoutModel::findByPk($GLOBALS['objPage']->layoutId)->lightboxSize ?? null),
+                        true
+                    );
+                    $lightboxPicture                =
+                        $this->pictureFactory->create($projectDir . '/' . $file->path, $lightboxSize);
+                    $information['lightboxPicture'] = $lightboxPicture;
+                    $information['imageUrl']        = $lightboxPicture->getImg($projectDir, $staticUrl)['src'];
+                }
+            } catch (\Throwable $exception) {
+                // Unreadable broken image - ignore.
+                $information['isPicture'] = false;
             }
         }
 
