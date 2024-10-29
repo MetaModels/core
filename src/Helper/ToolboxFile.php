@@ -1240,4 +1240,34 @@ class ToolboxFile
 
         return $fileName;
     }
+
+    /**
+     * Compare two file names using a case-insensitive "natural order" algorithm
+     *
+     * @param string $a
+     * @param string $b
+     *
+     * @return integer
+     *
+     * @SuppressWarnings(PHPMD.ShortVariable)
+     */
+    private function basenameNatcasecmp(string $a, string $b): int
+    {
+        return strnatcasecmp(basename($a), basename($b));
+    }
+
+    /**
+     * Compare two file names using a case-insensitive, reverse "natural order" algorithm
+     *
+     * @param string $a
+     * @param string $b
+     *
+     * @return integer
+     *
+     * @SuppressWarnings(PHPMD.ShortVariable)
+     */
+    private function basenameNatcasercmp(string $a, string $b): int
+    {
+        return -strnatcasecmp(basename($a), basename($b));
+    }
 }
