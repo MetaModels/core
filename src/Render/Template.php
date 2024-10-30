@@ -457,8 +457,9 @@ class Template
         $this->arrBlocks = [];
 
         // Add start and end markers in debug mode.
-        if (Config::get('debugMode') && ('html5' === $this->strFormat)) {
-            $rootDir = System::getContainer()->getParameter('kernel.project_dir');
+        $container = System::getContainer();
+        if ($container && $container->getParameter('kernel.debug') && ('html5' === $this->strFormat)) {
+            $rootDir = $container->getParameter('kernel.project_dir');
             assert(\is_string($rootDir));
             $strRelPath =
                 \str_replace($rootDir . '/', '', (string) $this->getTemplate($this->strTemplate, $this->strFormat));
