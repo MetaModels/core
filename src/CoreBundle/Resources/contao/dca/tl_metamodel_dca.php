@@ -361,7 +361,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = [
                         'exclude'     => true,
                         'inputType'   => 'text',
                         'eval'        => [
-                            'style' => 'width:100%',
+                            'decodeEntities' => true,
+                            'style'          => 'width:100%',
                         ]
                     ],
                     'description' => [
@@ -370,7 +371,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = [
                         'exclude'     => true,
                         'inputType'   => 'text',
                         'eval'        => [
-                            'style' => 'width:100%',
+                            'decodeEntities' => true,
+                            'style'          => 'width:100%',
                         ]
                     ],
                 ],
