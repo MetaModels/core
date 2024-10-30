@@ -441,9 +441,10 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = [
             'inputType'   => 'text',
             'search'      => true,
             'eval'        => [
-                'mandatory' => true,
-                'maxlength' => 255,
-                'tl_class'  => 'w50'
+                'mandatory'         => true,
+                'useRawRequestData' => true,
+                'maxlength'         => 255,
+                'tl_class'          => 'w50'
             ],
             'sql'         => "varchar(255) NOT NULL default ''"
         ],
