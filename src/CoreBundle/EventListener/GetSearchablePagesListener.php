@@ -149,7 +149,6 @@ class GetSearchablePagesListener
             $metaModel   = $this->getMetaModel($metaModelId);
             assert($metaModel instanceof IMetaModel);
             $filterParams  = StringUtil::deserialize($config['filterparams'], true);
-            $listFilter    = $this->getListFilter($metaModel, (string) $config['filter'], $filterParams);
             $renderSetting =
                 $this->renderSettingFactory->createCollection($metaModel, (string) $config['rendersetting']);
 
@@ -180,8 +179,9 @@ class GetSearchablePagesListener
                         $langCode,
                         $renderSetting,
                         $pageDetails,
+                        (string) $config['filter'],
                         $filterAttributes,
-                        $listFilter
+                        $filterParams,
                     ) as $url
                 ) {
                     $loc   = $sitemap->createElement('loc', $url);
@@ -212,8 +212,9 @@ class GetSearchablePagesListener
         string $language,
         IRenderSettingCollection $renderSetting,
         array $pageDetails,
+        string $filterId,
         array $filterAttributes,
-        IFilter $listFilter
+        array $filterParams,
     ): Generator {
         // Save language.
         $currentLanguage = $GLOBALS['TL_LANGUAGE'];
@@ -224,6 +225,8 @@ class GetSearchablePagesListener
                 $prevLanguage = $metaModel->selectLanguage($language);
             }
             $GLOBALS['TL_LANGUAGE'] = $language;
+
+            $listFilter = $this->getListFilter($metaModel, $filterId, $filterParams);
 
             $items = $metaModel->findByFilter(
                 $listFilter,
