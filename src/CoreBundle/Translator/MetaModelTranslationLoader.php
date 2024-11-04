@@ -72,17 +72,17 @@ final class MetaModelTranslationLoader implements SymfonyLoaderInterface
     public function load($resource, string $locale, string $domain = 'messages'): MessageCatalogue
     {
         // Load tl_metamodel_item catalogue.
-        $base = $this->baseTranslator->getCatalogue($locale);
-
-        $catalog = new MessageCatalogue($locale);
-
-        foreach ($base->all('tl_metamodel_item') as $key => $value) {
-            $catalog->set($key, $value, $domain);
-        }
-
         $metaModel = $this->factory->getMetaModel($domain);
         if (null === $metaModel) {
             throw new NotFoundResourceException('Failed to load MetaModel: ' . $domain);
+        }
+
+        $catalog = new MessageCatalogue($locale);
+        $catalog->set('name', $metaModel->getName(), $domain);
+
+        $base = $this->baseTranslator->getCatalogue($locale);
+        foreach ($base->all('tl_metamodel_item') as $key => $value) {
+            $catalog->set($key, $value, $domain);
         }
 
         /**

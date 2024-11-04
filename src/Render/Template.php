@@ -25,7 +25,6 @@
 
 namespace MetaModels\Render;
 
-use Contao\Config;
 use Contao\BackendTemplate;
 use Contao\CoreBundle\Framework\Adapter;
 use Contao\FrontendTemplate;
@@ -35,8 +34,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use Exception;
 use MetaModels\Helper\ContaoController;
 use RuntimeException;
-
-use function array_key_exists;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Template class for MetaModels.
@@ -458,7 +456,11 @@ class Template
 
         // Add start and end markers in debug mode.
         $container = System::getContainer();
-        if ($container && $container->getParameter('kernel.debug') && ('html5' === $this->strFormat)) {
+        if (
+            ($container instanceof ContainerInterface)
+            && true === $container->getParameter('kernel.debug')
+            && ('html5' === $this->strFormat)
+        ) {
             $rootDir = $container->getParameter('kernel.project_dir');
             assert(\is_string($rootDir));
             $strRelPath =
