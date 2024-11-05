@@ -2,7 +2,7 @@
   <file source-language="en" datatype="plaintext" original="src/CoreBundle/Resources/translations/tl_metamodel_searchable_pages.en.xlf" target-language="de">
     <body>
       <trans-unit id="backend-module.headline" resname="backend-module.headline">
-        <source>All search settings</source>
+        <source>All indexing settings</source>
         <target>Alle Indexierungen</target>
       </trans-unit>
       <trans-unit id="id.label" resname="id.label">
@@ -18,7 +18,7 @@
         <target>Neuer Index</target>
       </trans-unit>
       <trans-unit id="new.description" resname="new.description">
-        <source>Create a new searchable page setting</source>
+        <source>Create a new indexing setting</source>
         <target>Erstellen einer neuen Indexierung.</target>
       </trans-unit>
       <trans-unit id="all.label" resname="all.label">
@@ -62,7 +62,7 @@
         <target>Name</target>
       </trans-unit>
       <trans-unit id="name.description" resname="name.description">
-        <source>Name of the searchable page setting</source>
+        <source>Name of the indexing setting</source>
         <target>Name der Einstellungen für die Indexierung</target>
       </trans-unit>
       <trans-unit id="tstamp.label" resname="tstamp.label">
@@ -74,20 +74,20 @@
         <target>Datum und Zeit der letzten Aktualisierung</target>
       </trans-unit>
       <trans-unit id="rendersetting.label" resname="rendersetting.label">
-        <source>Rendersetting</source>
+        <source>Render setting</source>
         <target>Render-Einstellung</target>
       </trans-unit>
       <trans-unit id="rendersetting.description" resname="rendersetting.description">
-        <source>Choose the rendersetting which will be used for the search rendering.</source>
-        <target>Wähle die Render-Einstellung, die bei der Indexierung verwendet werden soll. Meistens ist es sinnvoll, die Render-Einstellung für die Listenansicht zu benutzen.</target>
+        <source>Select the render setting to be used for indexing. It usually makes sense to use the render setting for the list view.</source>
+        <target>Wählen Sie die Render-Einstellung, die für die Indizierung verwendet werden soll. In der Regel ist es sinnvoll, die Render-Einstellung für die Listenansicht zu verwenden.</target>
       </trans-unit>
       <trans-unit id="filter.label" resname="filter.label">
-        <source>Filtersetting</source>
+        <source>Filter setting</source>
         <target>Filtereinstellungen</target>
       </trans-unit>
       <trans-unit id="filter.description" resname="filter.description">
-        <source>Choose the filtersetting which will be used for the search rendering.</source>
-        <target>Wähle das Filterset aus, welches bei der Indexierung verwendet werden soll. Eine Filterung ist nur dann notwendig, wenn bestimmte Seiten von der Indexierung ausgeschlossen werden sollen.</target>
+        <source>Select the filter setting to be used for indexing. The filter can be used to exclude unpublished items, for example.</source>
+        <target>Wähle die Filtereinstellung aus, welches bei der Indexierung verwendet werden soll. Mit dem Filter können z. B. unveröffentlichte Datensätze ausgeschlossen werden.</target>
       </trans-unit>
       <trans-unit id="filterparams.label" resname="filterparams.label">
         <source>Filter parameter override</source>
@@ -106,68 +106,68 @@
         <target>Grundeinstellungen</target>
       </trans-unit>
       <trans-unit id="edit.label" resname="edit.label">
-        <source>Edit searchable page</source>
+        <source>Edit indexing</source>
         <target>Indexierung bearbeiten</target>
       </trans-unit>
       <trans-unit id="edit.description" resname="edit.description">
-        <source>Edit the searchable page setting ID %id%</source>
-        <target>Indexierung ID %id% bearbeiten.</target>
+        <source>Edit the indexing setting ID %id%</source>
+        <target>Bearbeite die Indexierung ID %id%</target>
       </trans-unit>
       <trans-unit id="copy.label" resname="copy.label">
-        <source>Copy searchable page</source>
-        <target>Kopieren der Indexierung</target>
+        <source>Copy indexing</source>
+        <target>Indexierung kopieren</target>
       </trans-unit>
       <trans-unit id="copy.description" resname="copy.description">
-        <source>Copy definition of searchable page setting ID %id%</source>
-        <target>Kopieren der Definition der Indexierung ID %id%</target>
+        <source>Copy definition of indexing setting ID %id%</source>
+        <target>Kopieren der Indexierung ID %id%</target>
       </trans-unit>
       <trans-unit id="delete.label" resname="delete.label">
-        <source>Delete searchable page</source>
+        <source>Delete indexing</source>
         <target>Indexierung löschen</target>
       </trans-unit>
       <trans-unit id="delete.description" resname="delete.description">
-        <source>Delete searchable page setting ID %id%</source>
-        <target>Löschen der Indexierung ID %id%</target>
+        <source>Delete indexing setting ID %id%</source>
+        <target>Löschen Sie die Indexierung ID %id%</target>
       </trans-unit>
       <trans-unit id="delete.confirm" resname="delete.confirm">
         <source>Do you really want to delete element ID %id%?</source>
         <target>Wollen Sie wirklich die Einstellung mit der ID %id% löschen?</target>
       </trans-unit>
       <trans-unit id="show.label" resname="show.label">
-        <source>Searchable page setting details</source>
-        <target>Details der Einstellungen der Indexierung</target>
+        <source>Indexing setting details</source>
+        <target>Details der Indexierung</target>
       </trans-unit>
       <trans-unit id="show.description" resname="show.description">
-        <source>Show details of searchable page setting ID %id%</source>
-        <target>Zeigen Sie die Details der Einstellungen für die Indexierung ID %id% an.</target>
+        <source>Show details of indexing setting ID %id%</source>
+        <target>Anzeige Details der Indexierung ID %id%.</target>
       </trans-unit>
       <trans-unit id="toggle.label" resname="toggle.label">
         <source>Toggle</source>
         <target>Wechseln</target>
       </trans-unit>
       <trans-unit id="toggle.description" resname="toggle.description">
-        <source>Toggle the state of searchable page setting ID %id%</source>
-        <target>Wechseln des Status für die Einstellungen ID %id%</target>
+        <source>Toggle the state of indexing setting ID %id%</source>
+        <target>Wechseln des Status für die Indexierung ID %id%.</target>
       </trans-unit>
       <trans-unit id="settings.label" resname="settings.label">
-        <source>Searchable page settings</source>
-        <target>Einstellungen der Indexierung</target>
+        <source>Indexing settings</source>
+        <target>Indexierungseinstellungen</target>
       </trans-unit>
       <trans-unit id="settings.description" resname="settings.description">
-        <source>Edit the settings of searchable page setting ID %id%</source>
-        <target>Bearbeiten der Einstellungen der Indexierung ID %id%</target>
+        <source>Edit the settings of indexing setting ID %id%</source>
+        <target>Bearbeiten Sie die Einstellungen der Indexierung ID %id%.</target>
       </trans-unit>
       <trans-unit id="published.label" resname="published.label">
-        <source>Searchable page settings</source>
-        <target>Einstellungen Indexierung</target>
+        <source>Indexing page settings</source>
+        <target>Indexierungseinstellungen</target>
       </trans-unit>
       <trans-unit id="published.description" resname="published.description">
         <source>Published</source>
         <target>Veröffentlicht</target>
       </trans-unit>
       <trans-unit id="deleteConfirm" resname="deleteConfirm">
-        <source>Do you really want to render setting ID %id%?</source>
-        <target>Wollen Sie die Einstellung ID %id% wirklich rendern?</target>
+        <source>Do you really want indexing setting ID %id%?</source>
+        <target>Möchten Sie die Indexierung mit der ID %id% wirklich löschen?</target>
       </trans-unit>
       <trans-unit id="closeAll.label" resname="closeAll.label">
         <source>Cancel</source>
