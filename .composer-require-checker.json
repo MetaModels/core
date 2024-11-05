@@ -7,7 +7,6 @@
     "Contao\\ManagerPlugin\\Bundle\\Config\\BundleConfig",
     "Contao\\ManagerPlugin\\Bundle\\Parser\\ParserInterface",
     "Contao\\ManagerPlugin\\Routing\\RoutingPluginInterface",
-    "TL_PATH",
-    "tl_user_group"
+    "InspiredMinds\\ContaoFileUsage\\Result\\ResultInterface"
   ]
 }

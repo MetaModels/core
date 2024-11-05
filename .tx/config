@@ -10,6 +10,15 @@ resource_name          = metamodels_default
 replace_edited_strings = false
 keep_translations      = false
 
+[o:metamodels:p:metamodels-core:r:metamodels_file_usage]
+file_filter            = src/CoreBundle/Resources/translations/metamodels_file_usage.<lang>.xlf
+source_file            = src/CoreBundle/Resources/translations/metamodels_file_usage.en.xlf
+type                   = XLIFF
+minimum_perc           = 0
+resource_name          = metamodels_file_usage
+replace_edited_strings = false
+keep_translations      = false
+
 [o:metamodels:p:metamodels-core:r:metamodels_filter]
 file_filter            = src/CoreBundle/Resources/translations/metamodels_filter.<lang>.xlf
 source_file            = src/CoreBundle/Resources/translations/metamodels_filter.en.xlf

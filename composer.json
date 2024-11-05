@@ -26,7 +26,6 @@
     "email": "mail@metamodel.me",
     "issues": "https://github.com/MetaModels/core/issues",
     "wiki": "https://de.contaowiki.org/MetaModels",
-    "irc": "irc://irc.freenode.org/contao.mm",
     "source": "https://github.com/MetaModels/core"
   },
   "require": {
@@ -40,21 +39,25 @@
     "contao/core-bundle": "^5.3 <5.7",
     "discordier/justtextwidgets": "^2.0",
     "doctrine/cache": "^2.1",
-    "doctrine/dbal": "^3.6.0",
-    "doctrine/orm": "^2.17.0",
+    "doctrine/dbal": "^3.6",
+    "doctrine/doctrine-bundle": "^2.8",
+    "doctrine/orm": "^2.17",
+    "knplabs/knp-menu": "^3.1",
     "menatwork/contao-multicolumnwizard-bundle": "^3.6.8",
     "psr/container": "^2.0",
     "psr/log": "^2.0 || ^3.0",
     "symfony/asset": "^6.4",
     "symfony/cache": "^6.4",
     "symfony/config": "^6.4",
+    "symfony/cache-contracts": "^3.0",
     "symfony/console": "^6.4",
     "symfony/dependency-injection": "^6.4",
-    "symfony/deprecation-contracts": "^3.3.0",
+    "symfony/deprecation-contracts": "^3.3",
     "symfony/event-dispatcher": "^6.4",
     "symfony/event-dispatcher-contracts": "^3.0",
     "symfony/filesystem": "^6.4",
     "symfony/finder": "^6.4",
+    "symfony/framework-bundle": "^6.4",
     "symfony/http-foundation": "^6.4",
     "symfony/http-kernel": "^6.4",
     "symfony/routing": "^6.4",
@@ -63,20 +66,15 @@
     "symfony/translation": "^6.4",
     "symfony/translation-contracts": "^3.0",
     "terminal42/service-annotation-bundle": "^1.1",
-    "twig/twig": "^3.8.0"
+    "twig/twig": "^3.10.2"
   },
   "require-dev": {
     "contao/manager-bundle": "^5.3.0 <5.7.0",
     "contao/manager-plugin": "^2.8",
     "doctrine/doctrine-bundle": "^2.8.3",
+    "inspiredminds/contao-file-usage": "^3.0",
     "phpcq/runner-bootstrap": "^1.0@dev"
   },
-  "repositories": [
-    {
-      "type": "git",
-      "url": "git@github.com:zonky2/justtextwidgets.git"
-    }
-  ],
   "autoload": {
     "psr-4": {
       "MetaModels\\": "src/"

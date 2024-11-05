@@ -174,8 +174,10 @@ class SubSystemBootListener
      * @param MetaModelsBootEvent $event     The event payload.
      *
      * @return void
+     *
+     * @psalm-suppress DeprecatedClass
      */
-    private function tryDispatch($eventName, MetaModelsBootEvent $event): void
+    private function tryDispatch(string $eventName, MetaModelsBootEvent $event): void
     {
         if ($this->dispatcher->hasListeners($eventName)) {
             // @codingStandardsIgnoreStart
