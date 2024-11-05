@@ -1,0 +1,22 @@
+<?xml version="1.0" ?><xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="src/CoreBundle/Resources/translations/metamodels_file_usage.en.xlf" target-language="de">
+    <body>
+      <trans-unit id="single_usage" resname="single_usage">
+        <source>&quot;%metaModelName%&quot; in attribute &quot;%attribute%&quot;</source>
+        <target>&quot;%metaModelName%&quot; im Attribut &quot;%attribute%&quot;</target>
+      </trans-unit>
+      <trans-unit id="single_usage_translated" resname="single_usage_translated">
+        <source>&quot;%metaModelName%&quot; in attribute &quot;%attribute%&quot; in language &quot;%language%&quot;</source>
+        <target>&quot;%metaModelName%&quot; im Attribut &quot;%attribute%&quot; in Sprache &quot;%language%&quot;</target>
+      </trans-unit>
+      <trans-unit id="single_usage_edit" resname="single_usage_edit">
+        <source>Edit &quot;%metaModelName%&quot; dataset with id %id%</source>
+        <target>&quot;%metaModelName%&quot; Datensatz mit der Id %id% bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="single_usage_translated_edit" resname="single_usage_translated_edit">
+        <source>Edit &quot;%metaModelName%&quot; dataset with id %id% in language %language%</source>
+        <target>&quot;%metaModelName%&quot; Datensatz mit der Id %id% in Sprache %language% bearbeiten</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
