@@ -201,7 +201,7 @@ class GetSearchablePagesListener
      * @param IRenderSettingCollection $renderSetting    The render settings for the detail page.
      * @param array                    $pageDetails      The page information for the detail page.
      * @param array                    $filterAttributes The filter attributes.
-     * @param IFilter                  $listFilter       The list filter.
+     * @param array                    $filterParams     The filter parameters.
      *
      * @return Generator
      *
