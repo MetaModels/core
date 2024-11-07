@@ -26,4 +26,4 @@ $GLOBALS['TL_LANG']['tl_maintenance_jobs']['metamodels']['1']        = 'Löschen
 $GLOBALS['TL_LANG']['tl_maintenance_jobs']['metamodels_assets']['0'] = 'MetaModels-Assets';
 $GLOBALS['TL_LANG']['tl_maintenance_jobs']['metamodels_assets']['1'] = 'Löschen der MetaModels-Assets-Dateien (Backend Icons usw.).';
 $GLOBALS['TL_LANG']['tl_maintenance_jobs']['translator']['0']        = 'Symfony-Translator';
-$GLOBALS['TL_LANG']['tl_maintenance_jobs']['translator']['1']        = 'Leert den Symfony-Translator für die aktuell aktive Umgebungseinstellung.';
+$GLOBALS['TL_LANG']['tl_maintenance_jobs']['translator']['1']        = 'Leert den Symfony-Translator-Cache für die aktuell aktive Umgebungseinstellung.';
