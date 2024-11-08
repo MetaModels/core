@@ -72,7 +72,7 @@
     "contao/manager-bundle": "^4.13.0 <5.0",
     "contao/manager-plugin": "^2.8",
     "doctrine/doctrine-bundle": "^1.8.1 || ^2.8.3",
-    "inspiredminds/contao-file-usage": "^3.0",
+    "inspiredminds/contao-file-usage": "^3.0.1",
     "phpcq/runner-bootstrap": "^1.0@dev"
   },
   "autoload": {
