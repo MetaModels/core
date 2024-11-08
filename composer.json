@@ -32,10 +32,10 @@
     "php": "^8.2",
     "ext-dom": "*",
     "contao-community-alliance/dc-general": "^2.4@dev",
-    "contao-community-alliance/events-contao-bindings": "^5.0@dev",
+    "contao-community-alliance/events-contao-bindings": "^5.0",
     "contao-community-alliance/meta-palettes": "^2.0.10",
-    "contao-community-alliance/translator": "^2.5@dev",
-    "contao-community-alliance/url-builder": "^2.0@dev",
+    "contao-community-alliance/translator": "^2.5",
+    "contao-community-alliance/url-builder": "^2.0",
     "contao/core-bundle": "^5.3 <5.7",
     "discordier/justtextwidgets": "^2.0",
     "doctrine/cache": "^2.1",
@@ -72,7 +72,7 @@
     "contao/manager-bundle": "^5.3.0 <5.7.0",
     "contao/manager-plugin": "^2.8",
     "doctrine/doctrine-bundle": "^2.8.3",
-    "inspiredminds/contao-file-usage": "^3.0",
+    "inspiredminds/contao-file-usage": "^3.0.1",
     "phpcq/runner-bootstrap": "^1.0@dev"
   },
   "autoload": {
