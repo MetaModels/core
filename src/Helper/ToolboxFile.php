@@ -50,7 +50,6 @@ use Symfony\Component\Asset\Context\ContextInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * This class provides various methods for handling file collection within Contao.
