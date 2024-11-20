@@ -117,6 +117,10 @@ class TranslatedMetaModel extends MetaModel implements ITranslatedMetaModel
             $activeLanguage = \substr($activeLanguage, 0, 2);
         }
 
+        if (!\in_array($activeLanguage, $this->getLanguages(), true)) {
+            $activeLanguage = $this->getMainLanguage();
+        }
+
         $this->activeLanguage = $activeLanguage;
 
         return $previousLanguage;
