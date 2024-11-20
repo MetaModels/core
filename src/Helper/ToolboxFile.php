@@ -50,8 +50,8 @@ use Symfony\Component\Asset\Context\ContextInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
-
 use Throwable;
+
 use function array_fill;
 use function array_filter;
 use function array_flip;

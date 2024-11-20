@@ -33,6 +33,7 @@ $icon_locale: url('../images/icons/locale.png');
   background-image: $icon_fields;
   background-position: left center;
   background-repeat: no-repeat;
+  margin-left: 15px;
 }
 
 .header_add_all {
@@ -93,7 +94,6 @@ $icon_locale: url('../images/icons/locale.png');
   position: relative;
 }
 
-// 30, 32, 36
 input[readonly] {
   background-color: rgba(235, 235, 228, 1);
 
@@ -160,6 +160,7 @@ form[id*="tl_metamodel_"] .wizard {
     margin-top: 3px;
   }
 }
+
 
 fieldset.tl_subdca {
   padding: 0;
