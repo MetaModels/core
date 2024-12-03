@@ -51,15 +51,19 @@
       </trans-unit>
       <trans-unit id="save" resname="save">
         <source>Save</source>
+        <target>Sauvegarder </target>
       </trans-unit>
       <trans-unit id="saveNclose" resname="saveNclose">
         <source>Save and close</source>
+        <target>Sauvegarder et fermer</target>
       </trans-unit>
       <trans-unit id="saveNcreate" resname="saveNcreate">
         <source>Save and new</source>
+        <target>Sauvegarder et nouveau</target>
       </trans-unit>
       <trans-unit id="saveNback" resname="saveNback">
         <source>Save and go back</source>
+        <target>Sauvegarder et retour</target>
       </trans-unit>
       <trans-unit id="editRecord" resname="editRecord">
         <source>Edit record %id%</source>

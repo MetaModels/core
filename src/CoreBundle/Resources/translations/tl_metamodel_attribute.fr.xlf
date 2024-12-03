@@ -3,77 +3,101 @@
     <body>
       <trans-unit id="backend-module.headline" resname="backend-module.headline">
         <source>All attributes</source>
+        <target>Tous les attributs</target>
       </trans-unit>
       <trans-unit id="id.label" resname="id.label">
         <source>Id</source>
+        <target>Id</target>
       </trans-unit>
       <trans-unit id="pid.label" resname="pid.label">
         <source>Pid</source>
+        <target>Pid</target>
       </trans-unit>
       <trans-unit id="sorting.label" resname="sorting.label">
         <source>Sorting</source>
+        <target>Triage</target>
       </trans-unit>
       <trans-unit id="tstamp.label" resname="tstamp.label">
         <source>Revision date</source>
+        <target>Date de révision</target>
       </trans-unit>
       <trans-unit id="new.label" resname="new.label">
         <source>New attribute</source>
+        <target>Nouvel attribut</target>
       </trans-unit>
       <trans-unit id="new.description" resname="new.description">
         <source>Create a new attribute</source>
+        <target>Créer un nouvel attribut</target>
       </trans-unit>
       <trans-unit id="all.label" resname="all.label">
         <source>Edit multiple</source>
+        <target>Édition multiple</target>
       </trans-unit>
       <trans-unit id="all.description" resname="all.description">
         <source>Edit multiple elements at once</source>
+        <target>Modifier plusieurs éléments à la fois</target>
       </trans-unit>
       <trans-unit id="pastenew.label" resname="pastenew.label">
         <source>Create a new element at the top</source>
+        <target>Créer un nouvel élément en haut de page</target>
       </trans-unit>
       <trans-unit id="pastenew.description" resname="pastenew.description">
         <source>Create a new element after element ID %id%</source>
+        <target>Créer un nouvel élément après l'élément avec l'ID %id%</target>
       </trans-unit>
       <trans-unit id="pasteafter.label" resname="pasteafter.label">
         <source>Paste at the top</source>
+        <target>Coller en haut</target>
       </trans-unit>
       <trans-unit id="pasteafter.description" resname="pasteafter.description">
         <source>Paste after element ID %id%</source>
+        <target>Coller après l'élément avec l'ID %id%</target>
       </trans-unit>
       <trans-unit id="backBT" resname="backBT">
         <source>Go back</source>
+        <target>Retour</target>
       </trans-unit>
       <trans-unit id="backBTTitle" resname="backBTTitle">
         <source>Back to the previous page</source>
+        <target>Retour à la page précédente</target>
       </trans-unit>
       <trans-unit id="type.label" resname="type.label">
         <source>Attribute type</source>
+        <target>Type d'attribut</target>
       </trans-unit>
       <trans-unit id="type.description" resname="type.description">
         <source>Select the type of this attribute. WARNING: if you change this, all existing data within this attribute
           will be deleted.
         </source>
+        <target>Sélectionnez le type de cet attribut. ATTENTION : si vous modifiez ce type d'attribut, toutes les données existantes dans cet attribut seront supprimées.</target>
       </trans-unit>
       <trans-unit id="name.label" resname="name.label">
         <source>Name</source>
+        <target>Nom</target>
       </trans-unit>
       <trans-unit id="name.description" resname="name.description">
         <source>Human readable name</source>
+        <target>Nom lisible par l'humain</target>
       </trans-unit>
       <trans-unit id="description.label" resname="description.label">
         <source>Description</source>
+        <target>Déscription</target>
       </trans-unit>
       <trans-unit id="description.description" resname="description.description">
         <source>Human readable description</source>
+        <target>Déscription lisible par l'humain</target>
       </trans-unit>
       <trans-unit id="colname.label" resname="colname.label">
         <source>Column name</source>
+        <target>Nom de colonne</target>
       </trans-unit>
       <trans-unit id="colname.description" resname="colname.description">
         <source>Internal reference name for this attribute</source>
+        <target>Nom de référence interne pour cet attribut</target>
       </trans-unit>
       <trans-unit id="isvariant.label" resname="isvariant.label">
         <source>Enable variant override</source>
+        <target>Activer l'annulation des variantes</target>
       </trans-unit>
       <trans-unit id="isvariant.description" resname="isvariant.description">
         <source>Check this, if you want variants within the MetaModel to override the parent item's value</source>
@@ -81,80 +105,106 @@
       </trans-unit>
       <trans-unit id="isunique.label" resname="isunique.label">
         <source>Unique values</source>
+        <target>Valeurs uniques</target>
       </trans-unit>
       <trans-unit id="isunique.description" resname="isunique.description">
         <source>Check this, if you want to ensure that each value only occurs once</source>
+        <target>Cochez cette case si vous voulez vous assurer que chaque valeur n'apparaît qu'une seule fois.</target>
       </trans-unit>
       <trans-unit id="name_langcode" resname="name_langcode">
         <source>Language</source>
+        <target>Langue</target>
       </trans-unit>
       <trans-unit id="name_value" resname="name_value">
         <source>Description</source>
+        <target>Déscription</target>
       </trans-unit>
       <trans-unit id="title_legend" resname="title_legend">
         <source>Type, naming and base attribute configuration</source>
+        <target>Configuration des types, des noms et des attributs de base</target>
       </trans-unit>
       <trans-unit id="advanced_legend" resname="advanced_legend">
         <source>Advanced settings</source>
+        <target>Paramètres avancés</target>
       </trans-unit>
       <trans-unit id="edit.label" resname="edit.label">
         <source>Edit attribute</source>
+        <target>Modifier l'attribut</target>
       </trans-unit>
       <trans-unit id="closeAll.label" resname="closeAll.label">
         <source>Cancel</source>
+        <target>Annuler</target>
       </trans-unit>
       <trans-unit id="closeAll.description" resname="closeAll.description">
         <source>Cancel multiple processing.</source>
+        <target>Annuler l'édition multiple</target>
       </trans-unit>
       <trans-unit id="edit.description" resname="edit.description">
         <source>Edit attribute ID %id%</source>
+        <target>Modifier l'attribut ID %id%</target>
       </trans-unit>
       <trans-unit id="cut.label" resname="cut.label">
         <source>Cut attribute definition</source>
+        <target>Couper la définition de l'attribut</target>
       </trans-unit>
       <trans-unit id="cut.description" resname="cut.description">
         <source>Cut definition of attribute ID %id%</source>
+        <target>Couper la définition de l'attribut ID %id%</target>
       </trans-unit>
       <trans-unit id="copy.label" resname="copy.label">
         <source>Copy attribute definition</source>
+        <target>Copier la définition de l'attribut</target>
       </trans-unit>
       <trans-unit id="copy.description" resname="copy.description">
         <source>Copy definition of attribute ID %id%</source>
+        <target>Copier la définition de l'attribut ID %id%</target>
       </trans-unit>
       <trans-unit id="delete.label" resname="delete.label">
         <source>Delete attribute</source>
+        <target>Supprimer l'attribut</target>
       </trans-unit>
       <trans-unit id="delete.description" resname="delete.description">
         <source>Delete attribute ID %id%</source>
+        <target>Supprimer l'attribut ID %id%</target>
       </trans-unit>
       <trans-unit id="delete.confirm" resname="delete.confirm">
         <source>Do you really want to delete element ID %id%?</source>
+        <target>Voulez-vous vraiment supprimer l'élément ID %id% ?</target>
       </trans-unit>
       <trans-unit id="show.label" resname="show.label">
         <source>Attribute details</source>
+        <target>Détails de l'attribut</target>
       </trans-unit>
       <trans-unit id="show.description" resname="show.description">
         <source>Show details of attribute ID %id%</source>
+        <target>Afficher les détails de l'attribut ID %id%</target>
       </trans-unit>
       <trans-unit id="editheader.label" resname="editheader.label">
         <source>Edit attribute</source>
+        <target>Editer l'attribut</target>
       </trans-unit>
       <trans-unit id="editheader.description" resname="editheader.description">
         <source>Edit the attribute</source>
+        <target>Editer l'attribut</target>
       </trans-unit>
       <trans-unit id="error_unknown_attribute.label" resname="error_unknown_attribute.label">
         <source>Unknown attribute!</source>
+        <target>Attribut inconnu !</target>
       </trans-unit>
       <trans-unit id="error_unknown_attribute.description" resname="error_unknown_attribute.description">
         <source>Extension missing? The attribute type &quot;%id%&quot; is not installed.</source>
+        <target>Extension manquante ? Le type d'attribut « %id% » n'est pas installé.</target>
       </trans-unit>
       <trans-unit id="deleteConfirm" resname="deleteConfirm">
         <source>Do you really want to delete attribute ID %id%?</source>
+        <target>Voulez-vous vraiment supprimer l'attribut ID %id% ?</target>
       </trans-unit>
       <trans-unit id="hint_schema_manager" resname="hint_schema_manager">
         <source>After creating an attribute, the database must be migrated (console, Contao Manager) - even if the
           column name is changed. When changing the column name, the user data itself must be transferred.
         </source>
+        <target>Après la création d'un attribut, la base de données doit être migrée (console, Contao Manager) - même si le nom de la colonne est modifié.
+En cas de modification du nom de la colonne, les données de l'utilisateur doivent être transférées.</target>
       </trans-unit>
       <trans-unit id="newRecord" resname="newRecord">
         <source>Create a new item</source>
@@ -162,30 +212,39 @@
       </trans-unit>
       <trans-unit id="editRecord" resname="editRecord">
         <source>Edit record %id%</source>
+        <target>Modifier l'enregistrement %id%</target>
       </trans-unit>
       <trans-unit id="showRecord" resname="showRecord">
         <source>Show the details of record %id%</source>
+        <target>Afficher les détails de l'enregistrement %id%</target>
       </trans-unit>
       <trans-unit id="save" resname="save">
         <source>Save</source>
+        <target>Sauvegarder</target>
       </trans-unit>
       <trans-unit id="saveNclose" resname="saveNclose">
         <source>Save and close</source>
+        <target>Sauvegarder et fermer</target>
       </trans-unit>
       <trans-unit id="saveNcreate" resname="saveNcreate">
         <source>Save and new</source>
+        <target>Sauvegarder et nouveau</target>
       </trans-unit>
       <trans-unit id="saveNback" resname="saveNback">
         <source>Save and go back</source>
+        <target>Sauvegarder et retour</target>
       </trans-unit>
       <trans-unit id="ERR.columnExists" resname="ERR.columnExists">
         <source>Column &quot;%col_name%&quot; already exists on table &quot;%table_name%&quot;.</source>
+        <target>La colonne «%col_name% » existe déjà dans la table «%table_name% ».</target>
       </trans-unit>
       <trans-unit id="ERR.invalidColumnName" resname="ERR.invalidColumnName">
         <source>The column name &quot;%col_name%&quot; is invalid.</source>
+        <target>Le nom de la colonne « %col_name% » n'est pas valide.</target>
       </trans-unit>
       <trans-unit id="ERR.systemColumn" resname="ERR.systemColumn">
         <source>The column name &quot;%col_name%&quot; is reserved for system use.</source>
+        <target>Le nom de la colonne « %col_name% » est réservé à l'usage du système.</target>
       </trans-unit>
     </body>
   </file>
