@@ -3,12 +3,15 @@
     <body>
       <trans-unit id="backend-module.headline" resname="backend-module.headline">
         <source>All filter settings</source>
+        <target>Tous les paramètres du filtre</target>
       </trans-unit>
       <trans-unit id="id.label" resname="id.label">
         <source>Id</source>
+        <target>Id</target>
       </trans-unit>
       <trans-unit id="pid.label" resname="pid.label">
         <source>Pid</source>
+        <target>Pid</target>
       </trans-unit>
       <trans-unit id="sorting.label" resname="sorting.label">
         <source>Sorting</source>
@@ -18,9 +21,11 @@
       </trans-unit>
       <trans-unit id="new.label" resname="new.label">
         <source>New filter setting</source>
+        <target>Nouveaux paramètres du filtre</target>
       </trans-unit>
       <trans-unit id="new.description" resname="new.description">
         <source>Create a new filter setting</source>
+        <target>Créer de nouveaux paramètres du filtre</target>
       </trans-unit>
       <trans-unit id="all.label" resname="all.label">
         <source>Edit multiple</source>
@@ -54,12 +59,14 @@
       </trans-unit>
       <trans-unit id="list_label.label" resname="list_label.label">
         <source>Filter settings</source>
+        <target>Paramètres du filtre</target>
       </trans-unit>
       <trans-unit id="fid.label" resname="fid.label">
         <source>Parent collection</source>
       </trans-unit>
       <trans-unit id="fid.description" resname="fid.description">
         <source>The collection of filter settings, this setting belongs to.</source>
+        <target>La collection de paramètres de filtre à laquelle ce paramètre appartient.</target>
       </trans-unit>
       <trans-unit id="type.label" resname="type.label">
         <source>Type</source>
@@ -72,12 +79,14 @@
       </trans-unit>
       <trans-unit id="enabled.description" resname="enabled.description">
         <source>Enable this filter setting.</source>
+        <target>Activer ces paramètres de filtrage</target>
       </trans-unit>
       <trans-unit id="comment.label" resname="comment.label">
         <source>Comment</source>
       </trans-unit>
       <trans-unit id="comment.description" resname="comment.description">
         <source>A short comment for describing the purpose of this filter setting.</source>
+        <target>Un bref commentaire décrivant l'objectif de ce paramètre de filtre.</target>
       </trans-unit>
       <trans-unit id="attr_id.label" resname="attr_id.label">
         <source>Attribute</source>
@@ -100,6 +109,7 @@
         <source>Check if you want to allow this filter value to be emtpy, if checked and the parameter holds an empty
           value, this filter rule will behave as if it was not defined.
         </source>
+        <target>Vérifier si vous voulez autoriser cette valeur de filtre à être émise, si la case est cochée et que le paramètre contient une valeur vide, cette règle de filtrage se comportera comme si elle n'avait pas été définie.</target>
       </trans-unit>
       <trans-unit id="stop_after_match.label" resname="stop_after_match.label">
         <source>Stop after first match</source>
@@ -108,6 +118,7 @@
         <source>Check if you want this filter setting to stop executing its child rules after the first subset returned
           matches.
         </source>
+        <target>Cochez cette case si vous souhaitez que ce paramètre de filtrage cesse d'exécuter ses règles enfant après que le premier sous-ensemble renvoyé correspond.</target>
       </trans-unit>
       <trans-unit id="urlparam.label" resname="urlparam.label">
         <source>URL parameter</source>
@@ -131,6 +142,7 @@
       </trans-unit>
       <trans-unit id="fe_widget.description" resname="fe_widget.description">
         <source>Check if you want to display a filter widget in the Frontend.</source>
+        <target>Cochez si vous souhaitez afficher un widget de filtre dans l'interface publique.</target>
       </trans-unit>
       <trans-unit id="customsql.label" resname="customsql.label">
         <source>Custom SQL Query</source>
@@ -149,12 +161,14 @@
       </trans-unit>
       <trans-unit id="template.description" resname="template.description">
         <source>Sub template for this filter element. Standard: form widget.</source>
+        <target>Sous-modèle pour cet élément de filtre. Standard : widget de formulaire.</target>
       </trans-unit>
       <trans-unit id="blankoption.label" resname="blankoption.label">
         <source>Empty option</source>
       </trans-unit>
       <trans-unit id="blankoption.description" resname="blankoption.description">
         <source>Show empty options in filter widget.</source>
+        <target>Afficher les options vides dans le widget du filtre.</target>
       </trans-unit>
       <trans-unit id="onlyused.label" resname="onlyused.label">
         <source>Assigned values only</source>
@@ -167,15 +181,19 @@
       </trans-unit>
       <trans-unit id="onlypossible.description" resname="onlypossible.description">
         <source>Show only options, that are still assigned somewhere after the actual filter is set.</source>
+        <target>N'afficher que les options qui sont encore affectées quelque part après l'application du filtre.</target>
       </trans-unit>
       <trans-unit id="skipfilteroptions.label" resname="skipfilteroptions.label">
         <source>Ignore this filter for the remaining values</source>
+        <target>Ignorer ce filtre pour les valeurs restantes</target>
       </trans-unit>
       <trans-unit id="skipfilteroptions.description" resname="skipfilteroptions.description">
         <source>If activate the filter will return all options without itself in the filter rules.</source>
+        <target>Si cette option est activée, le filtre renverra toutes les options qui n'ont pas été définies dans les règles de filtrage.</target>
       </trans-unit>
       <trans-unit id="hide_label.label" resname="hide_label.label">
         <source>Hide label in filter widget</source>
+        <target>Masquer l'étiquette dans le widget du filtre</target>
       </trans-unit>
       <trans-unit id="hide_label.description" resname="hide_label.description">
         <source>If active, the label is not output.</source>
@@ -191,6 +209,7 @@
       </trans-unit>
       <trans-unit id="apply_sorting.description" resname="apply_sorting.description">
         <source>Please enter sorting of values in filter widget.</source>
+        <target>Veuillez indiquer le tri des valeurs dans le widget de filtrage.</target>
       </trans-unit>
       <trans-unit id="cssID.label" resname="cssID.label">
         <source>CSS ID/class</source>
@@ -224,39 +243,49 @@
       </trans-unit>
       <trans-unit id="fefilter_legend" resname="fefilter_legend">
         <source>Frontend filter</source>
+        <target>Filtre pour l'interface publique</target>
       </trans-unit>
       <trans-unit id="edit.label" resname="edit.label">
         <source>Edit setting</source>
       </trans-unit>
       <trans-unit id="edit.description" resname="edit.description">
         <source>Edit the filter setting ID %id%</source>
+        <target>Modifier les paramètres du filtre ID %id%</target>
       </trans-unit>
       <trans-unit id="copy.label" resname="copy.label">
         <source>Copy filter setting definition</source>
+        <target>Copier la définition des paramètres du filtre </target>
       </trans-unit>
       <trans-unit id="copy.description" resname="copy.description">
         <source>Copy the filter setting ID %id%</source>
+        <target>Copier les paramètres du filtre ID %id%</target>
       </trans-unit>
       <trans-unit id="cut.label" resname="cut.label">
         <source>Cut filter setting definition</source>
+        <target>Couper la définition des paramètres du filtre </target>
       </trans-unit>
       <trans-unit id="cut.description" resname="cut.description">
         <source>Cut the filter setting ID %id%</source>
+        <target>Couper la définition des paramètres du filtre ID %id%</target>
       </trans-unit>
       <trans-unit id="delete.label" resname="delete.label">
         <source>Delete filter setting</source>
+        <target>Supprimer ses paramètres du filtre </target>
       </trans-unit>
       <trans-unit id="delete.description" resname="delete.description">
         <source>Delete the filter setting ID %id%</source>
+        <target>Supprimer ses paramètres du filtre ID %id%</target>
       </trans-unit>
       <trans-unit id="delete.confirm" resname="delete.confirm">
         <source>Do you really want to delete element ID %id%?</source>
       </trans-unit>
       <trans-unit id="show.label" resname="show.label">
         <source>Filter setting details</source>
+        <target>Détails du paramétrage du filtre</target>
       </trans-unit>
       <trans-unit id="show.description" resname="show.description">
         <source>Show details of filter setting ID %id%</source>
+        <target>Afficher les détails du paramétrage du filtre ID %id%</target>
       </trans-unit>
       <trans-unit id="toggle.label" resname="toggle.label">
         <source>Toggle</source>
@@ -314,6 +343,7 @@
       </trans-unit>
       <trans-unit id="deleteConfirm" resname="deleteConfirm">
         <source>Do you really want to delete filter setting ID %id%?</source>
+        <target>Voulez-vous vraiment supprimer le paramètrage du filtre ID %id% ?</target>
       </trans-unit>
       <trans-unit id="closeAll.label" resname="closeAll.label">
         <source>Cancel</source>
@@ -326,15 +356,19 @@
       </trans-unit>
       <trans-unit id="save" resname="save">
         <source>Save</source>
+        <target>Sauvegarder </target>
       </trans-unit>
       <trans-unit id="saveNclose" resname="saveNclose">
         <source>Save and close</source>
+        <target>Sauvegarder et fermer</target>
       </trans-unit>
       <trans-unit id="saveNcreate" resname="saveNcreate">
         <source>Save and new</source>
+        <target>Sauvegarder et nouveau</target>
       </trans-unit>
       <trans-unit id="saveNback" resname="saveNback">
         <source>Save and go back</source>
+        <target>Sauvegarder et retour</target>
       </trans-unit>
     </body>
   </file>
