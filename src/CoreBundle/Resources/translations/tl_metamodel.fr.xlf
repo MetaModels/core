@@ -267,7 +267,7 @@
       </trans-unit>
       <trans-unit id="itemFormatCount.label" resname="itemFormatCount.label">
         <source>{-1} Table does not exist, run migration!| {0} No items|{1} 1 item|[2,Inf[ %count% items</source>
-        <target>{-1} La table n'existe pas, exécutez la migration !! {0} Aucun élément {1}1 élément [2,Inf[ %count%éléments</target>
+        <target>{-1} La table n'existe pas, exécutez la migration !| {0} Aucun élément|{1} 1 élément|[2,Inf[ %count% éléments</target>
       </trans-unit>
       <trans-unit id="deleteConfirm" resname="deleteConfirm">
         <source>Do you really want to delete MetaModel ID %id%?</source>

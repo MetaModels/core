@@ -3,51 +3,67 @@
     <body>
       <trans-unit id="backend-module.headline" resname="backend-module.headline">
         <source>All input screens</source>
+        <target>Tous les écrans de saisie</target>
       </trans-unit>
       <trans-unit id="id.label" resname="id.label">
         <source>Id</source>
+        <target>Id</target>
       </trans-unit>
       <trans-unit id="pid.label" resname="pid.label">
         <source>Pid</source>
+        <target>Pid</target>
       </trans-unit>
       <trans-unit id="sorting.label" resname="sorting.label">
         <source>Sorting</source>
+        <target>Trier</target>
       </trans-unit>
       <trans-unit id="new.label" resname="new.label">
         <source>New input screen</source>
+        <target>Nouvel écran de saisie</target>
       </trans-unit>
       <trans-unit id="new.description" resname="new.description">
         <source>Create a new input screen</source>
+        <target>Créer un nouvel écran de saisie</target>
       </trans-unit>
       <trans-unit id="all.label" resname="all.label">
         <source>Edit multiple</source>
+        <target>Édition multiple</target>
       </trans-unit>
       <trans-unit id="all.description" resname="all.description">
         <source>Edit multiple elements at once</source>
+        <target>Modifier plusieurs éléments à la fois</target>
       </trans-unit>
       <trans-unit id="pastenew.label" resname="pastenew.label">
         <source>Create a new element at the top</source>
+        <target>Créer un nouvel élément en haut de page</target>
       </trans-unit>
       <trans-unit id="pastenew.description" resname="pastenew.description">
         <source>Create a new element after element ID %id%</source>
+        <target>Créer un nouvel élément après l'élément ID %id%</target>
       </trans-unit>
       <trans-unit id="pasteafter.label" resname="pasteafter.label">
         <source>Paste at the top</source>
+        <target>Coller en haut de la page</target>
       </trans-unit>
       <trans-unit id="pasteafter.description" resname="pasteafter.description">
         <source>Paste after element ID %id%</source>
+        <target>Coller après l'élément ID %id%</target>
       </trans-unit>
       <trans-unit id="save" resname="save">
         <source>Save</source>
+        <target>Sauvegarder</target>
       </trans-unit>
       <trans-unit id="saveNclose" resname="saveNclose">
         <source>Save and close</source>
+        <target>Sauvegarder et fermer</target>
       </trans-unit>
       <trans-unit id="saveNcreate" resname="saveNcreate">
         <source>Save and new</source>
+        <target>Sauvegarder et nouveau</target>
       </trans-unit>
       <trans-unit id="saveNback" resname="saveNback">
         <source>Save and go back</source>
+        <target>Sauvegarder et retour</target>
       </trans-unit>
       <trans-unit id="backBT" resname="backBT">
         <source>Go back</source>
@@ -152,6 +168,8 @@
         <source>Separate panel options with comma (= space) and semicolon (= new line) like
           &quot;filter;search;sort,limit&quot;.
         </source>
+        <target>Séparez les options du panel par une virgule (= espace) et un point-virgule (= nouvelle ligne) comme suit
+« filtre;recherche;tri,limite ».</target>
       </trans-unit>
       <trans-unit id="panelpicker" resname="panelpicker">
         <source>Panelpicker</source>

@@ -1,0 +1,33 @@
+<?xml version="1.0" ?><xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="src/CoreBundle/Resources/translations/metamodels_filter.en.xlf" target-language="fr">
+    <body>
+      <trans-unit id="simplelookup.label" resname="simplelookup.label">
+        <source>Filter value for attribute &quot;%id%&quot;</source>
+        <target>Valeur du filtre pour l'attribut « %id% »</target>
+      </trans-unit>
+      <trans-unit id="simplelookup.description" resname="simplelookup.description">
+        <source/>
+      </trans-unit>
+      <trans-unit id="submit" resname="submit">
+        <source>Filter</source>
+        <target>Filtre</target>
+      </trans-unit>
+      <trans-unit id="do_not_filter" resname="do_not_filter">
+        <source>No filtering</source>
+        <target>Pas de filtrage</target>
+      </trans-unit>
+      <trans-unit id="select_all" resname="select_all">
+        <source>Select all</source>
+        <target>Tout sélectionner</target>
+      </trans-unit>
+      <trans-unit id="clear_all" resname="clear_all">
+        <source>Clear all filter</source>
+        <target>Supprimer tous les filtres</target>
+      </trans-unit>
+      <trans-unit id="no_combinations" resname="no_combinations">
+        <source>(No matching combinations found.)</source>
+        <target>(Aucune combinaison n'a été trouvée).</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

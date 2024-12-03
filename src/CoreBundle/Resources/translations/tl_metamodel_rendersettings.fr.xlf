@@ -96,6 +96,7 @@
         <source>The page that shall be used as &quot;show details&quot; urls. Note that the detailed URL params will get generated
           by the filter setting that is currently in use.
         </source>
+        <target>La page qui sera utilisée comme url pour afficher les détails. Notez que les paramètres de l'URL détaillée seront générés par le filtre en cours d'utilisation.</target>
       </trans-unit>
       <trans-unit id="jumpTo_allLanguages" resname="jumpTo_allLanguages">
         <source>All languages</source>
@@ -132,6 +133,7 @@
       </trans-unit>
       <trans-unit id="jumpTo_filter.label" resname="jumpTo_filter.label">
         <source>Filter settings</source>
+        <target>Paramétrage du filtre</target>
       </trans-unit>
       <trans-unit id="jumpTo_filter.description" resname="jumpTo_filter.description">
         <source>The filter settings that define how the target (the reader/lister on the detail page) will filter the
@@ -198,6 +200,7 @@
       </trans-unit>
       <trans-unit id="show.label" resname="show.label">
         <source>Filter details</source>
+        <target>Détails du filtre</target>
       </trans-unit>
       <trans-unit id="show.description" resname="show.description">
         <source>Show details of setting ID %id%</source>
@@ -228,15 +231,19 @@
       </trans-unit>
       <trans-unit id="save" resname="save">
         <source>Save</source>
+        <target>Sauvegarder </target>
       </trans-unit>
       <trans-unit id="saveNclose" resname="saveNclose">
         <source>Save and close</source>
+        <target>Sauvegarder et fermer</target>
       </trans-unit>
       <trans-unit id="saveNcreate" resname="saveNcreate">
         <source>Save and new</source>
+        <target>Sauvegarder et nouveau</target>
       </trans-unit>
       <trans-unit id="saveNback" resname="saveNback">
         <source>Save and go back</source>
+        <target>Sauvegarder et retour</target>
       </trans-unit>
     </body>
   </file>
