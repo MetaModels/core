@@ -184,7 +184,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = [
             'cut'    => [
                 'label'       => 'cut.label',
                 'description' => 'cut.description',
-                'href'        => 'act=paste&amp;mode=cut',
                 'icon'        => 'cut.svg',
                 'attributes'  => 'onclick="Backend.getScrollOffset()"',
             ],
