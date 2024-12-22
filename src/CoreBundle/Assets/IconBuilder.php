@@ -181,9 +181,10 @@ class IconBuilder
      */
     public function convertValueToPath($varValue, $fallback)
     {
-        if (null === $varValue) {
+        if (null === $varValue || '' === $varValue) {
             return $fallback;
         }
+
         if (Validator::isUuid($varValue)) {
             /** @psalm-suppress InternalMethod - Class Adapter is internal, not the __call() method. Blame Contao. */
             $model = $this->filesAdapter->findByPk($varValue);
@@ -193,6 +194,7 @@ class IconBuilder
 
             return $fallback;
         }
+
         $checkPath = $varValue;
         if (!Path::isAbsolute($checkPath) || !str_starts_with($checkPath, $this->projectWebPath)) {
             $checkPath = $this->projectWebPath . '/' . ltrim($checkPath, '/');
