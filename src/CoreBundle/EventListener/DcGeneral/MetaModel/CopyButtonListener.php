@@ -11,9 +11,6 @@
  * This project is provided in good faith and hope to be usable by anyone.
  *
  * @package    MetaModels/core
- * @author     David Molineus <david.molineus@netzmacht.de>
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
@@ -30,9 +27,9 @@ use MetaModels\DcGeneral\Data\Model;
 use MetaModels\IItem;
 
 /**
- * Class CutButtonListener handles the cut button for a metamodels item view.
+ * Class CopyButtonListener handles the copy button for a metamodels item view.
  */
-class CutButtonListener
+class CopyButtonListener
 {
     /**
      * Handle the event.
@@ -50,17 +47,15 @@ class CutButtonListener
         $command = $event->getCommand();
         assert($command instanceof CommandInterface);
 
-        if ($command->getName() === 'cut') {
-            $sortingProperty = ViewHelpers::getManualSortingProperty($event->getEnvironment());
-
+        if ($command->getName() === 'copy') {
             /** @var Model $model */
             $model = $event->getModel();
             $item  = $model->getItem();
             assert($item instanceof IItem);
             $metamodel = $item->getMetaModel();
 
-            // Disable sorting button if sorting not set or model has variants.
-            if (null === $sortingProperty || $metamodel->hasVariants()) {
+            // Disable copy button if model has variants.
+            if ($metamodel->hasVariants()) {
                 $event->setDisabled(true);
             }
         }
