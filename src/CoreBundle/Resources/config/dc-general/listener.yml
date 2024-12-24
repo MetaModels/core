@@ -37,6 +37,13 @@ services:
                 event: dc-general.view.contao2backend.get-operation-button
                 method: handle
 
+    metamodels.copy_button_listener:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\MetaModel\CopyButtonListener
+        tags:
+            -   name: kernel.event_listener
+                event: dc-general.view.contao2backend.get-operation-button
+                method: handle
+
     metamodels.paste_button_listener:
         class: MetaModels\CoreBundle\EventListener\DcGeneral\MetaModel\PasteButtonListener
         arguments:
