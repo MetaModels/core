@@ -72,3 +72,12 @@ services:
               event: dc-general.factory.build-data-definition
               method: prepareSubPalettes
               priority: -100
+
+    MetaModels\CoreBundle\EventListener\DcGeneral\Table\FilterSetting\DeepCopyButtonListener:
+        arguments:
+            - "@metamodels.filter_setting_factory"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-operation-button
+              method: handle
+              priority: 2048

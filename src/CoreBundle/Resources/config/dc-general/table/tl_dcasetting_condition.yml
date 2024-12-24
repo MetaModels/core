@@ -71,3 +71,15 @@ services:
             - name: kernel.event_listener
               event: dc-general.view.contao2backend.manipulate-widget
               method: setValueOptionsMultiple
+
+    MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSettingCondition\DeepCopyButtonListener:
+        arguments:
+          - "@cca.dc-general.scope-matcher"
+          - "@metamodels.factory"
+          - "@database_connection"
+          - '@MetaModels\CoreBundle\DcGeneral\PropertyConditionFactory'
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-operation-button
+              method: handle
+              priority: 2048
