@@ -472,12 +472,14 @@ class InputScreenInformationBuilder
         if (!empty($legend['properties'])) {
             $result['legend' . (\count($result) + 1)] = $legend;
         }
-        if (null === $fallback) {
+
+        if (null === $fallback || \is_string($property['legendtitle'])) {
             $label = ['default' => $property['legendtitle']];
         } else {
             $label            = unserialize($property['legendtitle'], ['allowed_classes' => false]);
             $label['default'] = $label[$fallback];
         }
+
         $legend = [
             'label'      => $label,
             'hide'       => (bool) $property['legendhide'],
