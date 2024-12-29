@@ -26,9 +26,21 @@ use Contao\StringUtil;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
+use InvalidArgumentException;
 use MetaModels\IFactory;
 use MetaModels\IMetaModel;
 use MetaModels\ITranslatedMetaModel;
+
+use function array_filter;
+use function array_flip;
+use function array_key_exists;
+use function array_map;
+use function array_merge;
+use function array_slice;
+use function count;
+use function is_string;
+use function sprintf;
+use function str_starts_with;
 
 /**
  * This class obtains information from the database about input screens.
@@ -100,7 +112,7 @@ class InputScreenInformationBuilder
      */
     public function fetchInputScreens($idList): array
     {
-        $idList  = \array_filter($idList);
+        $idList  = array_filter($idList);
         $builder = $this->connection->createQueryBuilder();
         $screens = $builder
             ->select('d.*')
@@ -113,7 +125,7 @@ class InputScreenInformationBuilder
             ->fetchAllAssociative();
 
         $result = [];
-        $keys   = \array_flip($idList);
+        $keys   = array_flip($idList);
         foreach ($screens as $screen) {
             $metaModelName          = $keys[$screen['id']];
             $result[$metaModelName] = $this->prepareInputScreen($metaModelName, $screen);
@@ -138,12 +150,12 @@ class InputScreenInformationBuilder
      *   legends: array,
      * }
      *
-     * @throws \InvalidArgumentException When the MetaModel can not be retrieved.
+     * @throws InvalidArgumentException When the MetaModel can not be retrieved.
      */
     private function prepareInputScreen(string $modelName, array $screen): array
     {
         if (null === $metaModel = $this->factory->getMetaModel($modelName)) {
-            throw new \InvalidArgumentException('Could not retrieve MetaModel ' . $modelName);
+            throw new InvalidArgumentException('Could not retrieve MetaModel ' . $modelName);
         }
         $caption     = ['' => $metaModel->getName()];
         $description = ['' => ''];
@@ -201,13 +213,13 @@ class InputScreenInformationBuilder
             $conditionPid       = $condition['pid'];
             $conditionSettingId = $condition['settingId'];
             // Check if already mapped, if so, we need to set the values.
-            if (\array_key_exists($conditionId, $conditionMap)) {
+            if (array_key_exists($conditionId, $conditionMap)) {
                 $converted = &$conditionMap[$conditionId];
                 foreach ($condition as $key => $value) {
                     $converted[$key] = $value;
                 }
             } else {
-                $converted                  = \array_slice($condition, 0);
+                $converted                  = array_slice($condition, 0);
                 $conditionMap[$conditionId] = &$converted;
             }
             // Is on root level - add to setting now.
@@ -242,7 +254,7 @@ class InputScreenInformationBuilder
     {
         $builder = $this->connection->createQueryBuilder();
 
-        return \array_map(
+        return array_map(
             static function ($column) use ($inputScreenId, $metaModel) {
                 if ('attribute' !== $column['dcatype']) {
                     return $column;
@@ -258,7 +270,7 @@ class InputScreenInformationBuilder
                     return $column;
                 }
 
-                $column = \array_merge(
+                $column = array_merge(
                     $column,
                     $attribute->getFieldDefinition($column),
                     ['col_name' => $attribute->getColName()]
@@ -319,7 +331,7 @@ class InputScreenInformationBuilder
     {
         $builder = $this->connection->createQueryBuilder();
 
-        return \array_map(
+        return array_map(
             static function ($information) use ($inputScreenId, $metaModel) {
                 $information['isdefault']      = (bool)$information['isdefault'];
                 $information['ismanualsort']   = (bool)$information['ismanualsort'];
@@ -332,7 +344,7 @@ class InputScreenInformationBuilder
                     if (!($attribute = $metaModel->getAttributeById((int)$information['rendersortattr']))) {
                         // @codingStandardsIgnoreStart
                         @trigger_error(
-                            \sprintf(
+                            sprintf(
                                 'Unknown attribute "%1$s" in group sorting "%2$s.%3$s"',
                                 $information['rendersortattr'],
                                 $inputScreenId,
@@ -419,7 +431,7 @@ class InputScreenInformationBuilder
             }
         }
         if (!empty($legend['properties'])) {
-            $result['legend' . (\count($result) + 1)] = $legend;
+            $result['legend' . (count($result) + 1)] = $legend;
         }
 
         return $result;
@@ -470,14 +482,19 @@ class InputScreenInformationBuilder
     private function convertLegend(array $property, ?string $fallback, $condition, array &$legend, array &$result)
     {
         if (!empty($legend['properties'])) {
-            $result['legend' . (\count($result) + 1)] = $legend;
+            $result['legend' . (count($result) + 1)] = $legend;
         }
-        if (null === $fallback) {
+
+        if (
+            null === $fallback
+            || (is_string($property['legendtitle']) && !str_starts_with($property['legendtitle'], 'a:'))
+        ) {
             $label = ['default' => $property['legendtitle']];
         } else {
             $label            = unserialize($property['legendtitle'], ['allowed_classes' => false]);
             $label['default'] = $label[$fallback];
         }
+
         $legend = [
             'label'      => $label,
             'hide'       => (bool) $property['legendhide'],
