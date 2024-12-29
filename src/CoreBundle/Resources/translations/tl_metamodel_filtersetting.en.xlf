@@ -205,6 +205,12 @@
       <trans-unit id="placeholder.description" resname="placeholder.description">
         <source>Show this text as long as the field is empty.</source>
       </trans-unit>
+      <trans-unit id="use_at_be_only.label" resname="use_at_be_only.label">
+        <source>Use SQL only at backend</source>
+      </trans-unit>
+      <trans-unit id="use_at_be_only.description" resname="use_at_be_only.description">
+        <source>If active, the SQL query is only executed in the backend - e.g. if filtering is to be used for the input mask.</source>
+      </trans-unit>
       <trans-unit id="sorting_directions.natsort_asc" resname="sorting_directions.natsort_asc">
         <source>Natural sorting (ASC)</source>
       </trans-unit>
