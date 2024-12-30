@@ -139,11 +139,21 @@ class CreateVariantButtonListener
             throw new \RuntimeException('No model id passed.');
         }
 
+        $doNotCopy  = [];
+        $properties = $environment->getDataDefinition()?->getPropertiesDefinition();
+        foreach ($properties as $property) {
+            $extras = $property->getExtra();
+            if(($extras['doNotCopy'] ?? false) === true) {
+                $doNotCopy[] = $property->getName();
+            }
+        }
+
         $model = $dataProvider
             ->createVariant(
                 $dataProvider
                     ->getEmptyConfig()
-                    ->setId($modelId->getId())
+                    ->setId($modelId->getId()),
+                $doNotCopy
             );
 
         if ($model === null) {
