@@ -207,7 +207,7 @@ class CommandBuilder
         $scrOffsetAttributes = ['attributes' => 'onclick="Backend.getScrollOffset();"'];
         $this->createCommand($collection, 'edit', ['act' => 'edit'], 'edit.svg');
         $this->createCommand($collection, 'copy', ['act' => 'copy'], 'copy.svg', $scrOffsetAttributes);
-        $this->createCommand($collection, 'cut', ['act' => 'paste', 'mode' => 'cut'], 'cut.svg', $scrOffsetAttributes);
+        $this->createCommand($collection, 'cut', ['act' => 'cut'], 'cut.svg', $scrOffsetAttributes);
         $this->createCommand(
             $collection,
             'delete',
