@@ -268,6 +268,11 @@ class DatabaseBackedListener
 
         if (isset($this->instancesByTable[$metaModelName = $event->getMetaModelName()])) {
             $event->setMetaModel($this->instancesByTable[$metaModelName]);
+            $metaModel = $event->getMetaModel();
+            if ($metaModel instanceof ITranslatedMetaModel) {
+                // @deprecated usage of TL_LANGUAGE - remove for Contao 5.0.
+                $metaModel->selectLanguage(LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE'] ?? 'en'));
+            }
 
             return;
         }

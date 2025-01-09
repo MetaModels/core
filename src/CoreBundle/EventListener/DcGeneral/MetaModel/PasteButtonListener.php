@@ -143,6 +143,7 @@ class PasteButtonListener
         }
 
         $this->checkForAction($clipboard, 'copy');
+        $this->checkForAction($clipboard, 'deepcopy');
         $this->checkForAction($clipboard, 'create');
         $this->checkForAction($clipboard, 'cut');
 
@@ -178,6 +179,7 @@ class PasteButtonListener
         }
 
         $this->checkForAction($clipboard, 'copy');
+        $this->checkForAction($clipboard, 'deepcopy');
         $this->checkForAction($clipboard, 'create');
         $this->checkForAction($clipboard, 'cut');
 
