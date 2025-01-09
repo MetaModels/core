@@ -751,11 +751,16 @@ class Driver implements MultiLanguageDataProviderInterface
      *
      * @return null|ModelInterface
      */
-    public function createVariant(ConfigInterface $objConfig)
+    public function createVariant(ConfigInterface $objConfig, $doNotCopy = [])
     {
         $item = $this->getMetaModel()->findById($objConfig->getId());
         assert($item instanceof IItem);
         $objItem = $item->varCopy();
+
+        // If a field has the eval[doNotCopy] flag set the value to null.
+        foreach ($doNotCopy as $field) {
+            $objItem->set($field, null);
+        }
 
         $model = new Model($objItem);
         $model->setMeta($model::IS_CHANGED, true);
@@ -840,7 +845,7 @@ class Driver implements MultiLanguageDataProviderInterface
     /**
      * Get the current working language.
      *
-     * @return string Short tag for the current working language like de or fr etc.
+     * @return string Short tag for the current working language like de or for etc.
      */
     public function getCurrentLanguage()
     {
