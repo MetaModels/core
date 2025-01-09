@@ -38,7 +38,7 @@ class TemplateOptionListener extends AbstractListener
      *
      * @var TemplateList
      */
-    private $templateList;
+    private TemplateList $templateList;
 
     /**
      * Create a new instance.
