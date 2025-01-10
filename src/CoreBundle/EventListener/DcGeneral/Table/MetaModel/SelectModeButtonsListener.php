@@ -26,7 +26,8 @@ use function array_key_exists;
 
 class SelectModeButtonsListener extends AbstractAbstainingListener
 {
-    public function __construct(RequestScopeDeterminator $scopeDeterminator) {
+    public function __construct(RequestScopeDeterminator $scopeDeterminator)
+    {
         parent::__construct($scopeDeterminator);
     }
 

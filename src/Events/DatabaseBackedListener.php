@@ -245,6 +245,8 @@ class DatabaseBackedListener
      * @param CreateMetaModelEvent $event The event.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function createMetaModel(CreateMetaModelEvent $event)
     {
