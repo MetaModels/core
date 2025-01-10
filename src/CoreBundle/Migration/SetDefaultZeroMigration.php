@@ -28,6 +28,17 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Schema\Table;
 
+use function array_filter;
+use function array_intersect;
+use function array_key_exists;
+use function array_map;
+use function array_values;
+use function count;
+use function implode;
+use function sprintf;
+use function str_starts_with;
+use function var_export;
+
 /**
  * This migration changes all 'pid', 'sorting', 'tstamp', 'vargroup', 'varbase' columns
  * to have zero default values.
@@ -68,6 +79,9 @@ class SetDefaultZeroMigration extends AbstractMigration
      * @var Connection
      */
     private Connection $connection;
+
+    /** @var list<string> */
+    private array $existsCache = [];
 
     /**
      * Create a new instance.
@@ -124,7 +138,7 @@ class SetDefaultZeroMigration extends AbstractMigration
             }
         }
 
-        return new MigrationResult(true, 'Adjusted column(s): ' . \implode(', ', $message));
+        return new MigrationResult(true, 'Adjusted column(s): ' . implode(', ', $message));
     }
 
     /**
@@ -143,14 +157,14 @@ class SetDefaultZeroMigration extends AbstractMigration
 
         $result = [];
         foreach ($tables as $tableName) {
-            if (!$schemaManager->tablesExist([$tableName])) {
+            if (!$this->tablesExist([$tableName])) {
                 continue;
             }
 
             $columns = $schemaManager->listTableColumns($tableName);
             foreach ($columns as $column) {
                 $columnName = $column->getName();
-                if (!\array_key_exists($columnName, self::COLUMN_NAMES)) {
+                if (!array_key_exists($columnName, self::COLUMN_NAMES)) {
                     continue;
                 }
                 $default = self::COLUMN_NAMES[$columnName]['default'];
@@ -174,12 +188,12 @@ class SetDefaultZeroMigration extends AbstractMigration
      */
     private function fetchTableNames(): array
     {
-        return \array_values(
-            \array_map(
+        return array_values(
+            array_map(
                 static fn (Table $table): string => $table->getName(),
-                \array_filter(
+                array_filter(
                     $this->connection->createSchemaManager()->listTables(),
-                    static fn (Table $table): bool => \str_starts_with($table->getName(), 'mm_')
+                    static fn (Table $table): bool => str_starts_with($table->getName(), 'mm_')
                 )
             )
         );
@@ -199,14 +213,23 @@ class SetDefaultZeroMigration extends AbstractMigration
     private function fixColumn(string $tableName, string $columnName, array $information): void
     {
         $this->connection->executeQuery(
-            \sprintf(
+            sprintf(
                 'ALTER TABLE `%1$s` CHANGE COLUMN `%2$s` `%2$s` %3$s NOT NULL DEFAULT %4$s',
                 $tableName,
                 $columnName,
                 $information['type'],
-                \var_export($information['default'], true),
+                var_export($information['default'], true),
             )
         );
     }
     // @codingStandardsIgnoreEnd
+
+    private function tablesExist(array $tableNames): bool
+    {
+        if ([] === $this->existsCache) {
+            $this->existsCache = array_values($this->connection->createSchemaManager()->listTableNames());
+        }
+
+        return count($tableNames) === count(array_intersect($tableNames, array_map('strtolower', $this->existsCache)));
+    }
 }
