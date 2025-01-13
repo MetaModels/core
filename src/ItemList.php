@@ -66,6 +66,7 @@ use function array_keys;
 use function array_merge;
 use function func_num_args;
 use function in_array;
+use function is_int;
 use function is_object;
 use function sprintf;
 use function strtoupper;
@@ -516,13 +517,33 @@ class ItemList
     /**
      * Set MetaModel and render settings.
      *
-     * @param string $intMetaModel The MetaModel to use.
-     * @param string $intView      The render settings to use (if 0, the default will be used).
+     * @param string|int $intMetaModel The MetaModel to use.
+     * @param string|int $intView      The render settings to use (if 0, the default will be used).
      *
      * @return ItemList
      */
-    public function setMetaModel(string $intMetaModel, string $intView): self
+    public function setMetaModel(string|int $intMetaModel, string|int $intView): self
     {
+        if (is_int($intMetaModel)) {
+            $intMetaModel = (string) $intMetaModel;
+            // @codingStandardsIgnoreStart Silencing errors is discouraged
+            @trigger_error(
+                'Parameter $intMetaModel in "' . __CLASS__ . '::' .__METHOD__. '" has been changed from int to string.',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+        }
+
+        if (is_int($intView)) {
+            $intView = (string) $intView;
+            // @codingStandardsIgnoreStart Silencing errors is discouraged
+            @trigger_error(
+                'Parameter $intView in "' . __CLASS__ . '::' .__METHOD__. '" has been changed from int to string.',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+        }
+
         $this->intMetaModel = $intMetaModel;
         $this->intView      = $intView;
 
@@ -670,14 +691,24 @@ class ItemList
     /**
      * Set the filter setting to use.
      *
-     * @param string $intFilter The filter setting id to use.
+     * @param string|int $intFilter The filter setting id to use.
      *
      * @return $this
      *
      * @throws RuntimeException When the filter settings can not be found.
      */
-    public function setFilterSettings(string $intFilter): self
+    public function setFilterSettings(string|int $intFilter): self
     {
+        if (is_int($intFilter)) {
+            $intFilter = (string) $intFilter;
+            // @codingStandardsIgnoreStart Silencing errors is discouraged
+            @trigger_error(
+                'Parameter $intFilter in "' . __CLASS__ . '::' .__METHOD__. '" has been changed from int to string.',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+        }
+
         $this->objFilterSettings = $this->getFilterFactory()->createCollection($intFilter);
 
         return $this;
