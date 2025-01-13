@@ -60,6 +60,7 @@ use function array_keys;
 use function array_merge;
 use function func_num_args;
 use function in_array;
+use function is_int;
 use function is_object;
 use function sprintf;
 use function strtoupper;
