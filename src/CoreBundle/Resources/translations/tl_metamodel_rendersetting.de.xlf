@@ -98,8 +98,8 @@
         <target>Attribut, auf das sich diese Einstellung bezieht.</target>
       </trans-unit>
       <trans-unit id="template.label" resname="template.label">
-        <source>Custom template to use for generating</source>
-        <target>Angepasstes Template für die Ausgabe</target>
+        <source>Template to use for generating</source>
+        <target>Template für die Ausgabe</target>
       </trans-unit>
       <trans-unit id="template.description" resname="template.description">
         <source>Select the template that shall be used for the selected attribute. Valid template files start with &quot;mm_&amp;lt;type&amp;gt;&quot;
