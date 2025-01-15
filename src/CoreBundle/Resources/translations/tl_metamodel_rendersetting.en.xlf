@@ -76,7 +76,7 @@
         <source>Attribute this setting relates to.</source>
       </trans-unit>
       <trans-unit id="template.label" resname="template.label">
-        <source>Custom template to use for generating</source>
+        <source>Template to use for generating</source>
       </trans-unit>
       <trans-unit id="template.description" resname="template.description">
         <source>Select the template that shall be used for the selected attribute. Valid template files start with "mm_&amp;lt;type&amp;gt;"
