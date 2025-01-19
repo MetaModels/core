@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Oliver Willmes <info@oliverwillmes.de>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -158,19 +158,26 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
         $scopeDeterminator = System::getContainer()?->get('cca.dc-general.scope-matcher');
         assert($scopeDeterminator instanceof RequestScopeDeterminator);
 
-        if ($this->get('use_at_be_only') && !$scopeDeterminator->currentScopeIsBackend()) {
+        $useOnlyAtEnv = $this->get('use_only_at_env') ?? false;
+
+        if (!$useOnlyAtEnv
+            || (
+                ('only_backend' === $useOnlyAtEnv && $scopeDeterminator->currentScopeIsBackend())
+                || ('only_frontend' === $useOnlyAtEnv && $scopeDeterminator->currentScopeIsFrontend())
+            )
+        ) {
+            $this->filterParameters = $arrFilterUrl;
+            $this->queryString      = $this->get('customsql');
+            $this->queryParameter   = [];
+
+            $objFilter->addFilterRule($this->getFilterRule());
+
             $this->filterParameters = [];
             $this->queryString      = '';
             $this->queryParameter   = [];
 
             return;
         }
-
-        $this->filterParameters = $arrFilterUrl;
-        $this->queryString      = $this->get('customsql');
-        $this->queryParameter   = [];
-
-        $objFilter->addFilterRule($this->getFilterRule());
 
         $this->filterParameters = [];
         $this->queryString      = '';

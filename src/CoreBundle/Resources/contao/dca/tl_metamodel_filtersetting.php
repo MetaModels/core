@@ -250,7 +250,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
         'customsql extends default'        => [
             '+config' => [
                 'customsql',
-                'use_at_be_only'
+                'use_only_at_env'
             ],
         ]
     ],
@@ -572,15 +572,16 @@ WHERE 1 = 1',
             'sql'         => 'varchar(255) NOT NULL default \'\'',
             'eval'        => ['tl_class' => 'w50']
         ],
-        'use_at_be_only'          => [
-            'label'       => 'use_at_be_only.label',
-            'description' => 'use_at_be_only.description',
+        'use_only_at_env'          => [
+            'label'       => 'use_only_at_env.label',
+            'description' => 'use_only_at_env.description',
             'exclude'     => true,
-            'inputType'   => 'checkbox',
+            'inputType'   => 'select',
             'eval'        => [
-                'tl_class'   => 'clr m12 cbx',
+                'tl_class'           => 'clr w50',
+                'includeBlankOption' => true
             ],
-            'sql'         => "char(1) NOT NULL default ''"
+            'sql'         => "varchar(255) NOT NULL default ''"
         ],
     ]
 ];
