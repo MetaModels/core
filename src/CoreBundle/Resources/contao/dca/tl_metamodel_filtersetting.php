@@ -250,7 +250,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
         'customsql extends default'        => [
             '+config' => [
                 'customsql',
-                'use_only_at_env'
+                'use_only_in_env'
             ],
         ]
     ],
@@ -572,9 +572,9 @@ WHERE 1 = 1',
             'sql'         => 'varchar(255) NOT NULL default \'\'',
             'eval'        => ['tl_class' => 'w50']
         ],
-        'use_only_at_env'          => [
-            'label'       => 'use_only_at_env.label',
-            'description' => 'use_only_at_env.description',
+        'use_only_in_env'          => [
+            'label'       => 'use_only_in_env.label',
+            'description' => 'use_only_in_env.description',
             'exclude'     => true,
             'inputType'   => 'select',
             'eval'        => [

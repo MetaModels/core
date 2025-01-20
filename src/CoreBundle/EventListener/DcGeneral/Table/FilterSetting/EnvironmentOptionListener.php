@@ -21,7 +21,6 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\FilterSetting;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
-use MetaModels\BackendIntegration\TemplateList;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -46,19 +45,19 @@ class EnvironmentOptionListener
 
         if (
             ('tl_metamodel_filtersetting' !== $dataDefinition->getName())
-            || ('use_only_at_env' !== $event->getPropertyName())
+            || ('use_only_in_env' !== $event->getPropertyName())
         ) {
             return;
         }
 
         $options = [
             'only_backend' => $this->translator->trans(
-                'use_only_at_env.only_backend',
+                'use_only_in_env.only_backend',
                 [],
                 'tl_metamodel_filtersetting'
             ),
             'only_frontend' => $this->translator->trans(
-                'use_only_at_env.only_frontend',
+                'use_only_in_env.only_frontend',
                 [],
                 'tl_metamodel_filtersetting'
             ),

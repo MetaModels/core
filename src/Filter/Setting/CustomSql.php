@@ -158,7 +158,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
         $scopeDeterminator = System::getContainer()?->get('cca.dc-general.scope-matcher');
         assert($scopeDeterminator instanceof RequestScopeDeterminator);
 
-        $useOnlyAtEnv = $this->get('use_only_at_env') ?? false;
+        $useOnlyAtEnv = $this->get('use_only_in_env') ?? false;
 
         if (!$useOnlyAtEnv
             || (
