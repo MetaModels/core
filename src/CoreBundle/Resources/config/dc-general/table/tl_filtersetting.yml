@@ -81,3 +81,11 @@ services:
               event: dc-general.view.contao2backend.get-operation-button
               method: handle
               priority: 2048
+
+    MetaModels\CoreBundle\EventListener\DcGeneral\Table\FilterSetting\EnvironmentOptionListener:
+      arguments:
+        - "@translator"
+      tags:
+        - name: kernel.event_listener
+          event: dc-general.view.contao2backend.get-property-options
+          method: handle
