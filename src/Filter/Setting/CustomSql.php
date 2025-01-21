@@ -27,6 +27,7 @@ namespace MetaModels\Filter\Setting;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use Contao\CoreBundle\InsertTag\InsertTagParser;
+use Contao\System;
 use Doctrine\DBAL\Connection;
 use InvalidArgumentException;
 use MetaModels\CoreBundle\Contao\InsertTag\ReplaceParam;
