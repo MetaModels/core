@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,7 +19,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -748,14 +748,22 @@ class Driver implements MultiLanguageDataProviderInterface
      * Fetch a variant of a single record by id.
      *
      * @param ConfigInterface $objConfig The config holding the id of the base model.
+     * @param array           $doNotCopy The array of doNotCopy.
      *
      * @return null|ModelInterface
      */
-    public function createVariant(ConfigInterface $objConfig)
+    public function createVariant(ConfigInterface $objConfig, array $doNotCopy = [])
     {
-        $item = $this->getMetaModel()->findById($objConfig->getId());
+        $metaModel = $this->getMetaModel();
+        assert($metaModel instanceof IMetaModel);
+        $item = $metaModel->findById($objConfig->getId());
         assert($item instanceof IItem);
         $objItem = $item->varCopy();
+
+        // If a field has the eval[doNotCopy] flag set the value to null.
+        foreach ($doNotCopy as $field) {
+            $objItem->set($field, null);
+        }
 
         $model = new Model($objItem);
         $model->setMeta($model::IS_CHANGED, true);
@@ -826,7 +834,7 @@ class Driver implements MultiLanguageDataProviderInterface
     /**
      * Set the current working language for the whole data provider.
      *
-     * @param string $language The new language, use short tag "2 chars like de, fr etc.".
+     * @param string $language The new language, use short tag "2 chars like de, for etc.".
      *
      * @return DataProviderInterface
      */
@@ -840,7 +848,7 @@ class Driver implements MultiLanguageDataProviderInterface
     /**
      * Get the current working language.
      *
-     * @return string Short tag for the current working language like de or fr etc.
+     * @return string Short tag for the current working language like de or for etc.
      */
     public function getCurrentLanguage()
     {

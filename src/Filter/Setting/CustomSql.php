@@ -183,15 +183,19 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      */
     public function prepareRules(IFilter $objFilter, $arrFilterUrl)
     {
-        $scopeDeterminator = System::getContainer()?->get('cca.dc-general.scope-matcher');
-        assert($scopeDeterminator instanceof RequestScopeDeterminator);
+        $scopeMatcher = System::getContainer()?->get('cca.dc-general.scope-matcher');
 
         $useOnlyAtEnv = $this->get('use_only_in_env') ?? false;
 
-        if (!$useOnlyAtEnv
+        if (
+            false === $useOnlyAtEnv
             || (
-                ('only_backend' === $useOnlyAtEnv && $scopeDeterminator->currentScopeIsBackend())
-                || ('only_frontend' === $useOnlyAtEnv && $scopeDeterminator->currentScopeIsFrontend())
+                ('only_backend' === $useOnlyAtEnv && null !== $scopeMatcher && $scopeMatcher->currentScopeIsBackend())
+                || (
+                    'only_frontend' === $useOnlyAtEnv
+                    && null !== $scopeMatcher
+                    && $scopeMatcher->currentScopeIsFrontend()
+                )
             )
         ) {
             $this->filterParameters = $arrFilterUrl;

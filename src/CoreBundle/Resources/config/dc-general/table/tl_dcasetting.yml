@@ -47,6 +47,18 @@ services:
         event: dc-general.view.contao2backend.build-widget
         method: handle
 
+  metamodels.listener.table.tl_metamodel_dcasetting.disable_always_save:
+    class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\DisableAlwaysSaveListener
+    arguments:
+      - "@cca.dc-general.scope-matcher"
+      - "@metamodels.factory"
+      - "@database_connection"
+      - "@translator"
+    tags:
+      - name: kernel.event_listener
+        event: dc-general.view.contao2backend.build-widget
+        method: handle
+
   metamodels.listener.table.tl_metamodel_dcasetting.legend_title:
     class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\LegendTitleListener
     arguments:
