@@ -223,6 +223,18 @@
       <trans-unit id="placeholder.description" resname="placeholder.description">
         <source>Show this text as long as the field is empty.</source>
       </trans-unit>
+      <trans-unit id="use_only_in_env.label" resname="use_only_in_env.label">
+        <source>Use SQL only in environment</source>
+      </trans-unit>
+      <trans-unit id="use_only_in_env.description" resname="use_only_in_env.description">
+        <source>If active, the SQL is only executed in the selected environment - e.g. for example only in the backend.</source>
+      </trans-unit>
+      <trans-unit id="use_only_in_env.only_backend" resname="use_only_in_env.only_backend">
+        <source>Only in backend</source>
+      </trans-unit>
+      <trans-unit id="use_only_in_env.only_frontend" resname="use_only_in_env.only_frontend">
+        <source>Only in frontend</source>
+      </trans-unit>
       <trans-unit id="sorting_directions.natsort_asc" resname="sorting_directions.natsort_asc">
         <source>Natural sorting (ASC)</source>
       </trans-unit>

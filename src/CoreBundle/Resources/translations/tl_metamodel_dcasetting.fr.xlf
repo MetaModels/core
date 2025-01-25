@@ -343,10 +343,13 @@
         <source>Set backend class.</source>
       </trans-unit>
       <trans-unit id="mandatory_for_unique_attr" resname="mandatory_for_unique_attr">
-        <source>Unique attribues are automatically mandatory (this is not changable).</source>
+        <source>Unique attributes are automatically mandatory (this is not changable).</source>
       </trans-unit>
       <trans-unit id="readonly_for_force_alias" resname="readonly_for_force_alias">
-        <source>Attribues with force alias are automatically readonly (this is not changable).</source>
+        <source>Attributes with force alias are automatically readonly (this is not changable).</source>
+      </trans-unit>
+      <trans-unit id="readonly_for_always_save" resname="readonly_for_always_save">
+        <source>Attributes with always save are automatically readonly (this is not changable).</source>
       </trans-unit>
       <trans-unit id="showRecord" resname="showRecord">
         <source>Show the details of record %id%</source>
