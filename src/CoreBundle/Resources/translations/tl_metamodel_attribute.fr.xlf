@@ -111,6 +111,9 @@
         <source>Check this, if you want to ensure that each value only occurs once</source>
         <target>Cochez cette case si vous voulez vous assurer que chaque valeur n'apparaît qu'une seule fois.</target>
       </trans-unit>
+      <trans-unit id="isunique.variant_error" resname="isunique.variant_error">
+        <source>The option &quot;Unique values&quot; can only be used for variants. It cannot be used for parent elements, as the value is copied to all child elements and a check for uniqueness results in an error.</source>
+      </trans-unit>
       <trans-unit id="name_langcode" resname="name_langcode">
         <source>Language</source>
         <target>Langue</target>
