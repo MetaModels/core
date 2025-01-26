@@ -86,6 +86,9 @@
       <trans-unit id="isunique.description" resname="isunique.description">
         <source>Check this, if you want to ensure that each value only occurs once</source>
       </trans-unit>
+      <trans-unit id="isunique.variant_error" resname="isunique.variant_error">
+        <source>The option "Unique values" can only be used for variants. It cannot be used for parent elements, as the value is copied to all child elements and a check for uniqueness results in an error.</source>
+      </trans-unit>
       <trans-unit id="name_langcode" resname="name_langcode">
         <source>Language</source>
       </trans-unit>
