@@ -25,7 +25,6 @@
 
 namespace MetaModels\Filter\Setting;
 
-use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use Contao\InsertTags;
 use Contao\System;
 use Doctrine\DBAL\Connection;
@@ -155,12 +154,12 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      */
     public function prepareRules(IFilter $objFilter, $arrFilterUrl)
     {
-        $scopeMatcher = System::getContainer()?->get('cca.dc-general.scope-matcher');
+        $scopeMatcher = System::getContainer()->get('cca.dc-general.scope-matcher');
 
-        $useOnlyAtEnv = $this->get('use_only_in_env') ?? false;
+        $useOnlyAtEnv = $this->get('use_only_in_env') ?? '';
 
         if (
-            false === $useOnlyAtEnv
+            '' === $useOnlyAtEnv
             || (
                 ('only_backend' === $useOnlyAtEnv && null !== $scopeMatcher && $scopeMatcher->currentScopeIsBackend())
                 || (
