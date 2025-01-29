@@ -27,6 +27,7 @@ namespace MetaModels\Filter\Setting;
 
 use Contao\InsertTags;
 use Contao\System;
+use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use Doctrine\DBAL\Connection;
 use MetaModels\CoreBundle\Contao\InsertTag\ReplaceParam;
 use MetaModels\CoreBundle\Contao\InsertTag\ReplaceTableName;
@@ -154,21 +155,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      */
     public function prepareRules(IFilter $objFilter, $arrFilterUrl)
     {
-        $scopeMatcher = System::getContainer()->get('cca.dc-general.scope-matcher');
-
-        $useOnlyAtEnv = $this->get('use_only_in_env') ?? '';
-
-        if (
-            '' === $useOnlyAtEnv
-            || (
-                ('only_backend' === $useOnlyAtEnv && null !== $scopeMatcher && $scopeMatcher->currentScopeIsBackend())
-                || (
-                    'only_frontend' === $useOnlyAtEnv
-                    && null !== $scopeMatcher
-                    && $scopeMatcher->currentScopeIsFrontend()
-                )
-            )
-        ) {
+        if ($this->isAllowedScope()) {
             $this->filterParameters = $arrFilterUrl;
             $this->queryString      = $this->get('customsql');
             $this->queryParameter   = [];
@@ -577,5 +564,20 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
             default:
                 return $this->parseInsertTagsInternal('{{' . $tag . '}}');
         }
+    }
+
+    private function isAllowedScope(): bool
+    {
+        $scopeMatcher = System::getContainer()->get('cca.dc-general.scope-matcher');
+        if (!$scopeMatcher instanceof RequestScopeDeterminator) {
+            return true;
+        }
+        $useOnlyAtEnv = (string) $this->get('use_only_in_env');
+
+        return match ($useOnlyAtEnv) {
+            'only_backend' => $scopeMatcher->currentScopeIsBackend(),
+            'only_frontend' => $scopeMatcher->currentScopeIsFrontend(),
+            default => true,
+        };
     }
 }
