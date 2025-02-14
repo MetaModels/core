@@ -37,8 +37,8 @@ final readonly class TypeHelpTextProvider implements BackendHelpProviderInterfac
                 $helpText = new HelpText(
                     '',
                     $option,
-                    'panelLayout_' . $option . '.caption',
-                    'panelLayout_' . $option . '.description',
+                    'type_' . $option . '.caption',
+                    'type_' . $option . '.description',
                     'tl_metamodel_dcasetting_condition',
                 );
                 if ($buffer[$helpText->getSection() . '_' . $helpText->getKey()] ?? false) {
