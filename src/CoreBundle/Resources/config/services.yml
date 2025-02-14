@@ -336,3 +336,23 @@ services:
         $cacheDir: ~
         $dispatcher: '@event_dispatcher'
       public: true
+
+    MetaModels\CoreBundle\BackendHelp\PanelLayoutHelpTextProvider:
+      decorates: 'cca.backend-help-provider'
+      arguments:
+        $previous: '@.inner'
+
+    MetaModels\CoreBundle\BackendHelp\TlClassHelpTextProvider:
+      decorates: 'cca.backend-help-provider'
+      arguments:
+        $previous: '@.inner'
+
+    MetaModels\CoreBundle\BackendHelp\TypeHelpTextProvider:
+      decorates: 'cca.backend-help-provider'
+      arguments:
+        $previous: '@.inner'
+
+    MetaModels\CoreBundle\BackendHelp\CustomSqlHelpTextProvider:
+      decorates: 'cca.backend-help-provider'
+      arguments:
+        $previous: '@.inner'

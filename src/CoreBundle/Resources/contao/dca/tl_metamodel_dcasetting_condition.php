@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -163,44 +163,44 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = [
             ]
         ],
         'operations'        => [
-            'edit'   => [
+            'edit'     => [
                 'label'       => 'edit.label',
                 'description' => 'edit.description',
                 'href'        => 'act=edit',
                 'icon'        => 'edit.svg'
             ],
-            'copy'   => [
+            'copy'     => [
                 'label'       => 'copy.label',
                 'description' => 'copy.description',
                 'href'        => 'act=copy',
                 'icon'        => 'copy.svg'
             ],
-            'deepcopy'   => [
+            'deepcopy' => [
                 'label'       => 'copy.label',
                 'description' => 'copy.description',
                 'href'        => 'act=deepcopy',
                 'icon'        => 'copychilds.svg'
             ],
-            'cut'    => [
+            'cut'      => [
                 'label'       => 'cut.label',
                 'description' => 'cut.description',
                 'icon'        => 'cut.svg',
                 'attributes'  => 'onclick="Backend.getScrollOffset()"',
             ],
-            'delete' => [
+            'delete'   => [
                 'label'       => 'delete.label',
                 'description' => 'delete.description',
                 'href'        => 'act=delete',
                 'icon'        => 'delete.svg',
                 'attributes'  => 'onclick="if (!confirm(this.dataset.msgConfirm)) return false; Backend.getScrollOffset();"',
             ],
-            'show'   => [
+            'show'     => [
                 'label'       => 'show.label',
                 'description' => 'show.description',
                 'href'        => 'act=show',
                 'icon'        => 'show.svg'
             ],
-            'toggle' => [
+            'toggle'   => [
                 'label'          => 'toggle.label',
                 'description'    => 'toggle.description',
                 'icon'           => 'visible.svg',
@@ -280,9 +280,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = [
                 'mandatory'          => true,
                 'tl_class'           => 'w50',
                 'chosen'             => true,
-                'helpwizard'         => true
+                'helptext'           => true
             ],
-            'explanation' => 'dcasetting_condition',
             'sql'         => "varchar(255) NOT NULL default ''"
         ],
         'enabled'   => [
