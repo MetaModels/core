@@ -279,6 +279,33 @@
       <trans-unit id="closeAll.description" resname="closeAll.description">
         <source>Cancel multiple processing.</source>
       </trans-unit>
+      <trans-unit id="panelLayout_headline" resname="panelLayout_headline">
+        <source>Add one or more panel options and separate with comma (= space) or semicolon (= new line) like "filter;search;sort,limit"</source>
+      </trans-unit>
+      <trans-unit id="panelLayout_filter.caption" resname="panelLayout_filter.caption">
+        <source>filter</source>
+      </trans-unit>
+      <trans-unit id="panelLayout_filter.description" resname="panelLayout_filter.description">
+        <source>Show the filter records menu.</source>
+      </trans-unit>
+      <trans-unit id="panelLayout_search.caption" resname="panelLayout_search.caption">
+        <source>search</source>
+      </trans-unit>
+      <trans-unit id="panelLayout_search.description" resname="panelLayout_search.description">
+        <source>Show the search records menu.</source>
+      </trans-unit>
+      <trans-unit id="panelLayout_sort.caption" resname="panelLayout_sort.caption">
+        <source>sort</source>
+      </trans-unit>
+      <trans-unit id="panelLayout_sort.description" resname="panelLayout_sort.description">
+        <source>Show the sort records menu.</source>
+      </trans-unit>
+      <trans-unit id="panelLayout_limit.caption" resname="panelLayout_limit.caption">
+        <source>limit</source>
+      </trans-unit>
+      <trans-unit id="panelLayout_limit.description" resname="panelLayout_limit.description">
+        <source>Show the limit records menu.</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>
