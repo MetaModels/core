@@ -455,6 +455,98 @@
         <source>Show the details of record %id%</source>
         <target>Zeige Details Datensatz ID %id%.</target>
       </trans-unit>
+      <trans-unit id="tl_class_headline" resname="tl_class_headline">
+        <source>Set one or more of the following CSS classes to define the layout of the widget like &quot;clr w50&quot; - &lt;a href=&quot;https://docs.contao.org/dev/reference/dca/palettes/#arranging-fields&quot; target=&quot;_blank&quot;&gt;see Contao manual&lt;/a&gt;.</source>
+        <target>Legen Sie eine oder mehrere der folgenden CSS-Klassen fest, um das Layout des Widgets wie „clr w50“ zu definieren - &lt;a href=&quot;https://docs.contao.org/dev/reference/dca/palettes/#arranging-fields&quot; target=&quot;_blank&quot;&gt;siehe Contao-Handbuch&lt;/a&gt;.</target>
+      </trans-unit>
+      <trans-unit id="tl_class_w25.caption" resname="tl_class_w25.caption">
+        <source>w25</source>
+        <target>w25</target>
+      </trans-unit>
+      <trans-unit id="tl_class_w25.description" resname="tl_class_w25.description">
+        <source>Set the field width to 25% and float it (float:left).</source>
+        <target>Setzen Sie die Breite des Feldes auf 25% und lassen Sie es floaten (float:left).</target>
+      </trans-unit>
+      <trans-unit id="tl_class_w33.caption" resname="tl_class_w33.caption">
+        <source>w33</source>
+        <target>w33</target>
+      </trans-unit>
+      <trans-unit id="tl_class_w33.description" resname="tl_class_w33.description">
+        <source>Set the field width to 33.33333333% and float it (float:left).</source>
+        <target>Setzen Sie die Breite des Feldes auf 33.33333333% und lassen Sie es floaten (float:left).</target>
+      </trans-unit>
+      <trans-unit id="tl_class_w50.caption" resname="tl_class_w50.caption">
+        <source>w50</source>
+        <target>w50</target>
+      </trans-unit>
+      <trans-unit id="tl_class_w50.description" resname="tl_class_w50.description">
+        <source>Set the field width to 50% and float it (float:left).</source>
+        <target>Setzen Sie die Breite des Feldes auf 50% und lassen Sie es floaten (float:left).</target>
+      </trans-unit>
+      <trans-unit id="tl_class_w66.caption" resname="tl_class_w66.caption">
+        <source>w66</source>
+        <target>w66</target>
+      </trans-unit>
+      <trans-unit id="tl_class_w66.description" resname="tl_class_w66.description">
+        <source>Set the field width to 66.66666666% and float it (float:left).</source>
+        <target>Setzen Sie die Breite des Feldes auf 66.66666666% und lassen Sie es floaten (float:left).</target>
+      </trans-unit>
+      <trans-unit id="tl_class_w75.caption" resname="tl_class_w75.caption">
+        <source>w75</source>
+        <target>w75</target>
+      </trans-unit>
+      <trans-unit id="tl_class_w75.description" resname="tl_class_w75.description">
+        <source>Set the field width to 75% and float it (float:left).</source>
+        <target>Setzen Sie die Breite des Feldes auf 75% und lassen Sie es floaten (float:left).</target>
+      </trans-unit>
+      <trans-unit id="tl_class_clr.caption" resname="tl_class_clr.caption">
+        <source>clr</source>
+        <target>clr</target>
+      </trans-unit>
+      <trans-unit id="tl_class_clr.description" resname="tl_class_clr.description">
+        <source>Clear all floats (clear:both). Use this for any full length field coming after a w50 field within a fieldset (see note below).</source>
+        <target>Hebt alle float-Angaben auf (clear:both). Verwenden Sie dies für jedes Feld voller Länge, das nach einem w50-Feld innerhalb eines Feldsatzes kommt (siehe Hinweis unten).</target>
+      </trans-unit>
+      <trans-unit id="tl_class_wizard.caption" resname="tl_class_wizard.caption">
+        <source>wizard</source>
+        <target>wizard</target>
+      </trans-unit>
+      <trans-unit id="tl_class_wizard.description" resname="tl_class_wizard.description">
+        <source>Shorten the input field so there is enough room for the wizard button (e.g. date picker fields).</source>
+        <target>Kürzen Sie das Eingabefeld so, dass genügend Platz für das Wizard-Icon vorhanden ist (z. B. bei Datumsauswahlfeldern).</target>
+      </trans-unit>
+      <trans-unit id="tl_class_long.caption" resname="tl_class_long.caption">
+        <source>long</source>
+        <target>long</target>
+      </trans-unit>
+      <trans-unit id="tl_class_long.description" resname="tl_class_long.description">
+        <source>Make the input field full length.</source>
+        <target>Setzt das Eingabefeld auf die volle Länge.</target>
+      </trans-unit>
+      <trans-unit id="tl_class_cbx.caption" resname="tl_class_cbx.caption">
+        <source>cbx</source>
+        <target>cbx</target>
+      </trans-unit>
+      <trans-unit id="tl_class_cbx.description" resname="tl_class_cbx.description">
+        <source>Set the field minimum height to 46 pixels (used for single checkboxes; more space at bottom).</source>
+        <target>Setzen Sie die Mindesthöhe des Feldes auf 46 Pixel (für einzelne Kontrollkästchen; mehr Platz am unteren Rand).</target>
+      </trans-unit>
+      <trans-unit id="tl_class_m12.caption" resname="tl_class_m12.caption">
+        <source>m12</source>
+        <target>m12</target>
+      </trans-unit>
+      <trans-unit id="tl_class_m12.description" resname="tl_class_m12.description">
+        <source>Adds a 17 pixels top and bottom padding to the element (used for single checkboxes; more space at top and bottom).</source>
+        <target>Fügt dem Element oben und unten eine Auffüllung von 17 Pixeln hinzu (wird für einzelne Kontrollkästchen verwendet; mehr Platz oben und unten).</target>
+      </trans-unit>
+      <trans-unit id="tl_class_cbx_m12.caption" resname="tl_class_cbx_m12.caption">
+        <source>cbx m12</source>
+        <target>cbx m12</target>
+      </trans-unit>
+      <trans-unit id="tl_class_cbx_m12.description" resname="tl_class_cbx_m12.description">
+        <source>A combination of cbx and m12 sets the minimum height of the field to 80 pixels (used for single checkboxes; more space at top and bottom).</source>
+        <target>Eine Kombination aus cbx und m12 setzt die Mindesthöhe des Feldes auf 80 Pixel (für einzelne Ankreuzfelder; mehr Platz oben und unten).</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
