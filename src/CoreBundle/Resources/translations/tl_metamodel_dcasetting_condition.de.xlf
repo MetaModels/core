@@ -253,6 +253,54 @@
         <source>Show the details of record %id%</source>
         <target>Die Details des Datensatzes %id% anzeigen</target>
       </trans-unit>
+      <trans-unit id="type_value_is.caption" resname="type_value_is.caption">
+        <source>Attribute value is...</source>
+        <target>Eigenschaftswert ist gleich ...</target>
+      </trans-unit>
+      <trans-unit id="type_value_is.description" resname="type_value_is.description">
+        <source>The condition is fulfilled when the attribute value is equal to the specified value..</source>
+        <target>Die Bedingung ist erfüllt, wenn der Attributwert gleich dem festgelegten Wert ist. Als Attribute können diejenigen mit Einfachauswahl wie z.B. Select oder Checkbox ausgewählt werden.</target>
+      </trans-unit>
+      <trans-unit id="type_values_contain.caption" resname="type_values_contain.caption">
+        <source>Attribute values contain any of...</source>
+        <target>Eigenschaftswert beinhaltet ...</target>
+      </trans-unit>
+      <trans-unit id="type_values_contain.description" resname="type_values_contain.description">
+        <source>The condition is fulfilled when any of the attribute's values matches at least one of the specified values (set intersection).</source>
+        <target>Die Bedingung ist erfüllt, wenn ein beliebiger Attributwert gleich dem jeweils festgelegten Wert ist (Schnittmenge bzw. ODER). Als Attribute können diejenigen mit Mehrfachauswahl wie z.B. Tags ausgewählt werden.</target>
+      </trans-unit>
+      <trans-unit id="type_is_visible.caption" resname="type_is_visible.caption">
+        <source>Is attribute visible...</source>
+        <target>Eigenschaft ist sichtbar ...</target>
+      </trans-unit>
+      <trans-unit id="type_is_visible.description" resname="type_is_visible.description">
+        <source>The condition is fulfilled when the condition of the specified attribute is fulfilled. In other words, the attribute is visible if, and only if, the specified attribute is visible as well.</source>
+        <target>Die Bedingung ist erfüllt, wenn alle Bedingungen für ein ausgewähltes Attribut erfüllt sind. Mit anderen Worten, das Attribut ist sichtbar, und nur dann, wenn das ausgewählte (oder &quot;referenzierte&quot;) Attribut auch sichtbar ist. Mit diesem Bedingungstyp erspart man sich das Duplizieren von erstellten Ansichtsbedingungen eines Attributs.</target>
+      </trans-unit>
+      <trans-unit id="type_or.caption" resname="type_or.caption">
+        <source>OR</source>
+        <target>ODER</target>
+      </trans-unit>
+      <trans-unit id="type_or.description" resname="type_or.description">
+        <source>Any sub condition must be fulfilled.</source>
+        <target>Eine beliebige Bedingung muss erfüllt sein.</target>
+      </trans-unit>
+      <trans-unit id="type_and.caption" resname="type_and.caption">
+        <source>AND</source>
+        <target>UND</target>
+      </trans-unit>
+      <trans-unit id="type_and.description" resname="type_and.description">
+        <source>All sub condition must be fulfilled.</source>
+        <target>Alle Bedingungen müssen erfüllt sein.</target>
+      </trans-unit>
+      <trans-unit id="type_not.caption" resname="type_not.caption">
+        <source>NOT</source>
+        <target>NICHT</target>
+      </trans-unit>
+      <trans-unit id="type_not.description" resname="type_not.description">
+        <source>Invert the result of the contained condition.</source>
+        <target>Kehrt das Ergebnis einer vorgegebenen Bedingung um.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
