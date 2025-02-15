@@ -455,6 +455,132 @@
         <source>Save and go back</source>
         <target>Speichern und zurück</target>
       </trans-unit>
+      <trans-unit id="customsql_abstract.caption" resname="customsql_abstract.caption">
+        <source>Abstract</source>
+        <target>Zusammenfassung</target>
+      </trans-unit>
+      <trans-unit id="customsql_abstract.description" resname="customsql_abstract.description">
+        <source><![CDATA[Type in any SQL query that shall be executed.<br />
+          It is required that this query returns at least one column named "id".<br />
+          It is not possible to pass calculations from the SQL to the list.<br />
+          The declaration of column names should be entered with table alias as prefix e.g. t.name.]]></source>
+        <target>Geben Sie eine beliebige SQL-Abfrage ein, die ausgeführt werden soll.&lt;br /&gt;
+Es ist erforderlich, dass diese Abfrage mindestens eine Spalte mit dem Namen &quot;id&quot; zurückgibt.&lt;br /&gt;
+Es ist nicht möglich, Berechnungen aus dem SQL an die Liste zu übergeben.&lt;br /&gt;
+Die Deklaration der Spaltennamen sollte mit dem Tabellenalias als Präfix eingegeben werden, z.B. t.name.
+</target>
+      </trans-unit>
+      <trans-unit id="customsql_example1.caption" resname="customsql_example1.caption">
+        <source><![CDATA[Example 1<br />plain query]]></source>
+        <target>Beispiel 1&lt;br /&gt;Einfache Abfrage</target>
+      </trans-unit>
+      <trans-unit id="customsql_example1.description" resname="customsql_example1.description">
+        <source><![CDATA[<pre>SELECT t.id FROM mm_mymetamodel AS t WHERE t.page_id=1</pre>
+          This selects all IDs from the table <em>mm_mymetamodel</em> that have the value <em>page_id=1</em>]]></source>
+        <target>&lt;pre&gt;SELECT t.id FROM mm_mymetamodel AS t WHERE t.page_id=1&lt;/pre&gt;
+Damit werden alle IDs aus der Tabelle &lt;em&gt;mm_mymetamodel&lt;/em&gt; ausgewählt, mit &lt;em&gt;page_id=1&lt;/em&gt;
+</target>
+      </trans-unit>
+      <trans-unit id="customsql_example2.caption" resname="customsql_example2.caption">
+        <source><![CDATA[Example 2<br />insert tablename]]></source>
+        <target>Beispiel 2&lt;br /&gt;Tabellennamen einsetzen</target>
+      </trans-unit>
+      <trans-unit id="customsql_example2.description" resname="customsql_example2.description">
+        <source><![CDATA[<pre>SELECT t.id FROM {{table}} AS t WHERE t.page_id=1</pre>
+          This is merely the same as example 1 but the table name of the current MetaModel
+          (i.e.: the <em>mm_mymetamodel</em> from above) will get inserted into the query.]]></source>
+        <target>&lt;pre&gt;SELECT t.id FROM {{table}} AS t WHERE t.page_id=1&lt;/pre&gt;
+Dies ist lediglich dasselbe wie in Beispiel 1, aber der Tabellenname des aktuellen MetaModel
+(z.B.: das &lt;em&gt;mm_mymetamodel&lt;/em&gt; von oben) wird in die Abfrage eingefügt.
+</target>
+      </trans-unit>
+      <trans-unit id="customsql_inserttags.caption" resname="customsql_inserttags.caption">
+        <source>Insert tags</source>
+        <target>Inserttags</target>
+      </trans-unit>
+      <trans-unit id="customsql_inserttags.description" resname="customsql_inserttags.description">
+        <source><![CDATA[Insert tags are supported, but keep in mind that not all tags might be available
+          when the filter setting is used (for example the <em>{{page::id}}</em> is
+          available only when used from a front end page and not from RSS-feeds).]]></source>
+        <target>Inserttags werden unterstützt. Bitte beachten, dass nicht alle Tags für alle Ausgaben verfügbar sein können. Falls eine Filtereinstellung wie zum Beispiel &lt;em&gt;{{page::id}}&lt;/em&gt; benutzt wird, dann ist der Inserttag nur für einen Seitenaufruf im Frontend und nicht für einen RRS-Feed verfügbar.</target>
+      </trans-unit>
+      <trans-unit id="customsql_secure_inserttags.caption" resname="customsql_secure_inserttags.caption">
+        <source>Secure insert tags</source>
+        <target>Sichere Inserttags</target>
+      </trans-unit>
+      <trans-unit id="customsql_secure_inserttags.description" resname="customsql_secure_inserttags.description">
+        <source><![CDATA[Secure insert tags are just like the plain insert tags, but their value get\'s escaped in the query.<br />
+          Therefore, you might be better off using the secure equivalent unless you exactly know what you are doing.<br />
+          The notation is like:<br />
+          <pre>{{secure::page::id}}</pre>]]></source>
+        <target>Sichere Inserttags funktionieren wie normale Inserttags. Allerdings werden die Werte in der Abfrage escaped.&lt;br /&gt; Eine unbedachte Nutzung kann daher zu unerwarteten Ergebnissen führen.&lt;br /&gt; Die Notation für sichere Inserttags ist wie folgt:&lt;br /&gt; &lt;pre&gt;{{secure::page::id}}&lt;/pre&gt;</target>
+      </trans-unit>
+      <trans-unit id="customsql_parameter_sources.caption" resname="customsql_parameter_sources.caption">
+        <source>Parameter sources</source>
+        <target>Parameterquellen</target>
+      </trans-unit>
+      <trans-unit id="customsql_parameter_sources.description" resname="customsql_parameter_sources.description">
+        <source><![CDATA[Parameter sources have the normal layout of:
+          <pre>{{param::[source]?[query string]}}</pre>
+          Where the source may be any of:
+          <ul>
+            <li><strong>get</strong> - HTTP GET query string</li>
+            <li><strong>post</strong> - HTTP POST fields</li>
+            <li><strong>cookie</strong> - HTTP COOKIE values</li>
+            <li><strong>session</strong> - any field in the Contao session</li>
+            <li><strong>filter</strong> - any of the passed filter parameters (for sharing paramters between filter settings).</li>
+            <li><strong>container</strong> - Name of a callable service in the MetaModels service container (this requires additional PHP coding from your side).</li>
+          </ul>
+          The Query string is built like a normal HTTP query string as "name=value" pairs which are combined using the & char and must at least contain the field "name".
+          One or more of the following optional keys may be used in addition:
+          <ul>
+            <li><strong>default</strong> - the default value to use, if there is no value available.</li>
+            <li><strong>aggregate</strong> - either "list" or "set"</li>
+            <li><strong>key</strong> - set to 1 to read the key of arrays (needs aggregate "set").</li>
+            <li><strong>recursive</strong> - set to 1 to read arrays recursive (needs aggregate "set").</li>
+            <li><strong>service</strong>  - The name of the service to retrieve (needs source "service").</li>
+          </ul>]]></source>
+        <target>Parameterquellen sind nach diesem Muster aufgebaut: &lt;pre&gt;{{param::[source]?[query string]}}&lt;/pre&gt; Eine Quelle kann bestehen aus &lt;ul&gt; &lt;li&gt;&lt;strong&gt;get&lt;/strong&gt; - HTTP GET Query-String&lt;/li&gt; &lt;li&gt;&lt;strong&gt;post&lt;/strong&gt; - HTTP POST Feldern&lt;/li&gt; &lt;li&gt;&lt;strong&gt;session&lt;/strong&gt; - einem beliebigen Feld aus der Contao-Session&lt;/li&gt; &lt;li&gt;&lt;strong&gt;filter&lt;/strong&gt; - einen beliebigen ausgeführten Filterparameter (um Filterparameter zwischen Filtereinstellungen zu teilen).&lt;/li&gt; &lt;/ul&gt; Der Abfragestring wird wie ein normaler HTTP-Query-String als &quot;name=wert&quot;-Paar aufgebaut kann mit dem Zeichen &amp; kombiniert werden und muss mindestens das Feld \'name\' enthalten. Einer oder mehrere der folgenden optionalen Schlüsselwörter können zusätzlich benutzt werden; &lt;ul&gt; &lt;li&gt;&lt;strong&gt;default&lt;/strong&gt; - der zu benutzende Standardwert falls kein anderer zur Verfügung steht&lt;/li&gt; &lt;li&gt;&lt;strong&gt;aggregate&lt;/strong&gt; - entweder &quot;list&quot; oder &quot;set&quot;&lt;/li&gt; &lt;li&gt;&lt;strong&gt;key&lt;/strong&gt; - auf 1 setzen um den Schlüssel eines Array auszulesen (benötigt &quot;aggregate&quot;).&lt;/li&gt; &lt;li&gt;&lt;strong&gt;recursive&lt;/strong&gt; - auf 1 setzen um Arrays rekursiv auszulesen (benötigt &quot;aggregate&quot;).&lt;/li&gt; &lt;/ul&gt;</target>
+      </trans-unit>
+      <trans-unit id="customsql_example3.caption" resname="customsql_example3.caption">
+        <source><![CDATA[Example 3<br />use complex filter parameter sources]]></source>
+        <target>Beispiel 3&lt;br /&gt;
+Komplexe Filter, Parameter und Quellen nutzen
+</target>
+      </trans-unit>
+      <trans-unit id="customsql_example3.description" resname="customsql_example3.description">
+        <source><![CDATA[<pre>SELECT t.id
+FROM {{table}} AS t
+WHERE t.catname={{param::get?name=category&default=defaultcat}}</pre>
+          <p>
+            This is the same as example 2, but now we use a parameter from the "query" string.
+          </p>
+          <p>
+            Imagine the page URL as of: "https://example.org/list/category/demo.html"<br />
+            the resulting Query will then be:<br />
+            "SELECT t.id FROM mm_demo AS t WHERE t.catname='demo'"
+          </p>
+          <p>
+            If the URL should be: "https://example.org/list.html",<br />
+            the resulting Query will then be:<br />
+            "SELECT t.id FROM mm_demo AS t WHERE t.catname='defaultcat'"
+          </p>]]></source>
+        <target>&lt;pre&gt;SELECT t.id
+FROM {{table}} AS t
+WHERE t.catname={{param::get?name=category&amp;default=defaultcat}}&lt;/pre&gt;
+&lt;p&gt;
+Dies ist dasselbe wie in Beispiel 2, aber jetzt verwenden wir einen Parameter aus dem &quot;query&quot;-String.
+&lt;/p&gt;
+&lt;p&gt;
+bei der Beispiel-URL wie diese: &quot;https://example.org/list/category/demo.html&quot;&lt;br /&gt;
+wäre das Query: &quot;SELECT t.id FROM mm_demo AS t WHERE t.catname=\'demo\'&quot;
+&lt;/p&gt;
+&lt;p&gt;
+Ist die URL: &quot;https://example.org/list.html&quot;,&lt;br /&gt;
+wäre das Query: &quot;SELECT t.id FROM mm_demo AS t WHERE t.catname=\'defaultcat\'&quot;
+&lt;/p&gt;
+</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

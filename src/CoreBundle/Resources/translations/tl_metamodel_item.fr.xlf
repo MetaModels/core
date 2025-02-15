@@ -19,12 +19,15 @@
       </trans-unit>
       <trans-unit id="editAll.label" resname="editAll.label">
         <source>Edit multiple</source>
+        <target>Modification multiple</target>
       </trans-unit>
       <trans-unit id="editAll.description" resname="editAll.description">
         <source>Edit multiple</source>
+        <target>Modification multiple</target>
       </trans-unit>
       <trans-unit id="metamodel_edit_as_child.label" resname="metamodel_edit_as_child.label">
         <source>Edit &quot;%child_name%&quot;</source>
+        <target>Modifier « %child_name%»</target>
       </trans-unit>
       <trans-unit id="metamodel_edit_as_child.description" resname="metamodel_edit_as_child.description">
         <source>Edit &quot;%child_name%&quot; for item %id%</source>
@@ -40,6 +43,7 @@
       </trans-unit>
       <trans-unit id="createvariant.label" resname="createvariant.label">
         <source>New variant</source>
+        <target>Nouvelle variante</target>
       </trans-unit>
       <trans-unit id="createvariant.description" resname="createvariant.description">
         <source>Create a new variant of item ID %id%</source>
@@ -63,6 +67,7 @@
       </trans-unit>
       <trans-unit id="delete.confirm" resname="delete.confirm">
         <source>Do you really want to delete element ID %id%?</source>
+        <target>Voulez-vous vraiment supprimer l'ID de l'élément %id% ?</target>
       </trans-unit>
       <trans-unit id="show.label" resname="show.label">
         <source>Item details</source>
@@ -98,6 +103,7 @@
       </trans-unit>
       <trans-unit id="pastenew.label" resname="pastenew.label">
         <source>Add new at the top</source>
+        <target>Ajouter un nouvel élément en haut</target>
       </trans-unit>
       <trans-unit id="pastenew.description" resname="pastenew.description">
         <source>Add new item after item ID %id%</source>
@@ -105,9 +111,11 @@
       </trans-unit>
       <trans-unit id="varbase.label" resname="varbase.label">
         <source>Is variant base</source>
+        <target>Est une base de variantes</target>
       </trans-unit>
       <trans-unit id="varbase.description" resname="varbase.description">
         <source>Check this if you want to make this the base for the current variant group</source>
+        <target>Cochez ceci si vous souhaitez en faire la base du groupe de variantes actuel.</target>
       </trans-unit>
       <trans-unit id="editRecord" resname="editRecord">
         <source>Edit item %id%</source>
@@ -119,9 +127,11 @@
       </trans-unit>
       <trans-unit id="sorting.label" resname="sorting.label">
         <source>Sorting</source>
+        <target>Tri</target>
       </trans-unit>
       <trans-unit id="sorting.description" resname="sorting.description">
         <source>The manual sorting</source>
+        <target>Tri manuel</target>
       </trans-unit>
       <trans-unit id="id.label" resname="id.label">
         <source>ID of the item</source>
@@ -141,6 +151,7 @@
       </trans-unit>
       <trans-unit id="tstamp.label" resname="tstamp.label">
         <source>Revision date</source>
+        <target>Date de révision</target>
       </trans-unit>
       <trans-unit id="tstamp.description" resname="tstamp.description">
         <source>The date when the item revision was created</source>
@@ -148,16 +159,20 @@
       </trans-unit>
       <trans-unit id="details" resname="details">
         <source>Details</source>
+        <target>Détails</target>
         <note>Used in the frontend for the &quot;Details&quot; link caption.</note>
       </trans-unit>
       <trans-unit id="showRecord" resname="showRecord">
         <source>Show the details of record %id%</source>
+        <target>Afficher les détails de l'enregistrement %id%</target>
       </trans-unit>
       <trans-unit id="backBT" resname="backBT">
         <source>Go back</source>
+        <target>Retour</target>
       </trans-unit>
       <trans-unit id="backBTTitle" resname="backBTTitle">
         <source>Back to the previous page</source>
+        <target>Retour à la page précédente</target>
       </trans-unit>
       <trans-unit id="save" resname="save">
         <source>Save</source>
