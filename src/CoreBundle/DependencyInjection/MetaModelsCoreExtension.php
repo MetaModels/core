@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,18 +16,21 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\CoreBundle\DependencyInjection;
 
+use MetaModels\CoreBundle\Attribute\DoctrineSchemaProvider;
+use MetaModels\CoreBundle\DependencyInjection\CompilerPass\CollectDoctrineSchemaGeneratorsPass;
 use MetaModels\CoreBundle\Migration\TableCollationMigration;
 use MetaModels\Filter\FilterUrlBuilder;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
@@ -91,6 +94,17 @@ class MetaModelsCoreExtension extends Extension implements PrependExtensionInter
      */
     public function load(array $configs, ContainerBuilder $container): void
     {
+        $container->registerAttributeForAutoconfiguration(
+            DoctrineSchemaProvider::class,
+            static function (ChildDefinition $definition, DoctrineSchemaProvider $attribute): void {
+                $attributes = [];
+                if (null !== ($priority = $attribute->getPriority())) {
+                    $attributes['priority'] = $priority;
+                }
+                $definition->addTag(CollectDoctrineSchemaGeneratorsPass::TAG_NAME, $attributes);
+            }
+        );
+
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         foreach (self::$files as $file) {
             $loader->load($file);
