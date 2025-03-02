@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,17 +16,19 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Andreas Nölke <zero@brothers-project.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\FrontendIntegration;
 
+use Contao\CoreBundle\Routing\ScopeMatcher;
 use Contao\FrontendTemplate;
 use Contao\System;
 use MetaModels\Filter\FilterUrlBuilder;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Content element clearing the FE-filter.
@@ -65,12 +67,13 @@ abstract class HybridFilterClearAll extends MetaModelHybrid
      */
     public function generate()
     {
-        if (
-            (bool) System::getContainer()->get('contao.routing.scope_matcher')
-            ?->isBackendRequest(
-                System::getContainer()->get('request_stack')?->getCurrentRequest() ?? Request::create('')
-            )
-        ) {
+        $scopeMatcher = System::getContainer()->get('contao.routing.scope_matcher');
+        assert($scopeMatcher instanceof ScopeMatcher);
+
+        $requestStack = System::getContainer()->get('request_stack');
+        assert($requestStack instanceof RequestStack);
+
+        if ($scopeMatcher->isBackendRequest($requestStack->getCurrentRequest() ?? Request::create(''))) {
             /** @psalm-suppress DeprecatedClass */
             return parent::generate();
         }

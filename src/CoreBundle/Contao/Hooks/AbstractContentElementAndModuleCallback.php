@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Marc Reimann <reimann@mediendepot-ruhr.de>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -262,7 +262,9 @@ abstract class AbstractContentElementAndModuleCallback
             'id'      => $this->translator->trans('id', [], 'metamodels_list')
         ];
 
+        /** @psalm-suppress UndefinedMagicPropertyFetch */
         assert(null !== $objDc->activeRecord);
+
         try {
             $metaModelName = $this->factory->translateIdToMetaModelName($objDc->activeRecord->metamodel);
         } catch (RuntimeException $exception) {
@@ -289,7 +291,9 @@ abstract class AbstractContentElementAndModuleCallback
      */
     public function getFilterSettings(DC_Table $objDC)
     {
+        /** @psalm-suppress UndefinedMagicPropertyFetch */
         assert(null !== $objDC->activeRecord);
+
         $filterSettings = $this->connection->createQueryBuilder()
             ->select('f.id', 'f.name')
             ->from('tl_metamodel_filter', 'f')
@@ -321,6 +325,7 @@ abstract class AbstractContentElementAndModuleCallback
      */
     public function getMetaTitleAttributes(DC_Table $objDC)
     {
+        /** @psalm-suppress UndefinedMagicPropertyFetch */
         assert(null !== $objDC->activeRecord);
 
         /** @psalm-suppress ArgumentTypeCoercion - We HOPE there is a list of strings. */
@@ -342,6 +347,7 @@ abstract class AbstractContentElementAndModuleCallback
      */
     public function getMetaDescriptionAttributes(DC_Table $objDC)
     {
+        /** @psalm-suppress UndefinedMagicPropertyFetch */
         assert(null !== $objDC->activeRecord);
 
         /** @psalm-suppress ArgumentTypeCoercion - We HOPE there is a list of strings. */
@@ -442,6 +448,7 @@ abstract class AbstractContentElementAndModuleCallback
      */
     public function getFilterParameterNames(DC_Table $objDc)
     {
+        /** @psalm-suppress UndefinedMagicPropertyFetch */
         assert(null !== $objDc->activeRecord);
 
         $return = [];
@@ -463,6 +470,7 @@ abstract class AbstractContentElementAndModuleCallback
      */
     public function getFilterTemplates(DC_Table $dcTable)
     {
+        /** @psalm-suppress UndefinedMagicPropertyFetch */
         assert(null !== $dcTable->activeRecord);
 
         if ($dcTable->activeRecord->type === 'metamodels_frontendclearall') {
@@ -493,6 +501,7 @@ abstract class AbstractContentElementAndModuleCallback
      */
     public function getRenderSettings(DC_Table $objDC)
     {
+        /** @psalm-suppress UndefinedMagicPropertyFetch */
         assert(null !== $objDC->activeRecord);
 
         $filterSettings = $this->connection->createQueryBuilder()

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -27,6 +27,7 @@ use Contao\StringUtil;
 use Contao\System;
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
+use Doctrine\DBAL\Connection;
 use MetaModels\CoreBundle\Assets\IconBuilder;
 use MetaModels\Helper\LocaleUtil;
 use MetaModels\IFactory;
@@ -104,7 +105,7 @@ class LoadDataContainer
         static $tableExists;
         // Test that the tables have been created.
         if (null === $tableExists) {
-            if (null === ($connection = System::getContainer()->get('database_connection'))) {
+            if (!(($connection = System::getContainer()->get('database_connection')) instanceof Connection)) {
                 return;
             }
             $tableExists = $connection->createSchemaManager()->tablesExist(['tl_metamodel']);

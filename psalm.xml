@@ -32,6 +32,8 @@
     <TooManyArguments>
       <errorLevel type="suppress">
         <referencedFunction name="Doctrine\DBAL\Query\QueryBuilder::select"/>
+        <file name="src/Helper/UpgradeHandler.php"/>
+        <file name="src/Render/Setting/Collection.php"/>
       </errorLevel>
     </TooManyArguments>
     <MissingClassConstType>

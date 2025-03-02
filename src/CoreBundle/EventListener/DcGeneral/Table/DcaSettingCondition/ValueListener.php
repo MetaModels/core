@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,30 +15,31 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSettingCondition;
 
-use Contao\System;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ManipulateWidgetEvent;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\Properties\PropertyInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\DataProviderInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\MultiLanguageDataProviderInterface;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\Properties\PropertyInterface;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\AbstractEnvironmentAwareEvent;
 use ContaoCommunityAlliance\DcGeneral\Factory\DcGeneralFactory;
+use Contao\System;
 use MetaModels\Attribute\IAliasConverter;
 use MetaModels\Attribute\IAttribute;
 use MetaModels\IMetaModel;
 use MetaModels\ITranslatedMetaModel;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 use function is_array;
 use function method_exists;
@@ -242,7 +243,9 @@ class ValueListener extends AbstractListener
         assert($dataProvider instanceof DataProviderInterface);
         if ($dataProvider instanceof MultiLanguageDataProviderInterface && $metaModel instanceof ITranslatedMetaModel) {
             // FIXME: check if language supported.
-            $locale = System::getContainer()->get('request_stack')?->getCurrentRequest()?->getLocale();
+            $requestStack = System::getContainer()->get('request_stack');
+            assert($requestStack instanceof RequestStack);
+            $locale = $requestStack->getCurrentRequest()?->getLocale();
             if (null === ($languages = $dataProvider->getLanguages($model->getId()))) {
                 return [];
             }

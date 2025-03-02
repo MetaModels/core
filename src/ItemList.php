@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -25,7 +25,7 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Fritz Michael Gschwantner <fmg@inspiredminds.at>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -35,11 +35,10 @@ namespace MetaModels;
 use Contao\ContentModel;
 use Contao\CoreBundle\Routing\ResponseContext\HtmlHeadBag\HtmlHeadBag;
 use Contao\CoreBundle\Routing\ResponseContext\ResponseContext;
+use Contao\CoreBundle\Routing\ScopeMatcher;
 use Contao\CoreBundle\String\HtmlDecoder;
-use Contao\Environment;
 use Contao\Model;
 use Contao\ModuleModel;
-use Contao\PageModel;
 use Contao\StringUtil;
 use Contao\System;
 use Contao\Template as ContaoTemplate;
@@ -57,7 +56,6 @@ use MetaModels\Render\Setting\IRenderSettingFactory;
 use MetaModels\Render\Template;
 use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -1061,17 +1059,24 @@ class ItemList
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function getPage(): ?object
     {
-        $currentRequest = System::getContainer()->get('request_stack')?->getCurrentRequest();
-        $isFrontend = (bool) System::getContainer()
-            ->get('contao.routing.scope_matcher')
-            ?->isFrontendRequest($currentRequest ?? Request::create(''));
+        $requestStack = System::getContainer()->get('request_stack');
+        if (!$requestStack instanceof RequestStack) {
+            return null;
+        }
+        $request = $requestStack->getCurrentRequest();
+        if (null === $request) {
+            return null;
+        }
+        $scopeMatcher = System::getContainer()->get('contao.routing.scope_matcher');
+        if (!($scopeMatcher instanceof ScopeMatcher) || !$scopeMatcher->isFrontendRequest($request)) {
+            return null;
+        }
 
-        $page = $currentRequest?->attributes->get('pageModel');
-
-        return ($isFrontend && ($page instanceof PageModel)) ? $page : null;
+        return $request->attributes->get('pageModel');
     }
 
     /**
@@ -1160,6 +1165,7 @@ class ItemList
      * @return void
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function setTitleAndDescription(): void
     {
@@ -1170,7 +1176,8 @@ class ItemList
         $container = System::getContainer();
         if (
             !($htmlDecoder = $container->get('contao.string.html_decoder')) instanceof HtmlDecoder
-            || !($responseContext = $container->get('contao.routing.response_context_accessor')?->getResponseContext()) instanceof ResponseContext
+            || !($responseContext = $container->get('contao.routing.response_context_accessor')->getResponseContext()
+                ) instanceof ResponseContext
             || !$responseContext->has(HtmlHeadBag::class)
         ) {
             return;

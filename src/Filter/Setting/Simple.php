@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,18 +18,19 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\Filter\Setting;
 
+use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Widget\GetAttributesFromDcaEvent;
+use Contao\CoreBundle\Routing\ScopeMatcher;
 use Contao\StringUtil;
 use Contao\System;
 use Contao\Widget;
-use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
-use ContaoCommunityAlliance\Contao\Bindings\Events\Widget\GetAttributesFromDcaEvent;
 use MetaModels\Filter\FilterUrl;
 use MetaModels\Filter\FilterUrlBuilder;
 use MetaModels\FrontendIntegration\FrontendFilterOptions;
@@ -38,6 +39,8 @@ use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\Render\Setting\ICollection as IRenderSettings;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -489,14 +492,19 @@ abstract class Simple implements ISimple
 
         $this->eventDispatcher->dispatch($event, ContaoEvents::WIDGET_GET_ATTRIBUTES_FROM_DCA);
 
-        $isFrontend = (bool) System::getContainer()
-            ->get('contao.routing.scope_matcher')
-            ?->isFrontendRequest(
-                System::getContainer()->get('request_stack')?->getCurrentRequest() ?? Request::create('')
-            );
+        $scopeMatcher = System::getContainer()->get('contao.routing.scope_matcher');
+        assert($scopeMatcher instanceof ScopeMatcher);
+
+        $requestStack = System::getContainer()->get('request_stack');
+        assert($requestStack instanceof RequestStack);
+
+        $isFrontend = $scopeMatcher->isFrontendRequest($requestStack->getCurrentRequest() ?? Request::create(''));
 
         if ($objFrontendFilterOptions->isAutoSubmit() && $isFrontend) {
-            $min = ((bool) System::getContainer()->get('kernel')?->isDebug()) ? '' : '.min';
+            $kernel = System::getContainer()->get('kernel');
+            assert($kernel instanceof KernelInterface);
+
+            $min = $kernel->isDebug() ? '' : '.min';
             $GLOBALS['TL_JAVASCRIPT']['metamodels'] = \sprintf('bundles/metamodelscore/js/metamodels%s.js', $min);
         }
 

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -21,19 +21,20 @@
  * @author     Marc Reimann <reimann@mediendepot-ruhr.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\FrontendIntegration;
 
+use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\RedirectEvent;
+use Contao\CoreBundle\Csrf\ContaoCsrfTokenManager;
 use Contao\CoreBundle\Exception\RedirectResponseException;
 use Contao\FrontendTemplate;
 use Contao\Input;
 use Contao\System;
-use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
-use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\RedirectEvent;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use MetaModels\Filter\FilterUrl;
@@ -42,7 +43,6 @@ use MetaModels\FrontendIntegration\Content\FilterClearAll as ContentElementFilte
 use MetaModels\FrontendIntegration\Module\FilterClearAll as ModuleFilterClearAll;
 use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -458,7 +458,7 @@ class FrontendFilter
         }
 
         $tokenManager = System::getContainer()->get('contao.csrf.token_manager');
-        assert($tokenManager instanceof CsrfTokenManagerInterface);
+        assert($tokenManager instanceof ContaoCsrfTokenManager);
 
         // Return filter data.
         /** @psalm-suppress UndefinedMagicPropertyFetch */

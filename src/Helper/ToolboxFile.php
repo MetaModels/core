@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,7 +20,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Andreas Fischer <anfischer@kaffee-partner.de>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -751,7 +751,12 @@ class ToolboxFile
             return ['files' => [], 'source' => []];
         }
 
-        uasort($arrFiles, [$this, ($blnAscending) ? 'basenameNatcasecmp' : 'basenameNatcasercmp']);
+        uasort(
+            $arrFiles,
+            static fn (string $fileA, string $fileB): int => $blnAscending
+                ? strnatcasecmp(basename($fileA), basename($fileB))
+                : -strnatcasecmp(basename($fileA), basename($fileB))
+        );
 
         return $this->remapSorting($arrFiles, $this->outputBuffer);
     }
@@ -880,7 +885,7 @@ class ToolboxFile
             return;
         }
 
-        if (($file = Input::get('file'))) {
+        if (is_string(($file = Input::get('file')))) {
             if ($this->withDownloadKeys) {
                 // Throws exception when running in CLI mode due to missing session.
                 $bag   = $this->requestStack->getSession()->getBag('attributes');
@@ -893,15 +898,11 @@ class ToolboxFile
                 // Check key and return 403 if mismatch
                 // keep both null-coalescing values different to account for missing values.
                 if (($links[$file] ?? null) !== (Input::get('fileKey') ?? false)) {
-                    $objHandler = new $GLOBALS['TL_PTY']['error_403']();
-                    /**
-                     * @var PageError403 $objHandler
-                     * @psalm-suppress DeprecatedMethod
-                     */
-                    $objHandler->generate($file);
+                    (new PageError403())->getResponse();
                 }
             }
             // Send the file to the browser if check succeeded.
+            /** @psalm-suppress DeprecatedMethod */
             Controller::sendFileToBrowser($file);
         }
     }
@@ -1068,8 +1069,8 @@ class ToolboxFile
      * Must either be called from within collectFiles or collectFiles must be called later on as this method
      * will add models of type folder to the list of pending paths to allow for recursive inclusion.
      *
-     * @param Collection   $files     The files to add.
-     * @param list<string> $skipPaths List of directories not to be added to the list of pending directories.
+     * @param Collection<FilesModel> $files     The files to add.
+     * @param list<string>           $skipPaths List of directories not to be added to the list of pending directories.
      *
      * @return void
      *
@@ -1240,35 +1241,5 @@ class ToolboxFile
         }
 
         return $fileName;
-    }
-
-    /**
-     * Compare two file names using a case-insensitive "natural order" algorithm
-     *
-     * @param string $a
-     * @param string $b
-     *
-     * @return integer
-     *
-     * @SuppressWarnings(PHPMD.ShortVariable)
-     */
-    private function basenameNatcasecmp(string $a, string $b): int
-    {
-        return strnatcasecmp(basename($a), basename($b));
-    }
-
-    /**
-     * Compare two file names using a case-insensitive, reverse "natural order" algorithm
-     *
-     * @param string $a
-     * @param string $b
-     *
-     * @return integer
-     *
-     * @SuppressWarnings(PHPMD.ShortVariable)
-     */
-    private function basenameNatcasercmp(string $a, string $b): int
-    {
-        return -strnatcasecmp(basename($a), basename($b));
     }
 }

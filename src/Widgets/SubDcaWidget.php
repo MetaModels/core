@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,13 +17,14 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\Widgets;
 
+use Contao\CoreBundle\Routing\ScopeMatcher;
 use Contao\DataContainer;
 use Contao\Date;
 use Contao\StringUtil;
@@ -35,11 +36,24 @@ use ContaoCommunityAlliance\Contao\Bindings\Events\Widget\GetAttributesFromDcaEv
 use Exception;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Contracts\Translation\TranslatorInterface;
+
+use function class_exists;
+use function count;
+use function implode;
+use function is_a;
+use function is_array;
+use function is_object;
+use function sprintf;
+use function strlen;
+use function strtr;
 
 /**
  * Provide methods to handle multiple widgets in one.
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
@@ -95,7 +109,7 @@ class SubDcaWidget extends Widget
     public function __construct($attributes = false)
     {
         parent::__construct();
-        if (\is_array($attributes)) {
+        if (is_array($attributes)) {
             $this->addAttributes($attributes);
 
             // Input field callback.
@@ -167,8 +181,6 @@ class SubDcaWidget extends Widget
      *
      * @return string
      *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function getHelpWizard($key, $field)
     {
@@ -177,22 +189,38 @@ class SubDcaWidget extends Widget
             return '';
         }
 
+        $translator = System::getContainer()->get('translator');
+        assert($translator instanceof TranslatorInterface);
+        $dispatcher = System::getContainer()->get('event_dispatcher');
+        assert($dispatcher instanceof EventDispatcherInterface);
+        $generator = System::getContainer()->get('router');
+
         $event = new GenerateHtmlEvent(
-            'about.svg',
-            $GLOBALS['TL_LANG']['MSC']['helpWizard'],
+            'help.svg',
+            $translator->trans('helpWizard', [], 'dc-general'),
             'style="vertical-align:text-bottom;"'
         );
-        $this->getEventDispatcher()->dispatch($event, ContaoEvents::IMAGE_GET_HTML);
 
-        /** @psalm-suppress UndefinedConstant */
-        return \sprintf(
-            ' <a href="%shelp.php?table=%s&amp;field=%s_%s" title="%s" rel="lightbox[help 610 80%%]">%s</a>',
-            TL_PATH . 'contao/',
-            $this->strTable,
-            $this->strName,
-            $key,
-            StringUtil::specialchars($GLOBALS['TL_LANG']['MSC']['helpWizard']),
-            $event->getHtml() ?? ''
+        $dispatcher->dispatch($event, ContaoEvents::IMAGE_GET_HTML);
+        $property = $this->strName . '_' . $key;
+        return strtr(
+            ' <a href="{url}" title="{title}" ' .
+            'onclick="Backend.openModalIframe({\'title\':\'{windowTitle}\',\'url\':this.href});' .
+            'return false">{icon}</a>',
+            [
+                '{url}'         => $generator->generate(
+                    'cca.backend-help',
+                    [
+                        'table' => $this->strTable,
+                        'property' => $property,
+                    ]
+                ),
+                '{title}'       => StringUtil::specialchars($translator->trans('helpWizard', [], 'dc-general')),
+                '{windowTitle}' => StringUtil::specialchars(
+                    $translator->trans($property . '.label', [], $this->strTable)
+                ),
+                '{icon}'        => $event->getHtml() ?? ''
+            ]
         );
     }
 
@@ -213,7 +241,7 @@ class SubDcaWidget extends Widget
             return $field;
         }
 
-        if (\is_array($this->varValue[$row][$key])) {
+        if (is_array($this->varValue[$row][$key])) {
             if (empty($this->varValue[$row][$key])) {
                 $field['eval']['required'] = true;
             }
@@ -236,15 +264,18 @@ class SubDcaWidget extends Widget
      */
     protected function getWidgetClass($field)
     {
-        $isBackend = (bool) System::getContainer()
-            ->get('contao.routing.scope_matcher')
-            ?->isBackendRequest(
-                System::getContainer()->get('request_stack')?->getCurrentRequest() ?? Request::create('')
-            );
+        $scopeMatcher = System::getContainer()->get('contao.routing.scope_matcher');
+        assert($scopeMatcher instanceof ScopeMatcher);
+
+        $requestStack = System::getContainer()->get('request_stack');
+        assert($requestStack instanceof RequestStack);
+
+        $isBackend = $scopeMatcher->isBackendRequest($requestStack->getCurrentRequest() ?? Request::create(''));
+
         /** @var class-string<Widget>|null $strClass */
         $className = $GLOBALS[($isBackend ? 'BE_FFL' : 'TL_FFL')][$field['inputType']];
 
-        if (($className !== '') && \class_exists($className)) {
+        if (($className !== '') && class_exists($className)) {
             return $className;
         }
 
@@ -262,7 +293,7 @@ class SubDcaWidget extends Widget
     protected function handleLoadCallback($field, $value)
     {
         // Load callback.
-        if (isset($field['load_callback']) && \is_array($field['load_callback'])) {
+        if (isset($field['load_callback']) && is_array($field['load_callback'])) {
             foreach ($field['load_callback'] as $callback) {
                 $this->import($callback[0]);
                 $value = $this->{$callback[0]}->{$callback[1]}($value, $this);
@@ -289,8 +320,8 @@ class SubDcaWidget extends Widget
         $xlabel = $this->getHelpWizard($strKey, $arrField);
 
         // Input field callback.
-        if (isset($arrField['input_field_callback']) && \is_array($arrField['input_field_callback'])) {
-            if (!\is_object($this->$arrField['input_field_callback'][0])) {
+        if (isset($arrField['input_field_callback']) && is_array($arrField['input_field_callback'])) {
+            if (!is_object($this->$arrField['input_field_callback'][0])) {
                 $this->import($arrField['input_field_callback'][0]);
             }
 
@@ -318,7 +349,7 @@ class SubDcaWidget extends Widget
             $arrField['value'],
             '',
             $this->strTable,
-            ((\is_a($this->objDca, DataContainer::class)) ? $this->objDca : null)
+            ((is_a($this->objDca, DataContainer::class)) ? $this->objDca : null)
         );
 
         $this->getEventDispatcher()->dispatch($event, ContaoEvents::WIDGET_GET_ATTRIBUTES_FROM_DCA);
@@ -392,7 +423,7 @@ class SubDcaWidget extends Widget
     {
         $newValue = $value;
 
-        if (isset($field['save_callback']) && \is_array($field['save_callback'])) {
+        if (isset($field['save_callback']) && is_array($field['save_callback'])) {
             foreach ($field['save_callback'] as $callback) {
                 $this->import($callback[0]);
 
@@ -429,7 +460,7 @@ class SubDcaWidget extends Widget
     {
         $varValue  = $varInput[$strRow][$strKey] ?? '';
         $objWidget = $this->initializeWidget($arrField, $strRow, $strKey, $varValue);
-        if (!\is_object($objWidget)) {
+        if (!is_object($objWidget)) {
             return false;
         }
 
@@ -508,7 +539,7 @@ class SubDcaWidget extends Widget
     {
         if (!empty($GLOBALS['TL_CONFIG']['showHelp']) && !empty($widget->description)) {
             /** @psalm-suppress UndefinedMagicPropertyFetch */
-            return \sprintf(
+            return sprintf(
                 '<p class="tl_help tl_tip%s">%s</p>',
                 (string) $widget->tl_class,
                 $widget->description
@@ -537,7 +568,7 @@ class SubDcaWidget extends Widget
                 $style  = ($widget->style != '' ? ' style="' . $widget->style . '"' : '');
                 $help   = $this->getHelpForWidget($widget);
 
-                $columns[] = \sprintf(
+                $columns[] = sprintf(
                     '<td %1$s%2$s%3$s>%4$s%5$s</td>',
                     $valign,
                     $class,
@@ -546,7 +577,7 @@ class SubDcaWidget extends Widget
                     $help
                 );
             }
-            $options[] = \implode('', $columns);
+            $options[] = implode('', $columns);
         }
 
         return $options;
@@ -569,16 +600,16 @@ class SubDcaWidget extends Widget
         $arrOptions = $this->buildOptions();
 
         // Add a "no entries found" message if there are no sub widgets.
-        if (!\count($arrOptions)) {
+        if (!count($arrOptions)) {
             $arrOptions[] = '<td><p class="tl_noopt">'
                             . (string) ($GLOBALS['TL_LANG']['MSC']['noResult'] ?? '')
                             . '</p></td>';
         }
 
         $strHead = '';
-        $strBody = \sprintf('<tbody><tr>%s</tr></tbody>', \implode("</tr>\n<tr>", $arrOptions));
+        $strBody = sprintf('<tbody><tr>%s</tr></tbody>', implode("</tr>\n<tr>", $arrOptions));
 
-        $strOutput = \sprintf(
+        $strOutput = sprintf(
             '<table%s id="ctrl_%s" class="tl_subdca">%s%s</table>',
             (($this->style) ? ('style="' . $this->style . '"') : ('')),
             $this->strId,
@@ -586,10 +617,10 @@ class SubDcaWidget extends Widget
             $strBody
         );
 
-        return \sprintf(
+        return sprintf(
             '<div id="ctrl_%s" class="tl_multiwidget_container%s clr">%s</div>',
             $this->strName,
-            (\strlen($this->strClass) ? ' ' . $this->strClass : ''),
+            (strlen($this->strClass) ? ' ' . $this->strClass : ''),
             $strOutput
         );
     }

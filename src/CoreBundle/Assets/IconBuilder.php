@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -144,7 +144,8 @@ class IconBuilder
         if (false !== ($lastDotAt = strrpos($realIcon, '.'))) {
             $darkIcon = substr_replace($realIcon, '--dark', $lastDotAt, 0);
             if (is_readable($darkIcon)) {
-                $this->imageFactory->create($darkIcon, [16, 16, 'center_center'], $this->outputPath . '/' . \basename($darkIcon));
+                $this->imageFactory
+                    ->create($darkIcon, [16, 16, 'center_center'], $this->outputPath . '/' . \basename($darkIcon));
             }
         }
 
