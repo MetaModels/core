@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Oliver Willmes <info@oliverwillmes.de>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -26,9 +26,9 @@
 namespace MetaModels\Filter\Setting;
 
 use Contao\InsertTags;
+use Contao\System;
+use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use Doctrine\DBAL\Connection;
-use MetaModels\InsertTag\Node;
-use MetaModels\InsertTag\Parser;
 use MetaModels\CoreBundle\Contao\InsertTag\ReplaceParam;
 use MetaModels\CoreBundle\Contao\InsertTag\ReplaceTableName;
 use MetaModels\CoreBundle\Contao\InsertTag\ResolveLanguageTag;
@@ -37,6 +37,8 @@ use MetaModels\Filter\Rules\SimpleQuery;
 use MetaModels\FrontendIntegration\FrontendFilterOptions;
 use MetaModels\IItem;
 use MetaModels\IMetaModelsServiceContainer;
+use MetaModels\InsertTag\Node;
+use MetaModels\InsertTag\Parser;
 use MetaModels\Render\Setting\ICollection as IRenderSettings;
 use Psr\Container\ContainerInterface;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
@@ -153,14 +155,22 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      */
     public function prepareRules(IFilter $objFilter, $arrFilterUrl)
     {
-        $this->filterParameters = $arrFilterUrl;
-        $this->queryString      = $this->get('customsql');
-        $this->queryParameter   = [];
+        if ($this->isAllowedScope()) {
+            $this->filterParameters = $arrFilterUrl;
+            $this->queryString      = $this->get('customsql');
+            $this->queryParameter   = [];
 
-        $objFilter->addFilterRule($this->getFilterRule());
+            $objFilter->addFilterRule($this->getFilterRule());
+
+            $this->filterParameters = [];
+            $this->queryString      = '';
+            $this->queryParameter   = [];
+
+            return;
+        }
 
         $this->filterParameters = [];
-        $this->queryString = '';
+        $this->queryString      = '';
         $this->queryParameter   = [];
     }
 
@@ -554,5 +564,20 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
             default:
                 return $this->parseInsertTagsInternal('{{' . $tag . '}}');
         }
+    }
+
+    private function isAllowedScope(): bool
+    {
+        $scopeMatcher = System::getContainer()->get('cca.dc-general.scope-matcher');
+        if (!$scopeMatcher instanceof RequestScopeDeterminator) {
+            return true;
+        }
+        $useOnlyAtEnv = (string) $this->get('use_only_in_env');
+
+        return match ($useOnlyAtEnv) {
+            'only_backend' => $scopeMatcher->currentScopeIsBackend(),
+            'only_frontend' => $scopeMatcher->currentScopeIsFrontend(),
+            default => true,
+        };
     }
 }

@@ -317,7 +317,7 @@ class Collection implements ICollection
     /**
      * {@inheritdoc}
      */
-    public function buildJumpToUrlFor(IItem $item /**, int $referenceType */)
+    public function buildJumpToUrlFor(IItem $item /**, ?int $referenceType */)
     {
         $information = $this->determineJumpToInformation();
         if (empty($information['pageDetails'])) {
@@ -349,8 +349,9 @@ class Collection implements ICollection
 
         $result['url'] = $this->filterUrlBuilder->generate(
             $filterUrl,
-            $information['referenceType']
-                ?? ((1 < func_num_args()) ? (int) func_get_arg(1) : UrlGeneratorInterface::ABSOLUTE_PATH)
+            (1 < \func_num_args() && \is_int($referenceType = \func_get_arg(1)))
+                ? $referenceType
+                : ($information['referenceType'] ?? UrlGeneratorInterface::ABSOLUTE_PATH)
         );
 
         return $result;

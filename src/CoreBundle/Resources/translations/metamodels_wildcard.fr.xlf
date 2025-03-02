@@ -1,0 +1,50 @@
+<?xml version="1.0" ?><xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" datatype="plaintext" original="src/CoreBundle/Resources/translations/metamodel_wildcard.en.xlf" target-language="fr">
+    <body>
+      <trans-unit id="mm_be_info_name.label" resname="mm_be_info_name.label">
+        <source>MM</source>
+        <target>MM</target>
+      </trans-unit>
+      <trans-unit id="mm_be_info_name.description" resname="mm_be_info_name.description">
+        <source>MetaModel</source>
+        <target>MetaModel</target>
+      </trans-unit>
+      <trans-unit id="mm_be_info_filter.label" resname="mm_be_info_filter.label">
+        <source>Fi</source>
+        <target>Fi</target>
+      </trans-unit>
+      <trans-unit id="mm_be_info_filter.description" resname="mm_be_info_filter.description">
+        <source>Filter</source>
+        <target>Filtre</target>
+      </trans-unit>
+      <trans-unit id="mm_be_info_render_setting.label" resname="mm_be_info_render_setting.label">
+        <source>Rs</source>
+        <target>Pa</target>
+      </trans-unit>
+      <trans-unit id="mm_be_info_render_setting.description" resname="mm_be_info_render_setting.description">
+        <source>Rendersetting</source>
+        <target>Paramètres d'affichage</target>
+      </trans-unit>
+      <trans-unit id="metamodels" resname="metamodels">
+        <source>MetaModels elements</source>
+        <target>Éléments MetaModels</target>
+      </trans-unit>
+      <trans-unit id="metamodel_content" resname="metamodel_content">
+        <source>MetaModels list</source>
+        <target>Liste MetaModels</target>
+      </trans-unit>
+      <trans-unit id="metamodel_list" resname="metamodel_list">
+        <source>MetaModels list</source>
+        <target>Liste MetaModels</target>
+      </trans-unit>
+      <trans-unit id="metamodels_frontendfilter" resname="metamodels_frontendfilter">
+        <source>MetaModels frontend filter</source>
+        <target>Filtre MetaModels Interface publique</target>
+      </trans-unit>
+      <trans-unit id="metamodels_frontendclearall" resname="metamodels_frontendclearall">
+        <source>MetaModels clear all</source>
+        <target>MetaModels tout effacer</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

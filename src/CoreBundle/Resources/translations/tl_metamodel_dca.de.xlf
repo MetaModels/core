@@ -365,6 +365,42 @@
         <source>Cancel multiple processing.</source>
         <target>Mehrfachbearbeitung abbrechen</target>
       </trans-unit>
+      <trans-unit id="panelLayout_headline" resname="panelLayout_headline">
+        <source>Add one or more panel options and separate with comma (= space) or semicolon (= new line) like &quot;filter;search;sort,limit&quot;</source>
+        <target>Fügen Sie eine oder mehrere Panel-Optionen hinzu und trennen Sie diese mit einem Komma (= Freiraum) oder Semikolon (= neue Zeile), z. B. &quot;filter;search;sort,limit&quot;.</target>
+      </trans-unit>
+      <trans-unit id="panelLayout_filter.caption" resname="panelLayout_filter.caption">
+        <source>filter</source>
+        <target>filter</target>
+      </trans-unit>
+      <trans-unit id="panelLayout_filter.description" resname="panelLayout_filter.description">
+        <source>Show the filter records menu.</source>
+        <target>Zeige Filter in der Listendarstellung</target>
+      </trans-unit>
+      <trans-unit id="panelLayout_search.caption" resname="panelLayout_search.caption">
+        <source>search</source>
+        <target>search</target>
+      </trans-unit>
+      <trans-unit id="panelLayout_search.description" resname="panelLayout_search.description">
+        <source>Show the search records menu.</source>
+        <target>Zeige Suche in der Listendarstellung</target>
+      </trans-unit>
+      <trans-unit id="panelLayout_sort.caption" resname="panelLayout_sort.caption">
+        <source>sort</source>
+        <target>sort</target>
+      </trans-unit>
+      <trans-unit id="panelLayout_sort.description" resname="panelLayout_sort.description">
+        <source>Show the sort records menu.</source>
+        <target>Zeige Sortierung in der Listendarstellung</target>
+      </trans-unit>
+      <trans-unit id="panelLayout_limit.caption" resname="panelLayout_limit.caption">
+        <source>limit</source>
+        <target>limit</target>
+      </trans-unit>
+      <trans-unit id="panelLayout_limit.description" resname="panelLayout_limit.description">
+        <source>Show the limit records menu.</source>
+        <target>Zeige Limit in der Listendarstellung</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

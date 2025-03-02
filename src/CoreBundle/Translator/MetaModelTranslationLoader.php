@@ -27,14 +27,14 @@ use MetaModels\ITranslatedMetaModel;
 use MetaModels\ViewCombination\InputScreenInformationBuilder;
 use MetaModels\ViewCombination\ViewCombination;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
-use Symfony\Component\Translation\Loader\LoaderInterface;
+use Symfony\Component\Translation\Loader\LoaderInterface as SymfonyLoaderInterface;
 use Symfony\Component\Translation\MessageCatalogue;
 use Symfony\Component\Translation\TranslatorBagInterface;
 
 use function is_array;
 use function sprintf;
 
-final class MetaModelTranslationLoader implements LoaderInterface
+final class MetaModelTranslationLoader implements SymfonyLoaderInterface
 {
     /**
      * The constructor.
@@ -43,12 +43,14 @@ final class MetaModelTranslationLoader implements LoaderInterface
      * @param IFactory                      $factory         The factory.
      * @param ViewCombination               $viewCombination The view combination.
      * @param InputScreenInformationBuilder $builder         The input screen builder.
+     * @param list<LoaderInterface>         $loaders         The loaders.
      */
     public function __construct(
         private readonly TranslatorBagInterface $baseTranslator,
         private readonly IFactory $factory,
         private readonly ViewCombination $viewCombination,
         private readonly InputScreenInformationBuilder $builder,
+        private readonly array $loaders
     ) {
     }
 
@@ -65,21 +67,22 @@ final class MetaModelTranslationLoader implements LoaderInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function load($resource, string $locale, string $domain = 'messages'): MessageCatalogue
     {
         // Load tl_metamodel_item catalogue.
-        $base = $this->baseTranslator->getCatalogue($locale);
-
-        $catalog = new MessageCatalogue($locale);
-
-        foreach ($base->all('tl_metamodel_item') as $key => $value) {
-            $catalog->set($key, $value, $domain);
-        }
-
         $metaModel = $this->factory->getMetaModel($domain);
         if (null === $metaModel) {
             throw new NotFoundResourceException('Failed to load MetaModel: ' . $domain);
+        }
+
+        $catalog = new MessageCatalogue($locale);
+        $catalog->set('name', $metaModel->getName(), $domain);
+
+        $base = $this->baseTranslator->getCatalogue($locale);
+        foreach ($base->all('tl_metamodel_item') as $key => $value) {
+            $catalog->set($key, $value, $domain);
         }
 
         /**
@@ -121,46 +124,66 @@ final class MetaModelTranslationLoader implements LoaderInterface
         }
 
         // Check if we have some children - add child button translations then.
-        foreach ($this->viewCombination->getChildrenOf($domain) as $tableName => $inputScreen) {
-            $subMetaModel = $this->factory->getMetaModel($tableName);
-            if (null === $subMetaModel) {
-                continue;
+        foreach (\array_keys($this->viewCombination->getChildrenOf($domain)) as $tableName) {
+            foreach ($this->builder->fetchAllInputScreensForTable($tableName) as $inputScreen) {
+                $this->handleChildInputScreen($domain, $tableName, $locale, $mainLanguage, $inputScreen, $catalog);
             }
-            $translationKey = 'metamodel_edit_as_child.' . $subMetaModel->getTableName();
+        }
 
-            if (
-                'metamodel_edit_as_child.label' !==
-                $baseValue = $catalog->get('metamodel_edit_as_child.label', $domain)
-            ) {
-                $catalog->set(
-                    $translationKey . '.label',
-                    strtr($baseValue, ['%child_name%' => $subMetaModel->getName()]),
-                    $domain,
-                );
+        foreach ($this->loaders as $loader) {
+            foreach ($loader->load($metaModel, $locale)->all($domain) as $key => $value) {
+                $catalog->set($key, $value, $domain);
             }
-            if (
-                'metamodel_edit_as_child.description' !==
-                $baseValue = $catalog->get('metamodel_edit_as_child.description', $domain)
-            ) {
-                $catalog->set(
-                    $translationKey . '.description',
-                    strtr($baseValue, ['%child_name%' => $subMetaModel->getName()]),
-                    $domain,
-                );
-            }
-
-            $this->setTranslationLabelAndDescription(
-                $domain,
-                $locale,
-                $mainLanguage,
-                $translationKey,
-                $inputScreen,
-                $catalog,
-                $tableName,
-            );
         }
 
         return $catalog;
+    }
+
+    private function handleChildInputScreen(
+        string $domain,
+        string $tableName,
+        string $locale,
+        string $mainLanguage,
+        array $inputScreen,
+        MessageCatalogue $catalog
+    ): void {
+        $subMetaModel = $this->factory->getMetaModel($tableName);
+        if (null === $subMetaModel) {
+            return;
+        }
+        $translationKey = 'metamodel_edit_as_child.' . $tableName . '.' . $inputScreen['meta']['id'];
+
+        if (
+            'metamodel_edit_as_child.label' !==
+            $baseValue = $catalog->get('metamodel_edit_as_child.label', $domain)
+        ) {
+            $catalog->set(
+                $translationKey . '.label',
+                strtr($baseValue, ['%child_name%' => $subMetaModel->getName()]),
+                $domain,
+            );
+        }
+        if (
+            'metamodel_edit_as_child.description' !==
+            $baseValue = $catalog->get('metamodel_edit_as_child.description', $domain)
+        ) {
+            $catalog->set(
+                $translationKey . '.description',
+                strtr($baseValue, ['%child_name%' => $subMetaModel->getName()]),
+                $domain,
+            );
+        }
+
+        $this->setTranslationLabelAndDescription(
+            $domain,
+            $locale,
+            $mainLanguage,
+            $translationKey,
+            $inputScreen,
+            $catalog,
+            $tableName,
+            ['%child_name%' => $subMetaModel->getName()]
+        );
     }
 
     /**
@@ -200,10 +223,24 @@ final class MetaModelTranslationLoader implements LoaderInterface
                 $inputScreen,
                 $catalog,
                 $domain,
+                [],
+            );
+            return;
+        }
+
+        if ('ctable' === $inputScreen['meta']['rendertype']) {
+            $this->handleChildInputScreen(
+                $inputScreen['meta']['ptable'],
+                $domain,
+                $locale,
+                $mainLanguage,
+                $inputScreen,
+                $catalog,
             );
         }
     }
 
+    /** @param array<string, string> $parameters The parameters. */
     private function setTranslationLabelAndDescription(
         string $domain,
         string $locale,
@@ -211,16 +248,23 @@ final class MetaModelTranslationLoader implements LoaderInterface
         string $prefix,
         array $inputScreen,
         MessageCatalogue $catalog,
-        string $headlineDomain
+        string $headlineDomain,
+        array $parameters,
     ): void {
         $headlineKey = 'backend-module.' . $inputScreen['meta']['id'] . '.headline';
-        $catalog->set($prefix . '.description', '', $domain);
+        if (!$catalog->has($prefix . '.description', $domain)) {
+            $catalog->set($prefix . '.description', '', $domain);
+        }
         if ('' !== $value = $this->extractLangString($inputScreen['description'], $locale, $mainLanguage) ?? '') {
+            $value = strtr($value, $parameters);
             $catalog->set($prefix . '.description', $value, $domain);
 
-            $catalog->set($headlineKey, $value, $headlineDomain);
+            if ($headlineKey === $catalog->get($headlineKey, $headlineDomain)) {
+                $catalog->set($headlineKey, $value, $headlineDomain);
+            }
         }
         if ('' !== $value = $this->extractLangString($inputScreen['label'], $locale, $mainLanguage) ?? '') {
+            $value = strtr($value, $parameters);
             $catalog->set($prefix . '.label', $value, $domain);
             if ($headlineKey === $catalog->get($headlineKey, $headlineDomain)) {
                 $catalog->set($headlineKey, $value, $headlineDomain);

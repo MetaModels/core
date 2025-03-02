@@ -64,10 +64,14 @@ class AttributeRendererListener extends BaseListener
                     </div>'
                 )
                 ->setArgs([
-                    $translator->translate('error_unknown_attribute.label', 'tl_metamodel_attribute'),
-                    $type,
-                    $translator->translate('error_unknown_attribute.description', 'tl_metamodel_attribute', [$type]),
-                ]);
+                              $translator->translate('error_unknown_attribute.label', 'tl_metamodel_attribute'),
+                              $type,
+                              $translator->translate(
+                                  'error_unknown_attribute.description',
+                                  'tl_metamodel_attribute',
+                                  ['%id%' => $type]
+                              ),
+                          ]);
 
             return;
         }
@@ -98,7 +102,7 @@ class AttributeRendererListener extends BaseListener
             ->setLabel(
                 '<div class="field_heading cte_type"><strong>%s</strong> <em>[%s%s]</em></div>
                 <div class="field_type block">
-                    %s<strong>%s</strong> - %s
+                    %s <strong>%s</strong> - %s
                 </div>'
             )
             ->setArgs([

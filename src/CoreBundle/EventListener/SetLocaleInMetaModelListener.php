@@ -29,10 +29,18 @@ final class SetLocaleInMetaModelListener
     /** @SuppressWarnings(PHPMD.Superglobals) */
     public function __invoke(CreateMetaModelEvent $event): void
     {
-        $metaModel = $event->getMetaModel();
-        $language  = $GLOBALS['TL_LANGUAGE'] ?? null;
-        if (null !== $language && $metaModel instanceof ITranslatedMetaModel) {
+        $metaModel   = $event->getMetaModel();
+        /** @var array<string, bool> $done */
+        static $done = [];
+
+        if (!($metaModel instanceof ITranslatedMetaModel) || ($done[$metaModel->getTableName()] ?? false)) {
+            return;
+        }
+
+        if (null !== ($language = $GLOBALS['TL_LANGUAGE'] ?? null)) {
             $metaModel->selectLanguage($language);
         }
+
+        $done[$metaModel->getTableName()] = true;
     }
 }

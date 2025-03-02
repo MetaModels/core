@@ -428,7 +428,7 @@ class FilterUrlBuilder
         // Look for a root page whose domain name matches the host name
         $languages = $pages[$host]
             // empty domain
-            ?? ($pages['*'] ?: []);
+            ?? ($pages['*'] ?? []);
         unset($pages);
 
         $pages = [];
@@ -488,6 +488,11 @@ class FilterUrlBuilder
             $aliases,
             ['order' => 'tl_page.routePriority DESC, tl_page.alias DESC']
         );
+
+        if (null === $pages) {
+            return [];
+        }
+
         assert($pages instanceof Collection);
 
         $arrPages = [];

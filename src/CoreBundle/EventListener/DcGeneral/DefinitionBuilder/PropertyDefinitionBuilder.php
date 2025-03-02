@@ -340,10 +340,12 @@ class PropertyDefinitionBuilder
      */
     private function setEval(PropertyInterface $property, array $propInfo, bool $isTranslated): void
     {
-        $extra = $propInfo['eval'] ?? [];
+        $extra   = $propInfo['eval'] ?? [];
+        $classes = ($extra['tl_class'] ?? '') . ' ' . ($property->getExtra()['tl_class'] ?? '');
         if ($isTranslated) {
-            $extra['tl_class'] = 'translat-attr' . (!empty($extra['tl_class']) ? ' ' . $extra['tl_class'] : '');
+            $classes .= ' translat-attr';
         }
+        $extra['tl_class'] = \implode(' ', \array_unique(preg_split('#(\s*,*\s*)*,+(\s*,*\s*)*#', $classes)));
 
         $property->setExtra(\array_merge($property->getExtra(), $extra));
     }

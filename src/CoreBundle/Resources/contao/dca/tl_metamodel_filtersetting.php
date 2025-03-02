@@ -44,7 +44,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
     'dca_config'            => [
         'data_provider'  => [
             'root'   => [
-                'source' => 'tl_metamodel_filtersetting'
+                'source' => 'tl_metamodel_filtersetting',
             ],
             'parent' => [
                 'source' => 'tl_metamodel_filter',
@@ -167,10 +167,15 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
                 'href'        => 'act=copy',
                 'icon'        => 'copy.svg'
             ],
+            'deepcopy'   => [
+                'label'       => 'copy.label',
+                'description' => 'copy.description',
+                'href'        => 'act=deepcopy',
+                'icon'        => 'copychilds.svg'
+            ],
             'cut'    => [
                 'label'       => 'cut.label',
                 'description' => 'cut.description',
-                'href'        => 'act=paste&amp;mode=cut',
                 'icon'        => 'cut.svg',
                 'attributes'  => 'onclick="Backend.getScrollOffset()"',
             ],
@@ -244,7 +249,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
         ],
         'customsql extends default'        => [
             '+config' => [
-                'customsql'
+                'customsql',
+                'use_only_in_env'
             ],
         ]
     ],
@@ -565,6 +571,17 @@ WHERE 1 = 1',
             'inputType'   => 'text',
             'sql'         => 'varchar(255) NOT NULL default \'\'',
             'eval'        => ['tl_class' => 'w50']
-        ]
+        ],
+        'use_only_in_env'          => [
+            'label'       => 'use_only_in_env.label',
+            'description' => 'use_only_in_env.description',
+            'exclude'     => true,
+            'inputType'   => 'select',
+            'eval'        => [
+                'tl_class'           => 'clr w50',
+                'includeBlankOption' => true
+            ],
+            'sql'         => "varchar(255) NOT NULL default ''"
+        ],
     ]
 ];

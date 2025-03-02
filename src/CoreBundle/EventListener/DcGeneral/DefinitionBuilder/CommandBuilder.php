@@ -206,8 +206,8 @@ class CommandBuilder
 
         $scrOffsetAttributes = ['attributes' => 'onclick="Backend.getScrollOffset();"'];
         $this->createCommand($collection, 'edit', ['act' => 'edit'], 'edit.svg');
-        $this->createCommand($collection, 'copy', ['act' => ''], 'copy.svg', $scrOffsetAttributes);
-        $this->createCommand($collection, 'cut', ['act' => 'paste', 'mode' => 'cut'], 'cut.svg', $scrOffsetAttributes);
+        $this->createCommand($collection, 'copy', ['act' => 'copy'], 'copy.svg', $scrOffsetAttributes);
+        $this->createCommand($collection, 'cut', ['act' => 'cut'], 'cut.svg', $scrOffsetAttributes);
         $this->createCommand(
             $collection,
             'delete',
@@ -233,14 +233,16 @@ class CommandBuilder
 
         // Check if we have some children.
         foreach ($this->viewCombination->getChildrenOf($this->container->getName()) as $tableName => $screen) {
+            $screenId = (string) ($screen['meta']['id'] ?? '');
+            assert('' !== $screenId);
             $this->createCommand(
                 $collection,
                 'edit_' . $tableName,
                 ['table' => $tableName],
                 $this->iconBuilder->getBackendIcon($screen['meta']['backendicon']),
                 [
-                    'label'       => 'metamodel_edit_as_child.' . $tableName . '.label',
-                    'description' => 'metamodel_edit_as_child.' . $tableName . '.description',
+                    'label'       => 'metamodel_edit_as_child.' . $tableName . '.' . $screenId . '.label',
+                    'description' => 'metamodel_edit_as_child.' . $tableName . '.' . $screenId . '.description',
                     'idparam'     => 'pid'
                 ]
             );

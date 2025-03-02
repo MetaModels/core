@@ -71,6 +71,7 @@ class DefaultOptionListener
         if (!($attributeId = $model->getProperty('attr_id'))) {
             return;
         }
+        assert(\is_numeric($attributeId));
 
         $metaModel = $this->filterFactory->createCollection($model->getProperty('fid'))->getMetaModel();
 

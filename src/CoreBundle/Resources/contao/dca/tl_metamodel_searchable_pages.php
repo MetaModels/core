@@ -166,6 +166,19 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = [
             ],
             'sql'         => "varchar(255) NOT NULL default ''"
         ],
+        'rendersetting' => [
+            'label'       => 'rendersetting.label',
+            'description' => 'rendersetting.description',
+            'exclude'     => true,
+            'inputType'   => 'select',
+            'eval'        => [
+                'includeBlankOption' => true,
+                'mandatory'          => true,
+                'chosen'             => true,
+                'tl_class'           => 'w50',
+            ],
+            'sql'         => "int(10) unsigned NOT NULL default '0'"
+        ],
         'filter'        => [
             'label'       => 'filter.label',
             'description' => 'filter.description',
@@ -175,7 +188,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = [
                 'includeBlankOption' => true,
                 'chosen'             => true,
                 'submitOnChange'     => true,
-                'tl_class'           => 'clr w50',
+                'tl_class'           => 'w50',
             ],
             'sql'         => "int(10) unsigned NOT NULL default '0'"
         ],
@@ -195,19 +208,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = [
                 ],
             ],
             'sql'         => 'longblob NULL'
-        ],
-        'rendersetting' => [
-            'label'       => 'rendersetting.label',
-            'description' => 'rendersetting.description',
-            'exclude'     => true,
-            'inputType'   => 'select',
-            'eval'        => [
-                'includeBlankOption' => true,
-                'mandatory'          => true,
-                'chosen'             => true,
-                'tl_class'           => 'w50',
-            ],
-            'sql'         => "int(10) unsigned NOT NULL default '0'"
         ],
         'published'     => [
             'label'       => 'published.label',

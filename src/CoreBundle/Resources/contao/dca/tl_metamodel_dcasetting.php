@@ -161,7 +161,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
             'cut'        => [
                 'label'       => 'cut.label',
                 'description' => 'cut.description',
-                'href'        => 'act=paste&amp;mode=cut',
+                'href'        => 'act=cut',
                 'icon'        => 'cut.svg'
             ],
             'delete'     => [

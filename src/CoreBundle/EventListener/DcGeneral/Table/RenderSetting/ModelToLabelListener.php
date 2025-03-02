@@ -121,7 +121,7 @@ class ModelToLabelListener extends AbstractListener
         $event
             ->setLabel('<div class="field_heading cte_type %s"><strong>%s</strong> <em>[%s%s]</em></div>
                 <div class="field_type block">
-                    %s<strong>%s</strong>
+                    %s <strong>%s</strong>
                 </div>')
             ->setArgs([
                 $model->getProperty('enabled') ? 'published' : 'unpublished',

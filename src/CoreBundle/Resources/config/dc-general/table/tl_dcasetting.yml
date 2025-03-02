@@ -5,6 +5,7 @@ services:
       - "@database_connection"
       - "@metamodels.factory"
       - "@router"
+      - "@request_stack"
     tags:
       - name: kernel.event_listener
         event: dc-general.view.contao2backend.get-global-button
@@ -36,6 +37,18 @@ services:
 
   metamodels.listener.table.tl_metamodel_dcasetting.disable_read_only:
     class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\DisableReadOnlyListener
+    arguments:
+      - "@cca.dc-general.scope-matcher"
+      - "@metamodels.factory"
+      - "@database_connection"
+      - "@translator"
+    tags:
+      - name: kernel.event_listener
+        event: dc-general.view.contao2backend.build-widget
+        method: handle
+
+  metamodels.listener.table.tl_metamodel_dcasetting.disable_always_save:
+    class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\DisableAlwaysSaveListener
     arguments:
       - "@cca.dc-general.scope-matcher"
       - "@metamodels.factory"

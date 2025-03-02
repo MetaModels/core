@@ -21,7 +21,10 @@
 
 namespace MetaModels\Filter\Setting;
 
+use MetaModels\Filter\FilterUrlBuilder;
 use MetaModels\Filter\Setting\Condition\ConditionOr;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Attribute type factory for OR filter settings.
@@ -31,8 +34,11 @@ class ConditionOrFilterSettingTypeFactory extends AbstractFilterSettingTypeFacto
     /**
      * {@inheritDoc}
      */
-    public function __construct()
-    {
+    public function __construct(
+        private readonly EventDispatcherInterface $dispatcher,
+        private readonly FilterUrlBuilder $filterUrlBuilder,
+        private readonly TranslatorInterface $translator,
+    ) {
         parent::__construct();
 
         $this
@@ -40,5 +46,19 @@ class ConditionOrFilterSettingTypeFactory extends AbstractFilterSettingTypeFacto
             ->setTypeIcon('bundles/metamodelscore/images/icons/filter_or.png')
             ->setTypeClass(ConditionOr::class)
             ->allowAttributeTypes();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createInstance($information, $filterSettings)
+    {
+        return new ConditionOr(
+            $filterSettings,
+            $information,
+            $this->dispatcher,
+            $this->filterUrlBuilder,
+            $this->translator
+        );
     }
 }

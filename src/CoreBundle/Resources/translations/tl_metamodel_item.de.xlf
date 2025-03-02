@@ -27,7 +27,7 @@
       </trans-unit>
       <trans-unit id="metamodel_edit_as_child.label" resname="metamodel_edit_as_child.label">
         <source>Edit &quot;%child_name%&quot;</source>
-        <target>&quot;%child_name%&quot; berabeiten</target>
+        <target>&quot;%child_name%&quot; bearbeiten</target>
       </trans-unit>
       <trans-unit id="metamodel_edit_as_child.description" resname="metamodel_edit_as_child.description">
         <source>Edit &quot;%child_name%&quot; for item %id%</source>

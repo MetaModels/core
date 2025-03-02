@@ -26,6 +26,8 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetOp
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\ViewHelpers;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CommandInterface;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
+use MetaModels\DcGeneral\Data\Model;
+use MetaModels\IItem;
 
 /**
  * Class CutButtonListener handles the cut button for a metamodels item view.
@@ -51,7 +53,14 @@ class CutButtonListener
         if ($command->getName() === 'cut') {
             $sortingProperty = ViewHelpers::getManualSortingProperty($event->getEnvironment());
 
-            if (null === $sortingProperty) {
+            /** @var Model $model */
+            $model = $event->getModel();
+            $item  = $model->getItem();
+            assert($item instanceof IItem);
+            $metamodel = $item->getMetaModel();
+
+            // Disable sorting button if sorting not set or model has variants.
+            if (null === $sortingProperty || $metamodel->hasVariants()) {
                 $event->setDisabled(true);
             }
         }

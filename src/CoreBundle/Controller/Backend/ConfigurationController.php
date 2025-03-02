@@ -56,7 +56,10 @@ final class ConfigurationController
         TranslatorInterface $translator,
         ContaoFramework $framework,
     ): Response {
-        $containerName    = (string) $request->query->get('table', 'tl_metamodel');
+        $containerName    = (string) $request->query->get('table', '');
+        if ('' === $containerName) {
+            $containerName = (string) ($request->attributes->get('_route_params', [])['tableName'] ?? 'tl_metamodel');
+        }
         $controllerResult = $this->bootDcGeneralAndProcess(
             $request,
             $containerName,

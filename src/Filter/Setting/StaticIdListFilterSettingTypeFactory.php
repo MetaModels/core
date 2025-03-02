@@ -21,6 +21,10 @@
 
 namespace MetaModels\Filter\Setting;
 
+use MetaModels\Filter\FilterUrlBuilder;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
+
 /**
  * Attribute type factory for static id list filter settings.
  */
@@ -29,13 +33,30 @@ class StaticIdListFilterSettingTypeFactory extends AbstractFilterSettingTypeFact
     /**
      * {@inheritDoc}
      */
-    public function __construct()
-    {
+    public function __construct(
+        private readonly EventDispatcherInterface $dispatcher,
+        private readonly FilterUrlBuilder $filterUrlBuilder,
+        private readonly TranslatorInterface $translator,
+    ) {
         parent::__construct();
 
         $this
             ->setTypeName('idlist')
             ->setTypeIcon('bundles/metamodelscore/images/icons/filter_default.png')
             ->setTypeClass(IdList::class);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createInstance($information, $filterSettings)
+    {
+        return new IdList(
+            $filterSettings,
+            $information,
+            $this->dispatcher,
+            $this->filterUrlBuilder,
+            $this->translator
+        );
     }
 }

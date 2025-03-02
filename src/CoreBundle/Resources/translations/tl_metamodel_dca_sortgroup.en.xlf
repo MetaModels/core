@@ -76,7 +76,7 @@
         <source>Is default</source>
       </trans-unit>
       <trans-unit id="isdefault.description" resname="isdefault.description">
-        <source>Determines that this input screen shall be used as default for the parenting MetaModel.</source>
+        <source>Determines that this grouping and sorting shall be used as default for the MetaModel.</source>
       </trans-unit>
       <trans-unit id="rendermode.label" resname="rendermode.label">
         <source>Render mode</source>

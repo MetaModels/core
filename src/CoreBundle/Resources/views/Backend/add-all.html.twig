@@ -12,7 +12,7 @@
 
 {% block main %}
     <div id="tl_buttons">
-        <a href="{{ href }}" class="header_back twig" title="{{ backBt }}">{{ backBt }}</a>
+        <a href="{{ href|raw }}" class="header_back twig" title="{{ backBt }}">{{ backBt }}</a>
     </div>
     <div id="tl_metamodel_autocreate_palette">
         <form action="{{ action }}" class="tl_form" method="post">

@@ -27,6 +27,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use ContaoCommunityAlliance\DcGeneral\InputProviderInterface;
 use Doctrine\DBAL\Connection;
 use MetaModels\IFactory;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
@@ -35,38 +36,19 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class AddAllButtonListener
 {
     /**
-     * The database.
-     *
-     * @var Connection
-     */
-    private Connection $connection;
-
-    /**
-     * The MetaModels factory.
-     *
-     * @var IFactory
-     */
-    private IFactory $factory;
-
-    /**
-     * The URL generator.
-     *
-     * @var UrlGeneratorInterface
-     */
-    private UrlGeneratorInterface $urlGenerator;
-
-    /**
      * Create a new instance.
      *
      * @param Connection            $connection   The connection.
      * @param IFactory              $factory      The factory.
      * @param UrlGeneratorInterface $urlGenerator The url generator.
+     * @param RequestStack          $requestStack The session.
      */
-    public function __construct(Connection $connection, IFactory $factory, UrlGeneratorInterface $urlGenerator)
-    {
-        $this->connection   = $connection;
-        $this->factory      = $factory;
-        $this->urlGenerator = $urlGenerator;
+    public function __construct(
+        private readonly Connection $connection,
+        private readonly IFactory $factory,
+        private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly RequestStack $requestStack
+    ) {
     }
 
     /**
@@ -108,13 +90,15 @@ class AddAllButtonListener
             return;
         }
 
-        $name = $this->factory->translateIdToMetaModelName($modelId);
+        $name    = $this->factory->translateIdToMetaModelName($modelId);
+        $request = $this->requestStack->getCurrentRequest();
 
         $event->setHref(
             $this->urlGenerator->generate(
                 'metamodels.inputscreen.add_all',
                 ['metaModel' => $name, 'inputScreen' => $inputScreen]
             )
+            . '?ref=' . $request?->attributes->get('_contao_referer_id')
         );
     }
 }

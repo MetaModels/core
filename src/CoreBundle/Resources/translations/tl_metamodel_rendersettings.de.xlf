@@ -139,6 +139,30 @@
         <source>The language for the jump to page.</source>
         <target>Sprache der Weiterleitungsseite.</target>
       </trans-unit>
+      <trans-unit id="jumpTo_type.label" resname="jumpTo_type.label">
+        <source>URL type</source>
+        <target>URL-Typ</target>
+      </trans-unit>
+      <trans-unit id="jumpTo_type.description" resname="jumpTo_type.description">
+        <source>The reference type to use when generating the URL.</source>
+        <target>Der Referenztyp, der bei der Generierung der URL verwendet werden soll.</target>
+      </trans-unit>
+      <trans-unit id="jumpTo_type.absolute_url" resname="jumpTo_type.absolute_url">
+        <source>Absolute URL, e.g. &quot;https://example.com/dir/file&quot;.</source>
+        <target>Absolute URL, z. B. &quot;https://example.com/dir/file&quot;.</target>
+      </trans-unit>
+      <trans-unit id="jumpTo_type.absolute_path" resname="jumpTo_type.absolute_path">
+        <source>Absolute path, e.g. &quot;/dir/file&quot;.</source>
+        <target>Absoluter Pfad, z. B. &quot;/dir/file&quot;.</target>
+      </trans-unit>
+      <trans-unit id="jumpTo_type.relative_path" resname="jumpTo_type.relative_path">
+        <source>Relative path based on the current request path, e.g. &quot;../parent-file&quot;.</source>
+        <target>Relativer Pfad basierend auf dem aktuellen Request-Pfad, z. B. &quot;../parent-file&quot;.</target>
+      </trans-unit>
+      <trans-unit id="jumpTo_type.network_path" resname="jumpTo_type.network_path">
+        <source>Network path, e.g. &quot;//example.com/dir/file&quot;.</source>
+        <target>Netzwerk-Pfad, z. B. &quot;//example.com/dir/file&quot;.</target>
+      </trans-unit>
       <trans-unit id="jumpTo_page.label" resname="jumpTo_page.label">
         <source>Jump to page</source>
         <target>Springe zu Seite</target>

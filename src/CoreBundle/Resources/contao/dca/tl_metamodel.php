@@ -331,7 +331,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = [
             'cut'              => [
                 'label'       => 'cut.label',
                 'description' => 'cut.description',
-                'href'        => 'act=paste&amp;mode=cut',
+                'href'        => 'act=cut',
                 'icon'        => 'cut.svg'
             ],
             'delete'           => [
@@ -441,9 +441,10 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = [
             'inputType'   => 'text',
             'search'      => true,
             'eval'        => [
-                'mandatory' => true,
-                'maxlength' => 255,
-                'tl_class'  => 'w50'
+                'mandatory'         => true,
+                'useRawRequestData' => true,
+                'maxlength'         => 255,
+                'tl_class'          => 'w50'
             ],
             'sql'         => "varchar(255) NOT NULL default ''"
         ],

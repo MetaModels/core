@@ -82,13 +82,6 @@ class BackendNavigationListener
     private RouterInterface $router;
 
     /**
-     * The session.
-     *
-     * @var Session
-     */
-    private Session $session;
-
-    /**
      * Create a new instance.
      *
      * @param TranslatorInterface   $translator      The translator.
@@ -96,7 +89,6 @@ class BackendNavigationListener
      * @param ViewCombination       $viewCombination The view combination.
      * @param TokenStorageInterface $tokenStorage    The token storage.
      * @param RouterInterface       $router          The router.
-     * @param Session               $session         The session.
      */
     public function __construct(
         TranslatorInterface $translator,
@@ -104,14 +96,12 @@ class BackendNavigationListener
         ViewCombination $viewCombination,
         TokenStorageInterface $tokenStorage,
         RouterInterface $router,
-        Session $session,
     ) {
         $this->requestStack    = $requestStack;
         $this->translator      = $translator;
         $this->viewCombination = $viewCombination;
         $this->tokenStorage    = $tokenStorage;
         $this->router          = $router;
-        $this->session         = $session;
     }
 
     /**
@@ -287,7 +277,7 @@ class BackendNavigationListener
     private function updateCollapsedState(ItemInterface $metaModelsNode): void
     {
         $nodeName    = $metaModelsNode->getName();
-        $sessionBag  = $this->session->getBag('contao_backend');
+        $sessionBag  = $this->requestStack->getSession()->getBag('contao_backend');
         $status      = ($sessionBag instanceof AttributeBagInterface) ? $sessionBag->get('backend_modules') : [];
         $isCollapsed = ($status[$nodeName] ?? 1) < 1;
         $path        = $this->router->generate('contao_backend');
@@ -364,6 +354,12 @@ class BackendNavigationListener
 
         // Search the position in the already existing menu by starting at offset in BE_MOD and walking up to the start.
         $start = (int) array_search($backendSection, $navigation, true);
+
+        // Special location for node zero.
+        if (0 === $start) {
+            array_splice($namesInMenu, 0, 0, [$backendSection]);
+        }
+
         while (0 <= --$start) {
             /** @psalm-suppress InvalidArrayOffset */
             if (in_array($navigation[$start], $namesInMenu, true)) {

@@ -48,8 +48,8 @@ use Contao\Validator;
 use InvalidArgumentException;
 use Symfony\Component\Asset\Context\ContextInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * This class provides various methods for handling file collection within Contao.
@@ -99,11 +99,11 @@ class ToolboxFile
     private PictureFactoryInterface $pictureFactory;
 
     /**
-     * Symfony session object
+     * Symfony requestStack object
      *
-     * @var Session
+     * @var RequestStack
      */
-    private Session $session;
+    private RequestStack $requestStack;
 
     /**
      * Allowed file extensions.
@@ -210,7 +210,7 @@ class ToolboxFile
      * @param string|null                                         $rootDir        The root path of the installation.
      * @param ContextInterface|null                               $filesContext   The assets file context.
      * @param PictureFactoryInterface|null                        $pictureFactory The picture factory.
-     * @param Session|null                                        $session        The session.
+     * @param RequestStack|null                                   $requestStack   The requestStack.
      *
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -221,7 +221,7 @@ class ToolboxFile
         string $rootDir = null,
         ContextInterface $filesContext = null,
         PictureFactoryInterface $pictureFactory = null,
-        Session $session = null
+        RequestStack $requestStack = null
     ) {
         switch (true) {
             case ($imageFactory instanceof ImageFactoryInterface) && (null !== $rootDir):
@@ -290,17 +290,17 @@ class ToolboxFile
         }
         $this->pictureFactory = $pictureFactory;
 
-        if (null === $session) {
+        if (null === $requestStack) {
             // @codingStandardsIgnoreStart
             @trigger_error(
                 'Not passing a "Session" is deprecated.',
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
-            $session = System::getContainer()->get('session');
-            assert($session instanceof Session);
+            $requestStack = System::getContainer()->get('request_stack');
+            assert($requestStack instanceof RequestStack);
         }
-        $this->session = $session;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -573,8 +573,8 @@ class ToolboxFile
                 ->setQueryParameter('file', \urlencode($strFile))
                 ->getUrl();
         }
-
-        $bag = $this->session->getBag('attributes');
+        // Throws exception when running in CLI mode due to missing session.
+        $bag = $this->requestStack->getSession()->getBag('attributes');
         assert($bag instanceof AttributeBagInterface);
 
         $links = $bag->has('metaModels_downloads') ? $bag->get('metaModels_downloads') : [];
@@ -850,7 +850,8 @@ class ToolboxFile
 
         if (($file = Input::get('file'))) {
             if ($this->withDownloadKeys) {
-                $bag   = $this->session->getBag('attributes');
+                // Throws exception when running in CLI mode due to missing session.
+                $bag   = $this->requestStack->getSession()->getBag('attributes');
                 assert($bag instanceof AttributeBagInterface);
                 $links = $bag->has('metaModels_downloads') ? $bag->get('metaModels_downloads') : [];
 
@@ -1113,14 +1114,25 @@ class ToolboxFile
 
         // Prepare GD images.
         if ($information['isGdImage'] = $file->isGdImage) {
-            $information['src'] = \urldecode($this->resizeImage($fileName));
+            try {
+                $information['src'] = urldecode($this->resizeImage($fileName));
+            } catch (\Throwable $exception) {
+                // Broken image, keep original path.
+                $information['src'] = urldecode($fileName);
+                $information['isGdImage'] = false;
+            }
+
             $information['lb']  = 'lb_' . $this->getLightboxId();
-            if (\file_exists($this->rootDir . '/' . $information['src'])) {
-                $size              = \getimagesize($this->rootDir . '/' . $information['src']);
+
+            if (
+                file_exists($this->rootDir . '/' . $information['src'])
+                && (false !== ($size = getimagesize($this->rootDir . '/' . $information['src'])))
+            ) {
                 $information['w']  = $size[0];
                 $information['h']  = $size[1];
                 $information['wh'] = $size[3];
             }
+
             $information['imageUrl'] = $fileName;
         }
 
@@ -1131,30 +1143,33 @@ class ToolboxFile
         }
 
         // Prepare the picture for provide the image size.
-        if ($file->isImage && ($information['isPicture'] = (int) ($this->resizeImages[2] ?? 0))) {
+        if ($file->isImage && ($information['isPicture'] = (bool) ($this->resizeImages[2] ?? false))) {
             $projectDir = $this->rootDir;
             /** @psalm-suppress InternalMethod */
-            $staticUrl  = $this->filesContext->getStaticUrl();
-            $picture    = $this->pictureFactory->create($projectDir . '/' . $file->path, $this->getResizeImages());
+            $staticUrl = $this->filesContext->getStaticUrl();
 
-            $information['picture'] = [
-                'alt'     => $altText,
-                'title'   => $title,
-                'img'     => $picture->getImg($projectDir, $staticUrl),
-                'sources' => $picture->getSources($projectDir, $staticUrl)
-            ];
+            try {
+                $picture   = $this->pictureFactory->create($projectDir . '/' . $file->path, $this->getResizeImages());
+                $information['picture'] = [
+                    'alt'     => $altText,
+                    'title'   => $title,
+                    'img'     => $picture->getImg($projectDir, $staticUrl),
+                    'sources' => $picture->getSources($projectDir, $staticUrl)
+                ];
 
-            $information['imageUrl'] = $fileName;
-
-            if (isset($GLOBALS['objPage']->layoutId)) {
-                $lightboxSize                   = StringUtil::deserialize(
-                    (LayoutModel::findByPk($GLOBALS['objPage']->layoutId)->lightboxSize ?? null),
-                    true
-                );
-                $lightboxPicture                =
-                    $this->pictureFactory->create($projectDir . '/' . $file->path, $lightboxSize);
-                $information['lightboxPicture'] = $lightboxPicture;
-                $information['imageUrl']        = $lightboxPicture->getImg($projectDir, $staticUrl)['src'];
+                if (isset($GLOBALS['objPage']->layoutId)) {
+                    $lightboxSize                   = StringUtil::deserialize(
+                        (LayoutModel::findByPk($GLOBALS['objPage']->layoutId)->lightboxSize ?? null),
+                        true
+                    );
+                    $lightboxPicture                =
+                        $this->pictureFactory->create($projectDir . '/' . $file->path, $lightboxSize);
+                    $information['lightboxPicture'] = $lightboxPicture;
+                    $information['imageUrl']        = $lightboxPicture->getImg($projectDir, $staticUrl)['src'];
+                }
+            } catch (\Throwable $exception) {
+                // Unreadable broken image - ignore.
+                $information['isPicture'] = false;
             }
         }
 

@@ -111,6 +111,10 @@
         <source>Check this, if you want to ensure that each value only occurs once</source>
         <target>Wählen Sie diese Option, wenn Sie sicherstellen möchten, dass jeder Wert nur einmal vorkommen kann.</target>
       </trans-unit>
+      <trans-unit id="isunique.variant_error" resname="isunique.variant_error">
+        <source>The option &quot;Unique values&quot; can only be used for variants. It cannot be used for parent elements, as the value is copied to all child elements and a check for uniqueness results in an error.</source>
+        <target>Die Option „Eindeutige Werte“ kann nur für Varianten verwendet werden. Sie kann nicht für übergeordnete Elemente verwendet werden, da der Wert in alle untergeordneten Elemente kopiert wird und eine Prüfung auf Eindeutigkeit zu einem Fehler führt.</target>
+      </trans-unit>
       <trans-unit id="name_langcode" resname="name_langcode">
         <source>Language</source>
         <target>Sprache</target>

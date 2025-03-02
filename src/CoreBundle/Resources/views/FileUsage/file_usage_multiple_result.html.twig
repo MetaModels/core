@@ -1,0 +1,24 @@
+{% trans_default_domain 'metamodels_file_usage' %}
+{% set metaModelName = 'name'|trans(domain: result.tableName) %}
+{% set attributeName = (result.attributeName ~ '.label')|trans(domain: result.tableName) %}
+<tr class="even click2edit toggle_select hover-row">
+  <td class="tl_file_list">
+    MetaModels
+  </td>
+  <td class="tl_file_list">
+    -
+  </td>
+  <td class="tl_file_list" title="{{ result.tableName }}.{{ result.attributeName }}">
+    {{ 'single_usage'|trans({'%metaModelName%': metaModelName, '%attribute%': attributeName}) }}
+  </td>
+  <td class="tl_file_list">
+    ID {{ result.itemId }}
+  </td>
+  <td class="tl_file_list tl_right_nowrap">
+    {% if result.editUrl|default %}
+      <a class="edit" href="{{ result.editUrl }}" title="{{ 'single_usage_edit'|trans({'%metaModelName%': metaModelName, '%attribute%': attributeName, '%id%': result.itemId}) }}">
+        <img src="/system/themes/flexible/icons/edit.svg" alt="" width="16" height="16">
+      </a>
+    {% endif %}
+  </td>
+</tr>

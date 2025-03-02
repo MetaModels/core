@@ -219,6 +219,8 @@ class CustomSqlTest extends AutoLoadingTestCase
     protected function generateSql(CustomSql $instance, array $filterUrl = []): array
     {
         $filter = new Filter($this->getMockForAbstractClass(IMetaModel::class));
+        $container = $this->getMockForAbstractClass(\Symfony\Component\DependencyInjection\ContainerInterface::class);
+        \Contao\System::setContainer($container);
 
         $instance->prepareRules($filter, $filterUrl);
 

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -30,10 +30,9 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\ContaoBacke
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\EditMask;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetOperationButtonEvent;
-use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CommandInterface;
-use ContaoCommunityAlliance\DcGeneral\Data\DataProviderInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\ActionEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PostCreateModelEvent;
@@ -113,6 +112,9 @@ class CreateVariantButtonListener
      *
      * @return void
      *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     *
      * @throws \RuntimeException When the base model can not be found.
      * @throws \InvalidArgumentException When the view in the environment is incompatible.
      */
@@ -139,11 +141,21 @@ class CreateVariantButtonListener
             throw new \RuntimeException('No model id passed.');
         }
 
+        $doNotCopy  = [];
+        $properties = $environment->getDataDefinition()?->getPropertiesDefinition();
+        foreach ($properties ?? [] as $property) {
+            $extras = $property->getExtra();
+            if (($extras['doNotCopy'] ?? false) === true) {
+                $doNotCopy[] = $property->getName();
+            }
+        }
+
         $model = $dataProvider
             ->createVariant(
                 $dataProvider
                     ->getEmptyConfig()
-                    ->setId($modelId->getId())
+                    ->setId($modelId->getId()),
+                $doNotCopy
             );
 
         if ($model === null) {
@@ -178,9 +190,9 @@ class CreateVariantButtonListener
         if (!$view instanceof BackendViewInterface) {
             throw new \InvalidArgumentException('Invalid view registered in environment.');
         }
-        $newModel = clone $model;
+
         $editMask =
-            new EditMask($view, $newModel, $model, $preFunction, $postFunction, $this->breadcrumb($environment));
+            new EditMask($view, $model, $model, $preFunction, $postFunction, $this->breadcrumb($environment));
         $event->setResponse($editMask->execute());
     }
 

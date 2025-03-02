@@ -32,6 +32,7 @@ use MetaModels\Helper\LocaleUtil;
 use MetaModels\IFactory;
 use MetaModels\IMetaModel;
 use MetaModels\ViewCombination\ViewCombination;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * This class handles loading of the virtual data containers.
@@ -137,6 +138,8 @@ class LoadDataContainer
             return;
         }
 
+        $this->controller->loadDataContainer('tl_metamodel_item');
+
         if (!isset($GLOBALS['TL_DCA'][$tableName])) {
             $GLOBALS['TL_DCA'][$tableName] = [];
         }
@@ -156,6 +159,7 @@ class LoadDataContainer
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     private function handleNonMetaModelTable(string $tableName): void
     {
@@ -176,16 +180,16 @@ class LoadDataContainer
 
         $parentDCA = &$GLOBALS['TL_DCA'][$tableName];
 
-        $this->controller->loadLanguageFile('default');
         foreach ($map[$tableName] as $metaModelTable => $inputScreen) {
             $metaModel = $this->factory->getMetaModel($metaModelTable);
             assert($metaModel instanceof IMetaModel);
 
-            $caption = $this->buildCaption($metaModel, $inputScreen);
+            $translationPrefix = 'metamodel_edit_as_child.'
+                . $metaModel->getTableName()
+                . '.' . $inputScreen['meta']['id'];
 
             $operationName                                   = 'edit_' . $metaModel->getTableName();
             $parentDCA['list']['operations'][$operationName] = [
-                'label'      => &$caption,
                 'href'       => 'table=' . $metaModelTable,
                 'icon'       => $this->iconBuilder->getBackendIcon($inputScreen['meta']['backendicon']),
                 'attributes' => 'onclick="Backend.getScrollOffset()"',
@@ -211,13 +215,15 @@ class LoadDataContainer
                         string $icon,
                         string $attributes,
                         string $table
-                    ) use ($idParameter): string {
+                    ) use (
+                        $idParameter,
+                        $translationPrefix
+                    ): string {
                         return $this->buildChildOperationButton(
                             $idParameter,
                             $row['id'],
                             $href,
-                            $label,
-                            $name,
+                            $translationPrefix,
                             $icon,
                             $attributes,
                             $table
@@ -243,48 +249,15 @@ class LoadDataContainer
     }
 
     /**
-     * Build the caption for a table.
-     *
-     * @param IMetaModel $metaModel   The MetaModel to build the caption for.
-     * @param array      $inputScreen The input screen information.
-     *
-     * @return array
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    private function buildCaption(IMetaModel $metaModel, array $inputScreen): array
-    {
-        $caption = [
-            \sprintf($GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label'], $metaModel->getName()),
-            ''
-        ];
-
-        // @deprecated usage of TL_LANGUAGE - remove for Contao 5.0.
-        $currentLanguage = LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE']);
-        foreach ($inputScreen['label'] as $langCode => $label) {
-            if ($label !== '' && $langCode === $currentLanguage) {
-                $caption = [
-                    $label,
-                    $inputScreen['description'][$langCode]
-                ];
-            }
-        }
-
-        return $caption;
-    }
-
-    /**
      * This method exists only for being compatible when MetaModels are being used as child table from DC_Table context.
      *
      * @param string $idParameter The id parameter in use.
-     * @param string $itemId     The current data row.
-     * @param string $href       The href to be appended.
-     * @param string $label      The operation label.
-     * @param string $name       The operation name.
-     * @param string $icon       The icon path.
-     * @param string $attributes The button attributes.
-     * @param string $table      The table name.
+     * @param string $itemId      The current data row.
+     * @param string $href        The href to be appended.
+     * @param string $transPrefix The operation button label translation prefix.
+     * @param string $icon        The icon path.
+     * @param string $attributes  The button attributes.
+     * @param string $table       The table name.
      *
      * @return string
      */
@@ -292,8 +265,7 @@ class LoadDataContainer
         string $idParameter,
         string $itemId,
         string $href,
-        string $label,
-        string $name,
+        string $transPrefix,
         string $icon,
         string $attributes,
         string $table
@@ -311,7 +283,19 @@ class LoadDataContainer
             $url = \preg_replace('#(&amp;)id=(?:&amp;)?#', '$1', $url);
         }
 
-        $title = \sprintf($label ?: $name, $itemId);
+        $translator = System::getContainer()->get('translator');
+        assert($translator instanceof TranslatorInterface);
+
+        $label = $translator->trans(
+            $transPrefix . '.label',
+            ['%id%' => $itemId],
+            $table
+        );
+        $title = $translator->trans(
+            $transPrefix . '.description',
+            ['%id%' => $itemId],
+            $table
+        );
 
         return \sprintf(
             '<a href="%1$s" title="%2$s"%3$s>%4$s</a> ',

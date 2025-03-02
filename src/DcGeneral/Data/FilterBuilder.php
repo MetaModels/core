@@ -437,12 +437,14 @@ class FilterBuilder
         $languages = [];
         $metaModel = $attribute->getMetaModel();
         if ($metaModel instanceof ITranslatedMetaModel) {
-            $languages = $metaModel->getLanguages();
+            $languages[] = $metaModel->getLanguage();
         } elseif ($metaModel->isTranslated(false)) {
-            $languages = $this->getMetaModel()->getAvailableLanguages() ?? [];
+            $languages[] = $metaModel->getActiveLanguage();
         }
 
-        return new SearchAttribute($attribute, $value, \array_values(\array_filter($languages)));
+        // FIXME: this does correctly search in the current language but does NOT fall back to the fall back language
+        //        This is a problem when we have selected items that have no translation.
+        return new SearchAttribute($attribute, $value, \array_filter($languages));
     }
 
     /** @psalm-assert TFilterANDOR $filter */
@@ -464,7 +466,10 @@ class FilterBuilder
     private function assertValidInList(array $filter): void
     {
         assert(\is_string($filter['property'] ?? null));
-        assert(\is_string($value = ($filter['value'] ?? null)) || \is_int($value) || \is_float($value));
+        assert(\is_array($filter['values'] ?? null));
+        foreach ($filter['values'] as $value) {
+            assert(\is_string($value) || \is_int($value) || \is_float($value));
+        }
         assert($filter['operation'] === 'IN');
     }
 

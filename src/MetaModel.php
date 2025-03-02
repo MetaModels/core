@@ -80,6 +80,8 @@ class MetaModel implements IMetaModel
      * The service container.
      *
      * @var \Closure|IMetaModelsServiceContainer|null
+     *
+     * @psalm-suppress DeprecatedInterface
      */
     protected $serviceContainer = null;
 
