@@ -902,7 +902,11 @@ class ToolboxFile
                 }
             }
             // Send the file to the browser if check succeeded.
-            /** @psalm-suppress DeprecatedMethod */
+            /**
+             * See https://github.com/contao/contao/issues/8147#issuecomment-2690388500
+             *
+             * @psalm-suppress DeprecatedMethod
+             */
             Controller::sendFileToBrowser($file);
         }
     }
