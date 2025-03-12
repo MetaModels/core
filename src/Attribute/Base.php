@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,7 +19,7 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -320,7 +320,7 @@ abstract class Base implements IAttribute
     {
         if (in_array($strKey, $this->getAttributeSettingNames())) {
             if (null !== $varValue && !\is_array($varValue) && (\str_starts_with($varValue, 'a:'))) {
-                $unSerialized = \unserialize($varValue);
+                $unSerialized = \unserialize($varValue, ['allowed_classes' => true]);
             }
 
             if (isset($unSerialized) && is_array($unSerialized)) {
@@ -624,7 +624,7 @@ abstract class Base implements IAttribute
             $this->prepareTemplate($objTemplate, $arrRowData, $objSettings);
 
             // Now the desired format.
-            if ($strValue = $objTemplate->parse($strOutputFormat, false)) {
+            if (('text' !== $strOutputFormat) && $strValue = $objTemplate->parse($strOutputFormat, false)) {
                 $arrResult[$strOutputFormat] = $strValue;
             }
 
