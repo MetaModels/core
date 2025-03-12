@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -319,6 +319,7 @@ class Template
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function getTemplate($strTemplate, $strFormat = 'html5', $blnFailIfNotFound = false)
     {
@@ -337,9 +338,14 @@ class Template
             isset(self::$templatePathCache[$strTemplate][$strFormat])
             && \array_key_exists($strCustom, self::$templatePathCache[$strTemplate][$strFormat])
         ) {
-            return self::$templatePathCache[$strTemplate][$strFormat][$strCustom] !== false
+            $value = self::$templatePathCache[$strTemplate][$strFormat][$strCustom] !== false
                 ? self::$templatePathCache[$strTemplate][$strFormat][$strCustom]
                 : null;
+            if ($blnFailIfNotFound && null === $value) {
+                throw new \Exception('Could not find template "' . $strTemplate . '"');
+            }
+
+            return $value;
         }
 
         try {
