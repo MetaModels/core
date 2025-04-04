@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     David Maack <david.maack@arcor.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -27,8 +27,11 @@ use MetaModels\Render\Setting\ICollection;
 /**
  * Interface for a collection of MetaModel items.
  *
- * @method IItems|bool next() Advance the internal cursor by one returns the current instance or false when last
- *                            item has had been reached.
+ * @psalm-suppress MethodSignatureMustProvideReturnType
+ * @psalm-suppress ImplementedReturnTypeMismatch
+ * @method IItems|false next() Advance the internal cursor by one returns the current instance or false when last
+ *                             item has had been reached.
+ *
  * @extends \Iterator<int, IItem>
  * @extends \ArrayAccess<int, IItem>
  */

@@ -165,15 +165,12 @@ abstract class MetaModelHybrid extends Hybrid
         $this->arrData = \method_exists($objElement, 'row') ? $objElement->row() : (array) $objElement;
 
         // Get CSS ID and headline from the parent element (!).
-        /** @psalm-suppress UndefinedThisPropertyFetch */
         $this->cssID      = StringUtil::deserialize($objElement->cssID, true);
         $this->typePrefix = $objElement->typePrefix ?? '';
-        /** @psalm-suppress UndefinedThisPropertyFetch */
-        $this->strKey = $objElement->type;
-        $arrHeadline  = StringUtil::deserialize($objElement->headline);
-        /** @psalm-suppress UndefinedThisPropertyFetch */
-        $this->headline = \is_array($arrHeadline) ? $arrHeadline['value'] : $arrHeadline;
-        $this->hl       = \is_array($arrHeadline) ? $arrHeadline['unit'] : 'h1';
+        $this->strKey     = $objElement->type;
+        $arrHeadline      = StringUtil::deserialize($objElement->headline);
+        $this->headline   = \is_array($arrHeadline) ? $arrHeadline['value'] : $arrHeadline;
+        $this->hl         = \is_array($arrHeadline) ? $arrHeadline['unit'] : 'h1';
     }
 
     /**

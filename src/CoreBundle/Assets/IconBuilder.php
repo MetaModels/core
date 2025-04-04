@@ -168,7 +168,6 @@ class IconBuilder
         $attributes = '',
         $defaultIcon = 'bundles/metamodelscore/images/icons/metamodels.png'
     ) {
-        /** @psalm-suppress InternalMethod - Class Adapter is internal, not the __call() method. Blame Contao. */
         return $this->image->getHtml($this->getBackendIcon($icon, $defaultIcon), $alt, $attributes);
     }
 
@@ -187,7 +186,6 @@ class IconBuilder
         }
 
         if (Validator::isUuid($varValue)) {
-            /** @psalm-suppress InternalMethod - Class Adapter is internal, not the __call() method. Blame Contao. */
             $model = $this->filesAdapter->findByPk($varValue);
             if (($model instanceof FilesModel) && \file_exists($this->rootPath . '/' . $model->path)) {
                 return $model->path;

@@ -136,7 +136,6 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
 
         if (\is_callable($this->factory)) {
             $this->factory = \call_user_func($this->factory);
-            /** @psalm-suppress DeprecatedMethod */
             $this->factory->setServiceContainer($this, false);
         }
 
@@ -173,7 +172,6 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
 
         if (\is_callable($this->attributeFactory)) {
             $this->attributeFactory = \call_user_func($this->attributeFactory);
-            /** @psalm-suppress DeprecatedMethod */
             $this->attributeFactory->setServiceContainer($this, false);
         }
 
@@ -210,7 +208,6 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
 
         if (\is_callable($this->filterFactory)) {
             $this->filterFactory = \call_user_func($this->filterFactory);
-            /** @psalm-suppress DeprecatedMethod */
             $this->filterFactory->setServiceContainer($this, false);
         }
 
@@ -247,7 +244,6 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
 
         if (\is_callable($this->renderFactory)) {
             $this->renderFactory = \call_user_func($this->renderFactory);
-            /** @psalm-suppress DeprecatedMethod */
             $this->renderFactory->setServiceContainer($this, false);
         }
 

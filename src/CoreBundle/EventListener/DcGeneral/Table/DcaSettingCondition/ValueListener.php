@@ -192,7 +192,6 @@ class ValueListener extends AbstractListener
             return;
         }
 
-        /** @psalm-suppress UndefinedMagicPropertyAssignment */
         $event->getWidget()->multiple = true;
     }
 

@@ -682,7 +682,8 @@ class ItemList
             $this->objView = $metaModel->getView((int) $this->intView);
         }
 
-        $this->objTemplate       = new Template((string) $this->objView->get('template'));
+        $this->objTemplate = new Template((string) $this->objView->get('template'));
+        /** @psalm-suppress UndefinedMagicPropertyAssignment */
         $this->objTemplate->view = $this->objView;
     }
 
@@ -909,7 +910,6 @@ class ItemList
         foreach ((array) $this->getView()->get('jumpTo') as $jumpTo) {
             $langCode = (string) ($jumpTo['langcode'] ?? '');
             // If either desired language or fallback, keep the result.
-            /** @psalm-suppress DeprecatedMethod */
             if (
                 $langCode === $desiredLanguage
                 || $langCode === $fallbackLanguage
@@ -962,6 +962,7 @@ class ItemList
         $calculator = $this->paginationLimitCalculator;
         $calculator->setTotalAmount($total);
         if (null !== $this->objTemplate) {
+            /** @psalm-suppress UndefinedMagicPropertyAssignment */
             $this->objTemplate->total = $total;
         }
 
@@ -1209,6 +1210,7 @@ class ItemList
             if (!empty($this->strDescriptionAttribute)) {
                 while ($this->objItems->next()) {
                     $currentItem = $this->objItems->current();
+                    assert($currentItem instanceof IItem);
                     $arrDescription = $currentItem->parseAttribute(
                         $this->strDescriptionAttribute,
                         'text',
@@ -1254,6 +1256,8 @@ class ItemList
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     *
+     * @psalm-suppress UndefinedMagicPropertyAssignment
      */
     public function render(bool $isNoNativeParsing, object $caller = null): string
     {

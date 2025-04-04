@@ -1103,7 +1103,7 @@ class ToolboxFile
 
                 if (isset($meta[$baseLanguage])) {
                     $this->metaInformation[dirname($path)][basename($path)] = $meta[$baseLanguage];
-                } elseif (isset($meta[$fallbackLanguage])) {
+                } elseif (isset($meta[$fallbackLanguage]) && null !== $fallbackLanguage) {
                     $this->metaInformation[dirname($path)][basename($path)] = $meta[$fallbackLanguage];
                 }
             }
@@ -1131,7 +1131,7 @@ class ToolboxFile
         if (isset($meta['caption']) && strlen($meta['caption'])) {
             $altText = $meta['caption'];
         } else {
-            $altText = ucfirst(str_replace('_', ' ', preg_replace('/^[0-9]+_/', '', $file->filename)));
+            $altText = ucfirst(str_replace('_', ' ', preg_replace('/^[0-9]+_/', '', $file->filename) ?? ''));
         }
 
         $information = [

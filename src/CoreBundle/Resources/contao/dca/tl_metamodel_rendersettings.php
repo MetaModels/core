@@ -291,7 +291,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = [
                         'inputType'   => 'justtextoption',
                         'eval'        => [
                             'tl_class' => 'jumpTo_language',
-                            'valign' => 'center'
+                            'valign'   => 'center'
                         ]
                     ],
                     'type'     => [

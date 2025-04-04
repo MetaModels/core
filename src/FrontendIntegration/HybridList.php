@@ -131,7 +131,6 @@ class HybridList extends MetaModelHybrid
 
         /**
          * @psalm-suppress UndefinedThisPropertyFetch
-         * @psalm-suppress UndefinedMagicPropertyAssignment
          */
         $objItemRenderer
             ->setMetaModel($this->metamodel, $this->metamodel_rendersettings)

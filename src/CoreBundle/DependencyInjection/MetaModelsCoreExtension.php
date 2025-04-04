@@ -39,7 +39,9 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * This is the class that loads and manages the bundle configuration
+ * This is the class that loads and manages the bundle configuration.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MetaModelsCoreExtension extends Extension implements PrependExtensionInterface
 {

@@ -83,7 +83,6 @@ final class ManipulateWidgetListener
         $propExtra = $property->getExtra();
 
         if (null !== ($template = $propExtra['be_template'] ?? null)) {
-            /** @psalm-suppress UndefinedMagicPropertyAssignment */
             $event->getWidget()->template = $template;
         }
     }

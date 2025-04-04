@@ -242,7 +242,6 @@ class Collection implements ICollection
             $translated       = true;
             $desiredLanguage  = $this->metaModel->getLanguage();
             $fallbackLanguage = $this->metaModel->getMainLanguage();
-            /** @psalm-suppress DeprecatedMethod */
         } elseif ($this->metaModel->isTranslated()) {
             // @coverageIgnoreStart
             // @codingStandardsIgnoreStart

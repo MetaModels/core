@@ -128,7 +128,11 @@ class SupportMetaModelsController extends AbstractBackendController
             return [];
         }
 
-        $contents = \json_decode(\file_get_contents($filename), true);
+        if (false === ($fileContents = \file_get_contents($filename))) {
+            return [];
+        }
+
+        $contents = \json_decode($fileContents, true);
 
         return $contents ?: [];
     }

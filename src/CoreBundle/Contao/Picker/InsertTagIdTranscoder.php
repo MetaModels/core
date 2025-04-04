@@ -13,7 +13,7 @@ final readonly class InsertTagIdTranscoder implements IdTranscoderInterface
     public function __construct(
         private string $metaModel,
         private string $renderSettingId,
-    ){
+    ) {
     }
 
     public function encode(string $id): string
