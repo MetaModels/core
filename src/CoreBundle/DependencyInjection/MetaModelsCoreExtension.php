@@ -24,6 +24,7 @@
 namespace MetaModels\CoreBundle\DependencyInjection;
 
 use MetaModels\CoreBundle\Attribute\DoctrineSchemaProvider;
+use MetaModels\CoreBundle\Contao\Picker\MetaModelsJumpToPickerProvider;
 use MetaModels\CoreBundle\DependencyInjection\CompilerPass\CollectDoctrineSchemaGeneratorsPass;
 use MetaModels\CoreBundle\Migration\TableCollationMigration;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
@@ -31,9 +32,11 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * This is the class that loads and manages the bundle configuration
@@ -119,6 +122,11 @@ class MetaModelsCoreExtension extends Extension implements PrependExtensionInter
 
         $container->getDefinition(TableCollationMigration::class)
             ->setArgument('$defaultTableOptions', $this->defaultTableOptions);
+
+        $jumpToPicker = $config['picker_jumpto'];
+        if (null !== $jumpToPicker) {
+            $this->processJumpToPicker($jumpToPicker, $container);
+        }
     }
 
     /**
@@ -184,5 +192,25 @@ class MetaModelsCoreExtension extends Extension implements PrependExtensionInter
             $defaultTableOptions[] = $doctrineConfig['dbal']['connections']['default']['default_table_options'];
         }
         $this->defaultTableOptions = \array_merge(...$defaultTableOptions);
+    }
+
+    /** @param array<string, array{render_setting: string, priority: int, icon: ?string}> $jumpToPicker */
+    private function processJumpToPicker(mixed $jumpToPicker, ContainerBuilder $container): void
+    {
+        $menuFactory = new Reference('knp_menu.factory');
+        $router      = new Reference('router');
+        $translator  = new Reference('translator');
+        foreach ($jumpToPicker as $metaModelName => $config) {
+            $definition = new Definition(MetaModelsJumpToPickerProvider::class);
+            $definition->setArgument('$menuFactory', $menuFactory);
+            $definition->setArgument('$router', $router);
+            $definition->setArgument('$translator', $translator);
+            $definition->setArgument('$tableName', $metaModelName);
+            $definition->setArgument('$renderSettingId', $config['render_setting']);
+            $definition->setArgument('$linkIcon', $config['icon']);
+            $definition->addTag('contao.picker_provider', ['priority' => $config['priority']]);
+
+            $container->setDefinition('metamodels_jump_to_picker_' . $metaModelName, $definition);
+        }
     }
 }
