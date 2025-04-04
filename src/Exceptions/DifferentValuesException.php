@@ -215,7 +215,7 @@ class DifferentValuesException extends \Exception
                 throw new \LogicException(
                     \sprintf(
                         'Array key mismatch. Found %s, expected %s.',
-                        \key($actual),
+                        \key($actual) ?? '',
                         $key
                     ),
                     self::ARRAY_KEY_MISMATCH
@@ -228,7 +228,7 @@ class DifferentValuesException extends \Exception
                 throw new \LogicException(
                     \sprintf(
                         'Array value mismatch for key %s.',
-                        \key($actual)
+                        \key($actual) ?? ''
                     ),
                     self::ARRAY_VALUE_MISMATCH,
                     $exception

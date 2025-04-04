@@ -312,7 +312,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = [
             'eval'        =>
                 [
                     'includeBlankOption' => true,
-                    'valign'             => 'top',
                     'chosen'             => true,
                     'tl_class'           => 'w50'
                 ],

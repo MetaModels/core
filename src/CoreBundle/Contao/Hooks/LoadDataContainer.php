@@ -300,7 +300,7 @@ class LoadDataContainer
 
         return \sprintf(
             '<a href="%1$s" title="%2$s"%3$s>%4$s</a> ',
-            $url,
+            $url ?? '',
             StringUtil::specialchars($title),
             $attributes,
             $this->iconBuilder->getBackendIconImageTag($icon, $label)

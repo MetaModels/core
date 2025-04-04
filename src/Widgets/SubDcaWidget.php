@@ -465,7 +465,7 @@ class SubDcaWidget extends Widget
         }
 
         // Hack for checkboxes.
-        if (($arrField['inputType'] == 'checkbox') && isset($varInput[$strRow][$strKey])) {
+        if (($arrField['inputType'] === 'checkbox') && isset($varInput[$strRow][$strKey])) {
             $_POST[$objWidget->name] = $varValue;
         }
 
@@ -475,7 +475,7 @@ class SubDcaWidget extends Widget
 
         // Convert date formats into timestamps (check the eval setting first -> #3063).
         $rgxp = $arrField['eval']['rgxp'] ?? null;
-        if (($rgxp == 'date' || $rgxp == 'time' || $rgxp == 'datim') && $varValue != '') {
+        if (($rgxp === 'date' || $rgxp === 'time' || $rgxp === 'datim') && $varValue !== '') {
             $objDate  = new Date($varValue, $GLOBALS['TL_CONFIG'][$rgxp . 'Format']);
             $varValue = $objDate->tstamp;
         }
@@ -561,12 +561,12 @@ class SubDcaWidget extends Widget
             $columns = [];
             foreach ((array) $widgetRow as $widget) {
                 /** @var Widget $widget */
-                /** @psalm-suppress UndefinedMagicPropertyFetch */
-                $valign = ($widget->valign != '' ? ' valign="' . ($widget->valign ?? '') . '"' : '');
-                /** @psalm-suppress UndefinedMagicPropertyFetch */
-                $class  = ($widget->tl_class != '' ? ' class="' . ($widget->tl_class ?? '') . '"' : '');
-                $style  = ($widget->style != '' ? ' style="' . $widget->style . '"' : '');
-                $help   = $this->getHelpForWidget($widget);
+                $rawValign = (string) ($widget->valign ?? '');
+                $valign    = ($rawValign !== '' ? ' valign="' . $rawValign . '"' : '');
+                $rawClass = $widget->class;
+                $class    = ($rawClass !== '' ? ' class="' . $rawClass . '"' : '');
+                $style    = ($widget->style !== '' ? ' style="' . $widget->style . '"' : '');
+                $help     = $this->getHelpForWidget($widget);
 
                 $columns[] = sprintf(
                     '<td %1$s%2$s%3$s>%4$s%5$s</td>',

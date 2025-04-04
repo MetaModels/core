@@ -284,7 +284,6 @@ trait ListControllerTrait
             ->setFilterParameters($filterParams, $this->getFilterParameters($filterUrl, $itemRenderer))
             ->setMetaTags($model->metamodel_meta_title, $model->metamodel_meta_description);
         if ($sortOverride) {
-            /** @psalm-suppress UndefinedMagicPropertyFetch */
             $itemRenderer->setSortingLinkGenerator(
                 new SortingLinkGenerator(
                     $this->filterUrlBuilder,
@@ -301,7 +300,6 @@ trait ListControllerTrait
 
         /** @psalm-suppress UndefinedMagicPropertyFetch */
         if ($model->metamodel_use_parameters) {
-            /** @psalm-suppress UndefinedMagicPropertyFetch */
             foreach (StringUtil::deserialize(($model->metamodel_parameters ?? null), true) as $key => $value) {
                 $itemRenderer->setTemplateParameter($key, $value);
             }
@@ -317,11 +315,13 @@ trait ListControllerTrait
         /** @psalm-suppress UndefinedMagicPropertyAssignment */
         $template->pagination = $itemRenderer->getPagination();
 
+        /** @var \Iterator<int, IItem> $items */
+        $items = $itemRenderer->getItems();
+
         $responseTags = \array_map(
-            static function (IItem $item) {
-                return \sprintf('contao.db.%s.%d', $item->getMetaModel()->getTableName(), $item->get('id'));
-            },
-            \iterator_to_array($itemRenderer->getItems(), false)
+            static fn (IItem $item): string
+                => \sprintf('contao.db.%s.%d', $item->getMetaModel()->getTableName(), $item->get('id')),
+            \iterator_to_array($items, false)
         );
 
         $response = $template->getResponse();

@@ -298,7 +298,12 @@ class Driver implements MultiLanguageDataProviderInterface
             $modelId = \reset($ids);
         }
 
-        $objItem = (null !== $modelId) ? $this->getMetaModel()->findById($modelId, $config->getFields() ?? []) : null;
+        if (!(($model = $this->getMetaModel()) instanceof IMetaModel)) {
+            return null;
+        }
+        assert(null === $modelId || is_string($modelId));
+
+        $objItem = (null !== $modelId) ? $model->findById($modelId, $config->getFields() ?? []) : null;
 
         $this->setLanguage($backupLanguage);
 
@@ -475,6 +480,10 @@ class Driver implements MultiLanguageDataProviderInterface
         $items      = $this->getItemsFromFilter($filter, $config);
         $collection = $this->getEmptyCollection();
         foreach ($items as $objItem) {
+            if (!($objItem instanceof IItem)) {
+                continue;
+            }
+
             $collection->push(new Model($objItem));
         }
         $this->setLanguage($backupLanguage);

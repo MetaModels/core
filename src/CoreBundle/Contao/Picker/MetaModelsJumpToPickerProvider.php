@@ -16,15 +16,17 @@ use Throwable;
 
 use function strtr;
 
-class MetaModelsJumpToPickerProvider implements PickerProviderInterface, IdTranscodingPickerProviderInterface
+final readonly class MetaModelsJumpToPickerProvider implements
+    PickerProviderInterface,
+    IdTranscodingPickerProviderInterface
 {
     public function __construct(
-        private readonly FactoryInterface $menuFactory,
-        private readonly RouterInterface $router,
-        private readonly TranslatorInterface $translator,
-        private readonly string $tableName,
-        private readonly string $renderSettingId,
-        private readonly ?string $linkIcon,
+        private FactoryInterface $menuFactory,
+        private RouterInterface $router,
+        private TranslatorInterface $translator,
+        private string $tableName,
+        private string $renderSettingId,
+        private ?string $linkIcon,
     ) {
     }
 
@@ -55,7 +57,7 @@ class MetaModelsJumpToPickerProvider implements PickerProviderInterface, IdTrans
         ]);
     }
 
-    public function supportsContext($context): bool
+    public function supportsContext(string $context): bool
     {
         return 'link' === $context;
     }
@@ -76,12 +78,13 @@ class MetaModelsJumpToPickerProvider implements PickerProviderInterface, IdTrans
         return $config->getCurrent() === $this->getName();
     }
 
+    /** @SuppressWarnings(PHPMD.UnusedFormalParameter) */
     public function createIdTranscoder(PickerConfig $config): IdTranscoderInterface
     {
         return new InsertTagIdTranscoder($this->tableName, $this->renderSettingId);
     }
 
-    private function generateUrl(PickerConfig $config): ?string
+    private function generateUrl(PickerConfig $config): string
     {
         $newConfig = $config->cloneForCurrent($this->getName());
         $newConfig->setExtra('sourceName', $this->tableName);

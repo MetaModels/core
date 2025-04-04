@@ -461,7 +461,6 @@ class FrontendFilter
         assert($tokenManager instanceof ContaoCsrfTokenManager);
 
         // Return filter data.
-        /** @psalm-suppress UndefinedMagicPropertyFetch */
         return [
             'requestToken' => $tokenManager->getDefaultTokenValue(),
             'action'       => $this->filterUrlBuilder->generate($other)

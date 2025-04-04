@@ -86,7 +86,6 @@ class AttributeRendererListener extends BaseListener
             assert($requestStack instanceof RequestStack);
             $locale      = (string) $requestStack->getCurrentRequest()?->getLocale();
             $description = $arrDescription[$locale] ?? null;
-            /** @psalm-suppress DeprecatedMethod */
             if (null === $description) {
                 if ($metaModel instanceof ITranslatedMetaModel) {
                     $description = $arrDescription[$metaModel->getMainLanguage()] ?? $attribute->getName();

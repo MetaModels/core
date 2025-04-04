@@ -46,8 +46,6 @@ class ContaoFactory
      * Create a new instance.
      *
      * @param ContaoFramework $framework The Contao framework.
-     *
-     * @psalm-suppress DeprecatedInterface
      */
     public function __construct(ContaoFramework $framework)
     {

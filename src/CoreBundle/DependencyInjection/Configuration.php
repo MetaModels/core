@@ -94,9 +94,11 @@ class Configuration implements ConfigurationInterface
         return $treeBuilder;
     }
 
+    /** @psalm-suppress UndefinedMethod */
     private function addJumpToPickerNode(): NodeDefinition
     {
         $treeBuilder = new TreeBuilder('picker_jumpto');
+
         $node = $treeBuilder->getRootNode();
         $node
             ->useAttributeAsKey('name')

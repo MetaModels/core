@@ -135,7 +135,6 @@ class HybridFilterBlock extends MetaModelHybrid
      */
     public function getFilterCollection()
     {
-        /** @psalm-suppress UndefinedThisPropertyFetch */
         return $this
             ->getFilterFactory()
             ->createCollection($this->metamodel_filtering);

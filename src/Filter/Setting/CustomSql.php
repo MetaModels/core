@@ -471,7 +471,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
         parse_str($strQuery, $arrArgs);
         $arrName = (array) $arrArgs['name'];
 
-        $var = $this->getValueFromSource($strSource, array_shift($arrName), $arrArgs);
+        $var = $this->getValueFromSource($strSource, array_shift($arrName) ?? '', $arrArgs);
 
         $index = 0;
         $count = count($arrName);

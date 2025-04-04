@@ -112,3 +112,9 @@ tasks:
     plugin: composer-normalize
     config:
       dry_run: false
+
+  psalm-unused:
+    plugin: psalm
+    config:
+      custom_flags:
+        - '--find-unused-psalm-suppress'

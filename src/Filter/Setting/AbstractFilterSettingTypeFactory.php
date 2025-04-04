@@ -170,7 +170,8 @@ abstract class AbstractFilterSettingTypeFactory implements IFilterSettingTypeFac
     public function isNestedType()
     {
         if (null === $this->isNestedType) {
-            $this->isNestedType = \in_array(IWithChildren::class, \class_implements($this->typeClass, true), true);
+            $this->isNestedType =
+                \in_array(IWithChildren::class, (array) \class_implements($this->typeClass, true), true);
         }
 
         return $this->isNestedType;

@@ -343,7 +343,7 @@ class Template
         }
 
         try {
-            /** @psalm-suppress InternalMethod - the ContaoFramework class is internal, not the method usage. */
+            /** @psalm-suppress UndefinedMagicMethod */
             self::$templatePathCache[$strTemplate][$strFormat][$strCustom] = $this->templateLoader->getPath(
                 $strTemplate,
                 $strFormat,
