@@ -8,14 +8,14 @@ if ($this->items->getCount()) {
         foreach ($item['attributes'] as $field => $attribute) {
             if ((isset($item['text'][$field]) && ($value = $item['text'][$field]))) {
                 if (!$hideLabels) {
-                    echo trim($translator->trans('field_label', ['%field_label%' => $attribute->getName()], 'metamodels_list')) . ' ';
+                    echo \trim($translator->trans('field_label', ['%field_label%' => $attribute->getName()], 'metamodels_list')) . ' ';
                 }
                 echo $value . PHP_EOL;
             }
         }
 
         foreach ($item['actions'] as $action) {
-            echo sprintf(
+            echo \sprintf(
                 '%s: %s%s',
                 $action['label'],
                 $action['href'],
