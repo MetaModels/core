@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2024 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2020 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2024 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -33,21 +34,21 @@ class PurgeCache
     /**
      * The cache directory.
      *
-     * @var string
+     * @var string|null
      */
-    private $cacheDir;
+    private ?string $cacheDir;
 
     /**
      * The logger to use.
      *
      * @var LoggerInterface
      */
-    private $logger;
+    private LoggerInterface $logger;
 
     /**
      * Create a new instance.
      *
-     * @param string          $cacheDir The cache directory.
+     * @param string|null     $cacheDir The cache directory.
      * @param LoggerInterface $logger   The logger.
      */
     public function __construct($cacheDir, LoggerInterface $logger)
@@ -67,7 +68,7 @@ class PurgeCache
     public function purge()
     {
         $fileSystem = new Filesystem();
-        if (!$fileSystem->exists($this->cacheDir)) {
+        if (null === $this->cacheDir || !$fileSystem->exists($this->cacheDir)) {
             return;
         }
         $fileSystem->remove($this->cacheDir);

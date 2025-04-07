@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,21 +20,22 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Marc Reimann <reimann@mediendepot-ruhr.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2024 The MetaModels team.
+ * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\FrontendIntegration;
 
+use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\RedirectEvent;
+use Contao\CoreBundle\Csrf\ContaoCsrfTokenManager;
 use Contao\CoreBundle\Exception\RedirectResponseException;
 use Contao\FrontendTemplate;
 use Contao\Input;
 use Contao\System;
-use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
-use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\RedirectEvent;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Exception;
 use MetaModels\Filter\FilterUrl;
 use MetaModels\Filter\FilterUrlBuilder;
@@ -203,7 +204,7 @@ class FrontendFilter
 
             if (\strlen($strValue)) {
                 // Shift auto_item to the front.
-                if ($strName == 'auto_item') {
+                if ($strName === 'auto_item') {
                     $strFilterAction = '/' . \rawurlencode(\rawurlencode($strValue)) . $strFilterAction;
                     continue;
                 }
@@ -456,16 +457,19 @@ class FrontendFilter
             }
         }
 
+        $tokenManager = System::getContainer()->get('contao.csrf.token_manager');
+        assert($tokenManager instanceof ContaoCsrfTokenManager);
+
         // Return filter data.
-        /** @psalm-suppress UndefinedMagicPropertyFetch */
         return [
-            'action'  => $this->filterUrlBuilder->generate($other)
-                         . ($this->objFilterConfig->metamodel_fef_urlfragment
+            'requestToken' => $tokenManager->getDefaultTokenValue(),
+            'action'       => $this->filterUrlBuilder->generate($other)
+                              . ($this->objFilterConfig->metamodel_fef_urlfragment
                     ? '#' . $this->objFilterConfig->metamodel_fef_urlfragment
                     : ''),
-            'formid'  => $this->formId,
-            'filters' => $renderedWidgets,
-            'submit'  => ($filterOptions->isAutoSubmit()
+            'formid'       => $this->formId,
+            'filters'      => $renderedWidgets,
+            'submit'       => ($filterOptions->isAutoSubmit()
                 ? ''
                 : $this->translator->trans('submit', [], 'metamodels_filter')
             )

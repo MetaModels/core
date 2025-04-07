@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -25,7 +25,7 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Fritz Michael Gschwantner <fmg@inspiredminds.at>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -33,6 +33,10 @@
 namespace MetaModels;
 
 use Contao\ContentModel;
+use Contao\CoreBundle\Routing\ResponseContext\HtmlHeadBag\HtmlHeadBag;
+use Contao\CoreBundle\Routing\ResponseContext\ResponseContext;
+use Contao\CoreBundle\Routing\ScopeMatcher;
+use Contao\CoreBundle\String\HtmlDecoder;
 use Contao\Model;
 use Contao\ModuleModel;
 use Contao\StringUtil;
@@ -52,7 +56,7 @@ use MetaModels\Render\Setting\IRenderSettingFactory;
 use MetaModels\Render\Template;
 use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 use function array_key_exists;
@@ -602,6 +606,7 @@ class ItemList
     /**
      * The list template (ce_ or mod_).
      *
+     * @psalm-suppress DeprecatedClass
      * @var ContaoTemplate|null
      */
     private $listTemplate = null;
@@ -677,7 +682,8 @@ class ItemList
             $this->objView = $metaModel->getView((int) $this->intView);
         }
 
-        $this->objTemplate       = new Template((string) $this->objView->get('template'));
+        $this->objTemplate = new Template((string) $this->objView->get('template'));
+        /** @psalm-suppress UndefinedMagicPropertyAssignment */
         $this->objTemplate->view = $this->objView;
     }
 
@@ -792,6 +798,8 @@ class ItemList
      * Get the template of the module or content element.
      *
      * @return ContaoTemplate
+     *
+     * @psalm-suppress DeprecatedClass
      */
     public function getListTemplate(): ?ContaoTemplate
     {
@@ -804,6 +812,8 @@ class ItemList
      * @param ContaoTemplate $template The template.
      *
      * @return self
+     *
+     * @psalm-suppress DeprecatedClass
      */
     public function setListTemplate(ContaoTemplate $template): self
     {
@@ -889,8 +899,10 @@ class ItemList
             $fallbackLanguage = $metaModel->getFallbackLanguage();
             $isTranslated     = true;
         } else {
+            $requestStack = System::getContainer()->get('request_stack');
+            assert($requestStack instanceof RequestStack);
             $desiredLanguage  =
-            $fallbackLanguage = System::getContainer()->get('request_stack')?->getCurrentRequest()?->getLocale();
+            $fallbackLanguage = $requestStack->getCurrentRequest()?->getLocale();
             $isTranslated     = false;
         }
 
@@ -898,7 +910,6 @@ class ItemList
         foreach ((array) $this->getView()->get('jumpTo') as $jumpTo) {
             $langCode = (string) ($jumpTo['langcode'] ?? '');
             // If either desired language or fallback, keep the result.
-            /** @psalm-suppress DeprecatedMethod */
             if (
                 $langCode === $desiredLanguage
                 || $langCode === $fallbackLanguage
@@ -951,6 +962,7 @@ class ItemList
         $calculator = $this->paginationLimitCalculator;
         $calculator->setTotalAmount($total);
         if (null !== $this->objTemplate) {
+            /** @psalm-suppress UndefinedMagicPropertyAssignment */
             $this->objTemplate->total = $total;
         }
 
@@ -1048,16 +1060,24 @@ class ItemList
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function getPage(): ?object
     {
-        $isFrontend = (bool) System::getContainer()
-            ->get('contao.routing.scope_matcher')
-            ?->isFrontendRequest(
-                System::getContainer()->get('request_stack')?->getCurrentRequest() ?? Request::create('')
-            );
+        $requestStack = System::getContainer()->get('request_stack');
+        if (!$requestStack instanceof RequestStack) {
+            return null;
+        }
+        $request = $requestStack->getCurrentRequest();
+        if (null === $request) {
+            return null;
+        }
+        $scopeMatcher = System::getContainer()->get('contao.routing.scope_matcher');
+        if (!($scopeMatcher instanceof ScopeMatcher) || !$scopeMatcher->isFrontendRequest($request)) {
+            return null;
+        }
 
-        return ($isFrontend && is_object($page = $GLOBALS['objPage'])) ? $page : null;
+        return $request->attributes->get('pageModel');
     }
 
     /**
@@ -1146,11 +1166,26 @@ class ItemList
      * @return void
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function setTitleAndDescription(): void
     {
-        $page = $this->getPage();
-        if ($page && null !== $this->objItems && $this->objItems->getCount()) {
+        if (empty($this->strTitleAttribute) && empty($this->strDescriptionAttribute)) {
+            return;
+        }
+
+        $container = System::getContainer();
+        if (
+            !($htmlDecoder = $container->get('contao.string.html_decoder')) instanceof HtmlDecoder
+            || !($responseContext = $container->get('contao.routing.response_context_accessor')->getResponseContext()
+                ) instanceof ResponseContext
+            || !$responseContext->has(HtmlHeadBag::class)
+        ) {
+            return;
+        }
+
+        $htmlHeadBag = $responseContext->get(HtmlHeadBag::class);
+        if (null !== $this->objItems && $this->objItems->getCount()) {
             // Add title if needed.
             if (!empty($this->strTitleAttribute)) {
                 while ($this->objItems->next()) {
@@ -1163,7 +1198,7 @@ class ItemList
                     );
 
                     if (!empty($titles['text'])) {
-                        $page->pageTitle = strip_tags($titles['text']);
+                        $htmlHeadBag->setTitle($htmlDecoder->inputEncodedToPlainText($titles['text']));
                         break;
                     }
                 }
@@ -1174,7 +1209,8 @@ class ItemList
             // Add description if needed.
             if (!empty($this->strDescriptionAttribute)) {
                 while ($this->objItems->next()) {
-                    $currentItem    = $this->objItems->current();
+                    $currentItem = $this->objItems->current();
+                    assert($currentItem instanceof IItem);
                     $arrDescription = $currentItem->parseAttribute(
                         $this->strDescriptionAttribute,
                         'text',
@@ -1182,7 +1218,9 @@ class ItemList
                     );
 
                     if (!empty($arrDescription['text'])) {
-                        $page->description = StringUtil::substr($arrDescription['text'], 160);
+                        $htmlHeadBag->setMetaDescription(
+                            StringUtil::substr($htmlDecoder->htmlToPlainText($arrDescription['text']), 160)
+                        );
                         break;
                     }
                 }
@@ -1191,7 +1229,6 @@ class ItemList
             }
         }
     }
-
 
     /**
      * Setter for SortingLinkGenerator.
@@ -1219,6 +1256,8 @@ class ItemList
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     *
+     * @psalm-suppress UndefinedMagicPropertyAssignment
      */
     public function render(bool $isNoNativeParsing, object $caller = null): string
     {

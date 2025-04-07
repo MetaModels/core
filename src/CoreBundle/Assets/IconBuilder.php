@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,8 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2024 The MetaModels team.
+ * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -120,8 +121,8 @@ class IconBuilder
     /**
      * Get a 16x16 pixel resized icon of the passed image if it exists, return the default icon otherwise.
      *
-     * @param string $icon        The icon to resize.
-     * @param string $defaultIcon The default icon.
+     * @param string|null $icon        The icon to resize.
+     * @param string      $defaultIcon The default icon.
      *
      * @return string
      */
@@ -134,11 +135,19 @@ class IconBuilder
             return $this->webPath . '/' . \basename($realIcon);
         }
 
-        if (!Path::isAbsolute($realIcon)) {
-            $realIcon = $this->projectWebPath . '/' . $realIcon;
+        if (!Path::isAbsolute($realIcon) || !str_starts_with($realIcon, $this->projectWebPath)) {
+            $realIcon = $this->projectWebPath . '/' . ltrim($realIcon, '/');
         }
 
         $this->imageFactory->create($realIcon, [16, 16, 'center_center'], $targetPath);
+
+        if (false !== ($lastDotAt = strrpos($realIcon, '.'))) {
+            $darkIcon = substr_replace($realIcon, '--dark', $lastDotAt, 0);
+            if (is_readable($darkIcon)) {
+                $this->imageFactory
+                    ->create($darkIcon, [16, 16, 'center_center'], $this->outputPath . '/' . \basename($darkIcon));
+            }
+        }
 
         return $this->webPath . '/' . \basename($realIcon);
     }
@@ -159,22 +168,24 @@ class IconBuilder
         $attributes = '',
         $defaultIcon = 'bundles/metamodelscore/images/icons/metamodels.png'
     ) {
-        /** @psalm-suppress InternalMethod - Class Adapter is internal, not the __call() method. Blame Contao. */
         return $this->image->getHtml($this->getBackendIcon($icon, $defaultIcon), $alt, $attributes);
     }
 
     /**
      * Translate the file ID to file path.
      *
-     * @param string $varValue The file id.
-     * @param string $fallback The fallback file path.
+     * @param string|null $varValue The file id.
+     * @param string      $fallback The fallback file path.
      *
      * @return string
      */
     public function convertValueToPath($varValue, $fallback)
     {
+        if (null === $varValue || '' === $varValue) {
+            return $fallback;
+        }
+
         if (Validator::isUuid($varValue)) {
-            /** @psalm-suppress InternalMethod - Class Adapter is internal, not the __call() method. Blame Contao. */
             $model = $this->filesAdapter->findByPk($varValue);
             if (($model instanceof FilesModel) && \file_exists($this->rootPath . '/' . $model->path)) {
                 return $model->path;
@@ -183,7 +194,12 @@ class IconBuilder
             return $fallback;
         }
 
-        if (\file_exists($varValue)) {
+        $checkPath = $varValue;
+        if (!Path::isAbsolute($checkPath) || !str_starts_with($checkPath, $this->projectWebPath)) {
+            $checkPath = $this->projectWebPath . '/' . ltrim($checkPath, '/');
+        }
+
+        if (\file_exists($checkPath)) {
             return $varValue;
         }
 

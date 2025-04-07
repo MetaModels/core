@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Oliver Willmes <info@oliverwillmes.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -64,7 +64,10 @@ final class ResolveLanguageTag
         if (!\str_contains($queryString, '{{iflng') && !\str_contains($queryString, '{{ifnlng')) {
             return $queryString;
         }
-        $tags = \preg_split('~{{(ifn?lng[^{}]*)}}~', $queryString, -1, PREG_SPLIT_DELIM_CAPTURE );
+
+        if (false === ($tags = \preg_split('~{{(ifn?lng[^{}]*)}}~', $queryString, -1, PREG_SPLIT_DELIM_CAPTURE ))) {
+            return $queryString;
+        }
 
         $strBuffer = '';
         $arrCache  = [];

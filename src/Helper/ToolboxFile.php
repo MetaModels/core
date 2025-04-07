@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,7 +20,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Andreas Fischer <anfischer@kaffee-partner.de>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -50,6 +50,38 @@ use Symfony\Component\Asset\Context\ContextInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
+use Throwable;
+
+use function array_fill;
+use function array_filter;
+use function array_flip;
+use function array_intersect;
+use function array_keys;
+use function array_map;
+use function array_multisort;
+use function basename;
+use function count;
+use function dirname;
+use function file_exists;
+use function getimagesize;
+use function implode;
+use function in_array;
+use function is_array;
+use function is_file;
+use function is_string;
+use function md5;
+use function preg_replace;
+use function shuffle;
+use function sprintf;
+use function str_replace;
+use function strlen;
+use function strnatcasecmp;
+use function strtolower;
+use function uasort;
+use function ucfirst;
+use function uniqid;
+use function urldecode;
+use function urlencode;
 
 /**
  * This class provides various methods for handling file collection within Contao.
@@ -261,7 +293,7 @@ class ToolboxFile
             );
             // @codingStandardsIgnoreEnd
             $rootDir = System::getContainer()->getParameter('kernel.project_dir');
-            assert(\is_string($rootDir));
+            assert(is_string($rootDir));
         }
         $this->rootDir = $rootDir;
 
@@ -318,11 +350,11 @@ class ToolboxFile
         // We must not allow file extensions that are globally disabled.
         $allowedDownload = StringUtil::trimsplit(',', $GLOBALS['TL_CONFIG']['allowedDownload']);
 
-        if (!\is_array($acceptedExtensions)) {
+        if (!is_array($acceptedExtensions)) {
             $acceptedExtensions = StringUtil::trimsplit(',', $acceptedExtensions);
         }
 
-        $this->acceptedExtensions = \array_map('strtolower', \array_intersect($allowedDownload, $acceptedExtensions));
+        $this->acceptedExtensions = array_map('strtolower', array_intersect($allowedDownload, $acceptedExtensions));
     }
 
     /**
@@ -524,10 +556,10 @@ class ToolboxFile
 
         $conditions = [];
         $parameters = [];
-        if (\count($this->pendingIds)) {
+        if (count($this->pendingIds)) {
             $conditions[] = $table . '.uuid IN(' .
-                            \implode(',', \array_fill(0, \count($this->pendingIds), 'UNHEX(?)')) . ')';
-            $parameters   = \array_map('bin2hex', $this->pendingIds);
+                            implode(',', array_fill(0, count($this->pendingIds), 'UNHEX(?)')) . ')';
+            $parameters   = array_map('bin2hex', $this->pendingIds);
 
             $this->pendingIds = [];
         }
@@ -540,11 +572,11 @@ class ToolboxFile
             $this->pendingPaths = [];
         }
 
-        if (!\count($conditions)) {
+        if (!count($conditions)) {
             return;
         }
 
-        $files = FilesModel::findBy([\implode(' OR ', $conditions)], $parameters);
+        $files = FilesModel::findBy([implode(' OR ', $conditions)], $parameters);
         if ($files instanceof Collection) {
             $this->addFileModels($files);
         }
@@ -570,7 +602,7 @@ class ToolboxFile
     {
         if (!$this->withDownloadKeys) {
             return UrlBuilder::fromUrl(Environment::get('request'))
-                ->setQueryParameter('file', \urlencode($strFile))
+                ->setQueryParameter('file', urlencode($strFile))
                 ->getUrl();
         }
         // Throws exception when running in CLI mode due to missing session.
@@ -578,11 +610,11 @@ class ToolboxFile
         assert($bag instanceof AttributeBagInterface);
 
         $links = $bag->has('metaModels_downloads') ? $bag->get('metaModels_downloads') : [];
-        if (!\is_array($links)) {
+        if (!is_array($links)) {
             $links = [];
         }
         if (!isset($links[$strFile])) {
-            $links[$strFile] = \md5(\uniqid('', true));
+            $links[$strFile] = md5(uniqid('', true));
             $bag->set('metaModels_downloads', $links);
         }
 
@@ -633,7 +665,7 @@ class ToolboxFile
         $files  = [];
         $source = [];
 
-        foreach (\array_keys($arrFiles) as $k) {
+        foreach (array_keys($arrFiles) as $k) {
             $files[]  = $arrFiles[$k];
             $source[] = $arrSource[$k];
         }
@@ -696,8 +728,8 @@ class ToolboxFile
      */
     protected function addClasses(&$arrSource)
     {
-        $countFiles = \count($arrSource);
-        foreach (\array_keys($arrSource) as $k) {
+        $countFiles = count($arrSource);
+        foreach (array_keys($arrSource) as $k) {
             $arrSource[$k]['class'] = (($k === 0) ? ' first' : '') .
                                       (($k === ($countFiles - 1)) ? ' last' : '') .
                                       ((($k % 2) === 0) ? ' even' : ' odd');
@@ -719,7 +751,12 @@ class ToolboxFile
             return ['files' => [], 'source' => []];
         }
 
-        \uasort($arrFiles, ($blnAscending) ? '\basename_natcasecmp' : '\basename_natcasercmp');
+        uasort(
+            $arrFiles,
+            static fn (string $fileA, string $fileB): int => $blnAscending
+                ? strnatcasecmp(basename($fileA), basename($fileB))
+                : -strnatcasecmp(basename($fileA), basename($fileB))
+        );
 
         return $this->remapSorting($arrFiles, $this->outputBuffer);
     }
@@ -741,9 +778,9 @@ class ToolboxFile
         }
 
         if ($blnAscending) {
-            \array_multisort($arrFiles, SORT_NUMERIC, $arrDates, SORT_ASC);
+            array_multisort($arrFiles, SORT_NUMERIC, $arrDates, SORT_ASC);
         } else {
-            \array_multisort($arrFiles, SORT_NUMERIC, $arrDates, SORT_DESC);
+            array_multisort($arrFiles, SORT_NUMERIC, $arrDates, SORT_DESC);
         }
 
         return $this->remapSorting($arrFiles, $this->outputBuffer);
@@ -762,7 +799,7 @@ class ToolboxFile
         if (!$fileMap) {
             return ['files' => [], 'source' => []];
         }
-        $fileKeys = \array_flip(\array_keys($this->uuidMap));
+        $fileKeys = array_flip(array_keys($this->uuidMap));
         $sorted   = [];
         foreach ($sortIds as $sortStringId) {
             $key          = $fileKeys[$sortStringId];
@@ -789,9 +826,9 @@ class ToolboxFile
             return ['files' => [], 'source' => []];
         }
 
-        $keys  = \array_keys($arrFiles);
+        $keys  = array_keys($arrFiles);
         $files = [];
-        \shuffle($keys);
+        shuffle($keys);
         foreach ($keys as $key) {
             $files[$key] = $arrFiles[$key];
         }
@@ -848,28 +885,28 @@ class ToolboxFile
             return;
         }
 
-        if (($file = Input::get('file'))) {
+        if (is_string(($file = Input::get('file')))) {
             if ($this->withDownloadKeys) {
                 // Throws exception when running in CLI mode due to missing session.
                 $bag   = $this->requestStack->getSession()->getBag('attributes');
                 assert($bag instanceof AttributeBagInterface);
                 $links = $bag->has('metaModels_downloads') ? $bag->get('metaModels_downloads') : [];
 
-                if (!\is_array($links)) {
+                if (!is_array($links)) {
                     $links = [];
                 }
                 // Check key and return 403 if mismatch
                 // keep both null-coalescing values different to account for missing values.
                 if (($links[$file] ?? null) !== (Input::get('fileKey') ?? false)) {
-                    $objHandler = new $GLOBALS['TL_PTY']['error_403']();
-                    /**
-                     * @var PageError403 $objHandler
-                     * @psalm-suppress DeprecatedMethod
-                     */
-                    $objHandler->generate($file);
+                    (new PageError403())->getResponse();
                 }
             }
             // Send the file to the browser if check succeeded.
+            /**
+             * See https://github.com/contao/contao/issues/8147#issuecomment-2690388500
+             *
+             * @psalm-suppress DeprecatedMethod
+             */
             Controller::sendFileToBrowser($file);
         }
     }
@@ -946,13 +983,13 @@ class ToolboxFile
     public static function convertValuesToMetaModels($values)
     {
         /** @psalm-suppress DocblockTypeContradiction */
-        if (!\is_array($values)) {
+        if (!is_array($values)) {
             throw new InvalidArgumentException('Invalid uuid list.');
         }
 
         // Convert UUIDs to binary and clean empty values out.
-        $values = \array_filter(
-            \array_map(function ($fileId) {
+        $values = array_filter(
+            array_map(function ($fileId) {
                 return Validator::isStringUuid($fileId) ? StringUtil::uuidToBin($fileId) : $fileId;
             }, $values)
         );
@@ -1002,7 +1039,7 @@ class ToolboxFile
      */
     public static function convertUuidsOrPathsToMetaModels($values)
     {
-        $values = \array_filter($values);
+        $values = array_filter($values);
         if (empty($values)) {
             return [
                 'bin'   => [],
@@ -1014,7 +1051,7 @@ class ToolboxFile
 
         foreach ($values as $key => $value) {
             if (!(Validator::isUuid($value))) {
-                if (!\is_string($value)) {
+                if (!is_string($value)) {
                     continue;
                 }
 
@@ -1036,8 +1073,8 @@ class ToolboxFile
      * Must either be called from within collectFiles or collectFiles must be called later on as this method
      * will add models of type folder to the list of pending paths to allow for recursive inclusion.
      *
-     * @param Collection   $files     The files to add.
-     * @param list<string> $skipPaths List of directories not to be added to the list of pending directories.
+     * @param Collection<FilesModel> $files     The files to add.
+     * @param list<string>           $skipPaths List of directories not to be added to the list of pending directories.
      *
      * @return void
      *
@@ -1048,14 +1085,14 @@ class ToolboxFile
         $baseLanguage     = $this->getBaseLanguage();
         $fallbackLanguage = $this->getFallbackLanguage();
         foreach ($files as $file) {
-            if ('folder' === $file->type && !\in_array($file->path, $skipPaths)) {
+            if ('folder' === $file->type && !in_array($file->path, $skipPaths)) {
                 $this->pendingPaths[] = $file->path . '/';
                 continue;
             }
             if (
-                \is_file($this->rootDir . DIRECTORY_SEPARATOR . $file->path)
-                && \in_array(
-                    \strtolower(pathinfo($file->path, PATHINFO_EXTENSION)),
+                is_file($this->rootDir . DIRECTORY_SEPARATOR . $file->path)
+                && in_array(
+                    strtolower(pathinfo($file->path, PATHINFO_EXTENSION)),
                     $this->acceptedExtensions
                 )
             ) {
@@ -1065,9 +1102,9 @@ class ToolboxFile
                 $meta                       = StringUtil::deserialize($file->meta, true);
 
                 if (isset($meta[$baseLanguage])) {
-                    $this->metaInformation[\dirname($path)][\basename($path)] = $meta[$baseLanguage];
-                } elseif (isset($meta[$fallbackLanguage])) {
-                    $this->metaInformation[\dirname($path)][\basename($path)] = $meta[$fallbackLanguage];
+                    $this->metaInformation[dirname($path)][basename($path)] = $meta[$baseLanguage];
+                } elseif (isset($meta[$fallbackLanguage]) && null !== $fallbackLanguage) {
+                    $this->metaInformation[dirname($path)][basename($path)] = $meta[$fallbackLanguage];
                 }
             }
         }
@@ -1088,35 +1125,35 @@ class ToolboxFile
     {
         $file  = new File($fileName);
         $meta  = $this->metaInformation[dirname($fileName)][$file->basename] ?? [];
-        $title = isset($meta['title']) && \strlen($meta['title'])
+        $title = isset($meta['title']) && strlen($meta['title'])
             ? $meta['title']
             : StringUtil::specialchars($file->basename);
-        if (isset($meta['caption']) && \strlen($meta['caption'])) {
+        if (isset($meta['caption']) && strlen($meta['caption'])) {
             $altText = $meta['caption'];
         } else {
-            $altText = \ucfirst(\str_replace('_', ' ', \preg_replace('/^[0-9]+_/', '', $file->filename)));
+            $altText = ucfirst(str_replace('_', ' ', preg_replace('/^[0-9]+_/', '', $file->filename) ?? ''));
         }
 
         $information = [
-            'file'       => $fileName,
-            'mtime'      => $file->mtime,
-            'alt'        => $altText,
-            'caption'    => $meta['caption'] ?? '',
-            'title'      => $title,
-            'metafile'   => $meta,
-            'icon'       => 'assets/contao/images/' . $file->icon,
-            'extension'  => $file->extension,
-            'size'       => $file->filesize,
-            'sizetext'   => \sprintf('(%s)', Controller::getReadableSize($file->filesize, 2)),
-            'url'        => StringUtil::specialchars($this->getDownloadLink($fileName)),
-            'isPicture'  => false,
+            'file'      => $fileName,
+            'mtime'     => $file->mtime,
+            'alt'       => $altText,
+            'caption'   => $meta['caption'] ?? '',
+            'title'     => $title,
+            'metafile'  => $meta,
+            'icon'      => 'assets/contao/images/' . $file->icon,
+            'extension' => $file->extension,
+            'size'      => $file->filesize,
+            'sizetext'  => sprintf('(%s)', Controller::getReadableSize($file->filesize, 2)),
+            'url'       => StringUtil::specialchars($this->getDownloadLink($fileName)),
+            'isPicture' => false,
         ];
 
         // Prepare GD images.
         if ($information['isGdImage'] = $file->isGdImage) {
             try {
                 $information['src'] = urldecode($this->resizeImage($fileName));
-            } catch (\Throwable $exception) {
+            } catch (Throwable $exception) {
                 // Broken image, keep original path.
                 $information['src'] = urldecode($fileName);
                 $information['isGdImage'] = false;
@@ -1167,7 +1204,7 @@ class ToolboxFile
                     $information['lightboxPicture'] = $lightboxPicture;
                     $information['imageUrl']        = $lightboxPicture->getImg($projectDir, $staticUrl)['src'];
                 }
-            } catch (\Throwable $exception) {
+            } catch (Throwable $exception) {
                 // Unreadable broken image - ignore.
                 $information['isPicture'] = false;
             }

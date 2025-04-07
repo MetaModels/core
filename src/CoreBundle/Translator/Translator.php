@@ -54,7 +54,7 @@ final class Translator implements TranslatorInterface, TranslatorBagInterface, L
         return $this->translator->trans($id, $parameters, $domain, $locale);
     }
 
-    public function setLocale($locale): void
+    public function setLocale(string $locale): void
     {
         $this->translator->setLocale($locale);
     }
@@ -71,6 +71,16 @@ final class Translator implements TranslatorInterface, TranslatorBagInterface, L
 
     public function getCatalogues(): array
     {
-        return $this->translator->getCatalogues();
+        if (!method_exists($this->translator, 'getCatalogues')) {
+            return [];
+        }
+
+        $catalogues = [];
+
+        foreach ($this->translator->getCatalogues() as $catalogue) {
+            $catalogues[] = $this->getCatalogue($catalogue->getLocale());
+        }
+
+        return $catalogues;
     }
 }

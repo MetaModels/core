@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -23,6 +23,7 @@
 namespace MetaModels\CoreBundle\Controller;
 
 use Contao\BackendTemplate;
+use Contao\CoreBundle\Csrf\ContaoCsrfTokenManager;
 use Contao\CoreBundle\Routing\ScopeMatcher;
 use Contao\Input;
 use Contao\Model;
@@ -186,6 +187,8 @@ trait ListControllerTrait
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     *
+     * @psalm-suppress DeprecatedClass
      */
     private function getResponseInternal(Template $template, Model $model, Request $request): Response
     {
@@ -281,7 +284,6 @@ trait ListControllerTrait
             ->setFilterParameters($filterParams, $this->getFilterParameters($filterUrl, $itemRenderer))
             ->setMetaTags($model->metamodel_meta_title, $model->metamodel_meta_description);
         if ($sortOverride) {
-            /** @psalm-suppress UndefinedMagicPropertyFetch */
             $itemRenderer->setSortingLinkGenerator(
                 new SortingLinkGenerator(
                     $this->filterUrlBuilder,
@@ -298,7 +300,6 @@ trait ListControllerTrait
 
         /** @psalm-suppress UndefinedMagicPropertyFetch */
         if ($model->metamodel_use_parameters) {
-            /** @psalm-suppress UndefinedMagicPropertyFetch */
             foreach (StringUtil::deserialize(($model->metamodel_parameters ?? null), true) as $key => $value) {
                 $itemRenderer->setTemplateParameter($key, $value);
             }
@@ -308,17 +309,19 @@ trait ListControllerTrait
          * @psalm-suppress UndefinedMagicPropertyAssignment
          * @psalm-suppress UndefinedMagicPropertyFetch
          */
-        $template->items         = StringUtil::encodeEmail($itemRenderer->render($model->metamodel_noparsing, $model));
+        $template->items = StringUtil::encodeEmail($itemRenderer->render($model->metamodel_noparsing, $model));
         /** @psalm-suppress UndefinedMagicPropertyAssignment */
         $template->numberOfItems = $itemRenderer->getItems()->getCount();
         /** @psalm-suppress UndefinedMagicPropertyAssignment */
-        $template->pagination    = $itemRenderer->getPagination();
+        $template->pagination = $itemRenderer->getPagination();
+
+        /** @var \Iterator<int, IItem> $items */
+        $items = $itemRenderer->getItems();
 
         $responseTags = \array_map(
-            static function (IItem $item) {
-                return \sprintf('contao.db.%s.%d', $item->getMetaModel()->getTableName(), $item->get('id'));
-            },
-            \iterator_to_array($itemRenderer->getItems(), false)
+            static fn (IItem $item): string
+                => \sprintf('contao.db.%s.%d', $item->getMetaModel()->getTableName(), $item->get('id')),
+            \iterator_to_array($items, false)
         );
 
         $response = $template->getResponse();
@@ -430,7 +433,7 @@ trait ListControllerTrait
             return 'Unknown MetaModel: ' . $model->metamodel;
         }
         // Add CSS file.
-        $GLOBALS['TL_CSS'][] = 'bundles/metamodelscore/css/style.css';
+        $GLOBALS['TL_CSS'][] = '/bundles/metamodelscore/css/style.css';
 
         // Retrieve name of MetaModel.
         $infoTemplate =
@@ -439,12 +442,15 @@ trait ListControllerTrait
         $metaModel = $this->factory->getMetaModel($metaModelName);
         assert($metaModel instanceof IMetaModel);
 
+        $tokenManager = System::getContainer()->get('contao.csrf.token_manager');
+        assert($tokenManager instanceof ContaoCsrfTokenManager);
+
         $header = $metaModel->getName();
         if ($href) {
             $header .= \sprintf(
                 ' (<a href="%1$s&amp;rt=%2$s" class="tl_gray">ID: %3$s</a>)',
                 $href,
-                System::getContainer()->get('contao.csrf.token_manager')?->getDefaultTokenValue() ?? '',
+                $tokenManager->getDefaultTokenValue(),
                 (string) $model->id
             );
         }

@@ -199,7 +199,6 @@ class Model implements ModelInterface
                 if (null !== $this->language) {
                     if ($model instanceof ITranslatedMetaModel) {
                         $originalLanguage = $model->selectLanguage($this->language);
-                        /** @psalm-suppress DeprecatedMethod */
                     } elseif ($model->isTranslated()) {
                         $originalLanguage       = $GLOBALS['TL_LANGUAGE'];
                         $GLOBALS['TL_LANGUAGE'] = $this->language;

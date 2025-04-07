@@ -345,6 +345,75 @@
       <trans-unit id="showRecord" resname="showRecord">
         <source>Show the details of record %id%</source>
       </trans-unit>
+      <trans-unit id="tl_class_headline" resname="tl_class_headline">
+        <source>Set one or more of the following CSS classes to define the layout of the widget like "clr w50" - &lt;a href=&quot;https://docs.contao.org/dev/reference/dca/palettes/#arranging-fields&quot; target=&quot;_blank&quot;&gt;see Contao manual&lt;/a&gt;.</source>
+      </trans-unit>
+      <trans-unit id="tl_class_w25.caption" resname="tl_class_w25.caption">
+        <source>w25</source>
+      </trans-unit>
+      <trans-unit id="tl_class_w25.description" resname="tl_class_w25.description">
+        <source>Set the field width to 25% and float it (float:left).</source>
+      </trans-unit>
+      <trans-unit id="tl_class_w33.caption" resname="tl_class_w33.caption">
+        <source>w33</source>
+      </trans-unit>
+      <trans-unit id="tl_class_w33.description" resname="tl_class_w33.description">
+        <source>Set the field width to 33.33333333% and float it (float:left).</source>
+      </trans-unit>
+      <trans-unit id="tl_class_w50.caption" resname="tl_class_w50.caption">
+        <source>w50</source>
+      </trans-unit>
+      <trans-unit id="tl_class_w50.description" resname="tl_class_w50.description">
+        <source>Set the field width to 50% and float it (float:left).</source>
+      </trans-unit>
+      <trans-unit id="tl_class_w66.caption" resname="tl_class_w66.caption">
+        <source>w66</source>
+      </trans-unit>
+      <trans-unit id="tl_class_w66.description" resname="tl_class_w66.description">
+        <source>Set the field width to 66.66666666% and float it (float:left).</source>
+      </trans-unit>
+      <trans-unit id="tl_class_w75.caption" resname="tl_class_w75.caption">
+        <source>w75</source>
+      </trans-unit>
+      <trans-unit id="tl_class_w75.description" resname="tl_class_w75.description">
+        <source>Set the field width to 75% and float it (float:left).</source>
+      </trans-unit>
+      <trans-unit id="tl_class_clr.caption" resname="tl_class_clr.caption">
+        <source>clr</source>
+      </trans-unit>
+      <trans-unit id="tl_class_clr.description" resname="tl_class_clr.description">
+        <source>Clear all floats (clear:both). Use this for any full length field coming after a w50 field within a fieldset (see note below).</source>
+      </trans-unit>
+      <trans-unit id="tl_class_wizard.caption" resname="tl_class_wizard.caption">
+        <source>wizard</source>
+      </trans-unit>
+      <trans-unit id="tl_class_wizard.description" resname="tl_class_wizard.description">
+        <source>Shorten the input field so there is enough room for the wizard button (e.g. date picker fields).</source>
+      </trans-unit>
+      <trans-unit id="tl_class_long.caption" resname="tl_class_long.caption">
+        <source>long</source>
+      </trans-unit>
+      <trans-unit id="tl_class_long.description" resname="tl_class_long.description">
+        <source>Make the input field full length.</source>
+      </trans-unit>
+      <trans-unit id="tl_class_cbx.caption" resname="tl_class_cbx.caption">
+        <source>cbx</source>
+      </trans-unit>
+      <trans-unit id="tl_class_cbx.description" resname="tl_class_cbx.description">
+        <source>Set the field minimum height to 46 pixels (used for single checkboxes; more space at bottom).</source>
+      </trans-unit>
+      <trans-unit id="tl_class_m12.caption" resname="tl_class_m12.caption">
+        <source>m12</source>
+      </trans-unit>
+      <trans-unit id="tl_class_m12.description" resname="tl_class_m12.description">
+        <source>Adds a 17 pixels top and bottom padding to the element (used for single checkboxes; more space at top and bottom).</source>
+      </trans-unit>
+      <trans-unit id="tl_class_cbx_m12.caption" resname="tl_class_cbx_m12.caption">
+        <source>cbx m12</source>
+      </trans-unit>
+      <trans-unit id="tl_class_cbx_m12.description" resname="tl_class_cbx_m12.description">
+        <source>A combination of cbx and m12 sets the minimum height of the field to 80 pixels (used for single checkboxes; more space at top and bottom).</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

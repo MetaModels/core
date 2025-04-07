@@ -23,6 +23,7 @@
 namespace MetaModels\Helper;
 
 use Contao\Controller;
+use Contao\System;
 
 /**
  * Gateway to the Contao "Controller" class for usage of the core without
@@ -63,7 +64,7 @@ class ContaoController extends Controller
     protected function __construct()
     {
         parent::__construct();
-        $this->import('Database');
+        System::getContainer()->get('database_connection');
     }
 
     /**

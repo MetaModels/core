@@ -161,7 +161,7 @@ class Template
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
-            $templateLoader = System::getContainer()->get('contao.framework')?->getAdapter(TemplateLoader::class);
+            $templateLoader = System::getContainer()->get('contao.framework')->getAdapter(TemplateLoader::class);
             assert($templateLoader instanceof Adapter);
         }
         $this->templateLoader = $templateLoader;
@@ -349,7 +349,7 @@ class Template
         }
 
         try {
-            /** @psalm-suppress InternalMethod - the ContaoFramework class is internal, not the method usage. */
+            /** @psalm-suppress UndefinedMagicMethod */
             self::$templatePathCache[$strTemplate][$strFormat][$strCustom] = $this->templateLoader->getPath(
                 $strTemplate,
                 $strFormat,

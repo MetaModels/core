@@ -140,7 +140,6 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
     {
         /**
          * @psalm-suppress DocblockTypeContradiction
-         * @psalm-suppress RedundantConditionGivenDocblockType
          * Remove when we have strict type hints in the method signature.
          */
         if (($arrValue === null) || !\is_array($arrValue)) {
@@ -199,9 +198,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     public function getDataFor($arrIds)
     {
-        /** @psalm-suppress DeprecatedMethod */
         $strActiveLanguage = $this->getActiveLanguage();
-        /** @psalm-suppress DeprecatedMethod */
         $strFallbackLanguage = $this->getFallbackLanguage();
 
         $arrReturn = $this->getTranslatedDataFor($arrIds, $strActiveLanguage);
@@ -405,7 +402,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
 
                 foreach ($this->getSetValues($itemValues, $intId, $strLangCode) as $name => $value) {
                     $queryBuilder
-                        ->set($tableAlias . '.' . $name, ':' . $name)
+                        ->set($tableAlias . '.' . (string) $name, ':' . (string) $name)
                         ->setParameter($name, $value);
                 }
             } else {

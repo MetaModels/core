@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     binron <rtb@gmx.ch>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -23,7 +23,7 @@
 namespace MetaModels\CoreBundle\Contao\Compat;
 
 use Contao\CoreBundle\Framework\Adapter;
-use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
+use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\InsertTags;
 
 /**
@@ -36,20 +36,18 @@ class ContaoFactory
     /**
      * The Contao framework.
      *
-     * @var ContaoFrameworkInterface
+     * @var ContaoFramework
      *
      * @psalm-suppress DeprecatedInterface
      */
-    private ContaoFrameworkInterface $framework;
+    private ContaoFramework $framework;
 
     /**
      * Create a new instance.
      *
-     * @param ContaoFrameworkInterface $framework The Contao framework.
-     *
-     * @psalm-suppress DeprecatedInterface
+     * @param ContaoFramework $framework The Contao framework.
      */
-    public function __construct(ContaoFrameworkInterface $framework)
+    public function __construct(ContaoFramework $framework)
     {
         $this->framework = $framework;
     }
@@ -61,6 +59,7 @@ class ContaoFactory
      */
     public function createInsertTags()
     {
+        /** @psalm-suppress InternalMethod - the ContaoFramework class is internal, not the method usage. */
         $this->framework->initialize();
 
         return new InsertTags();
@@ -75,22 +74,26 @@ class ContaoFactory
      */
     public function getAdapter($className)
     {
+        /** @psalm-suppress InternalMethod - the ContaoFramework class is internal, not the method usage. */
         $this->framework->initialize();
 
+        /** @psalm-suppress InternalMethod - the ContaoFramework class is internal, not the method usage. */
         return $this->framework->getAdapter($className);
     }
 
     /**
      * Create an instance.
      *
-     * @param string $className The class name to create an instance for.
+     * @param class-string $className The class name to create an instance for.
      *
      * @return object
      */
     public function createInstance($className)
     {
+        /** @psalm-suppress InternalMethod - the ContaoFramework class is internal, not the method usage. */
         $this->framework->initialize();
 
+        /** @psalm-suppress InternalMethod - the ContaoFramework class is internal, not the method usage. */
         return $this->framework->createInstance($className);
     }
 }

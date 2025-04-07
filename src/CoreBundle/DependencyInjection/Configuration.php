@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,13 +14,14 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\CoreBundle\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Filesystem\Path;
@@ -66,10 +67,9 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder('metamodels');
-
         $treeBuilder
             ->getRootNode()
-            ->children()
+                ->children()
                 ->booleanNode('enable_cache')
                     ->defaultValue(!$this->debug)
                 ->end()
@@ -87,11 +87,31 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->scalarNode('assets_web')
                     ->cannotBeEmpty()
-                    ->defaultValue('assets/metamodels')
+                    ->defaultValue('/assets/metamodels')
+                ->end()
+                ->append($this->addJumpToPickerNode());
+
+        return $treeBuilder;
+    }
+
+    /** @psalm-suppress UndefinedMethod */
+    private function addJumpToPickerNode(): NodeDefinition
+    {
+        $treeBuilder = new TreeBuilder('picker_jumpto');
+
+        $node = $treeBuilder->getRootNode();
+        $node
+            ->useAttributeAsKey('name')
+                ->arrayPrototype()
+                    ->children()
+                        ->scalarNode('render_setting')->cannotBeEmpty()->end()
+                        ->integerNode('priority')->defaultValue(0)->end()
+                        ->scalarNode('icon')->defaultNull()->end()
+                    ->end()
                 ->end()
             ->end();
 
-        return $treeBuilder;
+        return $node;
     }
 
     /**

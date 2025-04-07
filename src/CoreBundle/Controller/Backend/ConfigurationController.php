@@ -20,24 +20,23 @@
 
 namespace MetaModels\CoreBundle\Controller\Backend;
 
+use Contao\CoreBundle\Controller\AbstractBackendController;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use ContaoCommunityAlliance\DcGeneral\Factory\DcGeneralFactoryService;
 use ContaoCommunityAlliance\Translator\TranslatorInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Twig\Environment as TwigEnvironment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-final class ConfigurationController
+final class ConfigurationController extends AbstractBackendController
 {
     use DcGeneralControllerTrait;
 
     /**
      * @param Request                  $request        The request.
-     * @param TwigEnvironment          $twig           The twig environment.
      * @param DcGeneralFactoryService  $factoryFactory The DCG factory
      * @param EventDispatcherInterface $dispatcher     The event dispatcher.
      * @param TranslatorInterface      $translator     The translator.
@@ -47,10 +46,11 @@ final class ConfigurationController
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function __invoke(
         Request $request,
-        TwigEnvironment $twig,
         DcGeneralFactoryService $factoryFactory,
         EventDispatcherInterface $dispatcher,
         TranslatorInterface $translator,
@@ -70,15 +70,15 @@ final class ConfigurationController
         );
         $headline         = $this->determineHeadline($containerName, $translator);
 
-        return new Response(
-            $twig->render(
-                '@MetaModelsCore/Backend/be_config.html.twig',
-                [
-                    'headline'    => $headline,
-                    'body'        => $controllerResult,
-                    'stylesheets' => ['bundles/metamodelscore/css/style.css']
-                ]
-            )
+        $GLOBALS['TL_CSS']['metamodels.core'] = '/bundles/metamodelscore/css/style.css';
+
+        return $this->render(
+            '@MetaModelsCore/Backend/be_config.html.twig',
+            [
+                'title'       => $headline,
+                'headline'    => $headline,
+                'body'        => $controllerResult,
+            ]
         );
     }
 

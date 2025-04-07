@@ -24,4 +24,4 @@
 $GLOBALS['TL_LANG']['FFL']['multitext']['0'] = 'Multitext (intern)';
 $GLOBALS['TL_LANG']['FFL']['multitext']['1'] = 'Multitext (intern, das Widget nicht verwenden!)';
 $GLOBALS['TL_LANG']['FFL']['tags']['0']      = 'Tags (intern)';
-$GLOBALS['TL_LANG']['FFL']['tags']['1']      = ' Tags (intern, das Widget nicht verwenden!)';
+$GLOBALS['TL_LANG']['FFL']['tags']['1']      = 'Tags (intern, das Widget nicht verwenden!)';

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,12 +14,14 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\FrontendIntegration;
+
+use Contao\System;
 
 /**
  * Class ViewCombinations.
@@ -39,8 +41,7 @@ class ViewCombinations extends \MetaModels\Helper\ViewCombinations
      */
     protected function authenticateUser()
     {
-        /** @psalm-suppress DeprecatedMethod */
-        return $this->getUser()->authenticate();
+        return System::getContainer()->get('contao.security.token_checker')->hasFrontendUser();
     }
 
     /**
@@ -49,7 +50,7 @@ class ViewCombinations extends \MetaModels\Helper\ViewCombinations
     protected function getUserGroups()
     {
         // Special case in combinations, anonymous frontend users have the implicit group id -1.
-        if (0 === (int) $this->getUser()->id) {
+        if (0 === $this->getUser()->id) {
             return [-1];
         }
 

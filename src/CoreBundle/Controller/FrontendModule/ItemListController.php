@@ -81,6 +81,7 @@ final class ItemListController extends AbstractFrontendModuleController
      */
     protected function getBackendWildcard(ModuleModel $module): Response
     {
+        /** @psalm-suppress InternalMethod - Class Adapter is internal, not the __call() method. Blame Contao. */
         $name = $this->translator->trans($this->getType(), [], 'metamodels_wildcard');
         $href = $this->router->generate(
             'contao_backend',
@@ -98,6 +99,8 @@ final class ItemListController extends AbstractFrontendModuleController
      * @param Request     $request  The request.
      *
      * @return Response The response.
+     *
+     * @psalm-suppress DeprecatedClass
      */
     protected function getResponse(Template $template, ModuleModel $model, Request $request): Response
     {

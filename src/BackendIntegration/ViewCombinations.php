@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -23,11 +23,12 @@ namespace MetaModels\BackendIntegration;
 
 use Contao\Environment;
 use Contao\System;
+use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 
 /**
  * Class ViewCombinations.
  *
- * Retrieve combinations of view and input screens for the currently logged in user (either frontend or backend).
+ * Retrieve combinations of view and input screens for the currently logged-in user (either frontend or backend).
  *
  * @deprecated This will get removed.
  *
@@ -43,7 +44,7 @@ class ViewCombinations extends \MetaModels\Helper\ViewCombinations
     protected function authenticateUser()
     {
         $scopeMatcher = System::getContainer()->get('cca.dc-general.scope-matcher');
-        if (null === $scopeMatcher || $scopeMatcher->currentScopeIsUnknown()) {
+        if (!($scopeMatcher instanceof RequestScopeDeterminator) || $scopeMatcher->currentScopeIsUnknown()) {
             return false;
         }
 
@@ -64,8 +65,7 @@ class ViewCombinations extends \MetaModels\Helper\ViewCombinations
         // Bug fix: If the user is not authenticated, contao will redirect to contao/index.php
         // But at this moment the TL_PATH is not defined, so the $this->Environment->request
         // generate an url without replacing the basepath(TL_PATH) with an empty string.
-        /** @psalm-suppress DeprecatedMethod */
-        return $this->getUser()->authenticate();
+        return System::getContainer()->get('contao.security.token_checker')->hasFrontendUser();
     }
 
     /**
@@ -79,9 +79,8 @@ class ViewCombinations extends \MetaModels\Helper\ViewCombinations
         /** @psalm-suppress DeprecatedClass */
         $groups = parent::getUserGroups();
 
-        /** @noinspection PhpUndefinedFieldInspection */
         // Special case in combinations, admins have the implicit group id -1.
-        if ((bool) $this->getUser()->admin) {
+        if ($this->getUser()->admin) {
             $groups[] = -1;
         }
 

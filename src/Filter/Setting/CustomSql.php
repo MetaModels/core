@@ -25,10 +25,11 @@
 
 namespace MetaModels\Filter\Setting;
 
-use Contao\InsertTags;
+use Contao\CoreBundle\InsertTag\InsertTagParser;
 use Contao\System;
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use Doctrine\DBAL\Connection;
+use InvalidArgumentException;
 use MetaModels\CoreBundle\Contao\InsertTag\ReplaceParam;
 use MetaModels\CoreBundle\Contao\InsertTag\ReplaceTableName;
 use MetaModels\CoreBundle\Contao\InsertTag\ResolveLanguageTag;
@@ -41,7 +42,34 @@ use MetaModels\InsertTag\Node;
 use MetaModels\InsertTag\Parser;
 use MetaModels\Render\Setting\ICollection as IRenderSettings;
 use Psr\Container\ContainerInterface;
+use RecursiveArrayIterator;
+use RecursiveIteratorIterator;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
+
+use function array_flip;
+use function array_intersect_key;
+use function array_key_exists;
+use function array_keys;
+use function array_map;
+use function array_merge;
+use function array_reduce;
+use function array_shift;
+use function array_values;
+use function call_user_func;
+use function count;
+use function explode;
+use function implode;
+use function in_array;
+use function is_array;
+use function is_callable;
+use function iterator_to_array;
+use function parse_str;
+use function preg_match_all;
+use function rtrim;
+use function sprintf;
+use function str_repeat;
+use function strtolower;
+use function unserialize;
 
 /**
  * This filter condition generates a filter rule for a predefined SQL query.
@@ -103,7 +131,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      * @param array<string, mixed> $data       The attributes for this filter setting.
      * @param ContainerInterface   $container  The service container.
      *
-     * @throws \InvalidArgumentException When a service is missing.
+     * @throws InvalidArgumentException When a service is missing.
      */
     public function __construct($collection, $data, ContainerInterface $container)
     {
@@ -111,14 +139,14 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
         $this->data       = $data;
 
         $missing = [];
-        foreach (\array_keys(self::getSubscribedServices()) as $serviceId) {
+        foreach (array_keys(self::getSubscribedServices()) as $serviceId) {
             if (!$container->has($serviceId)) {
                 $missing[] = $serviceId;
             }
         }
         if (!empty($missing)) {
-            throw new \InvalidArgumentException(
-                'The service container is missing the following services: ' . \implode(', ', $missing)
+            throw new InvalidArgumentException(
+                'The service container is missing the following services: ' . implode(', ', $missing)
             );
         }
         $this->container = $container;
@@ -129,11 +157,11 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      *
      * @return array<string, class-string>
      */
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return [
             Connection::class                  => Connection::class,
-            InsertTags::class                  => InsertTags::class,
+            InsertTagParser::class             => InsertTagParser::class,
             ReplaceParam::class                => ReplaceParam::class,
             ReplaceTableName::class            => ReplaceTableName::class,
             ResolveLanguageTag::class          => ResolveLanguageTag::class,
@@ -189,9 +217,9 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     {
         $arrParams = [];
 
-        \preg_match_all('@\{\{param::filter\?([^}]*)}}@', $this->get('customsql'), $arrMatches);
+        preg_match_all('@\{\{param::filter\?([^}]*)}}@', $this->get('customsql'), $arrMatches);
         foreach ($arrMatches[1] as $strQuery) {
-            \parse_str($strQuery, $arrArgs);
+            parse_str($strQuery, $arrArgs);
             if (isset($arrArgs['name'])) {
                 $arrName     = (array) $arrArgs['name'];
                 $arrParams[] = $arrName[0];
@@ -280,7 +308,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
             return;
         }
 
-        $this->queryParameter = \array_merge($this->queryParameter, $parameters);
+        $this->queryParameter = array_merge($this->queryParameter, $parameters);
     }
 
     /**
@@ -324,8 +352,8 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
         }
 
         $service = $this->container->get(IMetaModelsServiceContainer::class)->getService($serviceName);
-        if (\is_callable($service)) {
-            return \call_user_func($service, $valueName, $arguments);
+        if (is_callable($service)) {
+            return call_user_func($service, $valueName, $arguments);
         }
 
         return 'NULL';
@@ -343,7 +371,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      */
     private function getValueFromSource(string $source, string $valueName, array $arguments): mixed
     {
-        if (\strtolower($source) === 'container') {
+        if (strtolower($source) === 'container') {
             // @codingStandardsIgnoreStart
             @trigger_error(
                 'Getting filter values from the service container is deprecated, the container will get removed.',
@@ -353,7 +381,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
             return $this->getValueFromServiceContainer($valueName, $arguments);
         }
 
-        return match (\strtolower($source)) {
+        return match (strtolower($source)) {
             'get', 'post', 'cookie', 'session' => $this->executeInsertTagReplaceParam($source, $arguments),
             'filter' => $this->filterParameters[$valueName] ?? null,
             // Unknown sources always resort to null.
@@ -371,9 +399,9 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      */
     private function executeInsertTagReplaceParam(string $source, array $arguments): mixed
     {
-        $filteredArguments = \array_intersect_key($arguments, \array_flip(['name', 'default']));
-        $imploded          = \array_reduce(
-            \array_keys($filteredArguments),
+        $filteredArguments = array_intersect_key($arguments, array_flip(['name', 'default']));
+        $imploded          = array_reduce(
+            array_keys($filteredArguments),
             static function ($carry, $item) use ($filteredArguments) {
                 return $carry . ($carry ? '&' : '') . $item . '=' . $filteredArguments[$item];
             },
@@ -381,10 +409,10 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
         );
 
         $result = $this->container->get(ReplaceParam::class)
-            ->replace(\sprintf('{{param::%s?%s}}', $source, $imploded));
+            ->replace(sprintf('{{param::%s?%s}}', $source, $imploded));
 
         // @codingStandardsIgnoreStart
-        return (($results = @\unserialize($result, ['allowed_classes' => false])) ? $results : $result);
+        return (($results = @unserialize($result, ['allowed_classes' => false])) ? $results : $result);
         // @codingStandardsIgnoreEnd
     }
 
@@ -399,7 +427,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     private function convertParameterAggregate(array $var, array $arguments): string
     {
         if (!empty($arguments['recursive'])) {
-            $var = \iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($var)));
+            $var = iterator_to_array(new RecursiveIteratorIterator(new RecursiveArrayIterator($var)));
         }
 
         if ([] === $var) {
@@ -407,19 +435,19 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
         }
 
         if ($arguments['aggregate'] === 'list') {
-            $var = \array_merge(
-                ...\array_map(static fn (string $value): array => \explode(',', $value), \array_values($var))
+            $var = array_merge(
+                ...array_map(static fn (string $value): array => explode(',', $value), array_values($var))
             );
         }
 
         if (!empty($arguments['key'])) {
-            $var = \array_keys($var);
+            $var = array_keys($var);
         } else {
             // Use values.
-            $var = \array_values($var);
+            $var = array_values($var);
         }
 
-        if (!\in_array($arguments['aggregate'], ['set', 'list'], true)) {
+        if (!in_array($arguments['aggregate'], ['set', 'list'], true)) {
             $this->addParameter(implode(',', $var));
 
             return '?';
@@ -427,7 +455,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
 
         $this->addParameters($var);
 
-        return \rtrim(\str_repeat('?,', \count($var)), ',');
+        return rtrim(str_repeat('?,', count($var)), ',');
     }
 
     /**
@@ -439,20 +467,20 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      */
     private function convertParameter(string $strMatch): string
     {
-        [$strSource, $strQuery] = \explode('?', $strMatch, 2) + ['', ''];
-        \parse_str($strQuery, $arrArgs);
+        [$strSource, $strQuery] = explode('?', $strMatch, 2) + ['', ''];
+        parse_str($strQuery, $arrArgs);
         $arrName = (array) $arrArgs['name'];
 
-        $var = $this->getValueFromSource($strSource, \array_shift($arrName), $arrArgs);
+        $var = $this->getValueFromSource($strSource, array_shift($arrName) ?? '', $arrArgs);
 
         $index = 0;
-        $count = \count($arrName);
-        while ($index < $count && \is_array($var)) {
+        $count = count($arrName);
+        while ($index < $count && is_array($var)) {
             $var = $var[$arrName[$index++]];
         }
 
         if ($index !== $count || $var === null) {
-            if (\array_key_exists('default', $arrArgs) && (null !== $arrArgs['default'])) {
+            if (array_key_exists('default', $arrArgs) && (null !== $arrArgs['default'])) {
                 $this->addParameter($arrArgs['default']);
 
                 return '?';
@@ -480,7 +508,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      */
     private function parseInsertTagsInternal(string $queryString): string
     {
-        return $this->container->get(InsertTags::class)->replace($queryString, false);
+        return $this->container->get(InsertTagParser::class)->replace($queryString, false);
     }
 
     /**
@@ -549,8 +577,8 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      */
     private function resolveTag(string $tag): string
     {
-        $parts = \explode('::', $tag, 2);
-        if (!\array_key_exists(1, $parts)) {
+        $parts = explode('::', $tag, 2);
+        if (!array_key_exists(1, $parts)) {
             return $this->parseInsertTagsInternal('{{' . $tag . '}}');
         }
 

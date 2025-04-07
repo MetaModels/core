@@ -23,39 +23,44 @@
 $white: rgba(255, 255, 255, 1);
 
 //urls
-$metamodels_logo: url('../images/backend/metamodels-logo.png');
+$url_metamodels: url('/bundles/metamodelscore/images/backend/metamodels-logo.png');
 
 .mm_support_display {
   padding: 15px;
+
   .logo {
     display: block;
-    height: 38px;
+    height: 80px;
     text-indent: -99999px;
-    width: 169px;
-    background: $white $metamodels_logo no-repeat top left;
-    background-size: 160px auto;
+    background: transparent $url_metamodels no-repeat top left;
+    background-size: contain;
   }
+
   h1 {
     margin-bottom: 20px;
   }
+
   .colset {
     width: 100%;
     padding-top: 10px;
     padding-bottom: 10px;
     overflow: hidden;
     clear: both;
+
     form {
-      padding-top: 10px;
+      padding-bottom: 10px;
     }
     .left {
       width: 35%;
       float: left;
     }
+
     .right {
       float: right;
       width: 60%;
     }
   }
+
   a {
     text-decoration: underline;
   }

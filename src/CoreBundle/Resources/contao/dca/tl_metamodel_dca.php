@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -21,10 +21,12 @@
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
+
+use Contao\System;
 
 $GLOBALS['TL_DCA']['tl_metamodel_dca'] = [
     'config'                => [
@@ -168,14 +170,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = [
                 'label'       => 'groupsort_settings.label',
                 'description' => 'groupsort_settings.description',
                 'href'        => 'table=tl_metamodel_dca_sortgroup',
-                'icon'        => 'bundles/metamodelscore/images/icons/dca_groupsortsettings.png',
+                'icon'        => '/bundles/metamodelscore/images/icons/dca_groupsortsettings.png',
                 'idparam'     => 'pid'
             ],
             'settings'           => [
                 'label'       => 'settings.label',
                 'description' => 'settings.description',
                 'href'        => 'table=tl_metamodel_dcasetting',
-                'icon'        => 'bundles/metamodelscore/images/icons/dca_setting.png',
+                'icon'        => '/bundles/metamodelscore/images/icons/dca_setting.png',
                 'idparam'     => 'pid'
             ],
         ]
@@ -310,7 +312,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = [
             'eval'        =>
                 [
                     'includeBlankOption' => true,
-                    'valign'             => 'top',
                     'chosen'             => true,
                     'tl_class'           => 'w50'
                 ],
@@ -340,12 +341,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = [
                 'tl_class'      => 'clr',
                 'columnFields'  => [
                     'langcode'    => [
-                        'label'       => 'becap_langcode.label',
-                        'description' => 'becap_langcode.description',
-                        'exclude'     => true,
-                        'inputType'   => 'select',
-                        'options'     => $this->getLanguages(),
-                        'eval'        => [
+                        'label'            => 'becap_langcode.label',
+                        'description'      => 'becap_langcode.description',
+                        'exclude'          => true,
+                        'inputType'        => 'select',
+                        'options_callback' => static fn() => System::getContainer()
+                            ->get('contao.intl.locales')
+                            ->getLocales(),
+                        'eval'             => [
                             'tl_class' => '',
                             'style'    => 'width:400px',
                             'chosen'   => 'true'
@@ -383,10 +386,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = [
             'default'     => 'limit',
             'eval'        =>
                 [
-                    'tl_class'   => 'clr w50',
-                    'helpwizard' => true,
+                    'tl_class' => 'clr w50',
+                    'helptext' => true,
                 ],
-            'explanation' => 'dca_panellayout',
             'sql'         => 'blob NULL'
         ],
         'iseditable'     => [

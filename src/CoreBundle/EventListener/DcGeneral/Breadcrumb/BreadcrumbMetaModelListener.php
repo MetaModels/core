@@ -51,7 +51,7 @@ class BreadcrumbMetaModelListener extends AbstractBreadcrumbListener
     protected function getBreadcrumbElements(EnvironmentInterface $environment, BreadcrumbStore $elements)
     {
         $elements->push(
-            'contao/metamodels',
+            '/contao/metamodels',
             'tl_metamodel',
             'bundles/metamodelscore/images/backend/logo.png'
         );

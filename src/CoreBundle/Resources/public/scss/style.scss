@@ -102,11 +102,27 @@ input[readonly] {
   }
 }
 
+html[data-color-scheme="dark"] input[readonly] {
+  background-color: rgba(30, 32, 36, 1);
+
+  &:focus {
+    background-color: rgba(30, 32, 36, 1);
+  }
+}
+
 textarea[readonly] {
   background-color: rgba(235, 235, 228, 1);
 
   &:focus {
     background-color: rgba(235, 235, 228, 1);
+  }
+}
+
+html[data-color-scheme="dark"] textarea[readonly] {
+  background-color: rgba(30, 32, 36, 1);
+
+  &:focus {
+    background-color: rgba(30, 32, 36, 1);
   }
 }
 
@@ -145,9 +161,6 @@ form[id*="tl_metamodel_"] .wizard {
   }
 }
 
-div[class*="table_tl_metamodel_"] .tl_file_list {
-  padding: 4px 0 6px;
-}
 
 fieldset.tl_subdca {
   padding: 0;

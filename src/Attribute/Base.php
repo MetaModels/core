@@ -169,7 +169,7 @@ abstract class Base implements IAttribute
          * @psalm-suppress TooManyArguments
          */
         if (!($metaModel instanceof ITranslatedMetaModel) && !$metaModel->isTranslated(false)) {
-            return reset($arrValues);
+            return ([] === $arrValues) ? null : reset($arrValues);
         }
 
         if (null === $strLangCode) {

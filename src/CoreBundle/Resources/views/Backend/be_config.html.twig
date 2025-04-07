@@ -1,15 +1,15 @@
 {% extends "@MetaModelsCore/Backend/be_base.html.twig" %}
 
-{% block headline %}
-    {{ headline }}
+{% block main_headline %}
+  {{ headline }}
 {% endblock %}
 
 {% block error %}
-    {%- if error is defined -%}
-        {{- error -}}
-    {%- endif -%}
+  {%- if error is defined -%}
+    {{- error -}}
+  {%- endif -%}
 {% endblock %}
 
-{% block main %}
-{{ body | raw }}
+{% block main_content %}
+  {{ body | raw }}
 {% endblock %}

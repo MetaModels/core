@@ -192,6 +192,42 @@
       <trans-unit id="showRecord" resname="showRecord">
         <source>Show the details of record %id%</source>
       </trans-unit>
+      <trans-unit id="type_value_is.caption" resname="type_value_is.caption">
+        <source>Attribute value is...</source>
+      </trans-unit>
+      <trans-unit id="type_value_is.description" resname="type_value_is.description">
+        <source>The condition is fulfilled when the attribute value is equal to the specified value..</source>
+      </trans-unit>
+      <trans-unit id="type_values_contain.caption" resname="type_values_contain.caption">
+        <source>Attribute values contain any of...</source>
+      </trans-unit>
+      <trans-unit id="type_values_contain.description" resname="type_values_contain.description">
+        <source>The condition is fulfilled when any of the attribute's values matches at least one of the specified values (set intersection).</source>
+      </trans-unit>
+      <trans-unit id="type_is_visible.caption" resname="type_is_visible.caption">
+        <source>Is attribute visible...</source>
+      </trans-unit>
+      <trans-unit id="type_is_visible.description" resname="type_is_visible.description">
+        <source>The condition is fulfilled when the condition of the specified attribute is fulfilled. In other words, the attribute is visible if, and only if, the specified attribute is visible as well.</source>
+      </trans-unit>
+      <trans-unit id="type_or.caption" resname="type_or.caption">
+        <source>OR</source>
+      </trans-unit>
+      <trans-unit id="type_or.description" resname="type_or.description">
+        <source>Any sub condition must be fulfilled.</source>
+      </trans-unit>
+      <trans-unit id="type_and.caption" resname="type_and.caption">
+        <source>AND</source>
+      </trans-unit>
+      <trans-unit id="type_and.description" resname="type_and.description">
+        <source>All sub condition must be fulfilled.</source>
+      </trans-unit>
+      <trans-unit id="type_not.caption" resname="type_not.caption">
+        <source>NOT</source>
+      </trans-unit>
+      <trans-unit id="type_not.description" resname="type_not.description">
+        <source>Invert the result of the contained condition.</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -38,8 +38,6 @@ interface IServiceContainerAware
      * @return IServiceContainerAware
      *
      * @deprecated The service container will get removed, use the symfony service container instead.
-     *
-     * @psalm-suppress DeprecatedInterface
      */
     public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer);
 

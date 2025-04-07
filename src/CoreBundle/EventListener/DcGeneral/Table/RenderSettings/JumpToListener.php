@@ -21,7 +21,9 @@
 
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\RenderSettings;
 
+use Contao\CoreBundle\Intl\Locales;
 use Contao\StringUtil;
+use Contao\System;
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\BuildWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
@@ -34,23 +36,28 @@ use MetaModels\IMetaModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+use function array_keys;
+use function count;
+use function in_array;
+use function is_array;
+use function serialize;
+use function str_replace;
+
 /**
  * This handles the rendering of models to labels.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class JumpToListener extends AbstractAbstainingListener
 {
-    /** @psalm-suppress MissingClassConstType */
     private const DEFAULT_TYPE = UrlGeneratorInterface::ABSOLUTE_PATH;
 
-    /** @psalm-suppress MissingClassConstType */
     private const TYPE_MAP = [
         'absolute_url'  => UrlGeneratorInterface::ABSOLUTE_URL,
         'absolute_path' => UrlGeneratorInterface::ABSOLUTE_PATH,
         'relative_path' => UrlGeneratorInterface::RELATIVE_PATH,
         'network_path'  => UrlGeneratorInterface::NETWORK_PATH,
     ];
-
-    /** @psalm-suppress MissingClassConstType */
 
     private const TYPE_MAP_INVERSE = [
         UrlGeneratorInterface::ABSOLUTE_URL  => 'absolute_url',
@@ -102,6 +109,8 @@ class JumpToListener extends AbstractAbstainingListener
 
     /**
      * Translates the values of the jumpTo entries into the real array.
+     * Input: Int for the type.
+     * Output: String for the type
      *
      * @param DecodePropertyValueForWidgetEvent $event The event.
      *
@@ -123,23 +132,30 @@ class JumpToListener extends AbstractAbstainingListener
         $newValues = [];
         /** @var array<string, mixed> $languages */
         $languages = $extra['columnFields']['langcode']['options'] ?? [];
-        foreach (\array_keys($languages) as $key) {
+        foreach (array_keys($languages) as $key) {
             $newValue = '';
             $filter   = 0;
             $type     = self::TYPE_MAP_INVERSE[self::DEFAULT_TYPE];
             if ($value) {
                 foreach ($value as $arr) {
-                    if (!\is_array($arr)) {
+                    if (!is_array($arr)) {
                         break;
                     }
 
-                    // Set the new value and exit the loop.
-                    if (\in_array($key, $arr, true)) {
+                    if (in_array($key, $arr, true)) {
                         $newValue = '{{link_url::' . $arr['value'] . '}}';
-                        $type     = self::TYPE_MAP_INVERSE[$arr['type'] ?? self::DEFAULT_TYPE];
                         $filter   = $arr['filter'];
+
+                        // Set the new value and exit the loop.
+                        if (\in_array($key, $arr, true)) {
+                            $newValue = '{{link_url::' . $arr['value'] . '}}';
+                            $type     = self::TYPE_MAP_INVERSE[$arr['type'] ?? self::DEFAULT_TYPE];
+                            $filter   = $arr['filter'];
+                            break;
+                        }
                         break;
                     }
+                    // Set the new value and exit the loop.
                 }
             }
 
@@ -157,6 +173,8 @@ class JumpToListener extends AbstractAbstainingListener
 
     /**
      * Translates the values of the jumpTo entries into the internal array.
+     * Input: String for the type
+     * Output: Int for the type.
      *
      * @param EncodePropertyValueFromWidgetEvent $event The event.
      *
@@ -171,11 +189,12 @@ class JumpToListener extends AbstractAbstainingListener
         $value = StringUtil::deserialize($event->getValue(), true);
 
         foreach ($value as $k => $v) {
-            $value[$k]['value'] = \str_replace(['{{link_url::', '}}'], ['', ''], $v['value']);
+            $value[$k]['value'] = str_replace(['{{link_url::', '}}'], ['', ''], $v['value']);
             $value[$k]['type']  = self::TYPE_MAP[$v['type']] ?? self::DEFAULT_TYPE;
         }
 
-        $event->setValue(\serialize($value));
+
+        $event->setValue(serialize($value));
     }
 
     /**
@@ -208,15 +227,17 @@ class JumpToListener extends AbstractAbstainingListener
 
             $arrLanguages = [];
             $rowClasses   = [];
+            $intlLocales  = System::getContainer()->get('contao.intl.locales');
+            assert($intlLocales instanceof Locales);
+            $labels = $intlLocales->getLocales();
             /** @psalm-suppress DeprecatedMethod */
             foreach ((array) $metaModel->getAvailableLanguages() as $strLangCode) {
-                $arrLanguages[$strLangCode] = $this->translator
-                    ->trans('LNG.' . $strLangCode, [], 'contao_languages');
+                $arrLanguages[$strLangCode] = $labels[$strLangCode];
                 $rowClasses[]               = ($strLangCode === $fallback) ? 'fallback_language' : 'normal_language';
             }
 
-            $extra['minCount'] = \count($arrLanguages);
-            $extra['maxCount'] = \count($arrLanguages);
+            $extra['minCount'] = count($arrLanguages);
+            $extra['maxCount'] = count($arrLanguages);
 
             $extra['columnFields']['langcode']['options']            = $arrLanguages;
             $extra['columnFields']['langcode']['eval']['rowClasses'] = $rowClasses;

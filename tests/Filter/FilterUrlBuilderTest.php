@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,23 +13,19 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2021 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\Test\Filter;
 
-use Contao\Config;
-use Contao\CoreBundle\Framework\Adapter;
-use Contao\CoreBundle\Routing\UrlGenerator;
-use Contao\Model\Collection;
-use Contao\PageModel;
 use MetaModels\Filter\FilterUrl;
 use MetaModels\Filter\FilterUrlBuilder;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * This tests the filter url class.
@@ -46,45 +42,49 @@ class FilterUrlBuilderTest extends TestCase
     public function generateProvider(): array
     {
         return [
-            'test generating' => [
-                'expectedUrl' => 'page-alias/auto/slug/sluggy',
+            'test generating'   => [
+                'expectedUrl'        => 'tl_page.42',
                 'expectedParameters' => [
-                    'get2' => 'value',
+                    'get2'       => 'value',
+                    'parameters' => '/auto/slug/sluggy',
                 ],
-                'page' => [
+                'page'               => [
                     'alias' => 'page-alias',
+                    'id'    => 42,
                 ],
-                'get' => [
+                'get'                => [
                     'get2' => 'value',
                 ],
-                'slug' => [
-                    'slug' => 'sluggy',
+                'slug'               => [
+                    'slug'      => 'sluggy',
                     'auto_item' => 'auto',
                 ],
-                'requestGet' => [
+                'requestGet'         => [
                     'get-param' => 'get-value',
                 ],
-                'requestUrl' => 'https://example.org/alias.html',
+                'requestUrl'         => 'https://example.org/alias.html',
             ],
             'test stay on page' => [
-                'expectedUrl' => 'alias/auto/slug/sluggy',
+                'expectedUrl'        => 'tl_page.42',
                 'expectedParameters' => [
+                    'get2'       => 'value',
+                    'parameters' => '/auto/slug/sluggy',
+                    'get-param'  => 'get-value',
+                ],
+                'page'               => [
+                    'id' => 42,
+                ],
+                'get'                => [
                     'get2' => 'value',
-                    'get-param' => 'get-value',
                 ],
-                'page' => [
-                ],
-                'get' => [
-                    'get2' => 'value',
-                ],
-                'slug' => [
-                    'slug' => 'sluggy',
+                'slug'               => [
+                    'slug'      => 'sluggy',
                     'auto_item' => 'auto',
                 ],
-                'requestGet' => [
+                'requestGet'         => [
                     'get-param' => 'get-value',
                 ],
-                'requestUrl' => 'https://example.org/alias.html',
+                'requestUrl'         => 'https://example.org/alias.html',
             ],
         ];
     }
@@ -120,8 +120,7 @@ class FilterUrlBuilderTest extends TestCase
         );
 
         $generator = $this
-            ->getMockBuilder(UrlGenerator::class)
-            ->disableOriginalConstructor()
+            ->getMockBuilder(UrlGeneratorInterface::class)
             ->getMock();
 
         $generator
@@ -130,10 +129,9 @@ class FilterUrlBuilderTest extends TestCase
             ->with($expectedUrl, $expectedParameters)
             ->willReturn('success');
 
-        $adapter      = $this->getMockBuilder(Adapter::class)->disableOriginalConstructor()->getMock();
-        $requestStack = $this->mockRequestStack($requestGet, $requestUrl);
+        $requestStack = $this->mockRequestStack($requestGet, $requestUrl, $page['id']);
 
-        $builder = new FilterUrlBuilder($generator, $requestStack, true, '.html', $adapter, true);
+        $builder = new FilterUrlBuilder($generator, $requestStack);
 
         self::assertSame('success', $builder->generate($filterUrl));
     }
@@ -147,27 +145,22 @@ class FilterUrlBuilderTest extends TestCase
         );
 
         $generator = $this
-            ->getMockBuilder(UrlGenerator::class)
+            ->getMockBuilder(UrlGeneratorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $generator
             ->expects(self::once())
             ->method('generate')
-            ->with('folder/page/auto/slug/sluggy', ['get2' => 'value', 'get-param' => 'get-value'])
+            ->with('tl_page.42', ['get2' => 'value', 'get-param' => 'get-value', 'parameters' => '/auto/slug/sluggy'])
             ->willReturn('success');
 
-        $adapter      = $this
-            ->getMockBuilder(Adapter::class)
-            ->addMethods(['findByAliases'])
-            ->disableOriginalConstructor()
-            ->getMock();
         $requestStack = $this->getMockBuilder(RequestStack::class)->getMock();
         $requestStack->method('getCurrentRequest')->willReturn(
             new Request(
                 ['get-param' => 'get-value'],
                 [],
-                [],
+                ['pageModel' => 42],
                 [],
                 [],
                 [
@@ -177,33 +170,9 @@ class FilterUrlBuilderTest extends TestCase
             )
         );
 
-        $page = $this->getMockBuilder(PageModel::class)->disableOriginalConstructor()->getMock();
-        $page->expects(self::once())->method('loadDetails')->willReturn((object) [
-            'domain'         => 'example.org:8080',
-            'rootLanguage'   => 'en',
-            'rootIsFallback' => true,
-            'alias'          => 'folder/page',
-        ]);
+        $builder = new FilterUrlBuilder($generator, $requestStack);
 
-        $pages = $this->getMockBuilder(Collection::class)->disableOriginalConstructor()->getMock();
-        $pages->expects(self::exactly(2))->method('next')->willReturnOnConsecutiveCalls(true, false);
-        $pages->expects(self::once())->method('current')->willReturn($page);
-
-        $adapter
-            ->expects(self::once())
-            ->method('findByAliases')
-            ->with(['folder/page', 'folder'])
-            ->willReturn($pages);
-
-        $builder = new FilterUrlBuilder($generator, $requestStack, false, '.html', $adapter, true);
-
-        $prevFolderUrl = Config::get('folderUrl');
-        Config::set('folderUrl', true);
-        try {
-            self::assertSame('success', $builder->generate($filterUrl));
-        } finally {
-            Config::set('folderUrl', $prevFolderUrl);
-        }
+        self::assertSame('success', $builder->generate($filterUrl));
     }
 
     /**
@@ -212,11 +181,11 @@ class FilterUrlBuilderTest extends TestCase
      * @param array  $requestGet The current GET parameters.
      * @param string $requestUrl The request URL.
      */
-    private function mockRequestStack(array $requestGet, string $requestUrl): RequestStack
+    private function mockRequestStack(array $requestGet, string $requestUrl, int $pageModel): RequestStack
     {
         $requestStack = $this->getMockBuilder(RequestStack::class)->getMock();
         $requestStack->method('getCurrentRequest')->willReturn(
-            new Request($requestGet, [], [], [], [], ['REQUEST_URI' => $requestUrl])
+            new Request($requestGet, [], ['pageModel' => $pageModel], [], [], ['REQUEST_URI' => $requestUrl])
         );
 
         return $requestStack;

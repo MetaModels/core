@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -23,11 +23,12 @@ namespace MetaModels\Test\Filter\Setting;
 
 use Contao\CoreBundle\Framework\Adapter;
 use Contao\CoreBundle\Framework\ContaoFramework;
+use Contao\CoreBundle\InsertTag\InsertTagParser;
 use Contao\Input;
 use Contao\PageModel;
-use Contao\Session as ContaoSession;
-use Contao\InsertTags;
+use Contao\System;
 use Doctrine\DBAL\Connection;
+use Iterator;
 use MetaModels\CoreBundle\Contao\InsertTag\ReplaceParam;
 use MetaModels\CoreBundle\Contao\InsertTag\ReplaceTableName;
 use MetaModels\CoreBundle\Contao\InsertTag\ResolveLanguageTag;
@@ -38,8 +39,10 @@ use MetaModels\IMetaModel;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\Test\AutoLoadingTestCase;
 use ReflectionProperty;
+use RuntimeException;
 use Symfony\Component\DependencyInjection\Container;
 use MetaModels\Filter\Rules\SimpleQuery;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
@@ -81,9 +84,9 @@ class CustomSqlTest extends AutoLoadingTestCase
         $filterSetting = $this->getMockForAbstractClass(ICollection::class);
         $filterSetting->method('getMetaModel')->willReturn($metaModel);
 
-        if (!isset($services[InsertTags::class])) {
-            $services[InsertTags::class] = $insertTags = $this
-                ->getMockBuilder(InsertTags::class)
+        if (!isset($services[InsertTagParser::class])) {
+            $services[InsertTagParser::class] = $insertTags = $this
+                ->getMockBuilder(InsertTagParser::class)
                 ->onlyMethods(['replace'])
                 ->disableOriginalConstructor()
                 ->getMock();
@@ -118,7 +121,9 @@ class CustomSqlTest extends AutoLoadingTestCase
                 ->disableOriginalConstructor()
                 ->onlyMethods([])
                 ->getMock();
-            $services[PageModel::class]->language = 'en';
+            // Have to use reflection here as the models now want a real database instance.
+            $reflection = new ReflectionProperty(PageModel::class, 'arrData');
+            $reflection->setValue($services[PageModel::class], ['language' => 'en']);
         }
         if (!isset($services[Request::class])) {
             $services[Request::class] = new Request();
@@ -131,9 +136,6 @@ class CustomSqlTest extends AutoLoadingTestCase
             $services[RequestStack::class]->push($services[Request::class]);
         }
 
-        if (!isset($services[ContaoSession::class])) {
-            $services[ContaoSession::class] = $this->mockLegacySession([]);
-        }
         if (!isset($services[IMetaModelsServiceContainer::class])) {
             $services[IMetaModelsServiceContainer::class] = $this
                 ->getMockBuilder(IMetaModelsServiceContainer::class)
@@ -149,7 +151,7 @@ class CustomSqlTest extends AutoLoadingTestCase
             $services[ContaoFramework::class]->method('getAdapter')->willReturnCallback(
                 fn (string $class) => match ($class) {
                     Input::class => $services[Input::class],
-                    default => throw new \RuntimeException('Override ContaoFramework instance'),
+                    default => throw new RuntimeException('Override ContaoFramework instance'),
                 }
             );
         }
@@ -166,25 +168,6 @@ class CustomSqlTest extends AutoLoadingTestCase
         }
 
         return new CustomSql($filterSetting, $properties, $container);
-    }
-
-    private function mockLegacySession(array $values): ContaoSession
-    {
-        $session = $this
-            ->getMockBuilder(ContaoSession::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['get'])
-            ->getMock();
-
-        $map = [];
-        foreach ($values as $key => $value) {
-            // key => value
-            $map[] = [$key, $value];
-        }
-        $session->method('get')->willReturnMap($map);
-
-
-        return $session;
     }
 
     private function mockSession(array $values): Session
@@ -219,21 +202,18 @@ class CustomSqlTest extends AutoLoadingTestCase
     protected function generateSql(CustomSql $instance, array $filterUrl = []): array
     {
         $filter = new Filter($this->getMockForAbstractClass(IMetaModel::class));
-        $container = $this->getMockForAbstractClass(\Symfony\Component\DependencyInjection\ContainerInterface::class);
-        \Contao\System::setContainer($container);
+        $container = $this->getMockForAbstractClass(ContainerInterface::class);
+        System::setContainer($container);
 
         $instance->prepareRules($filter, $filterUrl);
 
         $reflection = new ReflectionProperty($filter, 'arrFilterRules');
-        $reflection->setAccessible(true);
         $rules = $reflection->getValue($filter);
 
         $reflection = new ReflectionProperty(SimpleQuery::class, 'queryString');
-        $reflection->setAccessible(true);
         $sql = $reflection->getValue($rules[0]);
 
         $reflection = new ReflectionProperty(SimpleQuery::class, 'params');
-        $reflection->setAccessible(true);
         $params = $reflection->getValue($rules[0]);
 
         return ['sql' => $sql, 'params' => $params];
@@ -647,7 +627,7 @@ class CustomSqlTest extends AutoLoadingTestCase
         );
     }
 
-    public function issue1495IfLangProvider(): \Iterator
+    public function issue1495IfLangProvider(): Iterator
     {
         yield [
             'sql' => '{{iflng::de}}1{{iflng::en}}3{{iflng::nl}}2{{iflng::es}}4{{iflng::el}}5{{iflng}}',
@@ -732,7 +712,9 @@ WHERE alias = moe-yer-ss-hans-herbert-oeaeue',
             ->disableOriginalConstructor()
             ->onlyMethods([])
             ->getMock();
-        $pageModel->language = $language;
+        // Have to use reflection here as the models now want a real database instance.
+        $reflection = new ReflectionProperty(PageModel::class, 'arrData');
+        $reflection->setValue($pageModel, ['language' => $language]);
 
         $setting = $this->mockCustomSql(
             ['customsql' => $sql],

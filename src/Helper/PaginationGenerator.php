@@ -70,6 +70,8 @@ class PaginationGenerator
      * Template object.
      *
      * @var Template
+     *
+     * @psalm-suppress DeprecatedClass
      */
     private Template $template;
 
@@ -105,6 +107,8 @@ class PaginationGenerator
      * @param string           $paramType          The pagination parameter url type.
      * @param Template         $paginationTemplate The pagination template.
      * @param string           $paginationFragment The URL fragment.
+     *
+     * @psalm-suppress DeprecatedClass
      */
     public function __construct(
         FilterUrlBuilder $urlBuilder,

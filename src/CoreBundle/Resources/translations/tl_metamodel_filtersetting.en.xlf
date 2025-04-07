@@ -346,6 +346,93 @@
       <trans-unit id="saveNback" resname="saveNback">
         <source>Save and go back</source>
       </trans-unit>
+      <trans-unit id="customsql_abstract.caption" resname="customsql_abstract.caption">
+        <source>Abstract</source>
+      </trans-unit>
+      <trans-unit id="customsql_abstract.description" resname="customsql_abstract.description">
+        <source><![CDATA[Type in any SQL query that shall be executed.<br />
+          It is required that this query returns at least one column named "id".<br />
+          It is not possible to pass calculations from the SQL to the list.<br />
+          The declaration of column names should be entered with table alias as prefix e.g. t.name.]]></source>
+      </trans-unit>
+      <trans-unit id="customsql_example1.caption" resname="customsql_example1.caption">
+        <source><![CDATA[Example 1<br />plain query]]></source>
+      </trans-unit>
+      <trans-unit id="customsql_example1.description" resname="customsql_example1.description">
+        <source><![CDATA[<pre>SELECT t.id FROM mm_mymetamodel AS t WHERE t.page_id=1</pre>
+          This selects all IDs from the table <em>mm_mymetamodel</em> that have the value <em>page_id=1</em>]]></source>
+      </trans-unit>
+      <trans-unit id="customsql_example2.caption" resname="customsql_example2.caption">
+        <source><![CDATA[Example 2<br />insert tablename]]></source>
+      </trans-unit>
+      <trans-unit id="customsql_example2.description" resname="customsql_example2.description">
+        <source><![CDATA[<pre>SELECT t.id FROM {{table}} AS t WHERE t.page_id=1</pre>
+          This is merely the same as example 1 but the table name of the current MetaModel
+          (i.e.: the <em>mm_mymetamodel</em> from above) will get inserted into the query.]]></source>
+      </trans-unit>
+      <trans-unit id="customsql_inserttags.caption" resname="customsql_inserttags.caption">
+        <source>Insert tags</source>
+      </trans-unit>
+      <trans-unit id="customsql_inserttags.description" resname="customsql_inserttags.description">
+        <source><![CDATA[Insert tags are supported, but keep in mind that not all tags might be available
+          when the filter setting is used (for example the <em>{{page::id}}</em> is
+          available only when used from a front end page and not from RSS-feeds).]]></source>
+      </trans-unit>
+      <trans-unit id="customsql_secure_inserttags.caption" resname="customsql_secure_inserttags.caption">
+        <source>Secure insert tags</source>
+      </trans-unit>
+      <trans-unit id="customsql_secure_inserttags.description" resname="customsql_secure_inserttags.description">
+        <source><![CDATA[Secure insert tags are just like the plain insert tags, but their value get\'s escaped in the query.<br />
+          Therefore, you might be better off using the secure equivalent unless you exactly know what you are doing.<br />
+          The notation is like:<br />
+          <pre>{{secure::page::id}}</pre>]]></source>
+      </trans-unit>
+      <trans-unit id="customsql_parameter_sources.caption" resname="customsql_parameter_sources.caption">
+        <source>Parameter sources</source>
+      </trans-unit>
+      <trans-unit id="customsql_parameter_sources.description" resname="customsql_parameter_sources.description">
+        <source><![CDATA[Parameter sources have the normal layout of:
+          <pre>{{param::[source]?[query string]}}</pre>
+          Where the source may be any of:
+          <ul>
+            <li><strong>get</strong> - HTTP GET query string</li>
+            <li><strong>post</strong> - HTTP POST fields</li>
+            <li><strong>cookie</strong> - HTTP COOKIE values</li>
+            <li><strong>session</strong> - any field in the Contao session</li>
+            <li><strong>filter</strong> - any of the passed filter parameters (for sharing paramters between filter settings).</li>
+            <li><strong>container</strong> - Name of a callable service in the MetaModels service container (this requires additional PHP coding from your side).</li>
+          </ul>
+          The Query string is built like a normal HTTP query string as "name=value" pairs which are combined using the & char and must at least contain the field "name".
+          One or more of the following optional keys may be used in addition:
+          <ul>
+            <li><strong>default</strong> - the default value to use, if there is no value available.</li>
+            <li><strong>aggregate</strong> - either "list" or "set"</li>
+            <li><strong>key</strong> - set to 1 to read the key of arrays (needs aggregate "set").</li>
+            <li><strong>recursive</strong> - set to 1 to read arrays recursive (needs aggregate "set").</li>
+            <li><strong>service</strong>  - The name of the service to retrieve (needs source "service").</li>
+          </ul>]]></source>
+      </trans-unit>
+      <trans-unit id="customsql_example3.caption" resname="customsql_example3.caption">
+        <source><![CDATA[Example 3<br />use complex filter parameter sources]]></source>
+      </trans-unit>
+      <trans-unit id="customsql_example3.description" resname="customsql_example3.description">
+        <source><![CDATA[<pre>SELECT t.id
+FROM {{table}} AS t
+WHERE t.catname={{param::get?name=category&default=defaultcat}}</pre>
+          <p>
+            This is the same as example 2, but now we use a parameter from the "query" string.
+          </p>
+          <p>
+            Imagine the page URL as of: "https://example.org/list/category/demo.html"<br />
+            the resulting Query will then be:<br />
+            "SELECT t.id FROM mm_demo AS t WHERE t.catname='demo'"
+          </p>
+          <p>
+            If the URL should be: "https://example.org/list.html",<br />
+            the resulting Query will then be:<br />
+            "SELECT t.id FROM mm_demo AS t WHERE t.catname='defaultcat'"
+          </p>]]></source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

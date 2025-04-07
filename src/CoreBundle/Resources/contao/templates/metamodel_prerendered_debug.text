@@ -5,7 +5,7 @@
  */
 
 // Debug.
-if (System::getContainer()->get('kernel')->isDebug()) {
+if (\Contao\System::getContainer()->get('kernel')->isDebug()) {
     dump($this->data);
 }
 

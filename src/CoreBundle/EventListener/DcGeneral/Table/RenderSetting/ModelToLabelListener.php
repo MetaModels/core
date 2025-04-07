@@ -104,14 +104,14 @@ class ModelToLabelListener extends AbstractListener
                 $this->attributeFactory->getIconForType($type),
                 $type,
                 '',
-                'bundles/metamodelscore/images/icons/fields.png'
+                '/bundles/metamodelscore/images/icons/fields.png'
             );
             $variant = ($metaModel->hasVariants() && $attribute->get('isvariant')) ? ', variant' : '';
             $name    = $attribute->getName();
             $colName = $attribute->getColName();
         } else {
             $type    = $this->trans('error_unknown_id', ['%id%' => $model->getProperty('attr_id')]);
-            $image   = $this->iconBuilder->getBackendIconImageTag('bundles/metamodelscore/images/icons/fields.png');
+            $image   = $this->iconBuilder->getBackendIconImageTag('/bundles/metamodelscore/images/icons/fields.png');
             $variant = '';
             $name    = $this->trans('error_unknown_attribute');
             $colName = $this->trans('error_unknown_column');

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,13 +13,14 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\CoreBundle\Controller\Backend;
 
+use Contao\CoreBundle\Controller\AbstractBackendController;
 use Contao\CoreBundle\Exception\AccessDeniedException;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\CoreBundle\Menu\BackendMenuBuilder;
@@ -29,9 +30,11 @@ use MetaModels\ViewCombination\ViewCombination;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Twig\Environment as TwigEnvironment;
 
-final class MetaModelController
+/**
+ * @psalm-suppress PropertyNotSetInConstructor
+ */
+final class MetaModelController extends AbstractBackendController
 {
     use DcGeneralControllerTrait;
 
@@ -47,17 +50,17 @@ final class MetaModelController
 
     /**
      * @param Request                  $request        The request.
-     * @param TwigEnvironment          $twig           The twig environment.
      * @param DcGeneralFactoryService  $factoryFactory The DCG factory
      * @param EventDispatcherInterface $dispatcher     The event dispatcher.
      * @param TranslatorInterface      $translator     The translator.
      * @param ContaoFramework          $framework      The Contao framework
      *
      * @return Response
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function __invoke(
         Request $request,
-        TwigEnvironment $twig,
         DcGeneralFactoryService $factoryFactory,
         EventDispatcherInterface $dispatcher,
         TranslatorInterface $translator,
@@ -83,15 +86,15 @@ final class MetaModelController
         );
         $headline         = $this->determineHeadline($containerName, $inputScreenId, $translator);
 
-        return new Response(
-            $twig->render(
-                '@MetaModelsCore/Backend/be_config.html.twig',
-                [
-                    'headline'    => $headline,
-                    'body'        => $controllerResult,
-                    'stylesheets' => ['bundles/metamodelscore/css/style.css']
-                ]
-            )
+        $GLOBALS['TL_CSS']['metamodels.core'] = '/bundles/metamodelscore/css/style.css';
+
+        return $this->render(
+            '@MetaModelsCore/Backend/be_config.html.twig',
+            [
+                'title'       => $headline,
+                'headline'    => $headline,
+                'body'        => $controllerResult,
+            ]
         );
     }
 

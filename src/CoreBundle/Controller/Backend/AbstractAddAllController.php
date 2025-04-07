@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,13 +15,15 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\CoreBundle\Controller\Backend;
 
+use Contao\CoreBundle\Controller\AbstractBackendController;
+use Contao\CoreBundle\Csrf\ContaoCsrfTokenManager;
 use Contao\CoreBundle\Framework\Adapter;
 use Contao\System;
 use Doctrine\DBAL\Connection;
@@ -42,7 +44,7 @@ use Twig\Environment as TwigEnvironment;
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-abstract class AbstractAddAllController
+abstract class AbstractAddAllController extends AbstractBackendController
 {
     /**
      * Adapter to the Contao\System class.
@@ -176,11 +178,9 @@ abstract class AbstractAddAllController
             }
         }
 
-        return new Response(
-            $this->twig->render(
-                '@MetaModelsCore/Backend/add-all.html.twig',
-                $this->render($table, $metaModel, $request)
-            )
+        return $this->render(
+            '@MetaModelsCore/Backend/add-all.html.twig',
+            $this->renderOutput($table, $metaModel, $request)
         );
     }
 
@@ -192,27 +192,39 @@ abstract class AbstractAddAllController
      * @param Request    $request   The request.
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
-    protected function render($table, $metaModel, Request $request)
+    protected function renderOutput($table, $metaModel, Request $request)
     {
-        $fields = $this->generateForm($table, $metaModel, $request);
+        $fields   = $this->generateForm($table, $metaModel, $request);
+        $headline = $this->translator->trans('addall.description', [], $table);
+
+        $GLOBALS['TL_CSS']['metamodels.core'] = '/bundles/metamodelscore/css/style.css';
+
+        System::loadLanguageFile('default');
+
+        $tokenManager = System::getContainer()->get('contao.csrf.token_manager');
+        assert($tokenManager instanceof ContaoCsrfTokenManager);
 
         return [
+            'title'         => $headline,
             'action'        => '',
-            'requestToken'  => System::getContainer()->get('contao.csrf.token_manager')?->getDefaultTokenValue(),
+            'requestToken'  => $tokenManager->getDefaultTokenValue(),
             'href'          => $this->getReferer($request, $table, true),
             'backBt'        => $this->translator->trans('backBT', [], $table),
             'add'           => $this->translator->trans('continue', [], $table),
             'saveNclose'    => $this->translator->trans('saveNclose', [], $table),
             'activate'      => $this->translator->trans('addAll_activate', [], $table),
             'tlclass'       => '',
-            'headline'      => $this->translator->trans('addall.description', [], $table),
+            'headline'      => $headline,
             'selectAll'     => $this->translator->trans('selectAll', [], $table) . '.',
             'cacheMessage'  => '',
             'updateMessage' => '',
             'hasCheckbox'   => \count($fields) > 0,
             'fields'        => $fields,
-            'stylesheets'   => ['bundles/metamodelscore/css/style.css']
+            'theme'         => 'flexible',
+            //'stylesheets'   => ['/bundles/metamodelscore/css/style.css']
         ];
     }
 

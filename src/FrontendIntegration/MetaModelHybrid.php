@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -24,6 +24,7 @@
 namespace MetaModels\FrontendIntegration;
 
 use Contao\BackendTemplate;
+use Contao\CoreBundle\Routing\ScopeMatcher;
 use Contao\Database\Result;
 use Contao\Hybrid;
 use Contao\StringUtil;
@@ -34,6 +35,7 @@ use MetaModels\IMetaModel;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\MetaModelsServiceContainer;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -56,6 +58,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * @deprecated We switched to fragments in MetaModels 2.2. To be removed in MetaModels 3.0.
  *
  * @psalm-suppress PropertyNotSetInConstructor
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class MetaModelHybrid extends Hybrid
 {
@@ -161,15 +165,12 @@ abstract class MetaModelHybrid extends Hybrid
         $this->arrData = \method_exists($objElement, 'row') ? $objElement->row() : (array) $objElement;
 
         // Get CSS ID and headline from the parent element (!).
-        /** @psalm-suppress UndefinedThisPropertyFetch */
         $this->cssID      = StringUtil::deserialize($objElement->cssID, true);
         $this->typePrefix = $objElement->typePrefix ?? '';
-        /** @psalm-suppress UndefinedThisPropertyFetch */
-        $this->strKey = $objElement->type;
-        $arrHeadline  = StringUtil::deserialize($objElement->headline);
-        /** @psalm-suppress UndefinedThisPropertyFetch */
-        $this->headline = \is_array($arrHeadline) ? $arrHeadline['value'] : $arrHeadline;
-        $this->hl       = \is_array($arrHeadline) ? $arrHeadline['unit'] : 'h1';
+        $this->strKey     = $objElement->type;
+        $arrHeadline      = StringUtil::deserialize($objElement->headline);
+        $this->headline   = \is_array($arrHeadline) ? $arrHeadline['value'] : $arrHeadline;
+        $this->hl         = \is_array($arrHeadline) ? $arrHeadline['unit'] : 'h1';
     }
 
     /**
@@ -183,16 +184,17 @@ abstract class MetaModelHybrid extends Hybrid
      */
     public function generate()
     {
-        if (
-            (bool) System::getContainer()->get('contao.routing.scope_matcher')
-                ?->isBackendRequest(
-                    System::getContainer()->get('request_stack')?->getCurrentRequest() ?? Request::create('')
-                )
-        ) {
+        $scopeMatcher = System::getContainer()->get('contao.routing.scope_matcher');
+        assert($scopeMatcher instanceof ScopeMatcher);
+
+        $requestStack = System::getContainer()->get('request_stack');
+        assert($requestStack instanceof RequestStack);
+
+        if ($scopeMatcher->isBackendRequest($requestStack->getCurrentRequest() ?? Request::create(''))) {
             $strInfo = '';
             if ($this->metamodel) {
                 // Add CSS file.
-                $GLOBALS['TL_CSS'][] = 'bundles/metamodelscore/css/style.css';
+                $GLOBALS['TL_CSS'][] = '/bundles/metamodelscore/css/style.css';
 
                 // Retrieve name of MetaModel.
                 $infoTemplate =
