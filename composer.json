@@ -31,7 +31,7 @@
   "require": {
     "php": "^8.2",
     "ext-dom": "*",
-    "contao-community-alliance/dc-general": "^2.4",
+    "contao-community-alliance/dc-general": "^2.4.2",
     "contao-community-alliance/events-contao-bindings": "^5.0",
     "contao-community-alliance/meta-palettes": "^2.0.10",
     "contao-community-alliance/translator": "^2.5",
