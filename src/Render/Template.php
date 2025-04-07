@@ -319,6 +319,7 @@ class Template
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function getTemplate($strTemplate, $strFormat = 'html5', $blnFailIfNotFound = false)
     {
@@ -337,9 +338,14 @@ class Template
             isset(self::$templatePathCache[$strTemplate][$strFormat])
             && \array_key_exists($strCustom, self::$templatePathCache[$strTemplate][$strFormat])
         ) {
-            return self::$templatePathCache[$strTemplate][$strFormat][$strCustom] !== false
+            $value = self::$templatePathCache[$strTemplate][$strFormat][$strCustom] !== false
                 ? self::$templatePathCache[$strTemplate][$strFormat][$strCustom]
                 : null;
+            if ($blnFailIfNotFound && null === $value) {
+                throw new \Exception('Could not find template "' . $strTemplate . '"');
+            }
+
+            return $value;
         }
 
         try {

@@ -320,7 +320,7 @@ abstract class Base implements IAttribute
     {
         if (in_array($strKey, $this->getAttributeSettingNames())) {
             if (null !== $varValue && !\is_array($varValue) && (\str_starts_with($varValue, 'a:'))) {
-                $unSerialized = \unserialize($varValue, ['allowed_classes' => false]);
+                $unSerialized = \unserialize($varValue, ['allowed_classes' => true]);
             }
 
             if (isset($unSerialized) && is_array($unSerialized)) {
@@ -624,7 +624,7 @@ abstract class Base implements IAttribute
             $this->prepareTemplate($objTemplate, $arrRowData, $objSettings);
 
             // Now the desired format.
-            if ($strValue = $objTemplate->parse($strOutputFormat, false)) {
+            if (('text' !== $strOutputFormat) && $strValue = $objTemplate->parse($strOutputFormat, false)) {
                 $arrResult[$strOutputFormat] = $strValue;
             }
 

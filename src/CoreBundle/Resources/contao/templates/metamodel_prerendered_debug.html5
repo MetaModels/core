@@ -10,9 +10,9 @@ if (\Contao\System::getContainer()->get('kernel')->isDebug()) {
 }
 ?>
 <?php if (count($this->data)): ?>
-    <?php foreach ($this->data as $arrItem): ?>
+    <?php foreach ($this->data as $item): ?>
      <!-- Include here your output with PHP echo from nodes e.g.
-          $arrItem['html5']['attribute_name'] or $arrItem['text']['attribute_name'] and so on
+          $item['html5']['attribute_name'] or $item['text']['attribute_name'] and so on
           Switch on the debug mode and look at the debug output in the toolbar...
           --->
     <?php endforeach; ?>
