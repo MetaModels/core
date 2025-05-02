@@ -1011,8 +1011,10 @@ class ToolboxFile
         }
 
         foreach ($models as $value) {
-            $result['bin'][]   = $value->uuid;
-            $result['value'][] = StringUtil::binToUuid($value->uuid);
+            $uuid = $value->uuid;
+            assert(null !== $uuid);
+            $result['bin'][]   = $uuid;
+            $result['value'][] = StringUtil::binToUuid($uuid);
             $result['path'][]  = $value->path;
             $result['meta'][]  = StringUtil::deserialize($value->meta, true);
         }
@@ -1096,10 +1098,12 @@ class ToolboxFile
                     $this->acceptedExtensions
                 )
             ) {
-                $path                       = $file->path;
-                $this->foundFiles[]         = $path;
-                $this->uuidMap[$file->uuid] = $path;
-                $meta                       = StringUtil::deserialize($file->meta, true);
+                $path               = $file->path;
+                $this->foundFiles[] = $path;
+                $uuid               = $file->uuid;
+                assert(null !== $uuid);
+                $this->uuidMap[$uuid] = $path;
+                $meta                 = StringUtil::deserialize($file->meta, true);
 
                 if (isset($meta[$baseLanguage])) {
                     $this->metaInformation[dirname($path)][basename($path)] = $meta[$baseLanguage];
