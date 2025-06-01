@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,20 +15,27 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
-$GLOBALS['TL_LANG']['tl_module']['mm_config_legend']                         = 'MetaModel Configuration';
-$GLOBALS['TL_LANG']['tl_module']['mm_filter_legend']                         = 'MetaModel Filter';
-$GLOBALS['TL_LANG']['tl_module']['mm_rendering_legend']                      = 'MetaModel Rendering';
-$GLOBALS['TL_LANG']['tl_module']['mm_pagination_legend']                     = 'MetaModel Pagination';
-$GLOBALS['TL_LANG']['tl_module']['mm_sorting_legend']                        = 'MetaModel Sorting';
-$GLOBALS['TL_LANG']['tl_module']['mm_parameters_legend']                     = 'Parameter Setting';
-$GLOBALS['TL_LANG']['tl_module']['mm_meta_legend']                           = 'Search engine optimization';
-$GLOBALS['TL_LANG']['tl_module']['asc']                                      = 'Ascending';
-$GLOBALS['TL_LANG']['tl_module']['desc']                                     = 'Descending';
+// Legends
+$GLOBALS['TL_LANG']['tl_module']['mm_config_legend']     = 'MetaModel Configuration';
+$GLOBALS['TL_LANG']['tl_module']['mm_filter_legend']     = 'MetaModel Filter';
+$GLOBALS['TL_LANG']['tl_module']['mm_rendering_legend']  = 'MetaModel Rendering';
+$GLOBALS['TL_LANG']['tl_module']['mm_pagination_legend'] = 'MetaModel Pagination';
+$GLOBALS['TL_LANG']['tl_module']['mm_sorting_legend']    = 'MetaModel Sorting';
+$GLOBALS['TL_LANG']['tl_module']['mm_parameters_legend'] = 'Parameter Setting';
+$GLOBALS['TL_LANG']['tl_module']['mm_meta_legend']       = 'Search engine optimization';
+
+// References
+$GLOBALS['TL_LANG']['tl_module']['ASC']                          = 'Ascending';
+$GLOBALS['TL_LANG']['tl_module']['DESC']                         = 'Descending';
+$GLOBALS['TL_LANG']['tl_content']['select_values']['attributes'] = 'Attributes';
+$GLOBALS['TL_LANG']['tl_content']['select_values']['meta']       = 'Metafields';
+
+// Fields
 $GLOBALS['TL_LANG']['tl_module']['metamodel'][0]                             = 'MetaModel';
 $GLOBALS['TL_LANG']['tl_module']['metamodel'][1]                             =
     'The MetaModel to list in this listing.';

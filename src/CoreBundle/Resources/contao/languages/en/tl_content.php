@@ -19,16 +19,22 @@
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
+// Legends
+$GLOBALS['TL_LANG']['tl_content']['mm_config_legend']     = 'MetaModel Configuration';
+$GLOBALS['TL_LANG']['tl_content']['mm_filter_legend']     = 'MetaModel Filter';
+$GLOBALS['TL_LANG']['tl_content']['mm_rendering_legend']  = 'MetaModel Rendering';
+$GLOBALS['TL_LANG']['tl_content']['mm_pagination_legend'] = 'MetaModel Pagination';
+$GLOBALS['TL_LANG']['tl_content']['mm_sorting_legend']    = 'MetaModel Sorting';
+$GLOBALS['TL_LANG']['tl_content']['mm_parameters_legend'] = 'Parameter Setting';
+$GLOBALS['TL_LANG']['tl_content']['mm_meta_legend']       = 'Search engine optimization';
 
-$GLOBALS['TL_LANG']['tl_content']['mm_config_legend']                         = 'MetaModel Configuration';
-$GLOBALS['TL_LANG']['tl_content']['mm_filter_legend']                         = 'MetaModel Filter';
-$GLOBALS['TL_LANG']['tl_content']['mm_rendering_legend']                      = 'MetaModel Rendering';
-$GLOBALS['TL_LANG']['tl_content']['mm_pagination_legend']                     = 'MetaModel Pagination';
-$GLOBALS['TL_LANG']['tl_content']['mm_sorting_legend']                        = 'MetaModel Sorting';
-$GLOBALS['TL_LANG']['tl_content']['mm_parameters_legend']                     = 'Parameter Setting';
-$GLOBALS['TL_LANG']['tl_content']['mm_meta_legend']                           = 'Search engine optimization';
-$GLOBALS['TL_LANG']['tl_content']['asc']                                      = 'Ascending';
-$GLOBALS['TL_LANG']['tl_content']['desc']                                     = 'Descending';
+// References
+$GLOBALS['TL_LANG']['tl_content']['ASC']                         = 'Ascending';
+$GLOBALS['TL_LANG']['tl_content']['DESC']                        = 'Descending';
+$GLOBALS['TL_LANG']['tl_content']['select_values']['attributes'] = 'Attributes';
+$GLOBALS['TL_LANG']['tl_content']['select_values']['meta']       = 'Metafields';
+
+// Fields
 $GLOBALS['TL_LANG']['tl_content']['metamodel'][0]                             = 'MetaModel';
 $GLOBALS['TL_LANG']['tl_content']['metamodel'][1]                             =
     'The MetaModel to list in this listing.';
