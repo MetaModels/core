@@ -29,6 +29,7 @@ use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
 use ContaoCommunityAlliance\UrlBuilder\UrlBuilderFactoryInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
+use MetaModels\Attribute\IInternal;
 use MetaModels\BackendIntegration\TemplateList;
 use MetaModels\CoreBundle\Assets\IconBuilder;
 use MetaModels\Filter\Setting\FilterSettingFactory;
@@ -249,19 +250,13 @@ abstract class AbstractContentElementAndModuleCallback
      *
      * @param DC_Table $objDc The data container calling this method.
      *
-     * @return string[] array of all attributes as colName => human name
+     * @return array<string, array<string, string>> array of all attributes as colName => human name
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function getAttributeNames(DC_Table $objDc)
     {
-        $attributeNames = [
-            'sorting' => $this->translator->trans('metamodels_sorting', [], 'metamodels_list'),
-            'random'  => $this->translator->trans('random', [], 'metamodels_list'),
-            'id'      => $this->translator->trans('id', [], 'metamodels_list')
-        ];
-
         /** @psalm-suppress UndefinedMagicPropertyFetch */
         assert(null !== $objDc->activeRecord);
 
@@ -269,17 +264,37 @@ abstract class AbstractContentElementAndModuleCallback
             $metaModelName = $this->factory->translateIdToMetaModelName($objDc->activeRecord->metamodel);
         } catch (RuntimeException $exception) {
             // No valid MetaModel selected, can not add attributes of it.
-            return $attributeNames;
+            return [];
         }
-        $metaModel     = $this->factory->getMetaModel($metaModelName);
+        $metaModel = $this->factory->getMetaModel($metaModelName);
+        if (null === $metaModel) {
+            return [];
+        }
 
-        if ($metaModel) {
-            foreach ($metaModel->getAttributes() as $objAttribute) {
-                $attributeNames[$objAttribute->getColName()] = $objAttribute->getName();
+        $result = [];
+        // Add meta fields.
+        $result['meta'] = [
+            'sorting' => $this->translator->trans('metamodels_sorting', [], 'metamodels_list'),
+            'random'  => $this->translator->trans('random', [], 'metamodels_list'),
+            'id'      => $this->translator->trans('id', [], 'metamodels_list'),
+        ];
+
+        foreach ($metaModel->getAttributes() as $attribute) {
+            // Hide virtual types.
+            if ($attribute instanceof IInternal) {
+                continue;
             }
+
+            $colName = $attribute->getColName();
+            $result['attributes'][$colName] = sprintf(
+                '%s [%s, "%s"]',
+                $attribute->getName(),
+                $attribute->get('type'),
+                $colName,
+            );
         }
 
-        return $attributeNames;
+        return $result;
     }
 
     /**
