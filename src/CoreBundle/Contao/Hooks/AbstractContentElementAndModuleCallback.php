@@ -250,7 +250,7 @@ abstract class AbstractContentElementAndModuleCallback
      *
      * @param DC_Table $objDc The data container calling this method.
      *
-     * @return string[] array of all attributes as colName => human name
+     * @return array<string, array<string, string>> array of all attributes as colName => human name
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
