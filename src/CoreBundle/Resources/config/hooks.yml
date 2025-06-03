@@ -53,10 +53,3 @@ services:
             - '@?logger'
         tags:
             - { name: contao.hook, hook: replaceInsertTags }
-
-    MetaModels\CoreBundle\Contao\Hooks\FixupUserGroupModules:
-        arguments:
-            - '@metamodels.view_combination.builder'
-            - '@metamodels.view_combination.input_screen_information_builder'
-            - '@request_stack'
-        public: true

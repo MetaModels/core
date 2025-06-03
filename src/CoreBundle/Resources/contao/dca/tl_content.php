@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -79,7 +79,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_
     $GLOBALS['TL_DCA']['tl_content']['fields'],
     1,
     [
-        'metamodel'                     => [
+        'metamodel'                        => [
             'label'      => &$GLOBALS['TL_LANG']['tl_content']['metamodel'],
             'exclude'    => true,
             'inputType'  => 'select',
@@ -96,7 +96,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_
             ],
             'sql'        => "int(10) unsigned NOT NULL default '0'"
         ],
-        'metamodel_layout'              => [
+        'metamodel_layout'                 => [
             'label'            => &$GLOBALS['TL_LANG']['tl_content']['metamodel_layout'],
             'exclude'          => true,
             'inputType'        => 'select',
@@ -107,7 +107,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_
             ],
             'sql'              => "varchar(64) NOT NULL default ''"
         ],
-        'metamodel_noparsing'           => [
+        'metamodel_noparsing'              => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_noparsing'],
             'exclude'   => true,
             'inputType' => 'checkbox',
@@ -116,7 +116,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_
             ],
             'sql'       => "char(1) NOT NULL default ''"
         ],
-        'metamodel_page_param_type'     => [
+        'metamodel_page_param_type'        => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_page_param_type'],
             'exclude'   => true,
             'inputType' => 'select',
@@ -128,7 +128,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_
             ],
             'sql'       => "varchar(64) NOT NULL default 'slugNget'"
         ],
-        'metamodel_page_param'          => [
+        'metamodel_page_param'             => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_page_param'],
             'exclude'   => true,
             'inputType' => 'text',
@@ -138,7 +138,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_
             ],
             'sql'       => "varchar(64) NOT NULL default ''"
         ],
-        'metamodel_maxpaginationlinks'  => [
+        'metamodel_maxpaginationlinks'     => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_maxpaginationlinks'],
             'exclude'   => true,
             'inputType' => 'text',
@@ -148,7 +148,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_
             ],
             'sql'       => "smallint(5) NOT NULL default '0'"
         ],
-        'metamodel_pagination'          => [
+        'metamodel_pagination'             => [
             'label'            => &$GLOBALS['TL_LANG']['tl_content']['metamodel_pagination'],
             'exclude'          => true,
             'inputType'        => 'select',
@@ -159,7 +159,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_
             ],
             'sql'              => "varchar(64) NOT NULL default ''"
         ],
-        'metamodel_pagination_urlfragment'          => [
+        'metamodel_pagination_urlfragment' => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_pagination_urlfragment'],
             'exclude'   => true,
             'inputType' => 'text',
@@ -169,7 +169,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_
             ],
             'sql'       => "char(255) NOT NULL default ''"
         ],
-        'metamodel_use_limit'           => [
+        'metamodel_use_limit'              => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_use_limit'],
             'exclude'   => true,
             'inputType' => 'checkbox',
@@ -179,7 +179,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_
             ],
             'sql'       => "char(1) NOT NULL default ''"
         ],
-        'metamodel_limit'               => [
+        'metamodel_limit'                  => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_limit'],
             'exclude'   => true,
             'inputType' => 'text',
@@ -189,7 +189,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_
             ],
             'sql'       => "smallint(5) NOT NULL default '0'"
         ],
-        'metamodel_offset'              => [
+        'metamodel_offset'                 => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_offset'],
             'exclude'   => true,
             'inputType' => 'text',
@@ -199,11 +199,12 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_
             ],
             'sql'       => "smallint(5) NOT NULL default '0'"
         ],
-        'metamodel_sortby'              => [
+        'metamodel_sortby'                 => [
             'label'            => &$GLOBALS['TL_LANG']['tl_content']['metamodel_sortby'],
             'exclude'          => true,
             'inputType'        => 'select',
             'options_callback' => [ContentElementCallback::class, 'getAttributeNames'],
+            'reference'        => &$GLOBALS['TL_LANG']['tl_content']['select_values'],
             'eval'             => [
                 'includeBlankOption' => true,
                 'chosen'             => true,
@@ -211,7 +212,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_
             ],
             'sql'              => "varchar(64) NOT NULL default ''"
         ],
-        'metamodel_sortby_direction'    => [
+        'metamodel_sortby_direction'       => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_sortby_direction'],
             'exclude'   => true,
             'inputType' => 'select',
@@ -224,7 +225,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_
             ],
             'sql'       => "varchar(4) NOT NULL default ''"
         ],
-        'metamodel_sort_override'       => [
+        'metamodel_sort_override'          => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_sort_override'],
             'exclude'   => true,
             'inputType' => 'checkbox',
@@ -234,7 +235,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_
             ],
             'sql'       => "char(1) NOT NULL default ''"
         ],
-        'metamodel_sort_param_type'     => [
+        'metamodel_sort_param_type'        => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_sort_param_type'],
             'exclude'   => true,
             'inputType' => 'select',
@@ -246,7 +247,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_
             ],
             'sql'       => "varchar(64) NOT NULL default 'slug'"
         ],
-        'metamodel_order_by_param'      => [
+        'metamodel_order_by_param'         => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_order_by_param'],
             'exclude'   => true,
             'inputType' => 'text',
@@ -256,7 +257,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_
             ],
             'sql'       => "varchar(64) NOT NULL default ''"
         ],
-        'metamodel_order_dir_param'     => [
+        'metamodel_order_dir_param'        => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_order_dir_param'],
             'exclude'   => true,
             'inputType' => 'text',
@@ -266,7 +267,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_
             ],
             'sql'       => "varchar(64) NOT NULL default ''"
         ],
-        'metamodel_sort_urlfragment'          => [
+        'metamodel_sort_urlfragment'       => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_sort_urlfragment'],
             'exclude'   => true,
             'inputType' => 'text',
@@ -276,7 +277,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_
             ],
             'sql'       => "char(255) NOT NULL default ''"
         ],
-        'metamodel_filtering'           =>
+        'metamodel_filtering'              =>
             [
                 'label'            => &$GLOBALS['TL_LANG']['tl_content']['metamodel_filtering'],
                 'exclude'          => true,
@@ -294,7 +295,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_
                 ],
                 'sql'              => "int(10) NOT NULL default '0'"
             ],
-        'metamodel_rendersettings'      => [
+        'metamodel_rendersettings'         => [
             'label'            => &$GLOBALS['TL_LANG']['tl_content']['metamodel_rendersettings'],
             'exclude'          => true,
             'inputType'        => 'select',
@@ -311,7 +312,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_
             ],
             'sql'              => "int(10) NOT NULL default '0'"
         ],
-        'metamodel_donotindex'          => [
+        'metamodel_donotindex'             => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_donotindex'],
             'exclude'   => true,
             'inputType' => 'checkbox',
@@ -320,7 +321,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_
             ],
             'sql'       => "char(1) NOT NULL default ''"
         ],
-        'metamodel_available_values'    => [
+        'metamodel_available_values'       => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_available_values'],
             'exclude'   => true,
             'inputType' => 'checkbox',
@@ -329,7 +330,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_
             ],
             'sql'       => "char(1) NOT NULL default ''"
         ],
-        'metamodel_filterparams'        => [
+        'metamodel_filterparams'           => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams'],
             'exclude'   => true,
             'inputType' => 'mm_subdca',
@@ -345,7 +346,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_
             ],
             'sql'       => 'longblob NULL'
         ],
-        'metamodel_jumpTo'              => [
+        'metamodel_jumpTo'                 => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_jumpTo'],
             'exclude'   => true,
             'inputType' => 'pageTree',
@@ -355,7 +356,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_
             ],
             'sql'       => "int(10) unsigned NOT NULL default '0'"
         ],
-        'metamodel_fef_id'          => [
+        'metamodel_fef_id'                 => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_fef_id'],
             'exclude'   => true,
             'inputType' => 'text',
@@ -365,7 +366,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_
             ],
             'sql'       => "char(255) NOT NULL default ''"
         ],
-        'metamodel_fef_urlfragment'          => [
+        'metamodel_fef_urlfragment'        => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_fef_urlfragment'],
             'exclude'   => true,
             'inputType' => 'text',
@@ -375,7 +376,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_
             ],
             'sql'       => "char(255) NOT NULL default ''"
         ],
-        'metamodel_fef_params'          => [
+        'metamodel_fef_params'             => [
             'label'            => &$GLOBALS['TL_LANG']['tl_content']['metamodel_fef_params'],
             'exclude'          => true,
             'inputType'        => 'checkboxWizard',
@@ -386,7 +387,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_
             ],
             'sql'              => 'blob NULL'
         ],
-        'metamodel_fef_autosubmit'      => [
+        'metamodel_fef_autosubmit'         => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_fef_autosubmit'],
             'exclude'   => true,
             'default'   => '1',
@@ -396,7 +397,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_
             ],
             'sql'       => "char(1) NOT NULL default ''"
         ],
-        'metamodel_fef_hideclearfilter' => [
+        'metamodel_fef_hideclearfilter'    => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_fef_hideclearfilter'],
             'exclude'   => true,
             'inputType' => 'checkbox',
@@ -405,7 +406,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_
             ],
             'sql'       => "char(1) NOT NULL default ''"
         ],
-        'metamodel_fef_template'        => [
+        'metamodel_fef_template'           => [
             'label'            => &$GLOBALS['TL_LANG']['tl_content']['metamodel_fef_template'],
             'exclude'          => true,
             'inputType'        => 'select',
@@ -416,7 +417,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_
             ],
             'sql'              => "varchar(64) NOT NULL default ''"
         ],
-        'metamodel_meta_title'          => [
+        'metamodel_meta_title'             => [
             'label'            => &$GLOBALS['TL_LANG']['tl_content']['metamodel_meta_title'],
             'exclude'          => true,
             'inputType'        => 'select',
@@ -428,7 +429,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_
             ],
             'sql'              => "varchar(64) NOT NULL default ''"
         ],
-        'metamodel_meta_description'    => [
+        'metamodel_meta_description'       => [
             'label'            => &$GLOBALS['TL_LANG']['tl_content']['metamodel_meta_description'],
             'exclude'          => true,
             'inputType'        => 'select',
@@ -440,7 +441,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_
             ],
             'sql'              => "varchar(64) NOT NULL default ''"
         ],
-        'metamodel_use_parameters'      => [
+        'metamodel_use_parameters'         => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_use_parameters'],
             'exclude'   => true,
             'inputType' => 'checkbox',
@@ -450,7 +451,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_
             ],
             'sql'       => "char(1) NOT NULL default ''"
         ],
-        'metamodel_parameters'          => [
+        'metamodel_parameters'             => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_parameters'],
             'exclude'   => true,
             'inputType' => 'multiColumnWizard',

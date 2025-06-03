@@ -115,8 +115,9 @@ class Model implements ModelInterface
     {
         $item = $this->getItem();
         assert($item instanceof IItem);
+        $rawId = $item->get('id');
 
-        return $item->get('id');
+        return null === $rawId ? null : (string) $rawId;
     }
 
     /**
