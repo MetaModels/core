@@ -1,0 +1,27 @@
+<?php $this->extend('mm_filteritem_default'); ?>
+<?php $this->block('formlabel'); ?>
+<?php if (!$this->hide_label): ?>
+  <?= $this->label ?>
+<?php endif; ?>
+<?php $this->endblock(); ?>
+<?php $this->block('formfield'); ?>
+<?php
+$urlparam       = $this->raw['eval']['urlparam'];
+$dateMin        = null !== $this->raw['optionsMin']['key'] ? \date('Y-m-d', $this->raw['optionsMin']['key']) : '';
+$dateMax        = null !== $this->raw['optionsMax']['key'] ? \date('Y-m-d', $this->raw['optionsMax']['key']) : '';
+$placeholderMin = $this->raw['optionsMin']['value'] ?? '';
+$placeholderMax = $this->raw['optionsMax']['value'] ?? '';
+$index          = 0;
+?>
+<?php if($this->raw['eval']['fromField']): ?>
+<input type="date" name="<?= $this->urlparam ?>[]" id="ctrl_<?= $this->urlparam ?>_<?= $index ?>" class="text <?= $this->class ?>" value="<?= $this->raw['value'][$index] ?? '' ?>" placeholder="<?= $placeholderMin ?>" title="<?= $this->raw['eval']['labelFrom'] ?>: <?= $placeholderMin ?>" min="<?= $dateMin ?>" max="<?= $dateMax ?>">
+<?php endif; ?>
+<?php
+if (2 === $this->raw['eval']['size']) {
+  $index = 1;
+}
+?>
+<?php if($this->raw['eval']['toField']): ?>
+<input type="date" name="<?= $this->urlparam ?>[]" id="ctrl_<?= $this->urlparam ?>_<?= $index ?>" class="text <?= $this->class ?>" value="<?= $this->raw['value'][$index] ?? '' ?>" placeholder="<?= $placeholderMax ?>" title="<?= $this->raw['eval']['labelTo'] ?>: <?= $placeholderMax ?>" min="<?= $dateMin ?>" max="<?= $dateMax ?>">
+<?php endif; ?>
+<?php $this->endblock(); ?>
