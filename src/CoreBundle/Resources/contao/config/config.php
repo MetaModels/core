@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -21,7 +21,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -31,8 +31,10 @@ use Contao\System;
 use MetaModels\BackendIntegration\PurgeAssets;
 use MetaModels\BackendIntegration\PurgeTranslator;
 use MetaModels\CoreBundle\Contao\Hooks\LoadDataContainer;
-use MetaModels\FrontendIntegration\Content\Filter;
-use MetaModels\FrontendIntegration\Content\FilterClearAll;
+use MetaModels\FrontendIntegration\Content\Filter as ContentFilter;
+use MetaModels\FrontendIntegration\Content\FilterClearAll as ContentFilterClearAll;
+use MetaModels\FrontendIntegration\Module\Filter as ModuleFilter;
+use MetaModels\FrontendIntegration\Module\FilterClearAll as ModuleFilterClearAll;
 use MetaModels\FrontendIntegration\FrontendFilter;
 use MetaModels\Widgets\MultiTextWidget;
 use MetaModels\Widgets\SubDcaWidget;
@@ -44,12 +46,12 @@ $container = System::getContainer();
 $GLOBALS['METAMODELS_SYSTEM_COLUMNS'] = $container->getParameter('metamodels.system_columns');
 
 // Front-end modules.
-$GLOBALS['FE_MOD']['metamodels']['metamodels_frontendfilter']   = Filter::class;
-$GLOBALS['FE_MOD']['metamodels']['metamodels_frontendclearall'] = FilterClearAll::class;
+$GLOBALS['FE_MOD']['metamodels']['metamodels_frontendfilter']   = ModuleFilter::class;
+$GLOBALS['FE_MOD']['metamodels']['metamodels_frontendclearall'] = ModuleFilterClearAll::class;
 
 // Content elements.
-$GLOBALS['TL_CTE']['metamodels']['metamodels_frontendfilter']   = Filter::class;
-$GLOBALS['TL_CTE']['metamodels']['metamodels_frontendclearall'] = FilterClearAll::class;
+$GLOBALS['TL_CTE']['metamodels']['metamodels_frontendfilter']   = ContentFilter::class;
+$GLOBALS['TL_CTE']['metamodels']['metamodels_frontendclearall'] = ContentFilterClearAll::class;
 
 // Frontend widgets.
 $GLOBALS['TL_FFL']['multitext'] = MultiTextWidget::class;
@@ -62,7 +64,7 @@ $GLOBALS['TL_HOOKS']['outputFrontendTemplate'][] = [FrontendFilter::class, 'gene
 if ($cacheDir = $container->getParameter('metamodels.cache_dir')) {
     // We need to translate the cache dir - otherwise the backend view is distorted. See \Contao\PurgeData::run().
     $GLOBALS['TL_PURGE']['folders']['metamodels']['affected'] = [
-        str_replace(
+        \str_replace(
             $container->getParameter('kernel.cache_dir') . '/',
             '%s/',
             $cacheDir
