@@ -1153,6 +1153,9 @@ class ToolboxFile
             'isPicture' => false,
         ];
 
+        $information['lb']       = 'lb_' . $this->getLightboxId();
+        $information['imageUrl'] = $fileName;
+
         // Prepare GD images.
         if ($information['isGdImage'] = $file->isGdImage) {
             try {
@@ -1163,8 +1166,6 @@ class ToolboxFile
                 $information['isGdImage'] = false;
             }
 
-            $information['lb']  = 'lb_' . $this->getLightboxId();
-
             if (
                 file_exists($this->rootDir . '/' . $information['src'])
                 && (false !== ($size = getimagesize($this->rootDir . '/' . $information['src'])))
@@ -1173,14 +1174,11 @@ class ToolboxFile
                 $information['h']  = $size[1];
                 $information['wh'] = $size[3];
             }
-
-            $information['imageUrl'] = $fileName;
         }
 
         // Prepare SVG images.
         if ($information['isSvgImage'] = $file->isSvgImage) {
-            $information['src']      = $fileName;
-            $information['imageUrl'] = $fileName;
+            $information['src'] = $fileName;
         }
 
         // Prepare the picture for provide the image size.
