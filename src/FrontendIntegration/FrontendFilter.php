@@ -428,13 +428,11 @@ class FrontendFilter
             }
         }
 
-        // TODO: hier presets einbauen...
         $values         = \array_merge($all->getSlugParameters(), $all->getGetParameters());
         $baseParameters = $this->getBaseParameters($values);
-        //$baseParameters = ['select' => 'abteilung-a'];
+
         $arrWidgets = $filterSetting->getParameterFilterWidgets(
             \array_merge($baseParameters, $values),
-            //\array_merge($all->getSlugParameters(), $all->getGetParameters()),
             $jumpToInformation,
             $filterOptions
         );
@@ -629,8 +627,9 @@ class FrontendFilter
         return $strContent;
     }
 
-    private function getBaseParameters($values): array
+    private function getBaseParameters(array $values): array
     {
+        /** @psalm-suppress UndefinedMagicPropertyFetch */
         if ([] === ($presets = StringUtil::deserialize($this->objFilterConfig->metamodel_filterparams, true))) {
             return [];
         }
@@ -657,13 +656,16 @@ class FrontendFilter
         // * not contained within the presets
         // * or are overridable.
         foreach ($filterParamKeys as $filterParameterKey) {
-            // Unknown parameter? - next please.
+            // Unknown parameter? - next, please.
             if (!\array_key_exists($filterParameterKey, $values)) {
                 continue;
             }
 
             // Not a preset or allowed to override? - use value.
-            if ((!\array_key_exists($filterParameterKey, $presets)) || (bool) $presets[$filterParameterKey]['use_get']) {
+            if (
+                (!\array_key_exists($filterParameterKey, $presets))
+                || (bool) $presets[$filterParameterKey]['use_get']
+            ) {
                 $processed[$filterParameterKey] = $values[$filterParameterKey];
             }
         }

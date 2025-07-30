@@ -25,7 +25,7 @@ use MetaModels\CoreBundle\Contao\Hooks\AbstractContentElementAndModuleCallback;
 /**
  * This class provides callbacks for tl_module.
  */
-class FilterModuleCallback extends AbstractContentElementAndModuleCallback
+final class FilterModuleCallback extends AbstractContentElementAndModuleCallback
 {
     /**
      * The table name.
@@ -37,7 +37,10 @@ class FilterModuleCallback extends AbstractContentElementAndModuleCallback
     /** Called from tl_module.onload_callback. */
     public function buildFilterParameterList(DC_Table $dataContainer): void
     {
-        if ($dataContainer->getCurrentRecord()['type'] !== 'metamodels_frontendfilter') {
+        if (
+            null === ($currentRecord = $dataContainer->getCurrentRecord())
+            || $currentRecord['type'] !== 'metamodels_frontendfilter'
+        ) {
             return;
         }
 
