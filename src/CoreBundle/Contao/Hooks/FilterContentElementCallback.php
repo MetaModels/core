@@ -20,7 +20,6 @@
 namespace MetaModels\CoreBundle\Contao\Hooks;
 
 use Contao\DC_Table;
-use MetaModels\CoreBundle\Contao\Hooks\AbstractContentElementAndModuleCallback;
 
 /**
  * This class provides callbacks for tl_content.
