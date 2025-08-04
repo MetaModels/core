@@ -28,6 +28,7 @@
 
 namespace MetaModels\FrontendIntegration;
 
+use Contao\StringUtil;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\RedirectEvent;
 use Contao\CoreBundle\Csrf\ContaoCsrfTokenManager;
@@ -427,8 +428,11 @@ class FrontendFilter
             }
         }
 
+        $values         = \array_merge($all->getSlugParameters(), $all->getGetParameters());
+        $baseParameters = $this->getBaseParameters($values);
+
         $arrWidgets = $filterSetting->getParameterFilterWidgets(
-            \array_merge($all->getSlugParameters(), $all->getGetParameters()),
+            \array_merge($values, $baseParameters),
             $jumpToInformation,
             $filterOptions
         );
@@ -621,5 +625,51 @@ class FrontendFilter
         }
 
         return $strContent;
+    }
+
+    private function getBaseParameters(array $values): array
+    {
+        /** @psalm-suppress UndefinedMagicPropertyFetch */
+        if ([] === ($presets = StringUtil::deserialize($this->objFilterConfig->metamodel_filterparams, true))) {
+            return [];
+        }
+
+        if (null === ($filterSetting = $this->objFilterConfig->getFilterCollection())) {
+            throw new RuntimeException(
+                'Error: no filter object defined, call setFilterSettings() before setFilterParameters().'
+            );
+        }
+
+        $presetNames     = $filterSetting->getParameters();
+        $filterParamKeys = \array_keys($filterSetting->getParameterFilterNames());
+
+        $processed = [];
+
+        // We have to use all the preset values we want first.
+        foreach ($presets as $presetName => $presetValues) {
+            if (\in_array($presetName, $presetNames, true)) {
+                $processed[$presetName] = $presetValues['value'];
+            }
+        }
+
+        // Now we have to use all FE filter params, that are either:
+        // * not contained within the presets
+        // * or are overridable.
+        foreach ($filterParamKeys as $filterParameterKey) {
+            // Unknown parameter? - next, please.
+            if (!\array_key_exists($filterParameterKey, $values)) {
+                continue;
+            }
+
+            // Not a preset or allowed to override? - use value.
+            if (
+                (!\array_key_exists($filterParameterKey, $presets))
+                || (bool) $presets[$filterParameterKey]['use_get']
+            ) {
+                $processed[$filterParameterKey] = $values[$filterParameterKey];
+            }
+        }
+
+        return $processed;
     }
 }

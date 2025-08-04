@@ -24,8 +24,11 @@
  */
 
 use MetaModels\CoreBundle\Contao\Hooks\ModuleCallback;
+use MetaModels\CoreBundle\Contao\Hooks\FilterModuleCallback;
 
 $GLOBALS['TL_DCA']['tl_module']['config']['onload_callback'][] = [ModuleCallback::class, 'buildFilterParameterList'];
+$GLOBALS['TL_DCA']['tl_module']['config']['onload_callback'][] =
+    [FilterModuleCallback::class, 'buildFilterParameterList'];
 
 $GLOBALS['TL_DCA']['tl_module']['palettes']['metamodel_list'] =
     '{title_legend},name,headline,type;' .
@@ -43,8 +46,8 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['metamodel_list'] =
 
 $GLOBALS['TL_DCA']['tl_module']['palettes']['metamodels_frontendfilter'] =
     '{title_legend},name,headline,type;' .
-    '{mm_filter_legend},metamodel,metamodel_filtering,metamodel_fef_template,metamodel_fef_params,' .
-    'metamodel_fef_autosubmit,metamodel_fef_hideclearfilter,metamodel_available_values,' .
+    '{mm_filter_legend},metamodel,metamodel_filtering,metamodel_fef_template,metamodel_filterparams,' .
+    'metamodel_fef_params,metamodel_fef_autosubmit,metamodel_fef_hideclearfilter,metamodel_available_values,' .
     'metamodel_jumpTo,metamodel_fef_id,metamodel_fef_urlfragment;' .
     '{protected_legend:hide},protected;' .
     '{expert_legend:hide},guests,cssID,space';
