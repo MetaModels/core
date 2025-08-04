@@ -432,7 +432,7 @@ class FrontendFilter
         $baseParameters = $this->getBaseParameters($values);
 
         $arrWidgets = $filterSetting->getParameterFilterWidgets(
-            \array_merge($baseParameters, $values),
+            \array_merge($values, $baseParameters),
             $jumpToInformation,
             $filterOptions
         );
