@@ -45,7 +45,14 @@ class ContentElementCallback extends AbstractContentElementAndModuleCallback
      */
     public function buildFilterParameterList(DC_Table $dataContainer)
     {
-        parent::buildFilterParamsFor($dataContainer, 'metamodel_content');
+        if (
+            null === ($currentRecord = $dataContainer->getCurrentRecord())
+            || $currentRecord['type'] !== 'metamodel_content'
+        ) {
+            return;
+        }
+
+        $this->buildFilterParamsFor($dataContainer, 'metamodel_content');
     }
 
     /**
