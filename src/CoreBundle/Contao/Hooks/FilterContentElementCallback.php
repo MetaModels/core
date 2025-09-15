@@ -19,6 +19,7 @@
 
 namespace MetaModels\CoreBundle\Contao\Hooks;
 
+use Contao\CoreBundle\Exception\AccessDeniedException;
 use Contao\DC_Table;
 
 /**
@@ -36,13 +37,17 @@ final class FilterContentElementCallback extends AbstractContentElementAndModule
     /** Called from tl_content.onload_callback. */
     public function buildFilterParameterList(DC_Table $dataContainer): void
     {
-        if (
-            null === ($currentRecord = $dataContainer->getCurrentRecord())
-            || $currentRecord['type'] !== 'metamodels_frontendfilter'
-        ) {
+        try {
+            if (
+                null === ($currentRecord = $dataContainer->getCurrentRecord())
+                || $currentRecord['type'] !== 'metamodels_frontendfilter'
+            ) {
+                return;
+            }
+        } catch (AccessDeniedException $exception) {
+            // If the access is denied, we don't want to build filter parameters.
             return;
         }
-
         $this->buildFilterParamsFor($dataContainer, 'metamodels_frontendfilter');
     }
 }
