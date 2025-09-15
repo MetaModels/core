@@ -518,11 +518,19 @@ class SubDcaWidget extends Widget
         }
         unset($arrSubField);
 
+        // Clean all unset keys.
+        foreach (\array_keys($varInput) as $fieldName) {
+            if (!\array_key_exists($fieldName, $this->arrSubFields)) {
+                unset($varInput[$fieldName]);
+            }
+        }
+
         if ($blnHasError) {
             $this->blnSubmitInput = false;
             $this->addError($GLOBALS['TL_LANG']['ERR']['general']);
         }
-        return $varInput;
+
+        return $varInput ?: null;
     }
 
     /**
@@ -606,22 +614,28 @@ class SubDcaWidget extends Widget
                             . '</p></td>';
         }
 
-        $strHead = '';
-        $strBody = sprintf('<tbody><tr>%s</tr></tbody>', implode("</tr>\n<tr>", $arrOptions));
+        $class = ($this->strClass !== '' ? ' ' . $this->strClass : '');
+        $style = (($this->style) ? ('style="' . $this->style . '"') : (''));
+        $options = implode("</tr>\n<tr>", $arrOptions);
 
-        $strOutput = sprintf(
-            '<table%s id="ctrl_%s" class="tl_subdca">%s%s</table>',
-            (($this->style) ? ('style="' . $this->style . '"') : ('')),
-            $this->strId,
-            $strHead,
-            $strBody
-        );
-
-        return sprintf(
-            '<div id="ctrl_%s" class="tl_multiwidget_container%s clr">%s</div>',
-            $this->strName,
-            (strlen($this->strClass) ? ' ' . $this->strClass : ''),
-            $strOutput
-        );
+        return <<<EOF
+            <div
+              id="ctrl_{$this->strName}"
+              class="tl_multiwidget_container{$class} clr"
+            >
+            <input type="hidden" name="{$this->strName}[]" value="">
+            <table
+              $style
+              id="ctrl_{$this->strId}"
+              class="tl_subdca"
+            >
+              <tbody>
+                <tr>
+                  $options
+                </tr>
+              </tbody>
+            </table>
+            </div>
+        EOF;
     }
 }
