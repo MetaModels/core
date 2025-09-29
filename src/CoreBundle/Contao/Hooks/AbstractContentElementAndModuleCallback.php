@@ -556,7 +556,7 @@ abstract class AbstractContentElementAndModuleCallback
         );
 
         return sprintf(
-            '<a href="%s" title="%s" style="padding-left:3px">%s</a>',
+            '<a href="%s" title="%s" target="_blank" style="padding-left:3px">%s</a>',
             $url->getUrl(),
             $title,
             $icon
