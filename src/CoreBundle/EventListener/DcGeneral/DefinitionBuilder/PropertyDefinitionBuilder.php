@@ -27,6 +27,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\Properties\Empty
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\Properties\PropertyInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\PropertiesDefinitionInterface;
 use MetaModels\Attribute\IAttribute;
+use MetaModels\Attribute\IInternal;
 use MetaModels\Attribute\ITranslated;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\DcGeneral\Events\MetaModel\BuildAttributeEvent;
@@ -122,7 +123,7 @@ class PropertyDefinitionBuilder
         }
 
         foreach ($metaModel->getAttributes() as $attribute) {
-            if (!isset($properties[$attribute->get('id')])) {
+            if ($attribute instanceof IInternal || !isset($properties[$attribute->get('id')])) {
                 continue;
             }
             $this->buildProperty(
