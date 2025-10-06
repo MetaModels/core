@@ -41,12 +41,13 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Base implementation of a MetaModel Hybrid element.
  *
- * @property string $id                       The id of the element.
- * @property string $name                     The module name to use (if type is module).
- * @property string $metamodel                The id of the MetaModel to use.
- * @property string $metamodel_filtering      The id of the MetaModel filter setting to use.
- * @property string $metamodel_rendersettings The id of the MetaModel render setting to use.
- * @property bool   $metamodel_sort_override  The flag to override sorting.
+ * @property string       $id                       The id of the element.
+ * @property string       $name                     The module name to use (if type is module).
+ * @property string       $metamodel                The id of the MetaModel to use.
+ * @property string       $metamodel_filtering      The id of the MetaModel filter setting to use.
+ * @property string       $metamodel_rendersettings The id of the MetaModel render setting to use.
+ * @property bool         $metamodel_sort_override  The flag to override sorting.
+ * @property list<string> $cssID                    The CSS id and classes.
  *
  * @psalm-type TDatabaseResult=object{
  *   cssID: string,
@@ -155,7 +156,7 @@ abstract class MetaModelHybrid extends Hybrid
      * Create a new instance.
      *
      * @param Result|TDatabaseResult $objElement The object from the database.
-     * @param string                             $strColumn  The column the element is displayed within.
+     * @param string                 $strColumn  The column the element is displayed within.
      */
     public function __construct($objElement, $strColumn = 'main')
     {
@@ -165,6 +166,7 @@ abstract class MetaModelHybrid extends Hybrid
         $this->arrData = \method_exists($objElement, 'row') ? $objElement->row() : (array) $objElement;
 
         // Get CSS ID and headline from the parent element (!).
+        /** @psalm-suppress PropertyTypeCoercion */
         $this->cssID      = StringUtil::deserialize($objElement->cssID, true);
         $this->typePrefix = $objElement->typePrefix ?? '';
         $this->strKey     = $objElement->type;
