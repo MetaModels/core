@@ -111,7 +111,7 @@ class BreadcrumbDcaSettingConditionListener extends AbstractBreadcrumbListener
         } else {
             $title = StringUtil::deserialize($setting->legendtitle, true);
             // @deprecated usage of TL_LANGUAGE - remove for Contao 5.0.
-            return ($title[LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE'])] ?? current($title));
+            return ($title[LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE'])] ?? (string) current($title));
         }
 
         return 'unknown ' . $setting->dcatype;

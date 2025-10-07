@@ -280,14 +280,11 @@ class BackendNavigationListener
         $sessionBag  = $this->requestStack->getSession()->getBag('contao_backend');
         $status      = ($sessionBag instanceof AttributeBagInterface) ? $sessionBag->get('backend_modules') : [];
         $isCollapsed = ($status[$nodeName] ?? 1) < 1;
-        $path        = $this->router->generate('contao_backend');
 
         $metaModelsNode
             ->setLinkAttribute('class', 'group-' . $nodeName)
-            ->setLinkAttribute(
-                'onclick',
-                "return AjaxRequest.toggleNavigation(this, '" . $nodeName . "', '" . $path . "')"
-            )
+            ->setLinkAttribute('data-action', 'contao--toggle-navigation#toggle:prevent')
+            ->setLinkAttribute('data-contao--toggle-navigation-category-param', $nodeName)
             ->setLinkAttribute('aria-controls', $nodeName)
             ->setChildrenAttribute('id', $nodeName)
             ->setLinkAttribute(

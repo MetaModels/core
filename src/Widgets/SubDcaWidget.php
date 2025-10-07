@@ -97,7 +97,7 @@ class SubDcaWidget extends Widget
     /**
      * The prepared widgets.
      *
-     * @var array
+     * @var list<list<Widget>>
      */
     protected $arrWidgets = [];
 
@@ -567,9 +567,9 @@ class SubDcaWidget extends Widget
         $options = [];
         foreach ($this->arrWidgets as $widgetRow) {
             $columns = [];
-            foreach ((array) $widgetRow as $widget) {
-                /** @var Widget $widget */
-                $rawValign = (string) ($widget->valign ?? '');
+            foreach ($widgetRow as $widget) {
+                /** @psalm-suppress UndefinedMagicPropertyFetch */
+                $rawValign = ((string) $widget->valign) ?: '';
                 $valign    = ($rawValign !== '' ? ' valign="' . $rawValign . '"' : '');
                 $rawClass = $widget->class;
                 $class    = ($rawClass !== '' ? ' class="' . $rawClass . '"' : '');

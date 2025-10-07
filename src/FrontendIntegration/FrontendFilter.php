@@ -634,11 +634,7 @@ class FrontendFilter
             return [];
         }
 
-        if (null === ($filterSetting = $this->objFilterConfig->getFilterCollection())) {
-            throw new RuntimeException(
-                'Error: no filter object defined, call setFilterSettings() before setFilterParameters().'
-            );
-        }
+        $filterSetting = $this->objFilterConfig->getFilterCollection();
 
         $presetNames     = $filterSetting->getParameters();
         $filterParamKeys = \array_keys($filterSetting->getParameterFilterNames());
