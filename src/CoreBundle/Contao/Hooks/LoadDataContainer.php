@@ -27,6 +27,7 @@ use Contao\StringUtil;
 use Contao\System;
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
+use ContaoCommunityAlliance\DcGeneral\DC\General;
 use Doctrine\DBAL\Connection;
 use MetaModels\CoreBundle\Assets\IconBuilder;
 use MetaModels\Helper\LocaleUtil;
@@ -204,7 +205,7 @@ class LoadDataContainer
             }
 
             // Compatibility with DC_Table.
-            if ($parentDCA['config']['dataContainer'] !== 'General') {
+            if ($parentDCA['config']['dataContainer'] !== General::class) {
                 $idParameter                                                        =
                     $parentDCA['list']['operations'][$operationName]['idparam'];
                 $parentDCA['list']['operations'][$operationName]['button_callback'] =

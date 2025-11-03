@@ -27,10 +27,11 @@
  */
 
 use Contao\System;
+use ContaoCommunityAlliance\DcGeneral\DC\General;
 
 $GLOBALS['TL_DCA']['tl_metamodel_dca'] = [
     'config'                => [
-        'dataContainer'    => 'General',
+        'dataContainer'    => General::class,
         'ptable'           => 'tl_metamodel',
         'switchToEdit'     => false,
         'enableVersioning' => false,

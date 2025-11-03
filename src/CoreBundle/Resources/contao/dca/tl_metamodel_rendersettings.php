@@ -27,6 +27,7 @@
  */
 
 use ContaoCommunityAlliance\DcGeneral\DC\General;
+use MetaModels\CoreBundle\Contao\Hooks\ContentElementCallback;
 
 $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = [
     'config'       => [
@@ -320,8 +321,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = [
                         'eval'        => [
                             'tl_class'           => 'jumpTo_filter',
                             'includeBlankOption' => true,
-                            'chosen'             => true
-                        ]
+                            'chosen'             => true,
+                            'submitOnChange'     => true,
+                        ],
                     ],
                 ],
             ],
