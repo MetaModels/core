@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -26,7 +26,6 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBr
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
-use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
 use MetaModels\Helper\LocaleUtil;
 use MetaModels\IMetaModel;
 
@@ -62,21 +61,12 @@ class BreadcrumbDcaSettingConditionListener extends AbstractBreadcrumbListener
 
         parent::getBreadcrumbElements($environment, $elements);
 
-        $builder = UrlBuilder::fromUrl($elements->getUri())
-            ->setQueryParameter('table', 'tl_metamodel_dcasetting_condition')
-            ->setQueryParameter(
-                'pid',
-                ModelId::fromValues(
-                    'tl_metamodel_dcasetting',
-                    $elements->getId('tl_metamodel_dcasetting')
-                )->getSerialized()
-            )
-            ->unsetQueryParameter('act')
-            ->unsetQueryParameter('id');
-
         $dcaSettingId = $elements->getId('tl_metamodel_dcasetting');
         $elements->push(
-            StringUtil::ampersand($builder->getUrl()),
+            $this->generate('metamodels.configuration', [
+                'table' => 'tl_metamodel_dcasetting_condition',
+                'pid'   => ModelId::fromValues('tl_metamodel_dcasetting', $dcaSettingId)->getSerialized(),
+            ]),
             \sprintf(
                 $elements->getLabel('tl_metamodel_dcasetting_condition'),
                 (null !== $dcaSettingId) ? $this->getConditionAttribute($dcaSettingId) : ''

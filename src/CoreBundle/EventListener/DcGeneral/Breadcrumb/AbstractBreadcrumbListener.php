@@ -21,10 +21,12 @@
 
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\Breadcrumb;
 
+use Contao\System;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\DcGeneral\InputProviderInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * This class renders various breadcrumbs.
@@ -45,18 +47,28 @@ abstract class AbstractBreadcrumbListener
      */
     private ?AbstractBreadcrumbListener $parent;
 
+    private UrlGeneratorInterface $urlGenerator;
+
     /**
      * Create a new instance.
      *
      * @param BreadcrumbStoreFactory          $storeFactory The store factory.
      * @param AbstractBreadcrumbListener|null $parent       Optional parent renderer.
+     * @param string                          $routePrefix  The $route prefix.
      */
     public function __construct(
         BreadcrumbStoreFactory $storeFactory,
-        AbstractBreadcrumbListener $parent = null
+        ?AbstractBreadcrumbListener $parent = null,
+        ?UrlGeneratorInterface $urlGenerator = null,
     ) {
         $this->storeFactory = $storeFactory;
         $this->parent       = $parent;
+        if (null === $urlGenerator) {
+            $urlGenerator = System::getContainer()->get('router');
+            assert($urlGenerator instanceof UrlGeneratorInterface);
+            \trigger_deprecation('metamodels/core', '2.4.0', 'The "$urlGenerator" argument will become mandatory.');
+        }
+        $this->urlGenerator  = $urlGenerator;
     }
 
     /**
@@ -119,5 +131,11 @@ abstract class AbstractBreadcrumbListener
         $parameter = $inputProvider->getParameter($parameterName);
 
         return (string) ModelId::fromSerialized($parameter)->getId();
+    }
+
+    protected function generate(string $route, array $parameters): string
+    {
+        // TODO: Add ref & rt from current URL?
+        return $this->urlGenerator->generate($route, $parameters);
     }
 }

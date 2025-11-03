@@ -25,8 +25,6 @@ namespace MetaModels\CoreBundle\Contao\Hooks;
 use Contao\DC_Table;
 use Contao\StringUtil;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
-use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
-use ContaoCommunityAlliance\UrlBuilder\UrlBuilderFactoryInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use MetaModels\Attribute\IInternal;
@@ -36,6 +34,7 @@ use MetaModels\Filter\Setting\FilterSettingFactory;
 use MetaModels\IFactory;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 use function asort;
@@ -61,86 +60,26 @@ abstract class AbstractContentElementAndModuleCallback
     protected static $tableName;
 
     /**
-     * The icon builder.
-     *
-     * @var IconBuilder
-     */
-    private IconBuilder $iconBuilder;
-
-    /**
-     * The URL builder factory.
-     *
-     * @var UrlBuilderFactoryInterface
-     */
-    private UrlBuilderFactoryInterface $urlBuilderFactory;
-
-    /**
-     * The MetaModel factory.
-     *
-     * @var IFactory
-     */
-    private IFactory $factory;
-
-    /**
-     * The filtersetting factory.
-     *
-     * @var FilterSettingFactory
-     */
-    private FilterSettingFactory $filterFactory;
-
-    /**
-     * The database connection.
-     *
-     * @var Connection
-     */
-    private Connection $connection;
-
-    /**
-     * The template list.
-     *
-     * @var TemplateList
-     */
-    private TemplateList $templateList;
-
-    /**
-     * The request stack.
-     *
-     * @var RequestStack
-     */
-    private RequestStack $requestStack;
-
-    private TranslatorInterface $translator;
-
-    /**
      * Create a new instance.
      *
-     * @param IconBuilder                $iconBuilder       The icon builder.
-     * @param UrlBuilderFactoryInterface $urlBuilderFactory The URL builder.
-     * @param IFactory                   $factory           The MetaModel factory.
-     * @param FilterSettingFactory       $filterFactory     The filter factory.
-     * @param Connection                 $connection        The database connection.
-     * @param TemplateList               $templateList      The template list loader.
-     * @param RequestStack               $requestStack      The request stack.
-     * @param TranslatorInterface        $translator        The translator.
+     * @param IconBuilder          $iconBuilder   The icon builder.
+     * @param IFactory             $factory       The MetaModel factory.
+     * @param FilterSettingFactory $filterFactory The filter factory.
+     * @param Connection           $connection    The database connection.
+     * @param TemplateList         $templateList  The template list loader.
+     * @param RequestStack         $requestStack  The request stack.
+     * @param TranslatorInterface  $translator    The translator.
      */
     public function __construct(
-        IconBuilder $iconBuilder,
-        UrlBuilderFactoryInterface $urlBuilderFactory,
-        IFactory $factory,
-        FilterSettingFactory $filterFactory,
-        Connection $connection,
-        TemplateList $templateList,
-        RequestStack $requestStack,
-        TranslatorInterface $translator,
+        private readonly IconBuilder $iconBuilder,
+        private readonly IFactory $factory,
+        private readonly FilterSettingFactory $filterFactory,
+        private readonly Connection $connection,
+        private readonly TemplateList $templateList,
+        private readonly RequestStack $requestStack,
+        private readonly TranslatorInterface $translator,
+        private readonly UrlGeneratorInterface $urlGenerator,
     ) {
-        $this->iconBuilder       = $iconBuilder;
-        $this->urlBuilderFactory = $urlBuilderFactory;
-        $this->filterFactory     = $filterFactory;
-        $this->connection        = $connection;
-        $this->templateList      = $templateList;
-        $this->factory           = $factory;
-        $this->requestStack      = $requestStack;
-        $this->translator        = $translator;
     }
 
     /**
@@ -159,9 +98,6 @@ abstract class AbstractContentElementAndModuleCallback
             return '';
         }
 
-        $url = $this->urlBuilderFactory->create('contao/metamodels?act=edit')
-            ->setQueryParameter('id', ModelId::fromValues('tl_metamodel', $dataContainer->value)->getSerialized());
-
         return $this->renderEditButton(
             $this->translator->trans('editmetamodel.label', [], static::$tableName),
             StringUtil::specialchars(
@@ -171,7 +107,10 @@ abstract class AbstractContentElementAndModuleCallback
                     static::$tableName
                 )
             ),
-            $url
+            $this->generate('metamodels.configuration', [
+                'act' => 'edit',
+                'id' => ModelId::fromValues('tl_metamodel', $dataContainer->value)->getSerialized(),
+            ]),
         );
     }
 
@@ -191,12 +130,6 @@ abstract class AbstractContentElementAndModuleCallback
             return '';
         }
 
-        $url = $this->urlBuilderFactory->create('contao/metamodels?table=tl_metamodel_filtersetting')
-            ->setQueryParameter(
-                'pid',
-                ModelId::fromValues('tl_metamodel_filter', $dataContainer->value)->getSerialized()
-            );
-
         return $this->renderEditButton(
             $this->translator->trans('editfiltersetting.label', [], static::$tableName),
             StringUtil::specialchars(
@@ -206,7 +139,10 @@ abstract class AbstractContentElementAndModuleCallback
                     static::$tableName
                 )
             ),
-            $url
+            $this->generate('metamodels.configuration', [
+                'table' => 'tl_metamodel_filtersetting',
+                'pid' => ModelId::fromValues('tl_metamodel_filter', $dataContainer->value)->getSerialized(),
+            ]),
         );
     }
 
@@ -226,12 +162,6 @@ abstract class AbstractContentElementAndModuleCallback
             return '';
         }
 
-        $url = $this->urlBuilderFactory->create('contao/metamodels?table=tl_metamodel_rendersetting')
-            ->setQueryParameter(
-                'pid',
-                ModelId::fromValues('tl_metamodel_rendersettings', $dataContainer->value)->getSerialized()
-            );
-
         return $this->renderEditButton(
             $this->translator->trans('editrendersetting.label', [], static::$tableName),
             StringUtil::specialchars(
@@ -241,7 +171,10 @@ abstract class AbstractContentElementAndModuleCallback
                     static::$tableName
                 ),
             ),
-            $url
+            $this->generate('metamodels.configuration', [
+                'table' => 'tl_metamodel_rendersetting',
+                'pid' => ModelId::fromValues('tl_metamodel_rendersettings', $dataContainer->value)->getSerialized(),
+            ]),
         );
     }
 
@@ -541,13 +474,13 @@ abstract class AbstractContentElementAndModuleCallback
     /**
      * Render an edit button.
      *
-     * @param string     $caption The caption (alt attribute of the image).
-     * @param string     $title   The title (title attribute of the <a> tag).
-     * @param UrlBuilder $url     The URL for the button.
+     * @param string $caption The caption (alt attribute of the image).
+     * @param string $title   The title (title attribute of the <a> tag).
+     * @param string $url     The URL for the button.
      *
      * @return string
      */
-    private function renderEditButton(string $caption, string $title, UrlBuilder $url): string
+    private function renderEditButton(string $caption, string $title, string $url): string
     {
         $icon = $this->iconBuilder->getBackendIconImageTag(
             'system/themes/flexible/icons/alias.svg',
@@ -557,7 +490,7 @@ abstract class AbstractContentElementAndModuleCallback
 
         return sprintf(
             '<a href="%s" title="%s" target="_blank" style="padding-left:3px">%s</a>',
-            $url->getUrl(),
+            $url,
             $title,
             $icon
         );
@@ -597,5 +530,11 @@ abstract class AbstractContentElementAndModuleCallback
         }
 
         return $attributeNames;
+    }
+
+    protected function generate(string $route, array $parameters): string
+    {
+        // TODO: Add ref & rt from current URL?
+        return $this->urlGenerator->generate($route, $parameters);
     }
 }

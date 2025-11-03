@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2025 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,19 +14,17 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2025 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\Breadcrumb;
 
-use Contao\StringUtil;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
-use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
 
 /**
  * Generate a breadcrumb for table tl_metamodel_filter.
@@ -67,18 +65,12 @@ class BreadcrumbFilterListener extends AbstractBreadcrumbListener
 
         parent::getBreadcrumbElements($environment, $elements);
 
-        $builder = UrlBuilder::fromUrl($elements->getUri())
-            ->setQueryParameter('table', 'tl_metamodel_filter')
-            ->setQueryParameter(
-                'pid',
-                ModelId::fromValues('tl_metamodel', $elements->getId('tl_metamodel'))->getSerialized()
-            )
-            ->unsetQueryParameter('act')
-            ->unsetQueryParameter('id');
-
         $modelId = $elements->getId('tl_metamodel');
         $elements->push(
-            StringUtil::ampersand($builder->getUrl()),
+            $this->generate('metamodels.configuration', [
+                'table' => 'tl_metamodel_filter',
+                'pid'   => ModelId::fromValues('tl_metamodel', $modelId)->getSerialized(),
+            ]),
             \sprintf(
                 $elements->getLabel('tl_metamodel_filter'),
                 (null !== $modelId) ? $this->getMetaModel($modelId)->getName() : ''
