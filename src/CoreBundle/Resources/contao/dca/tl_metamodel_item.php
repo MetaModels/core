@@ -26,9 +26,12 @@
     This file defines the basic structure of ALL MetaModel items.
     Note however, that various MetaModel extensions might remove or add stuff here.
 */
+
+use ContaoCommunityAlliance\DcGeneral\DC\General;
+
 $GLOBALS['TL_DCA']['tl_metamodel_item'] = [
     'config'     => [
-        'dataContainer'    => 'General',
+        'dataContainer'    => General::class,
         'switchToEdit'     => false,
         'enableVersioning' => false,
     ],

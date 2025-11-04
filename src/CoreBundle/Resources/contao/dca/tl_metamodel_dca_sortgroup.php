@@ -22,9 +22,11 @@
  * @filesource
  */
 
+use ContaoCommunityAlliance\DcGeneral\DC\General;
+
 $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = [
     'config'                => [
-        'dataContainer'    => 'General',
+        'dataContainer'    => General::class,
         'ptable'           => 'tl_metamodel_dca',
         'switchToEdit'     => false,
         'enableVersioning' => false,
