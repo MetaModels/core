@@ -230,7 +230,12 @@ class TemplateList
         $templates = [];
         foreach ($foundTemplates as $template) {
             /** @var SplFileInfo $template */
-            $templates[$template->getBasename('.' . $template->getExtension())] = [$themeName => $themeName];
+            if (str_ends_with($template->getBasename(), '.html.twig')) {
+                $baseName = $template->getBasename('.html.twig');
+            } else {
+                $baseName = $template->getBasename('.' . $template->getExtension());
+            }
+            $templates[$baseName] = [$themeName => $themeName];
         }
 
         return $templates;
