@@ -1,7 +1,7 @@
 {% trans_default_domain 'metamodels_file_usage' %}
 {% set metaModelName = 'name'|trans(domain: result.tableName) %}
 {% set attributeName = (result.attributeName ~ '.label')|trans(domain: result.tableName) %}
-{% set language = ('LNG.' ~ result.language)|trans(domain: 'contao_languages') %}
+{% set language = result.language|language_name %}
 {% set translationParameters = {'%metaModelName%': metaModelName, '%attribute%': attributeName, '%id%': result.itemId, '%language%': language} %}
 <tr class="even click2edit toggle_select hover-row">
   <td class="tl_file_list">
