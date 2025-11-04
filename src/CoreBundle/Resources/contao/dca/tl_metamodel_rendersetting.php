@@ -25,9 +25,11 @@
  * @filesource
  */
 
+use ContaoCommunityAlliance\DcGeneral\DC\General;
+
 $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = [
     'config'       => [
-        'dataContainer'    => 'General',
+        'dataContainer'    => General::class,
         'ptable'           => 'tl_metamodel_rendersettings',
         'switchToEdit'     => true,
         'enableVersioning' => false,
