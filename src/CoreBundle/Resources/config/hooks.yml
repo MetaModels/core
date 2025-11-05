@@ -13,49 +13,49 @@ services:
     MetaModels\CoreBundle\Contao\Hooks\ContentElementCallback:
         arguments:
             - '@metamodels.assets.icon_builder'
-            - '@metamodels.backend.url-builder-factory'
             - '@metamodels.factory'
             - '@metamodels.filter_setting_factory'
             - '@database_connection'
             - '@metamodels.template_list'
             - '@request_stack'
             - '@translator'
+            - '@router'
         public: true
 
     MetaModels\CoreBundle\Contao\Hooks\ModuleCallback:
         arguments:
             - '@metamodels.assets.icon_builder'
-            - '@metamodels.backend.url-builder-factory'
             - '@metamodels.factory'
             - '@metamodels.filter_setting_factory'
             - '@database_connection'
             - '@metamodels.template_list'
             - '@request_stack'
             - '@translator'
+            - '@router'
         public: true
 
     MetaModels\CoreBundle\Contao\Hooks\FilterContentElementCallback:
       arguments:
         - '@metamodels.assets.icon_builder'
-        - '@metamodels.backend.url-builder-factory'
         - '@metamodels.factory'
         - '@metamodels.filter_setting_factory'
         - '@database_connection'
         - '@metamodels.template_list'
         - '@request_stack'
         - '@translator'
+        - '@router'
       public: true
 
     MetaModels\CoreBundle\Contao\Hooks\FilterModuleCallback:
       arguments:
         - '@metamodels.assets.icon_builder'
-        - '@metamodels.backend.url-builder-factory'
         - '@metamodels.factory'
         - '@metamodels.filter_setting_factory'
         - '@database_connection'
         - '@metamodels.template_list'
         - '@request_stack'
         - '@translator'
+        - '@router'
       public: true
 
     MetaModels\CoreBundle\EventListener\GetSearchablePagesListener:

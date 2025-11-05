@@ -21,12 +21,10 @@
 
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\Breadcrumb;
 
-use Contao\StringUtil;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
-use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
 
 /**
  * Generate a breadcrumb for table tl_metamodel_dcacombine.
@@ -59,18 +57,12 @@ class BreadcrumbDcaCombineListener extends AbstractBreadcrumbListener
 
         parent::getBreadcrumbElements($environment, $elements);
 
-        $builder = UrlBuilder::fromUrl($elements->getUri())
-            ->setQueryParameter('table', 'tl_metamodel_dca_combine')
-            ->setQueryParameter(
-                'pid',
-                ModelId::fromValues('tl_metamodel', $elements->getId('tl_metamodel'))->getSerialized()
-            )
-            ->unsetQueryParameter('act')
-            ->unsetQueryParameter('id');
-
         $modelId = $elements->getId('tl_metamodel');
         $elements->push(
-            StringUtil::ampersand($builder->getUrl()),
+            $this->generate('metamodels.configuration', [
+                'table' => 'tl_metamodel_dca_combine',
+                'pid'   => ModelId::fromValues('tl_metamodel', $modelId)->getSerialized(),
+            ]),
             \sprintf(
                 $elements->getLabel('tl_metamodel_dca_combine'),
                 (null !== $modelId) ? $this->getMetaModel($modelId)->getName() : ''

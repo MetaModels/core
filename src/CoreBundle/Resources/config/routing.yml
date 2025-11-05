@@ -1,17 +1,17 @@
 metamodels.inputscreen.add_all:
-    path: /contao/metamodels/inputscreen/add-all/{metaModel}/{inputScreen}
+    path: /%contao.backend.route_prefix%/metamodels/inputscreen/add-all/{metaModel}/{inputScreen}
     defaults: { _controller: metamodels.controller.inputscreen.add_all, _scope: backend, _dcg_referer_update: true, _token_check: true }
 
 metamodels.support_screen:
-    path: /contao/metamodels/support
+    path: /%contao.backend.route_prefix%/metamodels/support
     defaults: { _controller: metamodels.controller.support_screen, _scope: backend, _token_check: true }
 
 metamodels.rendersetting.add_all:
-    path: /contao/metamodels/rendersetting/add-all/{metaModel}/{renderSetting}
+    path: /%contao.backend.route_prefix%/metamodels/rendersetting/add-all/{metaModel}/{renderSetting}
     defaults: { _controller: metamodels.controller.rendersetting.add_all, _scope: backend, _dcg_referer_update: true, _token_check: true }
 
 metamodels.configuration:
-  path: /contao/metamodels/{tableName}
+  path: /%contao.backend.route_prefix%/metamodels/{tableName}
   defaults:
     _controller: MetaModels\CoreBundle\Controller\Backend\ConfigurationController
     _scope: backend
@@ -20,7 +20,7 @@ metamodels.configuration:
     tableName: ~
 
 metamodels.metamodel:
-  path: /contao/metamodel/{tableName}
+  path: /%contao.backend.route_prefix%/metamodel/{tableName}
   defaults:
     _controller: MetaModels\CoreBundle\Controller\Backend\MetaModelController
     _scope: backend
