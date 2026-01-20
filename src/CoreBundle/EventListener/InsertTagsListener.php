@@ -24,6 +24,7 @@
 
 namespace MetaModels\CoreBundle\EventListener;
 
+use Contao\CoreBundle\Exception\ResponseException;
 use Contao\StringUtil;
 use Contao\Input;
 use Doctrine\DBAL\Connection;
@@ -176,6 +177,10 @@ final class InsertTagsListener
                 default:
             }
         } catch (\Exception $exc) {
+            if ($exc instanceof ResponseException) {
+                throw $exc;
+            }
+
             $this->logger?->error(
                 'Error by replace tags: ' . $exc->getMessage() . ' | ' . __CLASS__ . ' | ' . __FUNCTION__
             );
