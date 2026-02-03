@@ -23,14 +23,13 @@ namespace MetaModels\Test\Data;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Result;
 use MetaModels\DcGeneral\Data\FilterBuilderSql;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Test the filter builder.
- *
- * @covers \MetaModels\DcGeneral\Data\FilterBuilderSql
- */
+/** Test the filter builder. */
+#[CoversClass(FilterBuilderSql::class)]
 class FilterBuilderSqlTest extends TestCase
 {
     /**
@@ -48,7 +47,7 @@ class FilterBuilderSqlTest extends TestCase
     /**
      * Data provider for testBuild()
      */
-    public function buildTestProvider(): array
+    public static function buildTestProvider(): array
     {
         return [
             'equality compare' => [
@@ -85,9 +84,8 @@ class FilterBuilderSqlTest extends TestCase
      * @param string $expectedSql    The expected SQL query.
      * @param array  $expectedParams The expected parameters.
      * @param array  $filter         The filter input array.
-     *
-     * @dataProvider buildTestProvider
      */
+    #[DataProvider('buildTestProvider')]
     public function testBuild(string $expectedSql, array $expectedParams, array $filter): void
     {
         $connection = $this->mockConnection($expectedSql, $expectedParams, [['id' => 'succ'], ['id' => 'ess']]);
@@ -157,11 +155,11 @@ class FilterBuilderSqlTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $resultSet
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('fetchAllAssociative')
             ->willReturn($result);
         $connection
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('executeQuery')
             ->with($queryString, $params)
             ->willReturn($resultSet);

@@ -41,6 +41,7 @@ phpcq:
     # psalm
     - 8A03EA3B385DBAA1
     - 12CE0F1D262429A5
+    - 99BF4D9A33D65E1E
     # magl@magll.net
     - D2CCAC42F6295E7D
     # PHP_CodeSniffer

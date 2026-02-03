@@ -91,7 +91,7 @@ class MetaModelInformationCollectorTest extends TestCase
     {
         $collector = $this
             ->getMockBuilder(MetaModelInformationCollector::class)
-            ->setMethods(['getNames', 'getInformationFor'])
+            ->onlyMethods(['getNames', 'getInformationFor'])
             ->disableOriginalConstructor()
             ->getMock();
 
