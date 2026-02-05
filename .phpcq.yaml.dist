@@ -12,6 +12,9 @@ phpcq:
     phpunit:
       version: ^1.0
       signed: false
+      requirements:
+        phpunit:
+          version: ^10.0
     psalm:
       version: ^1.0
       signed: false
