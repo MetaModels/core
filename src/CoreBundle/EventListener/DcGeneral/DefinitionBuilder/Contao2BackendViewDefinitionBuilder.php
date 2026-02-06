@@ -131,6 +131,7 @@ class Contao2BackendViewDefinitionBuilder
      *
      * @return void
      */
+    #[\Override]
     protected function build(IMetaModelDataDefinition $container)
     {
         $this->container   = $container;

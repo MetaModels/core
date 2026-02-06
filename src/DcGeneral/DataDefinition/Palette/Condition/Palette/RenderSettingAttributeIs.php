@@ -144,6 +144,7 @@ class RenderSettingAttributeIs extends AbstractWeightAwarePaletteCondition
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getMatchCount(ModelInterface $model = null, PropertyValueBag $input = null)
     {
         $value = null;
@@ -165,6 +166,7 @@ class RenderSettingAttributeIs extends AbstractWeightAwarePaletteCondition
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function __clone()
     {
     }

@@ -70,6 +70,7 @@ class SearchAttribute extends FilterRule
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getMatchingIds()
     {
         if ($this->objAttribute instanceof ITranslated) {

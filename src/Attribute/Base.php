@@ -123,6 +123,7 @@ abstract class Base implements IAttribute
      *
      * @return string the human-readable name
      */
+    #[\Override]
     public function getName()
     {
         if (isset($this->arrData['name']) && \is_array($this->arrData['name'])) {
@@ -289,6 +290,7 @@ abstract class Base implements IAttribute
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getColName()
     {
         $colName = $this->arrData['colname'];
@@ -300,6 +302,7 @@ abstract class Base implements IAttribute
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getMetaModel()
     {
         return $this->metaModel;
@@ -308,6 +311,7 @@ abstract class Base implements IAttribute
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function get($strKey)
     {
         return $this->arrData[$strKey] ?? null;
@@ -316,6 +320,7 @@ abstract class Base implements IAttribute
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function set($strKey, $varValue)
     {
         if (in_array($strKey, $this->getAttributeSettingNames())) {
@@ -338,6 +343,7 @@ abstract class Base implements IAttribute
      *
      * @deprecated Implement schema generators instead - see #1267.
      */
+    #[\Override]
     public function handleMetaChange($strMetaName, $varNewValue)
     {
         // By default, we accept any change of meta information.
@@ -357,6 +363,7 @@ abstract class Base implements IAttribute
      *
      * @deprecated Implement schema generators instead - see #1267.
      */
+    #[\Override]
     public function destroyAUX()
     {
         if ($this->isManagedAttribute($this->get('type'))) {
@@ -373,6 +380,7 @@ abstract class Base implements IAttribute
      *
      * @deprecated Implement schema generators instead - see #1267.
      */
+    #[\Override]
     public function initializeAUX()
     {
         if ($this->isManagedAttribute($this->get('type'))) {
@@ -387,6 +395,7 @@ abstract class Base implements IAttribute
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getAttributeSettingNames()
     {
         return [
@@ -547,6 +556,7 @@ abstract class Base implements IAttribute
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getFieldDefinition($arrOverrides = [])
     {
         $arrFieldDef = $this->setBaseEval($this->getBaseDefinition(), $arrOverrides);
@@ -577,6 +587,7 @@ abstract class Base implements IAttribute
      *
      * @deprecated Use DataDefinition builders in DC_General 2.0.0
      */
+    #[\Override]
     public function getItemDCA($arrOverrides = [])
     {
         return [
@@ -590,6 +601,7 @@ abstract class Base implements IAttribute
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function valueToWidget($varValue)
     {
         return $varValue;
@@ -598,6 +610,7 @@ abstract class Base implements IAttribute
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function widgetToValue($varValue, $itemId)
     {
         return $varValue;
@@ -606,6 +619,7 @@ abstract class Base implements IAttribute
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getDefaultRenderSettings()
     {
         return new Simple(['template' => 'mm_attr_' . ($this->get('type') ?? '')]);
@@ -614,6 +628,7 @@ abstract class Base implements IAttribute
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function parseValue($arrRowData, $strOutputFormat = 'text', $objSettings = null)
     {
         $arrResult = ['raw' => ($arrRowData[$this->getColName()] ?? null)];
@@ -658,6 +673,7 @@ abstract class Base implements IAttribute
      *
      * This base implementation returns the value itself.
      */
+    #[\Override]
     public function getFilterUrlValue($varValue)
     {
         // We are parsing as text here as this was the way before this method was implemented. See #216.
@@ -669,6 +685,7 @@ abstract class Base implements IAttribute
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function sortIds($idList, $strDirection)
     {
         // Base implementation, do not perform any sorting.
@@ -679,6 +696,7 @@ abstract class Base implements IAttribute
      * {@inheritdoc}
      * Base implementation, do not perform any search;
      */
+    #[\Override]
     public function searchFor($strPattern)
     {
         return [];
@@ -691,6 +709,7 @@ abstract class Base implements IAttribute
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function filterGreaterThan($varValue, $blnInclusive = false)
     {
         return [];
@@ -703,6 +722,7 @@ abstract class Base implements IAttribute
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function filterLessThan($varValue, $blnInclusive = false)
     {
         return [];
@@ -712,6 +732,7 @@ abstract class Base implements IAttribute
      * {@inheritdoc}
      * Base implementation, merge the result of filterLessThan() and filterGreaterThan().
      */
+    #[\Override]
     public function filterNotEqual($varValue)
     {
         return \array_merge($this->filterLessThan($varValue) ?? [], $this->filterGreaterThan($varValue) ?? []);
@@ -721,6 +742,7 @@ abstract class Base implements IAttribute
      * {@inheritdoc}
      * Base implementation, do not perform anything.
      */
+    #[\Override]
     public function modelSaved($objItem)
     {
         // No-op.

@@ -122,6 +122,7 @@ class GetAttributeTypeListener extends BaseListener
      *
      * @return bool
      */
+    #[\Override]
     protected function wantToHandle(AbstractEnvironmentAwareEvent $event)
     {
         /** @var GetPropertyOptionsEvent $event */

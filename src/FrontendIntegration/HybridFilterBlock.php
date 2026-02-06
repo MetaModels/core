@@ -145,6 +145,7 @@ class HybridFilterBlock extends MetaModelHybrid
      *
      * @return string
      */
+    #[\Override]
     public function generate()
     {
         // Get template if configured.
@@ -161,6 +162,7 @@ class HybridFilterBlock extends MetaModelHybrid
      *
      * @return void
      */
+    #[\Override]
     protected function compile()
     {
         $objFilter = new FrontendFilter($this->getConnection(), $this->getFilterUrlBuilder());

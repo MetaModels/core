@@ -59,6 +59,7 @@ class AttributeInformation implements AttributeInformationInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getName(): string
     {
         return $this->name;
@@ -67,6 +68,7 @@ class AttributeInformation implements AttributeInformationInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getType(): string
     {
         return $this->type;

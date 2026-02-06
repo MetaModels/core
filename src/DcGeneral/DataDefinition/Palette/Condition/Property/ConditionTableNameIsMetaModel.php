@@ -109,6 +109,7 @@ class ConditionTableNameIsMetaModel implements PropertyConditionInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function match(
         ModelInterface $model = null,
         PropertyValueBag $input = null,
@@ -130,6 +131,7 @@ class ConditionTableNameIsMetaModel implements PropertyConditionInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function __clone()
     {
     }

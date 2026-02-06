@@ -53,6 +53,7 @@ class FindXhtmlTemplateMigration extends AbstractMigration
      *
      * @return string
      */
+    #[\Override]
     public function getName(): string
     {
         return 'Detect old MetaModels template files with extension "xhtml".';
@@ -64,6 +65,7 @@ class FindXhtmlTemplateMigration extends AbstractMigration
      *
      * @return bool
      */
+    #[\Override]
     public function shouldRun(): bool
     {
         if ($this->findXhtmlTemplates()) {
@@ -78,6 +80,7 @@ class FindXhtmlTemplateMigration extends AbstractMigration
      *
      * @return MigrationResult
      */
+    #[\Override]
     public function run(): MigrationResult
     {
         if ($this->findXhtmlTemplates()) {

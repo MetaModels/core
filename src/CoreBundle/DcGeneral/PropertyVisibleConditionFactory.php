@@ -30,6 +30,7 @@ class PropertyVisibleConditionFactory extends AbstractAttributeConditionFactory
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function buildCondition(array $configuration, IMetaModel $metaModel)
     {
         return new PropertyVisibleCondition($this->attributeIdToName($metaModel, $configuration['attr_id']));
@@ -38,6 +39,7 @@ class PropertyVisibleConditionFactory extends AbstractAttributeConditionFactory
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function supportsAttribute($attribute)
     {
         return true;

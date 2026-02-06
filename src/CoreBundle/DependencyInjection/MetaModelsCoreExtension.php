@@ -87,6 +87,7 @@ class MetaModelsCoreExtension extends Extension implements PrependExtensionInter
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function prepend(ContainerBuilder $container): void
     {
         $this->collectDefaultTableOptionsFromDoctrineExtension($container);
@@ -95,6 +96,7 @@ class MetaModelsCoreExtension extends Extension implements PrependExtensionInter
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function load(array $configs, ContainerBuilder $container): void
     {
         $container->registerAttributeForAutoconfiguration(
@@ -134,6 +136,7 @@ class MetaModelsCoreExtension extends Extension implements PrependExtensionInter
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getConfiguration(array $config, ContainerBuilder $container): ?ConfigurationInterface
     {
         $projectDir = $container->getParameter('kernel.project_dir');

@@ -62,6 +62,7 @@ class NotEqual implements IFilterRule
      *
      * @return list<string>|null
      */
+    #[\Override]
     public function getMatchingIds()
     {
         return $this->objAttribute->filterNotEqual($this->varValue);

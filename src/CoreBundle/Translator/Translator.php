@@ -43,6 +43,7 @@ final class Translator implements TranslatorInterface, TranslatorBagInterface, L
      * Gets the translation from Contao’s $GLOBALS['TL_LANG'] array if the message
      * domain starts with "contao_". The locale parameter is ignored in this case.
      */
+    #[\Override]
     public function trans($id, array $parameters = [], $domain = null, $locale = null): string
     {
         // Cut off the contao_ prefix for mm_ domains as they are already loaded via symfony.
@@ -54,21 +55,25 @@ final class Translator implements TranslatorInterface, TranslatorBagInterface, L
         return $this->translator->trans($id, $parameters, $domain, $locale);
     }
 
+    #[\Override]
     public function setLocale(string $locale): void
     {
         $this->translator->setLocale($locale);
     }
 
+    #[\Override]
     public function getLocale(): string
     {
         return $this->translator->getLocale();
     }
 
+    #[\Override]
     public function getCatalogue($locale = null): MessageCatalogueInterface
     {
         return $this->translator->getCatalogue($locale);
     }
 
+    #[\Override]
     public function getCatalogues(): array
     {
         if (!method_exists($this->translator, 'getCatalogues')) {

@@ -100,6 +100,7 @@ class InputScreenAddAllController extends AbstractAddAllController
      *
      * @return array
      */
+    #[\Override]
     protected function renderOutput($table, $metaModel, Request $request)
     {
         return \array_merge(
@@ -121,6 +122,7 @@ class InputScreenAddAllController extends AbstractAddAllController
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     protected function createEmptyDataFor(IAttribute $attribute, $parentId, $activate, $sort, $tlclass = '')
     {
         return [
@@ -141,6 +143,7 @@ class InputScreenAddAllController extends AbstractAddAllController
      *
      * @return bool
      */
+    #[\Override]
     protected function accepts(IAttribute $attribute)
     {
         return !($attribute instanceof IInternal) && !empty($attribute->get('id'));

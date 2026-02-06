@@ -34,6 +34,7 @@ class LegacySchemaManager implements SchemaManagerInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function preprocess(SchemaInformation $information): void
     {
         // No-op.
@@ -42,6 +43,7 @@ class LegacySchemaManager implements SchemaManagerInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function process(SchemaInformation $information): void
     {
         /** @psalm-suppress DeprecatedClass */
@@ -97,6 +99,7 @@ class LegacySchemaManager implements SchemaManagerInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function postprocess(SchemaInformation $information): void
     {
         // No-op.
@@ -105,6 +108,7 @@ class LegacySchemaManager implements SchemaManagerInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function validate(SchemaInformation $information): array
     {
         /** @psalm-suppress DeprecatedClass */

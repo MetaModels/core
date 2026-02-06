@@ -32,6 +32,7 @@ class PropertyValueConditionFactory extends AbstractRestrictedAttributeCondition
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function buildCondition(array $configuration, IMetaModel $metaModel)
     {
         return new PropertyValueCondition(

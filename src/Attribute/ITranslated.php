@@ -35,6 +35,7 @@ interface ITranslated extends IAttribute
      *
      * @return ITranslatedMetaModel the MetaModel instance.
      */
+    #[\Override]
     public function getMetaModel();
 
     /**

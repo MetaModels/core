@@ -50,6 +50,7 @@ class SimpleLookupFilterSettingTypeFactory extends AbstractFilterSettingTypeFact
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function createInstance($information, $filterSettings)
     {
         return new SimpleLookup(

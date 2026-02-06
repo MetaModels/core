@@ -118,6 +118,7 @@ class SimpleQuery extends FilterRule
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getMatchingIds()
     {
         $matches = $this->connection->executeQuery($this->queryString, $this->params, $this->types);

@@ -53,6 +53,7 @@ class MultiTextWidget extends Widget
      *
      * @return void
      */
+    #[\Override]
     public function __set($strKey, $varValue)
     {
         switch ($strKey) {
@@ -88,6 +89,7 @@ class MultiTextWidget extends Widget
      *
      * @return mixed The processed value
      */
+    #[\Override]
     protected function validator($varInput)
     {
         if (\is_array($varInput)) {
@@ -108,6 +110,7 @@ class MultiTextWidget extends Widget
      *
      * @return string
      */
+    #[\Override]
     public function generate()
     {
         $return = '';

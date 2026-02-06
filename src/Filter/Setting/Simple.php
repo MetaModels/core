@@ -187,6 +187,7 @@ abstract class Simple implements ISimple
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function get($strKey)
     {
         return $this->data[$strKey] ?? null;
@@ -549,6 +550,7 @@ abstract class Simple implements ISimple
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function generateFilterUrlFrom(IItem $objItem, IRenderSettings $objRenderSetting)
     {
         return [];
@@ -557,6 +559,7 @@ abstract class Simple implements ISimple
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getParameters()
     {
         return [];
@@ -565,6 +568,7 @@ abstract class Simple implements ISimple
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getParameterDCA()
     {
         return [];
@@ -573,6 +577,7 @@ abstract class Simple implements ISimple
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getParameterFilterNames()
     {
         return [];
@@ -583,6 +588,7 @@ abstract class Simple implements ISimple
      *
      * @SuppressWarnings(PHPMD.LongVariable)
      */
+    #[\Override]
     public function getParameterFilterWidgets(
         $arrIds,
         $arrFilterUrl,
@@ -595,6 +601,7 @@ abstract class Simple implements ISimple
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getReferencedAttributes()
     {
         return [];

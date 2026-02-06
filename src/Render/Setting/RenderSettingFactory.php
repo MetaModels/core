@@ -119,6 +119,7 @@ class RenderSettingFactory implements IRenderSettingFactory
      *
      * @psalm-suppress DeprecatedInterface
      */
+    #[\Override]
     public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer, $deprecationNotice = true)
     {
         if ($deprecationNotice) {
@@ -164,6 +165,7 @@ class RenderSettingFactory implements IRenderSettingFactory
      *
      * @psalm-suppress DeprecatedInterface
      */
+    #[\Override]
     public function getServiceContainer()
     {
         // @codingStandardsIgnoreStart
@@ -270,6 +272,7 @@ class RenderSettingFactory implements IRenderSettingFactory
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function createCollection(IMetaModel $metaModel, $settingId = '')
     {
         $tableName = $metaModel->getTableName();

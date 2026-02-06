@@ -57,6 +57,7 @@ class Items implements IItems
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     #[\ReturnTypeWillChange]
     public function rewind()
     {
@@ -66,6 +67,7 @@ class Items implements IItems
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     #[\ReturnTypeWillChange]
     public function current()
     {
@@ -75,6 +77,7 @@ class Items implements IItems
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     #[\ReturnTypeWillChange]
     public function key()
     {
@@ -84,6 +87,7 @@ class Items implements IItems
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     #[\ReturnTypeWillChange]
     public function valid()
     {
@@ -93,6 +97,7 @@ class Items implements IItems
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
@@ -102,6 +107,7 @@ class Items implements IItems
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
@@ -124,6 +130,7 @@ class Items implements IItems
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
@@ -141,6 +148,7 @@ class Items implements IItems
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
@@ -150,6 +158,7 @@ class Items implements IItems
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getItem()
     {
         // Implicitly call first when not within "while ($obj->next())" scope.
@@ -168,6 +177,7 @@ class Items implements IItems
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getCount()
     {
         return \count($this->arrItems);
@@ -176,6 +186,7 @@ class Items implements IItems
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function first()
     {
         if ($this->getCount() > 0) {
@@ -193,6 +204,7 @@ class Items implements IItems
      * @psalm-suppress InvalidReturnStatement
      * @psalm-suppress InvalidFalsableReturnType
      */
+    #[\Override]
     #[\ReturnTypeWillChange]
     public function next()
     {
@@ -210,6 +222,7 @@ class Items implements IItems
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function prev()
     {
         if ($this->intCursor == 0) {
@@ -224,6 +237,7 @@ class Items implements IItems
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function last()
     {
         $this->intCursor = ($this->getCount() - 1);
@@ -234,6 +248,7 @@ class Items implements IItems
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function reset()
     {
         $this->intCursor = -1;
@@ -243,6 +258,7 @@ class Items implements IItems
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getClass()
     {
         $arrClass = [];
@@ -266,6 +282,7 @@ class Items implements IItems
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function parseValue($strOutputFormat = 'text', $objSettings = null)
     {
         $item = $this->getItem();
@@ -279,6 +296,7 @@ class Items implements IItems
      *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
+    #[\Override]
     public function parseAll($strOutputFormat = 'text', $objSettings = null)
     {
         $arrResult = [];

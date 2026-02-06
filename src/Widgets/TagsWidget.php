@@ -47,6 +47,7 @@ class TagsWidget extends Widget
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function __set($strKey, $varValue)
     {
         switch ($strKey) {
@@ -79,6 +80,7 @@ class TagsWidget extends Widget
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     protected function validator($varInput)
     {
         if (\is_array($varInput)) {
@@ -156,6 +158,7 @@ class TagsWidget extends Widget
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
+    #[\Override]
     public function generate(): string
     {
         $return = \sprintf(

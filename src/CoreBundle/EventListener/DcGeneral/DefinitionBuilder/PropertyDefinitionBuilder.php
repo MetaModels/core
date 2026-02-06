@@ -90,6 +90,7 @@ class PropertyDefinitionBuilder
      *
      * @return void
      */
+    #[\Override]
     protected function build(IMetaModelDataDefinition $container)
     {
         $inputScreen = $this->viewCombination->getScreen($container->getName());

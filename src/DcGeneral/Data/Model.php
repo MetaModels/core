@@ -101,6 +101,7 @@ class Model implements ModelInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function __clone()
     {
         $item = $this->getItem();
@@ -111,6 +112,7 @@ class Model implements ModelInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getId()
     {
         $item = $this->getItem();
@@ -123,6 +125,7 @@ class Model implements ModelInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getProperty($propertyName)
     {
         if (null !== ($item = $this->getItem())) {
@@ -142,6 +145,7 @@ class Model implements ModelInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getPropertiesAsArray()
     {
         $arrResult = [];
@@ -156,6 +160,7 @@ class Model implements ModelInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getMeta($strMetaName)
     {
         if (\array_key_exists($strMetaName, $this->arrMetaInformation)) {
@@ -168,6 +173,7 @@ class Model implements ModelInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function setId($mixId)
     {
         if ($this->getId() === null) {
@@ -186,6 +192,7 @@ class Model implements ModelInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.Superglobals)
      */
+    #[\Override]
     public function setProperty($strPropertyName, $varValue)
     {
         if (null !== ($item = $this->getItem())) {
@@ -243,6 +250,7 @@ class Model implements ModelInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function setPropertiesAsArray($properties)
     {
         foreach ($properties as $strKey => $varValue) {
@@ -253,6 +261,7 @@ class Model implements ModelInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function setMeta($strMetaName, $varValue)
     {
         $this->arrMetaInformation[$strMetaName] = $varValue;
@@ -261,6 +270,7 @@ class Model implements ModelInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function hasProperties()
     {
         return (bool) $this->getItem();
@@ -271,6 +281,7 @@ class Model implements ModelInterface
      *
      * @return \Traversable<string, mixed>
      */
+    #[\Override]
     #[\ReturnTypeWillChange]
     public function getIterator()
     {
@@ -280,6 +291,7 @@ class Model implements ModelInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getProviderName()
     {
         $item = $this->getItem();
@@ -293,6 +305,7 @@ class Model implements ModelInterface
      *
      * @throws DcGeneralInvalidArgumentException When a property in the value bag has been marked as invalid.
      */
+    #[\Override]
     public function readFromPropertyValueBag(PropertyValueBagInterface $valueBag)
     {
         foreach ($this->getPropertyNames() as $property) {
@@ -313,6 +326,7 @@ class Model implements ModelInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function writeToPropertyValueBag(PropertyValueBagInterface $valueBag)
     {
         foreach ($this->getPropertyNames() as $property) {

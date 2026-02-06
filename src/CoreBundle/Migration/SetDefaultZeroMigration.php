@@ -98,6 +98,7 @@ class SetDefaultZeroMigration extends AbstractMigration
      *
      * @return string
      */
+    #[\Override]
     public function getName(): string
     {
         return 'Set default zero values for system columns in MetaModels.';
@@ -111,6 +112,7 @@ class SetDefaultZeroMigration extends AbstractMigration
      * @return bool
      * @throws Exception
      */
+    #[\Override]
     public function shouldRun(): bool
     {
         $nonNullableColumns = $this->fetchNonDefaultZeroColumns();
@@ -127,6 +129,7 @@ class SetDefaultZeroMigration extends AbstractMigration
      * @return MigrationResult
      * @throws Exception
      */
+    #[\Override]
     public function run(): MigrationResult
     {
         $columnsByTable = $this->fetchNonDefaultZeroColumns();

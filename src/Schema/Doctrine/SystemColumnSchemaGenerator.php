@@ -35,6 +35,7 @@ class SystemColumnSchemaGenerator implements DoctrineSchemaGeneratorInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function generate(DoctrineSchemaInformation $schema, MetaModelCollectionInterface $collection): void
     {
         foreach ($collection as $metaModelInformation) {

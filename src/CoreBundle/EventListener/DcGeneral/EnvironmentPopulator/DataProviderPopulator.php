@@ -79,6 +79,7 @@ class DataProviderPopulator
      *
      * @return void
      */
+    #[\Override]
     public function populate(EnvironmentInterface $environment)
     {
         foreach (

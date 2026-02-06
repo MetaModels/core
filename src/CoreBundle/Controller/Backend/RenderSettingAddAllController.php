@@ -52,6 +52,7 @@ class RenderSettingAddAllController extends AbstractAddAllController
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     protected function createEmptyDataFor(IAttribute $attribute, $parentId, $activate, $sort, $tlclass = '')
     {
         $result   = [
@@ -76,6 +77,7 @@ class RenderSettingAddAllController extends AbstractAddAllController
      *
      * @return bool
      */
+    #[\Override]
     protected function accepts(IAttribute $attribute)
     {
         return !($attribute instanceof IInternal) && !empty($attribute->get('id'));

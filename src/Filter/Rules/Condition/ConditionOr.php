@@ -92,6 +92,7 @@ class ConditionOr extends FilterRule
      *
      * @return list<string>|null
      */
+    #[\Override]
     public function getMatchingIds()
     {
         $arrIds = [];

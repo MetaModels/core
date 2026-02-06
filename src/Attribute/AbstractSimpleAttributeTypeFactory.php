@@ -60,6 +60,7 @@ class AbstractSimpleAttributeTypeFactory extends AbstractAttributeTypeFactory
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function createInstance($information, $metaModel)
     {
         return new $this->typeClass($metaModel, $information, $this->connection, $this->tableManipulator);

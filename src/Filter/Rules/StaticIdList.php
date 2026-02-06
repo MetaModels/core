@@ -50,6 +50,7 @@ class StaticIdList extends FilterRule
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getMatchingIds()
     {
         return $this->arrIds;

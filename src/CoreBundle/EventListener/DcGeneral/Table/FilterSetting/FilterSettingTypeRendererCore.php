@@ -34,6 +34,7 @@ class FilterSettingTypeRendererCore extends AbstractFilterSettingTypeRenderer
      *
      * @return list<string>
      */
+    #[\Override]
     protected function getTypes()
     {
         return ['idlist', 'simplelookup', 'customsql', 'conditionand', 'conditionor'];
@@ -48,6 +49,7 @@ class FilterSettingTypeRendererCore extends AbstractFilterSettingTypeRenderer
      *
      * @return array
      */
+    #[\Override]
     protected function getLabelParameters(EnvironmentInterface $environment, ModelInterface $model)
     {
         if ($model->getProperty('type') == 'simplelookup') {

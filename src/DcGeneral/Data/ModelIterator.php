@@ -88,6 +88,7 @@ class ModelIterator implements \Iterator
      *
      * @return void
      */
+    #[\Override]
     public function rewind(): void
     {
         $this->intPosition = 0;
@@ -98,6 +99,7 @@ class ModelIterator implements \Iterator
      *
      * @return mixed
      */
+    #[\Override]
     public function current(): mixed
     {
         $model = $this->objModel;
@@ -111,6 +113,7 @@ class ModelIterator implements \Iterator
      *
      * @return string
      */
+    #[\Override]
     public function key(): string
     {
         $arrKeys = $this->getKeys();
@@ -123,6 +126,7 @@ class ModelIterator implements \Iterator
      *
      * @return void
      */
+    #[\Override]
     public function next(): void
     {
         ++$this->intPosition;
@@ -133,6 +137,7 @@ class ModelIterator implements \Iterator
      *
      * @return bool
      */
+    #[\Override]
     public function valid(): bool
     {
         return \strlen($this->key()) > 0;

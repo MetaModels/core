@@ -411,6 +411,7 @@ class InputScreen implements IInputScreen
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getId()
     {
         return (int) $this->data['id'];
@@ -419,6 +420,7 @@ class InputScreen implements IInputScreen
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getLegends()
     {
         return $this->legends;
@@ -427,6 +429,7 @@ class InputScreen implements IInputScreen
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getLegendNames()
     {
         return \array_keys($this->legends);
@@ -435,6 +438,7 @@ class InputScreen implements IInputScreen
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getLegend($name)
     {
         return $this->legends[$name];
@@ -443,6 +447,7 @@ class InputScreen implements IInputScreen
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getProperties()
     {
         return $this->properties;
@@ -451,6 +456,7 @@ class InputScreen implements IInputScreen
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getProperty($name)
     {
         return $this->properties[$name];
@@ -459,6 +465,7 @@ class InputScreen implements IInputScreen
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getPropertyNames()
     {
         $result = [];
@@ -472,6 +479,7 @@ class InputScreen implements IInputScreen
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getConditionsFor($name)
     {
         $property = $this->propertyMap2[$name];
@@ -482,6 +490,7 @@ class InputScreen implements IInputScreen
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getGroupingAndSorting()
     {
         return $this->groupSort;
@@ -492,6 +501,7 @@ class InputScreen implements IInputScreen
      *
      * @throws \RuntimeException When the instance could not be retrieved.
      */
+    #[\Override]
     public function getMetaModel()
     {
         /** @psalm-suppress DocblockTypeContradiction */
@@ -515,6 +525,7 @@ class InputScreen implements IInputScreen
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getIcon()
     {
         // Determine image to use.
@@ -528,6 +539,7 @@ class InputScreen implements IInputScreen
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getBackendSection()
     {
         return trim($this->data['backendsection'] ?? '');
@@ -536,6 +548,7 @@ class InputScreen implements IInputScreen
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getBackendCaption()
     {
         return StringUtil::deserialize($this->data['backendcaption'] ?? [], true);
@@ -544,6 +557,7 @@ class InputScreen implements IInputScreen
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getParentTable()
     {
         return $this->data['ptable'] ?? null;
@@ -552,6 +566,7 @@ class InputScreen implements IInputScreen
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function isStandalone()
     {
         return $this->data['rendertype'] == 'standalone';
@@ -560,6 +575,7 @@ class InputScreen implements IInputScreen
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getRenderMode()
     {
         // If we have variant overwrite all modes and set mode 5 - tree mode.
@@ -574,6 +590,7 @@ class InputScreen implements IInputScreen
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function isHierarchical()
     {
         return $this->getRenderMode() === 'hierarchical';
@@ -582,6 +599,7 @@ class InputScreen implements IInputScreen
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function isParented()
     {
         return $this->getRenderMode() === 'parented';
@@ -590,6 +608,7 @@ class InputScreen implements IInputScreen
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function isFlat()
     {
         return $this->getRenderMode() === 'flat';
@@ -598,6 +617,7 @@ class InputScreen implements IInputScreen
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function isEditable()
     {
         return (bool) $this->data['iseditable'];
@@ -606,6 +626,7 @@ class InputScreen implements IInputScreen
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function isCreatable()
     {
         return (bool) $this->data['iscreatable'];
@@ -614,6 +635,7 @@ class InputScreen implements IInputScreen
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function isDeletable()
     {
         return (bool) $this->data['isdeleteable'];
@@ -622,6 +644,7 @@ class InputScreen implements IInputScreen
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getPanelLayout()
     {
         return $this->data['panelLayout'] ?? '';
@@ -630,6 +653,7 @@ class InputScreen implements IInputScreen
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function isShowColumns()
     {
         return (bool) $this->data['showColumns'];

@@ -54,6 +54,7 @@ final class ItemListController extends AbstractContentElementController
      *
      * @return Response The response.
      */
+    #[\Override]
     public function __invoke(
         Request $request,
         ContentModel $model,
@@ -84,6 +85,7 @@ final class ItemListController extends AbstractContentElementController
      *
      * @psalm-suppress DeprecatedClass
      */
+    #[\Override]
     protected function getResponse(Template $template, ContentModel $model, Request $request): Response
     {
         $response = $this->getResponseInternal($template, $model, $request);

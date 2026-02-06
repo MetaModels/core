@@ -57,6 +57,7 @@ class MetaModelDefinitionBuilder
      *
      * @return void
      */
+    #[\Override]
     protected function build(IMetaModelDataDefinition $container)
     {
         $definition = $this->createOrGetDefinition($container);

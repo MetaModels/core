@@ -39,6 +39,7 @@ class ViewCombinations extends \MetaModels\Helper\ViewCombinations
      *
      * @return bool
      */
+    #[\Override]
     protected function authenticateUser()
     {
         return System::getContainer()->get('contao.security.token_checker')->hasFrontendUser();
@@ -47,6 +48,7 @@ class ViewCombinations extends \MetaModels\Helper\ViewCombinations
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function getUserGroups()
     {
         // Special case in combinations, anonymous frontend users have the implicit group id -1.

@@ -48,6 +48,7 @@ class SchemaGenerator implements SchemaGeneratorInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function generate(SchemaInformation $information, MetaModelCollectionInterface $collection): void
     {
         foreach ($this->generators as $manager) {

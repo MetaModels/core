@@ -58,6 +58,7 @@ class MetaModelInformation implements MetaModelInformationInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getName(): string
     {
         return $this->name;
@@ -66,6 +67,7 @@ class MetaModelInformation implements MetaModelInformationInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getAttributeNames(): array
     {
         return \array_keys($this->attributes);
@@ -96,6 +98,7 @@ class MetaModelInformation implements MetaModelInformationInterface
      *
      * @throws \InvalidArgumentException When the attribute is not registered.
      */
+    #[\Override]
     public function getAttribute(string $name): AttributeInformationInterface
     {
         if (!$this->hasAttribute($name)) {
@@ -108,6 +111,7 @@ class MetaModelInformation implements MetaModelInformationInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function hasAttribute(string $name): bool
     {
         return isset($this->attributes[$name]);
@@ -116,6 +120,7 @@ class MetaModelInformation implements MetaModelInformationInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getAttributes(): array
     {
         return \array_values($this->attributes);
@@ -124,6 +129,7 @@ class MetaModelInformation implements MetaModelInformationInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getAttributesOfType(string $typeName): \Traversable
     {
         foreach ($this->attributes as $attribute) {

@@ -53,6 +53,7 @@ final class ItemListController extends AbstractFrontendModuleController
      *
      * @return Response The response.
      */
+    #[\Override]
     public function __invoke(
         Request $request,
         ModuleModel $model,
@@ -79,6 +80,7 @@ final class ItemListController extends AbstractFrontendModuleController
      *
      * @return Response The response.
      */
+    #[\Override]
     protected function getBackendWildcard(ModuleModel $module): Response
     {
         /** @psalm-suppress InternalMethod - Class Adapter is internal, not the __call() method. Blame Contao. */
@@ -102,6 +104,7 @@ final class ItemListController extends AbstractFrontendModuleController
      *
      * @psalm-suppress DeprecatedClass
      */
+    #[\Override]
     protected function getResponse(Template $template, ModuleModel $model, Request $request): Response
     {
         return $this->getResponseInternal($template, $model, $request);
