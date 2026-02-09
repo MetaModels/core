@@ -27,11 +27,6 @@
         <file name="src/Render/Setting/Collection.php"/>
       </errorLevel>
     </TooManyArguments>
-    <MissingOverrideAttribute>
-      <errorLevel type="suppress">
-        <directory name="src"/>
-      </errorLevel>
-    </MissingOverrideAttribute>
     <ClassMustBeFinal>
       <errorLevel type="suppress">
         <file name="src/Attribute/AbstractSimpleAttributeTypeFactory.php"/>
