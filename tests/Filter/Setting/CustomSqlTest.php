@@ -38,6 +38,8 @@ use MetaModels\Filter\Setting\ICollection;
 use MetaModels\IMetaModel;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\Test\AutoLoadingTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionProperty;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Container;
@@ -51,14 +53,13 @@ use Symfony\Component\HttpFoundation\Session\Session;
 /**
  * Unit test for testing the CustomSql filter setting.
  *
- * @covers \MetaModels\Filter\Setting\CustomSql
- * @covers \MetaModels\CoreBundle\Contao\InsertTag\ReplaceParam
- * @covers \MetaModels\CoreBundle\Contao\InsertTag\ReplaceTableName
- *
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
+#[CoversClass(CustomSql::class)]
+#[CoversClass(ReplaceParam::class)]
+#[CoversClass(ReplaceTableName::class)]
 class CustomSqlTest extends AutoLoadingTestCase
 {
     /**
@@ -78,10 +79,10 @@ class CustomSqlTest extends AutoLoadingTestCase
         string $tableName = 'mm_unittest',
         array $services = []
     ): CustomSql {
-        $metaModel = $this->getMockForAbstractClass(IMetaModel::class);
+        $metaModel = $this->getMockBuilder(IMetaModel::class)->getMock();
         $metaModel->method('getTableName')->willReturn($tableName);
 
-        $filterSetting = $this->getMockForAbstractClass(ICollection::class);
+        $filterSetting = $this->getMockBuilder(ICollection::class)->getMock();
         $filterSetting->method('getMetaModel')->willReturn($metaModel);
 
         if (!isset($services[InsertTagParser::class])) {
@@ -627,84 +628,83 @@ class CustomSqlTest extends AutoLoadingTestCase
         );
     }
 
-    public function issue1495IfLangProvider(): Iterator
+    public static function issue1495IfLangProvider(): Iterator
     {
         yield [
             'sql' => '{{iflng::de}}1{{iflng::en}}3{{iflng::nl}}2{{iflng::es}}4{{iflng::el}}5{{iflng}}',
             'language' => 'en',
-            'exp_sql' => '3',
+            'expectedSql' => '3',
         ];
         yield [
             'sql' => '{{iflng::de}}1{{iflng::en}}3{{iflng::nl}}2{{iflng::es}}4{{iflng::el}}5{{iflng}}',
             'language' => 'de',
-            'exp_sql' => '1',
+            'expectedSql' => '1',
         ];
         yield [
             'sql' => '{{iflng::de}}1{{iflng::en}}3{{iflng::nl}}2{{iflng::es}}4{{iflng::el}}5{{iflng}}',
             'language' => 'nl',
-            'exp_sql' => '2',
+            'expectedSql' => '2',
         ];
         yield [
             'sql' => '{{iflng::de}}1{{iflng::en}}3{{iflng::nl}}2{{iflng::es}}4{{iflng::el}}5{{iflng}}',
             'language' => 'es',
-            'exp_sql' => '4',
+            'expectedSql' => '4',
         ];
         yield [
             'sql' => '{{iflng::de}}1{{iflng::en}}3{{iflng::nl}}2{{iflng::es}}4{{iflng::el}}5{{iflng}}',
             'language' => 'el',
-            'exp_sql' => '5',
+            'expectedSql' => '5',
         ];
         yield [
             'sql' => '{{iflng::de}}1{{iflng::en}}3{{iflng::nl}}2{{iflng::es}}4{{iflng::el}}5{{iflng}}',
             'language' => 'cn',
-            'exp_sql' => '',
+            'expectedSql' => '',
         ];
 
         yield [
             'sql' => '{{ifnlng::de}}1{{ifnlng::en}}3{{ifnlng::nl}}2{{ifnlng::es}}4{{ifnlng::el}}5{{iflng}}',
             'language' => 'en',
-            'exp_sql' => '1245',
+            'expectedSql' => '1245',
         ];
         yield [
             'sql' => '{{ifnlng::de}}1{{ifnlng::en}}3{{ifnlng::nl}}2{{ifnlng::es}}4{{ifnlng::el}}5{{iflng}}',
             'language' => 'de',
-            'exp_sql' => '3245',
+            'expectedSql' => '3245',
         ];
         yield [
             'sql' => '{{ifnlng::de}}1{{ifnlng::en}}3{{ifnlng::nl}}2{{ifnlng::es}}4{{ifnlng::el}}5{{iflng}}',
             'language' => 'nl',
-            'exp_sql' => '1345',
+            'expectedSql' => '1345',
         ];
         yield [
             'sql' => '{{ifnlng::de}}1{{ifnlng::en}}3{{ifnlng::nl}}2{{ifnlng::es}}4{{ifnlng::el}}5{{iflng}}',
             'language' => 'es',
-            'exp_sql' => '1325',
+            'expectedSql' => '1325',
         ];
         yield [
             'sql' => '{{ifnlng::de}}1{{ifnlng::en}}3{{ifnlng::nl}}2{{ifnlng::es}}4{{ifnlng::el}}5{{iflng}}',
             'language' => 'el',
-            'exp_sql' => '1324',
+            'expectedSql' => '1324',
         ];
         yield [
             'sql' => '{{ifnlng::de}}1{{ifnlng::en}}3{{ifnlng::nl}}2{{ifnlng::es}}4{{ifnlng::el}}5{{iflng}}',
             'language' => 'cn',
-            'exp_sql' => '13245',
+            'expectedSql' => '13245',
         ];
         yield [
             'sql' => 'SELECT id FROM {{table}}
 WHERE alias = {{iflng::de}}moe-yer-ss-hans-herbert-oeaeue' .
                 '{{iflng::en}}3{{iflng::nl}}2{{iflng::es}}4{{iflng::el}}5{{iflng}}',
             'language' => 'de',
-            'exp_sql' => 'SELECT id FROM tableName
+            'expectedSql' => 'SELECT id FROM tableName
 WHERE alias = moe-yer-ss-hans-herbert-oeaeue',
         ];
     }
 
     /**
      * https://github.com/MetaModels/core/issues/1495
-     *
-     * @dataProvider issue1495IfLangProvider
      */
+    #[DataProvider('issue1495IfLangProvider')]
     public function testIssue1495IfLang(string $sql, string $language, string $expectedSql): void
     {
         $pageModel = $this

@@ -64,6 +64,7 @@ class Configuration implements ConfigurationInterface
      *
      * @psalm-suppress UndefinedMethod
      */
+    #[\Override]
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder('metamodels');

@@ -89,6 +89,7 @@ class TypeOptionsListener extends AbstractConditionFactoryUsingListener
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     protected function wantToHandle(AbstractEnvironmentAwareEvent $event)
     {
         /** @var GetPropertyOptionsEvent $event */

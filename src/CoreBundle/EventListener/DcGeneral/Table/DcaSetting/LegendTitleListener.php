@@ -110,6 +110,7 @@ class LegendTitleListener extends AbstractListener
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     protected function wantToHandle(AbstractEnvironmentAwareEvent $event)
     {
         if (!parent::wantToHandle($event)) {

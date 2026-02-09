@@ -22,13 +22,12 @@ namespace MetaModels\Test\Filter\Rules\Condition;
 
 use MetaModels\Filter\IFilter;
 use MetaModels\Filter\Rules\Condition\ConditionOr;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Test OR condition filter rules.
- *
- * @covers \MetaModels\Filter\Rules\Condition\ConditionOr
- */
+/** Test OR condition filter rules. */
+#[CoversClass(ConditionOr::class)]
 class ConditionOrTest extends TestCase
 {
     /**
@@ -36,7 +35,7 @@ class ConditionOrTest extends TestCase
      *
      * @return array
      */
-    public function provider()
+    public static function provider(): array
     {
         return array(
             array(
@@ -77,10 +76,9 @@ class ConditionOrTest extends TestCase
      * @param array      $filters  The filter result values to add to the AND condition.
      *
      * @return void
-     *
-     * @dataProvider provider
      */
-    public function testOrCondition($message, $expected, $filters)
+    #[DataProvider('provider')]
+    public function testOrCondition(string $message, ?array $expected, array $filters): void
     {
         $condition = new ConditionOr();
         foreach ($filters as $filter) {
@@ -97,9 +95,9 @@ class ConditionOrTest extends TestCase
      *
      * @return IFilter
      */
-    private function mockFilter($result)
+    private function mockFilter(?array $result): IFilter
     {
-        $filter = $this->getMockForAbstractClass(IFilter::class);
+        $filter = $this->getMockBuilder(IFilter::class)->getMock();
         $filter->method('getMatchingIds')->willReturn($result);
 
         return $filter;

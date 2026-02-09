@@ -51,6 +51,7 @@ class ConditionOrFilterSettingTypeFactory extends AbstractFilterSettingTypeFacto
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function createInstance($information, $filterSettings)
     {
         return new ConditionOr(

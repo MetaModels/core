@@ -157,6 +157,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      *
      * @return array<string, class-string>
      */
+    #[\Override]
     public static function getSubscribedServices(): array
     {
         return [
@@ -173,6 +174,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function get($strKey)
     {
         return $this->data[$strKey] ?? null;
@@ -181,6 +183,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function prepareRules(IFilter $objFilter, $arrFilterUrl)
     {
         if ($this->isAllowedScope()) {
@@ -205,6 +208,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function generateFilterUrlFrom(IItem $objItem, IRenderSettings $objRenderSetting)
     {
         return [];
@@ -213,6 +217,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getParameters()
     {
         $arrParams = [];
@@ -232,6 +237,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getParameterDCA()
     {
         return [];
@@ -240,6 +246,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getParameterFilterNames()
     {
         return [];
@@ -250,6 +257,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      *
      * @SuppressWarnings(PHPMD.LongVariable)
      */
+    #[\Override]
     public function getParameterFilterWidgets(
         $arrIds,
         $arrFilterUrl,
@@ -262,6 +270,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getReferencedAttributes()
     {
         return [];

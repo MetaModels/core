@@ -122,6 +122,7 @@ class CommandBuilder
      *
      * @return void
      */
+    #[\Override]
     protected function build(IMetaModelDataDefinition $container)
     {
         if ($container->hasDefinition(Contao2BackendViewDefinitionInterface::NAME)) {

@@ -53,6 +53,7 @@ class FindClearAllTemplateMigration extends AbstractMigration
      *
      * @return string
      */
+    #[\Override]
     public function getName(): string
     {
         return 'Detect old style named MetaModels filter template files (mm_filter_clearall*.*).';
@@ -64,6 +65,7 @@ class FindClearAllTemplateMigration extends AbstractMigration
      *
      * @return bool
      */
+    #[\Override]
     public function shouldRun(): bool
     {
         if ($this->findClearAllTemplates()) {
@@ -78,6 +80,7 @@ class FindClearAllTemplateMigration extends AbstractMigration
      *
      * @return MigrationResult
      */
+    #[\Override]
     public function run(): MigrationResult
     {
         if ($this->findClearAllTemplates()) {

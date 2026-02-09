@@ -235,6 +235,7 @@ class Item implements IItem
      *
      * @return mixed
      */
+    #[\Override]
     public function get($strAttributeName)
     {
         return \array_key_exists($strAttributeName, $this->arrData) ? $this->arrData[$strAttributeName] : null;
@@ -248,6 +249,7 @@ class Item implements IItem
      *
      * @return IItem
      */
+    #[\Override]
     public function set($strAttributeName, $varValue)
     {
         $this->arrData[$strAttributeName] = $varValue;
@@ -260,6 +262,7 @@ class Item implements IItem
      *
      * @return IMetaModel the instance.
      */
+    #[\Override]
     public function getMetaModel()
     {
         return $this->metaModel;
@@ -272,6 +275,7 @@ class Item implements IItem
      *
      * @return null|IAttribute the instance or null if not found.
      */
+    #[\Override]
     public function getAttribute($strAttributeName)
     {
         return $this->getMetaModel()->getAttribute($strAttributeName);
@@ -287,6 +291,7 @@ class Item implements IItem
      * @return bool True means the data is set, on load of the item or at any time.
      *              False means the attribute is not set.
      */
+    #[\Override]
     public function isAttributeSet($strAttributeName)
     {
         return \array_key_exists($strAttributeName, $this->arrData);
@@ -298,6 +303,7 @@ class Item implements IItem
      *
      * @return array
      */
+    #[\Override]
     public function getSetAttributes()
     {
         return \array_keys($this->arrData);
@@ -308,6 +314,7 @@ class Item implements IItem
      *
      * @return bool True if it is a variant, false otherwise.
      */
+    #[\Override]
     public function isVariant()
     {
         return $this->getMetaModel()->hasVariants() && ($this->arrData['varbase'] === '0');
@@ -322,6 +329,7 @@ class Item implements IItem
      *
      * @return bool True if it is a variant base, false otherwise.
      */
+    #[\Override]
     public function isVariantBase()
     {
         return $this->getMetaModel()->hasVariants() && ($this->arrData['varbase'] === '1');
@@ -334,6 +342,7 @@ class Item implements IItem
      *
      * @return IItems|null A list of all variants for this item.
      */
+    #[\Override]
     public function getVariants($objFilter)
     {
         if ($this->isVariantBase()) {
@@ -350,6 +359,7 @@ class Item implements IItem
      *
      * @return IItem The variant base.
      */
+    #[\Override]
     public function getVariantBase()
     {
         if ($this->getMetaModel()->hasVariants() && !$this->isVariantBase()) {
@@ -389,6 +399,7 @@ class Item implements IItem
      *
      * @return void
      */
+    #[\Override]
     public function save($timestamp = null)
     {
         if (null === $timestamp) {
@@ -449,6 +460,7 @@ class Item implements IItem
      *
      * @psalm-suppress InvalidArrayOffset
      */
+    #[\Override]
     public function parseValue($strOutputFormat = 'text', $objSettings = null)
     {
         $this->registerAssets($objSettings);
@@ -544,6 +556,7 @@ class Item implements IItem
      *
      * @return array format=>value
      */
+    #[\Override]
     public function parseAttribute($strAttributeName, $strOutputFormat = 'text', $objSettings = null)
     {
         $attribute = $this->getAttribute($strAttributeName);
@@ -561,6 +574,7 @@ class Item implements IItem
      *
      * @return IItem the new copy.
      */
+    #[\Override]
     public function copy()
     {
         // Fetch data, clean undesired fields and return the new item.
@@ -582,6 +596,7 @@ class Item implements IItem
      *
      * @return \MetaModels\IItem the new copy.
      */
+    #[\Override]
     public function varCopy()
     {
         $objNewItem = $this->copy();

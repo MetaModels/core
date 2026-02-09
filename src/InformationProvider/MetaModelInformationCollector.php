@@ -51,6 +51,7 @@ class MetaModelInformationCollector implements InformationProviderInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getNames(): array
     {
         $nameLists = \array_values(\array_map(
@@ -65,6 +66,7 @@ class MetaModelInformationCollector implements InformationProviderInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getInformationFor(MetaModelInformation $information): void
     {
         foreach ($this->providers as $provider) {

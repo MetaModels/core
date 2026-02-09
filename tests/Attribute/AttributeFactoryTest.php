@@ -26,14 +26,12 @@ use MetaModels\Attribute\IAttributeTypeFactory;
 use MetaModels\Attribute\IAttributeFactory;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\MetaModelsEvents;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-/**
- * Test the attribute factory.
- *
- * @covers \MetaModels\Attribute\AttributeFactory
- */
+/** Test the attribute factory. */
+#[CoversClass(AttributeFactory::class)]
 class AttributeFactoryTest extends TestCase
 {
     /**
@@ -41,24 +39,23 @@ class AttributeFactoryTest extends TestCase
      *
      * @return void
      */
-    public function testCreateFactoryFiresEvent()
+    public function testCreateFactoryFiresEvent(): void
     {
-        $serviceContainer = $this->getMockForAbstractClass(IMetaModelsServiceContainer::class);
+        $serviceContainer = $this->getMockBuilder(IMetaModelsServiceContainer::class)->getMock();
 
-        $eventDispatcher = $this->getMockForAbstractClass(EventDispatcherInterface::class);
+        $eventDispatcher = $this->getMockBuilder(EventDispatcherInterface::class)->getMock();
         $eventDispatcher
-            ->expects(self::exactly(1))
+            ->expects($this->once())
             ->method('dispatch')
-            ->withConsecutive(
-                [
-                    self::isInstanceOf(CreateAttributeFactoryEvent::class),
-                    self::equalTo(MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE),
-                ]
-            );
+            ->willReturnCallback(function (object $event, string $name) {
+                self::assertInstanceOf(CreateAttributeFactoryEvent::class, $event);
+                self::assertSame(MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE, $name);
+                return $event;
+            });
         $eventDispatcher
-            ->expects(self::exactly(1))
+            ->expects($this->once())
             ->method('hasListeners')
-            ->with(self::equalTo(MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE))
+            ->with(MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE)
             ->willReturn(true);
 
         $factory = new AttributeFactory($eventDispatcher);
@@ -72,9 +69,9 @@ class AttributeFactoryTest extends TestCase
      *
      * @return void
      */
-    public function testAddTypeFactoryAndGetTypeFactory()
+    public function testAddTypeFactoryAndGetTypeFactory(): void
     {
-        $factory = new AttributeFactory($this->getMockForAbstractClass(EventDispatcherInterface::class));
+        $factory = new AttributeFactory($this->getMockBuilder(EventDispatcherInterface::class)->getMock());
 
         self::assertNull($factory->getTypeFactory('test'));
         $attributeFactory = $this->mockAttributeFactory('test', true, false, false);

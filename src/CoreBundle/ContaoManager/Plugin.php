@@ -41,6 +41,7 @@ class Plugin implements BundlePluginInterface, RoutingPluginInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getBundles(ParserInterface $parser): array
     {
         return [
@@ -59,6 +60,7 @@ class Plugin implements BundlePluginInterface, RoutingPluginInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getRouteCollection(LoaderResolverInterface $resolver, KernelInterface $kernel): ?RouteCollection
     {
         if (false === ($resolved = $resolver->resolve(__DIR__ . '/../Resources/config/routing.yml'))) {

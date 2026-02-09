@@ -41,6 +41,7 @@ class AssetPopulator
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function populate(EnvironmentInterface $environment)
     {
         $GLOBALS['TL_CSS'][] = '/bundles/metamodelscore/css/style.css';

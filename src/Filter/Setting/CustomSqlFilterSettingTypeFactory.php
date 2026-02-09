@@ -54,6 +54,7 @@ class CustomSqlFilterSettingTypeFactory extends AbstractFilterSettingTypeFactory
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function createInstance($information, $filterSettings)
     {
         return new CustomSql(

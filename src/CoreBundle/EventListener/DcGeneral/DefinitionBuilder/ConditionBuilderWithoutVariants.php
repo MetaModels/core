@@ -40,6 +40,7 @@ class ConditionBuilderWithoutVariants extends AbstractConditionBuilder
      *
      * @throws \RuntimeException When the conditions can not be determined yet.
      */
+    #[\Override]
     protected function calculate(): void
     {
         if ($this->inputScreen['meta']['rendertype'] !== 'standalone') {

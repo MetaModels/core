@@ -64,6 +64,7 @@ class TranslatorPopulator
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
+    #[\Override]
     protected function populate(EnvironmentInterface $environment)
     {
         $translator = $environment->getTranslator();

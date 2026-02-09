@@ -67,5 +67,6 @@ interface MetaModelCollectionInterface extends \IteratorAggregate
      *
      * @return \Traversable<int, MetaModelInformationInterface>
      */
+    #[\Override]
     public function getIterator(): \Traversable;
 }

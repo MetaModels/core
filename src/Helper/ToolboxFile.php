@@ -1107,7 +1107,7 @@ class ToolboxFile
 
                 if (isset($meta[$baseLanguage])) {
                     $this->metaInformation[dirname($path)][basename($path)] = $meta[$baseLanguage];
-                } elseif (isset($meta[$fallbackLanguage]) && null !== $fallbackLanguage) {
+                } elseif (null !== $fallbackLanguage && isset($meta[$fallbackLanguage])) {
                     $this->metaInformation[dirname($path)][basename($path)] = $meta[$fallbackLanguage];
                 }
             }

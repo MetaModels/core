@@ -16,6 +16,7 @@ final readonly class InsertTagIdTranscoder implements IdTranscoderInterface
     ) {
     }
 
+    #[\Override]
     public function encode(string $id): string
     {
         return strtr(
@@ -28,6 +29,7 @@ final readonly class InsertTagIdTranscoder implements IdTranscoderInterface
         );
     }
 
+    #[\Override]
     public function decode(string $encodedId): string
     {
         if (

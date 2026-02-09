@@ -39,6 +39,7 @@ class BreadcrumbDcaListener extends AbstractBreadcrumbListener
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     protected function wantToHandle(GetBreadcrumbEvent $event)
     {
         $dataDefinition = $event->getEnvironment()->getDataDefinition();
@@ -50,6 +51,7 @@ class BreadcrumbDcaListener extends AbstractBreadcrumbListener
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     protected function getBreadcrumbElements(EnvironmentInterface $environment, BreadcrumbStore $elements)
     {
         if (!$elements->hasId('tl_metamodel')) {

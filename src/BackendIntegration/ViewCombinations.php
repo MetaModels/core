@@ -41,6 +41,7 @@ class ViewCombinations extends \MetaModels\Helper\ViewCombinations
      *
      * @return bool
      */
+    #[\Override]
     protected function authenticateUser()
     {
         $scopeMatcher = System::getContainer()->get('cca.dc-general.scope-matcher');
@@ -71,6 +72,7 @@ class ViewCombinations extends \MetaModels\Helper\ViewCombinations
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function getUserGroups()
     {
         // Try to get the group(s)

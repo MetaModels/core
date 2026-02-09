@@ -32,6 +32,7 @@ class MetaModelDataDefinition extends DefaultContainer implements IMetaModelData
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function setMetaModelDefinition(IMetaModelDefinition $definition)
     {
         $this->setDefinition(IMetaModelDefinition::NAME, $definition);
@@ -42,6 +43,7 @@ class MetaModelDataDefinition extends DefaultContainer implements IMetaModelData
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function hasMetaModelDefinition()
     {
         return $this->hasDefinition(IMetaModelDefinition::NAME);
@@ -50,6 +52,7 @@ class MetaModelDataDefinition extends DefaultContainer implements IMetaModelData
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getMetaModelDefinition()
     {
         $definition = $this->getDefinition(IMetaModelDefinition::NAME);

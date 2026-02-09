@@ -44,6 +44,7 @@ abstract class WithChildren extends Simple implements IWithChildren
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function addChild(ISimple $objFilterSetting)
     {
         $this->arrChildren[] = $objFilterSetting;
@@ -52,6 +53,7 @@ abstract class WithChildren extends Simple implements IWithChildren
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function generateFilterUrlFrom(IItem $objItem, IRenderSettings $objRenderSetting)
     {
         $arrFilterUrl = array();
@@ -64,6 +66,7 @@ abstract class WithChildren extends Simple implements IWithChildren
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getParameters()
     {
         $arrParams = array();
@@ -76,6 +79,7 @@ abstract class WithChildren extends Simple implements IWithChildren
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getParameterDCA()
     {
         $arrParams = array();
@@ -90,6 +94,7 @@ abstract class WithChildren extends Simple implements IWithChildren
      *
      * @SuppressWarnings(PHPMD.LongVariable)
      */
+    #[\Override]
     public function getParameterFilterWidgets(
         $arrIds,
         $arrFilterUrl,
@@ -109,6 +114,7 @@ abstract class WithChildren extends Simple implements IWithChildren
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getParameterFilterNames()
     {
         $arrParams = [];
@@ -123,6 +129,7 @@ abstract class WithChildren extends Simple implements IWithChildren
      *
      * @return list<string>
      */
+    #[\Override]
     public function getReferencedAttributes()
     {
         $arrAttributes = [];

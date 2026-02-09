@@ -139,6 +139,7 @@ class Driver implements MultiLanguageDataProviderInterface
      *
      * @throws \RuntimeException When an unusable object has been passed.
      */
+    #[\Override]
     public function delete($item)
     {
         $metaModel = $this->getMetaModel();
@@ -167,6 +168,7 @@ class Driver implements MultiLanguageDataProviderInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function saveVersion(ModelInterface $model, $username)
     {
         throw new \RuntimeException('Versioning not supported in MetaModels so far.');
@@ -184,6 +186,7 @@ class Driver implements MultiLanguageDataProviderInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function getVersion($mixID, $mixVersion)
     {
         throw new \RuntimeException('Versioning not supported in MetaModels so far.');
@@ -201,6 +204,7 @@ class Driver implements MultiLanguageDataProviderInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function setVersionActive($mixID, $mixVersion)
     {
         throw new \RuntimeException('Versioning not supported in MetaModels so far.');
@@ -217,6 +221,7 @@ class Driver implements MultiLanguageDataProviderInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function getActiveVersion($mixID)
     {
         throw new \RuntimeException('Versioning not supported in MetaModels so far.');
@@ -286,6 +291,7 @@ class Driver implements MultiLanguageDataProviderInterface
      *
      * @return null|ModelInterface
      */
+    #[\Override]
     public function fetch(ConfigInterface $config)
     {
         $backupLanguage = $this->setLanguage($currentLanguage = $this->getCurrentLanguage());
@@ -323,6 +329,7 @@ class Driver implements MultiLanguageDataProviderInterface
      *
      * @throws \RuntimeException When no source has been defined.
      */
+    #[\Override]
     public function setBaseConfig(array $config)
     {
         if (!$config['source']) {
@@ -338,6 +345,7 @@ class Driver implements MultiLanguageDataProviderInterface
      *
      * @return ConfigInterface
      */
+    #[\Override]
     public function getEmptyConfig()
     {
         return DefaultConfig::init();
@@ -348,6 +356,7 @@ class Driver implements MultiLanguageDataProviderInterface
      *
      * @return ModelInterface
      */
+    #[\Override]
     public function getEmptyModel()
     {
         if (!isset($this->dispatcher)) {
@@ -369,6 +378,7 @@ class Driver implements MultiLanguageDataProviderInterface
      *
      * @return CollectionInterface
      */
+    #[\Override]
     public function getEmptyCollection()
     {
         return new DefaultCollection();
@@ -466,6 +476,7 @@ class Driver implements MultiLanguageDataProviderInterface
      *
      * @return CollectionInterface|list<string>
      */
+    #[\Override]
     public function fetchAll(ConfigInterface $config)
     {
         $backupLanguage = $this->setLanguage($this->getCurrentLanguage());
@@ -508,6 +519,7 @@ class Driver implements MultiLanguageDataProviderInterface
      *
      * @throws \RuntimeException If improper values have been passed (i.e. not exactly one field requested).
      */
+    #[\Override]
     public function getFilterOptions(ConfigInterface $config)
     {
         $arrProperties = $config->getFields();
@@ -540,6 +552,7 @@ class Driver implements MultiLanguageDataProviderInterface
      *
      * @return int
      */
+    #[\Override]
     public function getCount(ConfigInterface $config)
     {
         $objFilter = $this->prepareFilter($config);
@@ -560,6 +573,7 @@ class Driver implements MultiLanguageDataProviderInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function getVersions($mixID, $onlyActive = false)
     {
         // No version support on MetaModels so far, sorry.
@@ -575,6 +589,7 @@ class Driver implements MultiLanguageDataProviderInterface
      *
      * @return bool True if the values is not yet contained within the table, false otherwise.
      */
+    #[\Override]
     public function isUniqueValue($field, $new, $primaryId = null)
     {
         $model = $this->getMetaModel();
@@ -612,6 +627,7 @@ class Driver implements MultiLanguageDataProviderInterface
      *
      * @throws \RuntimeException For invalid ids.
      */
+    #[\Override]
     public function resetFallback($field)
     {
         // @codingStandardsIgnoreStart
@@ -654,6 +670,7 @@ class Driver implements MultiLanguageDataProviderInterface
      *
      * @throws \RuntimeException When an incompatible item was passed, an Exception is being thrown.
      */
+    #[\Override]
     public function save(ModelInterface $item, $timestamp = null)
     {
         if (null === $timestamp) {
@@ -690,6 +707,7 @@ class Driver implements MultiLanguageDataProviderInterface
      *
      * @throws \RuntimeException When an incompatible item was passed.
      */
+    #[\Override]
     public function saveEach(CollectionInterface $items, $timestamp = 0)
     {
         if (null === $timestamp) {
@@ -713,6 +731,7 @@ class Driver implements MultiLanguageDataProviderInterface
      *
      * @return boolean
      */
+    #[\Override]
     public function fieldExists($columnName)
     {
         return !!(
@@ -731,6 +750,7 @@ class Driver implements MultiLanguageDataProviderInterface
      *
      * @throws \InvalidArgumentException If not both models are compatible with this data provider.
      */
+    #[\Override]
     public function sameModels($firstModel, $secondModel)
     {
         if (!($firstModel instanceof Model && $secondModel instanceof Model)) {
@@ -785,6 +805,7 @@ class Driver implements MultiLanguageDataProviderInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function getLanguages($mixID)
     {
         $metaModel = $this->getMetaModel();
@@ -819,6 +840,7 @@ class Driver implements MultiLanguageDataProviderInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function getFallbackLanguage($mixID)
     {
         $metaModel = $this->getMetaModel();
@@ -847,6 +869,7 @@ class Driver implements MultiLanguageDataProviderInterface
      *
      * @return DataProviderInterface
      */
+    #[\Override]
     public function setCurrentLanguage($language)
     {
         $this->strCurrentLanguage = $language;
@@ -859,6 +882,7 @@ class Driver implements MultiLanguageDataProviderInterface
      *
      * @return string Short tag for the current working language like de or for etc.
      */
+    #[\Override]
     public function getCurrentLanguage()
     {
         return '' === $this->strCurrentLanguage ? 'en' : $this->strCurrentLanguage;

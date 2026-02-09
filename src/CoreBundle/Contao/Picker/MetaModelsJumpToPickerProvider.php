@@ -30,16 +30,19 @@ final readonly class MetaModelsJumpToPickerProvider implements
     ) {
     }
 
+    #[\Override]
     public function getName(): string
     {
         return 'metamodelPicker_' . $this->tableName . '_' . $this->renderSettingId;
     }
 
+    #[\Override]
     public function getUrl(PickerConfig $config): ?string
     {
         return $this->generateUrl($config);
     }
 
+    #[\Override]
     public function createMenuItem(PickerConfig $config): ItemInterface
     {
         $label = $this->translator->trans('name', [], $this->tableName);
@@ -57,11 +60,13 @@ final readonly class MetaModelsJumpToPickerProvider implements
         ]);
     }
 
+    #[\Override]
     public function supportsContext(string $context): bool
     {
         return 'link' === $context;
     }
 
+    #[\Override]
     public function supportsValue(PickerConfig $config): bool
     {
         try {
@@ -73,12 +78,14 @@ final readonly class MetaModelsJumpToPickerProvider implements
         return true;
     }
 
+    #[\Override]
     public function isCurrent(PickerConfig $config): bool
     {
         return $config->getCurrent() === $this->getName();
     }
 
     /** @SuppressWarnings(PHPMD.UnusedFormalParameter) */
+    #[\Override]
     public function createIdTranscoder(PickerConfig $config): IdTranscoderInterface
     {
         return new InsertTagIdTranscoder($this->tableName, $this->renderSettingId);

@@ -54,6 +54,7 @@ final class LiteralNode implements NodeInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function asString(): string
     {
         return $this->getValue();

@@ -128,6 +128,7 @@ class BaseSimple extends Base implements ISimple
      *
      * @deprecated Implement schema generators instead.
      */
+    #[\Override]
     public function handleMetaChange($strMetaName, $varNewValue)
     {
         if ($this->isManagedAttribute($this->get('type'))) {
@@ -158,6 +159,7 @@ class BaseSimple extends Base implements ISimple
      *
      * @throws Exception
      */
+    #[\Override]
     public function setDataFor($arrValues)
     {
         $strTable   = $this->getMetaModel()->getTableName();
@@ -179,6 +181,7 @@ class BaseSimple extends Base implements ISimple
      *
      * @throws Exception
      */
+    #[\Override]
     public function getFilterOptions($idList, $usedOnly, &$arrCount = null)
     {
         // If empty list, return empty result. See also #379 for discussion.
@@ -224,6 +227,7 @@ class BaseSimple extends Base implements ISimple
      *
      * @throws Exception
      */
+    #[\Override]
     public function sortIds($idList, $strDirection)
     {
         // Base implementation, do a simple sorting on given column.
@@ -245,6 +249,7 @@ class BaseSimple extends Base implements ISimple
      *
      * Base implementation, perform string matching search.
      */
+    #[\Override]
     public function searchFor($strPattern)
     {
         // Base implementation, do a simple search on given column.
@@ -272,6 +277,7 @@ class BaseSimple extends Base implements ISimple
      *
      * @deprecated Implement schema generators instead - see #1267.
      */
+    #[\Override]
     public function getSQLDataType()
     {
         if ($this->isManagedAttribute($this->get('type'))) {
@@ -288,6 +294,7 @@ class BaseSimple extends Base implements ISimple
      *
      * @deprecated Implement schema generators instead - see #1267.
      */
+    #[\Override]
     public function destroyAUX()
     {
         if ($this->isManagedAttribute($this->get('type'))) {
@@ -314,6 +321,7 @@ class BaseSimple extends Base implements ISimple
      *
      * @deprecated Implement schema generators instead - see #1267.
      */
+    #[\Override]
     public function initializeAUX()
     {
         if ($this->isManagedAttribute($this->get('type'))) {
@@ -342,6 +350,7 @@ class BaseSimple extends Base implements ISimple
      *
      * @deprecated Implement schema generators instead - see #1267.
      */
+    #[\Override]
     public function createColumn()
     {
         if ($this->isManagedAttribute($this->get('type'))) {
@@ -371,6 +380,7 @@ class BaseSimple extends Base implements ISimple
      *
      * @deprecated Implement schema generators instead - see #1267.
      */
+    #[\Override]
     public function deleteColumn()
     {
         if ($this->isManagedAttribute($this->get('type'))) {
@@ -401,6 +411,7 @@ class BaseSimple extends Base implements ISimple
      *
      * @deprecated Implement schema generators instead - see #1267.
      */
+    #[\Override]
     public function renameColumn($strNewColumnName)
     {
         if ($this->isManagedAttribute($this->get('type'))) {
@@ -440,6 +451,7 @@ class BaseSimple extends Base implements ISimple
      *
      * @return mixed
      */
+    #[\Override]
     public function unserializeData($value)
     {
         return $value;
@@ -452,6 +464,7 @@ class BaseSimple extends Base implements ISimple
      *
      * @return string|null
      */
+    #[\Override]
     public function serializeData($value)
     {
         if (empty($value)) {

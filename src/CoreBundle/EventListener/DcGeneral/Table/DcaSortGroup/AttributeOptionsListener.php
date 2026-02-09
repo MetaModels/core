@@ -104,6 +104,7 @@ class AttributeOptionsListener extends AbstractListener
      *
      * @return bool
      */
+    #[\Override]
     protected function wantToHandle(AbstractEnvironmentAwareEvent $event)
     {
         /** @var GetPropertyOptionsEvent $event */

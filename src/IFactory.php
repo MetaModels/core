@@ -41,6 +41,7 @@ interface IFactory extends IServiceContainerAware
      *
      * @psalm-suppress DeprecatedInterface
      */
+    #[\Override]
     public function getServiceContainer();
 
     /**

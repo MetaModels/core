@@ -49,6 +49,7 @@ class StaticIdListFilterSettingTypeFactory extends AbstractFilterSettingTypeFact
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function createInstance($information, $filterSettings)
     {
         return new IdList(

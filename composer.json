@@ -36,7 +36,7 @@
     "contao-community-alliance/meta-palettes": "^2.0.10",
     "contao-community-alliance/translator": "^2.5",
     "contao-community-alliance/url-builder": "^2.0",
-    "contao/core-bundle": "^5.3 <5.7",
+    "contao/core-bundle": "^5.3",
     "discordier/justtextwidgets": "^2.0",
     "doctrine/cache": "^2.1",
     "doctrine/dbal": "^3.6",

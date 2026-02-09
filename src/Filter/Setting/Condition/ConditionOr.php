@@ -35,6 +35,7 @@ class ConditionOr extends WithChildren
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function prepareRules(IFilter $objFilter, $arrFilterUrl)
     {
         $objFilterRule = new FilterRuleOr($this->get('stop_after_match'));

@@ -125,6 +125,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      *
      * @deprecated The service container will get removed, use the symfony service container instead.
      */
+    #[\Override]
     public function getFactory()
     {
         // @codingStandardsIgnoreStart
@@ -161,6 +162,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      *
      * @deprecated The service container will get removed, use the symfony service container instead.
      */
+    #[\Override]
     public function getAttributeFactory()
     {
         // @codingStandardsIgnoreStart
@@ -197,6 +199,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      *
      * @deprecated The service container will get removed, use the symfony service container instead.
      */
+    #[\Override]
     public function getFilterFactory()
     {
         // @codingStandardsIgnoreStart
@@ -233,6 +236,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      *
      * @deprecated The service container will get removed, use the symfony service container instead.
      */
+    #[\Override]
     public function getRenderSettingFactory()
     {
         // @codingStandardsIgnoreStart
@@ -269,6 +273,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      *
      * @deprecated The service container will get removed, use the symfony service container instead.
      */
+    #[\Override]
     public function getEventDispatcher()
     {
         // @codingStandardsIgnoreStart
@@ -304,6 +309,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      *
      * @deprecated The service container will get removed, use the symfony service container instead.
      */
+    #[\Override]
     public function getDatabase()
     {
         // @codingStandardsIgnoreStart
@@ -327,6 +333,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      *
      * @deprecated The service container will get removed, use the symfony service container instead.
      */
+    #[\Override]
     public function getCache()
     {
         // @codingStandardsIgnoreStart
@@ -364,6 +371,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      *
      * @deprecated The service container will get removed, use the symfony service container instead.
      */
+    #[\Override]
     public function setService($service, $serviceName = null)
     {
         // @codingStandardsIgnoreStart
@@ -395,6 +403,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      *
      * @deprecated The service container will get removed, use the symfony service container instead.
      */
+    #[\Override]
     public function getService($serviceName)
     {
         // @codingStandardsIgnoreStart

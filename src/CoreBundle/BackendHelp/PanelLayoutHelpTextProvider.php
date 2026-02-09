@@ -16,6 +16,7 @@ final readonly class PanelLayoutHelpTextProvider implements BackendHelpProviderI
     ) {
     }
 
+    #[\Override]
     public function getHelpFor(string $table, string $property): iterable
     {
         $buffer = [];

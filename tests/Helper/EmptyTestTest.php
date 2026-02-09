@@ -20,13 +20,12 @@
 namespace MetaModels\Test\Helper;
 
 use MetaModels\Helper\EmptyTest;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-/**
- * This tests the empty value check helper.
- *
- * @covers \MetaModels\Helper\EmptyTest
- */
+/** This tests the empty value check helper. */
+#[CoversClass(EmptyTest::class)]
 class EmptyTestTest extends TestCase
 {
     /**
@@ -34,7 +33,7 @@ class EmptyTestTest extends TestCase
      *
      * @return array
      */
-    public function emptyValueTestProvider(): array
+    public static function emptyValueTestProvider(): array
     {
         return [
             [
@@ -99,10 +98,9 @@ class EmptyTestTest extends TestCase
      * @param mixed $value    The value to test.
      *
      * @return void
-     *
-     * @dataProvider emptyValueTestProvider
      */
-    public function testEmptyValue($expected, $value): void
+    #[DataProvider('emptyValueTestProvider')]
+    public function testEmptyValue(bool $expected, mixed $value): void
     {
         $message = sprintf(
             ' %s === %s::isEmptyValue(%s)',

@@ -16,6 +16,7 @@ final readonly class TlClassHelpTextProvider implements BackendHelpProviderInter
     ) {
     }
 
+    #[\Override]
     public function getHelpFor(string $table, string $property): iterable
     {
         $buffer = [];

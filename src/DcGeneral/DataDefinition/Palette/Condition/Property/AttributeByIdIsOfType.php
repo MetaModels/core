@@ -133,6 +133,7 @@ class AttributeByIdIsOfType implements PropertyConditionInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function match(
         ModelInterface $model = null,
         PropertyValueBag $input = null,
@@ -153,6 +154,7 @@ class AttributeByIdIsOfType implements PropertyConditionInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function __clone()
     {
     }

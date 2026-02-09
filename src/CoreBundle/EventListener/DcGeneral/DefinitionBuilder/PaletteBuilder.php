@@ -93,6 +93,7 @@ class PaletteBuilder
      *
      * @return void
      */
+    #[\Override]
     protected function build(IMetaModelDataDefinition $container)
     {
         if (null === ($inputScreen = $this->viewCombination->getScreen($container->getName()))) {

@@ -177,7 +177,7 @@ class FilterBuilderTest extends TestCase
         $attribute = $this
             ->getMockBuilder(Base::class)
             ->setConstructorArgs([$metaModel, ['colname' => 'test1']])
-            ->setMethods(['searchFor'])
+            ->onlyMethods(['searchFor'])
             ->getMockForAbstractClass();
 
         $attribute

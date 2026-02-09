@@ -54,6 +54,7 @@ abstract class AbstractAttributeTypeFactory implements IAttributeTypeFactory
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getTypeName()
     {
         return $this->typeName;
@@ -62,6 +63,7 @@ abstract class AbstractAttributeTypeFactory implements IAttributeTypeFactory
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getTypeIcon()
     {
         return $this->typeIcon;
@@ -70,6 +72,7 @@ abstract class AbstractAttributeTypeFactory implements IAttributeTypeFactory
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function createInstance($information, $metaModel)
     {
         return new $this->typeClass($metaModel, $information);
@@ -88,6 +91,7 @@ abstract class AbstractAttributeTypeFactory implements IAttributeTypeFactory
      *
      * @return bool
      */
+    #[\Override]
     public function isTranslatedType()
     {
         return \in_array('MetaModels\Attribute\ITranslated', (array) \class_implements($this->typeClass), true);
@@ -98,6 +102,7 @@ abstract class AbstractAttributeTypeFactory implements IAttributeTypeFactory
      *
      * @return bool
      */
+    #[\Override]
     public function isSimpleType()
     {
         return \in_array('MetaModels\Attribute\ISimple', (array) \class_implements($this->typeClass), true);
@@ -108,6 +113,7 @@ abstract class AbstractAttributeTypeFactory implements IAttributeTypeFactory
      *
      * @return bool
      */
+    #[\Override]
     public function isComplexType()
     {
         return \in_array('MetaModels\Attribute\IComplex', (array) \class_implements($this->typeClass), true);

@@ -174,6 +174,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function valueToWidget($varValue)
     {
         return $varValue['value'] ?? null;
@@ -184,6 +185,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function widgetToValue($varValue, $itemId)
     {
         return [
@@ -196,6 +198,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getDataFor($arrIds)
     {
         $strActiveLanguage = $this->getActiveLanguage();
@@ -252,6 +255,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function setDataFor($arrValues)
     {
         foreach ($this->determineLanguages() as $strLangCode) {
@@ -262,6 +266,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function unsetDataFor($arrIds)
     {
         foreach ($this->determineLanguages() as $strLangCode) {
@@ -272,6 +277,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function searchFor($strPattern)
     {
         // Search at active language and return findings.
@@ -295,6 +301,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function searchForInLanguages($strPattern, $arrLanguages = [])
     {
         if (empty($optionizer = $this->getOptionizer())) {
@@ -321,6 +328,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function sortIds($idList, $strDirection)
     {
         $queryBuilder = $this->connection->createQueryBuilder();
@@ -359,6 +367,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getFilterOptions($idList, $usedOnly, &$arrCount = null)
     {
         $queryBuilder = $this->connection->createQueryBuilder()
@@ -381,6 +390,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function setTranslatedDataFor($arrValues, $strLangCode)
     {
         if ('' === $strLangCode) {
@@ -448,6 +458,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getTranslatedDataFor($arrIds, $strLangCode)
     {
         if ('' === $strLangCode) {
@@ -471,6 +482,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function unsetValueFor($arrIds, $strLangCode)
     {
         if ('' === $strLangCode) {

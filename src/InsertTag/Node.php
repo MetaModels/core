@@ -44,6 +44,7 @@ final class Node implements IteratorAggregate, NodeInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getIterator(): Traversable
     {
         foreach ($this->parts as $part) {
@@ -54,6 +55,7 @@ final class Node implements IteratorAggregate, NodeInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function asString(): string
     {
         return '{{' . \array_reduce(

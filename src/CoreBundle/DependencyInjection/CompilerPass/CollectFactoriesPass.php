@@ -48,6 +48,7 @@ class CollectFactoriesPass implements CompilerPassInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function process(ContainerBuilder $container): void
     {
         $this->collectAttributeFactories($container);

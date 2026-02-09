@@ -83,6 +83,7 @@ class AttributeFactory implements IAttributeFactory
      *
      * @deprecated The service container will get removed, use the symfony service container instead.
      */
+    #[\Override]
     public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer, $deprecationNotice = true)
     {
         if ($deprecationNotice) {
@@ -123,6 +124,7 @@ class AttributeFactory implements IAttributeFactory
      *
      * @deprecated The service container will get removed, use the symfony service container instead.
      */
+    #[\Override]
     public function getServiceContainer()
     {
         // @codingStandardsIgnoreStart
@@ -146,6 +148,7 @@ class AttributeFactory implements IAttributeFactory
      *
      * @return IAttribute|null
      */
+    #[\Override]
     public function createAttribute($information, $metaModel)
     {
         $event = new CreateAttributeEvent($information, $metaModel);
@@ -172,6 +175,7 @@ class AttributeFactory implements IAttributeFactory
      *
      * @throws \RuntimeException When the type is already registered.
      */
+    #[\Override]
     public function addTypeFactory(IAttributeTypeFactory $typeFactory)
     {
         $typeName = $typeFactory->getTypeName();
@@ -187,6 +191,7 @@ class AttributeFactory implements IAttributeFactory
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getTypeFactory($typeFactory)
     {
         return $this->typeFactories[$typeFactory] ?? null;
@@ -195,6 +200,7 @@ class AttributeFactory implements IAttributeFactory
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function attributeTypeMatchesFlags($factory, $flags)
     {
         $factory = $this->getTypeFactory($factory);
@@ -215,6 +221,7 @@ class AttributeFactory implements IAttributeFactory
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getTypeNames($flags = false)
     {
         if ($flags === false) {
@@ -236,6 +243,7 @@ class AttributeFactory implements IAttributeFactory
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function collectAttributeInformation(IMetaModel $metaModel)
     {
         $event = new CollectMetaModelAttributeInformationEvent($metaModel);
@@ -248,6 +256,7 @@ class AttributeFactory implements IAttributeFactory
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function createAttributesForMetaModel($metaModel)
     {
         $attributes = array();
@@ -264,6 +273,7 @@ class AttributeFactory implements IAttributeFactory
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getIconForType($type)
     {
         return isset($this->typeFactories[$type]) ? $this->typeFactories[$type]->getTypeIcon() : '';

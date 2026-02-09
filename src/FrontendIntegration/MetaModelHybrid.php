@@ -184,6 +184,7 @@ abstract class MetaModelHybrid extends Hybrid
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      * @throws \Doctrine\DBAL\Exception
      */
+    #[\Override]
     public function generate()
     {
         $scopeMatcher = System::getContainer()->get('contao.routing.scope_matcher');

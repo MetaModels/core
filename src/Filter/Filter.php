@@ -80,6 +80,7 @@ class Filter implements IFilter
      *
      * @return Filter|IFilter
      */
+    #[\Override]
     public function createCopy()
     {
         return clone $this;
@@ -88,6 +89,7 @@ class Filter implements IFilter
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function addFilterRule(IFilterRule $objFilterRule)
     {
         // Reset matches as they are most likely invalid now.
@@ -101,6 +103,7 @@ class Filter implements IFilter
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getMatchingIds()
     {
         if ($this->arrMatches !== null) {

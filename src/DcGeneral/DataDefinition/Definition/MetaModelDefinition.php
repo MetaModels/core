@@ -45,6 +45,7 @@ class MetaModelDefinition implements IMetaModelDefinition
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function setActiveRenderSetting($renderSettingId)
     {
         $this->activeRenderSetting = $renderSettingId;
@@ -55,6 +56,7 @@ class MetaModelDefinition implements IMetaModelDefinition
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function hasActiveRenderSetting()
     {
         return isset($this->activeRenderSetting);
@@ -63,6 +65,7 @@ class MetaModelDefinition implements IMetaModelDefinition
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getActiveRenderSetting()
     {
         return $this->activeRenderSetting;
@@ -71,6 +74,7 @@ class MetaModelDefinition implements IMetaModelDefinition
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function setActiveInputScreen($renderSettingId)
     {
         $this->activeInputScreen = $renderSettingId;
@@ -81,6 +85,7 @@ class MetaModelDefinition implements IMetaModelDefinition
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function hasActiveInputScreen()
     {
         return isset($this->activeInputScreen);
@@ -89,6 +94,7 @@ class MetaModelDefinition implements IMetaModelDefinition
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getActiveInputScreen()
     {
         return $this->activeInputScreen;

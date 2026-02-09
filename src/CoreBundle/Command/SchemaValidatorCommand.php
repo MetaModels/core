@@ -60,12 +60,14 @@ class SchemaValidatorCommand extends Command
         parent::__construct('metamodels:schema-update');
     }
 
+    #[\Override]
     protected function configure(): void
     {
         parent::configure();
         $this->addOption('force', null, InputOption::VALUE_NONE, 'Perform the update');
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->generator->generate($information = new SchemaInformation(), $this->collector->getCollection());

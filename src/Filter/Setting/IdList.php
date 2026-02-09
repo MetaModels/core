@@ -33,6 +33,7 @@ class IdList extends Simple
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function prepareRules(IFilter $objFilter, $arrFilterUrl)
     {
         if ($this->get('items')) {

@@ -47,12 +47,11 @@ class FactoryTest extends TestCase
         $dispatcher
             ->expects(self::exactly(1))
             ->method('dispatch')
-            ->withConsecutive(
-                [
-                    self::isInstanceOf(CreateMetaModelEvent::class),
-                    self::equalTo(CreateMetaModelEvent::NAME)
-                ]
-            );
+            ->willReturnCallback(function (object $event, string $name) {
+                self::assertInstanceOf(CreateMetaModelEvent::class, $event);
+                self::assertSame(CreateMetaModelEvent::NAME, $name);
+                return $event;
+            });
 
         $factory->getMetaModel('mm_test');
     }

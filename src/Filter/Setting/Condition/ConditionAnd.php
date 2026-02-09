@@ -35,6 +35,7 @@ class ConditionAnd extends WithChildren
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function prepareRules(IFilter $objFilter, $arrFilterUrl)
     {
         $objSubFilter = new Filter($this->getMetaModel());

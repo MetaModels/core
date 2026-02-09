@@ -61,6 +61,7 @@ class Simple implements ISimple
      *
      * @return ISimple
      */
+    #[\Override]
     public function setParent($parent)
     {
         $this->parent = $parent;
@@ -73,6 +74,7 @@ class Simple implements ISimple
      *
      * @return ICollection
      */
+    #[\Override]
     public function getParent()
     {
         if (null === $this->parent) {
@@ -89,6 +91,7 @@ class Simple implements ISimple
      *
      * @return mixed|null The value or null if not set.
      */
+    #[\Override]
     public function get($strName)
     {
         return isset($this->arrBase[$strName]) ? $this->arrBase[$strName] : null;
@@ -102,6 +105,7 @@ class Simple implements ISimple
      *
      * @return ISimple The setting itself.
      */
+    #[\Override]
     public function set($strName, $varSetting)
     {
         $this->arrBase[$strName] = $varSetting;
@@ -113,6 +117,7 @@ class Simple implements ISimple
      *
      * @return string[]
      */
+    #[\Override]
     public function getKeys()
     {
         return \array_keys($this->arrBase);

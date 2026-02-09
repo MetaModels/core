@@ -35,6 +35,7 @@ abstract class AbstractAttributeTypeSchemaGenerator implements DoctrineSchemaGen
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function generate(DoctrineSchemaInformation $schema, MetaModelCollectionInterface $collection): void
     {
         $typeName = $this->getTypeName();

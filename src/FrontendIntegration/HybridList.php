@@ -57,6 +57,7 @@ class HybridList extends MetaModelHybrid
      *
      * @return string
      */
+    #[\Override]
     public function generate()
     {
         // Fallback template.
@@ -106,6 +107,7 @@ class HybridList extends MetaModelHybrid
      *
      * @return void
      */
+    #[\Override]
     protected function compile()
     {
         $objItemRenderer = new ItemList();

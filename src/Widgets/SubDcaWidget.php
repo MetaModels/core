@@ -134,6 +134,7 @@ class SubDcaWidget extends Widget
      *
      * @return void
      */
+    #[\Override]
     public function __set($strKey, $varValue)
     {
         switch ($strKey) {
@@ -502,6 +503,7 @@ class SubDcaWidget extends Widget
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
+    #[\Override]
     protected function validator($varInput)
     {
         $blnHasError = false;
@@ -599,6 +601,7 @@ class SubDcaWidget extends Widget
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
+    #[\Override]
     public function generate()
     {
         $GLOBALS['TL_CSS'][] = '/bundles/metamodelscore/css/style.css';

@@ -41,6 +41,7 @@ class IsVariantAttribute implements PropertyConditionInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function match(
         ModelInterface $model = null,
         PropertyValueBag $input = null,
@@ -64,6 +65,7 @@ class IsVariantAttribute implements PropertyConditionInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function __clone()
     {
     }

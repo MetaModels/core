@@ -61,6 +61,7 @@ class InputScreenGroupingAndSorting implements IInputScreenGroupingAndSorting
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getMetaModel()
     {
         return $this->inputScreen->getMetaModel();
@@ -69,6 +70,7 @@ class InputScreenGroupingAndSorting implements IInputScreenGroupingAndSorting
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getRenderGroupType()
     {
         if ($this->isManualSorting()) {
@@ -81,6 +83,7 @@ class InputScreenGroupingAndSorting implements IInputScreenGroupingAndSorting
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getRenderGroupLength()
     {
         return (string) $this->data['rendergrouplen'];
@@ -89,6 +92,7 @@ class InputScreenGroupingAndSorting implements IInputScreenGroupingAndSorting
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getRenderGroupAttribute()
     {
         if (!empty($this->data['rendergroupattr'])) {
@@ -105,6 +109,7 @@ class InputScreenGroupingAndSorting implements IInputScreenGroupingAndSorting
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getRenderSortDirection()
     {
         return $this->data['rendersort'];
@@ -113,6 +118,7 @@ class InputScreenGroupingAndSorting implements IInputScreenGroupingAndSorting
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getRenderSortAttribute()
     {
         if (!empty($this->data['rendersortattr'])) {
@@ -129,6 +135,7 @@ class InputScreenGroupingAndSorting implements IInputScreenGroupingAndSorting
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function isManualSorting()
     {
         return (bool) $this->data['ismanualsort'];
@@ -137,6 +144,7 @@ class InputScreenGroupingAndSorting implements IInputScreenGroupingAndSorting
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function isDefault()
     {
         return (bool) $this->data['isdefault'];
@@ -145,6 +153,7 @@ class InputScreenGroupingAndSorting implements IInputScreenGroupingAndSorting
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getName()
     {
         return $this->data['name'];
