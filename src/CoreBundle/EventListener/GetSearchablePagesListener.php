@@ -356,7 +356,15 @@ class GetSearchablePagesListener
     {
         $url = new UrlBuilder();
         // Set the domain (see contao/core#6421)
-        $url->setHost($pageDetails['domain'] ?: Environment::get('host'));
+        $host = $pageDetails['domain'] ?: Environment::get('httpHost');
+        if (
+            1 === preg_match('/^([^:]+):([\d]+)$/', $host, $matches)
+            && '' !== $matches[2]
+        ) {
+            $url->setPort((int) $matches[2]);
+            $host = $matches[1];
+        }
+        $url->setHost($host);
         $url->setScheme($pageDetails['rootUseSSL'] ? 'https' : 'http');
 
         // Get the path.
@@ -369,7 +377,8 @@ class GetSearchablePagesListener
                 true
             );
             $this->dispatcher->dispatch($event, ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL);
-            $url->setPath($event->getUrl());
+            $tempUrl = new UrlBuilder($event->getUrl());
+            $url->setPath($tempUrl->getPath());
         } else {
             $url->setPath($path);
         }
