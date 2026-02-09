@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2025 The MetaModels team.
+ * (c) 2012-2026 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -21,7 +21,7 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2025 The MetaModels team.
+ * @copyright  2012-2026 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -166,6 +166,7 @@ class MetaModel implements IMetaModel
      *
      * @deprecated Inject services via constructor or setter.
      */
+    #[\Override]
     public function getServiceContainer()
     {
         // @codingStandardsIgnoreStart
@@ -254,6 +255,7 @@ class MetaModel implements IMetaModel
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function addAttribute(IAttribute $objAttribute)
     {
         if ($objAttribute instanceof ITranslated && !$this instanceof ITranslatedMetaModel) {
@@ -279,6 +281,7 @@ class MetaModel implements IMetaModel
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function hasAttribute($strAttributeName)
     {
         return \array_key_exists($strAttributeName, $this->arrAttributes);
@@ -385,11 +388,37 @@ class MetaModel implements IMetaModel
             }
         }
 
+        return $this->getMatchingIdsAuthoritative($objFilter);
+    }
+
+    /**
+     * Narrow down the list of Ids that match the given filter.
+     *
+     * @param IFilter|null $objFilter The filter to search the matching ids for.
+     *
+     * @return list<string> all matching Ids.
+     */
+    protected function getMatchingIdsAuthoritative(?IFilter $objFilter): array
+    {
+        $builder = $this->getConnection()->createQueryBuilder();
+        $builder
+            ->select('t.id')
+            ->from($this->getTableName(), 't');
+
+        if ($objFilter) {
+            $arrFilteredIds = $objFilter->getMatchingIds();
+            if ($arrFilteredIds !== null) {
+                $builder
+                    ->where($builder->expr()->in('t.id', ':values'))
+                    ->setParameter('values', $arrFilteredIds, ArrayParameterType::STRING);
+            }
+        }
+
+        // FIXME: Cache list is possible, if cachable filter interface is implemented by all filter rules.
+
         // Either no filter object or all ids allowed => return all ids.
         // if no id filter is passed, we assume all ids are provided.
-        return $this->getConnection()->createQueryBuilder()
-            ->select('t.id')
-            ->from($this->getTableName(), 't')
+        return $builder
             ->executeQuery()
             ->fetchFirstColumn();
     }
@@ -609,6 +638,7 @@ class MetaModel implements IMetaModel
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function get($strKey)
     {
         // Try to retrieve via getter method.
@@ -628,6 +658,7 @@ class MetaModel implements IMetaModel
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getTableName()
     {
         return ($this->arrData['tableName'] ?? '');
@@ -636,6 +667,7 @@ class MetaModel implements IMetaModel
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getName()
     {
         return $this->arrData['name'];
@@ -644,6 +676,7 @@ class MetaModel implements IMetaModel
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getAttributes()
     {
         return $this->arrAttributes;
@@ -652,6 +685,7 @@ class MetaModel implements IMetaModel
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getInVariantAttributes()
     {
         $arrAttributes = $this->getAttributes();
@@ -674,6 +708,7 @@ class MetaModel implements IMetaModel
      *
      * @deprecated Please implement ITranslatedMetaModel instead.
      */
+    #[\Override]
     public function isTranslated(bool $deprecation = true)
     {
         if (!$deprecation) {
@@ -684,7 +719,7 @@ class MetaModel implements IMetaModel
             // @codingStandardsIgnoreStart
             @\trigger_error(
                 \sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
-                    'Please use "instanceof \MetaModels\ITranslatedMetaModel" instead.', __METHOD__),
+                         'Please use "instanceof \MetaModels\ITranslatedMetaModel" instead.', __METHOD__),
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
@@ -710,7 +745,7 @@ class MetaModel implements IMetaModel
         // @codingStandardsIgnoreStart
         @\trigger_error(
             \sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
-                'Please use "instanceof \MetaModels\ITranslatedMetaModel" instead.', __METHOD__),
+                     'Please use "instanceof \MetaModels\ITranslatedMetaModel" instead.', __METHOD__),
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
@@ -721,6 +756,7 @@ class MetaModel implements IMetaModel
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function hasVariants()
     {
         return $this->arrData['varsupport'];
@@ -731,13 +767,14 @@ class MetaModel implements IMetaModel
      *
      * @deprecated Please implement ITranslatedMetaModel instead.
      */
+    #[\Override]
     public function getAvailableLanguages()
     {
         if ($this instanceof ITranslatedMetaModel) {
             // @codingStandardsIgnoreStart
             @\trigger_error(
                 \sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
-                    'Please use "\MetaModels\ITranslatedMetaModel::getLanguages" instead.', __METHOD__),
+                         'Please use "\MetaModels\ITranslatedMetaModel::getLanguages" instead.', __METHOD__),
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
@@ -749,8 +786,8 @@ class MetaModel implements IMetaModel
             // @codingStandardsIgnoreStart
             @\trigger_error(
                 \sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
-                    'Please test for "instanceof "\MetaModels\ITranslatedMetaModel" and use '.
-                    '"\MetaModels\ITranslatedMetaModel::getLanguages" instead.', __METHOD__),
+                         'Please test for "instanceof "\MetaModels\ITranslatedMetaModel" and use '.
+                         '"\MetaModels\ITranslatedMetaModel::getLanguages" instead.', __METHOD__),
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
@@ -760,7 +797,7 @@ class MetaModel implements IMetaModel
         // @codingStandardsIgnoreStart
         @\trigger_error(
             \sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
-                'Please test for "instanceof \MetaModels\ITranslatedMetaModel".', __METHOD__),
+                     'Please test for "instanceof \MetaModels\ITranslatedMetaModel".', __METHOD__),
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
@@ -773,13 +810,14 @@ class MetaModel implements IMetaModel
      *
      * @deprecated Please implement ITranslatedMetaModel instead.
      */
+    #[\Override]
     public function getFallbackLanguage()
     {
         if ($this instanceof ITranslatedMetaModel) {
             // @codingStandardsIgnoreStart
             @\trigger_error(
                 \sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
-                    'Please use "\MetaModels\ITranslatedMetaModel::getMainLanguage" instead.', __METHOD__),
+                         'Please use "\MetaModels\ITranslatedMetaModel::getMainLanguage" instead.', __METHOD__),
                 E_USER_DEPRECATED
             );
 
@@ -791,8 +829,8 @@ class MetaModel implements IMetaModel
             // @codingStandardsIgnoreStart
             @\trigger_error(
                 \sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
-                    'Please implement interface "\MetaModels\ITranslatedMetaModel" and use ' .
-                    '"\MetaModels\ITranslatedMetaModel::getMainLanguage" instead.', __METHOD__),
+                         'Please implement interface "\MetaModels\ITranslatedMetaModel" and use ' .
+                         '"\MetaModels\ITranslatedMetaModel::getMainLanguage" instead.', __METHOD__),
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
@@ -805,8 +843,8 @@ class MetaModel implements IMetaModel
         // @codingStandardsIgnoreStart
         @\trigger_error(
             \sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
-                'Please test for translations via "instanceof \MetaModels\ITranslatedMetaModel" and call ' .
-                '"\MetaModels\ITranslatedMetaModel::getMainLanguage" instead.', __METHOD__),
+                     'Please test for translations via "instanceof \MetaModels\ITranslatedMetaModel" and call ' .
+                     '"\MetaModels\ITranslatedMetaModel::getMainLanguage" instead.', __METHOD__),
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
@@ -824,14 +862,15 @@ class MetaModel implements IMetaModel
      *
      * @deprecated Please implement ITranslatedMetaModel instead.
      */
+    #[\Override]
     public function getActiveLanguage()
     {
         if ($this instanceof ITranslatedMetaModel) {
             // @codingStandardsIgnoreStart
             @\trigger_error(
                 \sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
-                    'Please use "\MetaModels\ITranslatedMetaModel::getLanguage" and ' .
-                    '"\MetaModels\ITranslatedMetaModel::selectLanguage" instead.', __METHOD__),
+                         'Please use "\MetaModels\ITranslatedMetaModel::getLanguage" and ' .
+                         '"\MetaModels\ITranslatedMetaModel::selectLanguage" instead.', __METHOD__),
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
@@ -839,7 +878,7 @@ class MetaModel implements IMetaModel
             // @codingStandardsIgnoreStart
             @\trigger_error(
                 \sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
-                    'Please use "\MetaModels\ITranslatedMetaModel::getLanguage" instead.', __METHOD__),
+                         'Please use "\MetaModels\ITranslatedMetaModel::getLanguage" instead.', __METHOD__),
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
@@ -852,6 +891,7 @@ class MetaModel implements IMetaModel
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getAttribute($strAttributeName)
     {
         $arrAttributes = $this->getAttributes();
@@ -862,6 +902,7 @@ class MetaModel implements IMetaModel
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getAttributeById($intId)
     {
         foreach ($this->getAttributes() as $objAttribute) {
@@ -900,6 +941,7 @@ class MetaModel implements IMetaModel
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function findById($intId, $arrAttrOnly = [])
     {
         if (!$intId) {
@@ -917,6 +959,7 @@ class MetaModel implements IMetaModel
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function findByFilter(
         $objFilter,
         $strSortBy = '',
@@ -942,6 +985,7 @@ class MetaModel implements IMetaModel
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
+    #[\Override]
     public function getIdsFromFilter($objFilter, $strSortBy = '', $intOffset = 0, $intLimit = 0, $strSortOrder = 'ASC')
     {
         if ([] === $arrFilteredIds = \array_values(\array_filter($this->getMatchingIds($objFilter)))) {
@@ -974,6 +1018,7 @@ class MetaModel implements IMetaModel
                     return \array_values($cacheResult);
                 }
 
+                // FIXME: implementation incomplete! Came with 2.0.5.
                 // Merge the already known and the new one.
                 $fullIdList = \array_merge((array) $this->existingIds[$sortKey], $arrFilteredIds);
                 $fullIdList = \array_keys(\array_flip($fullIdList));
@@ -1008,27 +1053,18 @@ class MetaModel implements IMetaModel
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getCount($objFilter)
     {
-        $arrFilteredIds = $this->getMatchingIds($objFilter);
-        if (0 === \count($arrFilteredIds)) {
-            return 0;
-        }
+        $arrFilteredIds = $this->getMatchingIdsAuthoritative($objFilter);
 
-        $builder = $this->getConnection()->createQueryBuilder();
-
-        return (int) $builder
-            ->select('COUNT(t.id)')
-            ->from($this->getTableName(), 't')
-            ->where($builder->expr()->in('t.id', ':values'))
-            ->setParameter('values', $arrFilteredIds, ArrayParameterType::STRING)
-            ->executeQuery()
-            ->fetchOne();
+        return \count($arrFilteredIds);
     }
 
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function findVariantBase($objFilter)
     {
         $objNewFilter = $this->copyFilter($objFilter);
@@ -1050,6 +1086,7 @@ class MetaModel implements IMetaModel
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function findVariants($arrIds, $objFilter)
     {
         if (!$arrIds) {
@@ -1077,6 +1114,7 @@ class MetaModel implements IMetaModel
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function findVariantsWithBase($arrIds, $objFilter)
     {
         if (!$arrIds) {
@@ -1104,6 +1142,7 @@ class MetaModel implements IMetaModel
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getAttributeOptions($strAttribute, $objFilter = null)
     {
         $objAttribute = $this->getAttribute($strAttribute);
@@ -1268,6 +1307,7 @@ class MetaModel implements IMetaModel
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function saveItem($objItem, $timestamp = null)
     {
         if (null === $timestamp) {
@@ -1289,8 +1329,8 @@ class MetaModel implements IMetaModel
             // @codingStandardsIgnoreStart
             @\trigger_error(
                 \sprintf('Support for translated MetaModels not implementing "\MetaModels\ITranslatedMetaModel" '.
-                    'is %s deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
-                    'Please implement interface "\MetaModels\ITranslatedMetaModel".', __METHOD__),
+                         'is %s deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
+                         'Please implement interface "\MetaModels\ITranslatedMetaModel".', __METHOD__),
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
@@ -1322,6 +1362,7 @@ class MetaModel implements IMetaModel
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function delete(IItem $objItem)
     {
         $arrIds = [$objItem->get('id')];
@@ -1355,6 +1396,7 @@ class MetaModel implements IMetaModel
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getEmptyFilter()
     {
         return new Filter($this);
@@ -1363,6 +1405,7 @@ class MetaModel implements IMetaModel
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function prepareFilter($intFilterSettings, $arrFilterUrl)
     {
         // @codingStandardsIgnoreStart
@@ -1385,6 +1428,7 @@ class MetaModel implements IMetaModel
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getView($intViewId = 0)
     {
         // @codingStandardsIgnoreStart
@@ -1399,12 +1443,7 @@ class MetaModel implements IMetaModel
         return $this->getServiceContainer()->getRenderSettingFactory()->createCollection($this, (string) $intViewId);
     }
 
-    /**
-     * Obtain the doctrine connection.
-     *
-     * @return Connection
-     */
-    private function getConnection()
+    private function getConnection(): Connection
     {
         return $this->connection;
     }

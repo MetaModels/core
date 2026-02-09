@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2026 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,13 +13,15 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2021 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2026 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\Test;
 
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\Expression\ExpressionBuilder;
 use Doctrine\DBAL\Query\QueryBuilder;
@@ -99,7 +101,6 @@ class MetaModelsTest extends TestCase
         );
 
         $reflection = new \ReflectionMethod($metaModel, 'buildDatabaseParameterList');
-        $reflection->setAccessible(true);
         self::assertEquals('?', $reflection->invoke($metaModel, [1]));
         self::assertEquals('?,?', $reflection->invoke($metaModel, [1, 2]));
         self::assertEquals('?,?,?,?,?,?', $reflection->invoke($metaModel, [1, 2, 'fooo', 'bar', null, 'test']));
@@ -159,7 +160,7 @@ class MetaModelsTest extends TestCase
                     $builder
                         ->expects($this->once())
                         ->method('setParameter')
-                        ->with('values', [1], Connection::PARAM_STR_ARRAY)
+                        ->with('values', [1], ArrayParameterType::STRING)
                         ->willReturn($builder);
 
                     $builder
@@ -278,7 +279,7 @@ class MetaModelsTest extends TestCase
                         $builder
                             ->expects($this->once())
                             ->method('setParameter')
-                            ->with('values', [4, 3, 2, 1], Connection::PARAM_STR_ARRAY)
+                            ->with('values', [4, 3, 2, 1], ArrayParameterType::STRING)
                             ->willReturn($builder);
 
                         $builder
@@ -366,7 +367,7 @@ class MetaModelsTest extends TestCase
                         $builder
                             ->expects($this->once())
                             ->method('setParameter')
-                            ->with('values', [4, 3, 2, 1], Connection::PARAM_STR_ARRAY)
+                            ->with('values', [4, 3, 2, 1], ArrayParameterType::STRING)
                             ->willReturn($builder);
 
                         $builder
@@ -409,7 +410,7 @@ class MetaModelsTest extends TestCase
     {
         $metaModel = $this
             ->getMockBuilder(MetaModel::class)
-            ->onlyMethods(['getMatchingIds'])
+            ->onlyMethods(['getMatchingIdsAuthoritative'])
             ->setConstructorArgs(
                 [
                     ['tableName' => 'mm_test_retrieve'],
@@ -420,7 +421,7 @@ class MetaModelsTest extends TestCase
             ->getMock();
         $metaModel
             ->expects(self::once())
-            ->method('getMatchingIds')
+            ->method('getMatchingIdsAuthoritative')
             ->willReturn([]);
 
         /** @var MetaModel $metaModel */
@@ -433,71 +434,16 @@ class MetaModelsTest extends TestCase
     public function testGetCountForNonEmptyList(): void
     {
         $metaModel = $this->getMockBuilder(MetaModel::class)
-            ->onlyMethods(['getMatchingIds'])
+            ->onlyMethods(['getMatchingIdsAuthoritative'])
             ->setConstructorArgs([
                 ['tableName' => 'mm_test_retrieve'],
                 $this->getMockForAbstractClass(EventDispatcherInterface::class),
-                $this->mockConnection(
-                    (function () {
-                        $builder = $this
-                            ->getMockBuilder(QueryBuilder::class)
-                            ->disableOriginalConstructor()
-                            ->getMock();
-                        $builder
-                            ->expects($this->once())
-                            ->method('select')
-                            ->with('COUNT(t.id)')
-                            ->willReturn($builder);
-                        $builder
-                            ->expects($this->once())
-                            ->method('from')
-                            ->with('mm_test_retrieve', 't')
-                            ->willReturn($builder);
-
-                        $expr = $this
-                            ->getMockBuilder(ExpressionBuilder::class)
-                            ->disableOriginalConstructor()
-                            ->onlyMethods([])
-                            ->getMock();
-
-                        $builder
-                            ->expects($this->once())
-                            ->method('expr')
-                            ->willReturn($expr);
-
-                        $builder
-                            ->expects($this->once())
-                            ->method('where')
-                            ->with('t.id IN (:values)')
-                            ->willReturn($builder);
-
-                        $builder
-                            ->expects($this->once())
-                            ->method('setParameter')
-                            ->with('values', [4, 3, 2, 1], Connection::PARAM_STR_ARRAY)
-                            ->willReturn($builder);
-
-                        $result = $this
-                            ->getMockBuilder(Result::class)
-                            ->disableOriginalConstructor()
-                            ->getMock();
-                        $result
-                            ->expects($this->once())
-                            ->method('fetchOne')
-                            ->willReturn(4);
-                        $builder
-                            ->expects($this->once())
-                            ->method('executeQuery')
-                            ->willReturn($result);
-
-                        return $builder;
-                    })->__invoke()
-                )
+                $this->mockConnection()
             ])
             ->getMock();
         $metaModel
             ->expects(self::once())
-            ->method('getMatchingIds')
+            ->method('getMatchingIdsAuthoritative')
             ->willReturn([4, 3, 2, 1]);
 
         self::assertEquals(4, $metaModel->getCount($metaModel->getEmptyFilter()));
