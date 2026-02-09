@@ -70,7 +70,7 @@ jobs:
 
       - name: Upload build directory to artifact
         uses: actions/upload-artifact@v4
-        if: ${{ success() }} || ${{ failure() }}
+        if: success() || failure()
         with:
           name: phpcq-builds-php-${{ matrix.php }}-${{ matrix.contao }}
           path: .phpcq/build/
