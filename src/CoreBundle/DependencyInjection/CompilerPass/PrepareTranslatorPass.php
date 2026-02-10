@@ -39,6 +39,7 @@ final class PrepareTranslatorPass implements CompilerPassInterface
 
     public const TAG_NAME = 'metamodels.translation-loader';
 
+    #[\Override]
     public function process(ContainerBuilder $container): void
     {
         $definition = $container->getDefinition('translator.default');

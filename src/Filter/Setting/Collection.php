@@ -72,6 +72,7 @@ class Collection implements ICollection
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function get($key)
     {
         return ($this->arrData[$key] ?? null);
@@ -98,6 +99,7 @@ class Collection implements ICollection
      *
      * @throws \RuntimeException When the MetaModel can not be determined.
      */
+    #[\Override]
     public function getMetaModel()
     {
         if (null === $this->metaModel) {
@@ -124,6 +126,7 @@ class Collection implements ICollection
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function addRules(IFilter $objFilter, $arrFilterUrl, $arrIgnoredFilter = array())
     {
         foreach ($this->arrSettings as $objSetting) {
@@ -139,6 +142,7 @@ class Collection implements ICollection
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function generateFilterUrlFrom(IItem $objItem, IRenderSettings $objRenderSetting)
     {
         $filterUrl = [];
@@ -152,6 +156,7 @@ class Collection implements ICollection
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getParameters()
     {
         $parameters = [];
@@ -165,6 +170,7 @@ class Collection implements ICollection
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getParameterDCA()
     {
         $parameters = [];
@@ -178,6 +184,7 @@ class Collection implements ICollection
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getParameterFilterNames()
     {
         $parameters = [];
@@ -195,6 +202,7 @@ class Collection implements ICollection
      *
      * @SuppressWarnings(PHPMD.LongVariable)
      */
+    #[\Override]
     public function getParameterFilterWidgets(
         $arrFilterUrl,
         $arrJumpTo,
@@ -236,6 +244,7 @@ class Collection implements ICollection
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getReferencedAttributes()
     {
         $attributes = [];

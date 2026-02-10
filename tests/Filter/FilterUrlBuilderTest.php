@@ -22,16 +22,15 @@ namespace MetaModels\Test\Filter;
 
 use MetaModels\Filter\FilterUrl;
 use MetaModels\Filter\FilterUrlBuilder;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-/**
- * This tests the filter url class.
- *
- * @covers \MetaModels\Filter\FilterUrlBuilder
- */
+/** This tests the filter url class. */
+#[CoversClass(FilterUrlBuilder::class)]
 class FilterUrlBuilderTest extends TestCase
 {
     /**
@@ -39,7 +38,7 @@ class FilterUrlBuilderTest extends TestCase
      *
      * @return array
      */
-    public function generateProvider(): array
+    public static function generateProvider(): array
     {
         return [
             'test generating'   => [
@@ -101,9 +100,8 @@ class FilterUrlBuilderTest extends TestCase
      * @param string $requestUrl         The current URL.
      *
      * @return void
-     *
-     * @dataProvider generateProvider
      */
+    #[DataProvider('generateProvider')]
     public function testGenerate(
         string $expectedUrl,
         array $expectedParameters,
@@ -124,7 +122,7 @@ class FilterUrlBuilderTest extends TestCase
             ->getMock();
 
         $generator
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('generate')
             ->with($expectedUrl, $expectedParameters)
             ->willReturn('success');
@@ -150,7 +148,7 @@ class FilterUrlBuilderTest extends TestCase
             ->getMock();
 
         $generator
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('generate')
             ->with('tl_page.42', ['get2' => 'value', 'get-param' => 'get-value', 'parameters' => '/auto/slug/sluggy'])
             ->willReturn('success');

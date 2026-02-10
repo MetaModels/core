@@ -180,14 +180,14 @@ class ModelToLabelListener extends AbstractListener
         assert($metaModel instanceof IMetaModel);
         if (\is_array($legend = StringUtil::deserialize($model->getProperty('legendtitle')))) {
             /** @psalm-suppress DeprecatedMethod */
-            foreach ([$metaModel->getActiveLanguage(), $metaModel->getFallbackLanguage()] as $language) {
-                if (\array_key_exists($language ?? '', $legend) && !empty($legend[$language])) {
+            foreach ([$metaModel->getActiveLanguage(), (string) $metaModel->getFallbackLanguage()] as $language) {
+                if (\array_key_exists($language, $legend) && !empty($legend[$language])) {
                     $legend = $legend[$language];
                     break;
                 }
             }
         }
-        if (null === $legend) {
+        if (!\is_string($legend)) {
             $legend = 'legend';
         }
 

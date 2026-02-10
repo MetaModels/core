@@ -50,6 +50,7 @@ class DoctrineSchemaGenerator implements SchemaGeneratorInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function generate(SchemaInformation $information, MetaModelCollectionInterface $collection): void
     {
         if (!$information->has(DoctrineSchemaInformation::class)) {

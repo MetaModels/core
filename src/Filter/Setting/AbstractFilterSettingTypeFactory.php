@@ -127,6 +127,7 @@ abstract class AbstractFilterSettingTypeFactory implements IFilterSettingTypeFac
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getTypeName()
     {
         return $this->typeName;
@@ -149,6 +150,7 @@ abstract class AbstractFilterSettingTypeFactory implements IFilterSettingTypeFac
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getTypeIcon()
     {
         return $this->typeIcon;
@@ -157,6 +159,7 @@ abstract class AbstractFilterSettingTypeFactory implements IFilterSettingTypeFac
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function createInstance($information, $filterSettings)
     {
         return new $this->typeClass($filterSettings, $information);
@@ -167,6 +170,7 @@ abstract class AbstractFilterSettingTypeFactory implements IFilterSettingTypeFac
      *
      * @return bool
      */
+    #[\Override]
     public function isNestedType()
     {
         if (null === $this->isNestedType) {
@@ -200,6 +204,7 @@ abstract class AbstractFilterSettingTypeFactory implements IFilterSettingTypeFac
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getMaxChildren()
     {
         return $this->isNestedType() ? $this->maxChildren : 0;
@@ -238,6 +243,7 @@ abstract class AbstractFilterSettingTypeFactory implements IFilterSettingTypeFac
      *
      * @return list<string>|null The list of attribute names or null if no attributes are allowed.
      */
+    #[\Override]
     public function getKnownAttributeTypes()
     {
         return $this->attributeTypes;
@@ -252,6 +258,7 @@ abstract class AbstractFilterSettingTypeFactory implements IFilterSettingTypeFac
      *
      * @throws \LogicException When the filter setting can not handle attributes.
      */
+    #[\Override]
     public function addKnownAttributeType($typeName)
     {
         if (!\is_array($this->attributeTypes)) {

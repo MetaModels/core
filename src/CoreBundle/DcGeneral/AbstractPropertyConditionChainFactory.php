@@ -47,6 +47,7 @@ abstract class AbstractPropertyConditionChainFactory implements NestableProperty
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function buildCondition(array $configuration, IMetaModel $metaModel)
     {
         $children = [];
@@ -71,6 +72,7 @@ abstract class AbstractPropertyConditionChainFactory implements NestableProperty
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function maxChildren()
     {
         return -1;

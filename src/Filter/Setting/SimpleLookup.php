@@ -151,6 +151,7 @@ class SimpleLookup extends Simple
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function prepareRules(IFilter $objFilter, $arrFilterUrl)
     {
         $objMetaModel = $this->getMetaModel();
@@ -181,6 +182,7 @@ class SimpleLookup extends Simple
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function generateFilterUrlFrom(IItem $objItem, IRenderSettings $objRenderSetting)
     {
         if ($attribute = $this->getFilteredAttribute()) {
@@ -195,6 +197,7 @@ class SimpleLookup extends Simple
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getParameters()
     {
         return (null !== ($strParamName = $this->getParamName())) ? [$strParamName] : [];
@@ -206,6 +209,7 @@ class SimpleLookup extends Simple
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
+    #[\Override]
     public function getParameterDCA()
     {
         // If defined as static, return nothing as not to be manipulated via editors.
@@ -238,6 +242,7 @@ class SimpleLookup extends Simple
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getParameterFilterNames()
     {
         if (null !== ($label = $this->getLabel()) && null !== ($paramName = $this->getParamName())) {
@@ -256,6 +261,7 @@ class SimpleLookup extends Simple
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      * @SuppressWarnings(PHPMD.LongVariable)
      */
+    #[\Override]
     public function getParameterFilterWidgets(
         $arrIds,
         $arrFilterUrl,
@@ -321,6 +327,7 @@ class SimpleLookup extends Simple
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getReferencedAttributes()
     {
         if ($attribute = $this->getFilteredAttribute()) {

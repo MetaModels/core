@@ -33,6 +33,7 @@ class PropertyContainAnyOfConditionFactory extends AbstractRestrictedAttributeCo
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function buildCondition(array $configuration, IMetaModel $metaModel)
     {
         $condition = new PropertyContainAnyOfCondition(

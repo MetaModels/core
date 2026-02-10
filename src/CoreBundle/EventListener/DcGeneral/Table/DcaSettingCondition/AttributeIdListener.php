@@ -148,6 +148,7 @@ class AttributeIdListener extends AbstractConditionFactoryUsingListener
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     protected function wantToHandle(AbstractEnvironmentAwareEvent $event)
     {
         if (!parent::wantToHandle($event)) {

@@ -36,6 +36,7 @@ class MetaModelCollection implements MetaModelCollectionInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getNames(): array
     {
         return array_keys($this->metaModels);
@@ -44,6 +45,7 @@ class MetaModelCollection implements MetaModelCollectionInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function all(): array
     {
         return array_values($this->metaModels);
@@ -70,6 +72,7 @@ class MetaModelCollection implements MetaModelCollectionInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function has(string $name): bool
     {
         return array_key_exists($name, $this->metaModels);
@@ -80,6 +83,7 @@ class MetaModelCollection implements MetaModelCollectionInterface
      *
      * @throws \InvalidArgumentException When the MetaModel is not registered.
      */
+    #[\Override]
     public function get(string $name): MetaModelInformationInterface
     {
         if (!$this->has($name)) {
@@ -92,6 +96,7 @@ class MetaModelCollection implements MetaModelCollectionInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getIterator(): \Traversable
     {
         // Cannot "yield from" here as we have the names as key.

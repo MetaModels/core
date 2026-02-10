@@ -72,6 +72,7 @@ class LessThan implements IFilterRule
      *
      * @return list<string>|null
      */
+    #[\Override]
     public function getMatchingIds()
     {
         return $this->objAttribute->filterLessThan($this->varValue, $this->blnInclusive);

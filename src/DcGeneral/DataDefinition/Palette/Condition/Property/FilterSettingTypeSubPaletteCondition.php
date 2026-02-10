@@ -61,6 +61,7 @@ final class FilterSettingTypeSubPaletteCondition implements PropertyConditionInt
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function match(
         ModelInterface $model = null,
         PropertyValueBag $input = null,
@@ -84,6 +85,7 @@ final class FilterSettingTypeSubPaletteCondition implements PropertyConditionInt
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function __clone()
     {
     }

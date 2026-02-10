@@ -64,6 +64,7 @@ class TableCollationMigration extends AbstractMigration
      *
      * @return string
      */
+    #[\Override]
     public function getName(): string
     {
         return \sprintf(
@@ -82,6 +83,7 @@ class TableCollationMigration extends AbstractMigration
      * @return bool
      * @throws Exception
      */
+    #[\Override]
     public function shouldRun(): bool
     {
         $tables = $this->fetchPendingTables();
@@ -98,6 +100,7 @@ class TableCollationMigration extends AbstractMigration
      * @return MigrationResult
      * @throws Exception
      */
+    #[\Override]
     public function run(): MigrationResult
     {
         $tables  = $this->fetchPendingTables();

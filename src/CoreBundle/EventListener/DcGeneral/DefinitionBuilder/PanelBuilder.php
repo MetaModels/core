@@ -75,6 +75,7 @@ class PanelBuilder
      *
      * @return void
      */
+    #[\Override]
     protected function build(IMetaModelDataDefinition $container)
     {
         $this->inputScreen = $this->viewCombination->getScreen($container->getName());

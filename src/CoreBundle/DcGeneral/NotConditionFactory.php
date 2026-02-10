@@ -50,6 +50,7 @@ class NotConditionFactory implements NestablePropertyConditionFactoryInterface
      *
      * @throws \InvalidArgumentException When there are more than one children.
      */
+    #[\Override]
     public function buildCondition(array $configuration, IMetaModel $metaModel)
     {
         // No children, then return "true".
@@ -68,6 +69,7 @@ class NotConditionFactory implements NestablePropertyConditionFactoryInterface
      *
      * @return int
      */
+    #[\Override]
     public function maxChildren()
     {
         return 1;

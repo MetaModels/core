@@ -46,6 +46,7 @@ class SchemaManager implements SchemaManagerInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function preprocess(SchemaInformation $information): void
     {
         // pre process - this may perform data migrations and the like.
@@ -57,6 +58,7 @@ class SchemaManager implements SchemaManagerInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function process(SchemaInformation $information): void
     {
         // process - here the automatic adjustments to the db will be made.
@@ -68,6 +70,7 @@ class SchemaManager implements SchemaManagerInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function postprocess(SchemaInformation $information): void
     {
         // post process - perform any cleanup to be done.
@@ -79,6 +82,7 @@ class SchemaManager implements SchemaManagerInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function validate(SchemaInformation $information): array
     {
         $tasks = [];

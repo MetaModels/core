@@ -135,6 +135,7 @@ class Collection implements ICollection
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function get($strName)
     {
         return $this->arrBase[$strName] ?? null;
@@ -143,6 +144,7 @@ class Collection implements ICollection
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function set($strName, $varSetting)
     {
         $this->arrBase[$strName] = $varSetting;
@@ -153,6 +155,7 @@ class Collection implements ICollection
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getSetting($strAttributeName)
     {
         return ($this->arrSettings[$strAttributeName] ?? null);
@@ -161,6 +164,7 @@ class Collection implements ICollection
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function setSetting($strAttributeName, $objSetting)
     {
         if ($objSetting) {
@@ -175,6 +179,7 @@ class Collection implements ICollection
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getSettingNames()
     {
         return \array_keys($this->arrSettings);
@@ -316,6 +321,7 @@ class Collection implements ICollection
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function buildJumpToUrlFor(IItem $item /**, ?int $referenceType */)
     {
         $information = $this->determineJumpToInformation();

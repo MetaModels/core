@@ -95,6 +95,7 @@ class FilterSettingFactory implements IFilterSettingFactory
      *
      * @deprecated The service container will get removed, use the symfony service container instead.
      */
+    #[\Override]
     public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer, bool $deprecationNotice = true)
     {
         if ($deprecationNotice) {
@@ -130,6 +131,7 @@ class FilterSettingFactory implements IFilterSettingFactory
      *
      * @deprecated The service container will get removed, use the symfony service container instead.
      */
+    #[\Override]
     public function getServiceContainer()
     {
         // @codingStandardsIgnoreStart
@@ -146,6 +148,7 @@ class FilterSettingFactory implements IFilterSettingFactory
      *
      * @throws \RuntimeException When the type is already registered.
      */
+    #[\Override]
     public function addTypeFactory($factory)
     {
         $typeName = $factory->getTypeName();
@@ -160,6 +163,7 @@ class FilterSettingFactory implements IFilterSettingFactory
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getTypeFactory($type)
     {
         return isset($this->typeFactories[$type]) ? $this->typeFactories[$type] : null;
@@ -257,6 +261,7 @@ class FilterSettingFactory implements IFilterSettingFactory
      *
      * @throws \RuntimeException When the MetaModel could not be retrieved.
      */
+    #[\Override]
     public function createCollection($settingId)
     {
         $query = $this->database
@@ -287,6 +292,7 @@ class FilterSettingFactory implements IFilterSettingFactory
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getTypeNames()
     {
         return \array_keys($this->typeFactories);

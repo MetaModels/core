@@ -51,6 +51,7 @@ final class NodeList implements IteratorAggregate, NodeInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getIterator(): Traversable
     {
         foreach ($this->elements as $element) {
@@ -61,6 +62,7 @@ final class NodeList implements IteratorAggregate, NodeInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function asString(): string
     {
         return array_reduce(

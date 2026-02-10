@@ -38,6 +38,7 @@ class ConditionBuilderWithVariants extends AbstractConditionBuilder
      *
      * @return void
      */
+    #[\Override]
     protected function calculate(): void
     {
         // Basic conditions.

@@ -81,6 +81,7 @@ class Factory implements IFactory
      *
      * @psalm-suppress DeprecatedInterface
      */
+    #[\Override]
     public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer, $deprecationNotice = true)
     {
         if ($deprecationNotice) {
@@ -106,6 +107,7 @@ class Factory implements IFactory
      *
      * @psalm-suppress DeprecatedInterface
      */
+    #[\Override]
     public function getServiceContainer()
     {
         if (null === $this->serviceContainer) {
@@ -124,6 +126,7 @@ class Factory implements IFactory
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function translateIdToMetaModelName($metaModelId)
     {
         if (!isset($this->lookupMap[$metaModelId])) {
@@ -144,6 +147,7 @@ class Factory implements IFactory
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getMetaModel($metaModelName)
     {
         $event = new CreateMetaModelEvent($this, $metaModelName);
@@ -156,6 +160,7 @@ class Factory implements IFactory
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function collectNames()
     {
         $event = new CollectMetaModelTableNamesEvent($this);

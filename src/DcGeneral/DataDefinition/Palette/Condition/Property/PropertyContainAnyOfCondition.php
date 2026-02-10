@@ -178,6 +178,7 @@ class PropertyContainAnyOfCondition implements PropertyConditionInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
+    #[\Override]
     public function match(
         ModelInterface $model = null,
         PropertyValueBag $input = null,
@@ -231,6 +232,7 @@ class PropertyContainAnyOfCondition implements PropertyConditionInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function __clone()
     {
     }

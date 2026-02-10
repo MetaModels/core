@@ -51,6 +51,7 @@ class ContaoDatabaseBackedInformationProvider implements InformationProviderInte
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getNames(): array
     {
         if ($this->connection->createSchemaManager()->tablesExist('tl_metamodel')) {
@@ -71,6 +72,7 @@ class ContaoDatabaseBackedInformationProvider implements InformationProviderInte
      *
      * @throws \RuntimeException On error.
      */
+    #[\Override]
     public function getInformationFor(MetaModelInformation $information): void
     {
         $configuration = $this

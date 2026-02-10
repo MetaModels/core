@@ -42,6 +42,7 @@ final class MetaModelsTranslatedSingleResult implements ResultInterface
         return $this->editUrl;
     }
 
+    #[\Override]
     public function getTemplate(): string
     {
         return '@MetaModelsCore/FileUsage/file_usage_translated_single_result.html.twig';

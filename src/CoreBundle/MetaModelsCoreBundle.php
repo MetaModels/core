@@ -37,6 +37,7 @@ class MetaModelsCoreBundle extends Bundle
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function build(ContainerBuilder $container): void
     {
         parent::build($container);

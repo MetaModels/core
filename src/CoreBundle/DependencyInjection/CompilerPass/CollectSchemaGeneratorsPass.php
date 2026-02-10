@@ -38,6 +38,7 @@ class CollectSchemaGeneratorsPass implements CompilerPassInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function process(ContainerBuilder $container): void
     {
         $generator = $container->getDefinition(SchemaGenerator::class);

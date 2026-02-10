@@ -72,6 +72,7 @@ class GreaterThan implements IFilterRule
      *
      * @return list<string>|null
      */
+    #[\Override]
     public function getMatchingIds()
     {
         return $this->objAttribute->filterGreaterThan($this->varValue, $this->blnInclusive);

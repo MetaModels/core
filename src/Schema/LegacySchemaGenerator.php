@@ -61,6 +61,7 @@ class LegacySchemaGenerator implements SchemaGeneratorInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function generate(SchemaInformation $information, MetaModelCollectionInterface $collection): void
     {
         /** @psalm-suppress DeprecatedClass */

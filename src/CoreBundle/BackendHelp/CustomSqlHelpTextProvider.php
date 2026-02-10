@@ -16,6 +16,7 @@ final readonly class CustomSqlHelpTextProvider implements BackendHelpProviderInt
     ) {
     }
 
+    #[\Override]
     public function getHelpFor(string $table, string $property): iterable
     {
         $buffer = [];

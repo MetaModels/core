@@ -29,6 +29,7 @@ class OrPropertyConditionFactory extends AbstractPropertyConditionChainFactory
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     protected function createCondition(array $children)
     {
         return new PropertyConditionChain($children, PropertyConditionChain::OR_CONJUNCTION);

@@ -120,6 +120,7 @@ class ModelToLabelListener extends AbstractListener
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     protected function wantToHandle(AbstractEnvironmentAwareEvent $event)
     {
         $inputProvider = $event->getEnvironment()->getInputProvider();

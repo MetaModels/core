@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2025 The MetaModels team.
+ * (c) 2012-2026 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,7 +20,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Andreas Fischer <anfischer@kaffee-partner.de>
- * @copyright  2012-2025 The MetaModels team.
+ * @copyright  2012-2026 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -802,6 +802,10 @@ class ToolboxFile
         $fileKeys = array_flip(array_keys($this->uuidMap));
         $sorted   = [];
         foreach ($sortIds as $sortStringId) {
+            if (!isset($fileKeys[$sortStringId])) {
+                continue;
+            }
+
             $key          = $fileKeys[$sortStringId];
             $sorted[$key] = $fileMap[$key];
             unset($fileMap[$key]);
@@ -1107,7 +1111,7 @@ class ToolboxFile
 
                 if (isset($meta[$baseLanguage])) {
                     $this->metaInformation[dirname($path)][basename($path)] = $meta[$baseLanguage];
-                } elseif (isset($meta[$fallbackLanguage]) && null !== $fallbackLanguage) {
+                } elseif (null !== $fallbackLanguage && isset($meta[$fallbackLanguage])) {
                     $this->metaInformation[dirname($path)][basename($path)] = $meta[$fallbackLanguage];
                 }
             }

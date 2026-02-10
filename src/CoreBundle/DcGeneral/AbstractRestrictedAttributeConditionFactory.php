@@ -47,6 +47,7 @@ abstract class AbstractRestrictedAttributeConditionFactory extends AbstractAttri
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function supportsAttribute($attribute)
     {
         return \in_array($attribute, $this->supportedAttributeTypes, true);

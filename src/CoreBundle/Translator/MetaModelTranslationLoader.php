@@ -69,6 +69,7 @@ final class MetaModelTranslationLoader implements SymfonyLoaderInterface
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
+    #[\Override]
     public function load($resource, string $locale, string $domain = 'messages'): MessageCatalogue
     {
         // Load tl_metamodel_item catalogue.

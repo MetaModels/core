@@ -85,6 +85,7 @@ class TranslatedMetaModel extends MetaModel implements ITranslatedMetaModel
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getLanguages(): array
     {
         return \array_keys((array) $this->arrData['languages']);
@@ -93,6 +94,7 @@ class TranslatedMetaModel extends MetaModel implements ITranslatedMetaModel
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getMainLanguage(): string
     {
         return $this->mainLanguage;
@@ -101,6 +103,7 @@ class TranslatedMetaModel extends MetaModel implements ITranslatedMetaModel
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getLanguage(): string
     {
         return $this->activeLanguage;
@@ -109,6 +112,7 @@ class TranslatedMetaModel extends MetaModel implements ITranslatedMetaModel
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function selectLanguage(string $activeLanguage): string
     {
         $previousLanguage = $this->getLanguage();
@@ -137,6 +141,7 @@ class TranslatedMetaModel extends MetaModel implements ITranslatedMetaModel
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
+    #[\Override]
     protected function fetchTranslatedAttributeValues(ITranslated $attribute, $ids)
     {
         // @deprecated usage of TL_LANGUAGE - remove for Contao 5.0.

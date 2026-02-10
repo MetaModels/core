@@ -53,6 +53,7 @@ class ConditionAnd extends FilterRule
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getMatchingIds()
     {
         if (0 === count($this->arrChildFilters)) {

@@ -65,6 +65,7 @@ abstract class HybridFilterClearAll extends MetaModelHybrid
      *
      * @return string
      */
+    #[\Override]
     public function generate()
     {
         $scopeMatcher = System::getContainer()->get('contao.routing.scope_matcher');
@@ -89,6 +90,7 @@ abstract class HybridFilterClearAll extends MetaModelHybrid
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
+    #[\Override]
     protected function compile()
     {
         $blnActiveParam   = false;

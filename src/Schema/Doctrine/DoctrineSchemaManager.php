@@ -53,6 +53,7 @@ class DoctrineSchemaManager implements SchemaManagerInterface
      *
      * @return void
      */
+    #[\Override]
     public function preprocess(SchemaInformation $information): void
     {
         // If no information added, exit.
@@ -74,6 +75,7 @@ class DoctrineSchemaManager implements SchemaManagerInterface
      *
      * @return void
      */
+    #[\Override]
     public function process(SchemaInformation $information): void
     {
         // If no information added, exit.
@@ -93,6 +95,7 @@ class DoctrineSchemaManager implements SchemaManagerInterface
      *
      * @return void
      */
+    #[\Override]
     public function postprocess(SchemaInformation $information): void
     {
         // If no information added, exit.
@@ -111,6 +114,7 @@ class DoctrineSchemaManager implements SchemaManagerInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function validate(SchemaInformation $information): array
     {
         // If no information added, exit.

@@ -40,6 +40,7 @@ class LegacySchemaInformation implements SchemaInformationInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getName(): string
     {
         return static::class;

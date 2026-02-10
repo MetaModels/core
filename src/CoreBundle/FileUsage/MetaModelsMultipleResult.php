@@ -36,6 +36,7 @@ final class MetaModelsMultipleResult implements ResultInterface
         return $this->editUrl;
     }
 
+    #[\Override]
     public function getTemplate(): string
     {
         return '@MetaModelsCore/FileUsage/file_usage_multiple_result.html.twig';
