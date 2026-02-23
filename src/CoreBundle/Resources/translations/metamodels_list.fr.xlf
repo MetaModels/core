@@ -3,6 +3,7 @@
     <body>
       <trans-unit id="metamodels_sorting" resname="metamodels_sorting">
         <source>Sorting</source>
+        <target>Tri</target>
       </trans-unit>
       <trans-unit id="random" resname="random">
         <source>Random</source>
