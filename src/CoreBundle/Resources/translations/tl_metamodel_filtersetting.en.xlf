@@ -87,6 +87,12 @@
       <trans-unit id="attr_id.description" resname="attr_id.description">
         <source>Attribute this setting relates to.</source>
       </trans-unit>
+      <trans-unit id="label_attr_id.label" resname="label_attr_id.label">
+        <source>Attribute for option label</source>
+      </trans-unit>
+      <trans-unit id="label_attr_id.description" resname="label_attr_id.description">
+        <source>Here you can select a second attribute to be displayed as an option label.</source>
+      </trans-unit>
       <trans-unit id="all_langs.label" resname="all_langs.label">
         <source>Search all languages</source>
       </trans-unit>
