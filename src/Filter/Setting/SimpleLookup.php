@@ -117,7 +117,7 @@ class SimpleLookup extends Simple
             $arrOptions = $this->getLabelAttributeValuesByOptionsList(
                 $objAttribute,
                 $labelAttribute,
-                ((bool) $this->get('onlyused')) ? $arrIds : null
+                ((bool) $this->get('onlypossible')) ? $arrIds : null
             );
         } else {
             $arrOptions = $objAttribute->getFilterOptions(
