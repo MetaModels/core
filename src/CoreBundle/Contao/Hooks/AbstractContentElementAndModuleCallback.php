@@ -370,7 +370,7 @@ abstract class AbstractContentElementAndModuleCallback
      *
      * @return string|null
      */
-    public function saveCallback(string $value = null)
+    public function saveCallback(?string $value = null)
     {
         return ('--null--' === $value || null === $value) ? null : base64_decode($value);
     }
@@ -382,7 +382,7 @@ abstract class AbstractContentElementAndModuleCallback
      *
      * @return string|null
      */
-    public function loadCallback(string $value = null)
+    public function loadCallback(?string $value = null)
     {
         return null === $value ? '--null--' : trim(base64_encode($value), '=');
     }

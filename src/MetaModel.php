@@ -124,8 +124,8 @@ class MetaModel implements IMetaModel
      */
     public function __construct(
         $arrData,
-        EventDispatcherInterface $dispatcher = null,
-        Connection $connection = null
+        ?EventDispatcherInterface $dispatcher = null,
+        ?Connection $connection = null
     ) {
         foreach ($arrData as $strKey => $varValue) {
             $this->arrData[$strKey] = $this->tryUnserialize($varValue);

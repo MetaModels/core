@@ -108,7 +108,7 @@ class Collection implements ICollection
         array $arrInformation,
         EventDispatcherInterface $dispatcher,
         IFilterSettingFactory $filterFactory,
-        FilterUrlBuilder $filterUrlBuilder = null
+        ?FilterUrlBuilder $filterUrlBuilder = null
     ) {
         $this->metaModel     = $metaModel;
         $this->dispatcher    = $dispatcher;
@@ -281,7 +281,7 @@ class Collection implements ICollection
      *
      * @return array
      */
-    private function lookupJumpTo(bool $translated, string $desired = null, string $fallback = null): array
+    private function lookupJumpTo(bool $translated, ?string $desired = null, ?string $fallback = null): array
     {
         $jumpToPageId    = '';
         $filterSettingId = '';

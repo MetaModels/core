@@ -116,7 +116,7 @@ final class InsertTagsListener
         IFactory $factory,
         IRenderSettingFactory $renderSettingFactory,
         IFilterSettingFactory $filterSettingFactory,
-        LoggerInterface $logger = null
+        ?LoggerInterface $logger = null
     ) {
         $this->connection           = $connection;
         $this->factory              = $factory;

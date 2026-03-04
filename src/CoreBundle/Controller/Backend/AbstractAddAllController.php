@@ -22,7 +22,7 @@
 
 namespace MetaModels\CoreBundle\Controller\Backend;
 
-use Contao\CoreBundle\Controller\AbstractBackendController;
+use Contao\CoreBundle\Controller\Backend\AbstractBackendController;
 use Contao\CoreBundle\Csrf\ContaoCsrfTokenManager;
 use Contao\CoreBundle\Framework\Adapter;
 use Contao\System;

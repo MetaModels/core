@@ -173,8 +173,8 @@ class PaletteBuilder
         PropertyInterface $property,
         string $propertyName,
         bool $variantHandling,
-        ConditionInterface $condition = null,
-        ConditionInterface $legendCondition = null
+        ?ConditionInterface $condition = null,
+        ?ConditionInterface $legendCondition = null
     ): Property {
         $paletteProperty = new Property($propertyName);
 

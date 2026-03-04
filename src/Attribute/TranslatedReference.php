@@ -58,7 +58,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      *                                      classes for information what values are understood.
      * @param Connection|null $connection   Database connection.
      */
-    public function __construct(IMetaModel $objMetaModel, $arrData = [], Connection $connection = null)
+    public function __construct(IMetaModel $objMetaModel, $arrData = [], ?Connection $connection = null)
     {
         parent::__construct($objMetaModel, $arrData);
 

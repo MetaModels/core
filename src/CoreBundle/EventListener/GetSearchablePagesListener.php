@@ -352,7 +352,7 @@ class GetSearchablePagesListener
      *
      * @return UrlBuilder
      */
-    private function getBaseUrl(array $pageDetails, string $path = null): UrlBuilder
+    private function getBaseUrl(array $pageDetails, ?string $path = null): UrlBuilder
     {
         $url = new UrlBuilder();
         // Set the domain (see contao/core#6421)

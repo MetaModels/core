@@ -20,7 +20,7 @@
 
 namespace MetaModels\CoreBundle\Controller\Backend;
 
-use Contao\CoreBundle\Controller\AbstractBackendController;
+use Contao\CoreBundle\Controller\Backend\AbstractBackendController;
 use Contao\CoreBundle\Exception\AccessDeniedException;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\CoreBundle\Menu\BackendMenuBuilder;

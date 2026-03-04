@@ -72,7 +72,7 @@ class Item implements IItem
      * @param array|null                    $arrData      The initial data that shall be injected into the new instance.
      * @param EventDispatcherInterface|null $dispatcher   The event dispatcher.
      */
-    public function __construct(IMetaModel $objMetaModel, $arrData, EventDispatcherInterface $dispatcher = null)
+    public function __construct(IMetaModel $objMetaModel, $arrData, ?EventDispatcherInterface $dispatcher = null)
     {
         $this->metaModel  = $objMetaModel;
         $this->dispatcher = $dispatcher;

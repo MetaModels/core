@@ -124,9 +124,9 @@ trait ListControllerTrait
         IRenderSettingFactory $renderSettingFactory,
         EventDispatcherInterface $eventDispatcher,
         FilterUrlBuilder $filterUrlBuilder,
-        TranslatorInterface $translator = null,
-        RouterInterface $router = null,
-        ScopeMatcher $scopeMatcher = null
+        ?TranslatorInterface $translator = null,
+        ?RouterInterface $router = null,
+        ?ScopeMatcher $scopeMatcher = null
     ) {
         $this->factory              = $factory;
         $this->filterFactory        = $filterFactory;

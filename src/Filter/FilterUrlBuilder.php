@@ -128,7 +128,7 @@ class FilterUrlBuilder
      *
      * @return FilterUrl
      */
-    public function getCurrentFilterUrl(array $options = null): FilterUrl
+    public function getCurrentFilterUrl(?array $options = null): FilterUrl
     {
         $this->addFromCurrentRequest($filterUrl = new FilterUrl(), $options);
 
@@ -155,7 +155,7 @@ class FilterUrlBuilder
      *
      * @return void
      */
-    public function addFromCurrentRequest(FilterUrl $filterUrl, array $options = null): void
+    public function addFromCurrentRequest(FilterUrl $filterUrl, ?array $options = null): void
     {
         if (null === $options) {
             $options = [

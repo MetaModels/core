@@ -65,7 +65,6 @@ use function array_merge;
 use function func_num_args;
 use function in_array;
 use function is_int;
-use function is_object;
 use function sprintf;
 use function strtoupper;
 use function trigger_error;
@@ -221,16 +220,16 @@ class ItemList
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        IFactory $factory = null,
-        IFilterSettingFactory $filterFactory = null,
-        IRenderSettingFactory $renderSettingFactory = null,
-        EventDispatcherInterface $eventDispatcher = null,
-        FilterUrlBuilder $filterUrlBuilder = null,
-        string $pageParam = 'page',
-        string $paramType = 'get',
-        int $maxPaginationLinks = 0,
-        string $paginationTemplate = 'mm_pagination',
-        string $paginationFragment = ''
+        ?IFactory                 $factory = null,
+        ?IFilterSettingFactory    $filterFactory = null,
+        ?IRenderSettingFactory    $renderSettingFactory = null,
+        ?EventDispatcherInterface $eventDispatcher = null,
+        ?FilterUrlBuilder         $filterUrlBuilder = null,
+        string                    $pageParam = 'page',
+        string                    $paramType = 'get',
+        int                       $maxPaginationLinks = 0,
+        string                    $paginationTemplate = 'mm_pagination',
+        string                    $paginationFragment = ''
     ) {
         $this->paginationLimitCalculator = new PaginationLimitCalculator(
             $filterUrlBuilder,
@@ -500,7 +499,7 @@ class ItemList
      *
      * @return ItemList
      */
-    public function overrideOutputFormat(string $outputFormat = null): self
+    public function overrideOutputFormat(?string $outputFormat = null): self
     {
         $outputFormat = (string) $outputFormat;
         if ('' !== $outputFormat) {
@@ -1259,7 +1258,7 @@ class ItemList
      *
      * @psalm-suppress UndefinedMagicPropertyAssignment
      */
-    public function render(bool $isNoNativeParsing, object $caller = null): string
+    public function render(bool $isNoNativeParsing, ?object $caller = null): string
     {
         if (func_num_args() > 1) {
             trigger_error('Passing $objCaller as second argument is deprecated', E_USER_DEPRECATED);

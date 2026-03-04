@@ -78,8 +78,8 @@ class BaseSimple extends Base implements ISimple
     public function __construct(
         IMetaModel $objMetaModel,
         $arrData = [],
-        Connection $connection = null,
-        TableManipulator $tableManipulator = null
+        ?Connection $connection = null,
+        ?TableManipulator $tableManipulator = null
     ) {
         parent::__construct($objMetaModel, $arrData);
 

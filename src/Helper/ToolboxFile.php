@@ -249,11 +249,11 @@ class ToolboxFile
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function __construct(
-        ImageFactoryInterface|EventDispatcherInterface $imageFactory = null,
-        string $rootDir = null,
-        ContextInterface $filesContext = null,
-        PictureFactoryInterface $pictureFactory = null,
-        RequestStack $requestStack = null
+        ImageFactoryInterface|EventDispatcherInterface|null $imageFactory = null,
+        ?string $rootDir = null,
+        ?ContextInterface $filesContext = null,
+        ?PictureFactoryInterface $pictureFactory = null,
+        ?RequestStack $requestStack = null
     ) {
         switch (true) {
             case ($imageFactory instanceof ImageFactoryInterface) && (null !== $rootDir):

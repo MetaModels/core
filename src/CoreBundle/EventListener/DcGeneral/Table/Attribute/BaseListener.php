@@ -107,7 +107,7 @@ class BaseListener
      *
      * @throws \InvalidArgumentException When the MetaModel could not be retrieved.
      */
-    protected function createAttributeInstance(ModelInterface $model = null)
+    protected function createAttributeInstance(?ModelInterface $model = null)
     {
         if (null === $model) {
             return null;

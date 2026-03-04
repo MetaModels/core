@@ -51,7 +51,7 @@ class Configuration implements ConfigurationInterface
      * @param bool   $debug   The debug flag.
      * @param string $rootDir The root directory.
      */
-    public function __construct($debug, $rootDir)
+    public function __construct(bool $debug, string $rootDir)
     {
         $this->debug   = $debug;
         $this->rootDir = $rootDir;
@@ -65,7 +65,7 @@ class Configuration implements ConfigurationInterface
      * @psalm-suppress UndefinedMethod
      */
     #[\Override]
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('metamodels');
         $treeBuilder

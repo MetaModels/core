@@ -58,8 +58,8 @@ final class ItemListController extends AbstractFrontendModuleController
         Request $request,
         ModuleModel $model,
         string $section,
-        array $classes = null,
-        PageModel $pageModel = null
+        ?array $classes = null,
+        ?PageModel $pageModel = null
     ): Response {
         if ($this->scopeMatcher->isBackendRequest($request)) {
             return $this->getBackendWildcard($model);

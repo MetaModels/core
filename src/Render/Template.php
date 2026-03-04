@@ -148,8 +148,8 @@ class Template
      */
     public function __construct(
         $strTemplate = '',
-        Adapter $templateLoader = null,
-        RequestScopeDeterminator $scopeDeterminator = null
+        ?Adapter $templateLoader = null,
+        ?RequestScopeDeterminator $scopeDeterminator = null
     ) {
         $this->strTemplate = $strTemplate;
 
@@ -638,7 +638,7 @@ EOF;
      *
      * @return void
      */
-    public function insert($strName, array $arrData = null)
+    public function insert($strName, ?array $arrData = null)
     {
         if ($this->scopeDeterminator->currentScopeIsBackend()) {
             $objTemplate = new BackendTemplate($strName);

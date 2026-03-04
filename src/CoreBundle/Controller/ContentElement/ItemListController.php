@@ -59,8 +59,8 @@ final class ItemListController extends AbstractContentElementController
         Request $request,
         ContentModel $model,
         string $section,
-        array $classes = null,
-        PageModel $pageModel = null
+        ?array $classes = null,
+        ?PageModel $pageModel = null
     ): Response {
         if ($this->scopeMatcher->isBackendRequest($request)) {
             return $this->getBackendWildcard($model);

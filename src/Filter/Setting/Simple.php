@@ -98,9 +98,9 @@ abstract class Simple implements ISimple
     public function __construct(
         $collection,
         $data,
-        EventDispatcherInterface $eventDispatcher = null,
-        FilterUrlBuilder $filterUrlBuilder = null,
-        TranslatorInterface $translator = null
+        ?EventDispatcherInterface $eventDispatcher = null,
+        ?FilterUrlBuilder $filterUrlBuilder = null,
+        ?TranslatorInterface $translator = null
     ) {
         $this->collection = $collection;
         $this->data       = $data;

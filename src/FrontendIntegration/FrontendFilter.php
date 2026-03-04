@@ -94,14 +94,14 @@ class FrontendFilter
     /**
      * FrontendFilter constructor.
      *
-     * @param Connection|null       $connection       Database connection.
-     * @param FilterUrlBuilder|null $filterUrlBuilder The filter URL builder.
-     * @param TranslatorInterface   $translator       The translator.
+     * @param Connection|null          $connection       Database connection.
+     * @param FilterUrlBuilder|null    $filterUrlBuilder The filter URL builder.
+     * @param TranslatorInterface|null $translator       The translator.
      */
     public function __construct(
-        Connection $connection = null,
-        FilterUrlBuilder $filterUrlBuilder = null,
-        TranslatorInterface $translator = null
+        ?Connection $connection = null,
+        ?FilterUrlBuilder $filterUrlBuilder = null,
+        ?TranslatorInterface $translator = null
     ) {
         if (null === $connection) {
             // @codingStandardsIgnoreStart

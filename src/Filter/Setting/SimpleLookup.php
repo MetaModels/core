@@ -24,7 +24,6 @@
 namespace MetaModels\Filter\Setting;
 
 use Contao\StringUtil;
-use Contao\System;
 use MetaModels\Attribute\IAttribute;
 use MetaModels\FrontendIntegration\FrontendFilterOptions;
 use MetaModels\IItem;
@@ -34,7 +33,6 @@ use MetaModels\Filter\Rules\SearchAttribute as FilterRuleSimpleLookup;
 use MetaModels\IMetaModel;
 use MetaModels\ITranslatedMetaModel;
 use MetaModels\Render\Setting\ICollection as IRenderSettings;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Filter setting implementation performing a search for a value on a configured attribute.
