@@ -322,7 +322,7 @@ class Collection implements ICollection
      * {@inheritdoc}
      */
     #[\Override]
-    public function buildJumpToUrlFor(IItem $item /**, ?int $referenceType */)
+    public function buildJumpToUrlFor(IItem $item, ?int $referenceType = null)
     {
         $information = $this->determineJumpToInformation();
         if (empty($information['pageDetails'])) {
