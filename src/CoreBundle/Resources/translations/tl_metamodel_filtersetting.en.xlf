@@ -298,6 +298,12 @@
       <trans-unit id="typenames.conditionand" resname="typenames.conditionand">
         <source>AND condition</source>
       </trans-unit>
+      <trans-unit id="typenames.conditiongate" resname="typenames.conditiongate">
+        <source>Gate condition</source>
+      </trans-unit>
+      <trans-unit id="error.condition_max_children" resname="error.condition_max_children">
+        <source>The condition "%name%" can only have "%max%" children max.</source>
+      </trans-unit>
       <trans-unit id="typedesc._attribute_" resname="typedesc._attribute_">
         <source>&lt;em&gt;[%colName%, "%name%"]&lt;/em&gt;</source>
       </trans-unit>
@@ -320,6 +326,9 @@
         <source>%1$s &lt;strong&gt;%2$s&lt;/strong&gt; %4$s</source>
       </trans-unit>
       <trans-unit id="typedesc.conditionand" resname="typedesc.conditionand">
+        <source>%1$s &lt;strong&gt;%2$s&lt;/strong&gt; %4$s</source>
+      </trans-unit>
+      <trans-unit id="typedesc.conditiongate" resname="typedesc.conditiongate">
         <source>%1$s &lt;strong&gt;%2$s&lt;/strong&gt; %4$s</source>
       </trans-unit>
       <trans-unit id="items.label" resname="items.label">

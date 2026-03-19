@@ -25,9 +25,11 @@ use ContaoCommunityAlliance\DcGeneral\Clipboard\ClipboardInterface;
 use ContaoCommunityAlliance\DcGeneral\Clipboard\Filter;
 use ContaoCommunityAlliance\DcGeneral\Clipboard\ItemInterface;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPasteButtonEvent;
+use ContaoCommunityAlliance\DcGeneral\Controller\ModelCollector;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use MetaModels\Filter\Setting\IFilterSettingFactory;
+use MetaModels\Filter\Setting\IFilterSettingTypeFactory;
 
 /**
  * This class takes care of enabling and disabling of the paste button.
@@ -41,6 +43,8 @@ class PasteButtonListener
      */
     private IFilterSettingFactory $filterFactory;
 
+    private \SplObjectStorage $parents;
+
     /**
      * Create a new instance.
      *
@@ -49,6 +53,7 @@ class PasteButtonListener
     public function __construct(IFilterSettingFactory $filterFactory)
     {
         $this->filterFactory = $filterFactory;
+        $this->parents = new \SplObjectStorage();
     }
 
     /**
@@ -79,11 +84,45 @@ class PasteButtonListener
 
             return;
         }
-        $factory = $this->filterFactory->getTypeFactory($model->getProperty('type'));
+        $factory = $this->getFactoryFor($model);
+        if (null === $factory) {
+            // Unknown type, disallow paste.
+            $event->setPasteIntoDisabled(true);
+            $event->setPasteAfterDisabled(true);
+            return;
+        }
 
         // If setting does not support children, omit them.
-        if ($model->getId() && !($factory && $factory->isNestedType())) {
+        if ($model->getId() && !($factory->isNestedType())) {
             $event->setPasteIntoDisabled(true);
         }
+
+        $collector = new ModelCollector($event->getEnvironment());
+        if ($factory->isNestedType() && (null !== ($maxChildren = $factory->getMaxChildren()))) {
+            if ($maxChildren < count($collector->collectDirectChildrenOf($model))) {
+                $event->setPasteIntoDisabled(true);
+            }
+        }
+        if (!$this->parents->contains($model)) {
+            $this->parents[$model] = $collector->searchParentOf($model);
+        }
+        $parent = $this->parents[$model];
+        if (!$parent) {
+            return;
+        }
+        $parentFactory = $this->getFactoryFor($parent);
+        if (!$parentFactory?->isNestedType() || (null === ($maxChildren = $parentFactory?->getMaxChildren()))) {
+            return;
+        }
+        $siblings = $collector->collectSiblingsOf($model, $parent?->getId());
+        // FIXME: Except, if we are already contained and just get moved within parent :(
+        if ($maxChildren <= $siblings->length()) {
+            $event->setPasteAfterDisabled(true);
+        }
+    }
+
+    private function getFactoryFor(ModelInterface $model): ?IFilterSettingTypeFactory
+    {
+        return $this->filterFactory->getTypeFactory($model->getProperty('type'));
     }
 }

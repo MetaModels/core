@@ -356,3 +356,6 @@ services:
       decorates: 'cca.backend-help-provider'
       arguments:
         $previous: '@.inner'
+
+    metamodels.expression-language:
+      class: Symfony\Component\ExpressionLanguage\ExpressionLanguage
