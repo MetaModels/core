@@ -8,6 +8,8 @@
     "Contao\\ManagerPlugin\\Bundle\\Config\\BundleConfig",
     "Contao\\ManagerPlugin\\Bundle\\Parser\\ParserInterface",
     "Contao\\ManagerPlugin\\Routing\\RoutingPluginInterface",
-    "InspiredMinds\\ContaoFileUsage\\Result\\ResultInterface"
+    "InspiredMinds\\ContaoFileUsage\\Result\\ResultInterface",
+    "Symfony\\Component\\ExpressionLanguage\\ExpressionLanguage"
+    "Symfony\\Component\\ExpressionLanguage\\ExpressionLanguage"
   ]
 }
