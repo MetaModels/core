@@ -41,7 +41,7 @@ use Psr\Log\LoggerInterface;
 /**
  * This class handles the replacement of all MetaModels insert tags.
  *
- * @codingStandardsIgnoreStart
+ * phpcs:disable
  *
  * Available insert tags:
  *
@@ -59,7 +59,7 @@ use Psr\Log\LoggerInterface;
  * -- JumpTo --
  * mm::jumpTo::[MM Table-Name|ID]::[Item ID]::[ID render setting](::[Parameter (Default:url)|label|page|params.attname])
  *
- * @codingStandardsIgnoreEnd
+ * phpcs:enable
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
