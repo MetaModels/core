@@ -101,7 +101,7 @@ class FilterSettingFactory implements IFilterSettingFactory
         if ($deprecationNotice) {
             // @codingStandardsIgnoreStart
             @trigger_error(
-                '"' .__METHOD__ . '" is deprecated and will get removed.',
+                '"' . __METHOD__ . '" is deprecated and will get removed.',
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
@@ -136,7 +136,7 @@ class FilterSettingFactory implements IFilterSettingFactory
     {
         // @codingStandardsIgnoreStart
         @trigger_error(
-            '"' .__METHOD__ . '" is deprecated - use the services from the service container.',
+            '"' . __METHOD__ . '" is deprecated - use the services from the service container.',
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd

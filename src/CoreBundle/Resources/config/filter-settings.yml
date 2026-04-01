@@ -55,7 +55,7 @@ services:
         tags:
           - { name: metamodels.filter_factory }
 
-    MetaModels\Filter\Setting\ConditionGateFilterSettingTypeFactory:
+    MetaModels\Filter\Setting\ExpressionRuleFilterSettingTypeFactory:
         arguments:
           - '@metamodels.expression-language'
           - '@request_stack'

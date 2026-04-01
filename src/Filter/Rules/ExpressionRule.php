@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MetaModels\Filter\Rules\Condition;
+namespace MetaModels\Filter\Rules;
 
 use MetaModels\Filter\IFilter;
 use MetaModels\Filter\IFilterRule;
@@ -11,7 +11,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 /**
  * This is the MetaModel filter interface.
  */
-final readonly class ConditionGate implements IFilterRule
+final readonly class ExpressionRule implements IFilterRule
 {
     public function __construct(
         private string $expression,
@@ -29,9 +29,11 @@ final readonly class ConditionGate implements IFilterRule
         if ((bool) $this->expressionLanguage->evaluate($this->expression, $this->parameters)) {
             return $this->ifTrue?->getMatchingIds();
         }
+
         if (null !== $this->ifFalse) {
             return $this->ifFalse->getMatchingIds();
         }
+
         return [];
     }
 }

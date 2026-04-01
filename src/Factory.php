@@ -87,7 +87,7 @@ class Factory implements IFactory
         if ($deprecationNotice) {
             // @codingStandardsIgnoreStart
             @trigger_error(
-                '"' .__METHOD__ . '" is deprecated and will get removed.',
+                '"' . __METHOD__ . '" is deprecated and will get removed.',
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
@@ -116,7 +116,7 @@ class Factory implements IFactory
 
         // @codingStandardsIgnoreStart
         @trigger_error(
-            '"' .__METHOD__ . '" is deprecated - use the services from the service container.',
+            '"' . __METHOD__ . '" is deprecated - use the services from the service container.',
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd

@@ -230,9 +230,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
                 'stop_after_match'
             ]
         ],
-        'conditiongate extends default'      => [
+        'expression_rule extends default'      => [
             'config' => [
-                'gate_expression'
+                'expression_rule'
             ],
             '+fefilter' => [
                 'onlypossible',
@@ -465,9 +465,9 @@ WHERE 1 = 1',
             ],
             'sql'         => "char(1) NOT NULL default ''"
         ],
-        'gate_expression'     => [
-            'label'       => 'gate_expression.label',
-            'description' => 'gate_expression.description',
+        'expression_rule'     => [
+            'label'       => 'expression_rule.label',
+            'description' => 'expression_rule.description',
             'exclude'     => true,
             'inputType'   => 'text',
             'eval'        => [

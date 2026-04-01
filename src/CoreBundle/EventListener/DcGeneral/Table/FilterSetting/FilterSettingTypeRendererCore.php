@@ -37,7 +37,7 @@ class FilterSettingTypeRendererCore extends AbstractFilterSettingTypeRenderer
     #[\Override]
     protected function getTypes()
     {
-        return ['idlist', 'simplelookup', 'customsql', 'conditionand', 'conditionor', 'conditiongate'];
+        return ['idlist', 'simplelookup', 'customsql', 'conditionand', 'conditionor', 'expression_rule'];
     }
 
     /**
