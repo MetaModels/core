@@ -526,7 +526,7 @@ class ItemList
             $intMetaModel = (string) $intMetaModel;
             // @codingStandardsIgnoreStart Silencing errors is discouraged
             @trigger_error(
-                'Parameter $intMetaModel in "' . __CLASS__ . '::' .__METHOD__. '" has been changed from int to string.',
+                'Parameter $intMetaModel in "' . __CLASS__ . '::' . __METHOD__ . '" has been changed from int to string.',
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
@@ -536,7 +536,7 @@ class ItemList
             $intView = (string) $intView;
             // @codingStandardsIgnoreStart Silencing errors is discouraged
             @trigger_error(
-                'Parameter $intView in "' . __CLASS__ . '::' .__METHOD__. '" has been changed from int to string.',
+                'Parameter $intView in "' . __CLASS__ . '::' . __METHOD__ . '" has been changed from int to string.',
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
@@ -702,7 +702,7 @@ class ItemList
             $intFilter = (string) $intFilter;
             // @codingStandardsIgnoreStart Silencing errors is discouraged
             @trigger_error(
-                'Parameter $intFilter in "' . __CLASS__ . '::' .__METHOD__. '" has been changed from int to string.',
+                'Parameter $intFilter in "' . __CLASS__ . '::' . __METHOD__ . '" has been changed from int to string.',
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
@@ -1017,7 +1017,7 @@ class ItemList
     {
         // @codingStandardsIgnoreStart
         @trigger_error(
-            '"' .__METHOD__ . '" is deprecated - use \'getItems()\'.',
+            '"' . __METHOD__ . '" is deprecated - use \'getItems()\'.',
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd

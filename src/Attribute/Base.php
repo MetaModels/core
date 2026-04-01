@@ -238,7 +238,7 @@ abstract class Base implements IAttribute
         if (isset($GLOBALS['METAMODEL_HOOKS']['parseValue']) && \is_array($GLOBALS['METAMODEL_HOOKS']['parseValue'])) {
             // @codingStandardsIgnoreStart
             @trigger_error(
-                '"' .__METHOD__ . '" is deprecated and will get removed.',
+                '"' . __METHOD__ . '" is deprecated and will get removed.',
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
