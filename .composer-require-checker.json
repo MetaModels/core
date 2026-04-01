@@ -10,6 +10,5 @@
     "Contao\\ManagerPlugin\\Routing\\RoutingPluginInterface",
     "InspiredMinds\\ContaoFileUsage\\Result\\ResultInterface",
     "Symfony\\Component\\ExpressionLanguage\\ExpressionLanguage"
-    "Symfony\\Component\\ExpressionLanguage\\ExpressionLanguage"
   ]
 }
