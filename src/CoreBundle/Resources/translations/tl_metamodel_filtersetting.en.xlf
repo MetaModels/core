@@ -298,6 +298,12 @@
       <trans-unit id="typenames.conditionand" resname="typenames.conditionand">
         <source>AND condition</source>
       </trans-unit>
+      <trans-unit id="typenames.expression_rule" resname="typenames.expression_rule">
+        <source>Expression rule</source>
+      </trans-unit>
+      <trans-unit id="error.condition_max_children" resname="error.condition_max_children">
+        <source>The condition or rule "%name%" can only have "%max%" children max.</source>
+      </trans-unit>
       <trans-unit id="typedesc._attribute_" resname="typedesc._attribute_">
         <source>&lt;em&gt;[%colName%, "%name%"]&lt;/em&gt;</source>
       </trans-unit>
@@ -322,11 +328,21 @@
       <trans-unit id="typedesc.conditionand" resname="typedesc.conditionand">
         <source>%1$s &lt;strong&gt;%2$s&lt;/strong&gt; %4$s</source>
       </trans-unit>
+      <trans-unit id="typedesc.expression_rule" resname="typedesc.expression_rule">
+        <source>%1$s &lt;strong&gt;%2$s&lt;/strong&gt; %4$s</source>
+      </trans-unit>
       <trans-unit id="items.label" resname="items.label">
         <source>Items</source>
       </trans-unit>
       <trans-unit id="items.description" resname="items.description">
         <source>Please enter the IDs of the items for filtering as comma-separated list.</source>
+      </trans-unit>
+      <trans-unit id="expression_rule.label" resname="expression_rule.label">
+        <source>Expression</source>
+      </trans-unit>
+      <trans-unit id="expression_rule.description" resname="expression_rule.description">
+        <source>Enter an expression here that is to be evaluated. If the condition is met, the
+          first filter rule is executed; if not, the second one is executed.</source>
       </trans-unit>
       <trans-unit id="deleteConfirm" resname="deleteConfirm">
         <source>Do you really want to delete filter setting ID %id%?</source>

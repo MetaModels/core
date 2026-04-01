@@ -94,7 +94,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
                         'remote'    => 'id',
                         'operation' => '=',
                     ],
-                ]
+                ],
+                'inverse' => [
+                    [
+                        'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ],
+                ],
             ]
         ],
         'rootEntries'    => [
@@ -222,6 +229,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
             'config' => [
                 'stop_after_match'
             ]
+        ],
+        'expression_rule extends default'      => [
+            'config' => [
+                'expression_rule'
+            ],
+            '+fefilter' => [
+                'onlypossible',
+            ],
         ],
         'idlist extends default'           => [
             '+config' => [
@@ -449,6 +464,19 @@ WHERE 1 = 1',
                 'tl_class'   => 'w50 cbx',
             ],
             'sql'         => "char(1) NOT NULL default ''"
+        ],
+        'expression_rule'     => [
+            'label'       => 'expression_rule.label',
+            'description' => 'expression_rule.description',
+            'exclude'     => true,
+            'inputType'   => 'text',
+            'eval'        => [
+                'alwaysSave'     => true,
+                'decodeEntities' => true,
+                'mandatory'      => true,
+                'tl_class'       => 'clr',
+            ],
+            'sql'         => "text NOT NULL default ''"
         ],
         'label'                => [
             'label'       => 'label.label',
