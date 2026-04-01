@@ -329,7 +329,7 @@ class PaginationLimitCalculator
 
         // @codingStandardsIgnoreStart
         @trigger_error(
-            '"' .__METHOD__ . '" is deprecated  - the page is determined automatically from the current request.',
+            '"' . __METHOD__ . '" is deprecated  - the page is determined automatically from the current request.',
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd

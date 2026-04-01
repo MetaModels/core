@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2025 The MetaModels team.
+ * (c) 2012-2026 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -25,7 +25,7 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Fritz Michael Gschwantner <fmg@inspiredminds.at>
- * @copyright  2012-2025 The MetaModels team.
+ * @copyright  2012-2026 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -524,19 +524,19 @@ class ItemList
     {
         if (is_int($intMetaModel)) {
             $intMetaModel = (string) $intMetaModel;
-            // @codingStandardsIgnoreStart Silencing errors is discouraged
+            // phpcs:disable
             @trigger_error(
-                'Parameter $intMetaModel in "' . __CLASS__ . '::' .__METHOD__. '" has been changed from int to string.',
+                'Parameter $intMetaModel in "' . __CLASS__ . '::' . __METHOD__ . '" has been changed from int to string.',
                 E_USER_DEPRECATED
             );
-            // @codingStandardsIgnoreEnd
+            // phpcs:enable
         }
 
         if (is_int($intView)) {
             $intView = (string) $intView;
             // @codingStandardsIgnoreStart Silencing errors is discouraged
             @trigger_error(
-                'Parameter $intView in "' . __CLASS__ . '::' .__METHOD__. '" has been changed from int to string.',
+                'Parameter $intView in "' . __CLASS__ . '::' . __METHOD__ . '" has been changed from int to string.',
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
@@ -702,7 +702,7 @@ class ItemList
             $intFilter = (string) $intFilter;
             // @codingStandardsIgnoreStart Silencing errors is discouraged
             @trigger_error(
-                'Parameter $intFilter in "' . __CLASS__ . '::' .__METHOD__. '" has been changed from int to string.',
+                'Parameter $intFilter in "' . __CLASS__ . '::' . __METHOD__ . '" has been changed from int to string.',
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
@@ -1017,7 +1017,7 @@ class ItemList
     {
         // @codingStandardsIgnoreStart
         @trigger_error(
-            '"' .__METHOD__ . '" is deprecated - use \'getItems()\'.',
+            '"' . __METHOD__ . '" is deprecated - use \'getItems()\'.',
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd

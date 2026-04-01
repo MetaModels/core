@@ -130,7 +130,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
     {
         // @codingStandardsIgnoreStart
         @trigger_error(
-            '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
+            '"' . __METHOD__ . '" is deprecated as the service container will get removed.',
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
@@ -167,7 +167,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
     {
         // @codingStandardsIgnoreStart
         @trigger_error(
-            '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
+            '"' . __METHOD__ . '" is deprecated as the service container will get removed.',
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
@@ -204,7 +204,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
     {
         // @codingStandardsIgnoreStart
         @trigger_error(
-            '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
+            '"' . __METHOD__ . '" is deprecated as the service container will get removed.',
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
@@ -241,7 +241,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
     {
         // @codingStandardsIgnoreStart
         @trigger_error(
-            '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
+            '"' . __METHOD__ . '" is deprecated as the service container will get removed.',
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
@@ -278,7 +278,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
     {
         // @codingStandardsIgnoreStart
         @trigger_error(
-            '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
+            '"' . __METHOD__ . '" is deprecated as the service container will get removed.',
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
@@ -314,7 +314,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
     {
         // @codingStandardsIgnoreStart
         @trigger_error(
-            '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
+            '"' . __METHOD__ . '" is deprecated as the service container will get removed.',
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
@@ -338,7 +338,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
     {
         // @codingStandardsIgnoreStart
         @trigger_error(
-            '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
+            '"' . __METHOD__ . '" is deprecated as the service container will get removed.',
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
@@ -376,7 +376,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
     {
         // @codingStandardsIgnoreStart
         @trigger_error(
-            '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
+            '"' . __METHOD__ . '" is deprecated as the service container will get removed.',
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
@@ -408,7 +408,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
     {
         // @codingStandardsIgnoreStart
         @trigger_error(
-            '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
+            '"' . __METHOD__ . '" is deprecated as the service container will get removed.',
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
