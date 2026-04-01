@@ -171,7 +171,7 @@ class MetaModel implements IMetaModel
     {
         // @codingStandardsIgnoreStart
         @trigger_error(
-            '"' .__METHOD__ . '" is deprecated and will get removed.',
+            '"' . __METHOD__ . '" is deprecated and will get removed.',
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
@@ -203,7 +203,7 @@ class MetaModel implements IMetaModel
         if ($deprecationNotice) {
             // @codingStandardsIgnoreStart
             @trigger_error(
-                '"' .__METHOD__ . '" is deprecated and will get removed.',
+                '"' . __METHOD__ . '" is deprecated and will get removed.',
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
@@ -224,7 +224,7 @@ class MetaModel implements IMetaModel
     {
         // @codingStandardsIgnoreStart
         @trigger_error(
-            '"' .__METHOD__ . '" is deprecated and will get removed.',
+            '"' . __METHOD__ . '" is deprecated and will get removed.',
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
@@ -786,7 +786,7 @@ class MetaModel implements IMetaModel
             // @codingStandardsIgnoreStart
             @\trigger_error(
                 \sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
-                         'Please test for "instanceof "\MetaModels\ITranslatedMetaModel" and use '.
+                         'Please test for "instanceof "\MetaModels\ITranslatedMetaModel" and use ' .
                          '"\MetaModels\ITranslatedMetaModel::getLanguages" instead.', __METHOD__),
                 E_USER_DEPRECATED
             );
@@ -1328,7 +1328,7 @@ class MetaModel implements IMetaModel
         } elseif ($this->isTranslated(false)) {
             // @codingStandardsIgnoreStart
             @\trigger_error(
-                \sprintf('Support for translated MetaModels not implementing "\MetaModels\ITranslatedMetaModel" '.
+                \sprintf('Support for translated MetaModels not implementing "\MetaModels\ITranslatedMetaModel" ' .
                          'is %s deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
                          'Please implement interface "\MetaModels\ITranslatedMetaModel".', __METHOD__),
                 E_USER_DEPRECATED

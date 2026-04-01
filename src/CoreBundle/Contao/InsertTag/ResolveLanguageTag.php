@@ -65,7 +65,7 @@ final class ResolveLanguageTag
             return $queryString;
         }
 
-        if (false === ($tags = \preg_split('~{{(ifn?lng[^{}]*)}}~', $queryString, -1, PREG_SPLIT_DELIM_CAPTURE ))) {
+        if (false === ($tags = \preg_split('~{{(ifn?lng[^{}]*)}}~', $queryString, -1, PREG_SPLIT_DELIM_CAPTURE))) {
             return $queryString;
         }
 
@@ -75,10 +75,10 @@ final class ResolveLanguageTag
         for ($_rit = 0, $_cnt = \count($tags); $_rit < $_cnt; $_rit += 2) {
             $strBuffer .= $tags[$_rit];
 
-            if (!isset($tags[$_rit+1])) {
+            if (!isset($tags[$_rit + 1])) {
                 continue;
             }
-            $strTag = $tags[$_rit+1];
+            $strTag = $tags[$_rit + 1];
 
             if (!$strTag) {
                 continue;
@@ -94,13 +94,14 @@ final class ResolveLanguageTag
                 '' !== $elements[1] &&
                 $this->languageMatches($elements[1]) === (\strtolower($elements[0]) === 'ifnlng')
             ) {
-                for (; $_rit<$_cnt; $_rit+=2) {
+                for (; $_rit < $_cnt; $_rit += 2) {
                     if (
                         1 === \preg_match(
-                            '/^' . \preg_quote($elements[0], '/') . '(?:$|::|\|)/i', $tags[$_rit+3] ?? ''
+                            '/^' . \preg_quote($elements[0], '/') . '(?:$|::|\|)/i',
+                            $tags[$_rit + 3] ?? ''
                         )
                     ) {
-                        $tags[$_rit+2] = '';
+                        $tags[$_rit + 2] = '';
                         break;
                     }
                 }

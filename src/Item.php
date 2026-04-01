@@ -111,7 +111,7 @@ class Item implements IItem
     {
         // @codingStandardsIgnoreStart
         @trigger_error(
-            '"' .__METHOD__ . '" is deprecated and will get removed in MetaModels 3.0.',
+            '"' . __METHOD__ . '" is deprecated and will get removed in MetaModels 3.0.',
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
