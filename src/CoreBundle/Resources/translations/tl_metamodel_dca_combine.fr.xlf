@@ -44,13 +44,13 @@
         <source>Frontend group</source>
       </trans-unit>
       <trans-unit id="fe_group.description" resname="fe_group.description">
-        <source>The frontend user group the combination applies to; * is 'catch all'.</source>
+        <source>The frontend user group the combination applies to; * is &apos;catch all&apos;.</source>
       </trans-unit>
       <trans-unit id="be_group.label" resname="be_group.label">
         <source>Backend group</source>
       </trans-unit>
       <trans-unit id="be_group.description" resname="be_group.description">
-        <source>The backend user group the combination applies to; * is 'catch all'.</source>
+        <source>The backend user group the combination applies to; * is &apos;catch all&apos;.</source>
       </trans-unit>
       <trans-unit id="dca_id.label" resname="dca_id.label">
         <source>Input screen</source>

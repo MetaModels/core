@@ -391,6 +391,12 @@
         <source>AND condition</source>
         <target>UND-Bedingung</target>
       </trans-unit>
+      <trans-unit id="typenames.expression_rule" resname="typenames.expression_rule">
+        <source>Expression rule</source>
+      </trans-unit>
+      <trans-unit id="error.condition_max_children" resname="error.condition_max_children">
+        <source>The condition or rule &quot;%name%&quot; can only have &quot;%max%&quot; children max.</source>
+      </trans-unit>
       <trans-unit id="typedesc._attribute_" resname="typedesc._attribute_">
         <source>&lt;em&gt;[%colName%, &quot;%name%&quot;]&lt;/em&gt;</source>
         <target>&lt;em&gt;[%colName%, &quot;%name%&quot;]&lt;/em&gt;</target>
@@ -423,6 +429,9 @@
         <source>%1$s &lt;strong&gt;%2$s&lt;/strong&gt; %4$s</source>
         <target>%1$s &lt;strong&gt;%2$s&lt;/strong&gt; %4$s</target>
       </trans-unit>
+      <trans-unit id="typedesc.expression_rule" resname="typedesc.expression_rule">
+        <source>%1$s &lt;strong&gt;%2$s&lt;/strong&gt; %4$s</source>
+      </trans-unit>
       <trans-unit id="items.label" resname="items.label">
         <source>Items</source>
         <target>Items</target>
@@ -430,6 +439,13 @@
       <trans-unit id="items.description" resname="items.description">
         <source>Please enter the IDs of the items for filtering as comma-separated list.</source>
         <target>Bitte geben Sie für die Filterung die IDs der Items als Komma-Separierte-Liste ein.</target>
+      </trans-unit>
+      <trans-unit id="expression_rule.label" resname="expression_rule.label">
+        <source>Expression</source>
+      </trans-unit>
+      <trans-unit id="expression_rule.description" resname="expression_rule.description">
+        <source>Enter an expression here that is to be evaluated. If the condition is met, the
+          first filter rule is executed; if not, the second one is executed.</source>
       </trans-unit>
       <trans-unit id="deleteConfirm" resname="deleteConfirm">
         <source>Do you really want to delete filter setting ID %id%?</source>
@@ -517,7 +533,7 @@ Dies ist lediglich dasselbe wie in Beispiel 1, aber der Tabellenname des aktuell
         <target>Sichere Inserttags</target>
       </trans-unit>
       <trans-unit id="customsql_secure_inserttags.description" resname="customsql_secure_inserttags.description">
-        <source><![CDATA[Secure insert tags are just like the plain insert tags, but their value get\'s escaped in the query.<br />
+        <source><![CDATA[Secure insert tags are just like the plain insert tags, but their value get\&apos;s escaped in the query.<br />
           Therefore, you might be better off using the secure equivalent unless you exactly know what you are doing.<br />
           The notation is like:<br />
           <pre>{{secure::page::id}}</pre>]]></source>
@@ -548,7 +564,7 @@ Dies ist lediglich dasselbe wie in Beispiel 1, aber der Tabellenname des aktuell
             <li><strong>recursive</strong> - set to 1 to read arrays recursive (needs aggregate "set").</li>
             <li><strong>service</strong>  - The name of the service to retrieve (needs source "service").</li>
           </ul>]]></source>
-        <target>Parameterquellen sind nach diesem Muster aufgebaut: &lt;pre&gt;{{param::[source]?[query string]}}&lt;/pre&gt; Eine Quelle kann bestehen aus &lt;ul&gt; &lt;li&gt;&lt;strong&gt;get&lt;/strong&gt; - HTTP GET Query-String&lt;/li&gt; &lt;li&gt;&lt;strong&gt;post&lt;/strong&gt; - HTTP POST Feldern&lt;/li&gt; &lt;li&gt;&lt;strong&gt;session&lt;/strong&gt; - einem beliebigen Feld aus der Contao-Session&lt;/li&gt; &lt;li&gt;&lt;strong&gt;filter&lt;/strong&gt; - einen beliebigen ausgeführten Filterparameter (um Filterparameter zwischen Filtereinstellungen zu teilen).&lt;/li&gt; &lt;/ul&gt; Der Abfragestring wird wie ein normaler HTTP-Query-String als &quot;name=wert&quot;-Paar aufgebaut kann mit dem Zeichen &amp; kombiniert werden und muss mindestens das Feld \'name\' enthalten. Einer oder mehrere der folgenden optionalen Schlüsselwörter können zusätzlich benutzt werden; &lt;ul&gt; &lt;li&gt;&lt;strong&gt;default&lt;/strong&gt; - der zu benutzende Standardwert falls kein anderer zur Verfügung steht&lt;/li&gt; &lt;li&gt;&lt;strong&gt;aggregate&lt;/strong&gt; - entweder &quot;list&quot; oder &quot;set&quot;&lt;/li&gt; &lt;li&gt;&lt;strong&gt;key&lt;/strong&gt; - auf 1 setzen um den Schlüssel eines Array auszulesen (benötigt &quot;aggregate&quot;).&lt;/li&gt; &lt;li&gt;&lt;strong&gt;recursive&lt;/strong&gt; - auf 1 setzen um Arrays rekursiv auszulesen (benötigt &quot;aggregate&quot;).&lt;/li&gt; &lt;/ul&gt;</target>
+        <target>Parameterquellen sind nach diesem Muster aufgebaut: &lt;pre&gt;{{param::[source]?[query string]}}&lt;/pre&gt; Eine Quelle kann bestehen aus &lt;ul&gt; &lt;li&gt;&lt;strong&gt;get&lt;/strong&gt; - HTTP GET Query-String&lt;/li&gt; &lt;li&gt;&lt;strong&gt;post&lt;/strong&gt; - HTTP POST Feldern&lt;/li&gt; &lt;li&gt;&lt;strong&gt;session&lt;/strong&gt; - einem beliebigen Feld aus der Contao-Session&lt;/li&gt; &lt;li&gt;&lt;strong&gt;filter&lt;/strong&gt; - einen beliebigen ausgeführten Filterparameter (um Filterparameter zwischen Filtereinstellungen zu teilen).&lt;/li&gt; &lt;/ul&gt; Der Abfragestring wird wie ein normaler HTTP-Query-String als &quot;name=wert&quot;-Paar aufgebaut kann mit dem Zeichen &amp; kombiniert werden und muss mindestens das Feld \&apos;name\&apos; enthalten. Einer oder mehrere der folgenden optionalen Schlüsselwörter können zusätzlich benutzt werden; &lt;ul&gt; &lt;li&gt;&lt;strong&gt;default&lt;/strong&gt; - der zu benutzende Standardwert falls kein anderer zur Verfügung steht&lt;/li&gt; &lt;li&gt;&lt;strong&gt;aggregate&lt;/strong&gt; - entweder &quot;list&quot; oder &quot;set&quot;&lt;/li&gt; &lt;li&gt;&lt;strong&gt;key&lt;/strong&gt; - auf 1 setzen um den Schlüssel eines Array auszulesen (benötigt &quot;aggregate&quot;).&lt;/li&gt; &lt;li&gt;&lt;strong&gt;recursive&lt;/strong&gt; - auf 1 setzen um Arrays rekursiv auszulesen (benötigt &quot;aggregate&quot;).&lt;/li&gt; &lt;/ul&gt;</target>
       </trans-unit>
       <trans-unit id="customsql_example3.caption" resname="customsql_example3.caption">
         <source><![CDATA[Example 3<br />use complex filter parameter sources]]></source>
@@ -566,12 +582,12 @@ WHERE t.catname={{param::get?name=category&default=defaultcat}}</pre>
           <p>
             Imagine the page URL as of: "https://example.org/list/category/demo.html"<br />
             the resulting Query will then be:<br />
-            "SELECT t.id FROM mm_demo AS t WHERE t.catname='demo'"
+            "SELECT t.id FROM mm_demo AS t WHERE t.catname=&apos;demo&apos;"
           </p>
           <p>
             If the URL should be: "https://example.org/list.html",<br />
             the resulting Query will then be:<br />
-            "SELECT t.id FROM mm_demo AS t WHERE t.catname='defaultcat'"
+            "SELECT t.id FROM mm_demo AS t WHERE t.catname=&apos;defaultcat&apos;"
           </p>]]></source>
         <target>&lt;pre&gt;SELECT t.id
 FROM {{table}} AS t
@@ -581,11 +597,11 @@ Dies ist dasselbe wie in Beispiel 2, aber jetzt verwenden wir einen Parameter au
 &lt;/p&gt;
 &lt;p&gt;
 bei der Beispiel-URL wie diese: &quot;https://example.org/list/category/demo.html&quot;&lt;br /&gt;
-wäre das Query: &quot;SELECT t.id FROM mm_demo AS t WHERE t.catname=\'demo\'&quot;
+wäre das Query: &quot;SELECT t.id FROM mm_demo AS t WHERE t.catname=\&apos;demo\&apos;&quot;
 &lt;/p&gt;
 &lt;p&gt;
 Ist die URL: &quot;https://example.org/list.html&quot;,&lt;br /&gt;
-wäre das Query: &quot;SELECT t.id FROM mm_demo AS t WHERE t.catname=\'defaultcat\'&quot;
+wäre das Query: &quot;SELECT t.id FROM mm_demo AS t WHERE t.catname=\&apos;defaultcat\&apos;&quot;
 &lt;/p&gt;
 </target>
       </trans-unit>

@@ -23,7 +23,7 @@
       </trans-unit>
       <trans-unit id="mm_be_info_render_setting.description" resname="mm_be_info_render_setting.description">
         <source>Rendersetting</source>
-        <target>Paramètres d'affichage</target>
+        <target>Paramètres d&apos;affichage</target>
       </trans-unit>
       <trans-unit id="metamodels" resname="metamodels">
         <source>MetaModels elements</source>

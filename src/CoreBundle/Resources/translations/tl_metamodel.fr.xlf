@@ -27,7 +27,7 @@
       </trans-unit>
       <trans-unit id="pastenew.description" resname="pastenew.description">
         <source>Create a new element after element ID %id%</source>
-        <target>Créer un nouvel élément après l'élément ID %id%</target>
+        <target>Créer un nouvel élément après l&apos;élément ID %id%</target>
       </trans-unit>
       <trans-unit id="pasteafter.label" resname="pasteafter.label">
         <source>Paste at the top</source>
@@ -35,7 +35,7 @@
       </trans-unit>
       <trans-unit id="pasteafter.description" resname="pasteafter.description">
         <source>Paste after element ID %id%</source>
-        <target>Coller après l'élément ID %id%</target>
+        <target>Coller après l&apos;élément ID %id%</target>
       </trans-unit>
       <trans-unit id="backBT" resname="backBT">
         <source>Go back</source>
@@ -47,7 +47,7 @@
       </trans-unit>
       <trans-unit id="showRecord" resname="showRecord">
           <source>Show the details of record %id%</source>
-          <target>Afficher les détails de l'enregistrement %id%</target>
+          <target>Afficher les détails de l&apos;enregistrement %id%</target>
       </trans-unit>
       <trans-unit id="id.label" resname="id.label">
         <source>Id</source>
@@ -127,7 +127,7 @@
       </trans-unit>
       <trans-unit id="varsupport.description" resname="varsupport.description">
         <source>Check if this MetaModel shall support variants of items.</source>
-        <target>Cocher pour que ce Metamodel prenne en charge les variantes d'éléments.</target>
+        <target>Cocher pour que ce Metamodel prenne en charge les variantes d&apos;éléments.</target>
       </trans-unit>
       <trans-unit id="localeterritorysupport.label" resname="localeterritorysupport.label">
         <source>Locale territory support</source>
@@ -191,7 +191,7 @@
       </trans-unit>
       <trans-unit id="delete.confirm" resname="delete.confirm">
         <source>Do you really want to delete element ID %id%?</source>
-        <target>Voulez-vous vraiment supprimer l'élément ID %id% ?</target>
+        <target>Voulez-vous vraiment supprimer l&apos;élément ID %id% ?</target>
       </trans-unit>
       <trans-unit id="show.label" resname="show.label">
         <source>MetaModel details</source>
@@ -243,11 +243,11 @@
       </trans-unit>
       <trans-unit id="dca_combine.label" resname="dca_combine.label">
         <source>Define input/output combinations</source>
-        <target>Définir les combinaisons d'entrée/sortie</target>
+        <target>Définir les combinaisons d&apos;entrée/sortie</target>
       </trans-unit>
       <trans-unit id="dca_combine.description" resname="dca_combine.description">
         <source>Define input/output combinations for MetaModel ID %id%</source>
-        <target>Définir les combinaisons d'entrée/sortie pour le MetaModel ID %id%</target>
+        <target>Définir les combinaisons d&apos;entrée/sortie pour le MetaModel ID %id%</target>
       </trans-unit>
       <trans-unit id="cut.label" resname="cut.label">
         <source>Move MetaModel</source>
@@ -255,7 +255,7 @@
       </trans-unit>
       <trans-unit id="cut.description" resname="cut.description">
         <source>Define the order of your MetaModels.</source>
-        <target>Modifier l'ordre de vos MetaModels</target>
+        <target>Modifier l&apos;ordre de vos MetaModels</target>
       </trans-unit>
       <trans-unit id="searchable_pages.label" resname="searchable_pages.label">
         <source>Define search settings</source>
@@ -267,7 +267,7 @@
       </trans-unit>
       <trans-unit id="itemFormatCount.label" resname="itemFormatCount.label">
         <source>{-1} Table does not exist, run migration!| {0} No items|{1} 1 item|[2,Inf[ %count% items</source>
-        <target>{-1} La table n'existe pas, exécutez la migration !| {0} Aucun élément|{1} 1 élément|[2,Inf[ %count% éléments</target>
+        <target>{-1} La table n&apos;existe pas, exécutez la migration !| {0} Aucun élément|{1} 1 élément|[2,Inf[ %count% éléments</target>
       </trans-unit>
       <trans-unit id="deleteConfirm" resname="deleteConfirm">
         <source>Do you really want to delete MetaModel ID %id%?</source>
@@ -277,7 +277,7 @@
         <source>After creating a model, the database must be migrated (console, Contao Manager) - even if the table
           name is changed. When changing the table name, the user data itself must be transferred.
         </source>
-        <target>Après la création d'un modèle, la base de données doit être migrée (console, Contao Manager) - même si le nom de la table est modifié. En cas de changement du nom de la table, les données utilisateur elles-mêmes doivent être transférées.</target>
+        <target>Après la création d&apos;un modèle, la base de données doit être migrée (console, Contao Manager) - même si le nom de la table est modifié. En cas de changement du nom de la table, les données utilisateur elles-mêmes doivent être transférées.</target>
       </trans-unit>
       <trans-unit id="newRecord" resname="newRecord">
         <source>Create a new item</source>
@@ -285,7 +285,7 @@
       </trans-unit>
       <trans-unit id="editRecord" resname="editRecord">
         <source>Edit record %id%</source>
-        <target>Modifier l'enregistrement %id%</target>
+        <target>Modifier l&apos;enregistrement %id%</target>
       </trans-unit>
       <trans-unit id="save" resname="save">
         <source>Save</source>
@@ -305,11 +305,11 @@
       </trans-unit>
       <trans-unit id="ERR.tableNameNotGiven" resname="ERR.tableNameNotGiven">
         <source>The table name is not given or empty.</source>
-        <target>Le nom de la table n'est pas autorisé ou est vide.</target>
+        <target>Le nom de la table n&apos;est pas autorisé ou est vide.</target>
       </trans-unit>
       <trans-unit id="ERR.invalidTableName" resname="ERR.invalidTableName">
         <source>The table name &quot;%table_name%&quot; is invalid.</source>
-        <target>Le nom de la table &quot;%table_name%&quot; n'est pas valide.</target>
+        <target>Le nom de la table &quot;%table_name%&quot; n&apos;est pas valide.</target>
       </trans-unit>
       <trans-unit id="ERR.tableExists" resname="ERR.tableExists">
         <source>Table &quot;%table_name%&quot; already exists.</source>
