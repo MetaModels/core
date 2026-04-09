@@ -110,14 +110,14 @@
       </trans-unit>
       <trans-unit id="rendergrouptype.description" resname="rendergrouptype.description">
         <source>The grouping type to use in the item view.</source>
-        <target>Le type de regroupement à utiliser dans la vue de l'élément.</target>
+        <target>Le type de regroupement à utiliser dans la vue de l&apos;élément.</target>
       </trans-unit>
       <trans-unit id="rendergroupattr.label" resname="rendergroupattr.label">
         <source>Grouping attribute</source>
       </trans-unit>
       <trans-unit id="rendergroupattr.description" resname="rendergroupattr.description">
         <source>The attribute to use for grouping in the item view.</source>
-        <target>L'attribut à utiliser pour le regroupement dans la vue de l'élément.</target>
+        <target>L&apos;attribut à utiliser pour le regroupement dans la vue de l&apos;élément.</target>
       </trans-unit>
       <trans-unit id="rendergrouplen.label" resname="rendergrouplen.label">
         <source>Grouping length</source>

@@ -11,11 +11,11 @@
       </trans-unit>
       <trans-unit id="editrendersetting.label" resname="editrendersetting.label">
         <source>Edit render setting</source>
-        <target>Modifier les paramètres d'affichage</target>
+        <target>Modifier les paramètres d&apos;affichage</target>
       </trans-unit>
       <trans-unit id="editrendersetting.description" resname="editrendersetting.description">
         <source>Edit the render setting ID %id%.</source>
-        <target>Modifier les paramètres d'affichage ID %id%</target>
+        <target>Modifier les paramètres d&apos;affichage ID %id%</target>
       </trans-unit>
       <trans-unit id="editfiltersetting.label" resname="editfiltersetting.label">
         <source>Edit filter setting</source>

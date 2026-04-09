@@ -96,7 +96,7 @@
         <source>The page that shall be used as &quot;show details&quot; urls. Note that the detailed URL params will get generated
           by the filter setting that is currently in use.
         </source>
-        <target>La page qui sera utilisée comme url pour afficher les détails. Notez que les paramètres de l'URL détaillée seront générés par le filtre en cours d'utilisation.</target>
+        <target>La page qui sera utilisée comme url pour afficher les détails. Notez que les paramètres de l&apos;URL détaillée seront générés par le filtre en cours d&apos;utilisation.</target>
       </trans-unit>
       <trans-unit id="jumpTo_allLanguages" resname="jumpTo_allLanguages">
         <source>All languages</source>

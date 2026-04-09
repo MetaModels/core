@@ -39,7 +39,7 @@
       </trans-unit>
       <trans-unit id="pastenew.description" resname="pastenew.description">
         <source>Create a new element after element ID %id%</source>
-        <target>Créer un nouvel élément après l'élément ID %id%</target>
+        <target>Créer un nouvel élément après l&apos;élément ID %id%</target>
       </trans-unit>
       <trans-unit id="pasteafter.label" resname="pasteafter.label">
         <source>Paste at the top</source>
@@ -47,7 +47,7 @@
       </trans-unit>
       <trans-unit id="pasteafter.description" resname="pasteafter.description">
         <source>Paste after element ID %id%</source>
-        <target>Coller après l'élément ID %id%</target>
+        <target>Coller après l&apos;élément ID %id%</target>
       </trans-unit>
       <trans-unit id="save" resname="save">
         <source>Save</source>
@@ -192,11 +192,11 @@
       </trans-unit>
       <trans-unit id="iseditable.description" resname="iseditable.description">
         <source>If checked, this input screen allows the editing of items.</source>
-        <target>Si cette case est cochée, cet écran de saisie permet d'éditer des éléments.</target>
+        <target>Si cette case est cochée, cet écran de saisie permet d&apos;éditer des éléments.</target>
       </trans-unit>
       <trans-unit id="iscreatable.label" resname="iscreatable.label">
         <source>Allow creating of items</source>
-        <target>Autoriser la création d'éléments</target>
+        <target>Autoriser la création d&apos;éléments</target>
       </trans-unit>
       <trans-unit id="iscreatable.description" resname="iscreatable.description">
         <source>If checked, this input screen allows the creating of items.</source>
@@ -204,7 +204,7 @@
       </trans-unit>
       <trans-unit id="isdeleteable.label" resname="isdeleteable.label">
         <source>Allow deleting of items</source>
-        <target>Permettre la suppression d'éléments</target>
+        <target>Permettre la suppression d&apos;éléments</target>
       </trans-unit>
       <trans-unit id="isdeleteable.description" resname="isdeleteable.description">
         <source>If checked, this input screen allows the deleting of items.</source>
