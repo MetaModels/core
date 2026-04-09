@@ -193,7 +193,7 @@
       </trans-unit>
       <trans-unit id="chosen.description" resname="chosen.description">
         <source>Enable Chosen graphical select widget.</source>
-        <target>'Chosen' für die Auswahl aktivieren.</target>
+        <target>&apos;Chosen&apos; für die Auswahl aktivieren.</target>
       </trans-unit>
       <trans-unit id="filterable.label" resname="filterable.label">
         <source>Filterable</source>
@@ -263,11 +263,11 @@
       </trans-unit>
       <trans-unit id="trailingSlash.label" resname="trailingSlash.label">
         <source>Trailing slash handling</source>
-        <target>Führende '/' bearbeiten</target>
+        <target>Führende &apos;/&apos; bearbeiten</target>
       </trans-unit>
       <trans-unit id="trailingSlash.description" resname="trailingSlash.description">
         <source>Here you can specify how trailing slashes shall be handled</source>
-        <target>Hier können Sie angeben, wie führende '/' behandelt werden sollen.</target>
+        <target>Hier können Sie angeben, wie führende &apos;/&apos; behandelt werden sollen.</target>
       </trans-unit>
       <trans-unit id="spaceToUnderscore.label" resname="spaceToUnderscore.label">
         <source>Replace spaces with underscore</source>

@@ -266,7 +266,7 @@
         <target>Eigenschaftswert beinhaltet ...</target>
       </trans-unit>
       <trans-unit id="type_values_contain.description" resname="type_values_contain.description">
-        <source>The condition is fulfilled when any of the attribute's values matches at least one of the specified values (set intersection).</source>
+        <source>The condition is fulfilled when any of the attribute&apos;s values matches at least one of the specified values (set intersection).</source>
         <target>Die Bedingung ist erfüllt, wenn ein beliebiger Attributwert gleich dem jeweils festgelegten Wert ist (Schnittmenge bzw. ODER). Als Attribute können diejenigen mit Mehrfachauswahl wie z.B. Tags ausgewählt werden.</target>
       </trans-unit>
       <trans-unit id="type_is_visible.caption" resname="type_is_visible.caption">

@@ -145,7 +145,7 @@
       </trans-unit>
       <trans-unit id="alwaysSave.description" resname="alwaysSave.description">
         <source>If true the field will always be saved, even if its value has not changed.</source>
-        <target>Si c'est le cas, le champ sera toujours sauvegardé, même si sa valeur n'a pas changé.</target>
+        <target>Si c&apos;est le cas, le champ sera toujours sauvegardé, même si sa valeur n&apos;a pas changé.</target>
       </trans-unit>
       <trans-unit id="chosen.label" resname="chosen.label">
         <source>Chosen</source>
@@ -248,7 +248,7 @@
       </trans-unit>
       <trans-unit id="overview_legend" resname="overview_legend">
         <source>Filtering and searching in the backend list</source>
-        <target>Filtrage et recherche dans la liste d'arrière-plan</target>
+        <target>Filtrage et recherche dans la liste d&apos;arrière-plan</target>
       </trans-unit>
       <trans-unit id="backend_legend" resname="backend_legend">
         <source>Backend</source>
