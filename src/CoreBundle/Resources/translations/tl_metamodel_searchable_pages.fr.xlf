@@ -67,7 +67,7 @@
       </trans-unit>
       <trans-unit id="filter.description" resname="filter.description">
         <source>Select the filter setting to be used for indexing. The filter can be used to exclude unpublished items, for example.</source>
-        <target>Sélectionnez le paramètre de filtre à utiliser pour l'indexation. Le filtre peut être utilisé pour exclure des éléments non publiés, par exemple.</target>
+        <target>Sélectionnez le paramètre de filtre à utiliser pour l&apos;indexation. Le filtre peut être utilisé pour exclure des éléments non publiés, par exemple.</target>
       </trans-unit>
       <trans-unit id="filterparams.label" resname="filterparams.label">
         <source>Filter parameter override</source>
