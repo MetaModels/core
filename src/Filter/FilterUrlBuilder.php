@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2025 The MetaModels team.
+ * (c) 2012-2026 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Andreas Fischer <anfischer@kaffee-partner.de>
- * @copyright  2012-2025 The MetaModels team.
+ * @copyright  2012-2026 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -182,13 +182,15 @@ class FilterUrlBuilder
         $filterUrl->setPageValue('id', \substr($routeName, 8));
         $requestUri = \rawurldecode(\substr($request->getPathInfo(), 1));
 
-        if (null === ($route = $request->attributes->get('_route_object'))) {
-            return;
-        }
-        assert($route instanceof Route);
+        if (null === ($pageModel = $request->attributes->get('pageModel'))) {
+            if (null === ($route = $request->attributes->get('_route_object'))) {
+                return;
+            }
+            assert($route instanceof Route);
 
-        $pageModel = $route->getDefault('pageModel');
-        assert($pageModel instanceof PageModel);
+            $pageModel = $route->getDefault('pageModel');
+            assert($pageModel instanceof PageModel);
+        }
 
         $length    = $pageModel->urlSuffix ? -\strlen($pageModel->urlSuffix) : null;
         $start     = ($pageModel->urlPrefix ? \strlen($pageModel->urlPrefix . '/') : 0)
