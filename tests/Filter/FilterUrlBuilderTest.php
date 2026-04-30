@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2025 The MetaModels team.
+ * (c) 2012-2026 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,13 +13,15 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2025 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2026 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\Test\Filter;
 
+use Contao\PageModel;
 use MetaModels\Filter\FilterUrl;
 use MetaModels\Filter\FilterUrlBuilder;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -47,10 +49,10 @@ class FilterUrlBuilderTest extends TestCase
                     'get2'       => 'value',
                     'parameters' => '/auto/slug/sluggy',
                 ],
-                'page'               => [
-                    'alias' => 'page-alias',
+                'page'               => fn ($test) => $test->mockPage([
+                    'alias' => 'alias',
                     'id'    => 42,
-                ],
+                ]),
                 'get'                => [
                     'get2' => 'value',
                 ],
@@ -70,9 +72,9 @@ class FilterUrlBuilderTest extends TestCase
                     'parameters' => '/auto/slug/sluggy',
                     'get-param'  => 'get-value',
                 ],
-                'page'               => [
-                    'id' => 42,
-                ],
+                'page'               => fn ($test) => $test->mockPage([
+                    'id'    => 42,
+                ]),
                 'get'                => [
                     'get2' => 'value',
                 ],
@@ -91,28 +93,28 @@ class FilterUrlBuilderTest extends TestCase
     /**
      * Test initialization.
      *
-     * @param string $expectedUrl        The expected URL.
-     * @param array  $expectedParameters The expected parameters.
-     * @param array  $page               The page array.
-     * @param array  $get                The GET parameters.
-     * @param array  $slug               The slug parameters.
-     * @param array  $requestGet         The GET parameters of the current request.
-     * @param string $requestUrl         The current URL.
-     *
-     * @return void
+     * @param string    $expectedUrl        The expected URL.
+     * @param array     $expectedParameters The expected parameters.
+     * @param callable(FilterUrlBuilderTest): PageModel $page               The page array.
+     * @param array     $get                The GET parameters.
+     * @param array     $slug               The slug parameters.
+     * @param array     $requestGet         The GET parameters of the current request.
+     * @param string    $requestUrl         The current URL.
      */
     #[DataProvider('generateProvider')]
     public function testGenerate(
         string $expectedUrl,
         array $expectedParameters,
-        array $page,
+        callable $page,
         array $get,
         array $slug,
         array $requestGet,
         string $requestUrl
     ): void {
+        $pageModel = $page($this);
+
         $filterUrl = new FilterUrl(
-            $page,
+            $pageModel->row(),
             $get,
             $slug
         );
@@ -127,7 +129,7 @@ class FilterUrlBuilderTest extends TestCase
             ->with($expectedUrl, $expectedParameters)
             ->willReturn('success');
 
-        $requestStack = $this->mockRequestStack($requestGet, $requestUrl, $page['id']);
+        $requestStack = $this->mockRequestStack($requestGet, $requestUrl, $pageModel);
 
         $builder = new FilterUrlBuilder($generator, $requestStack);
 
@@ -158,7 +160,7 @@ class FilterUrlBuilderTest extends TestCase
             new Request(
                 ['get-param' => 'get-value'],
                 [],
-                ['pageModel' => 42],
+                ['pageModel' => $this->mockPage(['alias' => 'folder/page', 'id' => 42])],
                 [],
                 [],
                 [
@@ -179,7 +181,7 @@ class FilterUrlBuilderTest extends TestCase
      * @param array  $requestGet The current GET parameters.
      * @param string $requestUrl The request URL.
      */
-    private function mockRequestStack(array $requestGet, string $requestUrl, int $pageModel): RequestStack
+    private function mockRequestStack(array $requestGet, string $requestUrl, PageModel $pageModel): RequestStack
     {
         $requestStack = $this->getMockBuilder(RequestStack::class)->getMock();
         $requestStack->method('getCurrentRequest')->willReturn(
@@ -187,5 +189,16 @@ class FilterUrlBuilderTest extends TestCase
         );
 
         return $requestStack;
+    }
+
+    private function mockPage(array $data): PageModel
+    {
+        $mock = $this->getMockBuilder(PageModel::class)->disableOriginalConstructor()->getMock();
+        $mock->method('__get')->willReturnCallback(
+            fn (string $name) => $data[$name] ?? null
+        );
+        $mock->method('row')->willReturn($data);
+
+        return $mock;
     }
 }
