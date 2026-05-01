@@ -155,6 +155,26 @@
         <source>URL parameter</source>
         <target>URL-Parameter</target>
       </trans-unit>
+      <trans-unit id="param_type.label" resname="param_type.label">
+        <source>URL type for parameter</source>
+        <target>URL-Typ für den Parameter</target>
+      </trans-unit>
+      <trans-unit id="param_type.description" resname="param_type.description">
+        <source>Define whether the filter parameter is placed as a URL path segment (slug) or as a query string parameter (GET).</source>
+        <target>Legt fest, ob der Filterparameter als URL-Pfadsegment (Slug) oder als Query-String-Parameter (GET) in die URL eingebaut wird.</target>
+      </trans-unit>
+      <trans-unit id="param_type_options.slug" resname="param_type_options.slug">
+        <source>Slug only</source>
+        <target>Nur Slug</target>
+      </trans-unit>
+      <trans-unit id="param_type_options.get" resname="param_type_options.get">
+        <source>GET only</source>
+        <target>Nur GET</target>
+      </trans-unit>
+      <trans-unit id="param_type_options.slugNget" resname="param_type_options.slugNget">
+        <source>Slug or GET allowed</source>
+        <target>Slug oder GET erlaubt</target>
+      </trans-unit>
       <trans-unit id="urlparam.description" resname="urlparam.description">
         <source>The URL parameter that shall get mapped to the selected attribute. The special &lt;em&gt;&quot;auto_item&quot;&lt;/em&gt;
           parameter can also be used, this is especially useful for alias columns.

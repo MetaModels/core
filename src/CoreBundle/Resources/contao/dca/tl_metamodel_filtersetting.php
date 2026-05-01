@@ -249,6 +249,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
             ],
             '+fefilter' => [
                 'urlparam',
+                'param_type',
                 'predef_param',
                 'fe_widget',
                 'allow_empty',
@@ -403,6 +404,22 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
                 'tl_class' => 'w50',
             ],
             'sql'         => "varchar(255) NOT NULL default ''"
+        ],
+        'param_type'           => [
+            'label'       => 'param_type.label',
+            'description' => 'param_type.description',
+            'exclude'     => true,
+            'inputType'   => 'select',
+            'options'     => ['slug', 'get', 'slugNget'],
+            'reference'   => [
+                'slug'     => 'param_type_options.slug',
+                'get'      => 'param_type_options.get',
+                'slugNget' => 'param_type_options.slugNget',
+            ],
+            'eval'        => [
+                'tl_class' => 'w50',
+            ],
+            'sql'         => "varchar(10) NOT NULL default 'slug'",
         ],
         'predef_param'         => [
             'label'       => 'predef_param.label',

@@ -32,6 +32,7 @@ use Contao\StringUtil;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\RedirectEvent;
 use Contao\CoreBundle\Csrf\ContaoCsrfTokenManager;
+use Contao\CoreBundle\Exception\PageNotFoundException;
 use Contao\CoreBundle\Exception\RedirectResponseException;
 use Contao\FrontendTemplate;
 use Contao\Input;
@@ -437,15 +438,28 @@ class FrontendFilter
             $filterOptions
         );
 
+        // 404 if a get-only filter parameter is accessed via slug.
+        foreach ($arrWidgets as $widgetName => $widget) {
+            if ('get' === ($widget['param_type'] ?? 'slug') && $all->hasSlug($widgetName)) {
+                throw new PageNotFoundException();
+            }
+        }
+
         // If we have POST data, we need to redirect now.
         if (Input::post('FORM_SUBMIT') === $this->formId) {
             foreach ($wantedNames as $widgetName) {
                 if (empty($arrWidgets[$widgetName])) {
                     continue;
                 }
-                $filter = $arrWidgets[$widgetName];
+                $filter    = $arrWidgets[$widgetName];
+                $paramType = $filter['param_type'] ?? 'slug';
                 if (null !== $filter['urlvalue']) {
-                    $other->setSlug($widgetName, $filter['urlvalue']);
+                    match ($paramType) {
+                        'get'      => $other->setGet($widgetName, $filter['urlvalue']),
+                        'slugNget' => $other->setSlug($widgetName, $filter['urlvalue'])
+                                           ->setGet($widgetName, $filter['urlvalue']),
+                        default    => $other->setSlug($widgetName, $filter['urlvalue']),
+                    };
                 }
             }
 
