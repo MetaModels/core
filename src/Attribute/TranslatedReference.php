@@ -38,7 +38,7 @@ use MetaModels\ITranslatedMetaModel;
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-abstract class TranslatedReference extends BaseComplex implements ITranslated
+abstract class TranslatedReference extends BaseComplex implements ITranslatedWithFallbackControl
 {
     /**
      * Database connection.
@@ -453,6 +453,24 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
         $this->buildWhere($queryBuilder, $idList, [$langCode], 't');
 
         return $queryBuilder->executeQuery()->fetchFirstColumn();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    #[\Override]
+    public function getTranslatedDataForWithoutFallback(array $arrIds, string $strLangCode): array
+    {
+        return $this->getTranslatedDataFor($arrIds, $strLangCode);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    #[\Override]
+    public function copyTranslatedDataFor(array $sourceData, string $newId, string $strLangCode): void
+    {
+        $this->setTranslatedDataFor([$newId => $sourceData], $strLangCode);
     }
 
     /**

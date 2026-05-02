@@ -48,6 +48,15 @@ services:
                 event: dc-general.model.pre-duplicate
                 method: handle
 
+    metamodels.copy_translated_data_listener:
+        class: MetaModels\DcGeneral\Events\MetaModel\CopyTranslatedData
+        arguments:
+            - "@metamodels.factory"
+        tags:
+            -   name: kernel.event_listener
+                event: dc-general.model.post-duplicate
+                method: handle
+
     metamodels.sub_system_boot:
         class: MetaModels\CoreBundle\EventListener\SubSystemBootListener
         arguments:
