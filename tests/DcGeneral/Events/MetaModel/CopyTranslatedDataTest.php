@@ -150,14 +150,14 @@ class CopyTranslatedDataTest extends TestCase
     }
 
     /**
-     * Languages for which the attribute holds no data are skipped (copyTranslatedDataFor not called).
+     * Languages for which the attribute holds no data are skipped (applyTranslatedDataFor not called).
      */
     public function testHandleSkipsLanguagesWithNoData(): void
     {
         /** @var ITranslatedWithFallbackControl&MockObject $attribute */
         $attribute = $this->getMockForAbstractClass(ITranslatedWithFallbackControl::class);
         $attribute->method('getTranslatedDataForWithoutFallback')->willReturn([]);
-        $attribute->expects(self::never())->method('copyTranslatedDataFor');
+        $attribute->expects(self::never())->method('applyTranslatedDataFor');
 
         /** @var ITranslatedMetaModel&MockObject $metaModel */
         $metaModel = $this->getMockForAbstractClass(ITranslatedMetaModel::class);
@@ -169,7 +169,7 @@ class CopyTranslatedDataTest extends TestCase
     }
 
     /**
-     * Happy path: for each language and attribute with data, copyTranslatedDataFor is called with the new ID.
+     * Happy path: for each language and attribute with data, applyTranslatedDataFor is called with the new ID.
      */
     public function testHandleCopiesDataForAllLanguages(): void
     {
@@ -186,13 +186,13 @@ class CopyTranslatedDataTest extends TestCase
             [[$sourceId], 'en', [$sourceId => $dataEN]],
         ]);
 
-        $attribute->expects(self::exactly(2))->method('copyTranslatedDataFor')->willReturnCallback(
-            static function (array $sourceData, string $newItemId, string $lang) use ($newId, $dataDE, $dataEN): void {
-                self::assertSame($newId, $newItemId, "New ID must be the second argument for lang={$lang}");
+        $attribute->expects(self::exactly(2))->method('applyTranslatedDataFor')->willReturnCallback(
+            static function (array $arrValues, string $lang) use ($newId, $dataDE, $dataEN): void {
+                self::assertArrayHasKey($newId, $arrValues, "New ID must be the array key for lang={$lang}");
                 if ('de' === $lang) {
-                    self::assertSame($dataDE, $sourceData);
+                    self::assertSame($dataDE, $arrValues[$newId]);
                 } else {
-                    self::assertSame($dataEN, $sourceData);
+                    self::assertSame($dataEN, $arrValues[$newId]);
                 }
             }
         );
@@ -223,8 +223,8 @@ class CopyTranslatedDataTest extends TestCase
             [[$sourceId], 'en', []],
         ]);
 
-        $attribute->expects(self::once())->method('copyTranslatedDataFor')
-            ->with($dataDE, $newId, 'de');
+        $attribute->expects(self::once())->method('applyTranslatedDataFor')
+            ->with([$newId => $dataDE], 'de');
 
         /** @var ITranslatedMetaModel&MockObject $metaModel */
         $metaModel = $this->getMockForAbstractClass(ITranslatedMetaModel::class);
@@ -249,12 +249,12 @@ class CopyTranslatedDataTest extends TestCase
         /** @var ITranslatedWithFallbackControl&MockObject $attribute1 */
         $attribute1 = $this->getMockForAbstractClass(ITranslatedWithFallbackControl::class);
         $attribute1->method('getTranslatedDataForWithoutFallback')->willReturn([$sourceId => $data1]);
-        $attribute1->expects(self::once())->method('copyTranslatedDataFor')->with($data1, $newId, 'de');
+        $attribute1->expects(self::once())->method('applyTranslatedDataFor')->with([$newId => $data1], 'de');
 
         /** @var ITranslatedWithFallbackControl&MockObject $attribute2 */
         $attribute2 = $this->getMockForAbstractClass(ITranslatedWithFallbackControl::class);
         $attribute2->method('getTranslatedDataForWithoutFallback')->willReturn([$sourceId => $data2]);
-        $attribute2->expects(self::once())->method('copyTranslatedDataFor')->with($data2, $newId, 'de');
+        $attribute2->expects(self::once())->method('applyTranslatedDataFor')->with([$newId => $data2], 'de');
 
         /** @var ITranslatedMetaModel&MockObject $metaModel */
         $metaModel = $this->getMockForAbstractClass(ITranslatedMetaModel::class);

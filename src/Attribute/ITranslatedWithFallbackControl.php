@@ -42,17 +42,16 @@ interface ITranslatedWithFallbackControl extends ITranslated
     public function getTranslatedDataForWithoutFallback(array $arrIds, string $strLangCode): array;
 
     /**
-     * Copy source data to a new item for a given language.
+     * Save translated data for a given language, potentially with attribute-specific transformation.
      *
      * Implementations may transform the data before persisting it — e.g. a unique-alias attribute
      * re-generates the slug to satisfy its uniqueness constraint. The default behaviour is to call
      * setTranslatedDataFor() verbatim.
      *
-     * @param array<string, mixed> $sourceData  The raw attribute data of the source item for $strLangCode.
-     * @param string               $newId       The id of the new (copied) item.
-     * @param string               $strLangCode The language code being processed.
+     * @param array<string, array<string, mixed>> $arrValues   The values keyed by item id.
+     * @param string                              $strLangCode The language code being processed.
      *
      * @return void
      */
-    public function copyTranslatedDataFor(array $sourceData, string $newId, string $strLangCode): void;
+    public function applyTranslatedDataFor(array $arrValues, string $strLangCode): void;
 }

@@ -102,7 +102,7 @@ final class CopyTranslatedData
                 continue;
             }
 
-            $attribute->copyTranslatedDataFor($data[$sourceId], $newId, $language);
+            $attribute->applyTranslatedDataFor([$newId => $data[$sourceId]], $language);
         }
     }
 }
