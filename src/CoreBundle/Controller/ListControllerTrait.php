@@ -343,10 +343,13 @@ trait ListControllerTrait
     private function getFilterParameters(FilterUrl $filterUrl, ItemList $itemRenderer): array
     {
         $filterSetting = $itemRenderer->getFilterSettings();
-        $wantedByType      = ['get' => [], 'slug' => []];
+        /** @var array<string, string> $wantedByType */
+        $wantedByType = [];
         // FIXME: improve this call - it does too much.
-        foreach ($filterSetting->getParameterFilterWidgets([], [], new FrontendFilterOptions()) as $widgetName => $widget) {
-            $wantedByType[$widgetName] = ($widget['param_type'] ?? 'slugNget');
+        foreach (
+            $filterSetting->getParameterFilterWidgets([], [], new FrontendFilterOptions()) as $widgetName => $widget
+        ) {
+            $wantedByType[$widgetName] = (string) ($widget['param_type'] ?? 'slugNget');
         }
 
         $result = [];

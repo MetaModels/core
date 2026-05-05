@@ -698,7 +698,7 @@ class FrontendFilter
     }
 
     /**
-     * @param list<string>|array{get: list<string>, slug: list<string>, slugNget?: list<string>} $wantedNames The wanted parameter names.
+     * @param list<string>|array{get: list<string>, slug: list<string>} $wantedNames The wanted parameter names.
      *
      * @return array{get: list<string>, slug: list<string>}
      */
@@ -711,11 +711,10 @@ class FrontendFilter
                 'Passing a list of strings to "\MetaModels\FrontendIntegration\FrontendFilter::buildParameters()"' .
                 ' is deprecated since version 2.4, please pass an array [\'get\' => [], \'slug\' => []] instead.',
             );
-            return [
-                'slug' => $wantedNames,
-                'get' => [],
-            ];
+            /** @var list<string> $wantedNames */
+            return ['slug' => $wantedNames, 'get' => []];
         }
+        /** @var array{get: list<string>, slug: list<string>} $wantedNames */
         return $wantedNames;
     }
 }
