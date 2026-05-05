@@ -173,7 +173,11 @@
       </trans-unit>
       <trans-unit id="param_type_options.slugNget" resname="param_type_options.slugNget">
         <source>Slug or GET allowed</source>
-        <target>Slug oder GET erlaubt</target>
+        <target>Slug oder GET erlaubt - Deprecated: Slug ODER GET verwenden!</target>
+      </trans-unit>
+      <trans-unit id="hint_param_type_slugNget" resname="hint_param_type_slugNget">
+        <source>Set the URL type for the parameter to "Slug" OR "GET" - the "Slug or Get" setting will be removed in a future version.</source>
+        <target>URL-Typ für den Parameter auf "Slug" ODER "GET" einstellen - Einstellung "Slug oder Get" entfällt in künftiger Version.</target>
       </trans-unit>
       <trans-unit id="urlparam.description" resname="urlparam.description">
         <source>The URL parameter that shall get mapped to the selected attribute. The special &lt;em&gt;&quot;auto_item&quot;&lt;/em&gt;

@@ -138,7 +138,10 @@
         <source>GET only</source>
       </trans-unit>
       <trans-unit id="param_type_options.slugNget" resname="param_type_options.slugNget">
-        <source>Slug or GET allowed</source>
+        <source>Slug or GET allowed - deprecated: use slug OR GET!</source>
+      </trans-unit>
+      <trans-unit id="hint_param_type_slugNget" resname="hint_param_type_slugNget">
+        <source>Set the URL type for the parameter to "Slug" OR "GET" - the "Slug or GET" setting will be removed in a future version.</source>
       </trans-unit>
       <trans-unit id="predef_param.label" resname="predef_param.label">
         <source>Static parameter</source>

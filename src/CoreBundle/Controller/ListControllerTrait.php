@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2025 The MetaModels team.
+ * (c) 2012-2026 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2025 The MetaModels team.
+ * @copyright  2012-2026 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -33,6 +33,7 @@ use Contao\Template;
 use MetaModels\Filter\FilterUrl;
 use MetaModels\Filter\FilterUrlBuilder;
 use MetaModels\Filter\Setting\IFilterSettingFactory;
+use MetaModels\FrontendIntegration\FrontendFilterOptions;
 use MetaModels\Helper\SortingLinkGenerator;
 use MetaModels\IFactory;
 use MetaModels\IItem;
@@ -341,9 +342,16 @@ trait ListControllerTrait
      */
     private function getFilterParameters(FilterUrl $filterUrl, ItemList $itemRenderer): array
     {
+        $filterSetting = $itemRenderer->getFilterSettings();
+        $wantedByType      = ['get' => [], 'slug' => []];
+        // FIXME: improve this call - it does too much.
+        foreach ($filterSetting->getParameterFilterWidgets([], [], new FrontendFilterOptions()) as $widgetName => $widget) {
+            $wantedByType[$widgetName] = ($widget['param_type'] ?? 'slugNget');
+        }
+
         $result = [];
-        foreach ($itemRenderer->getFilterSettings()->getParameters() as $name) {
-            if (null !== $value = $this->tryReadFromSlugOrGet($filterUrl, $name, 'slugNget')) {
+        foreach ($filterSetting->getParameters() as $name) {
+            if (null !== $value = $this->tryReadFromSlugOrGet($filterUrl, $name, $wantedByType[$name] ?? 'slugNget')) {
                 $result[$name] = $value;
             }
         }
@@ -354,31 +362,32 @@ trait ListControllerTrait
     /**
      * Get parameter from get or slug.
      *
-     * @param FilterUrl $filterUrl The filter URL to obtain parameters from.
-     * @param string    $sortParam The sort parameter name to obtain.
-     * @param string    $sortType  The sort URL type.
+     * @param FilterUrl $filterUrl   The filter URL to obtain parameters from.
+     * @param string    $name        The parameter name to obtain.
+     * @param string    $paramSource The source in the URL.
      *
      * @return string|null
      */
-    private function tryReadFromSlugOrGet(FilterUrl $filterUrl, string $sortParam, string $sortType): ?string
+    private function tryReadFromSlugOrGet(FilterUrl $filterUrl, string $name, string $paramSource): ?string
     {
         $result = null;
 
-        switch ($sortType) {
+        switch ($paramSource) {
             case 'get':
-                $result = $filterUrl->getGet($sortParam);
+                $result = $filterUrl->getGet($name);
                 break;
             case 'slug':
-                $result = $filterUrl->getSlug($sortParam);
+                $result = $filterUrl->getSlug($name);
                 break;
             case 'slugNget':
-                $result = ($filterUrl->getGet($sortParam) ?? $filterUrl->getSlug($sortParam));
+                $result = ($filterUrl->getGet($name) ?? $filterUrl->getSlug($name));
                 break;
             default:
         }
 
-        // Mark the parameter as used (otherwise, a 404 is thrown)
-        Input::get($sortParam);
+        // Mark the parameter as used — InputEnhancer registers route parameters via setUnusedRouteParameters();
+        // FrontendTemplate::compile() throws UnusedArgumentsException (→ 404) for any that remain unconsumed.
+        Input::get($name);
 
         return $result;
     }
