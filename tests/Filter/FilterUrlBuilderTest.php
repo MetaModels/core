@@ -72,9 +72,10 @@ class FilterUrlBuilderTest extends TestCase
                     'parameters' => '/auto/slug/sluggy',
                     'get-param'  => 'get-value',
                 ],
-                'page'               => fn ($test) => $test->mockPage([
-                    'id'    => 42,
-                ]),
+                'page'               => fn ($test) => $test->mockPage(
+                    ['id' => 42, 'alias' => 'alias', 'urlSuffix' => '.html'],
+                    ['id' => 42]
+                ),
                 'get'                => [
                     'get2' => 'value',
                 ],
@@ -160,7 +161,7 @@ class FilterUrlBuilderTest extends TestCase
             new Request(
                 ['get-param' => 'get-value'],
                 [],
-                ['pageModel' => $this->mockPage(['alias' => 'folder/page', 'id' => 42])],
+                ['pageModel' => $this->mockPage(['alias' => 'folder/page', 'id' => 42, 'urlSuffix' => '.html'])],
                 [],
                 [],
                 [
@@ -191,13 +192,13 @@ class FilterUrlBuilderTest extends TestCase
         return $requestStack;
     }
 
-    private function mockPage(array $data): PageModel
+    private function mockPage(array $data, array $rowData = null): PageModel
     {
         $mock = $this->getMockBuilder(PageModel::class)->disableOriginalConstructor()->getMock();
         $mock->method('__get')->willReturnCallback(
             fn (string $name) => $data[$name] ?? null
         );
-        $mock->method('row')->willReturn($data);
+        $mock->method('row')->willReturn($rowData ?? $data);
 
         return $mock;
     }

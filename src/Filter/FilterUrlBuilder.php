@@ -195,9 +195,10 @@ class FilterUrlBuilder
         $length    = $pageModel->urlSuffix ? -\strlen($pageModel->urlSuffix) : null;
         $start     = ($pageModel->urlPrefix ? \strlen($pageModel->urlPrefix . '/') : 0)
                      + \strlen($pageModel->alias . '/');
-        $fragments = \explode('/', \substr($requestUri, $start, $length));
+        $slicedUri = \substr($requestUri, $start, $length);
+        $fragments = '' !== $slicedUri ? \explode('/', $slicedUri) : [];
 
-        if (1 === \count($fragments) % 2) {
+        if (!empty($fragments) && 1 === \count($fragments) % 2) {
             \array_unshift($fragments, 'auto_item');
         }
         \array_unshift($fragments, $pageModel->alias);
