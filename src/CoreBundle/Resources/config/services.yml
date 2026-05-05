@@ -301,6 +301,7 @@ services:
         $connection: '@database_connection'
       tags:
         - name: contao.migration
+
     MetaModels\CoreBundle\Migration\JumpToMigration:
         arguments:
             $connection: '@database_connection'
