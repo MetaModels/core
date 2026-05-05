@@ -23,7 +23,6 @@
     <TooManyArguments>
       <errorLevel type="suppress">
         <referencedFunction name="Doctrine\DBAL\Query\QueryBuilder::select"/>
-        <file name="src/Helper/UpgradeHandler.php"/>
         <file name="src/Render/Setting/Collection.php"/>
       </errorLevel>
     </TooManyArguments>
@@ -271,7 +270,6 @@
         <file name="src/Helper/TableManipulation.php"/>
         <file name="src/Helper/TableManipulator.php"/>
         <file name="src/Helper/ToolboxFile.php"/>
-        <file name="src/Helper/UpgradeHandler.php"/>
         <file name="src/Information/AttributeInformation.php"/>
         <file name="src/Information/MetaModelCollection.php"/>
         <file name="src/Information/MetaModelInformation.php"/>
