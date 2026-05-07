@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2025 The MetaModels team.
+ * (c) 2012-2026 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -21,12 +21,13 @@
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2025 The MetaModels team.
+ * @copyright  2012-2026 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 use ContaoCommunityAlliance\DcGeneral\DC\General;
+use MetaModels\CoreBundle\DataProvider\DcaSettingAttrTypeDataProvider;
 
 $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
     'config'                => [
@@ -43,7 +44,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
     'dca_config'            => [
         'data_provider'  => [
             'root'         => [
-                'source' => 'tl_metamodel_dcasetting'
+                'source' => 'tl_metamodel_dcasetting',
+                'class'  => DcaSettingAttrTypeDataProvider::class,
             ],
             'parent'       => [
                 'source' => 'tl_metamodel_dca'
@@ -135,7 +137,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
         'sorting'           => [
             'mode'         => 4,
             'fields'       => ['sorting'],
-            'panelLayout'  => 'limit',
+            'panelLayout'  => 'filter;search;limit',
             'headerFields' => ['name'],
         ],
         'global_operations' => [
@@ -522,6 +524,39 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
                 'tl_class' => 'w50 cbx m12',
             ],
             'sql'         => "char(1) NOT NULL default ''"
-        ]
+        ],
+        'attr_type'          => [
+            'label'       => 'attr_type.label',
+            'description' => 'attr_type.description',
+            'exclude'     => true,
+            'inputType'   => 'select',
+            'eval'        => [
+                'includeBlankOption' => true,
+                'tl_class'           => 'w50',
+                'chosen'             => true,
+            ],
+            'filter'      => true,
+            'search'      => true,
+        ],
+        'attr_name'          => [
+            'label'       => 'attr_name.label',
+            'description' => 'attr_name.description',
+            'exclude'     => true,
+            'inputType'   => 'text',
+            'eval'        => [
+                'tl_class' => 'w50',
+            ],
+            'search'      => true,
+        ],
+        'attr_colname'       => [
+            'label'       => 'attr_colname.label',
+            'description' => 'attr_colname.description',
+            'exclude'     => true,
+            'inputType'   => 'text',
+            'eval'        => [
+                'tl_class' => 'w50',
+            ],
+            'search'      => true,
+        ],
     ]
 ];
