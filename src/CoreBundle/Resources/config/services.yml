@@ -296,6 +296,48 @@ services:
       tags:
         - name: contao.migration
 
+    MetaModels\CoreBundle\Migration\FilterSettingParamTypeMigration:
+      arguments:
+        $connection: '@database_connection'
+      tags:
+        - name: contao.migration
+
+    MetaModels\CoreBundle\Migration\JumpToMigration:
+        arguments:
+            $connection: '@database_connection'
+        tags:
+            - name: contao.migration
+
+    MetaModels\CoreBundle\Migration\DcaSettingPublishedMigration:
+        arguments:
+            $connection: '@database_connection'
+        tags:
+            - name: contao.migration
+
+    MetaModels\CoreBundle\Migration\SubPalettesToConditionsMigration:
+        arguments:
+            $connection: '@database_connection'
+        tags:
+            - name: contao.migration
+
+    MetaModels\CoreBundle\Migration\IsClosedMigration:
+        arguments:
+            $connection: '@database_connection'
+        tags:
+            - name: contao.migration
+
+    MetaModels\CoreBundle\Migration\InputScreenModeMigration:
+        arguments:
+            $connection: '@database_connection'
+        tags:
+            - name: contao.migration
+
+    MetaModels\CoreBundle\Migration\InputScreenFlagMigration:
+        arguments:
+            $connection: '@database_connection'
+        tags:
+            - name: contao.migration
+
     MetaModels\CoreBundle\Formatter\SelectAttributeOptionLabelFormatter:
         public: false
 
