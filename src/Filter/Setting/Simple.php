@@ -399,6 +399,7 @@ abstract class Simple implements ISimple
             $filterUrl->setSlug($name, (string) $value);
         }
         $parameterName = $arrWidget['eval']['urlparam'] ?? '';
+        $paramType     = $this->get('param_type') ?: 'slug';
 
         if ((bool) ($arrWidget['eval']['includeBlankOption'] ?? false)) {
             $blnActive = $this->isActiveFrontendFilterValue($arrWidget, $arrFilterUrl, '');
@@ -421,12 +422,19 @@ abstract class Simple implements ISimple
             $strValue  = $this->getFrontendFilterValue($arrWidget, $arrFilterUrl, $strKeyOption);
             $blnActive = $this->isActiveFrontendFilterValue($arrWidget, $arrFilterUrl, $strKeyOption);
 
+            $optionFilterUrl = match ($paramType) {
+                'get'      => $filterUrl->clone()->setGet($parameterName, $strValue)->setSlug($parameterName, ''),
+                'slugNget' => $filterUrl->clone()->setSlug($parameterName, $strValue)->setGet(
+                    $parameterName,
+                    $strValue
+                ),
+                default    => $filterUrl->clone()->setSlug($parameterName, $strValue)->setGet($parameterName, ''),
+            };
+
             $arrOptions[] = [
                 'key'    => $strKeyOption,
                 'value'  => $strOption,
-                'href'   => $this->filterUrlBuilder->generate(
-                    $filterUrl->clone()->setSlug($parameterName, $strValue)->setGet($parameterName, '')
-                ),
+                'href'   => $this->filterUrlBuilder->generate($optionFilterUrl),
                 'active' => $blnActive,
                 'class'  => StringUtil::standardize($strKeyOption) . ($blnActive ? ' active' : '')
             ];
@@ -531,6 +539,7 @@ abstract class Simple implements ISimple
             'formfield'   => $strField,
             'raw'         => $arrWidget,
             'urlparam'    => $arrWidget['eval']['urlparam'],
+            'param_type'  => $this->get('param_type') ?: 'slug',
             'options'     => $this->prepareFrontendFilterOptions(
                 $arrWidget,
                 $arrFilterUrl,
