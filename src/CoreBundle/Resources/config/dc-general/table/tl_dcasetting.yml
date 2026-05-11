@@ -154,3 +154,4 @@ services:
       - name: kernel.event_listener
         event: dc-general.view.contao2backend.manipulate-widget
         method: handle
+
