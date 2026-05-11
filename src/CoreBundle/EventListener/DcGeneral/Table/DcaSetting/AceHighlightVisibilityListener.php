@@ -31,7 +31,7 @@ use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
  * Replaces the exact-match condition for the "highlight" property's "rte" selector with a prefix match,
  * so that "highlight" is visible for all ACE editor template variants (e.g. "ace", "ace_mm").
  */
-class AceHighlightVisibilityListener
+final class AceHighlightVisibilityListener
 {
     /**
      * Replace the PropertyValueCondition('rte', 'ace') on the "highlight" property with a callback
