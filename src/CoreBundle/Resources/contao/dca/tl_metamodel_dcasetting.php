@@ -244,6 +244,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
             // * preserveTags       do not encode html tags.
             // * decodeEntities     do decode HTML entities.
             // * rte                enable richtext editor on this
+            // * highlight          set type of highlighting for ACE editor
             // * rows               amount of rows in longtext and tables.
             // * cols               amount of columns in longtext and tables.
             // * trailingSlash      allow trailing slash, 2 => do nothing, 1 => add one on save, 0 => strip it on save.

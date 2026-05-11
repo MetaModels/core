@@ -99,6 +99,14 @@ services:
         event: dc-general.factory.build-data-definition
         method: handle
 
+  metamodels.listener.table.tl_metamodel_dcasetting.ace_highlight_visibility:
+    class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\AceHighlightVisibilityListener
+    tags:
+      - name: kernel.event_listener
+        event: dc-general.factory.build-data-definition
+        method: handle
+        priority: -100
+
   metamodels.listener.table.tl_metamodel_dcasetting.rich_text_options:
     class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\RichTextOptionListener
     arguments:
