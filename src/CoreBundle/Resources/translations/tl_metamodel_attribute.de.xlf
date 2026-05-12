@@ -100,7 +100,7 @@
         <target>Varianten überschreiben</target>
       </trans-unit>
       <trans-unit id="isvariant.description" resname="isvariant.description">
-        <source>Check this, if you want variants within the MetaModel to override the parent item's value</source>
+        <source>Check this, if you want variants within the MetaModel to override the parent item&apos;s value</source>
         <target>Anwählen, falls Sie innerhalb des MetaModels Varianten wünschen, um Elternwerte zu überschreiben.</target>
       </trans-unit>
       <trans-unit id="isunique.label" resname="isunique.label">

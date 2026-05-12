@@ -86,13 +86,19 @@
       </trans-unit>
       <trans-unit id="comment.description" resname="comment.description">
         <source>A short comment for describing the purpose of this filter setting.</source>
-        <target>Un bref commentaire décrivant l'objectif de ce paramètre de filtre.</target>
+        <target>Un bref commentaire décrivant l&apos;objectif de ce paramètre de filtre.</target>
       </trans-unit>
       <trans-unit id="attr_id.label" resname="attr_id.label">
         <source>Attribute</source>
       </trans-unit>
       <trans-unit id="attr_id.description" resname="attr_id.description">
         <source>Attribute this setting relates to.</source>
+      </trans-unit>
+      <trans-unit id="label_attr_id.label" resname="label_attr_id.label">
+        <source>Attribute for option label</source>
+      </trans-unit>
+      <trans-unit id="label_attr_id.description" resname="label_attr_id.description">
+        <source>Here you can select a second attribute to be displayed as an option label.</source>
       </trans-unit>
       <trans-unit id="all_langs.label" resname="all_langs.label">
         <source>Search all languages</source>
@@ -109,7 +115,7 @@
         <source>Check if you want to allow this filter value to be emtpy, if checked and the parameter holds an empty
           value, this filter rule will behave as if it was not defined.
         </source>
-        <target>Vérifier si vous voulez autoriser cette valeur de filtre à être émise, si la case est cochée et que le paramètre contient une valeur vide, cette règle de filtrage se comportera comme si elle n'avait pas été définie.</target>
+        <target>Vérifier si vous voulez autoriser cette valeur de filtre à être émise, si la case est cochée et que le paramètre contient une valeur vide, cette règle de filtrage se comportera comme si elle n&apos;avait pas été définie.</target>
       </trans-unit>
       <trans-unit id="stop_after_match.label" resname="stop_after_match.label">
         <source>Stop after first match</source>
@@ -118,7 +124,7 @@
         <source>Check if you want this filter setting to stop executing its child rules after the first subset returned
           matches.
         </source>
-        <target>Cochez cette case si vous souhaitez que ce paramètre de filtrage cesse d'exécuter ses règles enfant après que le premier sous-ensemble renvoyé correspond.</target>
+        <target>Cochez cette case si vous souhaitez que ce paramètre de filtrage cesse d&apos;exécuter ses règles enfant après que le premier sous-ensemble renvoyé correspond.</target>
       </trans-unit>
       <trans-unit id="urlparam.label" resname="urlparam.label">
         <source>URL parameter</source>
@@ -127,7 +133,25 @@
         <source>The URL parameter that shall get mapped to the selected attribute. The special &lt;em&gt;&quot;auto_item&quot;&lt;/em&gt;
           parameter can also be used, this is especially useful for alias columns.
         </source>
-        <target>Le paramètre URL qui sera associé à l'attribut sélectionné. Le paramètre spécial &lt;em&gt;« auto_item »&lt;/em&gt; peut également être utilisé, ce qui est particulièrement utile pour les colonnes d'alias. </target>
+        <target>Le paramètre URL qui sera associé à l&apos;attribut sélectionné. Le paramètre spécial &lt;em&gt;« auto_item »&lt;/em&gt; peut également être utilisé, ce qui est particulièrement utile pour les colonnes d&apos;alias. </target>
+      </trans-unit>
+      <trans-unit id="param_type.label" resname="param_type.label">
+        <source>URL type for parameter</source>
+      </trans-unit>
+      <trans-unit id="param_type.description" resname="param_type.description">
+        <source>Define whether the filter parameter is placed as a URL path segment (slug) or as a query string parameter (GET).</source>
+      </trans-unit>
+      <trans-unit id="param_type_options.slug" resname="param_type_options.slug">
+        <source>Slug only</source>
+      </trans-unit>
+      <trans-unit id="param_type_options.get" resname="param_type_options.get">
+        <source>GET only</source>
+      </trans-unit>
+      <trans-unit id="param_type_options.slugNget" resname="param_type_options.slugNget">
+        <source>Slug or GET allowed - deprecated: use slug OR GET!</source>
+      </trans-unit>
+      <trans-unit id="hint_param_type_slugNget" resname="hint_param_type_slugNget">
+        <source>Set the URL type for the parameter to &quot;Slug&quot; OR &quot;GET&quot; - the &quot;Slug or GET&quot; setting will be removed in a future version.</source>
       </trans-unit>
       <trans-unit id="predef_param.label" resname="predef_param.label">
         <source>Static parameter</source>
@@ -142,7 +166,7 @@
       </trans-unit>
       <trans-unit id="fe_widget.description" resname="fe_widget.description">
         <source>Check if you want to display a filter widget in the Frontend.</source>
-        <target>Cochez si vous souhaitez afficher un widget de filtre dans l'interface publique.</target>
+        <target>Cochez si vous souhaitez afficher un widget de filtre dans l&apos;interface publique.</target>
       </trans-unit>
       <trans-unit id="customsql.label" resname="customsql.label">
         <source>Custom SQL Query</source>
@@ -181,7 +205,7 @@
       </trans-unit>
       <trans-unit id="onlypossible.description" resname="onlypossible.description">
         <source>Show only options, that are still assigned somewhere after the actual filter is set.</source>
-        <target>N'afficher que les options qui sont encore affectées quelque part après l'application du filtre.</target>
+        <target>N&apos;afficher que les options qui sont encore affectées quelque part après l&apos;application du filtre.</target>
       </trans-unit>
       <trans-unit id="skipfilteroptions.label" resname="skipfilteroptions.label">
         <source>Ignore this filter for the remaining values</source>
@@ -189,11 +213,11 @@
       </trans-unit>
       <trans-unit id="skipfilteroptions.description" resname="skipfilteroptions.description">
         <source>If activate the filter will return all options without itself in the filter rules.</source>
-        <target>Si cette option est activée, le filtre renverra toutes les options qui n'ont pas été définies dans les règles de filtrage.</target>
+        <target>Si cette option est activée, le filtre renverra toutes les options qui n&apos;ont pas été définies dans les règles de filtrage.</target>
       </trans-unit>
       <trans-unit id="hide_label.label" resname="hide_label.label">
         <source>Hide label in filter widget</source>
-        <target>Masquer l'étiquette dans le widget du filtre</target>
+        <target>Masquer l&apos;étiquette dans le widget du filtre</target>
       </trans-unit>
       <trans-unit id="hide_label.description" resname="hide_label.description">
         <source>If active, the label is not output.</source>
@@ -255,7 +279,7 @@
       </trans-unit>
       <trans-unit id="fefilter_legend" resname="fefilter_legend">
         <source>Frontend filter</source>
-        <target>Filtre pour l'interface publique</target>
+        <target>Filtre pour l&apos;interface publique</target>
       </trans-unit>
       <trans-unit id="edit.label" resname="edit.label">
         <source>Edit setting</source>
@@ -307,7 +331,7 @@
       </trans-unit>
       <trans-unit id="typenames.idlist" resname="typenames.idlist">
         <source>Predefined set of items</source>
-        <target>Ensemble prédéfini d'éléments</target>
+        <target>Ensemble prédéfini d&apos;éléments</target>
       </trans-unit>
       <trans-unit id="typenames.simplelookup" resname="typenames.simplelookup">
         <source>Simple lookup</source>
@@ -320,6 +344,12 @@
       </trans-unit>
       <trans-unit id="typenames.conditionand" resname="typenames.conditionand">
         <source>AND condition</source>
+      </trans-unit>
+      <trans-unit id="typenames.expression_rule" resname="typenames.expression_rule">
+        <source>Expression rule</source>
+      </trans-unit>
+      <trans-unit id="error.condition_max_children" resname="error.condition_max_children">
+        <source>The condition or rule &quot;%name%&quot; can only have &quot;%max%&quot; children max.</source>
       </trans-unit>
       <trans-unit id="typedesc._attribute_" resname="typedesc._attribute_">
         <source>&lt;em&gt;[%colName%, &quot;%name%&quot;]&lt;/em&gt;</source>
@@ -345,13 +375,23 @@
       <trans-unit id="typedesc.conditionand" resname="typedesc.conditionand">
         <source>%1$s &lt;strong&gt;%2$s&lt;/strong&gt; %4$s</source>
       </trans-unit>
+      <trans-unit id="typedesc.expression_rule" resname="typedesc.expression_rule">
+        <source>%1$s &lt;strong&gt;%2$s&lt;/strong&gt; %4$s</source>
+      </trans-unit>
       <trans-unit id="items.label" resname="items.label">
         <source>Items</source>
         <target>Eléments</target>
       </trans-unit>
       <trans-unit id="items.description" resname="items.description">
         <source>Please enter the IDs of the items for filtering as comma-separated list.</source>
-        <target>Veuillez saisir les ID des éléments à filtrer sous la forme d'une liste séparée par des virgules.</target>
+        <target>Veuillez saisir les ID des éléments à filtrer sous la forme d&apos;une liste séparée par des virgules.</target>
+      </trans-unit>
+      <trans-unit id="expression_rule.label" resname="expression_rule.label">
+        <source>Expression</source>
+      </trans-unit>
+      <trans-unit id="expression_rule.description" resname="expression_rule.description">
+        <source>Enter an expression here that is to be evaluated. If the condition is met, the
+          first filter rule is executed; if not, the second one is executed.</source>
       </trans-unit>
       <trans-unit id="deleteConfirm" resname="deleteConfirm">
         <source>Do you really want to delete filter setting ID %id%?</source>
@@ -418,7 +458,7 @@
         <source>Secure insert tags</source>
       </trans-unit>
       <trans-unit id="customsql_secure_inserttags.description" resname="customsql_secure_inserttags.description">
-        <source><![CDATA[Secure insert tags are just like the plain insert tags, but their value get\'s escaped in the query.<br />
+        <source><![CDATA[Secure insert tags are just like the plain insert tags, but their value get\&apos;s escaped in the query.<br />
           Therefore, you might be better off using the secure equivalent unless you exactly know what you are doing.<br />
           The notation is like:<br />
           <pre>{{secure::page::id}}</pre>]]></source>
@@ -461,12 +501,12 @@ WHERE t.catname={{param::get?name=category&default=defaultcat}}</pre>
           <p>
             Imagine the page URL as of: "https://example.org/list/category/demo.html"<br />
             the resulting Query will then be:<br />
-            "SELECT t.id FROM mm_demo AS t WHERE t.catname='demo'"
+            "SELECT t.id FROM mm_demo AS t WHERE t.catname=&apos;demo&apos;"
           </p>
           <p>
             If the URL should be: "https://example.org/list.html",<br />
             the resulting Query will then be:<br />
-            "SELECT t.id FROM mm_demo AS t WHERE t.catname='defaultcat'"
+            "SELECT t.id FROM mm_demo AS t WHERE t.catname=&apos;defaultcat&apos;"
           </p>]]></source>
       </trans-unit>
     </body>
