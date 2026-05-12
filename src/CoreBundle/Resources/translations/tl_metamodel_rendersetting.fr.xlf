@@ -77,7 +77,6 @@
       <trans-unit id="attr_id.description" resname="attr_id.description">
         <source>Attribute this setting relates to.</source>
       </trans-unit>
-
       <trans-unit id="attr_type.label" resname="attr_type.label">
         <source>Attribute type</source>
       </trans-unit>

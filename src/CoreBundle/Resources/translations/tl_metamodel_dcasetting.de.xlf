@@ -7,21 +7,27 @@
       </trans-unit>
       <trans-unit id="attr_type.label" resname="attr_type.label">
         <source>Attribute type</source>
+        <target>Attribut-Typ</target>
       </trans-unit>
       <trans-unit id="attr_type.description" resname="attr_type.description">
         <source>Filters the list by the type of the referenced attribute.</source>
+        <target>Filtert die Liste nach dem Typ des referenzierten Attributs.</target>
       </trans-unit>
       <trans-unit id="attr_name.label" resname="attr_name.label">
         <source>Name</source>
+        <target>Name</target>
       </trans-unit>
       <trans-unit id="attr_name.description" resname="attr_name.description">
         <source>Search by the name of the referenced attribute.</source>
+        <target>Suche nach dem Namen des referenzierten Attributs.</target>
       </trans-unit>
       <trans-unit id="attr_colname.label" resname="attr_colname.label">
         <source>Column name</source>
+        <target>Spaltenname</target>
       </trans-unit>
       <trans-unit id="attr_colname.description" resname="attr_colname.description">
         <source>Search by the column name of the referenced attribute.</source>
+        <target>Suche nach dem Spaltennamen des referenzierten Attributs.</target>
       </trans-unit>
       <trans-unit id="id.label" resname="id.label">
         <source>Id</source>
@@ -134,30 +140,6 @@
       <trans-unit id="attr_id.description" resname="attr_id.description">
         <source>Attribute this setting relates to.</source>
         <target>Attribut, auf das sich diese Einstellung bezieht.</target>
-      </trans-unit>
-      <trans-unit id="attr_type.label" resname="attr_type.label">
-        <source>Attribute type</source>
-        <target>Attribut-Typ</target>
-      </trans-unit>
-      <trans-unit id="attr_type.description" resname="attr_type.description">
-        <source>Attribute type</source>
-        <target>Filtert die Liste nach dem Typ des referenzierten Attributs.</target>
-      </trans-unit>
-      <trans-unit id="attr_name.label" resname="attr_name.label">
-        <source>Name</source>
-        <target>Name</target>
-      </trans-unit>
-      <trans-unit id="attr_name.description" resname="attr_name.description">
-        <source>Search by the name of the referenced attribute.</source>
-        <target>Suche nach dem Namen des referenzierten Attributs.</target>
-      </trans-unit>
-      <trans-unit id="attr_colname.label" resname="attr_colname.label">
-        <source>Column name</source>
-        <target>Spaltenname</target>
-      </trans-unit>
-      <trans-unit id="attr_colname.description" resname="attr_colname.description">
-        <source>Search by the column name of the referenced attribute.</source>
-        <target>Suche nach dem Spaltennamen des referenzierten Attributs.</target>
       </trans-unit>
       <trans-unit id="template.label" resname="template.label">
         <source>Custom template to use for generating</source>
