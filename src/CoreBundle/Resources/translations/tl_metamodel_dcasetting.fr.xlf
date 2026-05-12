@@ -4,7 +4,6 @@
       <trans-unit id="backend-module.headline" resname="backend-module.headline">
         <source>All input screen settings</source>
       </trans-unit>
-
       <trans-unit id="attr_type.label" resname="attr_type.label">
         <source>Attribute type</source>
       </trans-unit>
