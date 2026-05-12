@@ -205,6 +205,12 @@
       <trans-unit id="rte.description" resname="rte.description">
         <source>Select the rich text configuration that shall be used on this field (if any).</source>
       </trans-unit>
+      <trans-unit id="highlight.label" resname="highlight.label">
+        <source>Syntax highlighting mode</source>
+      </trans-unit>
+      <trans-unit id="highlight.description" resname="highlight.description">
+        <source>Select the syntax highlighting mode for the ACE editor (e.g. "html", "css", "javascript"). Only relevant when an ACE editor configuration is selected.</source>
+      </trans-unit>
       <trans-unit id="rows.label" resname="rows.label">
         <source>Rows</source>
       </trans-unit>

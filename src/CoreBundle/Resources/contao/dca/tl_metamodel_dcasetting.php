@@ -244,6 +244,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
             // * preserveTags       do not encode html tags.
             // * decodeEntities     do decode HTML entities.
             // * rte                enable richtext editor on this
+            // * highlight          set type of highlighting for ACE editor
             // * rows               amount of rows in longtext and tables.
             // * cols               amount of columns in longtext and tables.
             // * trailingSlash      allow trailing slash, 2 => do nothing, 1 => add one on save, 0 => strip it on save.
@@ -253,7 +254,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
             // * readonly           readonly.
             // * be_template        widget template for backend.
             // * fe_template        form template for frontend.
-        ]
+        ],
+        'rte'     => [
+            'ace' => [
+                'presentation after rte' => [
+                    'highlight',
+                ]
+            ]
+        ],
     ],
     'fields'                => [
         'id'                 => [
@@ -442,8 +450,42 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
             'eval'        => [
                 'tl_class'           => 'w50',
                 'includeBlankOption' => true,
+                'submitOnChange'     => true,
             ],
             'sql'         => "varchar(64) NOT NULL default 'tinyMCE'"
+        ],
+        'highlight'          => [
+            'label'       => 'highlight.label',
+            'description' => 'highlight.description',
+            'inputType' => 'select',
+            'options'   => [
+                'Apache',
+                'Bash',
+                'C#',
+                'C++',
+                'CSS',
+                'Diff',
+                'HTML',
+                'HTTP',
+                'Ini',
+                'JSON',
+                'Java',
+                'JavaScript',
+                'Markdown',
+                'Nginx',
+                'Perl',
+                'PHP',
+                'PowerShell',
+                'Python',
+                'Ruby',
+                'SCSS',
+                'SQL',
+                'Twig',
+                'YAML',
+                'XML'
+            ],
+            'eval'      => ['includeBlankOption' => true, 'decodeEntities' => true, 'tl_class' => 'w50'],
+            'sql'       => "varchar(32) COLLATE ascii_bin NOT NULL default ''"
         ],
         'rows'               => [
             'label'       => 'rows.label',
@@ -452,7 +494,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
             'inputType'   => 'text',
             'eval'        =>
                 [
-                    'tl_class' => 'w50',
+                    'tl_class' => 'clr w50',
                     'rgxp'     => 'digit'
                 ],
             'sql'         => "int(10) NOT NULL default '0'"

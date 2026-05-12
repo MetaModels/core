@@ -269,6 +269,14 @@
         <source>Select the rich text configuration that shall be used on this field (if any).</source>
         <target>Wählen Sie eine Voreinstellung für den Richtext-Editor aus, die für dieses Feld benutzt werden soll (falls vorhanden).</target>
       </trans-unit>
+      <trans-unit id="highlight.label" resname="highlight.label">
+        <source>Syntax highlighting mode</source>
+        <target>Syntax-Hervorhebungsmodus</target>
+      </trans-unit>
+      <trans-unit id="highlight.description" resname="highlight.description">
+        <source>Select the syntax highlighting mode for the ACE editor (e.g. "html", "css", "javascript"). Only relevant when an ACE editor configuration is selected.</source>
+        <target>Wählen Sie den Syntax-Hervorhebungsmodus für den ACE-Editor (z.B. "html", "css", "javascript"). Nur relevant, wenn eine ACE-Editor-Konfiguration ausgewählt ist.</target>
+      </trans-unit>
       <trans-unit id="rows.label" resname="rows.label">
         <source>Rows</source>
         <target>Zeilen</target>
