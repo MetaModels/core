@@ -306,7 +306,7 @@ class SimpleTest extends TestCase
     }
 
     /**
-     * param_type='slugNget': option URLs set both slug and GET.
+     * param_type='slugNget': option URLs use slug only; GET is cleared so slug takes priority.
      */
     public function testPrepareFrontendFilterOptionsSlugNgetType(): void
     {
@@ -318,9 +318,9 @@ class SimpleTest extends TestCase
 
         self::assertCount(2, $result);
         self::assertSame('A', $capturedParams[0]['slug']['my_param'] ?? null, 'Option A slug');
-        self::assertSame('A', $capturedParams[0]['get']['my_param'] ?? null, 'Option A GET');
+        self::assertArrayNotHasKey('my_param', $capturedParams[0]['get'], 'Option A GET absent');
         self::assertSame('B', $capturedParams[1]['slug']['my_param'] ?? null, 'Option B slug');
-        self::assertSame('B', $capturedParams[1]['get']['my_param'] ?? null, 'Option B GET');
+        self::assertArrayNotHasKey('my_param', $capturedParams[1]['get'], 'Option B GET absent');
     }
 
     /**

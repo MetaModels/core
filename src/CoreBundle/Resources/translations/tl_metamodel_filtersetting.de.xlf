@@ -155,6 +155,12 @@
         <source>URL parameter</source>
         <target>URL-Parameter</target>
       </trans-unit>
+      <trans-unit id="urlparam.description" resname="urlparam.description">
+        <source>The URL parameter that shall get mapped to the selected attribute. The special &lt;em&gt;&quot;auto_item&quot;&lt;/em&gt;
+          parameter can also be used, this is especially useful for alias columns.
+        </source>
+        <target>Geben Sie den URL-Parameter an, der dem ausgewählten Attribut zugeordnet werden soll. Der &lt;em&gt;&quot;auto_item&quot;&lt;/em&gt;-Parameter kann ebenfalls verwendet werden. Diese Einstellung ist nützlich um Aliase zu verwenden.</target>
+      </trans-unit>
       <trans-unit id="param_type.label" resname="param_type.label">
         <source>URL type for parameter</source>
         <target>URL-Typ für den Parameter</target>
@@ -172,18 +178,12 @@
         <target>Nur GET</target>
       </trans-unit>
       <trans-unit id="param_type_options.slugNget" resname="param_type_options.slugNget">
-        <source>Slug or GET allowed</source>
+        <source>Slug or GET allowed - deprecated: use slug OR GET!</source>
         <target>Slug oder GET erlaubt - Deprecated: Slug ODER GET verwenden!</target>
       </trans-unit>
       <trans-unit id="hint_param_type_slugNget" resname="hint_param_type_slugNget">
-        <source>Set the URL type for the parameter to "Slug" OR "GET" - the "Slug or Get" setting will be removed in a future version.</source>
-        <target>URL-Typ für den Parameter auf "Slug" ODER "GET" einstellen - Einstellung "Slug oder Get" entfällt in künftiger Version.</target>
-      </trans-unit>
-      <trans-unit id="urlparam.description" resname="urlparam.description">
-        <source>The URL parameter that shall get mapped to the selected attribute. The special &lt;em&gt;&quot;auto_item&quot;&lt;/em&gt;
-          parameter can also be used, this is especially useful for alias columns.
-        </source>
-        <target>Geben Sie den URL-Parameter an, der dem ausgewählten Attribut zugeordnet werden soll. Der &lt;em&gt;&quot;auto_item&quot;&lt;/em&gt;-Parameter kann ebenfalls verwendet werden. Diese Einstellung ist nützlich um Aliase zu verwenden.</target>
+        <source>Set the URL type for the parameter to &quot;Slug&quot; OR &quot;GET&quot; - the &quot;Slug or GET&quot; setting will be removed in a future version.</source>
+        <target>URL-Typ für den Parameter auf &quot;Slug&quot; ODER &quot;GET&quot; einstellen - Einstellung &quot;Slug oder Get&quot; entfällt in künftiger Version.</target>
       </trans-unit>
       <trans-unit id="predef_param.label" resname="predef_param.label">
         <source>Static parameter</source>

@@ -383,7 +383,7 @@ trait ListControllerTrait
                 $result = $filterUrl->getSlug($name);
                 break;
             case 'slugNget':
-                $result = ($filterUrl->getGet($name) ?? $filterUrl->getSlug($name));
+                $result = ($filterUrl->getSlug($name) ?? $filterUrl->getGet($name));
                 break;
             default:
         }
