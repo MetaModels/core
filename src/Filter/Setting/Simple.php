@@ -424,10 +424,7 @@ abstract class Simple implements ISimple
 
             $optionFilterUrl = match ($paramType) {
                 'get'      => $filterUrl->clone()->setGet($parameterName, $strValue)->setSlug($parameterName, ''),
-                'slugNget' => $filterUrl->clone()->setSlug($parameterName, $strValue)->setGet(
-                    $parameterName,
-                    $strValue
-                ),
+                'slugNget' => $filterUrl->clone()->setSlug($parameterName, $strValue)->setGet($parameterName, ''),
                 default    => $filterUrl->clone()->setSlug($parameterName, $strValue)->setGet($parameterName, ''),
             };
 

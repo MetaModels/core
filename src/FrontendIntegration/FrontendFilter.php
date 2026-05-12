@@ -467,9 +467,10 @@ class FrontendFilter
                 $paramValue = $filter['urlvalue'];
                 if (null !== $paramValue) {
                     match ($filter['param_type'] ?? 'slug') {
-                        'get'   => $other->setGet($widgetName, $paramValue),
-                        'slug'  => $other->setSlug($widgetName, $paramValue),
-                        default => $other->setSlug($widgetName, $paramValue)->setGet($widgetName, $paramValue),
+                        'get'      => $other->setGet($widgetName, $paramValue),
+                        'slug'     => $other->setSlug($widgetName, $paramValue),
+                        'slugNget' => $other->setSlug($widgetName, $paramValue)->setGet($widgetName, ''),
+                        default    => $other->setSlug($widgetName, $paramValue)->setGet($widgetName, $paramValue),
                     };
                 }
             }
