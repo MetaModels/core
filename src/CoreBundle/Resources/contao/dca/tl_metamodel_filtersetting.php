@@ -493,7 +493,7 @@ WHERE 1 = 1',
                 'mandatory'      => true,
                 'tl_class'       => 'clr',
             ],
-            'sql'         => "text NOT NULL default ''"
+            'sql'         => 'text NULL'
         ],
         'label'                => [
             'label'       => 'label.label',
