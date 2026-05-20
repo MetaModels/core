@@ -229,3 +229,24 @@ form[id^=mm_] .sort_hint {
   height: 16px;
   display: inline-block;
 }
+
+.mm-lang-hint {
+  display: inline-block;
+  margin-left: 0.5ch;
+  padding: 0 3px;
+  font-size: 0.75rem !important;
+  font-weight: bold;
+  line-height: 1.4;
+  vertical-align: middle;
+  border-radius: 2px;
+  cursor: help;
+  color: #fff;
+}
+
+.mm-lang-hint--fallback {
+  background-color: #e6a118;
+}
+
+.mm-lang-hint--translated {
+  background-color: #4a9a3f;
+}

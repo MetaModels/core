@@ -1,25 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- https://phpunit.de/manual/current/en/appendixes.configuration.html -->
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.1/phpunit.xsd"
-         colors="true"
-         forceCoversAnnotation="true"
-         failOnRisky="true"
-         failOnWarning="true"
-         beStrictAboutChangesToGlobalState="true"
-         beStrictAboutOutputDuringTests="true"
-         beStrictAboutResourceUsageDuringSmallTests="true"
-         beStrictAboutTodoAnnotatedTests="true"
-         bootstrap="vendor/autoload.php"
->
-    <testsuites>
-        <testsuite name="MetaModels core tests">
-            <directory>./tests</directory>
-        </testsuite>
-    </testsuites>
-    <filter>
-        <whitelist>
-            <directory>./src</directory>
-        </whitelist>
-    </filter>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd" colors="true" failOnRisky="true" failOnWarning="true" beStrictAboutChangesToGlobalState="true" beStrictAboutOutputDuringTests="true" bootstrap="vendor/autoload.php" cacheDirectory=".phpunit.cache" requireCoverageMetadata="true">
+  <testsuites>
+    <testsuite name="MetaModels core tests">
+      <directory>./tests</directory>
+    </testsuite>
+  </testsuites>
+  <source>
+    <include>
+      <directory>./src</directory>
+    </include>
+  </source>
 </phpunit>

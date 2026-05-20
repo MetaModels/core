@@ -25,6 +25,8 @@ namespace MetaModels\Attribute;
  *
  * This separate interface allows opt-in without breaking existing ITranslated implementors.
  * Consumers check instanceof before calling getTranslatedDataForWithoutFallback().
+ *
+ * @deprecated Was a bad idea, sorry.
  */
 interface ITranslatedWithFallbackControl extends ITranslated
 {

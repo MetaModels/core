@@ -449,6 +449,7 @@ class MetaModelsTest extends TestCase
         self::assertEquals(4, $metaModel->getCount($metaModel->getEmptyFilter()));
     }
 
+
     /**
      * Mock a database connection with hte passed query builders.
      *

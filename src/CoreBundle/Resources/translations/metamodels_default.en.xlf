@@ -11,6 +11,18 @@
       <trans-unit id="template_in_theme" resname="template_in_theme">
         <source>%template% (%themes%)</source>
       </trans-unit>
+      <trans-unit id="fallback_language_hint.label_fallback" resname="fallback_language_hint.label_fallback">
+        <source>Fallback</source>
+      </trans-unit>
+      <trans-unit id="fallback_language_hint.title_fallback" resname="fallback_language_hint.title_fallback">
+        <source>Value from fallback language "%source%" (not yet translated to "%target%")</source>
+      </trans-unit>
+      <trans-unit id="fallback_language_hint.label_translated" resname="fallback_language_hint.label_translated">
+        <source>Translated</source>
+      </trans-unit>
+      <trans-unit id="fallback_language_hint.title_translated" resname="fallback_language_hint.title_translated">
+        <source>Value has its own translation in "%target%"</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

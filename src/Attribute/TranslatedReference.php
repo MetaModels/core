@@ -38,7 +38,7 @@ use MetaModels\ITranslatedMetaModel;
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-abstract class TranslatedReference extends BaseComplex implements ITranslatedWithFallbackControl
+abstract class TranslatedReference extends BaseComplex implements ITranslated
 {
     /**
      * Database connection.
@@ -170,7 +170,6 @@ abstract class TranslatedReference extends BaseComplex implements ITranslatedWit
         ];
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -189,9 +188,10 @@ abstract class TranslatedReference extends BaseComplex implements ITranslatedWit
     public function widgetToValue($varValue, $itemId)
     {
         return [
-            'tstamp' => \time(),
-            'value'  => $varValue,
-            'att_id' => $this->get('id'),
+            'tstamp'  => \time(),
+            'value'   => $varValue,
+            'att_id'  => $this->get('id'),
+            'item_id' => $itemId,
         ];
     }
 
@@ -453,24 +453,6 @@ abstract class TranslatedReference extends BaseComplex implements ITranslatedWit
         $this->buildWhere($queryBuilder, $idList, [$langCode], 't');
 
         return $queryBuilder->executeQuery()->fetchFirstColumn();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    #[\Override]
-    public function getTranslatedDataForWithoutFallback(array $arrIds, string $strLangCode): array
-    {
-        return $this->getTranslatedDataFor($arrIds, $strLangCode);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    #[\Override]
-    public function applyTranslatedDataFor(array $arrValues, string $strLangCode): void
-    {
-        $this->setTranslatedDataFor($arrValues, $strLangCode);
     }
 
     /**
