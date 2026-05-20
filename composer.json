@@ -29,11 +29,11 @@
     "source": "https://github.com/MetaModels/core"
   },
   "require": {
-    "php": "^8.2",
+    "php": "^8.4",
     "ext-dom": "*",
-    "contao-community-alliance/dc-general": "^2.4.2",
-    "contao-community-alliance/events-contao-bindings": "^5.0",
-    "contao-community-alliance/meta-palettes": "^2.0.10",
+    "contao-community-alliance/dc-general": "^2.5@dev",
+    "contao-community-alliance/events-contao-bindings": "^5.7@dev",
+    "contao-community-alliance/meta-palettes": "^2.1",
     "contao-community-alliance/translator": "^2.5",
     "contao-community-alliance/url-builder": "^2.0",
     "contao/core-bundle": "^5.7",
