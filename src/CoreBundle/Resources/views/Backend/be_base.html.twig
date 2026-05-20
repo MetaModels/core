@@ -1,1 +1,6 @@
 {% extends "@Contao/be_main" %}
+
+{%- set bodyAttributes = attrs(attributes|default)
+    .set('data-turbo', 'false')
+    .mergeWith(bodyAttributes|default)
+-%}
