@@ -40,7 +40,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class Item implements IItem
+class Item implements IItem, IDirtyTracking
 {
     /**
      * The MetaModel instance attached to the item.
@@ -57,6 +57,13 @@ class Item implements IItem
      * @var array
      */
     protected $arrData = [];
+
+    /**
+     * Tracks which attributes were explicitly set after item construction (dirty tracking).
+     *
+     * @var array<string, true>
+     */
+    private array $dirtyAttributes = [];
 
     /**
      * The event dispatcher.
@@ -252,9 +259,19 @@ class Item implements IItem
     #[\Override]
     public function set($strAttributeName, $varValue)
     {
-        $this->arrData[$strAttributeName] = $varValue;
+        if (\array_key_exists($strAttributeName, $this->arrData) && $this->arrData[$strAttributeName] === $varValue) {
+            return $this;
+        }
+        $this->arrData[$strAttributeName]         = $varValue;
+        $this->dirtyAttributes[$strAttributeName] = true;
 
         return $this;
+    }
+
+    #[\Override]
+    public function isDirty(string $attributeName): bool
+    {
+        return \array_key_exists($attributeName, $this->dirtyAttributes);
     }
 
     /**

@@ -163,3 +163,13 @@ services:
         event: dc-general.view.contao2backend.manipulate-widget
         method: handle
 
+  MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\FallbackLanguageHintListener:
+    arguments:
+      - "@cca.dc-general.scope-matcher"
+      - "@metamodels.factory"
+      - "@translator"
+    tags:
+      - name: kernel.event_listener
+        event: dc-general.view.contao2backend.manipulate-widget
+        method: handle
+

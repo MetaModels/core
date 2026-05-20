@@ -13,6 +13,22 @@
         <source>%template% (%themes%)</source>
         <target>%template% (%themes%)</target>
       </trans-unit>
+      <trans-unit id="fallback_language_hint.label_fallback" resname="fallback_language_hint.label_fallback">
+        <source>Fallback</source>
+        <target>Fallback</target>
+      </trans-unit>
+      <trans-unit id="fallback_language_hint.title_fallback" resname="fallback_language_hint.title_fallback">
+        <source>Value from fallback language "%source%" (not yet translated to "%target%")</source>
+        <target>Wert aus Fallback-Sprache „%source%" (noch nicht nach „%target%" übersetzt)</target>
+      </trans-unit>
+      <trans-unit id="fallback_language_hint.label_translated" resname="fallback_language_hint.label_translated">
+        <source>Translated</source>
+        <target>Übersetzt</target>
+      </trans-unit>
+      <trans-unit id="fallback_language_hint.title_translated" resname="fallback_language_hint.title_translated">
+        <source>Value has its own translation in "%target%"</source>
+        <target>Wert hat eine eigene Übersetzung in „%target%"</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
