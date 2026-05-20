@@ -98,7 +98,7 @@ final class CopyTranslatedData
             }
 
             $data = $attribute->getTranslatedDataForWithoutFallback([$sourceId], $language);
-            if ([] === $data || !isset($data[$sourceId])) {
+            if ([] === $data || !\array_key_exists($sourceId, $data)) {
                 continue;
             }
 
