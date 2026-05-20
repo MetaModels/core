@@ -7,8 +7,6 @@ namespace MetaModels\CoreBundle\BackendHelp;
 use ContaoCommunityAlliance\DcGeneral\BackendHelp\BackendHelpProviderInterface;
 use ContaoCommunityAlliance\DcGeneral\BackendHelp\HelpText;
 
-use function array_key_exists;
-
 final readonly class TlClassHelpTextProvider implements BackendHelpProviderInterface
 {
     public function __construct(
