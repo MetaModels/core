@@ -102,7 +102,6 @@ class PanelBuilder
         // Create a new panel container.
         $panel     = $view->getPanelLayout();
         $panelRows = $panel->getRows();
-
         foreach ($arrRows as $rowNo => $rowElements) {
             // Get the row, if we have one or create a new one.
             if ($panelRows->getRowCount() < ((int) $rowNo + 1)) {
@@ -156,7 +155,7 @@ class PanelBuilder
         // If not add a submit.
         if (!$hasSubmit && $panelRows->getRowCount()) {
             $row = $panelRows->getRow($panelRows->getRowCount() - 1);
-            $row->addElement(new DefaultSubmitElementInformation(), 0);
+            $row->addElement(new DefaultSubmitElementInformation(), -1);
         }
     }
 
