@@ -650,6 +650,7 @@ abstract class Base implements IAttribute
             try {
                 $arrResult['text'] = $objTemplate->parse('text', true);
             } catch (\Exception $e) {
+                // FIXME: this throws when no parent has been set - need to catch!
                 $objSettingsFallback = $this->getDefaultRenderSettings()->setParent($objSettings->getParent());
 
                 $objTemplate = new Template($objSettingsFallback->get('template') ?? '');
