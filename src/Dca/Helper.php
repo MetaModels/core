@@ -213,7 +213,7 @@ class Helper
         }
 
         $rowClasses = [];
-        foreach (\array_keys($arrValues) as $langCode) {
+        foreach (\array_keys($languages) as $langCode) {
             $rowClasses[] = ($langCode === $fallback) ? 'fallback_language' : 'normal_language';
         }
 
