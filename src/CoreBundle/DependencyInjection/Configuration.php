@@ -51,7 +51,7 @@ class Configuration implements ConfigurationInterface
      * @param bool   $debug   The debug flag.
      * @param string $rootDir The root directory.
      */
-    public function __construct(bool $debug, string $rootDir)
+    public function __construct($debug, $rootDir)
     {
         $this->debug   = $debug;
         $this->rootDir = $rootDir;
