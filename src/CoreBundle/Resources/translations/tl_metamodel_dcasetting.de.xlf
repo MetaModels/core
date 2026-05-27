@@ -5,6 +5,30 @@
         <source>All input screen settings</source>
         <target>Alle Einstellungen der Eingabemaske</target>
       </trans-unit>
+      <trans-unit id="attr_type.label" resname="attr_type.label">
+        <source>Attribute type</source>
+        <target>Attribut-Typ</target>
+      </trans-unit>
+      <trans-unit id="attr_type.description" resname="attr_type.description">
+        <source>Filters the list by the type of the referenced attribute.</source>
+        <target>Filtert die Liste nach dem Typ des referenzierten Attributs.</target>
+      </trans-unit>
+      <trans-unit id="attr_name.label" resname="attr_name.label">
+        <source>Name</source>
+        <target>Name</target>
+      </trans-unit>
+      <trans-unit id="attr_name.description" resname="attr_name.description">
+        <source>Search by the name of the referenced attribute.</source>
+        <target>Suche nach dem Namen des referenzierten Attributs.</target>
+      </trans-unit>
+      <trans-unit id="attr_colname.label" resname="attr_colname.label">
+        <source>Column name</source>
+        <target>Spaltenname</target>
+      </trans-unit>
+      <trans-unit id="attr_colname.description" resname="attr_colname.description">
+        <source>Search by the column name of the referenced attribute.</source>
+        <target>Suche nach dem Spaltennamen des referenzierten Attributs.</target>
+      </trans-unit>
       <trans-unit id="id.label" resname="id.label">
         <source>Id</source>
         <target>ID</target>
@@ -193,7 +217,7 @@
       </trans-unit>
       <trans-unit id="chosen.description" resname="chosen.description">
         <source>Enable Chosen graphical select widget.</source>
-        <target>'Chosen' für die Auswahl aktivieren.</target>
+        <target>&apos;Chosen&apos; für die Auswahl aktivieren.</target>
       </trans-unit>
       <trans-unit id="filterable.label" resname="filterable.label">
         <source>Filterable</source>
@@ -245,6 +269,14 @@
         <source>Select the rich text configuration that shall be used on this field (if any).</source>
         <target>Wählen Sie eine Voreinstellung für den Richtext-Editor aus, die für dieses Feld benutzt werden soll (falls vorhanden).</target>
       </trans-unit>
+      <trans-unit id="highlight.label" resname="highlight.label">
+        <source>Syntax highlighting mode</source>
+        <target>Syntax-Hervorhebungsmodus</target>
+      </trans-unit>
+      <trans-unit id="highlight.description" resname="highlight.description">
+        <source>Select the syntax highlighting mode for the ACE editor (e.g. "html", "css", "javascript"). Only relevant when an ACE editor configuration is selected.</source>
+        <target>Wählen Sie den Syntax-Hervorhebungsmodus für den ACE-Editor (z.B. "html", "css", "javascript"). Nur relevant, wenn eine ACE-Editor-Konfiguration ausgewählt ist.</target>
+      </trans-unit>
       <trans-unit id="rows.label" resname="rows.label">
         <source>Rows</source>
         <target>Zeilen</target>
@@ -263,11 +295,11 @@
       </trans-unit>
       <trans-unit id="trailingSlash.label" resname="trailingSlash.label">
         <source>Trailing slash handling</source>
-        <target>Führende '/' bearbeiten</target>
+        <target>Führende &apos;/&apos; bearbeiten</target>
       </trans-unit>
       <trans-unit id="trailingSlash.description" resname="trailingSlash.description">
         <source>Here you can specify how trailing slashes shall be handled</source>
-        <target>Hier können Sie angeben, wie führende '/' behandelt werden sollen.</target>
+        <target>Hier können Sie angeben, wie führende &apos;/&apos; behandelt werden sollen.</target>
       </trans-unit>
       <trans-unit id="spaceToUnderscore.label" resname="spaceToUnderscore.label">
         <source>Replace spaces with underscore</source>

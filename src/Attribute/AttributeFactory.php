@@ -89,7 +89,7 @@ class AttributeFactory implements IAttributeFactory
         if ($deprecationNotice) {
             // @codingStandardsIgnoreStart
             @trigger_error(
-                '"' .__METHOD__ . '" is deprecated and will get removed.',
+                '"' . __METHOD__ . '" is deprecated and will get removed.',
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
@@ -129,7 +129,7 @@ class AttributeFactory implements IAttributeFactory
     {
         // @codingStandardsIgnoreStart
         @trigger_error(
-            '"' .__METHOD__ . '" is deprecated - use the services from the service container.',
+            '"' . __METHOD__ . '" is deprecated - use the services from the service container.',
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd

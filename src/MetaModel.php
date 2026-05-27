@@ -171,7 +171,7 @@ class MetaModel implements IMetaModel
     {
         // @codingStandardsIgnoreStart
         @trigger_error(
-            '"' .__METHOD__ . '" is deprecated and will get removed.',
+            '"' . __METHOD__ . '" is deprecated and will get removed.',
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
@@ -203,7 +203,7 @@ class MetaModel implements IMetaModel
         if ($deprecationNotice) {
             // @codingStandardsIgnoreStart
             @trigger_error(
-                '"' .__METHOD__ . '" is deprecated and will get removed.',
+                '"' . __METHOD__ . '" is deprecated and will get removed.',
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
@@ -224,7 +224,7 @@ class MetaModel implements IMetaModel
     {
         // @codingStandardsIgnoreStart
         @trigger_error(
-            '"' .__METHOD__ . '" is deprecated and will get removed.',
+            '"' . __METHOD__ . '" is deprecated and will get removed.',
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
@@ -759,7 +759,7 @@ class MetaModel implements IMetaModel
     #[\Override]
     public function hasVariants()
     {
-        return $this->arrData['varsupport'];
+        return $this->arrData['varsupport'] ?? false;
     }
 
     /**
@@ -786,7 +786,7 @@ class MetaModel implements IMetaModel
             // @codingStandardsIgnoreStart
             @\trigger_error(
                 \sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
-                         'Please test for "instanceof "\MetaModels\ITranslatedMetaModel" and use '.
+                         'Please test for "instanceof "\MetaModels\ITranslatedMetaModel" and use ' .
                          '"\MetaModels\ITranslatedMetaModel::getLanguages" instead.', __METHOD__),
                 E_USER_DEPRECATED
             );
@@ -1240,22 +1240,13 @@ class MetaModel implements IMetaModel
     protected function updateVariants($item, $activeLanguage, $allIds, $baseAttributes = false)
     {
         foreach ($this->getAttributes() as $strAttributeId => $objAttribute) {
-            // Skip unset attributes.
-            if (!$item->isAttributeSet($objAttribute->getColName())) {
+            if ($this->shouldSkipAttributeUpdate($item, $objAttribute, $baseAttributes)) {
                 continue;
             }
 
-            if (!$baseAttributes && $item->isVariant() && !($objAttribute->get('isvariant'))) {
-                // Skip base attribute.
-                continue;
-            }
-
-            if ($item->isVariantBase() && !($objAttribute->get('isvariant'))) {
-                // We have to override in variants.
-                $arrIds = $allIds;
-            } else {
-                $arrIds = array($item->get('id'));
-            }
+            $arrIds = ($item->isVariantBase() && !($objAttribute->get('isvariant')))
+                ? $allIds
+                : [$item->get('id')];
 
             $this->saveAttribute($objAttribute, $arrIds, $item->get($strAttributeId), $activeLanguage);
         }
@@ -1328,7 +1319,7 @@ class MetaModel implements IMetaModel
         } elseif ($this->isTranslated(false)) {
             // @codingStandardsIgnoreStart
             @\trigger_error(
-                \sprintf('Support for translated MetaModels not implementing "\MetaModels\ITranslatedMetaModel" '.
+                \sprintf('Support for translated MetaModels not implementing "\MetaModels\ITranslatedMetaModel" ' .
                          'is %s deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
                          'Please implement interface "\MetaModels\ITranslatedMetaModel".', __METHOD__),
                 E_USER_DEPRECATED
@@ -1441,6 +1432,53 @@ class MetaModel implements IMetaModel
 
         /** @psalm-suppress DeprecatedMethod */
         return $this->getServiceContainer()->getRenderSettingFactory()->createCollection($this, (string) $intViewId);
+    }
+
+    /**
+     * Determine whether the given attribute should be skipped during updateVariants().
+     *
+     * @param IItem      $item           The item being saved.
+     * @param IAttribute $attribute      The attribute to check.
+     * @param bool       $baseAttributes Whether base attributes are included.
+     */
+    protected function shouldSkipAttributeUpdate(IItem $item, IAttribute $attribute, bool $baseAttributes): bool
+    {
+        if (!$item->isAttributeSet($attribute->getColName())) {
+            return true;
+        }
+        if ($item instanceof IDirtyTracking && !$item->isDirty($attribute->getColName())) {
+            return true;
+        }
+        return !$baseAttributes && $item->isVariant() && !(bool) $attribute->get('isvariant');
+    }
+
+    /**
+     * Clear an attribute for the given ids - this only clears IComplex and ITranslated and throws for ISimple.
+     *
+     * @param IAttribute $attribute The attribute to save.
+     * @param array      $idList    The ids of the rows that shall be updated.
+     * @param string     $langCode  The language code to save.
+     *
+     * @throws \RuntimeException When an unsupported attribute type is encountered.
+     */
+    protected function clearAttribute(IAttribute $attribute, array $idList, string $langCode): void
+    {
+        /** @var list<string> $ids */
+        $ids = array_values(array_map('strval', $idList));
+        // Check for translated fields first, then for complex and save as simple then.
+        if ($langCode && $this->isTranslatedAttribute($attribute)) {
+            /** @var ITranslated $attribute */
+            $attribute->unsetValueFor($ids, $langCode);
+        } elseif ($this->isComplexAttribute($attribute)) {
+            /** @var IComplex $attribute */
+            // Complex saving.
+            $attribute->unsetDataFor($ids);
+        } else {
+            throw new \RuntimeException(
+                'Unsupported attribute type, can not clear. Interfaces implemented: ' .
+                \implode(', ', (array) \class_implements($attribute))
+            );
+        }
     }
 
     private function getConnection(): Connection

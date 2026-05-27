@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2025 The MetaModels team.
+ * (c) 2012-2026 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,7 +20,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2025 The MetaModels team.
+ * @copyright  2012-2026 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -94,7 +94,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
                         'remote'    => 'id',
                         'operation' => '=',
                     ],
-                ]
+                ],
+                'inverse' => [
+                    [
+                        'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ],
+                ],
             ]
         ],
         'rootEntries'    => [
@@ -223,14 +230,26 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
                 'stop_after_match'
             ]
         ],
+        'expression_rule extends default'      => [
+            'config' => [
+                'expression_rule'
+            ],
+            '+fefilter' => [
+                'onlypossible',
+            ],
+        ],
         'idlist extends default'           => [
             '+config' => [
                 'items'
             ],
         ],
         'simplelookup extends _attribute_' => [
+            '+config' => [
+                'label_attr_id',
+            ],
             '+fefilter' => [
                 'urlparam',
+                'param_type',
                 'predef_param',
                 'fe_widget',
                 'allow_empty',
@@ -341,6 +360,18 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
             ],
             'sql'         => "int(10) unsigned NOT NULL default '0'"
         ],
+        'label_attr_id'        => [
+            'label'       => 'label_attr_id.label',
+            'description' => 'label_attr_id.description',
+            'exclude'     => true,
+            'inputType'   => 'select',
+            'eval'        => [
+                'includeBlankOption' => true,
+                'tl_class'           => 'w50',
+                'chosen'             => true
+            ],
+            'sql'         => 'varchar(255) NOT NULL default \'\''
+        ],
         'all_langs'            => [
             'label'       => 'all_langs.label',
             'description' => 'all_langs.description',
@@ -373,6 +404,22 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
                 'tl_class' => 'w50',
             ],
             'sql'         => "varchar(255) NOT NULL default ''"
+        ],
+        'param_type'           => [
+            'label'       => 'param_type.label',
+            'description' => 'param_type.description',
+            'exclude'     => true,
+            'inputType'   => 'select',
+            'options'     => ['slug', 'get', 'slugNget'],
+            'reference'   => [
+                'slug'     => 'param_type_options.slug',
+                'get'      => 'param_type_options.get',
+                'slugNget' => 'param_type_options.slugNget',
+            ],
+            'eval'        => [
+                'tl_class' => 'w50',
+            ],
+            'sql'         => "varchar(10) NOT NULL default 'slug'",
         ],
         'predef_param'         => [
             'label'       => 'predef_param.label',
@@ -434,6 +481,19 @@ WHERE 1 = 1',
                 'tl_class'   => 'w50 cbx',
             ],
             'sql'         => "char(1) NOT NULL default ''"
+        ],
+        'expression_rule'     => [
+            'label'       => 'expression_rule.label',
+            'description' => 'expression_rule.description',
+            'exclude'     => true,
+            'inputType'   => 'text',
+            'eval'        => [
+                'alwaysSave'     => true,
+                'decodeEntities' => true,
+                'mandatory'      => true,
+                'tl_class'       => 'clr',
+            ],
+            'sql'         => 'text NULL'
         ],
         'label'                => [
             'label'       => 'label.label',

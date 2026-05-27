@@ -1,0 +1,7 @@
+<?php $this->extend('be_tinyMCE'); ?>
+
+<?php $this->block('custom'); ?>
+<?php if (!empty($this->rows)): ?>
+    max_height: <?= $this->rows ?>,
+<?php endif; ?>
+<?php $this->endblock(); ?>

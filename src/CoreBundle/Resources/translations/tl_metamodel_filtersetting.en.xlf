@@ -87,6 +87,12 @@
       <trans-unit id="attr_id.description" resname="attr_id.description">
         <source>Attribute this setting relates to.</source>
       </trans-unit>
+      <trans-unit id="label_attr_id.label" resname="label_attr_id.label">
+        <source>Attribute for option label</source>
+      </trans-unit>
+      <trans-unit id="label_attr_id.description" resname="label_attr_id.description">
+        <source>Here you can select a second attribute to be displayed as an option label.</source>
+      </trans-unit>
       <trans-unit id="all_langs.label" resname="all_langs.label">
         <source>Search all languages</source>
       </trans-unit>
@@ -118,6 +124,24 @@
         <source>The URL parameter that shall get mapped to the selected attribute. The special &lt;em&gt;"auto_item"&lt;/em&gt;
           parameter can also be used, this is especially useful for alias columns.
         </source>
+      </trans-unit>
+      <trans-unit id="param_type.label" resname="param_type.label">
+        <source>URL type for parameter</source>
+      </trans-unit>
+      <trans-unit id="param_type.description" resname="param_type.description">
+        <source>Define whether the filter parameter is placed as a URL path segment (slug) or as a query string parameter (GET).</source>
+      </trans-unit>
+      <trans-unit id="param_type_options.slug" resname="param_type_options.slug">
+        <source>Slug only</source>
+      </trans-unit>
+      <trans-unit id="param_type_options.get" resname="param_type_options.get">
+        <source>GET only</source>
+      </trans-unit>
+      <trans-unit id="param_type_options.slugNget" resname="param_type_options.slugNget">
+        <source>Slug or GET allowed - deprecated: use slug OR GET!</source>
+      </trans-unit>
+      <trans-unit id="hint_param_type_slugNget" resname="hint_param_type_slugNget">
+        <source>Set the URL type for the parameter to "Slug" OR "GET" - the "Slug or GET" setting will be removed in a future version.</source>
       </trans-unit>
       <trans-unit id="predef_param.label" resname="predef_param.label">
         <source>Static parameter</source>
@@ -292,6 +316,12 @@
       <trans-unit id="typenames.conditionand" resname="typenames.conditionand">
         <source>AND condition</source>
       </trans-unit>
+      <trans-unit id="typenames.expression_rule" resname="typenames.expression_rule">
+        <source>Expression rule</source>
+      </trans-unit>
+      <trans-unit id="error.condition_max_children" resname="error.condition_max_children">
+        <source>The condition or rule "%name%" can only have "%max%" children max.</source>
+      </trans-unit>
       <trans-unit id="typedesc._attribute_" resname="typedesc._attribute_">
         <source>&lt;em&gt;[%colName%, "%name%"]&lt;/em&gt;</source>
       </trans-unit>
@@ -316,11 +346,21 @@
       <trans-unit id="typedesc.conditionand" resname="typedesc.conditionand">
         <source>%1$s &lt;strong&gt;%2$s&lt;/strong&gt; %4$s</source>
       </trans-unit>
+      <trans-unit id="typedesc.expression_rule" resname="typedesc.expression_rule">
+        <source>%1$s &lt;strong&gt;%2$s&lt;/strong&gt; %4$s</source>
+      </trans-unit>
       <trans-unit id="items.label" resname="items.label">
         <source>Items</source>
       </trans-unit>
       <trans-unit id="items.description" resname="items.description">
         <source>Please enter the IDs of the items for filtering as comma-separated list.</source>
+      </trans-unit>
+      <trans-unit id="expression_rule.label" resname="expression_rule.label">
+        <source>Expression</source>
+      </trans-unit>
+      <trans-unit id="expression_rule.description" resname="expression_rule.description">
+        <source>Enter an expression here that is to be evaluated. If the condition is met, the
+          first filter rule is executed; if not, the second one is executed.</source>
       </trans-unit>
       <trans-unit id="deleteConfirm" resname="deleteConfirm">
         <source>Do you really want to delete filter setting ID %id%?</source>

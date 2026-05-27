@@ -89,3 +89,20 @@ services:
         - name: kernel.event_listener
           event: dc-general.view.contao2backend.get-property-options
           method: handle
+
+    MetaModels\CoreBundle\EventListener\DcGeneral\Table\FilterSetting\FilterSettingsVisibilityListener:
+      arguments:
+        - '@cca.dc-general.scope-matcher'
+        - '@metamodels.filter_setting_factory'
+      tags:
+        - name: kernel.event_listener
+          event: 'dc-general.factory.build-data-definition'
+
+    MetaModels\CoreBundle\EventListener\DcGeneral\Table\FilterSetting\FilterSettingParamTypeHintListener:
+      arguments:
+        - '@cca.dc-general.scope-matcher'
+        - '@translator'
+      tags:
+        - name: kernel.event_listener
+          event: dc-general.view.contao2backend.build-widget
+          method: handle

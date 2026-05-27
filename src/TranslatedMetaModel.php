@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2026 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2026 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -21,6 +21,8 @@
 namespace MetaModels;
 
 use Doctrine\DBAL\Connection;
+use MetaModels\Attribute\IAttribute;
+use MetaModels\Attribute\ISimple;
 use MetaModels\Attribute\ITranslated;
 use MetaModels\Helper\LocaleUtil;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -160,5 +162,75 @@ class TranslatedMetaModel extends MetaModel implements ITranslatedMetaModel
             // @deprecated usage of TL_LANGUAGE - remove for Contao 5.0.
             $GLOBALS['TL_LANGUAGE'] = LocaleUtil::formatAsLanguageTag($originalLanguage);
         }
+    }
+
+    /**
+     * Update the variants with the value if needed.
+     *
+     * @param IItem  $item           The item to save.
+     * @param string $activeLanguage The language the values are in.
+     * @param int[]  $allIds         The ids of all variants.
+     * @param bool   $baseAttributes If also the base attributes get updated as well.
+     *
+     * @return void
+     */
+    #[\Override]
+    protected function updateVariants($item, $activeLanguage, $allIds, $baseAttributes = false): void
+    {
+        $mainLanguage = $this->getMainLanguage();
+        if ($mainLanguage === $activeLanguage) {
+            parent::updateVariants($item, $activeLanguage, $allIds, $baseAttributes);
+            return;
+        }
+
+        $fallbackItem = $this->loadFallbackItem($item, $mainLanguage);
+
+        foreach ($this->getAttributes() as $attributeName => $attribute) {
+            if ($this->shouldSkipAttributeUpdate($item, $attribute, $baseAttributes)) {
+                continue;
+            }
+
+            $idList = ($item->isVariantBase() && !($attribute->get('isvariant')))
+                ? $allIds
+                : [$item->get('id')];
+
+            if ($this->hasSameFallbackValue($item, $attribute, $attributeName, $fallbackItem)) {
+                $this->clearAttribute($attribute, $idList, $activeLanguage);
+                continue;
+            }
+
+            $this->saveAttribute($attribute, $idList, $item->get($attributeName), $activeLanguage);
+        }
+    }
+
+    /**
+     * Load the item in the main (fallback) language for comparison.
+     */
+    private function loadFallbackItem(IItem $item, string $mainLanguage): ?IItem
+    {
+        $currentLanguage = $this->getLanguage();
+        $this->selectLanguage($mainLanguage);
+        try {
+            return $this->getItemsWithId([$item->get('id')], $item->getSetAttributes())->getItem();
+        } finally {
+            $this->selectLanguage($currentLanguage);
+        }
+    }
+
+    /**
+     * Check whether the attribute value matches the fallback item value.
+     * Returns false for simple attributes or when no fallback item is available.
+     */
+    private function hasSameFallbackValue(
+        IItem $item,
+        IAttribute $attribute,
+        string $attributeName,
+        ?IItem $fallbackItem
+    ): bool {
+        if ($attribute instanceof ISimple || null === $fallbackItem) {
+            return false;
+        }
+        return $attribute->valueToWidget($item->get($attributeName))
+            === $attribute->valueToWidget($fallbackItem->get($attributeName));
     }
 }

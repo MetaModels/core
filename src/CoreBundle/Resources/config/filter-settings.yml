@@ -54,3 +54,11 @@ services:
           - '@translator'
         tags:
           - { name: metamodels.filter_factory }
+
+    MetaModels\Filter\Setting\ExpressionRuleFilterSettingTypeFactory:
+        arguments:
+          - '@metamodels.expression-language'
+          - '@request_stack'
+          - '@translator'
+        tags:
+          - { name: metamodels.filter_factory }

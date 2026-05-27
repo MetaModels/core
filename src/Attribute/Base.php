@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2025 The MetaModels team.
+ * (c) 2012-2026 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,7 +19,7 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2025 The MetaModels team.
+ * @copyright  2012-2026 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -238,7 +238,7 @@ abstract class Base implements IAttribute
         if (isset($GLOBALS['METAMODEL_HOOKS']['parseValue']) && \is_array($GLOBALS['METAMODEL_HOOKS']['parseValue'])) {
             // @codingStandardsIgnoreStart
             @trigger_error(
-                '"' .__METHOD__ . '" is deprecated and will get removed.',
+                '"' . __METHOD__ . '" is deprecated and will get removed.',
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
@@ -526,6 +526,7 @@ abstract class Base implements IAttribute
             'preserveTags',
             'decodeEntities',
             'rte',
+            'highlight',
             'rows',
             'cols',
             'spaceToUnderscore',
@@ -649,6 +650,7 @@ abstract class Base implements IAttribute
             try {
                 $arrResult['text'] = $objTemplate->parse('text', true);
             } catch (\Exception $e) {
+                // FIXME: this throws when no parent has been set - need to catch!
                 $objSettingsFallback = $this->getDefaultRenderSettings()->setParent($objSettings->getParent());
 
                 $objTemplate = new Template($objSettingsFallback->get('template') ?? '');

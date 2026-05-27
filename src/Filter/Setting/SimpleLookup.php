@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2026 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,7 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2026 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -24,12 +24,14 @@
 namespace MetaModels\Filter\Setting;
 
 use Contao\StringUtil;
+use MetaModels\Attribute\IAliasConverter;
 use MetaModels\Attribute\IAttribute;
+use MetaModels\Filter\IFilter;
+use MetaModels\Filter\Rules\SearchAttribute as FilterRuleSimpleLookup;
+use MetaModels\Filter\Rules\StaticIdList as FilterRuleStaticIdList;
+use MetaModels\Filter\Rules\StaticIdList;
 use MetaModels\FrontendIntegration\FrontendFilterOptions;
 use MetaModels\IItem;
-use MetaModels\Filter\IFilter;
-use MetaModels\Filter\Rules\StaticIdList as FilterRuleStaticIdList;
-use MetaModels\Filter\Rules\SearchAttribute as FilterRuleSimpleLookup;
 use MetaModels\IMetaModel;
 use MetaModels\ITranslatedMetaModel;
 use MetaModels\Render\Setting\ICollection as IRenderSettings;
@@ -101,14 +103,29 @@ class SimpleLookup extends Simple
      * @param array             $arrCount     If non-null, the amount of matches will get returned.
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function getParameterFilterOptions($objAttribute, $arrIds, &$arrCount = null)
     {
-        $arrOptions = $objAttribute->getFilterOptions(
-            $this->get('onlypossible') ? $arrIds : null,
-            (bool) $this->get('onlyused'),
-            $arrCount
-        );
+        $labelAttribute = null;
+        if ((!$objAttribute instanceof IAliasConverter) && $this->get('label_attr_id')) {
+            $labelAttribute = $this->getMetaModel()->getAttributeById((int) $this->get('label_attr_id'));
+        }
+
+        if ($labelAttribute) {
+            $arrOptions = $this->getLabelAttributeValuesByOptionsList(
+                $objAttribute,
+                $labelAttribute,
+                ((bool) $this->get('onlypossible')) ? $arrIds : null
+            );
+        } else {
+            $arrOptions = $objAttribute->getFilterOptions(
+                $this->get('onlypossible') ? $arrIds : null,
+                (bool) $this->get('onlyused'),
+                $arrCount
+            );
+        }
 
         // Remove empty values.
         foreach ($arrOptions as $mixOptionKey => $mixOptions) {
@@ -328,11 +345,18 @@ class SimpleLookup extends Simple
     #[\Override]
     public function getReferencedAttributes()
     {
+        $result = [];
         if ($attribute = $this->getFilteredAttribute()) {
-            return array($attribute->getColName());
+            $result[] = $attribute->getColName();
         }
 
-        return array();
+        if ((!$attribute instanceof IAliasConverter) && $this->get('label_attr_id')) {
+            if ($labelAttribute = $this->getMetaModel()->getAttributeById((int) $this->get('label_attr_id'))) {
+                $result[] = $labelAttribute->getColName();
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -405,5 +429,38 @@ class SimpleLookup extends Simple
         }
 
         return [];
+    }
+
+    /**
+     * @param null|list<string> $idList
+     *
+     * @return array<string, string>
+     */
+    private function getLabelAttributeValuesByOptionsList(
+        IAttribute $keyAttribute,
+        IAttribute $labelAttribute,
+        ?array $idList
+    ): array {
+        $model        = $this->getMetaModel();
+        $filter       = $model->getEmptyFilter();
+        $keyColName   = $keyAttribute->getColName();
+        $labelColName = $labelAttribute->getColName();
+
+        if (null !== $idList) {
+            $filter->addFilterRule(new StaticIdList($idList));
+        }
+
+        $items = $model->findByFilter(
+            $filter,
+            arrAttrOnly: [$keyColName, $labelColName]
+        );
+
+        $parsed = $items->parseAll('text');
+        $result = [];
+        foreach ($parsed as $item) {
+            $result[$item['text'][$keyColName]] = $item['text'][$labelColName];
+        }
+
+        return $result;
     }
 }

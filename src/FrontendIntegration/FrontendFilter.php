@@ -32,6 +32,7 @@ use Contao\StringUtil;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\RedirectEvent;
 use Contao\CoreBundle\Csrf\ContaoCsrfTokenManager;
+use Contao\CoreBundle\Exception\PageNotFoundException;
 use Contao\CoreBundle\Exception\RedirectResponseException;
 use Contao\FrontendTemplate;
 use Contao\Input;
@@ -414,11 +415,23 @@ class FrontendFilter
         $jumpToInformation = $this->objFilterConfig->getJumpTo();
         $filterSetting     = $this->objFilterConfig->getFilterCollection();
         $wantedNames       = $this->getWantedNames();
+        $wantedByType      = ['get' => [], 'slug' => []];
+        // FIXME: improve this call - it does too much.
+        foreach ($filterSetting->getParameterFilterWidgets([], [], $filterOptions) as $widgetName => $widget) {
+            $type = ($widget['param_type'] ?? 'slugNget');
+            if ($type === 'slugNget') {
+                $wantedByType['slug'][] = $widgetName;
+                $wantedByType['get'][] = $widgetName;
+                continue;
+            }
+
+            $wantedByType[$type][] = $widgetName;
+        }
 
         $this->buildParameters(
             $other = new FilterUrl($jumpToInformation),
             $all   = new FilterUrl($jumpToInformation),
-            $wantedNames
+            $wantedByType
         );
 
         // DAMN Contao - we have to "mark" the keys in the Input class as used as we get an 404 otherwise.
@@ -437,15 +450,28 @@ class FrontendFilter
             $filterOptions
         );
 
+        // 404 if a get-only filter parameter is accessed via slug.
+        foreach ($arrWidgets as $widgetName => $widget) {
+            if ('get' === ($widget['param_type'] ?? 'slug') && $all->hasSlug($widgetName)) {
+                throw new PageNotFoundException();
+            }
+        }
+
         // If we have POST data, we need to redirect now.
         if (Input::post('FORM_SUBMIT') === $this->formId) {
             foreach ($wantedNames as $widgetName) {
                 if (empty($arrWidgets[$widgetName])) {
                     continue;
                 }
-                $filter = $arrWidgets[$widgetName];
-                if (null !== $filter['urlvalue']) {
-                    $other->setSlug($widgetName, $filter['urlvalue']);
+                $filter     = $arrWidgets[$widgetName];
+                $paramValue = $filter['urlvalue'];
+                if (null !== $paramValue) {
+                    match ($filter['param_type'] ?? 'slug') {
+                        'get'      => $other->setGet($widgetName, $paramValue),
+                        'slug'     => $other->setSlug($widgetName, $paramValue),
+                        'slugNget' => $other->setSlug($widgetName, $paramValue)->setGet($widgetName, ''),
+                        default    => $other->setSlug($widgetName, $paramValue)->setGet($widgetName, $paramValue),
+                    };
                 }
             }
 
@@ -485,30 +511,33 @@ class FrontendFilter
      *
      * @param FilterUrl    $other       Destination for "other" parameters (not originating from current filter module).
      * @param FilterUrl    $all         Destination for "all" parameters.
-     * @param list<string> $wantedNames The wanted parameter names.
+     * @param list<string>|array{get: list<string>, slug: list<string>} $wantedNames The wanted parameter names.
      *
      * @return void
      */
     protected function buildParameters(FilterUrl $other, FilterUrl $all, array $wantedNames): void
     {
-        $current = $this->filterUrlBuilder->getCurrentFilterUrl(
+        $wantedNames = $this->ensureWantedNamesAreSortedByType($wantedNames);
+        $current     = $this->filterUrlBuilder->getCurrentFilterUrl(
             [
-                'postAsSlug'  => $wantedNames,
-                'postAsGet'   => [],
+                'postAsSlug'  => $wantedNames['slug'],
+                'postAsGet'   => $wantedNames['get'],
                 'preserveGet' => true
             ]
         );
         foreach ($current->getSlugParameters() as $name => $value) {
-            $all->setSlug($name, $value);
-            if (!\in_array($name, $wantedNames)) {
+            if (!\in_array($name, $wantedNames['slug'], true)) {
                 $other->setSlug($name, $value);
+                continue;
             }
+            $all->setSlug($name, $value);
         }
         foreach ($current->getGetParameters() as $name => $value) {
-            $all->setGet($name, $value);
-            if (!\in_array($name, $wantedNames)) {
+            if (!\in_array($name, $wantedNames['get'], true)) {
                 $other->setGet($name, $value);
+                continue;
             }
+            $all->setGet($name, $value);
         }
     }
 
@@ -667,5 +696,26 @@ class FrontendFilter
         }
 
         return $processed;
+    }
+
+    /**
+     * @param list<string>|array{get: list<string>, slug: list<string>} $wantedNames The wanted parameter names.
+     *
+     * @return array{get: list<string>, slug: list<string>}
+     */
+    private function ensureWantedNamesAreSortedByType(array $wantedNames): array
+    {
+        if (array_keys($wantedNames) !== ['get', 'slug']) {
+            trigger_deprecation(
+                'metamodels/core',
+                '2.4',
+                'Passing a list of strings to "\MetaModels\FrontendIntegration\FrontendFilter::buildParameters()"' .
+                ' is deprecated since version 2.4, please pass an array [\'get\' => [], \'slug\' => []] instead.',
+            );
+            /** @var list<string> $wantedNames */
+            return ['slug' => $wantedNames, 'get' => []];
+        }
+        /** @var array{get: list<string>, slug: list<string>} $wantedNames */
+        return $wantedNames;
     }
 }

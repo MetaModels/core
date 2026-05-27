@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2025 The MetaModels team.
+ * (c) 2012-2026 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -21,12 +21,13 @@
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2025 The MetaModels team.
+ * @copyright  2012-2026 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 use ContaoCommunityAlliance\DcGeneral\DC\General;
+use MetaModels\CoreBundle\DataProvider\DcaSettingAttrTypeDataProvider;
 
 $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
     'config'                => [
@@ -43,7 +44,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
     'dca_config'            => [
         'data_provider'  => [
             'root'         => [
-                'source' => 'tl_metamodel_dcasetting'
+                'source' => 'tl_metamodel_dcasetting',
+                'class'  => DcaSettingAttrTypeDataProvider::class,
             ],
             'parent'       => [
                 'source' => 'tl_metamodel_dca'
@@ -135,7 +137,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
         'sorting'           => [
             'mode'         => 4,
             'fields'       => ['sorting'],
-            'panelLayout'  => 'limit',
+            'panelLayout'  => 'filter;search;limit',
             'headerFields' => ['name'],
         ],
         'global_operations' => [
@@ -242,6 +244,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
             // * preserveTags       do not encode html tags.
             // * decodeEntities     do decode HTML entities.
             // * rte                enable richtext editor on this
+            // * highlight          set type of highlighting for ACE editor
             // * rows               amount of rows in longtext and tables.
             // * cols               amount of columns in longtext and tables.
             // * trailingSlash      allow trailing slash, 2 => do nothing, 1 => add one on save, 0 => strip it on save.
@@ -251,7 +254,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
             // * readonly           readonly.
             // * be_template        widget template for backend.
             // * fe_template        form template for frontend.
-        ]
+        ],
+        'rte'     => [
+            'ace' => [
+                'presentation after rte' => [
+                    'highlight',
+                ]
+            ]
+        ],
     ],
     'fields'                => [
         'id'                 => [
@@ -440,8 +450,42 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
             'eval'        => [
                 'tl_class'           => 'w50',
                 'includeBlankOption' => true,
+                'submitOnChange'     => true,
             ],
             'sql'         => "varchar(64) NOT NULL default 'tinyMCE'"
+        ],
+        'highlight'          => [
+            'label'       => 'highlight.label',
+            'description' => 'highlight.description',
+            'inputType' => 'select',
+            'options'   => [
+                'Apache',
+                'Bash',
+                'C#',
+                'C++',
+                'CSS',
+                'Diff',
+                'HTML',
+                'HTTP',
+                'Ini',
+                'JSON',
+                'Java',
+                'JavaScript',
+                'Markdown',
+                'Nginx',
+                'Perl',
+                'PHP',
+                'PowerShell',
+                'Python',
+                'Ruby',
+                'SCSS',
+                'SQL',
+                'Twig',
+                'YAML',
+                'XML'
+            ],
+            'eval'      => ['includeBlankOption' => true, 'decodeEntities' => true, 'tl_class' => 'w50'],
+            'sql'       => "varchar(32) COLLATE ascii_bin NOT NULL default ''"
         ],
         'rows'               => [
             'label'       => 'rows.label',
@@ -450,7 +494,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
             'inputType'   => 'text',
             'eval'        =>
                 [
-                    'tl_class' => 'w50',
+                    'tl_class' => 'clr w50',
                     'rgxp'     => 'digit'
                 ],
             'sql'         => "int(10) NOT NULL default '0'"
@@ -522,6 +566,39 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
                 'tl_class' => 'w50 cbx m12',
             ],
             'sql'         => "char(1) NOT NULL default ''"
-        ]
+        ],
+        'attr_type'          => [
+            'label'       => 'attr_type.label',
+            'description' => 'attr_type.description',
+            'exclude'     => true,
+            'inputType'   => 'select',
+            'eval'        => [
+                'includeBlankOption' => true,
+                'tl_class'           => 'w50',
+                'chosen'             => true,
+            ],
+            'filter'      => true,
+            'search'      => true,
+        ],
+        'attr_name'          => [
+            'label'       => 'attr_name.label',
+            'description' => 'attr_name.description',
+            'exclude'     => true,
+            'inputType'   => 'text',
+            'eval'        => [
+                'tl_class' => 'w50',
+            ],
+            'search'      => true,
+        ],
+        'attr_colname'       => [
+            'label'       => 'attr_colname.label',
+            'description' => 'attr_colname.description',
+            'exclude'     => true,
+            'inputType'   => 'text',
+            'eval'        => [
+                'tl_class' => 'w50',
+            ],
+            'search'      => true,
+        ],
     ]
 ];
