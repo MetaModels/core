@@ -80,6 +80,13 @@ services:
           - "%kernel.project_dir%"
           - "@translator"
 
+    metamodels.template_factory:
+        class: MetaModels\Render\TemplateFactory
+        arguments:
+          - "@=service('contao.framework').getAdapter('Contao\\\\TemplateLoader')"
+          - "@cca.dc-general.scope-matcher"
+        public: true
+
     metamodels.contao_input:
         class: Contao\Input
         factory: ['@MetaModels\CoreBundle\Contao\Compat\ContaoFactory', 'getAdapter']

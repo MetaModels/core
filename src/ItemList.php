@@ -54,6 +54,7 @@ use MetaModels\Helper\SortingLinkGenerator;
 use MetaModels\Render\Setting\ICollection as IRenderSettingCollection;
 use MetaModels\Render\Setting\IRenderSettingFactory;
 use MetaModels\Render\Template;
+use MetaModels\Render\TemplateFactory;
 use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -681,7 +682,10 @@ class ItemList
             $this->objView = $metaModel->getView((int) $this->intView);
         }
 
-        $this->objTemplate = new Template((string) $this->objView->get('template'));
+        $templateFactory = System::getContainer()->get('metamodels.template_factory');
+        assert($templateFactory instanceof TemplateFactory);
+
+        $this->objTemplate = $templateFactory->createTemplate((string) $this->objView->get('template'));
         /** @psalm-suppress UndefinedMagicPropertyAssignment */
         $this->objTemplate->view = $this->objView;
     }
