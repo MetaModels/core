@@ -66,7 +66,7 @@ if ($cacheDir = $container->getParameter('metamodels.cache_dir')) {
     $GLOBALS['TL_PURGE']['folders']['metamodels']['affected'] = [
         \str_replace(
             $container->getParameter('kernel.cache_dir') . '/',
-            '%s/',
+            '%kernel.cache_dir%/',
             $cacheDir
         )
     ];
