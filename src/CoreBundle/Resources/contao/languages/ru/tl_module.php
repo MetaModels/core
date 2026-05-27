@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2026 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,14 +13,18 @@
  * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * Last-updated: 2024-07-10T13:39:04+00:00
+ * Last-updated: 2026-05-27T22:26:30+00:00
  *
- * @copyright 2012-2024 The MetaModels team.
+ * @copyright 2012-2026 The MetaModels team.
  * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @link      https://www.transifex.com/metamodels/public/
  * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
 
+$GLOBALS['TL_LANG']['tl_content']['select_values']['attributes']          = 'Атрибуты';
+$GLOBALS['TL_LANG']['tl_content']['select_values']['meta']                = 'Метаполя';
+$GLOBALS['TL_LANG']['tl_module']['ASC']                                   = 'По возрастанию';
+$GLOBALS['TL_LANG']['tl_module']['DESC']                                  = 'По убыванию';
 $GLOBALS['TL_LANG']['tl_module']['asc']                                   = 'По возрастанию';
 $GLOBALS['TL_LANG']['tl_module']['desc']                                  = 'По убыванию';
 $GLOBALS['TL_LANG']['tl_module']['metamodel']['0']                        = 'MetaModel';

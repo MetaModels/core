@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2026 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,14 +13,16 @@
  * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * Last-updated: 2024-07-10T13:37:33+00:00
+ * Last-updated: 2026-05-27T22:24:45+00:00
  *
- * @copyright 2012-2024 The MetaModels team.
+ * @copyright 2012-2026 The MetaModels team.
  * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @link      https://www.transifex.com/metamodels/public/
  * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
 
+$GLOBALS['TL_LANG']['tl_content']['ASC']                                   = 'Kasvav';
+$GLOBALS['TL_LANG']['tl_content']['DESC']                                  = 'Kahanevalt';
 $GLOBALS['TL_LANG']['tl_content']['asc']                                   = 'Kasvav';
 $GLOBALS['TL_LANG']['tl_content']['desc']                                  = 'Kahanevalt';
 $GLOBALS['TL_LANG']['tl_content']['metamodel']['0']                        = 'MetaModel';
@@ -43,3 +45,4 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_sortby_direction']['0']       = 'JÃ
 $GLOBALS['TL_LANG']['tl_content']['mm_config_legend']                      = 'MetaModeli seadistamine';
 $GLOBALS['TL_LANG']['tl_content']['mm_filter_legend']                      = 'MetaModel filter';
 $GLOBALS['TL_LANG']['tl_content']['mm_meta_legend']                        = 'Otsingumootorile optimiseerimine';
+$GLOBALS['TL_LANG']['tl_content']['select_values']['attributes']           = 'Omadused';
