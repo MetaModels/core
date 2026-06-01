@@ -26,12 +26,14 @@
 
 namespace MetaModels\Attribute;
 
+use Contao\System;
 use MetaModels\Helper\LocaleUtil;
 use MetaModels\IMetaModel;
 use MetaModels\ITranslatedMetaModel;
 use MetaModels\Render\Setting\ISimple as ISimpleRenderSetting;
 use MetaModels\Render\Setting\Simple;
 use MetaModels\Render\Template;
+use MetaModels\Render\TemplateFactory;
 
 /**
  * This is the main MetaModels-attribute base class.
