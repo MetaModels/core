@@ -658,7 +658,7 @@ abstract class Base implements IAttribute
                 // FIXME: this throws when no parent has been set - need to catch!
                 $objSettingsFallback = $this->getDefaultRenderSettings()->setParent($objSettings->getParent());
 
-                $objTemplate = new Template($objSettingsFallback->get('template') ?? '');
+                $objTemplate = $templateFactory->createTemplate((string) $objSettingsFallback->get('template'));
                 $this->prepareTemplate($objTemplate, $arrRowData, $objSettingsFallback);
 
                 $arrResult['text'] = $objTemplate->parse('text', true);
