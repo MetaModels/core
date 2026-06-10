@@ -205,7 +205,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
         $strFallbackLanguage = $this->getFallbackLanguage();
 
         $arrReturn = $this->getTranslatedDataFor($arrIds, $strActiveLanguage);
-        if ($this->get('skip_fallback')) {
+        if ((bool) $this->get('skip_fallback')) {
             return $arrReturn;
         }
 
