@@ -201,10 +201,19 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
     #[\Override]
     public function getDataFor($arrIds)
     {
-        $strActiveLanguage = $this->getActiveLanguage();
+        $strActiveLanguage   = $this->getActiveLanguage();
         $strFallbackLanguage = $this->getFallbackLanguage();
 
         $arrReturn = $this->getTranslatedDataFor($arrIds, $strActiveLanguage);
+        if ($this->get('skip_fallback')) {
+//            foreach ($arrIds as $intId) {
+//                if (!\array_key_exists($intId, $arrReturn)) {
+//                    $arrReturn[$intId] = null;
+//                }
+//            }
+
+            return $arrReturn;
+        }
 
         // Second round, fetch fallback languages if not all items could be resolved.
         if (($strActiveLanguage !== $strFallbackLanguage) && (\count($arrReturn) < \count($arrIds))) {
