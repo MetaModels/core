@@ -206,12 +206,6 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
 
         $arrReturn = $this->getTranslatedDataFor($arrIds, $strActiveLanguage);
         if ($this->get('skip_fallback')) {
-//            foreach ($arrIds as $intId) {
-//                if (!\array_key_exists($intId, $arrReturn)) {
-//                    $arrReturn[$intId] = null;
-//                }
-//            }
-
             return $arrReturn;
         }
 
