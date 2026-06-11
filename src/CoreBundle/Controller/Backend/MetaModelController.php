@@ -67,7 +67,7 @@ final class MetaModelController extends AbstractBackendController
         ContaoFramework $framework,
         ViewCombination $viewCombination,
     ): Response {
-        $containerName = (string) $request->query->get('table', '');
+        $containerName = $request->query->get('table', '');
         if ('' === $containerName) {
             $containerName = (string) ($request->attributes->get('_route_params', [])['tableName'] ?? '');
         }

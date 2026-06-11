@@ -56,7 +56,7 @@ final class ConfigurationController extends AbstractBackendController
         TranslatorInterface $translator,
         ContaoFramework $framework,
     ): Response {
-        $containerName    = (string) $request->query->get('table', '');
+        $containerName    = $request->query->get('table', '');
         if ('' === $containerName) {
             $containerName = (string) ($request->attributes->get('_route_params', [])['tableName'] ?? 'tl_metamodel');
         }

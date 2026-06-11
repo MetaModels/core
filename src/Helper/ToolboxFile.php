@@ -902,6 +902,7 @@ class ToolboxFile
                 // Check key and return 403 if mismatch
                 // keep both null-coalescing values different to account for missing values.
                 if (($links[$file] ?? null) !== (Input::get('fileKey') ?? false)) {
+                    /** @psalm-suppress DeprecatedClass */
                     (new PageError403())->getResponse();
                 }
             }

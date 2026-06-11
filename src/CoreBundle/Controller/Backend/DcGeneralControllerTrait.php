@@ -52,7 +52,7 @@ trait DcGeneralControllerTrait
         TranslatorInterface $translator,
         ContaoFramework $framework,
     ): string {
-        $act = (string) $request->query->get('act', 'showAll');
+        $act = $request->query->get('act', 'showAll');
 
         // Work around legacy Contao code.
         /** @psalm-suppress InternalMethod - Class ContaoFramework is internal, not the getAdapter() method. */

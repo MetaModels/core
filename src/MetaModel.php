@@ -166,6 +166,8 @@ class MetaModel implements IMetaModel
      * {@inheritdoc}
      *
      * @deprecated Inject services via constructor or setter.
+     *
+     * @psalm-suppress DeprecatedProperty
      */
     #[\Override]
     public function getServiceContainer()
@@ -198,6 +200,8 @@ class MetaModel implements IMetaModel
      * @return MetaModel
      *
      * @deprecated Inject services via constructor or setter.
+     *
+     * @psalm-suppress DeprecatedProperty
      */
     public function setServiceContainer($serviceContainer, $deprecationNotice = true)
     {
