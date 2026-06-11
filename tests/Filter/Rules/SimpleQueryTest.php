@@ -25,12 +25,13 @@ use Doctrine\DBAL\Driver\Statement;
 use Doctrine\DBAL\Result;
 use MetaModels\Filter\Rules\SimpleQuery;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * This tests the simple query filter rule.
  *
- * @covers \MetaModels\Filter\Rules\SimpleQuery
  */
+#[CoversClass(\MetaModels\Filter\Rules\SimpleQuery::class)]
 class SimpleQueryTest extends TestCase
 {
     /**

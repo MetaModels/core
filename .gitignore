@@ -18,5 +18,6 @@ composer.lock
 # build
 /.cache
 /.phpunit.result.cache
+/.phpunit.cache
 /.pdepend/*
 /.phpcq/*

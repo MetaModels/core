@@ -30,10 +30,11 @@ use MetaModels\IMetaModel;
 use MetaModels\ITranslatedMetaModel;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
- * @covers \MetaModels\DcGeneral\Events\MetaModel\CopyTranslatedData
  */
+#[CoversClass(\MetaModels\DcGeneral\Events\MetaModel\CopyTranslatedData::class)]
 class CopyTranslatedDataTest extends TestCase
 {
     /**
@@ -50,12 +51,12 @@ class CopyTranslatedDataTest extends TestCase
         string $newId,
         string $providerName = 'mm_test'
     ): PostDuplicateModelEvent {
-        $environment = $this->getMockForAbstractClass(EnvironmentInterface::class);
+        $environment = $this->createMock(EnvironmentInterface::class);
 
-        $sourceModel = $this->getMockForAbstractClass(ModelInterface::class);
+        $sourceModel = $this->createMock(ModelInterface::class);
         $sourceModel->method('getId')->willReturn($sourceId);
 
-        $newModel = $this->getMockForAbstractClass(ModelInterface::class);
+        $newModel = $this->createMock(ModelInterface::class);
         $newModel->method('getId')->willReturn($newId);
         $newModel->method('getProviderName')->willReturn($providerName);
 
@@ -73,7 +74,7 @@ class CopyTranslatedDataTest extends TestCase
     private function buildListener(?IMetaModel $metaModel, string $providerName = 'mm_test'): CopyTranslatedData
     {
         /** @var IFactory&MockObject $factory */
-        $factory = $this->getMockForAbstractClass(IFactory::class);
+        $factory = $this->createMock(IFactory::class);
         $factory->method('getMetaModel')->with($providerName)->willReturn($metaModel);
 
         return new CopyTranslatedData($factory);
@@ -85,7 +86,7 @@ class CopyTranslatedDataTest extends TestCase
     public function testHandleDoesNothingWhenIdsAreEqual(): void
     {
         /** @var ITranslatedMetaModel&MockObject $metaModel */
-        $metaModel = $this->getMockForAbstractClass(ITranslatedMetaModel::class);
+        $metaModel = $this->createMock(ITranslatedMetaModel::class);
         $metaModel->expects(self::never())->method('getLanguages');
 
         $listener = $this->buildListener($metaModel);
@@ -98,7 +99,7 @@ class CopyTranslatedDataTest extends TestCase
     public function testHandleDoesNothingWhenSourceIdIsEmpty(): void
     {
         /** @var ITranslatedMetaModel&MockObject $metaModel */
-        $metaModel = $this->getMockForAbstractClass(ITranslatedMetaModel::class);
+        $metaModel = $this->createMock(ITranslatedMetaModel::class);
         $metaModel->expects(self::never())->method('getLanguages');
 
         $listener = $this->buildListener($metaModel);
@@ -111,7 +112,7 @@ class CopyTranslatedDataTest extends TestCase
     public function testHandleDoesNothingWhenNewIdIsEmpty(): void
     {
         /** @var ITranslatedMetaModel&MockObject $metaModel */
-        $metaModel = $this->getMockForAbstractClass(ITranslatedMetaModel::class);
+        $metaModel = $this->createMock(ITranslatedMetaModel::class);
         $metaModel->expects(self::never())->method('getLanguages');
 
         $listener = $this->buildListener($metaModel);
@@ -124,7 +125,7 @@ class CopyTranslatedDataTest extends TestCase
     public function testHandleDoesNothingForNonTranslatedMetaModel(): void
     {
         /** @var IMetaModel&MockObject $metaModel */
-        $metaModel = $this->getMockForAbstractClass(IMetaModel::class);
+        $metaModel = $this->createMock(IMetaModel::class);
         $metaModel->expects(self::never())->method('getAttributes');
 
         $listener = $this->buildListener($metaModel);
@@ -137,11 +138,11 @@ class CopyTranslatedDataTest extends TestCase
     public function testHandleSkipsAttributesWithoutFallbackControlInterface(): void
     {
         /** @var ITranslated&MockObject $attribute */
-        $attribute = $this->getMockForAbstractClass(ITranslated::class);
+        $attribute = $this->createMock(ITranslated::class);
         $attribute->expects(self::never())->method('setTranslatedDataFor');
 
         /** @var ITranslatedMetaModel&MockObject $metaModel */
-        $metaModel = $this->getMockForAbstractClass(ITranslatedMetaModel::class);
+        $metaModel = $this->createMock(ITranslatedMetaModel::class);
         $metaModel->method('getLanguages')->willReturn(['de', 'en']);
         $metaModel->method('getAttributes')->willReturn([$attribute]);
 
@@ -155,12 +156,12 @@ class CopyTranslatedDataTest extends TestCase
     public function testHandleSkipsLanguagesWithNoData(): void
     {
         /** @var ITranslatedWithFallbackControl&MockObject $attribute */
-        $attribute = $this->getMockForAbstractClass(ITranslatedWithFallbackControl::class);
+        $attribute = $this->createMock(ITranslatedWithFallbackControl::class);
         $attribute->method('getTranslatedDataForWithoutFallback')->willReturn([]);
         $attribute->expects(self::never())->method('applyTranslatedDataFor');
 
         /** @var ITranslatedMetaModel&MockObject $metaModel */
-        $metaModel = $this->getMockForAbstractClass(ITranslatedMetaModel::class);
+        $metaModel = $this->createMock(ITranslatedMetaModel::class);
         $metaModel->method('getLanguages')->willReturn(['de', 'en']);
         $metaModel->method('getAttributes')->willReturn([$attribute]);
 
@@ -180,7 +181,7 @@ class CopyTranslatedDataTest extends TestCase
         $dataEN = ['item_id' => $sourceId, 'langcode' => 'en', 'value' => 'Hello'];
 
         /** @var ITranslatedWithFallbackControl&MockObject $attribute */
-        $attribute = $this->getMockForAbstractClass(ITranslatedWithFallbackControl::class);
+        $attribute = $this->createMock(ITranslatedWithFallbackControl::class);
         $attribute->method('getTranslatedDataForWithoutFallback')->willReturnMap([
             [[$sourceId], 'de', [$sourceId => $dataDE]],
             [[$sourceId], 'en', [$sourceId => $dataEN]],
@@ -198,7 +199,7 @@ class CopyTranslatedDataTest extends TestCase
         );
 
         /** @var ITranslatedMetaModel&MockObject $metaModel */
-        $metaModel = $this->getMockForAbstractClass(ITranslatedMetaModel::class);
+        $metaModel = $this->createMock(ITranslatedMetaModel::class);
         $metaModel->method('getLanguages')->willReturn(['de', 'en']);
         $metaModel->method('getAttributes')->willReturn([$attribute]);
 
@@ -217,7 +218,7 @@ class CopyTranslatedDataTest extends TestCase
         $dataDE = ['item_id' => $sourceId, 'langcode' => 'de', 'value' => 'Hallo'];
 
         /** @var ITranslatedWithFallbackControl&MockObject $attribute */
-        $attribute = $this->getMockForAbstractClass(ITranslatedWithFallbackControl::class);
+        $attribute = $this->createMock(ITranslatedWithFallbackControl::class);
         $attribute->method('getTranslatedDataForWithoutFallback')->willReturnMap([
             [[$sourceId], 'de', [$sourceId => $dataDE]],
             [[$sourceId], 'en', []],
@@ -227,7 +228,7 @@ class CopyTranslatedDataTest extends TestCase
             ->with([$newId => $dataDE], 'de');
 
         /** @var ITranslatedMetaModel&MockObject $metaModel */
-        $metaModel = $this->getMockForAbstractClass(ITranslatedMetaModel::class);
+        $metaModel = $this->createMock(ITranslatedMetaModel::class);
         $metaModel->method('getLanguages')->willReturn(['de', 'en']);
         $metaModel->method('getAttributes')->willReturn([$attribute]);
 
@@ -247,17 +248,17 @@ class CopyTranslatedDataTest extends TestCase
         $data2 = ['item_id' => $sourceId, 'langcode' => 'de', 'value' => 'Attr2'];
 
         /** @var ITranslatedWithFallbackControl&MockObject $attribute1 */
-        $attribute1 = $this->getMockForAbstractClass(ITranslatedWithFallbackControl::class);
+        $attribute1 = $this->createMock(ITranslatedWithFallbackControl::class);
         $attribute1->method('getTranslatedDataForWithoutFallback')->willReturn([$sourceId => $data1]);
         $attribute1->expects(self::once())->method('applyTranslatedDataFor')->with([$newId => $data1], 'de');
 
         /** @var ITranslatedWithFallbackControl&MockObject $attribute2 */
-        $attribute2 = $this->getMockForAbstractClass(ITranslatedWithFallbackControl::class);
+        $attribute2 = $this->createMock(ITranslatedWithFallbackControl::class);
         $attribute2->method('getTranslatedDataForWithoutFallback')->willReturn([$sourceId => $data2]);
         $attribute2->expects(self::once())->method('applyTranslatedDataFor')->with([$newId => $data2], 'de');
 
         /** @var ITranslatedMetaModel&MockObject $metaModel */
-        $metaModel = $this->getMockForAbstractClass(ITranslatedMetaModel::class);
+        $metaModel = $this->createMock(ITranslatedMetaModel::class);
         $metaModel->method('getLanguages')->willReturn(['de']);
         $metaModel->method('getAttributes')->willReturn([$attribute1, $attribute2]);
 

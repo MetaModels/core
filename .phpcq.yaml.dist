@@ -14,19 +14,29 @@ phpcq:
       signed: false
       requirements:
         phpunit:
-          version: ^10.0
+          version: ^12
     psalm:
-      version: ^1.0
+      version: ^1.1
       signed: false
     composer-require-checker:
       version: ^1.0
       signed: false
+      requirements:
+        composer-require-checker:
+          signed: false
+          version: ^4.0
     phpmd:
       version: ^1.0
       signed: false
+      requirements:
+        phpmd:
+          signed: false
     phpcpd:
       version: ^1.1
       signed: false
+      requirements:
+        phpcpd:
+          version: ^6.0
     phploc:
       version: ^1.0
       signed: false
@@ -55,6 +65,7 @@ phpcq:
     # Composer normalize
     - C00543248C87FB13
     # phpmd
+    - 0F9684B8B16B7AB0
     - A4E55EA12C7C085C
     - 9093F8B32E4815AA
 

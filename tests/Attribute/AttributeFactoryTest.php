@@ -140,7 +140,7 @@ class AttributeFactoryTest extends TestCase
      */
     public function testAttributeTypeMatchesFlags()
     {
-        $factory = new AttributeFactory($this->getMockForAbstractClass(EventDispatcherInterface::class));
+        $factory = new AttributeFactory($this->createMock(EventDispatcherInterface::class));
         $factory->addTypeFactory($this->mockAttributeFactory('test_translated', true, false, false));
         $factory->addTypeFactory($this->mockAttributeFactory('test_simple', false, true, false));
         $factory->addTypeFactory($this->mockAttributeFactory('test_complex', false, false, true));
@@ -167,7 +167,7 @@ class AttributeFactoryTest extends TestCase
      */
     public function testGetTypeNames()
     {
-        $factory = new AttributeFactory($this->getMockForAbstractClass(EventDispatcherInterface::class));
+        $factory = new AttributeFactory($this->createMock(EventDispatcherInterface::class));
 
         self::assertSame(
             array(),
@@ -275,7 +275,7 @@ class AttributeFactoryTest extends TestCase
      */
     public function testGetTypeIcon()
     {
-        $factory     = new AttributeFactory($this->getMockForAbstractClass(EventDispatcherInterface::class));
+        $factory     = new AttributeFactory($this->createMock(EventDispatcherInterface::class));
         $typeFactory = $this->mockAttributeFactory('test', true, false, false, new \stdClass(), 'icon.png');
         $factory->addTypeFactory($typeFactory);
 
@@ -307,7 +307,7 @@ class AttributeFactoryTest extends TestCase
         $class = 'stdClass',
         $typeIcon = 'icon.png'
     ) {
-        $mockTypeFactory = $this->getMockForAbstractClass(IAttributeTypeFactory::class);
+        $mockTypeFactory = $this->createMock(IAttributeTypeFactory::class);
 
         $mockTypeFactory
             ->expects(self::any())

@@ -307,5 +307,10 @@
         <file name="src/Widgets/TagsWidget.php"/>
       </errorLevel>
     </ClassMustBeFinal>
+    <UndefinedClass>
+      <errorLevel type="suppress">
+        <referencedClass name="Contao\ManagerBundle\ContaoManagerBundle"/>
+      </errorLevel>
+    </UndefinedClass>
   </issueHandlers>
 </psalm>

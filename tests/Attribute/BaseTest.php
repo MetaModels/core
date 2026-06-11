@@ -23,12 +23,13 @@ namespace MetaModels\Test\Attribute;
 use MetaModels\Attribute\Base;
 use MetaModels\IMetaModel;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test the base attribute.
  *
- * @covers \MetaModels\Attribute\Base
  */
+#[CoversClass(\MetaModels\Attribute\Base::class)]
 class BaseTest extends TestCase
 {
     /**
@@ -41,7 +42,7 @@ class BaseTest extends TestCase
      */
     protected function mockMetaModel($language, $fallbackLanguage)
     {
-        $metaModel = $this->getMockForAbstractClass(IMetaModel::class);
+        $metaModel = $this->createMock(IMetaModel::class);
 
         $metaModel
             ->expects(self::any())
@@ -106,13 +107,15 @@ class BaseTest extends TestCase
 
         /** @var Base $attribute */
         return $this
-            ->getMockForAbstractClass(
-                'MetaModels\Attribute\Base',
+            ->getMockBuilder('MetaModels\Attribute\Base')
+            ->setConstructorArgs(
                 array(
                     $metaModel ?: $this->mockMetaModel('en', 'en'),
                     $serialized
                 )
-            );
+            )
+            ->onlyMethods(['searchFor', 'setDataFor', 'getFilterOptions'])
+            ->getMock();
     }
 
     /**

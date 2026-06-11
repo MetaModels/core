@@ -24,12 +24,13 @@ namespace MetaModels\Test\Information;
 use MetaModels\Information\AttributeInformationInterface;
 use MetaModels\Information\MetaModelInformation;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * This tests the attribute information.
  *
- * @covers \MetaModels\Information\MetaModelInformation
  */
+#[CoversClass(\MetaModels\Information\MetaModelInformation::class)]
 class MetaModelInformationTest extends TestCase
 {
     /**
@@ -56,7 +57,7 @@ class MetaModelInformationTest extends TestCase
     {
         $information = new MetaModelInformation('mm_test');
 
-        $attribute = $this->getMockForAbstractClass(AttributeInformationInterface::class);
+        $attribute = $this->createMock(AttributeInformationInterface::class);
         $attribute->expects($this->once())->method('getName')->willReturn('test');
 
         $information->addAttribute($attribute);
@@ -75,14 +76,14 @@ class MetaModelInformationTest extends TestCase
     {
         $information = new MetaModelInformation('mm_test');
 
-        $attribute = $this->getMockForAbstractClass(AttributeInformationInterface::class);
+        $attribute = $this->createMock(AttributeInformationInterface::class);
         $attribute->expects($this->once())->method('getName')->willReturn('test');
         $information->addAttribute($attribute);
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Attribute "test" already registered');
 
-        $second = $this->getMockForAbstractClass(AttributeInformationInterface::class);
+        $second = $this->createMock(AttributeInformationInterface::class);
         $second->expects($this->once())->method('getName')->willReturn('test');
 
         $information->addAttribute($second);
@@ -112,15 +113,15 @@ class MetaModelInformationTest extends TestCase
     {
         $information = new MetaModelInformation('mm_test');
 
-        $attribute1 = $this->getMockForAbstractClass(AttributeInformationInterface::class);
+        $attribute1 = $this->createMock(AttributeInformationInterface::class);
         $attribute1->expects($this->once())->method('getName')->willReturn('test1');
         $attribute1->expects($this->once())->method('getType')->willReturn('searched');
         $information->addAttribute($attribute1);
-        $attribute2 = $this->getMockForAbstractClass(AttributeInformationInterface::class);
+        $attribute2 = $this->createMock(AttributeInformationInterface::class);
         $attribute2->expects($this->once())->method('getName')->willReturn('test2');
         $attribute2->expects($this->once())->method('getType')->willReturn('other');
         $information->addAttribute($attribute2);
-        $attribute3 = $this->getMockForAbstractClass(AttributeInformationInterface::class);
+        $attribute3 = $this->createMock(AttributeInformationInterface::class);
         $attribute3->expects($this->once())->method('getName')->willReturn('test3');
         $attribute3->expects($this->once())->method('getType')->willReturn('searched');
 

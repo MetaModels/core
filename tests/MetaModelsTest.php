@@ -30,12 +30,13 @@ use MetaModels\MetaModel;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test the base attribute.
  *
- * @covers \MetaModels\MetaModel
  */
+#[CoversClass(\MetaModels\MetaModel::class)]
 class MetaModelsTest extends TestCase
 {
     /**
@@ -69,7 +70,7 @@ class MetaModelsTest extends TestCase
 
         $metaModel = new MetaModel(
             $serialized,
-            $this->getMockForAbstractClass(EventDispatcherInterface::class),
+            $this->createMock(EventDispatcherInterface::class),
             $this->mockConnection()
         );
         self::assertEmpty($metaModel->getAttributes());
@@ -80,7 +81,7 @@ class MetaModelsTest extends TestCase
 
         $metaModel = new MetaModel(
             $values,
-            $this->getMockForAbstractClass(EventDispatcherInterface::class),
+            $this->createMock(EventDispatcherInterface::class),
             $this->mockConnection()
         );
 
@@ -96,7 +97,7 @@ class MetaModelsTest extends TestCase
     {
         $metaModel = new MetaModel(
             [],
-            $this->getMockForAbstractClass(EventDispatcherInterface::class),
+            $this->createMock(EventDispatcherInterface::class),
             $this->mockConnection()
         );
 
@@ -122,7 +123,7 @@ class MetaModelsTest extends TestCase
                 'languages'  => serialize(['en' => ['isfallback' => '1'], 'de' => ['isfallback' => '0']]),
                 'varsupport' => '',
             ],
-            $this->getMockForAbstractClass(EventDispatcherInterface::class),
+            $this->createMock(EventDispatcherInterface::class),
             $this->mockConnection(
                 (function () {
                     $builder = $this
@@ -214,7 +215,7 @@ class MetaModelsTest extends TestCase
             ->onlyMethods(['getMatchingIds'])
             ->setConstructorArgs([
                 ['tableName' => 'mm_test_retrieve'],
-                $this->getMockForAbstractClass(EventDispatcherInterface::class),
+                $this->createMock(EventDispatcherInterface::class),
                 $this->mockConnection()
             ])
             ->getMock();
@@ -241,7 +242,7 @@ class MetaModelsTest extends TestCase
             ->onlyMethods(['getMatchingIds'])
             ->setConstructorArgs([
                 ['tableName' => 'mm_test_retrieve'],
-                $this->getMockForAbstractClass(EventDispatcherInterface::class),
+                $this->createMock(EventDispatcherInterface::class),
                 $this->mockConnection(
                     (function () {
                         $builder = $this
@@ -329,7 +330,7 @@ class MetaModelsTest extends TestCase
             ->onlyMethods(['getMatchingIds'])
             ->setConstructorArgs([
                 ['tableName' => 'mm_test_retrieve'],
-                $this->getMockForAbstractClass(EventDispatcherInterface::class),
+                $this->createMock(EventDispatcherInterface::class),
                 $this->mockConnection(
                     (function () {
                         $builder = $this
@@ -414,7 +415,7 @@ class MetaModelsTest extends TestCase
             ->setConstructorArgs(
                 [
                     ['tableName' => 'mm_test_retrieve'],
-                    $this->getMockForAbstractClass(EventDispatcherInterface::class),
+                    $this->createMock(EventDispatcherInterface::class),
                     $this->mockConnection()
                 ]
             )
@@ -437,7 +438,7 @@ class MetaModelsTest extends TestCase
             ->onlyMethods(['getMatchingIdsAuthoritative'])
             ->setConstructorArgs([
                 ['tableName' => 'mm_test_retrieve'],
-                $this->getMockForAbstractClass(EventDispatcherInterface::class),
+                $this->createMock(EventDispatcherInterface::class),
                 $this->mockConnection()
             ])
             ->getMock();

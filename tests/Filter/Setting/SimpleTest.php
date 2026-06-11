@@ -30,12 +30,13 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test simple filter settings.
  *
- * @covers \MetaModels\Filter\Setting\Simple
  */
+#[CoversClass(\MetaModels\Filter\Setting\Simple::class)]
 class SimpleTest extends TestCase
 {
     /**
@@ -52,8 +53,8 @@ class SimpleTest extends TestCase
         ?FilterUrlBuilder $filterUrlBuilder = null,
         ?TranslatorInterface $translator = null
     ) {
-        $filterSetting   = $this->getMockForAbstractClass(ICollection::class);
-        $eventDispatcher = $this->getMockForAbstractClass(EventDispatcherInterface::class);
+        $filterSetting   = $this->createMock(ICollection::class);
+        $eventDispatcher = $this->createMock(EventDispatcherInterface::class);
 
         if (null === $filterUrlBuilder) {
             $filterUrlBuilder = $this->getMockBuilder(FilterUrlBuilder::class)
@@ -62,13 +63,14 @@ class SimpleTest extends TestCase
         }
 
         if (null === $translator) {
-            $translator = $this->getMockForAbstractClass(TranslatorInterface::class);
+            $translator = $this->createMock(TranslatorInterface::class);
         }
 
         $setting = $this
             ->getMockBuilder(Simple::class)
             ->setConstructorArgs([$filterSetting, $properties, $eventDispatcher, $filterUrlBuilder, $translator])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['prepareRules'])
+            ->getMock();
 
         return $setting;
     }
@@ -328,7 +330,7 @@ class SimpleTest extends TestCase
      */
     public function testPrepareFrontendFilterOptionsBlankOptionAlwaysClears(): void
     {
-        $translator = $this->getMockForAbstractClass(TranslatorInterface::class);
+        $translator = $this->createMock(TranslatorInterface::class);
         $translator->method('trans')->willReturn('- no filter -');
 
         $widget                        = $this->defaultWidget();

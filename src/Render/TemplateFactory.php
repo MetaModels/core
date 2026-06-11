@@ -8,6 +8,9 @@ use Contao\CoreBundle\Framework\Adapter;
 use Contao\System;
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 
+/**
+ * @SuppressWarnings(PHPMD.LongVariable)
+ */
 final readonly class TemplateFactory
 {
     public function __construct(

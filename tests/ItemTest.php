@@ -27,6 +27,7 @@ use MetaModels\IMetaModel;
 use MetaModels\Item;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Tests for Item dirty tracking (IDirtyTracking implementation).
@@ -35,8 +36,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * Only attributes explicitly set via set() are marked dirty.
  * This prevents fallback-language data from being written to the active language on save.
  *
- * @covers \MetaModels\Item
  */
+#[CoversClass(\MetaModels\Item::class)]
 class ItemTest extends TestCase
 {
     private function createItem(array $data = []): Item

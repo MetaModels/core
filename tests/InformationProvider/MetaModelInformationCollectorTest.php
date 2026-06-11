@@ -25,12 +25,13 @@ use MetaModels\Information\MetaModelInformation;
 use MetaModels\InformationProvider\MetaModelInformationCollector;
 use MetaModels\InformationProvider\InformationProviderInterface;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * This tests the information collector.
  *
- * @covers \MetaModels\InformationProvider\MetaModelInformationCollector
  */
+#[CoversClass(\MetaModels\InformationProvider\MetaModelInformationCollector::class)]
 class MetaModelInformationCollectorTest extends TestCase
 {
     /**
@@ -51,8 +52,8 @@ class MetaModelInformationCollectorTest extends TestCase
      */
     public function testCollectsNamesFromAllProviders(): void
     {
-        $provider1 = $this->getMockForAbstractClass(InformationProviderInterface::class);
-        $provider2 = $this->getMockForAbstractClass(InformationProviderInterface::class);
+        $provider1 = $this->createMock(InformationProviderInterface::class);
+        $provider2 = $this->createMock(InformationProviderInterface::class);
 
         $provider1->expects($this->once())->method('getNames')->willReturn(['name1', 'name2']);
         $provider2->expects($this->once())->method('getNames')->willReturn(['name2', 'name3']);
@@ -71,8 +72,8 @@ class MetaModelInformationCollectorTest extends TestCase
     {
         $information = new MetaModelInformation('mm_test');
 
-        $provider1 = $this->getMockForAbstractClass(InformationProviderInterface::class);
-        $provider2 = $this->getMockForAbstractClass(InformationProviderInterface::class);
+        $provider1 = $this->createMock(InformationProviderInterface::class);
+        $provider2 = $this->createMock(InformationProviderInterface::class);
 
         $provider1->expects($this->once())->method('getInformationFor')->with($information);
         $provider2->expects($this->once())->method('getInformationFor')->with($information);

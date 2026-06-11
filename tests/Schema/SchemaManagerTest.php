@@ -25,12 +25,13 @@ use MetaModels\Schema\SchemaInformation;
 use MetaModels\Schema\SchemaManager;
 use MetaModels\Schema\SchemaManagerInterface;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * This tests the schema manager class.
  *
- * @covers \MetaModels\Schema\SchemaManager
  */
+#[CoversClass(\MetaModels\Schema\SchemaManager::class)]
 class SchemaManagerTest extends TestCase
 {
     /**
@@ -52,8 +53,8 @@ class SchemaManagerTest extends TestCase
      */
     public function testPreprocess(): void
     {
-        $manager1    = $this->getMockForAbstractClass(SchemaManagerInterface::class);
-        $manager2    = $this->getMockForAbstractClass(SchemaManagerInterface::class);
+        $manager1    = $this->createMock(SchemaManagerInterface::class);
+        $manager2    = $this->createMock(SchemaManagerInterface::class);
         $information = new SchemaInformation();
         $manager1->expects($this->once())->method('preprocess')->with($information);
         $manager2->expects($this->once())->method('preprocess')->with($information);
@@ -70,8 +71,8 @@ class SchemaManagerTest extends TestCase
      */
     public function testProcess(): void
     {
-        $manager1    = $this->getMockForAbstractClass(SchemaManagerInterface::class);
-        $manager2    = $this->getMockForAbstractClass(SchemaManagerInterface::class);
+        $manager1    = $this->createMock(SchemaManagerInterface::class);
+        $manager2    = $this->createMock(SchemaManagerInterface::class);
         $information = new SchemaInformation();
         $manager1->expects($this->once())->method('process')->with($information);
         $manager2->expects($this->once())->method('process')->with($information);
@@ -88,8 +89,8 @@ class SchemaManagerTest extends TestCase
      */
     public function testPostcess(): void
     {
-        $manager1    = $this->getMockForAbstractClass(SchemaManagerInterface::class);
-        $manager2    = $this->getMockForAbstractClass(SchemaManagerInterface::class);
+        $manager1    = $this->createMock(SchemaManagerInterface::class);
+        $manager2    = $this->createMock(SchemaManagerInterface::class);
         $information = new SchemaInformation();
         $manager1->expects($this->once())->method('postprocess')->with($information);
         $manager2->expects($this->once())->method('postprocess')->with($information);
@@ -106,8 +107,8 @@ class SchemaManagerTest extends TestCase
      */
     public function testValidate(): void
     {
-        $manager1    = $this->getMockForAbstractClass(SchemaManagerInterface::class);
-        $manager2    = $this->getMockForAbstractClass(SchemaManagerInterface::class);
+        $manager1    = $this->createMock(SchemaManagerInterface::class);
+        $manager2    = $this->createMock(SchemaManagerInterface::class);
         $information = new SchemaInformation();
         $manager1->expects($this->once())->method('validate')->with($information)->willReturn(['1', '2']);
         $manager2->expects($this->once())->method('validate')->with($information)->willReturn(['3', '4']);

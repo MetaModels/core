@@ -23,12 +23,13 @@ namespace MetaModels\Test\Filter\Rules\Comparing;
 use MetaModels\Filter\Rules\Comparing\NotEqual;
 use PHPUnit\Framework\TestCase;
 use MetaModels\Attribute\IAttribute;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test greater-than filter rules.
  *
- * @covers \MetaModels\Filter\Rules\Comparing\NotEqual
  */
+#[CoversClass(\MetaModels\Filter\Rules\Comparing\NotEqual::class)]
 class NotEqualTest extends TestCase
 {
     /**
@@ -38,7 +39,7 @@ class NotEqualTest extends TestCase
      */
     public function testGreaterThan()
     {
-        $attribute = $this->getMockForAbstractClass(IAttribute::class);
+        $attribute = $this->createMock(IAttribute::class);
         $attribute->expects(self::once())->method('filterNotEqual')->with(10)->willReturn(array(1, 2, 3));
 
         $rule = new NotEqual($attribute, 10);
@@ -53,7 +54,7 @@ class NotEqualTest extends TestCase
      */
     public function testGreaterThanInclusive()
     {
-        $attribute = $this->getMockForAbstractClass(IAttribute::class);
+        $attribute = $this->createMock(IAttribute::class);
         $attribute->expects(self::once())->method('filterNotEqual')->with(10)->willReturn(array(1, 2, 3));
 
         $rule = new NotEqual($attribute, 10);

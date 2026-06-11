@@ -28,12 +28,13 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * This tests the schema generator collecting.
  *
- * @covers \MetaModels\CoreBundle\DependencyInjection\CompilerPass\CollectSchemaGeneratorsPass
  */
+#[CoversClass(\MetaModels\CoreBundle\DependencyInjection\CompilerPass\CollectSchemaGeneratorsPass::class)]
 class CollectSchemaGeneratorsPassTest extends TestCase
 {
     /**

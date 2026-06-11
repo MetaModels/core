@@ -221,16 +221,16 @@ class ItemList
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        ?IFactory                 $factory = null,
-        ?IFilterSettingFactory    $filterFactory = null,
-        ?IRenderSettingFactory    $renderSettingFactory = null,
+        ?IFactory $factory = null,
+        ?IFilterSettingFactory $filterFactory = null,
+        ?IRenderSettingFactory $renderSettingFactory = null,
         ?EventDispatcherInterface $eventDispatcher = null,
-        ?FilterUrlBuilder         $filterUrlBuilder = null,
-        string                    $pageParam = 'page',
-        string                    $paramType = 'get',
-        int                       $maxPaginationLinks = 0,
-        string                    $paginationTemplate = 'mm_pagination',
-        string                    $paginationFragment = ''
+        ?FilterUrlBuilder $filterUrlBuilder = null,
+        string $pageParam = 'page',
+        string $paramType = 'get',
+        int $maxPaginationLinks = 0,
+        string $paginationTemplate = 'mm_pagination',
+        string $paginationFragment = ''
     ) {
         $this->paginationLimitCalculator = new PaginationLimitCalculator(
             $filterUrlBuilder,

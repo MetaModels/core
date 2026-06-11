@@ -23,12 +23,13 @@ namespace MetaModels\Test\Filter\Rules\Comparing;
 use MetaModels\Filter\Rules\Comparing\LessThan;
 use PHPUnit\Framework\TestCase;
 use MetaModels\Attribute\IAttribute;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test greater-than filter rules.
  *
- * @covers \MetaModels\Filter\Rules\Comparing\LessThan
  */
+#[CoversClass(\MetaModels\Filter\Rules\Comparing\LessThan::class)]
 class LessThanTest extends TestCase
 {
     /**
@@ -38,7 +39,7 @@ class LessThanTest extends TestCase
      */
     public function testGreaterThan()
     {
-        $attribute = $this->getMockForAbstractClass(IAttribute::class);
+        $attribute = $this->createMock(IAttribute::class);
         $attribute->expects(self::once())->method('filterLessThan')->with(10, false)->willReturn(array(1, 2, 3));
 
         $rule = new LessThan($attribute, 10);
@@ -53,7 +54,7 @@ class LessThanTest extends TestCase
      */
     public function testGreaterThanInclusive()
     {
-        $attribute = $this->getMockForAbstractClass(IAttribute::class);
+        $attribute = $this->createMock(IAttribute::class);
         $attribute->expects(self::once())->method('filterLessThan')->with(10, true)->willReturn(array(1, 2, 3));
 
         $rule = new LessThan($attribute, 10, true);

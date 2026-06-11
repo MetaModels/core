@@ -28,12 +28,13 @@ use MetaModels\Render\Template;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionMethod;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * This tests the empty value check helper.
  *
- * @covers \MetaModels\Render\Template
  */
+#[CoversClass(\MetaModels\Render\Template::class)]
 final class TemplateTest extends TestCase
 {
     /**

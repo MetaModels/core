@@ -22,12 +22,13 @@ namespace MetaModels\Test\Filter;
 
 use MetaModels\Filter\FilterUrl;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * This tests the filter url class.
  *
- * @covers \MetaModels\Filter\FilterUrl
  */
+#[CoversClass(\MetaModels\Filter\FilterUrl::class)]
 class FilterUrlTest extends TestCase
 {
     /**

@@ -24,9 +24,6 @@ use MetaModels\FrontendIntegration\FrontendFilterOptions;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \MetaModels\Filter\Setting\Collection
- */
 #[CoversClass(Collection::class)]
 class CollectionTest extends TestCase
 {

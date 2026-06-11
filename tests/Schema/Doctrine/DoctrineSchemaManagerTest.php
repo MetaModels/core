@@ -28,12 +28,13 @@ use MetaModels\Schema\Doctrine\SchemaProcessorInterface;
 use MetaModels\Schema\SchemaInformation;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * This tests the doctrine schema.
  *
- * @covers \MetaModels\Schema\Doctrine\DoctrineSchemaManager
  */
+#[CoversClass(\MetaModels\Schema\Doctrine\DoctrineSchemaManager::class)]
 class DoctrineSchemaManagerTest extends TestCase
 {
     /**
@@ -57,8 +58,8 @@ class DoctrineSchemaManagerTest extends TestCase
      */
     public function testPreprocess(): void
     {
-        $processor1 = $this->getMockForAbstractClass(SchemaProcessorInterface::class);
-        $processor2 = $this->getMockForAbstractClass(SchemaProcessorInterface::class);
+        $processor1 = $this->createMock(SchemaProcessorInterface::class);
+        $processor2 = $this->createMock(SchemaProcessorInterface::class);
 
         $processor1->expects($this->once())->method('process');
         $processor2->expects($this->once())->method('process');
@@ -138,8 +139,8 @@ class DoctrineSchemaManagerTest extends TestCase
      */
     public function testPostProcess(): void
     {
-        $processor1 = $this->getMockForAbstractClass(SchemaProcessorInterface::class);
-        $processor2 = $this->getMockForAbstractClass(SchemaProcessorInterface::class);
+        $processor1 = $this->createMock(SchemaProcessorInterface::class);
+        $processor2 = $this->createMock(SchemaProcessorInterface::class);
 
         $processor1->expects($this->once())->method('process');
         $processor2->expects($this->once())->method('process');
@@ -187,12 +188,12 @@ class DoctrineSchemaManagerTest extends TestCase
 
         $manipulator->expects($this->once())->method('getScript')->willReturn(['query1', 'query2']);
 
-        $processor1 = $this->getMockForAbstractClass(SchemaProcessorInterface::class);
-        $processor2 = $this->getMockForAbstractClass(SchemaProcessorInterface::class);
+        $processor1 = $this->createMock(SchemaProcessorInterface::class);
+        $processor2 = $this->createMock(SchemaProcessorInterface::class);
         $processor1->expects($this->once())->method('__toString')->willReturn('pre1');
         $processor2->expects($this->once())->method('__toString')->willReturn('pre2');
-        $processor3 = $this->getMockForAbstractClass(SchemaProcessorInterface::class);
-        $processor4 = $this->getMockForAbstractClass(SchemaProcessorInterface::class);
+        $processor3 = $this->createMock(SchemaProcessorInterface::class);
+        $processor4 = $this->createMock(SchemaProcessorInterface::class);
         $processor3->expects($this->once())->method('__toString')->willReturn('post1');
         $processor4->expects($this->once())->method('__toString')->willReturn('post2');
 

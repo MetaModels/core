@@ -35,21 +35,22 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test the base attribute.
  *
- * @covers \MetaModels\ItemList
  */
+#[CoversClass(\MetaModels\ItemList::class)]
 final class ItemListTest extends TestCase
 {
     /** @SuppressWarnings(PHPMD.Superglobals) */
     public function testGetOutputFormat(): void
     {
-        $factory              = $this->getMockForAbstractClass(IFactory::class);
-        $filterFactory        = $this->getMockForAbstractClass(IFilterSettingFactory::class);
-        $renderSettingFactory = $this->getMockForAbstractClass(IRenderSettingFactory::class);
-        $eventDispatcher      = $this->getMockForAbstractClass(EventDispatcherInterface::class);
+        $factory              = $this->createMock(IFactory::class);
+        $filterFactory        = $this->createMock(IFilterSettingFactory::class);
+        $renderSettingFactory = $this->createMock(IRenderSettingFactory::class);
+        $eventDispatcher      = $this->createMock(EventDispatcherInterface::class);
         $filterUrlBuilder     = $this->getMockBuilder(FilterUrlBuilder::class)->disableOriginalConstructor()->getMock();
         $itemlist             = new ItemList(
             $factory,
@@ -76,7 +77,7 @@ final class ItemListTest extends TestCase
 
         $requestStack = new RequestStack();
 
-        $mockContainer = $this->getMockForAbstractClass(ContainerInterface::class);
+        $mockContainer = $this->createMock(ContainerInterface::class);
         $mockContainer
             ->method('get')
             ->willReturnCallback(fn(string $service) => match ($service) {

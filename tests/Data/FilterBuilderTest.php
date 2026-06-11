@@ -29,12 +29,13 @@ use MetaModels\MetaModel;
 use PHPUnit\Framework\TestCase;
 use MetaModels\Attribute\Base;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test the filter builder.
  *
- * @covers \MetaModels\DcGeneral\Data\FilterBuilder
  */
+#[CoversClass(\MetaModels\DcGeneral\Data\FilterBuilder::class)]
 class FilterBuilderTest extends TestCase
 {
     /**
@@ -106,8 +107,8 @@ class FilterBuilderTest extends TestCase
         $attribute = $this
             ->getMockBuilder(Base::class)
             ->setConstructorArgs([$metaModel, ['colname' => 'test1']])
-            ->onlyMethods(['searchFor'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['searchFor', 'setDataFor', 'getFilterOptions'])
+            ->getMock();
 
         $attribute
             ->expects(self::once())
@@ -177,8 +178,8 @@ class FilterBuilderTest extends TestCase
         $attribute = $this
             ->getMockBuilder(Base::class)
             ->setConstructorArgs([$metaModel, ['colname' => 'test1']])
-            ->onlyMethods(['searchFor'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['searchFor', 'setDataFor', 'getFilterOptions'])
+            ->getMock();
 
         $attribute
             ->expects(self::once())

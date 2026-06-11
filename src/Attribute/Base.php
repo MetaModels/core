@@ -637,7 +637,6 @@ abstract class Base implements IAttribute
         $arrResult = ['raw' => ($arrRowData[$this->getColName()] ?? null)];
 
         if ($objSettings && ($strTemplate = (string) $objSettings->get('template'))) {
-
             $templateFactory = System::getContainer()->get('metamodels.template_factory');
             assert($templateFactory instanceof TemplateFactory);
             $objTemplate = $templateFactory->createTemplate($strTemplate);

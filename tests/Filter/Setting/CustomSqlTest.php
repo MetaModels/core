@@ -56,6 +56,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 #[CoversClass(CustomSql::class)]
 #[CoversClass(ReplaceParam::class)]
@@ -110,7 +111,7 @@ class CustomSqlTest extends AutoLoadingTestCase
             $services[Input::class] = $this
                 ->getMockBuilder(Adapter::class)
                 ->disableOriginalConstructor()
-                ->addMethods(['cookie', 'get', 'post'])
+                ->onlyMethods(['__call'])
                 ->getMock();
         }
         if (!isset($services[Session::class])) {
@@ -141,7 +142,7 @@ class CustomSqlTest extends AutoLoadingTestCase
             $services[IMetaModelsServiceContainer::class] = $this
                 ->getMockBuilder(IMetaModelsServiceContainer::class)
                 ->disableOriginalConstructor()
-                ->getMockForAbstractClass();
+                ->getMock();
         }
         if (!isset($services[ContaoFramework::class])) {
             $services[ContaoFramework::class] = $this
@@ -184,7 +185,7 @@ class CustomSqlTest extends AutoLoadingTestCase
             // key, default => value
             $map[] = [$key, null, $value];
         }
-        $sessionBag = $this->getMockForAbstractClass(AttributeBagInterface::class);
+        $sessionBag = $this->createMock(AttributeBagInterface::class);
         $sessionBag->method('get')->willReturnMap($map);
 
         $session->method('getBag')->with('contao_frontend')->willReturn($sessionBag);
@@ -202,8 +203,8 @@ class CustomSqlTest extends AutoLoadingTestCase
      */
     protected function generateSql(CustomSql $instance, array $filterUrl = []): array
     {
-        $filter = new Filter($this->getMockForAbstractClass(IMetaModel::class));
-        $container = $this->getMockForAbstractClass(ContainerInterface::class);
+        $filter = new Filter($this->createMock(IMetaModel::class));
+        $container = $this->createMock(ContainerInterface::class);
         System::setContainer($container);
 
         $instance->prepareRules($filter, $filterUrl);
@@ -308,9 +309,9 @@ class CustomSqlTest extends AutoLoadingTestCase
         $input = $this
             ->getMockBuilder(Adapter::class)
             ->disableOriginalConstructor()
-            ->addMethods(['cookie', 'get', 'post'])
+            ->onlyMethods(['__call'])
             ->getMock();
-        $input->expects(self::once())->method('get')->with('category')->willReturn(null);
+        $input->expects(self::once())->method('__call')->with('get', ['category'])->willReturn(null);
 
         $setting = $this->mockCustomSql(
             ['customsql' => 'SELECT id FROM tableName WHERE catname={{param::get?name=category&default=defaultcat}}'],
@@ -335,9 +336,9 @@ class CustomSqlTest extends AutoLoadingTestCase
         $input = $this
             ->getMockBuilder(Adapter::class)
             ->disableOriginalConstructor()
-            ->addMethods(['cookie', 'get', 'post'])
+            ->onlyMethods(['__call'])
             ->getMock();
-        $input->expects(self::once())->method('get')->with('category')->willReturn(null);
+        $input->expects(self::once())->method('__call')->with('get', ['category'])->willReturn(null);
 
         $setting = $this->mockCustomSql(
             ['customsql' =>
@@ -363,12 +364,12 @@ class CustomSqlTest extends AutoLoadingTestCase
         $input = $this
             ->getMockBuilder(Adapter::class)
             ->disableOriginalConstructor()
-            ->addMethods(['cookie', 'get', 'post'])
+            ->onlyMethods(['__call'])
             ->getMock();
         $input
             ->expects(self::once())
-            ->method('get')
-            ->with('category')
+            ->method('__call')
+            ->with('get', ['category'])
             ->willReturn('category name');
 
         $setting = $this->mockCustomSql(
@@ -388,12 +389,12 @@ class CustomSqlTest extends AutoLoadingTestCase
         $input = $this
             ->getMockBuilder(Adapter::class)
             ->disableOriginalConstructor()
-            ->addMethods(['cookie', 'get', 'post'])
+            ->onlyMethods(['__call'])
             ->getMock();
         $input
             ->expects($this->once())
-            ->method('post')
-            ->with('category')
+            ->method('__call')
+            ->with('post', ['category'])
             ->willReturn('category name');
 
         $setting = $this->mockCustomSql(
@@ -413,12 +414,12 @@ class CustomSqlTest extends AutoLoadingTestCase
         $input = $this
             ->getMockBuilder(Adapter::class)
             ->disableOriginalConstructor()
-            ->addMethods(['cookie', 'get', 'post'])
+            ->onlyMethods(['__call'])
             ->getMock();
         $input
             ->expects(self::once())
-            ->method('cookie')
-            ->with('category')
+            ->method('__call')
+            ->with('cookie', ['category'])
             ->willReturn('category name');
 
         $setting = $this->mockCustomSql(
@@ -509,12 +510,12 @@ class CustomSqlTest extends AutoLoadingTestCase
         $input = $this
             ->getMockBuilder(Adapter::class)
             ->disableOriginalConstructor()
-            ->addMethods(['cookie', 'get', 'post'])
+            ->onlyMethods(['__call'])
             ->getMock();
         $input
             ->expects(self::once())
-            ->method('get')
-            ->with('categories')
+            ->method('__call')
+            ->with('get', ['categories'])
             ->willReturn(['first', 'second']);
 
         $setting = $this->mockCustomSql(
@@ -539,12 +540,12 @@ class CustomSqlTest extends AutoLoadingTestCase
         $input = $this
             ->getMockBuilder(Adapter::class)
             ->disableOriginalConstructor()
-            ->addMethods(['cookie', 'get', 'post'])
+            ->onlyMethods(['__call'])
             ->getMock();
         $input
             ->expects(self::once())
-            ->method('get')
-            ->with('ids')
+            ->method('__call')
+            ->with('get', ['ids'])
             ->willReturn(['1', '2']);
 
         $setting = $this->mockCustomSql(
@@ -778,12 +779,12 @@ WHERE alias = moe-yer-ss-hans-herbert-oeaeue',
         $input = $this
             ->getMockBuilder(Adapter::class)
             ->disableOriginalConstructor()
-            ->addMethods(['cookie', 'get', 'post'])
+            ->onlyMethods(['__call'])
             ->getMock();
         $input
             ->expects(self::exactly(2))
-            ->method('get')
-            ->willReturnCallback(fn ($name) => ['act' => 'edit', 'id' => '10'][$name]);
+            ->method('__call')
+            ->willReturnCallback(fn ($method, $args) => ['act' => 'edit', 'id' => '10'][$args[0]]);
 
         $setting = $this->mockCustomSql(
             ['customsql' => <<<EOF

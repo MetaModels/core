@@ -24,12 +24,13 @@ use MetaModels\Filter\Rules\SearchAttribute;
 use PHPUnit\Framework\TestCase;
 use MetaModels\Attribute\IAttribute;
 use MetaModels\Attribute\ITranslated;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test greater-than filter rules.
  *
- * @covers \MetaModels\Filter\Rules\SearchAttribute
  */
+#[CoversClass(\MetaModels\Filter\Rules\SearchAttribute::class)]
 class SearchAttributeTest extends TestCase
 {
     /**
@@ -39,7 +40,7 @@ class SearchAttributeTest extends TestCase
      */
     public function testSearchAttribute()
     {
-        $attribute = $this->getMockForAbstractClass(IAttribute::class);
+        $attribute = $this->createMock(IAttribute::class);
         $attribute
             ->expects(self::once())
             ->method('searchFor')
@@ -58,7 +59,7 @@ class SearchAttributeTest extends TestCase
      */
     public function testSearchTranslatedAttribute()
     {
-        $attribute = $this->getMockForAbstractClass(ITranslated::class);
+        $attribute = $this->createMock(ITranslated::class);
         $attribute
             ->expects(self::once())
             ->method('searchForInLanguages')
@@ -77,7 +78,7 @@ class SearchAttributeTest extends TestCase
      */
     public function testSearchTranslatedAttributeWithLanguageOverride()
     {
-        $attribute = $this->getMockForAbstractClass(ITranslated::class);
+        $attribute = $this->createMock(ITranslated::class);
         $attribute
             ->expects(self::once())
             ->method('searchForInLanguages')

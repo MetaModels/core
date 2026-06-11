@@ -26,12 +26,13 @@ use MetaModels\Factory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test the attribute factory.
  *
- * @covers \MetaModels\Factory
  */
+#[CoversClass(\MetaModels\Factory::class)]
 class FactoryTest extends TestCase
 {
     /**
@@ -41,7 +42,7 @@ class FactoryTest extends TestCase
      */
     public function testCreateMetaModelFiresEvent()
     {
-        $dispatcher = $this->getMockBuilder(EventDispatcherInterface::class)->getMockForAbstractClass();
+        $dispatcher = $this->getMockBuilder(EventDispatcherInterface::class)->getMock();
         $factory    = new Factory($dispatcher);
 
         $dispatcher

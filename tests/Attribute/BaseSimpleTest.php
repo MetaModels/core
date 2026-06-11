@@ -28,12 +28,13 @@ use MetaModels\Attribute\ISimple;
 use MetaModels\Helper\TableManipulator;
 use MetaModels\IMetaModel;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Class BaseSimpleTest
  *
- * @covers \MetaModels\Attribute\BaseSimple
  */
+#[CoversClass(\MetaModels\Attribute\BaseSimple::class)]
 class BaseSimpleTest extends TestCase
 {
     /**

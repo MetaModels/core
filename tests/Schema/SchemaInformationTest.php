@@ -24,12 +24,13 @@ namespace MetaModels\Test\Schema;
 use MetaModels\Schema\SchemaInformation;
 use MetaModels\Schema\SchemaInformationInterface;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * This tests the schema information.
  *
- * @covers \MetaModels\Schema\SchemaInformation
  */
+#[CoversClass(\MetaModels\Schema\SchemaInformation::class)]
 class SchemaInformationTest extends TestCase
 {
     /**
@@ -53,7 +54,7 @@ class SchemaInformationTest extends TestCase
     {
         $instance = new SchemaInformation();
 
-        $mock = $this->getMockForAbstractClass(SchemaInformationInterface::class);
+        $mock = $this->createMock(SchemaInformationInterface::class);
         $mock->method('getName')->willReturn('test');
 
         $instance->add($mock);
@@ -71,7 +72,7 @@ class SchemaInformationTest extends TestCase
     {
         $instance = new SchemaInformation();
 
-        $mock = $this->getMockForAbstractClass(SchemaInformationInterface::class);
+        $mock = $this->createMock(SchemaInformationInterface::class);
         $mock->method('getName')->willReturn('test');
 
         $instance->add($mock);
@@ -118,7 +119,7 @@ class SchemaInformationTest extends TestCase
     {
         $instance = new SchemaInformation();
 
-        $mock = $this->getMockForAbstractClass(SchemaInformationInterface::class);
+        $mock = $this->createMock(SchemaInformationInterface::class);
         $mock->method('getName')->willReturn('test');
 
         $instance->add($mock);

@@ -23,12 +23,13 @@ namespace MetaModels\Test\Helper;
 
 use MetaModels\Helper\ToolboxFile;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Test the attribute factory.
  *
- * @covers \MetaModels\Helper\ToolboxFile
  */
+#[CoversClass(\MetaModels\Helper\ToolboxFile::class)]
 class ToolBoxFileTest extends TestCase
 {
     /**

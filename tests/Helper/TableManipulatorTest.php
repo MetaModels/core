@@ -25,12 +25,13 @@ use Doctrine\DBAL\Connection;
 use MetaModels\Helper\TableManipulator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * Class TableManipulatorTest
  *
- * @covers \MetaModels\Helper\TableManipulator
  */
+#[CoversClass(\MetaModels\Helper\TableManipulator::class)]
 class TableManipulatorTest extends TestCase
 {
     /**

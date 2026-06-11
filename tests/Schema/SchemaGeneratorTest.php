@@ -26,12 +26,13 @@ use MetaModels\Schema\SchemaGenerator;
 use MetaModels\Schema\SchemaGeneratorInterface;
 use MetaModels\Schema\SchemaInformation;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * This tests the schema generator class.
  *
- * @covers \MetaModels\Schema\SchemaGenerator
  */
+#[CoversClass(\MetaModels\Schema\SchemaGenerator::class)]
 class SchemaGeneratorTest extends TestCase
 {
     /**
@@ -53,9 +54,9 @@ class SchemaGeneratorTest extends TestCase
      */
     public function testGenerateSchema(): void
     {
-        $collection  = $this->getMockForAbstractClass(MetaModelCollectionInterface::class);
+        $collection  = $this->createMock(MetaModelCollectionInterface::class);
         $information = new SchemaInformation();
-        $generator   = $this->getMockForAbstractClass(SchemaGeneratorInterface::class);
+        $generator   = $this->createMock(SchemaGeneratorInterface::class);
         $generator->expects($this->once())->method('generate')->with($information, $collection);
 
         $instance = new SchemaGenerator([$generator]);

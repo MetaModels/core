@@ -24,12 +24,13 @@ namespace MetaModels\Test\Information;
 use MetaModels\Information\MetaModelInformationInterface;
 use MetaModels\Information\MetaModelCollection;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * This tests the attribute information.
  *
- * @covers \MetaModels\Information\MetaModelCollection
  */
+#[CoversClass(\MetaModels\Information\MetaModelCollection::class)]
 class MetaModelCollectionTest extends TestCase
 {
     /**
@@ -54,7 +55,7 @@ class MetaModelCollectionTest extends TestCase
     {
         $information = new MetaModelCollection();
 
-        $metamodel = $this->getMockForAbstractClass(MetaModelInformationInterface::class);
+        $metamodel = $this->createMock(MetaModelInformationInterface::class);
         $metamodel->expects($this->once())->method('getName')->willReturn('mm_test');
 
         $information->add($metamodel);
@@ -74,14 +75,14 @@ class MetaModelCollectionTest extends TestCase
     {
         $information = new MetaModelCollection();
 
-        $metamodel = $this->getMockForAbstractClass(MetaModelInformationInterface::class);
+        $metamodel = $this->createMock(MetaModelInformationInterface::class);
         $metamodel->expects($this->once())->method('getName')->willReturn('mm_test');
         $information->add($metamodel);
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('MetaModel "mm_test" already registered');
 
-        $second = $this->getMockForAbstractClass(MetaModelInformationInterface::class);
+        $second = $this->createMock(MetaModelInformationInterface::class);
         $second->expects($this->once())->method('getName')->willReturn('mm_test');
 
         $information->add($second);

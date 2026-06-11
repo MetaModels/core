@@ -34,14 +34,15 @@ use MetaModels\Schema\LegacySchemaGenerator;
 use MetaModels\Schema\LegacySchemaInformation;
 use MetaModels\Schema\SchemaInformation;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * This tests the doctrine schema.
  *
- * @covers \MetaModels\Schema\LegacySchemaGenerator
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
+#[CoversClass(\MetaModels\Schema\LegacySchemaGenerator::class)]
 class LegacySchemaGeneratorTest extends TestCase
 {
     /**
@@ -51,7 +52,7 @@ class LegacySchemaGeneratorTest extends TestCase
      */
     public function testInstantiation(): void
     {
-        $instance = new LegacySchemaGenerator($this->getMockForAbstractClass(IFactory::class), []);
+        $instance = new LegacySchemaGenerator($this->createMock(IFactory::class), []);
 
         $this->assertInstanceOf(LegacySchemaGenerator::class, $instance);
     }
@@ -63,9 +64,9 @@ class LegacySchemaGeneratorTest extends TestCase
      */
     public function testGenerateAddsSchemaInformationIfNotFound(): void
     {
-        $instance    = new LegacySchemaGenerator($this->getMockForAbstractClass(IFactory::class), []);
+        $instance    = new LegacySchemaGenerator($this->createMock(IFactory::class), []);
         $information = new SchemaInformation();
-        $collection  = $this->getMockForAbstractClass(MetaModelCollectionInterface::class);
+        $collection  = $this->createMock(MetaModelCollectionInterface::class);
 
         $collection->expects($this->once())->method('getIterator')->willReturn(new \ArrayIterator([]));
 
@@ -82,15 +83,15 @@ class LegacySchemaGeneratorTest extends TestCase
     public function testGenerate(): void
     {
         $information = new SchemaInformation();
-        $collection  = $this->getMockForAbstractClass(MetaModelCollectionInterface::class);
+        $collection  = $this->createMock(MetaModelCollectionInterface::class);
 
         $attribute1 = $this->mockAttribute(ISimple::class, 'attribute1');
         $attribute2 = $this->mockAttribute(IComplex::class, 'attribute2');
         $attribute3 = $this->mockAttribute(ISimple::class, 'managed-type');
-        $attribute4 = $this->getMockForAbstractClass(IInternal::class);
+        $attribute4 = $this->createMock(IInternal::class);
         $metaModel  = $this->mockMetaModel([$attribute1, $attribute2, $attribute3, $attribute4]);
 
-        $factory = $this->getMockForAbstractClass(IFactory::class);
+        $factory = $this->createMock(IFactory::class);
         $factory->expects($this->once())->method('getMetaModel')->with('mm_test')->willReturn($metaModel);
 
         $collection->expects($this->once())->method('getIterator')->willReturn(new \ArrayIterator([
@@ -118,7 +119,7 @@ class LegacySchemaGeneratorTest extends TestCase
      */
     private function mockMetaModel(array $attributes)
     {
-        $metaModel = $this->getMockForAbstractClass(IMetaModel::class);
+        $metaModel = $this->createMock(IMetaModel::class);
 
         $metaModel->expects($this->once())->method('getAttributes')->willReturn($attributes);
 
@@ -128,7 +129,7 @@ class LegacySchemaGeneratorTest extends TestCase
     /** @param class-string<IAttribute> $interface */
     private function mockAttribute(string $interface, string $typeName): IAttribute
     {
-        $attribute = $this->getMockForAbstractClass($interface);
+        $attribute = $this->createMock($interface);
 
         $attribute
             ->expects(self::atLeastOnce())

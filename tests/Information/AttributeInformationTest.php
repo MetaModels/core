@@ -23,12 +23,13 @@ namespace MetaModels\Test\Information;
 
 use MetaModels\Information\AttributeInformation;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * This tests the attribute information.
  *
- * @covers \MetaModels\Information\AttributeInformation
  */
+#[CoversClass(\MetaModels\Information\AttributeInformation::class)]
 class AttributeInformationTest extends TestCase
 {
     /**

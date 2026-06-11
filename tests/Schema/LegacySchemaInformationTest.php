@@ -26,12 +26,13 @@ use MetaModels\Attribute\IComplex;
 use MetaModels\Attribute\ISimple;
 use MetaModels\Schema\LegacySchemaInformation;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * This tests the legacy schema.
  *
- * @covers \MetaModels\Schema\LegacySchemaInformation
  */
+#[CoversClass(\MetaModels\Schema\LegacySchemaInformation::class)]
 class LegacySchemaInformationTest extends TestCase
 {
     /**
@@ -57,9 +58,9 @@ class LegacySchemaInformationTest extends TestCase
     {
         $instance = new LegacySchemaInformation();
 
-        $instance->addAttribute($attribute1 = $this->getMockForAbstractClass(ISimple::class));
-        $instance->addAttribute($attribute2 = $this->getMockForAbstractClass(IComplex::class));
-        $instance->addAttribute($attribute3 = $this->getMockForAbstractClass(IAttribute::class));
+        $instance->addAttribute($attribute1 = $this->createMock(ISimple::class));
+        $instance->addAttribute($attribute2 = $this->createMock(IComplex::class));
+        $instance->addAttribute($attribute3 = $this->createMock(IAttribute::class));
 
         $this->assertSame([$attribute1, $attribute2, $attribute3], $instance->getAttributes());
     }

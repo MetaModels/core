@@ -28,12 +28,13 @@ use MetaModels\Schema\LegacySchemaInformation;
 use MetaModels\Schema\LegacySchemaManager;
 use MetaModels\Schema\SchemaInformation;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * This tests the doctrine schema.
  *
- * @covers \MetaModels\Schema\LegacySchemaManager
  */
+#[CoversClass(\MetaModels\Schema\LegacySchemaManager::class)]
 class LegacySchemaManagerTest extends TestCase
 {
     /**
@@ -74,9 +75,9 @@ class LegacySchemaManagerTest extends TestCase
         $legacy      = new LegacySchemaInformation();
         $information->add($legacy);
 
-        $legacy->addAttribute($attribute1 = $this->getMockForAbstractClass(ISimple::class));
-        $legacy->addAttribute($attribute2 = $this->getMockForAbstractClass(IComplex::class));
-        $legacy->addAttribute($attribute3 = $this->getMockForAbstractClass(IAttribute::class));
+        $legacy->addAttribute($attribute1 = $this->createMock(ISimple::class));
+        $legacy->addAttribute($attribute2 = $this->createMock(IComplex::class));
+        $legacy->addAttribute($attribute3 = $this->createMock(IAttribute::class));
 
         $attribute1->expects($this->once())->method('initializeAUX');
         $attribute2->expects($this->once())->method('initializeAUX');
@@ -98,9 +99,9 @@ class LegacySchemaManagerTest extends TestCase
         $legacy      = new LegacySchemaInformation();
         $information->add($legacy);
 
-        $legacy->addAttribute($attribute1 = $this->getMockForAbstractClass(ISimple::class));
-        $legacy->addAttribute($attribute2 = $this->getMockForAbstractClass(IComplex::class));
-        $legacy->addAttribute($attribute3 = $this->getMockForAbstractClass(IAttribute::class));
+        $legacy->addAttribute($attribute1 = $this->createMock(ISimple::class));
+        $legacy->addAttribute($attribute2 = $this->createMock(IComplex::class));
+        $legacy->addAttribute($attribute3 = $this->createMock(IAttribute::class));
 
         $attribute1->expects($this->once())->method('getColName')->willReturn('attribute1');
         $attribute1->expects($this->once())->method('get')->with('type')->willReturn('type1');

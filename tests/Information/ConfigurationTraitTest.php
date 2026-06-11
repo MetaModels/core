@@ -23,12 +23,13 @@ namespace MetaModels\Test\Information;
 
 use MetaModels\Information\ConfigurationTrait;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * This tests the configuration trait.
  *
- * @covers \MetaModels\Information\ConfigurationTrait
  */
+#[CoversClass(\MetaModels\Information\ConfigurationTrait::class)]
 class ConfigurationTraitTest extends TestCase
 {
     /**
@@ -38,7 +39,7 @@ class ConfigurationTraitTest extends TestCase
      */
     public function testFunctionality(): void
     {
-        $trait = $this->getMockForTrait(ConfigurationTrait::class);
+        $trait = new ConfigurationTraitConsumer();
 
         $this->assertSame([], $trait->getConfiguration());
         $trait->addConfiguration(['string' => 'string', 'int' => 1, 'null' => null]);
@@ -58,7 +59,7 @@ class ConfigurationTraitTest extends TestCase
      */
     public function testGetConfigurationValueThrowsForUnknown(): void
     {
-        $trait = $this->getMockForTrait(ConfigurationTrait::class);
+        $trait = new ConfigurationTraitConsumer();
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Configuration key "unknown" does not exist');

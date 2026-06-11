@@ -63,6 +63,7 @@ class Configuration implements ConfigurationInterface
      * @return TreeBuilder
      *
      * @psalm-suppress UndefinedMethod
+     * @psalm-suppress ImplementedReturnTypeMismatch
      */
     #[\Override]
     public function getConfigTreeBuilder(): TreeBuilder

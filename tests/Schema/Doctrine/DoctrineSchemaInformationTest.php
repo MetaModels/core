@@ -25,12 +25,13 @@ use Doctrine\DBAL\Schema\Schema;
 use MetaModels\Schema\Doctrine\DoctrineSchemaInformation;
 use MetaModels\Schema\Doctrine\SchemaProcessorInterface;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * This tests the doctrine schema.
  *
- * @covers \MetaModels\Schema\Doctrine\DoctrineSchemaInformation
  */
+#[CoversClass(\MetaModels\Schema\Doctrine\DoctrineSchemaInformation::class)]
 class DoctrineSchemaInformationTest extends TestCase
 {
     /**
@@ -63,15 +64,15 @@ class DoctrineSchemaInformationTest extends TestCase
         $processorNormal = $this
             ->getMockBuilder(SchemaProcessorInterface::class)
             ->setMockClassName('TestAddPreProcessorsNormal')
-            ->getMockForAbstractClass();
+            ->getMock();
         $processorHigh   = $this
             ->getMockBuilder(SchemaProcessorInterface::class)
             ->setMockClassName('TestAddPreProcessorsHigh')
-            ->getMockForAbstractClass();
+            ->getMock();
         $processorLow    = $this
             ->getMockBuilder(SchemaProcessorInterface::class)
             ->setMockClassName('TestAddPreProcessorsLow')
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $instance = new DoctrineSchemaInformation($schema);
 
@@ -94,15 +95,15 @@ class DoctrineSchemaInformationTest extends TestCase
         $processorNormal = $this
             ->getMockBuilder(SchemaProcessorInterface::class)
             ->setMockClassName('TestAddPostProcessorsNormal')
-            ->getMockForAbstractClass();
+            ->getMock();
         $processorHigh   = $this
             ->getMockBuilder(SchemaProcessorInterface::class)
             ->setMockClassName('TestAddPostProcessorsHigh')
-            ->getMockForAbstractClass();
+            ->getMock();
         $processorLow    = $this
             ->getMockBuilder(SchemaProcessorInterface::class)
             ->setMockClassName('TestAddPostProcessorsLow')
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $instance = new DoctrineSchemaInformation($schema);
 

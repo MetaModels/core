@@ -27,12 +27,13 @@ use MetaModels\Schema\Doctrine\DoctrineSchemaInformation;
 use MetaModels\Schema\Doctrine\DoctrineSchemaGeneratorInterface;
 use MetaModels\Schema\SchemaInformation;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * This tests the doctrine schema.
  *
- * @covers \MetaModels\Schema\Doctrine\DoctrineSchemaGenerator
  */
+#[CoversClass(\MetaModels\Schema\Doctrine\DoctrineSchemaGenerator::class)]
 class DoctrineSchemaGeneratorTest extends TestCase
 {
     /**
@@ -58,7 +59,7 @@ class DoctrineSchemaGeneratorTest extends TestCase
 
         $information = new SchemaInformation();
 
-        $collection = $this->getMockForAbstractClass(MetaModelCollectionInterface::class);
+        $collection = $this->createMock(MetaModelCollectionInterface::class);
 
         $instance->generate($information, $collection);
 
@@ -73,9 +74,9 @@ class DoctrineSchemaGeneratorTest extends TestCase
     public function testGenerate(): void
     {
         $doctrineSchema = new DoctrineSchemaInformation();
-        $collection     = $this->getMockForAbstractClass(MetaModelCollectionInterface::class);
-        $generator1     = $this->getMockForAbstractClass(DoctrineSchemaGeneratorInterface::class);
-        $generator2     = $this->getMockForAbstractClass(DoctrineSchemaGeneratorInterface::class);
+        $collection     = $this->createMock(MetaModelCollectionInterface::class);
+        $generator1     = $this->createMock(DoctrineSchemaGeneratorInterface::class);
+        $generator2     = $this->createMock(DoctrineSchemaGeneratorInterface::class);
         $generator1->expects($this->once())->method('generate')->with($doctrineSchema, $collection);
         $generator2->expects($this->once())->method('generate')->with($doctrineSchema, $collection);
 
