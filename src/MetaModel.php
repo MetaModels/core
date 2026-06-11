@@ -79,8 +79,9 @@ class MetaModel implements IMetaModel
     /**
      * The service container.
      *
-     * @psalm-suppress DeprecatedInterface
      * @var \Closure|IMetaModelsServiceContainer|null
+     *
+     * @deprecated Inject services via constructor or setter.
      *
      * @psalm-suppress DeprecatedInterface
      */

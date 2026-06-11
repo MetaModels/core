@@ -194,7 +194,10 @@ class TranslatedMetaModel extends MetaModel implements ITranslatedMetaModel
                 ? $allIds
                 : [$item->get('id')];
 
-            if ($this->hasSameFallbackValue($item, $attribute, $attributeName, $fallbackItem)) {
+            if (
+                !$attribute->get('skip_fallback')
+                && $this->hasSameFallbackValue($item, $attribute, $attributeName, $fallbackItem)
+            ) {
                 $this->clearAttribute($attribute, $idList, $activeLanguage);
                 continue;
             }
