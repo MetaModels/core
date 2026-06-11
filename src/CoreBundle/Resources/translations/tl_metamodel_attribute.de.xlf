@@ -103,6 +103,12 @@
         <source>Check this, if you want variants within the MetaModel to override the parent item&apos;s value</source>
         <target>Anwählen, falls Sie innerhalb des MetaModels Varianten wünschen, um Elternwerte zu überschreiben.</target>
       </trans-unit>
+      <trans-unit id="skip_fallback.label" resname="skip_fallback.label">
+        <source>Fallback-Modus deaktivieren</source>
+      </trans-unit>
+      <trans-unit id="skip_fallback.description" resname="skip_fallback.description">
+        <source>Anwählen, wenn der Fallback.Modus deaktiviert werden soll - bei deaktiviertem Fallback-Modus werden die Werte unabhängig der Fallbacksprache gespeichert.</source>
+      </trans-unit>
       <trans-unit id="isunique.label" resname="isunique.label">
         <source>Unique values</source>
         <target>Eindeutige Werte</target>

@@ -33,14 +33,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Adds a label hint to every translated-attribute widget that implements
  * {@see ITranslated}, indicating whether the displayed value is an
- * own translation ("[Tx]", green) or comes from the fallback language ("[Fb]", yellow).
+ * own translation ("[Translated]", green) or comes from the fallback language ("[Fallback]", yellow).
  * Works independently of any machine-translation provider.
- *
- * FIXME: AI Bullshit! should never be the case! If it is, the attribute is WRONG!
- * Attributes opt in by implementing {@see ITranslationHintSupport}.  Attributes
- * that only implement the base {@see \MetaModels\Attribute\ITranslated} (e.g. TranslatedSelect,
- * TranslatedTags) are skipped because their getTranslatedDataFor() may silently return
- * fallback data, making a reliable distinction impossible.
  */
 final class FallbackLanguageHintListener
 {
@@ -63,6 +57,10 @@ final class FallbackLanguageHintListener
         }
 
         [$attribute, $targetLang, $sourceLang] = $context;
+
+        if ($attribute->get('skip_fallback')) {
+            return;
+        }
 
         $fromFallback = $this->isFromFallback($event->getModel()->getId(), $attribute, $targetLang);
         $event->getWidget()->xlabel .= $this->buildHint($fromFallback, $sourceLang, $targetLang);
