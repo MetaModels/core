@@ -20,7 +20,6 @@
 namespace MetaModels\DcGeneral\Events\MetaModel;
 
 use ContaoCommunityAlliance\DcGeneral\Event\PostDuplicateModelEvent;
-use MetaModels\Attribute\ITranslated;
 use MetaModels\Attribute\ITranslatedWithFallbackControl;
 use MetaModels\IFactory;
 use MetaModels\ITranslatedMetaModel;
@@ -94,25 +93,16 @@ final class CopyTranslatedData
         string $newId
     ): void {
         foreach ($metaModel->getAttributes() as $attribute) {
-            if (!$attribute instanceof ITranslated) {
-                continue;
-            }
-            if ($attribute instanceof ITranslatedWithFallbackControl) {
-                $data = $attribute->getTranslatedDataForWithoutFallback([$sourceId], $language);
-                if ([] === $data || !\array_key_exists($sourceId, $data)) {
-                    continue;
-                }
-
-                $attribute->applyTranslatedDataFor([$newId => $data[$sourceId]], $language);
+            if (!$attribute instanceof ITranslatedWithFallbackControl) {
                 continue;
             }
 
-            $data = $attribute->getTranslatedDataFor([$sourceId], $language);
+            $data = $attribute->getTranslatedDataForWithoutFallback([$sourceId], $language);
             if ([] === $data || !\array_key_exists($sourceId, $data)) {
                 continue;
             }
 
-            $attribute->setTranslatedDataFor([$newId => $data[$sourceId]], $language);
+            $attribute->applyTranslatedDataFor([$newId => $data[$sourceId]], $language);
         }
     }
 }
