@@ -23,6 +23,8 @@ namespace MetaModels\CoreBundle\DataProvider;
  * Data provider for tl_metamodel_rendersetting that handles virtual panel properties.
  *
  * Resolves the MetaModel ID via tl_metamodel_rendersettings.pid.
+ *
+ * @psalm-suppress MissingConstructor
  */
 final class RenderSettingAttrTypeDataProvider extends AbstractAttrTypeDataProvider
 {

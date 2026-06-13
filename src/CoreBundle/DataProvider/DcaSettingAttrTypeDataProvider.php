@@ -23,6 +23,8 @@ namespace MetaModels\CoreBundle\DataProvider;
  * Data provider for tl_metamodel_dcasetting that handles virtual panel properties.
  *
  * Resolves the MetaModel ID via tl_metamodel_dca.pid.
+ *
+ * @psalm-suppress MissingConstructor
  */
 final class DcaSettingAttrTypeDataProvider extends AbstractAttrTypeDataProvider
 {
