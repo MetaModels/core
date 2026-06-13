@@ -15,15 +15,19 @@
       </trans-unit>
       <trans-unit id="fallback_language_hint.label_fallback" resname="fallback_language_hint.label_fallback">
         <source>Fallback</source>
+        <target>Fallback</target>
       </trans-unit>
       <trans-unit id="fallback_language_hint.title_fallback" resname="fallback_language_hint.title_fallback">
         <source>Value from fallback language &quot;%source%&quot; (not yet translated to &quot;%target%&quot;)</source>
+        <target>Wert aus Fallback-Sprache &quot;%source%&quot; (noch nicht nach &quot;%target%&quot; übersetzt)</target>
       </trans-unit>
       <trans-unit id="fallback_language_hint.label_translated" resname="fallback_language_hint.label_translated">
         <source>Translated</source>
+        <target>Übersetzt</target>
       </trans-unit>
       <trans-unit id="fallback_language_hint.title_translated" resname="fallback_language_hint.title_translated">
         <source>Value has its own translation in &quot;%target%&quot;</source>
+        <target>Wert hat eine eigene Übersetzung in &quot;%target%&quot;</target>
       </trans-unit>
     </body>
   </file>
