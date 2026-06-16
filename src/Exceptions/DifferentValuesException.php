@@ -83,7 +83,7 @@ class DifferentValuesException extends \Exception
      *
      * @param \Exception $previous The previous exception used for the exception chaining.
      */
-    public function __construct($expected, $actual, $strict, $message = '', $code = 0, \Exception $previous = null)
+    public function __construct($expected, $actual, $strict, $message = '', $code = 0, ?\Exception $previous = null)
     {
         parent::__construct(
             $message,
