@@ -112,7 +112,6 @@ class PanelBuilder
 
             // Get the fields.
             $fields = StringUtil::trimsplit(',', $rowElements);
-            $fields = \array_reverse($fields);
 
             $this->parsePanelRow($fields, $panelRow);
 
