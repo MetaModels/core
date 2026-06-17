@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2026 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,12 +13,13 @@
  * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * Last-updated: 2024-07-10T13:39:04+00:00
+ * Last-updated: 2026-06-17T21:49:42+00:00
  *
- * @copyright 2012-2024 The MetaModels team.
+ * @copyright 2012-2026 The MetaModels team.
  * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @link      https://www.transifex.com/metamodels/public/
  * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
 
-$GLOBALS['TL_LANG']['tl_module']['metamodel_fef_params']['0'] = 'Nitelikler';
+$GLOBALS['TL_LANG']['tl_content']['select_values']['attributes'] = 'Özellikler';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_fef_params']['0']    = 'Nitelikler';

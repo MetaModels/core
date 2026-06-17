@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2026 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,14 +13,16 @@
  * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * Last-updated: 2024-07-10T13:37:33+00:00
+ * Last-updated: 2026-06-17T21:47:40+00:00
  *
- * @copyright 2012-2024 The MetaModels team.
+ * @copyright 2012-2026 The MetaModels team.
  * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @link      https://www.transifex.com/metamodels/public/
  * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
 
+$GLOBALS['TL_LANG']['tl_content']['ASC']                                   = 'По возрастанию';
+$GLOBALS['TL_LANG']['tl_content']['DESC']                                  = 'По убыванию';
 $GLOBALS['TL_LANG']['tl_content']['asc']                                   = 'По возрастанию';
 $GLOBALS['TL_LANG']['tl_content']['desc']                                  = 'По убыванию';
 $GLOBALS['TL_LANG']['tl_content']['metamodel']['0']                        = 'MetaModel';
@@ -71,3 +73,5 @@ $GLOBALS['TL_LANG']['tl_content']['mm_config_legend']                      = 'К
 $GLOBALS['TL_LANG']['tl_content']['mm_filter_legend']                      = 'MetaModel фильтр';
 $GLOBALS['TL_LANG']['tl_content']['mm_meta_legend']                        = 'Поисковая оптимизация';
 $GLOBALS['TL_LANG']['tl_content']['mm_rendering_legend']                   = 'MetaModel визуализация';
+$GLOBALS['TL_LANG']['tl_content']['select_values']['attributes']           = 'Атрибуты';
+$GLOBALS['TL_LANG']['tl_content']['select_values']['meta']                 = 'Метаполя';

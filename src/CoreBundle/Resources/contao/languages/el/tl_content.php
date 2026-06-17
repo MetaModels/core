@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2026 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,14 +13,16 @@
  * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * Last-updated: 2024-07-10T13:37:33+00:00
+ * Last-updated: 2026-06-17T21:47:40+00:00
  *
- * @copyright 2012-2024 The MetaModels team.
+ * @copyright 2012-2026 The MetaModels team.
  * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @link      https://www.transifex.com/metamodels/public/
  * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
 
+$GLOBALS['TL_LANG']['tl_content']['ASC']                                   = 'Αύξουσα';
+$GLOBALS['TL_LANG']['tl_content']['DESC']                                  = 'Φθίνουσα';
 $GLOBALS['TL_LANG']['tl_content']['asc']                                   = 'Αύξουσα';
 $GLOBALS['TL_LANG']['tl_content']['desc']                                  = 'Φθίνουσα';
 $GLOBALS['TL_LANG']['tl_content']['metamodel']['0']                        = 'MetaModel';
@@ -61,3 +63,4 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_use_limit']['1']              = 'Ε
 $GLOBALS['TL_LANG']['tl_content']['mm_config_legend']                      = 'MetaModel Διαμόρφωση ';
 $GLOBALS['TL_LANG']['tl_content']['mm_filter_legend']                      = 'MetaModel Φιλτρο';
 $GLOBALS['TL_LANG']['tl_content']['mm_rendering_legend']                   = 'MetaModel αποτύπωση ';
+$GLOBALS['TL_LANG']['tl_content']['select_values']['attributes']           = ' Χαρακτηριστικά';

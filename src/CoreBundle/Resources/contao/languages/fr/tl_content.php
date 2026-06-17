@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2025 The MetaModels team.
+ * (c) 2012-2026 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,14 +13,16 @@
  * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * Last-updated: 2025-02-24T16:47:56+00:00
+ * Last-updated: 2026-06-17T21:47:40+00:00
  *
- * @copyright 2012-2025 The MetaModels team.
+ * @copyright 2012-2026 The MetaModels team.
  * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @link      https://www.transifex.com/metamodels/public/
  * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
 
+$GLOBALS['TL_LANG']['tl_content']['ASC']                                      = 'Ascendant';
+$GLOBALS['TL_LANG']['tl_content']['DESC']                                     = 'Descendant';
 $GLOBALS['TL_LANG']['tl_content']['asc']                                      = 'Ascendant';
 $GLOBALS['TL_LANG']['tl_content']['desc']                                     = 'Descendant';
 $GLOBALS['TL_LANG']['tl_content']['metamodel']['0']                           = 'MetaModel';
@@ -81,3 +83,5 @@ $GLOBALS['TL_LANG']['tl_content']['mm_pagination_legend']                     = 
 $GLOBALS['TL_LANG']['tl_content']['mm_parameters_legend']                     = 'Paramétrage';
 $GLOBALS['TL_LANG']['tl_content']['mm_rendering_legend']                      = 'Rendu du MetaModel';
 $GLOBALS['TL_LANG']['tl_content']['mm_sorting_legend']                        = 'Tri du MetaModel';
+$GLOBALS['TL_LANG']['tl_content']['select_values']['attributes']              = 'Attributs';
+$GLOBALS['TL_LANG']['tl_content']['select_values']['meta']                    = 'Champs meta';
