@@ -38,6 +38,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * This prevents fallback-language data from being written to the active language on save.
  *
  * @covers \MetaModels\Item
+ *
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class ItemTest extends TestCase
 {
@@ -126,7 +128,11 @@ class ItemTest extends TestCase
         $metaModel = $this->createMock(IMetaModel::class);
         $metaModel->method('getAttribute')->willReturnMap([['title', $title], ['alias', $alias]]);
 
-        $item = new Item($metaModel, ['id' => '5', 'tstamp' => '123', 'title' => 'Hello', 'alias' => 'hello'], $this->createMock(EventDispatcherInterface::class));
+        $item = new Item(
+            $metaModel,
+            ['id' => '5', 'tstamp' => '123', 'title' => 'Hello', 'alias' => 'hello'],
+            $this->createMock(EventDispatcherInterface::class)
+        );
         self::assertFalse($item->isDirty('title'));
 
         $copy = $item->copy();
@@ -148,7 +154,11 @@ class ItemTest extends TestCase
         $metaModel = $this->createMock(IMetaModel::class);
         $metaModel->method('getAttribute')->willReturnMap([['title', $translated]]);
 
-        $item = new Item($metaModel, ['id' => '5', 'title' => 'Hallo'], $this->createMock(EventDispatcherInterface::class));
+        $item = new Item(
+            $metaModel,
+            ['id' => '5', 'title' => 'Hallo'],
+            $this->createMock(EventDispatcherInterface::class)
+        );
 
         $copy = $item->copy();
 
@@ -166,7 +176,11 @@ class ItemTest extends TestCase
         $metaModel = $this->createMock(IMetaModel::class);
         $metaModel->method('getAttribute')->willReturnMap([['title', $title]]);
 
-        $item = new Item($metaModel, ['id' => '5', 'tstamp' => '123', 'vargroup' => '2', 'title' => 'Hello'], $this->createMock(EventDispatcherInterface::class));
+        $item = new Item(
+            $metaModel,
+            ['id' => '5', 'tstamp' => '123', 'vargroup' => '2', 'title' => 'Hello'],
+            $this->createMock(EventDispatcherInterface::class)
+        );
 
         $copy = $item->copy();
 
