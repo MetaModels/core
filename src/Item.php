@@ -614,7 +614,7 @@ class Item implements IItem, IDirtyTracking
         // value currently in the data array, which may be fallback-language data of the source item.
         foreach (\array_keys($arrNewData) as $strColName) {
             $attribute = $metaModel->getAttribute($strColName);
-            if (!$attribute instanceof ITranslated) {
+            if (null === $attribute || $attribute instanceof ITranslated) {
                 continue;
             }
             $objCopy->dirtyAttributes[$strColName] = true;
