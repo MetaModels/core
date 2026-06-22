@@ -274,8 +274,8 @@
         <target>Syntax-Hervorhebungsmodus</target>
       </trans-unit>
       <trans-unit id="highlight.description" resname="highlight.description">
-        <source>Select the syntax highlighting mode for the ACE editor (e.g. "html", "css", "javascript"). Only relevant when an ACE editor configuration is selected.</source>
-        <target>Wählen Sie den Syntax-Hervorhebungsmodus für den ACE-Editor (z.B. "html", "css", "javascript"). Nur relevant, wenn eine ACE-Editor-Konfiguration ausgewählt ist.</target>
+        <source>Select the syntax highlighting mode for the ACE editor (e.g. &quot;html&quot;, &quot;css&quot;, &quot;javascript&quot;). Only relevant when an ACE editor configuration is selected.</source>
+        <target>Wählen Sie den Syntax-Hervorhebungsmodus für den ACE-Editor (z.B. &quot;html&quot;, &quot;css&quot;, &quot;javascript&quot;). Nur relevant, wenn eine ACE-Editor-Konfiguration ausgewählt ist.</target>
       </trans-unit>
       <trans-unit id="rows.label" resname="rows.label">
         <source>Rows</source>
