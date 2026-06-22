@@ -35,27 +35,25 @@ use MetaModels\ITranslatedMetaModel;
  *  - The simple copy action (Contao2BackendView CopyHandler) persists the clone first and then dispatches the
  *    post-duplicate event, so the new item already has an id and the copy runs right away.
  *  - The clipboard / manual sorting paste path (DefaultController::doCloneAction) dispatches the post-duplicate event
- *    *before* the clone is persisted, so the new item has no id yet. In that case we remember the source id and run
- *    the copy on the subsequent post-paste event, when the clone has been saved and carries a real id.
+ *    *before* the clone is persisted, so the new item has no id yet. In that case we stash the source id as meta
+ *    information on the clone model and run the copy on the subsequent post-paste event, when the clone has been saved
+ *    and carries a real id. The clipboard paste path reuses the very same model instance for the later post-paste
+ *    event, so the stashed meta value travels with it. Keeping the state on the model (instead of in the listener)
+ *    means this service stays stateless and the deferred id cannot leak across paste operations.
  */
 final class CopyTranslatedData
 {
+    /**
+     * Meta key under which the deferred source id is stashed on the not-yet-persisted clone model.
+     */
+    private const META_DEFERRED_SOURCE_ID = 'metamodels_copy_translated_source_id';
+
     /**
      * The MetaModels factory.
      *
      * @var IFactory
      */
     private IFactory $factory;
-
-    /**
-     * Source item ids for clones whose copy was deferred because the new item had no id yet.
-     *
-     * Keyed by the spl_object_id() of the (not yet persisted) new model. The clipboard paste path reuses the very same
-     * model instance for the later post-paste event, so the object id is a stable correlation key within the request.
-     *
-     * @var array<int, string>
-     */
-    private array $deferredSourceIds = [];
 
     /**
      * Create a new instance.
@@ -87,7 +85,7 @@ final class CopyTranslatedData
         // Clipboard / manual sorting path: the clone has not been persisted yet and therefore has no id. Defer the
         // copy until the post-paste event fires with a real id.
         if ('' === $newId) {
-            $this->deferredSourceIds[\spl_object_id($newModel)] = $sourceId;
+            $newModel->setMeta(self::META_DEFERRED_SOURCE_ID, $sourceId);
 
             return;
         }
@@ -109,14 +107,13 @@ final class CopyTranslatedData
     public function handlePostPaste(PostPasteModelEvent $event): void
     {
         $model    = $event->getModel();
-        $objectId = \spl_object_id($model);
+        $sourceId = (string) $model->getMeta(self::META_DEFERRED_SOURCE_ID);
 
-        if (!isset($this->deferredSourceIds[$objectId])) {
+        if ('' === $sourceId) {
             return;
         }
 
-        $sourceId = $this->deferredSourceIds[$objectId];
-        unset($this->deferredSourceIds[$objectId]);
+        $model->setMeta(self::META_DEFERRED_SOURCE_ID, null);
 
         $newId = (string) $model->getId();
         if ('' === $newId || $sourceId === $newId) {

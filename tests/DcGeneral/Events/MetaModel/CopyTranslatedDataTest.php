@@ -19,6 +19,7 @@
 
 namespace MetaModels\Test\DcGeneral\Events\MetaModel;
 
+use ContaoCommunityAlliance\DcGeneral\Data\DefaultModel;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\PostDuplicateModelEvent;
@@ -323,12 +324,13 @@ class CopyTranslatedDataTest extends TestCase
         $sourceModel->method('getId')->willReturn($sourceId);
 
         // The clipboard path reuses the very same model instance: it has no id on duplicate and the real id on paste.
-        $newModel = $this->getMockForAbstractClass(ModelInterface::class);
-        $newModel->method('getId')->willReturnOnConsecutiveCalls('', $newId);
-        $newModel->method('getProviderName')->willReturn('mm_test');
+        // A real model is used here so the deferred source id can travel as meta information on the model itself.
+        $newModel = new DefaultModel();
+        $newModel->setProviderName('mm_test');
 
         $listener = $this->buildListener($metaModel);
         $listener->handle($this->buildDuplicateEvent($sourceModel, $newModel));
+        $newModel->setId($newId);
         $listener->handlePostPaste($this->buildPasteEvent($newModel));
     }
 
@@ -372,14 +374,15 @@ class CopyTranslatedDataTest extends TestCase
         $sourceModel = $this->getMockForAbstractClass(ModelInterface::class);
         $sourceModel->method('getId')->willReturn($sourceId);
 
-        $newModel = $this->getMockForAbstractClass(ModelInterface::class);
-        $newModel->method('getId')->willReturnOnConsecutiveCalls('', $newId, $newId);
-        $newModel->method('getProviderName')->willReturn('mm_test');
+        $newModel = new DefaultModel();
+        $newModel->setProviderName('mm_test');
 
         $listener = $this->buildListener($metaModel);
         $listener->handle($this->buildDuplicateEvent($sourceModel, $newModel));
+        $newModel->setId($newId);
         $listener->handlePostPaste($this->buildPasteEvent($newModel));
-        // Second post-paste for the same model must not copy again (setTranslatedDataFor still expected exactly once).
+        // Second post-paste for the same model must not copy again: the deferred meta value was cleared on the first
+        // paste, so setTranslatedDataFor is still expected exactly once.
         $listener->handlePostPaste($this->buildPasteEvent($newModel));
     }
 }
