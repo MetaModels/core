@@ -29,6 +29,18 @@
         <source>Value has its own translation in &quot;%target%&quot;</source>
         <target>Wert hat eine eigene Übersetzung in &quot;%target%&quot;</target>
       </trans-unit>
+      <trans-unit id="sorting_direction_asc" resname="sorting_direction_asc">
+        <source>Ascending</source>
+        <target>Aufsteigend</target>
+      </trans-unit>
+      <trans-unit id="sorting_direction_desc" resname="sorting_direction_desc">
+        <source>Descending</source>
+        <target>Absteigend</target>
+      </trans-unit>
+      <trans-unit id="sorting_direction_label" resname="sorting_direction_label">
+        <source>%attribute_name% (%direction%)</source>
+        <target>%attribute_name% (%direction%)</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
