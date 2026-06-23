@@ -19,11 +19,13 @@
 
 namespace MetaModels\Test\DcGeneral\Events\MetaModel;
 
+use ContaoCommunityAlliance\DcGeneral\Data\DefaultModel;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\PostDuplicateModelEvent;
+use ContaoCommunityAlliance\DcGeneral\Event\PostPasteModelEvent;
+use MetaModels\Attribute\IAttribute;
 use MetaModels\Attribute\ITranslated;
-use MetaModels\Attribute\ITranslatedWithFallbackControl;
 use MetaModels\DcGeneral\Events\MetaModel\CopyTranslatedData;
 use MetaModels\IFactory;
 use MetaModels\IMetaModel;
@@ -33,6 +35,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \MetaModels\DcGeneral\Events\MetaModel\CopyTranslatedData
+ *
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class CopyTranslatedDataTest extends TestCase
 {
@@ -50,8 +54,6 @@ class CopyTranslatedDataTest extends TestCase
         string $newId,
         string $providerName = 'mm_test'
     ): PostDuplicateModelEvent {
-        $environment = $this->getMockForAbstractClass(EnvironmentInterface::class);
-
         $sourceModel = $this->getMockForAbstractClass(ModelInterface::class);
         $sourceModel->method('getId')->willReturn($sourceId);
 
@@ -59,7 +61,38 @@ class CopyTranslatedDataTest extends TestCase
         $newModel->method('getId')->willReturn($newId);
         $newModel->method('getProviderName')->willReturn($providerName);
 
+        return $this->buildDuplicateEvent($sourceModel, $newModel);
+    }
+
+    /**
+     * Build a PostDuplicateModelEvent for the given source and new model.
+     *
+     * @param ModelInterface $sourceModel The source model.
+     * @param ModelInterface $newModel    The duplicated (new) model.
+     *
+     * @return PostDuplicateModelEvent
+     */
+    private function buildDuplicateEvent(
+        ModelInterface $sourceModel,
+        ModelInterface $newModel
+    ): PostDuplicateModelEvent {
+        $environment = $this->getMockForAbstractClass(EnvironmentInterface::class);
+
         return new PostDuplicateModelEvent($environment, $newModel, $sourceModel);
+    }
+
+    /**
+     * Build a PostPasteModelEvent for the given model.
+     *
+     * @param ModelInterface $model The pasted (persisted) model.
+     *
+     * @return PostPasteModelEvent
+     */
+    private function buildPasteEvent(ModelInterface $model): PostPasteModelEvent
+    {
+        $environment = $this->getMockForAbstractClass(EnvironmentInterface::class);
+
+        return new PostPasteModelEvent($environment, $model);
     }
 
     /**
@@ -106,9 +139,10 @@ class CopyTranslatedDataTest extends TestCase
     }
 
     /**
-     * Nothing happens when new ID is empty.
+     * When the new ID is empty (clipboard / manual sorting path), the copy is deferred: nothing is copied on the
+     * duplicate event itself.
      */
-    public function testHandleDoesNothingWhenNewIdIsEmpty(): void
+    public function testHandleDefersCopyWhenNewIdIsEmpty(): void
     {
         /** @var ITranslatedMetaModel&MockObject $metaModel */
         $metaModel = $this->getMockForAbstractClass(ITranslatedMetaModel::class);
@@ -132,12 +166,31 @@ class CopyTranslatedDataTest extends TestCase
     }
 
     /**
-     * Attributes that only implement ITranslated (not ITranslatedWithFallbackControl) are skipped.
+     * Attributes that do not implement ITranslated are skipped.
      */
-    public function testHandleSkipsAttributesWithoutFallbackControlInterface(): void
+    public function testHandleSkipsNonTranslatedAttributes(): void
+    {
+        /** @var IAttribute&MockObject $attribute */
+        $attribute = $this->getMockForAbstractClass(IAttribute::class);
+
+        /** @var ITranslatedMetaModel&MockObject $metaModel */
+        $metaModel = $this->getMockForAbstractClass(ITranslatedMetaModel::class);
+        $metaModel->method('getLanguages')->willReturn(['de', 'en']);
+        // The attributes are inspected for both languages; a non-translated attribute is simply skipped without error.
+        $metaModel->expects(self::exactly(2))->method('getAttributes')->willReturn([$attribute]);
+
+        $listener = $this->buildListener($metaModel);
+        $listener->handle($this->buildEvent('1', '2'));
+    }
+
+    /**
+     * Languages for which the attribute holds no data are skipped (setTranslatedDataFor not called).
+     */
+    public function testHandleSkipsLanguagesWithNoData(): void
     {
         /** @var ITranslated&MockObject $attribute */
         $attribute = $this->getMockForAbstractClass(ITranslated::class);
+        $attribute->method('getTranslatedDataFor')->willReturn([]);
         $attribute->expects(self::never())->method('setTranslatedDataFor');
 
         /** @var ITranslatedMetaModel&MockObject $metaModel */
@@ -150,26 +203,7 @@ class CopyTranslatedDataTest extends TestCase
     }
 
     /**
-     * Languages for which the attribute holds no data are skipped (applyTranslatedDataFor not called).
-     */
-    public function testHandleSkipsLanguagesWithNoData(): void
-    {
-        /** @var ITranslatedWithFallbackControl&MockObject $attribute */
-        $attribute = $this->getMockForAbstractClass(ITranslatedWithFallbackControl::class);
-        $attribute->method('getTranslatedDataForWithoutFallback')->willReturn([]);
-        $attribute->expects(self::never())->method('applyTranslatedDataFor');
-
-        /** @var ITranslatedMetaModel&MockObject $metaModel */
-        $metaModel = $this->getMockForAbstractClass(ITranslatedMetaModel::class);
-        $metaModel->method('getLanguages')->willReturn(['de', 'en']);
-        $metaModel->method('getAttributes')->willReturn([$attribute]);
-
-        $listener = $this->buildListener($metaModel);
-        $listener->handle($this->buildEvent('1', '2'));
-    }
-
-    /**
-     * Happy path: for each language and attribute with data, applyTranslatedDataFor is called with the new ID.
+     * Happy path: for each language and attribute with data, setTranslatedDataFor is called with the new ID.
      */
     public function testHandleCopiesDataForAllLanguages(): void
     {
@@ -179,14 +213,14 @@ class CopyTranslatedDataTest extends TestCase
         $dataDE = ['item_id' => $sourceId, 'langcode' => 'de', 'value' => 'Hallo'];
         $dataEN = ['item_id' => $sourceId, 'langcode' => 'en', 'value' => 'Hello'];
 
-        /** @var ITranslatedWithFallbackControl&MockObject $attribute */
-        $attribute = $this->getMockForAbstractClass(ITranslatedWithFallbackControl::class);
-        $attribute->method('getTranslatedDataForWithoutFallback')->willReturnMap([
+        /** @var ITranslated&MockObject $attribute */
+        $attribute = $this->getMockForAbstractClass(ITranslated::class);
+        $attribute->method('getTranslatedDataFor')->willReturnMap([
             [[$sourceId], 'de', [$sourceId => $dataDE]],
             [[$sourceId], 'en', [$sourceId => $dataEN]],
         ]);
 
-        $attribute->expects(self::exactly(2))->method('applyTranslatedDataFor')->willReturnCallback(
+        $attribute->expects(self::exactly(2))->method('setTranslatedDataFor')->willReturnCallback(
             static function (array $arrValues, string $lang) use ($newId, $dataDE, $dataEN): void {
                 self::assertArrayHasKey($newId, $arrValues, "New ID must be the array key for lang={$lang}");
                 if ('de' === $lang) {
@@ -216,14 +250,14 @@ class CopyTranslatedDataTest extends TestCase
 
         $dataDE = ['item_id' => $sourceId, 'langcode' => 'de', 'value' => 'Hallo'];
 
-        /** @var ITranslatedWithFallbackControl&MockObject $attribute */
-        $attribute = $this->getMockForAbstractClass(ITranslatedWithFallbackControl::class);
-        $attribute->method('getTranslatedDataForWithoutFallback')->willReturnMap([
+        /** @var ITranslated&MockObject $attribute */
+        $attribute = $this->getMockForAbstractClass(ITranslated::class);
+        $attribute->method('getTranslatedDataFor')->willReturnMap([
             [[$sourceId], 'de', [$sourceId => $dataDE]],
             [[$sourceId], 'en', []],
         ]);
 
-        $attribute->expects(self::once())->method('applyTranslatedDataFor')
+        $attribute->expects(self::once())->method('setTranslatedDataFor')
             ->with([$newId => $dataDE], 'de');
 
         /** @var ITranslatedMetaModel&MockObject $metaModel */
@@ -246,15 +280,15 @@ class CopyTranslatedDataTest extends TestCase
         $data1 = ['item_id' => $sourceId, 'langcode' => 'de', 'value' => 'Attr1'];
         $data2 = ['item_id' => $sourceId, 'langcode' => 'de', 'value' => 'Attr2'];
 
-        /** @var ITranslatedWithFallbackControl&MockObject $attribute1 */
-        $attribute1 = $this->getMockForAbstractClass(ITranslatedWithFallbackControl::class);
-        $attribute1->method('getTranslatedDataForWithoutFallback')->willReturn([$sourceId => $data1]);
-        $attribute1->expects(self::once())->method('applyTranslatedDataFor')->with([$newId => $data1], 'de');
+        /** @var ITranslated&MockObject $attribute1 */
+        $attribute1 = $this->getMockForAbstractClass(ITranslated::class);
+        $attribute1->method('getTranslatedDataFor')->willReturn([$sourceId => $data1]);
+        $attribute1->expects(self::once())->method('setTranslatedDataFor')->with([$newId => $data1], 'de');
 
-        /** @var ITranslatedWithFallbackControl&MockObject $attribute2 */
-        $attribute2 = $this->getMockForAbstractClass(ITranslatedWithFallbackControl::class);
-        $attribute2->method('getTranslatedDataForWithoutFallback')->willReturn([$sourceId => $data2]);
-        $attribute2->expects(self::once())->method('applyTranslatedDataFor')->with([$newId => $data2], 'de');
+        /** @var ITranslated&MockObject $attribute2 */
+        $attribute2 = $this->getMockForAbstractClass(ITranslated::class);
+        $attribute2->method('getTranslatedDataFor')->willReturn([$sourceId => $data2]);
+        $attribute2->expects(self::once())->method('setTranslatedDataFor')->with([$newId => $data2], 'de');
 
         /** @var ITranslatedMetaModel&MockObject $metaModel */
         $metaModel = $this->getMockForAbstractClass(ITranslatedMetaModel::class);
@@ -263,5 +297,92 @@ class CopyTranslatedDataTest extends TestCase
 
         $listener = $this->buildListener($metaModel);
         $listener->handle($this->buildEvent($sourceId, $newId));
+    }
+
+    /**
+     * Clipboard / manual sorting path: the duplicate event has no new ID yet, so the copy is deferred and runs on the
+     * subsequent post-paste event with the persisted ID.
+     */
+    public function testHandlePostPasteCopiesDeferredData(): void
+    {
+        $sourceId = '10';
+        $newId    = '99';
+
+        $dataDE = ['item_id' => $sourceId, 'langcode' => 'de', 'value' => 'Hallo'];
+
+        /** @var ITranslated&MockObject $attribute */
+        $attribute = $this->getMockForAbstractClass(ITranslated::class);
+        $attribute->method('getTranslatedDataFor')->willReturn([$sourceId => $dataDE]);
+        $attribute->expects(self::once())->method('setTranslatedDataFor')->with([$newId => $dataDE], 'de');
+
+        /** @var ITranslatedMetaModel&MockObject $metaModel */
+        $metaModel = $this->getMockForAbstractClass(ITranslatedMetaModel::class);
+        $metaModel->method('getLanguages')->willReturn(['de']);
+        $metaModel->method('getAttributes')->willReturn([$attribute]);
+
+        $sourceModel = $this->getMockForAbstractClass(ModelInterface::class);
+        $sourceModel->method('getId')->willReturn($sourceId);
+
+        // The clipboard path reuses the very same model instance: it has no id on duplicate and the real id on paste.
+        // A real model is used here so the deferred source id can travel as meta information on the model itself.
+        $newModel = new DefaultModel();
+        $newModel->setProviderName('mm_test');
+
+        $listener = $this->buildListener($metaModel);
+        $listener->handle($this->buildDuplicateEvent($sourceModel, $newModel));
+        $newModel->setId($newId);
+        $listener->handlePostPaste($this->buildPasteEvent($newModel));
+    }
+
+    /**
+     * Post-paste events for models that were not duplicated through this listener (e.g. plain moves) are ignored.
+     */
+    public function testHandlePostPasteIgnoresUnknownModel(): void
+    {
+        /** @var ITranslatedMetaModel&MockObject $metaModel */
+        $metaModel = $this->getMockForAbstractClass(ITranslatedMetaModel::class);
+        $metaModel->expects(self::never())->method('getLanguages');
+
+        $model = $this->getMockForAbstractClass(ModelInterface::class);
+        $model->method('getId')->willReturn('99');
+        $model->method('getProviderName')->willReturn('mm_test');
+
+        $listener = $this->buildListener($metaModel);
+        $listener->handlePostPaste($this->buildPasteEvent($model));
+    }
+
+    /**
+     * A deferred copy is consumed only once: a second post-paste event for the same model does nothing.
+     */
+    public function testHandlePostPasteConsumesDeferredEntryOnlyOnce(): void
+    {
+        $sourceId = '10';
+        $newId    = '99';
+
+        $dataDE = ['item_id' => $sourceId, 'langcode' => 'de', 'value' => 'Hallo'];
+
+        /** @var ITranslated&MockObject $attribute */
+        $attribute = $this->getMockForAbstractClass(ITranslated::class);
+        $attribute->method('getTranslatedDataFor')->willReturn([$sourceId => $dataDE]);
+        $attribute->expects(self::once())->method('setTranslatedDataFor')->with([$newId => $dataDE], 'de');
+
+        /** @var ITranslatedMetaModel&MockObject $metaModel */
+        $metaModel = $this->getMockForAbstractClass(ITranslatedMetaModel::class);
+        $metaModel->method('getLanguages')->willReturn(['de']);
+        $metaModel->method('getAttributes')->willReturn([$attribute]);
+
+        $sourceModel = $this->getMockForAbstractClass(ModelInterface::class);
+        $sourceModel->method('getId')->willReturn($sourceId);
+
+        $newModel = new DefaultModel();
+        $newModel->setProviderName('mm_test');
+
+        $listener = $this->buildListener($metaModel);
+        $listener->handle($this->buildDuplicateEvent($sourceModel, $newModel));
+        $newModel->setId($newId);
+        $listener->handlePostPaste($this->buildPasteEvent($newModel));
+        // Second post-paste for the same model must not copy again: the deferred meta value was cleared on the first
+        // paste, so setTranslatedDataFor is still expected exactly once.
+        $listener->handlePostPaste($this->buildPasteEvent($newModel));
     }
 }
