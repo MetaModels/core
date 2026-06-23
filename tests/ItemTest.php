@@ -21,6 +21,8 @@ declare(strict_types=1);
 
 namespace MetaModels\Test;
 
+use MetaModels\Attribute\IAttribute;
+use MetaModels\Attribute\ITranslated;
 use MetaModels\IDirtyTracking;
 use MetaModels\IItem;
 use MetaModels\IMetaModel;
@@ -36,6 +38,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * This prevents fallback-language data from being written to the active language on save.
  *
  * @covers \MetaModels\Item
+ *
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class ItemTest extends TestCase
 {
@@ -109,5 +113,81 @@ class ItemTest extends TestCase
         $item->set('title', 'World');
 
         self::assertSame('World', $item->get('title'));
+    }
+
+    /**
+     * A copied item is a brand-new record: carried-over non-translated attribute values must be marked dirty so that
+     * saveItem() actually persists them (it skips non-dirty attributes). Otherwise non-translated attributes would not
+     * be copied.
+     */
+    public function testCopyMarksNonTranslatedAttributesAsDirty(): void
+    {
+        $title = $this->createMock(IAttribute::class);
+        $alias = $this->createMock(IAttribute::class);
+
+        $metaModel = $this->createMock(IMetaModel::class);
+        $metaModel->method('getAttribute')->willReturnMap([['title', $title], ['alias', $alias]]);
+
+        $item = new Item(
+            $metaModel,
+            ['id' => '5', 'tstamp' => '123', 'title' => 'Hello', 'alias' => 'hello'],
+            $this->createMock(EventDispatcherInterface::class)
+        );
+        self::assertFalse($item->isDirty('title'));
+
+        $copy = $item->copy();
+
+        self::assertTrue($copy->isDirty('title'));
+        self::assertTrue($copy->isDirty('alias'));
+        self::assertSame('Hello', $copy->get('title'));
+        self::assertSame('hello', $copy->get('alias'));
+    }
+
+    /**
+     * Translated attributes are copied per language by the CopyTranslatedData listener, so copy() must not mark them
+     * dirty — that would let saveItem() write the active language using possibly fallback data of the source item.
+     */
+    public function testCopyDoesNotMarkTranslatedAttributesDirty(): void
+    {
+        $translated = $this->createMock(ITranslated::class);
+
+        $metaModel = $this->createMock(IMetaModel::class);
+        $metaModel->method('getAttribute')->willReturnMap([['title', $translated]]);
+
+        $item = new Item(
+            $metaModel,
+            ['id' => '5', 'title' => 'Hallo'],
+            $this->createMock(EventDispatcherInterface::class)
+        );
+
+        $copy = $item->copy();
+
+        self::assertFalse($copy->isDirty('title'));
+        self::assertSame('Hallo', $copy->get('title'));
+    }
+
+    /**
+     * The copy must not carry over the identity columns of its source.
+     */
+    public function testCopyDropsIdentityColumns(): void
+    {
+        $title = $this->createMock(IAttribute::class);
+
+        $metaModel = $this->createMock(IMetaModel::class);
+        $metaModel->method('getAttribute')->willReturnMap([['title', $title]]);
+
+        $item = new Item(
+            $metaModel,
+            ['id' => '5', 'tstamp' => '123', 'vargroup' => '2', 'title' => 'Hello'],
+            $this->createMock(EventDispatcherInterface::class)
+        );
+
+        $copy = $item->copy();
+
+        self::assertNull($copy->get('id'));
+        self::assertNull($copy->get('tstamp'));
+        self::assertNull($copy->get('vargroup'));
+        self::assertFalse($copy->isDirty('id'));
+        self::assertFalse($copy->isDirty('tstamp'));
     }
 }
