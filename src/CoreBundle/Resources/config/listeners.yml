@@ -56,6 +56,9 @@ services:
             -   name: kernel.event_listener
                 event: dc-general.model.post-duplicate
                 method: handle
+            -   name: kernel.event_listener
+                event: dc-general.model.post-paste
+                method: handlePostPaste
 
     metamodels.reset_language_after_duplicate_listener:
         class: MetaModels\DcGeneral\Events\MetaModel\ResetLanguageAfterDuplicate
