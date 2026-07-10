@@ -139,6 +139,8 @@ class SortingLinkGenerator
 
         $this->updateSortingInFilterUrl($pageFilterUrl, $attributeName, $dir);
 
+        $direction = $this->translator->trans('sorting_direction_' . $dir, [], 'metamodels_default');
+
         return [
             'attribute' => $attribute,
             'name'      => $attribute->getName(),
@@ -148,9 +150,9 @@ class SortingLinkGenerator
             'active'    => $active,
             'class'     => 'sort' . ($active ? ' active' : '') . ' ' . $dir,
             'label'     => $this->translator->trans(
-                'MSC.orderMetaModelListBy' . ($dir === 'asc' ? 'Ascending' : 'Descending'),
-                [0 => $attribute->getName()],
-                'contao_default'
+                'sorting_direction_label',
+                ['%attribute_name%' => $attribute->getName(), '%direction%' => $direction],
+                'metamodels_default'
             ),
         ];
     }

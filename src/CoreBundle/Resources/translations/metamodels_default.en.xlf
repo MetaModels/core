@@ -23,6 +23,15 @@
       <trans-unit id="fallback_language_hint.title_translated" resname="fallback_language_hint.title_translated">
         <source>Value has its own translation in "%target%"</source>
       </trans-unit>
+      <trans-unit id="sorting_direction_asc" resname="sorting_direction_asc">
+        <source>Ascending</source>
+      </trans-unit>
+      <trans-unit id="sorting_direction_desc" resname="sorting_direction_desc">
+        <source>Descending</source>
+      </trans-unit>
+      <trans-unit id="sorting_direction_label" resname="sorting_direction_label">
+        <source>%attribute_name% (%direction%)</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

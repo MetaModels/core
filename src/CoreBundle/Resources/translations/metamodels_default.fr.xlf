@@ -13,6 +13,27 @@
         <source>%template% (%themes%)</source>
         <target>%template% (%themes%)]</target>
       </trans-unit>
+      <trans-unit id="fallback_language_hint.label_fallback" resname="fallback_language_hint.label_fallback">
+        <source>Fallback</source>
+      </trans-unit>
+      <trans-unit id="fallback_language_hint.title_fallback" resname="fallback_language_hint.title_fallback">
+        <source>Value from fallback language &quot;%source%&quot; (not yet translated to &quot;%target%&quot;)</source>
+      </trans-unit>
+      <trans-unit id="fallback_language_hint.label_translated" resname="fallback_language_hint.label_translated">
+        <source>Translated</source>
+      </trans-unit>
+      <trans-unit id="fallback_language_hint.title_translated" resname="fallback_language_hint.title_translated">
+        <source>Value has its own translation in &quot;%target%&quot;</source>
+      </trans-unit>
+      <trans-unit id="sorting_direction_asc" resname="sorting_direction_asc">
+        <source>Ascending</source>
+      </trans-unit>
+      <trans-unit id="sorting_direction_desc" resname="sorting_direction_desc">
+        <source>Descending</source>
+      </trans-unit>
+      <trans-unit id="sorting_direction_label" resname="sorting_direction_label">
+        <source>%attribute_name% (%direction%)</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -18,16 +18,28 @@
         <target>Fallback</target>
       </trans-unit>
       <trans-unit id="fallback_language_hint.title_fallback" resname="fallback_language_hint.title_fallback">
-        <source>Value from fallback language "%source%" (not yet translated to "%target%")</source>
-        <target>Wert aus Fallback-Sprache „%source%" (noch nicht nach „%target%" übersetzt)</target>
+        <source>Value from fallback language &quot;%source%&quot; (not yet translated to &quot;%target%&quot;)</source>
+        <target>Wert aus Fallback-Sprache &quot;%source%&quot; (noch nicht nach &quot;%target%&quot; übersetzt)</target>
       </trans-unit>
       <trans-unit id="fallback_language_hint.label_translated" resname="fallback_language_hint.label_translated">
         <source>Translated</source>
         <target>Übersetzt</target>
       </trans-unit>
       <trans-unit id="fallback_language_hint.title_translated" resname="fallback_language_hint.title_translated">
-        <source>Value has its own translation in "%target%"</source>
-        <target>Wert hat eine eigene Übersetzung in „%target%"</target>
+        <source>Value has its own translation in &quot;%target%&quot;</source>
+        <target>Wert hat eine eigene Übersetzung in &quot;%target%&quot;</target>
+      </trans-unit>
+      <trans-unit id="sorting_direction_asc" resname="sorting_direction_asc">
+        <source>Ascending</source>
+        <target>Aufsteigend</target>
+      </trans-unit>
+      <trans-unit id="sorting_direction_desc" resname="sorting_direction_desc">
+        <source>Descending</source>
+        <target>Absteigend</target>
+      </trans-unit>
+      <trans-unit id="sorting_direction_label" resname="sorting_direction_label">
+        <source>%attribute_name% (%direction%)</source>
+        <target>%attribute_name% (%direction%)</target>
       </trans-unit>
     </body>
   </file>
