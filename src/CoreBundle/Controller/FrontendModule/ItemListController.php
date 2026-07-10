@@ -23,7 +23,7 @@
 namespace MetaModels\CoreBundle\Controller\FrontendModule;
 
 use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
-use Contao\CoreBundle\ServiceAnnotation\FrontendModule;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsFrontendModule;
 use Contao\ModuleModel;
 use Contao\PageModel;
 use Contao\Template;
@@ -34,10 +34,9 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * The item list front end module.
  *
- * @FrontendModule("metamodel_list", category="metamodels")
- *
  * @psalm-suppress PropertyNotSetInConstructor
  */
+#[AsFrontendModule('metamodel_list', category: 'metamodels')]
 final class ItemListController extends AbstractFrontendModuleController
 {
     use ListControllerTrait;

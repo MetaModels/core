@@ -24,7 +24,7 @@ namespace MetaModels\CoreBundle\Controller\ContentElement;
 
 use Contao\ContentModel;
 use Contao\CoreBundle\Controller\ContentElement\AbstractContentElementController;
-use Contao\CoreBundle\ServiceAnnotation\ContentElement;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsContentElement;
 use Contao\PageModel;
 use Contao\System;
 use Contao\Template;
@@ -35,10 +35,9 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * The item list content element.
  *
- * @ContentElement("metamodel_content", category="metamodels", template="ce_metamodel_content")
- *
  * @psalm-suppress PropertyNotSetInConstructor
  */
+#[AsContentElement('metamodel_content', category: 'metamodels')]
 final class ItemListController extends AbstractContentElementController
 {
     use ListControllerTrait;
