@@ -28,6 +28,7 @@ namespace MetaModels;
 
 use MetaModels\Attribute\IAttribute;
 use MetaModels\Attribute\IInternal;
+use MetaModels\Attribute\ITranslated;
 use MetaModels\Events\ParseItemEvent;
 use MetaModels\Filter\IFilter;
 use MetaModels\Helper\EmptyTest;
@@ -600,7 +601,26 @@ class Item implements IItem, IDirtyTracking
         unset($arrNewData['tstamp']);
         unset($arrNewData['vargroup']);
 
-        return new Item($this->getMetaModel(), $arrNewData, $this->dispatcher);
+        $metaModel = $this->getMetaModel();
+        $objCopy   = new Item($metaModel, $arrNewData, $this->dispatcher);
+
+        // A copy is a brand-new item that has to be persisted from scratch. The constructor populates the data array
+        // directly without going through set(), so nothing would be marked dirty and saveItem() would skip every
+        // attribute (see MetaModel::shouldSkipAttributeUpdate()). Mark the carried-over non-translated attribute
+        // values as dirty so that they are actually written for the new item.
+        //
+        // Translated attributes are intentionally left untouched here: they are copied per language by the
+        // CopyTranslatedData listener. Marking them dirty would make saveItem() persist the active language using the
+        // value currently in the data array, which may be fallback-language data of the source item.
+        foreach (\array_keys($arrNewData) as $strColName) {
+            $attribute = $metaModel->getAttribute($strColName);
+            if (null === $attribute || $attribute instanceof ITranslated) {
+                continue;
+            }
+            $objCopy->dirtyAttributes[$strColName] = true;
+        }
+
+        return $objCopy;
     }
 
     /**
