@@ -418,10 +418,6 @@
         <source>Save and new</source>
         <target>Sauvegarder et nouveau</target>
       </trans-unit>
-      <trans-unit id="saveNback" resname="saveNback">
-        <source>Save and go back</source>
-        <target>Sauvegarder et retour</target>
-      </trans-unit>
       <trans-unit id="customsql_abstract.caption" resname="customsql_abstract.caption">
         <source>Abstract</source>
       </trans-unit>

@@ -184,9 +184,6 @@
       <trans-unit id="saveNcreate" resname="saveNcreate">
         <source>Save and new</source>
       </trans-unit>
-      <trans-unit id="saveNback" resname="saveNback">
-        <source>Save and go back</source>
-      </trans-unit>
       <trans-unit id="ERR.columnExists" resname="ERR.columnExists">
         <source>Column "%col_name%" already exists on table "%table_name%".</source>
       </trans-unit>
