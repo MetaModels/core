@@ -21,7 +21,6 @@
 
 namespace MetaModels\CoreBundle\Controller\Backend;
 
-use Contao\CoreBundle\Framework\Adapter;
 use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\IAttribute;
 use MetaModels\Attribute\IInternal;
@@ -57,22 +56,20 @@ class InputScreenAddAllController extends AbstractAddAllController
     /**
      * Create a new instance.
      *
-     * @param TwigEnvironment     $twig          The templating instance.
-     * @param TranslatorInterface $translator    The translator.
-     * @param IFactory            $factory       The MetaModels factory.
-     * @param Connection          $connection    The database connection.
-     * @param Adapter             $systemAdapter Adapter to the Contao\System class.
-     * @param PurgeCache          $purger        The cache purger.
+     * @param TwigEnvironment     $twig       The templating instance.
+     * @param TranslatorInterface $translator The translator.
+     * @param IFactory            $factory    The MetaModels factory.
+     * @param Connection          $connection The database connection.
+     * @param PurgeCache          $purger     The cache purger.
      */
     public function __construct(
         TwigEnvironment $twig,
         TranslatorInterface $translator,
         IFactory $factory,
         Connection $connection,
-        Adapter $systemAdapter,
         PurgeCache $purger
     ) {
-        parent::__construct($twig, $translator, $factory, $connection, $systemAdapter, $purger);
+        parent::__construct($twig, $translator, $factory, $connection, $purger);
 
         $this->translator = $translator;
     }

@@ -24,7 +24,6 @@ namespace MetaModels\CoreBundle\Controller\Backend;
 
 use Contao\CoreBundle\Controller\Backend\AbstractBackendController;
 use Contao\CoreBundle\Csrf\ContaoCsrfTokenManager;
-use Contao\CoreBundle\Framework\Adapter;
 use Contao\System;
 use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\IAttribute;
@@ -34,6 +33,7 @@ use MetaModels\IMetaModel;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment as TwigEnvironment;
 
@@ -46,13 +46,6 @@ use Twig\Environment as TwigEnvironment;
  */
 abstract class AbstractAddAllController extends AbstractBackendController
 {
-    /**
-     * Adapter to the Contao\System class.
-     *
-     * @var Adapter<System>
-     */
-    private Adapter $systemAdapter;
-
     /**
      * The translator.
      *
@@ -109,7 +102,6 @@ abstract class AbstractAddAllController extends AbstractBackendController
      * @param TranslatorInterface $translator    The translator.
      * @param IFactory            $factory       The MetaModels factory.
      * @param Connection          $connection    The database connection.
-     * @param Adapter<System>     $systemAdapter Adapter to the Contao\System class.
      * @param PurgeCache          $purger        The cache purger.
      */
     public function __construct(
@@ -117,15 +109,13 @@ abstract class AbstractAddAllController extends AbstractBackendController
         TranslatorInterface $translator,
         IFactory $factory,
         Connection $connection,
-        Adapter $systemAdapter,
         PurgeCache $purger
     ) {
-        $this->twig          = $twig;
-        $this->translator    = $translator;
-        $this->factory       = $factory;
-        $this->connection    = $connection;
-        $this->systemAdapter = $systemAdapter;
-        $this->purger        = $purger;
+        $this->twig       = $twig;
+        $this->translator = $translator;
+        $this->factory    = $factory;
+        $this->connection = $connection;
+        $this->purger     = $purger;
     }
 
     /**
@@ -172,16 +162,16 @@ abstract class AbstractAddAllController extends AbstractBackendController
         }
         if ($request->request->has('add') || $request->request->has('saveNclose')) {
             $this->perform($table, $request, $metaModel, $parentId);
-            // If we want to close, go back to referer.
+            // If we want to close, go back to the parent list.
             if ($request->request->has('saveNclose')) {
-                return new RedirectResponse($this->getReferer($request, $table, false));
+                return new RedirectResponse($this->getReferer($table, $parentId));
             }
         }
 
-        return $this->render(
-            '@MetaModelsCore/Backend/add-all.html.twig',
-            $this->renderOutput($table, $metaModel, $request)
-        );
+        $output         = $this->renderOutput($table, $metaModel, $request);
+        $output['href'] = $this->getReferer($table, $parentId);
+
+        return $this->render('@MetaModelsCore/Backend/add-all.html.twig', $output);
     }
 
     /**
@@ -211,7 +201,6 @@ abstract class AbstractAddAllController extends AbstractBackendController
             'title'         => $headline,
             'action'        => '',
             'requestToken'  => $tokenManager->getDefaultTokenValue(),
-            'href'          => $this->getReferer($request, $table, true),
             'backBt'        => $this->translator->trans('backBT', [], $table),
             'add'           => $this->translator->trans('continue', [], $table),
             'saveNclose'    => $this->translator->trans('saveNclose', [], $table),
@@ -404,22 +393,38 @@ abstract class AbstractAddAllController extends AbstractBackendController
     }
 
     /**
-     * Get the current Backend referrer URL.
+     * Build the back URL to the parent settings list.
      *
-     * @param Request $request   The request.
-     * @param string  $table     The table name.
-     * @param bool    $encodeAmp Flag to encode ampersands or not.
+     * Contao 5.7 no longer maintains the session based referer, so the URL is built
+     * deterministically from the settings table and its parent id.
+     *
+     * @param string $table    The settings table name.
+     * @param string $parentId The id of the parent record (input screen / render setting).
      *
      * @return string
      */
-    private function getReferer(Request $request, string $table, bool $encodeAmp = false): string
+    private function getReferer(string $table, string $parentId): string
     {
-        $uri = $this->systemAdapter->getReferer($encodeAmp, $table);
-        // Make the location an absolute URL
-        if (!preg_match('@^https?://@i', $uri)) {
-            $uri = $request->getBasePath() . '/' . ltrim($uri, '/');
-        }
+        $router = System::getContainer()->get('router');
+        assert($router instanceof UrlGeneratorInterface);
 
-        return $uri;
+        return $router->generate('metamodels.configuration', ['tableName' => $table])
+            . '?pid=' . $this->getParentProviderName($table) . '::' . $parentId;
+    }
+
+    /**
+     * Get the parent data provider name for the given settings table.
+     *
+     * @param string $table The settings table name.
+     *
+     * @return string
+     */
+    protected function getParentProviderName(string $table): string
+    {
+        return match ($table) {
+            'tl_metamodel_dcasetting'    => 'tl_metamodel_dca',
+            'tl_metamodel_rendersetting' => 'tl_metamodel_rendersettings',
+            default                      => $table,
+        };
     }
 }
