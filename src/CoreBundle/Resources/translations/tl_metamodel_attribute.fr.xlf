@@ -238,10 +238,6 @@ En cas de modification du nom de la colonne, les données de l&apos;utilisateur 
         <source>Save and new</source>
         <target>Sauvegarder et nouveau</target>
       </trans-unit>
-      <trans-unit id="saveNback" resname="saveNback">
-        <source>Save and go back</source>
-        <target>Sauvegarder et retour</target>
-      </trans-unit>
       <trans-unit id="ERR.columnExists" resname="ERR.columnExists">
         <source>Column &quot;%col_name%&quot; already exists on table &quot;%table_name%&quot;.</source>
         <target>La colonne «%col_name% » existe déjà dans la table «%table_name% ».</target>

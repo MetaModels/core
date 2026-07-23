@@ -299,10 +299,6 @@
         <source>Save and new</source>
         <target>Enregistrer et nouveau</target>
       </trans-unit>
-      <trans-unit id="saveNback" resname="saveNback">
-        <source>Save and go back</source>
-        <target>Enregistrer et retour</target>
-      </trans-unit>
       <trans-unit id="ERR.tableNameNotGiven" resname="ERR.tableNameNotGiven">
         <source>The table name is not given or empty.</source>
         <target>Le nom de la table n&apos;est pas autorisé ou est vide.</target>

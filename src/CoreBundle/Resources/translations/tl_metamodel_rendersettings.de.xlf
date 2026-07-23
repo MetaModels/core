@@ -309,10 +309,6 @@
         <source>Save and new</source>
         <target>Speichern und Neu</target>
       </trans-unit>
-      <trans-unit id="saveNback" resname="saveNback">
-        <source>Save and go back</source>
-        <target>Speichern und zurück</target>
-      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -226,9 +226,6 @@
       <trans-unit id="saveNcreate" resname="saveNcreate">
         <source>Save and new</source>
       </trans-unit>
-      <trans-unit id="saveNback" resname="saveNback">
-        <source>Save and go back</source>
-      </trans-unit>
       <trans-unit id="ERR.tableNameNotGiven" resname="ERR.tableNameNotGiven">
         <source>The table name is not given or empty.</source>
       </trans-unit>
