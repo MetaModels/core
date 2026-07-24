@@ -1,7 +1,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2024 The MetaModels team.
+ * (c) 2012-2026 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Carolina Koehn <ck@kikmedia.de>
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2024 The MetaModels team.
+ * @copyright  2012-2026 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -25,7 +25,6 @@ $icon_fields: url('../images/icons/fields.png');
 $icon_dca_add: url('../images/icons/dca_add.png');
 $icon_rendersettings_add: url('../images/icons/rendersettings_add.png');
 $icon_pal_open: url('/system/themes/flexible/icons/navcol.svg');
-$icon_filter_setting: url('../images/icons/filter_settings.png');
 $icon_locale: url('../images/icons/locale.png');
 
 .header_css_fields {
@@ -67,8 +66,7 @@ $icon_locale: url('../images/icons/locale.png');
 .tl_subdca {
   > legend {
     margin: 0;
-    padding: 10px 0 10px 23px;
-    background: $icon_filter_setting no-repeat left center;
+    padding: 20px 0 10px;
   }
 
   legend label {
