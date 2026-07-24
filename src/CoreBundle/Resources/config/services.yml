@@ -144,6 +144,7 @@ services:
             - '@database_connection'
             - '@MetaModels\Filter\FilterUrlBuilder'
             - '@translator'
+            - '@metamodels.template_factory'
         public: true
 
     metamodels.controller.abstract.add_all:

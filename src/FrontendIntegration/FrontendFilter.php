@@ -34,7 +34,6 @@ use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\RedirectEvent;
 use Contao\CoreBundle\Csrf\ContaoCsrfTokenManager;
 use Contao\CoreBundle\Exception\PageNotFoundException;
 use Contao\CoreBundle\Exception\RedirectResponseException;
-use Contao\FrontendTemplate;
 use Contao\Input;
 use Contao\System;
 use Doctrine\DBAL\Connection;
@@ -43,6 +42,7 @@ use MetaModels\Filter\FilterUrl;
 use MetaModels\Filter\FilterUrlBuilder;
 use MetaModels\FrontendIntegration\Content\FilterClearAll as ContentElementFilterClearAll;
 use MetaModels\FrontendIntegration\Module\FilterClearAll as ModuleFilterClearAll;
+use MetaModels\Render\TemplateFactory;
 use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -93,16 +93,25 @@ class FrontendFilter
     private TranslatorInterface $translator;
 
     /**
+     * The template factory.
+     *
+     * @var TemplateFactory
+     */
+    private TemplateFactory $templateFactory;
+
+    /**
      * FrontendFilter constructor.
      *
      * @param Connection|null          $connection       Database connection.
      * @param FilterUrlBuilder|null    $filterUrlBuilder The filter URL builder.
      * @param TranslatorInterface|null $translator       The translator.
+     * @param TemplateFactory|null     $templateFactory  The template factory.
      */
     public function __construct(
         ?Connection $connection = null,
         ?FilterUrlBuilder $filterUrlBuilder = null,
-        ?TranslatorInterface $translator = null
+        ?TranslatorInterface $translator = null,
+        ?TemplateFactory $templateFactory = null
     ) {
         if (null === $connection) {
             // @codingStandardsIgnoreStart
@@ -139,6 +148,18 @@ class FrontendFilter
             assert($translator instanceof TranslatorInterface);
         }
         $this->translator = $translator;
+
+        if (null === $templateFactory) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'TemplateFactory is missing. It has to be passed in the constructor. Fallback will be dropped.',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            $templateFactory = System::getContainer()->get('metamodels.template_factory');
+            assert($templateFactory instanceof TemplateFactory);
+        }
+        $this->templateFactory = $templateFactory;
     }
 
     /**
@@ -326,13 +347,13 @@ class FrontendFilter
     {
         $filter       = $widget;
         $templateName = ($filter['raw']['eval']['template'] ?? 'mm_filteritem_default');
-        $template     = new FrontendTemplate($templateName);
+        $template     = $this->templateFactory->createTemplate($templateName, 'filter');
 
         $template->setData($filter);
 
         /** @psalm-suppress UndefinedMagicPropertyAssignment */
         $template->submit = $filterOptions->isAutoSubmit();
-        $filter['value']  = $template->parse();
+        $filter['value']  = $template->parse('html5');
 
         return $filter;
     }
