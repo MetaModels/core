@@ -22,7 +22,7 @@
                     {% block actions %}
                         <div class="actions">
                             {% for action in item.actions %}
-                                {% if action.html|default('') %}{{ action.html|raw }}{% else %}<a href="{{ action.href|default('') }}"{% if action.class|default('') %} class="{{ action.class }}"{% endif %}{% if action.title|default('') %} title="{{ action.title }}"{% endif %} {{ action.attribute|default('')|raw }}>{{ action.label|raw }}</a>{% endif %}
+                                {{ include('@Contao/mm_actionbutton.html.twig', {action: action}) }}
                             {% endfor %}
                         </div>
                     {% endblock %}
