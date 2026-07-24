@@ -639,7 +639,7 @@ abstract class Base implements IAttribute
         if ($objSettings && ($strTemplate = (string) $objSettings->get('template'))) {
             $templateFactory = System::getContainer()->get('metamodels.template_factory');
             assert($templateFactory instanceof TemplateFactory);
-            $objTemplate = $templateFactory->createTemplate($strTemplate);
+            $objTemplate = $templateFactory->createTemplate($strTemplate, 'attribute');
 
             $this->prepareTemplate($objTemplate, $arrRowData, $objSettings);
 
@@ -657,7 +657,8 @@ abstract class Base implements IAttribute
                 // FIXME: this throws when no parent has been set - need to catch!
                 $objSettingsFallback = $this->getDefaultRenderSettings()->setParent($objSettings->getParent());
 
-                $objTemplate = $templateFactory->createTemplate((string) $objSettingsFallback->get('template'));
+                $objTemplate =
+                    $templateFactory->createTemplate((string) $objSettingsFallback->get('template'), 'attribute');
                 $this->prepareTemplate($objTemplate, $arrRowData, $objSettingsFallback);
 
                 $arrResult['text'] = $objTemplate->parse('text', true);

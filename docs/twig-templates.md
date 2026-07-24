@@ -1,0 +1,95 @@
+# Twig-Templates in MetaModels
+
+Ab MetaModels 2.5 kann jedes MetaModels-Template zusätzlich als **Twig-Template** angeboten
+werden. Existiert für ein Template eine Twig-Variante, hat sie **Vorrang** vor dem klassischen
+`.html5`-PHP-Template – analog zu Contao Core. Fehlt die Twig-Variante, wird unverändert das
+`.html5` gerendert (voller Rückwärtskompatibilitäts-Fallback).
+
+## Funktionsweise
+
+`MetaModels\Render\Template::parse()` fragt vor dem Einbinden des Legacy-`.html5` den
+`MetaModels\Render\TwigTemplateSurrogate` ab. Dieser prüft im gemanagten Contao-Twig-Loader
+(`contao.twig.filesystem_loader`), ob ein passendes Twig-Template existiert, und rendert es via
+`twig`. Der Twig-Context wird über Contaos `ContextFactory::fromData()` aus den Template-Daten
+gebaut – dieselben Variablen wie im `.html5` stehen zur Verfügung.
+
+Das entspricht 1:1 Contaos eigenem Surrogat-Mechanismus
+(`\Contao\Template::renderTwigSurrogateIfExists()`).
+
+### Namensschema
+
+Aus dem Legacy-Namen wird der Twig-Identifier gebildet:
+
+```
+@Contao/metamodels/<gruppe>/<leaf>.html.twig
+```
+
+* **Gruppe** kommt aus dem Render-Kontext: `attribute`, `filter` oder `item`.
+* **Leaf** ist der Template-Name ohne das konventionelle Legacy-Präfix.
+
+| Legacy `.html5`        | Gruppe      | Twig-Identifier                     |
+|------------------------|-------------|-------------------------------------|
+| `mm_attr_text`         | `attribute` | `metamodels/attribute/text`         |
+| `mm_filter_default`    | `filter`    | `metamodels/filter/default`         |
+| `mm_filteritem_...`    | `filter`    | `metamodels/filter/...`             |
+| `mm_default`           | `item`      | `metamodels/item/default`           |
+
+Ein eigenes (nicht-präfigiertes) Template `mm_attr_text_fancy` wird zu
+`metamodels/attribute/text_fancy`.
+
+### Nur visuelle Ausgabe
+
+Der Twig-Vorrang greift **ausschließlich für das Format `html5`** (die sichtbare Ausgabe).
+Das Format `text` (Suchindex, Sortierung, Gruppen-Header) bleibt immer auf der PHP-Engine.
+
+### Frontend und Backend
+
+Der Vorrang gilt in **beiden** Scopes. Die Backend-Listen rendern Attribute ebenfalls mit
+`html5` (siehe `ItemRendererListener`), daher wirken Attribut-Twig-Templates auch dort.
+**Standardtemplates müssen deshalb backend-tauglich bleiben** (schlanke `div`/`span`-Wrapper,
+wie die bisherigen `.html5`). Für abweichende Backend-Darstellung empfiehlt sich ein eigenes
+Render-Setting mit eigener Template-Auswahl.
+
+## Twig-Templates in einem Paket bereitstellen
+
+Der Contao-Twig-Loader behandelt den Legacy-Ordner `Resources/contao/templates` **flach**
+(Unterordner werden verworfen, der Identifier wäre nur der Dateiname). Damit die
+`metamodels/<gruppe>/<leaf>`-Struktur erhalten bleibt, müssen die Templates – genau wie in
+Contaos eigenen Bundles – unter einem **Namespace-Root** liegen: ein Ordner `twig/` mit einer
+leeren Marker-Datei **`.twig-root`**.
+
+```
+src/CoreBundle/Resources/contao/templates/
+└── twig/
+    ├── .twig-root                              (leere Marker-Datei, einmal pro Paket)
+    └── metamodels/
+        ├── attribute/
+        │   └── text.html.twig
+        ├── filter/
+        │   └── default.html.twig
+        └── item/
+            └── default.html.twig
+```
+
+(In Paketen mit moderner Struktur entsprechend unter `contao/templates/twig/…`.)
+
+Es ist **kein PHP-Code** nötig – die Dateien werden vom Loader automatisch unter `@Contao`
+erfasst.
+
+## Template Studio, Themes und Overrides
+
+Weil die Templates im gemanagten `@Contao`-Namespace liegen (Untergruppe `metamodels/`), sind
+sie ohne Zusatzaufwand:
+
+* im **Template Studio** sichtbar und editierbar,
+* über **Theme-Ordner** und das globale Projekt-`templates/`-Verzeichnis überschreibbar.
+
+Ein höher priorisiertes `.html5` in der gemanagten Hierarchie (z. B. ein Projekt-Override)
+behält gegenüber einem Paket-Twig-Template den Vorrang – ebenfalls wie in Contao.
+
+## Rollout-Stand
+
+* **MetaModels Core:** Mechanismus implementiert (`Template`, `TemplateFactory`,
+  `TwigTemplateSurrogate`, DI). Aktiv, solange Twig-Templates vorhanden sind – ohne Templates
+  keine Verhaltensänderung.
+* **Attribute/Filter/Core-Templates:** werden schrittweise als Twig-Varianten nachgezogen.
