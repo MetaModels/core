@@ -53,7 +53,7 @@ class ParentTableVisibilityListener
                     )
                 ) {
                     $chain = new PropertyConditionChain(
-                        [$property->getVisibleCondition()],
+                        $chain ? [$chain] : [],
                         PropertyConditionChain::AND_CONJUNCTION
                     );
 

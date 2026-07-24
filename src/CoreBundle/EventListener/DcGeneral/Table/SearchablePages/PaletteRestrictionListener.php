@@ -57,7 +57,7 @@ class PaletteRestrictionListener
                     )
                 ) {
                     $chain = new PropertyConditionChain(
-                        $chain ?: array(),
+                        $chain ? [$chain] : [],
                         PropertyConditionChain::AND_CONJUNCTION
                     );
 

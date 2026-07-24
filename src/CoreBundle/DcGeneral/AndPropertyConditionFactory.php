@@ -32,6 +32,6 @@ class AndPropertyConditionFactory extends AbstractPropertyConditionChainFactory
     #[\Override]
     protected function createCondition(array $children)
     {
-        return new PropertyConditionChain($children, PropertyConditionChain::AND_CONJUNCTION);
+        return new PropertyConditionChain(\array_values($children), PropertyConditionChain::AND_CONJUNCTION);
     }
 }

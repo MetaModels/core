@@ -32,6 +32,6 @@ class OrPropertyConditionFactory extends AbstractPropertyConditionChainFactory
     #[\Override]
     protected function createCondition(array $children)
     {
-        return new PropertyConditionChain($children, PropertyConditionChain::OR_CONJUNCTION);
+        return new PropertyConditionChain(\array_values($children), PropertyConditionChain::OR_CONJUNCTION);
     }
 }

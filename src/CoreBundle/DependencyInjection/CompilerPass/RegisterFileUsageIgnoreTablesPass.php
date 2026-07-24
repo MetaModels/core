@@ -36,7 +36,7 @@ use function is_array;
  * providers, so the generic database provider of the file usage extension must
  * not scan them again - otherwise every reference would be reported twice.
  */
-class RegisterFileUsageIgnoreTablesPass implements CompilerPassInterface
+final class RegisterFileUsageIgnoreTablesPass implements CompilerPassInterface
 {
     /**
      * The parameter holding the tables to be ignored by the file usage extension.

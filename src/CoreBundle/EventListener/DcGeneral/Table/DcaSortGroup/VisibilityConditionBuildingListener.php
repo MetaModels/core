@@ -103,10 +103,9 @@ class VisibilityConditionBuildingListener
             && $chain->getConjunction() == PropertyConditionChain::AND_CONJUNCTION
             )
         ) {
-            if ($property->getVisibleCondition()) {
-                $previous = array($property->getVisibleCondition());
-            } else {
-                $previous = array();
+            $previous = [];
+            if (null !== ($existing = $property->getVisibleCondition())) {
+                $previous = [$existing];
             }
 
             $chain = new PropertyConditionChain(
