@@ -17,6 +17,7 @@ final readonly class TemplateFactory
         private Adapter $templateLoader,
         private RequestScopeDeterminator $requestScopeDeterminator,
         private TwigTemplateSurrogate $twigSurrogate,
+        private string $projectDir,
     ) {
     }
 
@@ -35,6 +36,7 @@ final readonly class TemplateFactory
             $this->requestScopeDeterminator,
             $this->twigSurrogate,
             $twigGroup,
+            $this->projectDir,
         );
     }
 }

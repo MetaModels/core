@@ -84,12 +84,26 @@ sie ohne Zusatzaufwand:
 * im **Template Studio** sichtbar und editierbar,
 * über **Theme-Ordner** und das globale Projekt-`templates/`-Verzeichnis überschreibbar.
 
-Ein höher priorisiertes `.html5` in der gemanagten Hierarchie (z. B. ein Projekt-Override)
-behält gegenüber einem Paket-Twig-Template den Vorrang – ebenfalls wie in Contao.
+Ein höher priorisiertes `.html5` in der gemanagten Hierarchie (z. B. ein Projekt-Override am
+neuen Pfad `templates/metamodels/<gruppe>/<leaf>.html5`) behält gegenüber einem Paket-Twig-Template
+den Vorrang – ebenfalls wie in Contao.
+
+### Legacy-Flach-Override (Übergangslösung, remove in 3.0)
+
+Zusätzlich behält ein Override am **flachen** Legacy-Namen im Projekt-`templates/`-Ordner (oder in
+einem Theme-Ordner) – z. B. `templates/metamodel_prerendered.html5` – weiterhin Vorrang vor einem
+Paket-Twig-Template. `Template::hasLegacyTemplateOverride()` erkennt solche Overrides (Pfad unterhalb
+`%kernel.project_dir%/templates`, per DI injiziert) und überspringt dann den Twig-Surrogaten. So
+funktionieren bestehende Anpassungen nach dem Upgrade unverändert weiter.
+
+**Diese Rücksichtnahme ist bewusst als `@deprecated` markiert und entfällt in 3.0** gemeinsam mit den
+`.html5`-Templates – Overrides sollten nach `templates/metamodels/<gruppe>/…` umgezogen werden.
 
 ## Rollout-Stand
 
 * **MetaModels Core:** Mechanismus implementiert (`Template`, `TemplateFactory`,
-  `TwigTemplateSurrogate`, DI). Aktiv, solange Twig-Templates vorhanden sind – ohne Templates
-  keine Verhaltensänderung.
-* **Attribute/Filter/Core-Templates:** werden schrittweise als Twig-Varianten nachgezogen.
+  `TwigTemplateSurrogate`, DI) inkl. Legacy-Flach-Override-Vorrang (Übergangslösung). Als erste
+  Core-Twig-Templates ausgeliefert: `item/prerendered`, `item/unrendered`, `item/prerendered_debug`
+  sowie `filter/default`, `filter/checkbox`, `filter/radiobuttons`, `filter/linklist`,
+  `filter/datepicker`. `FrontendFilter` rendert die Filter-Widgets über die MetaModels-Engine.
+* **Attribute-Templates:** werden schrittweise paketweise als Twig-Varianten nachgezogen.

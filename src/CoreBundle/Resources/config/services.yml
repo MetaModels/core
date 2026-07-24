@@ -93,6 +93,7 @@ services:
           - "@=service('contao.framework').getAdapter('Contao\\\\TemplateLoader')"
           - "@cca.dc-general.scope-matcher"
           - "@metamodels.render.twig_surrogate"
+          - "%kernel.project_dir%"
         public: true
 
     metamodels.contao_input:

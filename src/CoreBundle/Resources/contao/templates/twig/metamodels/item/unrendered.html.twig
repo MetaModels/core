@@ -1,0 +1,37 @@
+{#
+    MetaModels unrendered item list - Twig version of metamodel_unrendered.html5.
+#}
+{% if items.getCount() %}
+    <div class="layout_full">
+        {% for item in items.parseAll('html5', view) %}
+            {% block item %}
+                {% set html5vals = item.html5|default({}) %}
+                {% set textvals = item.text|default({}) %}
+                <div class="item {{ item.class }}">
+                    {% for field, attr in items.getItem().getMetaModel().getAttributes() %}
+                        {% set value = html5vals[field] is defined ? html5vals[field] : (textvals[field] is defined ? textvals[field] : null) %}
+                        {% if value is not null %}
+                            <div class="field {{ field }}">
+                                {% if not view.get('hideLabels') %}
+                                    <div class="label">{{ 'field_label'|trans({'%field_label%': attr.getName()}, 'metamodels_list') }}</div>
+                                {% endif %}
+                                <div class="value"> {{ value|raw }}</div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    {% block actions %}
+                        <div class="actions">
+                            {% for action in item.actions %}
+                                {% if action.html|default('') %}{{ action.html|raw }}{% else %}<a href="{{ action.href|default('') }}"{% if action.class|default('') %} class="{{ action.class }}"{% endif %}{% if action.title|default('') %} title="{{ action.title }}"{% endif %} {{ action.attribute|default('')|raw }}>{{ action.label|raw }}</a>{% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endblock %}
+                </div>
+            {% endblock %}
+        {% endfor %}
+    </div>
+{% else %}
+    {% block noItem %}
+        <p class="info">{{ noItemsMsg|default('')|raw }}</p>
+    {% endblock %}
+{% endif %}

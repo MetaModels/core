@@ -128,6 +128,13 @@ class Template
     protected $twigGroup = '';
 
     /**
+     * The kernel project directory, used to detect legacy template overrides in the project "templates/" folder.
+     *
+     * @var string
+     */
+    protected $projectDir = '';
+
+    /**
      * Template path cache.
      *
      * Storing state of template path detection in a cache array for each template format and custom location.
@@ -162,17 +169,20 @@ class Template
      * @param RequestScopeDeterminator|null        $scopeDeterminator Request scope determinator.
      * @param TwigTemplateSurrogate|null           $twigSurrogate     Twig surrogate (enables Twig precedence).
      * @param string                               $twigGroup         Twig template group (attribute|filter|item).
+     * @param string                               $projectDir        The kernel project directory.
      */
     public function __construct(
         $strTemplate = '',
         ?Adapter $templateLoader = null,
         ?RequestScopeDeterminator $scopeDeterminator = null,
         ?TwigTemplateSurrogate $twigSurrogate = null,
-        string $twigGroup = ''
+        string $twigGroup = '',
+        string $projectDir = ''
     ) {
         $this->strTemplate   = $strTemplate;
         $this->twigSurrogate = $twigSurrogate;
         $this->twigGroup     = $twigGroup;
+        $this->projectDir    = $projectDir;
 
         if (null === $templateLoader) {
             // @codingStandardsIgnoreStart
@@ -496,12 +506,54 @@ class Template
      */
     protected function renderTwigSurrogate(): ?string
     {
-        return $this->twigSurrogate?->render(
+        if (null === $this->twigSurrogate) {
+            return null;
+        }
+
+        // Transitional (deprecated, to be removed in 3.0 together with the ".html5" templates): a legacy override of
+        // the flat template name in the project "templates/" directory (or a theme folder) still wins over a bundle
+        // provided Twig template, so existing customisations keep working until they are migrated to
+        // "templates/metamodels/<group>/<leaf>".
+        if ($this->hasLegacyTemplateOverride()) {
+            return null;
+        }
+
+        return $this->twigSurrogate->render(
             $this->strTemplate,
             $this->twigGroup,
             $this->strFormat,
             $this->arrData
         );
+    }
+
+    /**
+     * Check whether the flat template name is overridden in the project template directory (or a theme folder).
+     *
+     * Such a legacy override keeps precedence over a bundle provided Twig template for backwards compatibility.
+     *
+     * @return bool
+     *
+     * @deprecated Deprecated since 2.5 and to be removed in 3.0 - migrate overrides to "templates/metamodels/...".
+     */
+    private function hasLegacyTemplateOverride(): bool
+    {
+        if ('html5' !== $this->strFormat) {
+            return false;
+        }
+
+        if ('' === $this->projectDir) {
+            return false;
+        }
+
+        $path = $this->getTemplate($this->strTemplate, 'html5');
+        if (null === $path) {
+            return false;
+        }
+
+        $templatesDir = (\realpath($this->projectDir . '/templates') ?: ($this->projectDir . '/templates'))
+            . \DIRECTORY_SEPARATOR;
+
+        return \str_starts_with((string) (\realpath($path) ?: $path), $templatesDir);
     }
 
     /**

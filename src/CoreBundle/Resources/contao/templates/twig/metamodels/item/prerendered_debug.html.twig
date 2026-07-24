@@ -1,0 +1,15 @@
+{#
+    MetaModels prerendered debug list - Twig version of metamodel_prerendered_debug.html5.
+#}
+{% if app.debug %}
+    {{ dump(data) }}
+{% endif %}
+{% if data|default([])|length %}
+    {% for item in data %}
+        {# Include here your output, e.g. item.html5['attribute_name'] or item.text['attribute_name']. #}
+    {% endfor %}
+{% else %}
+    {% block noItem %}
+        <p class="info">{{ noItemsMsg|default('')|raw }}</p>
+    {% endblock %}
+{% endif %}

@@ -1,0 +1,22 @@
+{% extends "@Contao/metamodels/filter/default.html.twig" %}
+{% block formlabel %}
+    {% if not hide_label|default(false) %}
+        {{ label|default('')|raw }}
+    {% endif %}
+{% endblock %}
+{% block formfield %}
+    {% set minKey = raw.optionsMin.key|default(null) %}
+    {% set maxKey = raw.optionsMax.key|default(null) %}
+    {% set dateMin = minKey is not null ? minKey|date('Y-m-d') : '' %}
+    {% set dateMax = maxKey is not null ? maxKey|date('Y-m-d') : '' %}
+    {% set placeholderMin = raw.optionsMin.value|default('') %}
+    {% set placeholderMax = raw.optionsMax.value|default('') %}
+    {% set values = raw.value|default([]) %}
+    {% if raw.eval.fromField|default(false) %}
+        <input type="date" name="{{ urlparam }}[]" id="ctrl_{{ urlparam }}_0" class="text {{ class|default('') }}" value="{{ values[0]|default('') }}" placeholder="{{ placeholderMin }}" title="{{ raw.eval.labelFrom }}: {{ placeholderMin }}" min="{{ dateMin }}" max="{{ dateMax }}">
+    {% endif %}
+    {% set toIndex = (raw.eval.size|default(0) == 2) ? 1 : 0 %}
+    {% if raw.eval.toField|default(false) %}
+        <input type="date" name="{{ urlparam }}[]" id="ctrl_{{ urlparam }}_{{ toIndex }}" class="text {{ class|default('') }}" value="{{ values[toIndex]|default('') }}" placeholder="{{ placeholderMax }}" title="{{ raw.eval.labelTo }}: {{ placeholderMax }}" min="{{ dateMin }}" max="{{ dateMax }}">
+    {% endif %}
+{% endblock %}
