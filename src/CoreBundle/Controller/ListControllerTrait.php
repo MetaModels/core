@@ -45,6 +45,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Markup;
 
 /**
  * Helper trait for lists (CE and MOD).
@@ -410,8 +411,9 @@ trait ListControllerTrait
 
         /** @psalm-suppress UndefinedMagicPropertyFetch */
         $headline = StringUtil::deserialize($model->headline);
+        // Mark the info text as safe HTML so the (auto-escaping) Twig be_wildcard template does not escape it.
         /** @psalm-suppress UndefinedMagicPropertyAssignment */
-        $template->wildcard = $this->getWildcardInfoText($model, $href, $name);
+        $template->wildcard = new Markup($this->getWildcardInfoText($model, $href, $name), 'UTF-8');
         /** @psalm-suppress UndefinedMagicPropertyAssignment */
         $template->title = (\is_array($headline) ? $headline['value'] : $headline);
         /** @psalm-suppress UndefinedMagicPropertyAssignment */

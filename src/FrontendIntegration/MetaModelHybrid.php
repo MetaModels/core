@@ -37,6 +37,7 @@ use MetaModels\MetaModelsServiceContainer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Markup;
 
 /**
  * Base implementation of a MetaModel Hybrid element.
@@ -266,8 +267,9 @@ abstract class MetaModelHybrid extends Hybrid
             }
 
             $objTemplate = new BackendTemplate('be_wildcard');
+            // Mark the info text as safe HTML so the (auto-escaping) Twig be_wildcard template does not escape it.
             /** @psalm-suppress UndefinedMagicPropertyAssignment */
-            $objTemplate->wildcard = $this->wildCardName . $strInfo;
+            $objTemplate->wildcard = new Markup($this->wildCardName . $strInfo, 'UTF-8');
             /** @psalm-suppress UndefinedMagicPropertyAssignment */
             $objTemplate->title = $this->headline;
             /** @psalm-suppress UndefinedMagicPropertyAssignment */
