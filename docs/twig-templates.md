@@ -34,13 +34,38 @@ Aus dem Legacy-Namen wird der Twig-Identifier gebildet:
 | `mm_filteritem_...`    | `filter`    | `metamodels/filter/...`             |
 | `mm_default`           | `item`      | `metamodels/item/default`           |
 
-Ein eigenes (nicht-präfigiertes) Template `mm_attr_text_fancy` wird zu
-`metamodels/attribute/text_fancy`.
+Für eigene Templates gilt dieselbe Regel: `mm_attr_text_fancy` wird zu
+`metamodels/attribute/text_fancy` — das Präfix entfällt, der Rest wird zum Leaf.
 
-### Nur visuelle Ausgabe
+### Textformat
 
-Der Twig-Vorrang greift **ausschließlich für das Format `html5`** (die sichtbare Ausgabe).
-Das Format `text` (Suchindex, Sortierung, Gruppen-Header) bleibt immer auf der PHP-Engine.
+Neben der sichtbaren Ausgabe (`html5`) kann auch das Format `text` (Suchindex, Sortierung,
+Gruppen-Header) auf Twig laufen. Die Templates dafür tragen ein zusätzliches `.text` im
+Namen:
+
+| Legacy            | Twig-Datei                | Twig-Identifier                  |
+|-------------------|---------------------------|----------------------------------|
+| `mm_attr_text.html5` | `attribute/text.html.twig`      | `metamodels/attribute/text`      |
+| `mm_attr_text.text`  | `attribute/text.text.html.twig` | `metamodels/attribute/text.text` |
+
+Die doppelte Endung ist **kein Schönheitsfehler, sondern zwingend**. Contao bildet den
+Identifier, indem es das abschließende `.html.twig` bzw. `.twig` abschneidet, und verbietet
+gemischte Typen unter einem Identifier. Ein `text.text.twig` neben `text.html.twig` hätte
+also denselben Identifier `…/text`, aber einen anderen Typ — der `ContaoFilesystemLoader`
+bricht dann den Aufbau der **gesamten** Hierarchie mit einer `OutOfBoundsException` ab:
+
+```
+The "metamodels/item/prerendered" template has incompatible types,
+got "html.twig/html5" in "…/prerendered.html.twig" and "text.twig" in "…/prerendered.text.twig".
+```
+
+Das legt Backend **und** Frontend komplett lahm, nicht nur das betroffene Template. Mit
+`.text.html.twig` bleibt die echte Endung `html.twig`, und die Textvariante bekommt den
+eigenen Identifier `…/text.text`. Dieselbe Benennung nutzt bereits
+`email_metamodels_notelist.text.html.twig` im Paket `notelist`.
+
+Ein projekteigenes `templates/mm_attr_text.text` behält weiterhin Vorrang vor dem
+mitgelieferten Twig-Template — genauso wie im Format `html5`.
 
 ### Frontend und Backend
 

@@ -51,12 +51,48 @@ final class TwigTemplateSurrogateTest extends TestCase
         );
     }
 
-    public function testReturnsNullForNonHtml5Format(): void
+    public function testReturnsNullForUnsupportedFormat(): void
     {
         $twig   = $this->createMock(Environment::class);
         $loader = $this->createMock(ContaoFilesystemLoader::class);
         $twig->expects(self::never())->method('render');
         $loader->expects(self::never())->method('exists');
+
+        self::assertNull($this->buildSurrogate($twig, $loader)->render('mm_attr_text', 'attribute', 'xml', []));
+    }
+
+    /**
+     * The text format keeps ".html.twig" as its real extension and carries the ".text" in the identifier - a
+     * "<leaf>.text.twig" would collide with the "<leaf>.html.twig" of the same identifier and make Contao's
+     * template hierarchy fail as a whole.
+     */
+    public function testRendersTheTextVariantForTheTextFormat(): void
+    {
+        $twig   = $this->createMock(Environment::class);
+        $loader = $this->createMock(ContaoFilesystemLoader::class);
+        $loader->expects(self::once())->method('exists')
+            ->with('@Contao/metamodels/attribute/text.text.html.twig')
+            ->willReturn(true);
+        // The text identifier has no legacy counterpart, so the precedence check must not run.
+        $loader->expects(self::never())->method('getFirst');
+        $twig->expects(self::once())->method('render')
+            ->with('@Contao/metamodels/attribute/text.text.html.twig', ['foo' => 'bar'])
+            ->willReturn('plain text');
+
+        self::assertSame(
+            'plain text',
+            $this->buildSurrogate($twig, $loader)->render('mm_attr_text', 'attribute', 'text', ['foo' => 'bar'])
+        );
+    }
+
+    public function testReturnsNullWhenTheTextVariantDoesNotExist(): void
+    {
+        $twig   = $this->createMock(Environment::class);
+        $loader = $this->createMock(ContaoFilesystemLoader::class);
+        $loader->expects(self::once())->method('exists')
+            ->with('@Contao/metamodels/attribute/text.text.html.twig')
+            ->willReturn(false);
+        $twig->expects(self::never())->method('render');
 
         self::assertNull($this->buildSurrogate($twig, $loader)->render('mm_attr_text', 'attribute', 'text', []));
     }

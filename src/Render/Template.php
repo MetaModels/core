@@ -537,7 +537,7 @@ class Template
      */
     private function hasLegacyTemplateOverride(): bool
     {
-        if ('html5' !== $this->strFormat) {
+        if (!\in_array($this->strFormat, ['html5', 'text'], true)) {
             return false;
         }
 
@@ -545,7 +545,7 @@ class Template
             return false;
         }
 
-        $path = $this->getTemplate($this->strTemplate, 'html5');
+        $path = $this->getTemplate($this->strTemplate, $this->strFormat);
         if (null === $path) {
             return false;
         }

@@ -30,11 +30,28 @@ use Twig\Environment;
  * Renders a matching Twig template as a surrogate for a legacy MetaModels PHP template.
  *
  * A Twig template "@Contao/metamodels/&lt;group&gt;/&lt;leaf&gt;.html.twig" takes precedence over the legacy ".html5"
- * template (frontend and backend), mirroring Contao's own Twig surrogate. Only the visual "html5" output format is a
- * candidate; the plain text format (search index and sorting) always stays on the PHP engine.
+ * template (frontend and backend), mirroring Contao's own Twig surrogate.
+ *
+ * The plain text format (search index, sorting, group headers) works the same way, but its templates carry an
+ * additional ".text" in the name: "&lt;leaf&gt;.text.html.twig" surrogates the legacy "&lt;leaf&gt;.text".
+ *
+ * The doubled extension is not cosmetic. Contao derives the template identifier by stripping the trailing
+ * ".html.twig" resp. ".twig", and it refuses to mix types under one identifier: a "&lt;leaf&gt;.text.twig" beside a
+ * "&lt;leaf&gt;.html.twig" would share the identifier "&lt;leaf&gt;" but count as a different type, which makes
+ * ContaoFilesystemLoader abort the whole hierarchy with an OutOfBoundsException - the entire back end and front end
+ * would answer with HTTP 500. Keeping ".html.twig" as the real extension puts the text variant under its own
+ * identifier "&lt;leaf&gt;.text". The same naming is already in use for the notelist mail template.
  */
 final readonly class TwigTemplateSurrogate
 {
+    /**
+     * The output formats that can be surrogated, mapped to the suffix of the Twig template name.
+     */
+    private const SUFFIX_BY_FORMAT = [
+        'html5' => '.html.twig',
+        'text'  => '.text.html.twig',
+    ];
+
     public function __construct(
         private Environment $twig,
         private ContaoFilesystemLoader $loader,
@@ -52,8 +69,7 @@ final readonly class TwigTemplateSurrogate
      */
     public function render(string $templateName, string $group, string $format, array $data): ?string
     {
-        // Only the visual output is a candidate for Twig; the plain text format stays on the PHP engine.
-        if ('html5' !== $format) {
+        if (null === ($suffix = self::SUFFIX_BY_FORMAT[$format] ?? null)) {
             return null;
         }
 
@@ -61,15 +77,18 @@ final readonly class TwigTemplateSurrogate
             return null;
         }
 
-        $candidate = '@Contao/' . $identifier . '.html.twig';
+        // The ".text" of the suffix becomes part of the identifier ("<leaf>.text"), the real extension stays
+        // ".html.twig" - see the class comment on why.
+        $candidate = '@Contao/' . $identifier . $suffix;
         if (!$this->loader->exists($candidate)) {
             return null;
         }
 
         // Respect a higher priority legacy ".html5" override in the managed hierarchy (mirror Contao). The actual
         // render below stays theme aware through the loader's internal state; only this precedence check ignores the
-        // rarely used theme layer to avoid depending on Contao internal API.
-        if ('html5' === ContaoTwigUtil::getExtension($this->loader->getFirst($identifier))) {
+        // rarely used theme layer to avoid depending on Contao internal API. The text identifier has no legacy
+        // counterpart in the hierarchy, so the check only applies to the visual format.
+        if ('html5' === $format && 'html5' === ContaoTwigUtil::getExtension($this->loader->getFirst($identifier))) {
             return null;
         }
 
