@@ -29,10 +29,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = [
         'dataContainer'    => General::class,
         'ptable'           => 'tl_metamodel',
         'switchToEdit'     => false,
-        // This table has no list view: its data provider aggregates all rows of a MetaModel into a
-        // single record and refuses to fetch a collection. Without the flag the list handler runs
-        // into that refusal, which is what happened after "save and close".
-        'forceEdit'        => true,
         'enableVersioning' => false,
         'closed'           => false,
         'sql'              => [
