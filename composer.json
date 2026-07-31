@@ -19,6 +19,11 @@
       "name": "Stefan Heimes",
       "email": "stefan_heimes@hotmail.com",
       "role": "Developer"
+    },
+    {
+      "name": "Ingolf Steinhardt",
+      "email": "info@e-spin.de",
+      "role": "Developer"
     }
   ],
   "homepage": "https://now.metamodel.me/",
