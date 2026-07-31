@@ -1,0 +1,5 @@
+{% extends searchable|default(false) ? '@Contao/block_searchable.html.twig' : '@Contao/block_unsearchable.html.twig' %}
+{% block content %}
+{{ items|raw }}
+{{ pagination|raw }}
+{% endblock %}
