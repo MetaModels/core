@@ -1,0 +1,23 @@
+<!-- indexer::stop -->
+<section class="{{ class|default('') }} block"{{ cssID|default('')|raw }}{% if style|default('') %} style="{{ style }}"{% endif %}>
+    {% if headline|default('') %}
+        <{{ hl }}>{{ headline|raw }}</{{ hl }}>
+    {% endif %}
+    <form{% if action|default('') %} action="{{ action }}"{% endif %} method="post">
+        <input name="REQUEST_TOKEN" type="hidden" value="{{ requestToken|default('') }}"/>
+        <input type="hidden" name="FORM_SUBMIT" value="{{ formid|default('') }}">
+        <div class="formbody">
+            {% for filter in filters|default([]) %}
+                <div class="widget {{ filter.class|default('') }}"{{ filter.cssID|default('')|raw }}>
+                    {{ filter.value|raw }}
+                </div>
+            {% endfor %}
+            {% if submit|default('') %}
+                <div class="submit_container">
+                    <input type="submit" class="submit" value="{{ submit }}">
+                </div>
+            {% endif %}
+        </div>
+    </form>
+</section>
+<!-- indexer::continue -->

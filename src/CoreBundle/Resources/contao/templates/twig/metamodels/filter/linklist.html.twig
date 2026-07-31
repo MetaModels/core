@@ -1,0 +1,21 @@
+{% extends "@Contao/metamodels/filter/default.html.twig" %}
+{% block formlabel %}
+    {% if not hide_label|default(false) %}
+        {{ label|default('')|raw }}
+    {% endif %}
+{% endblock %}
+{% block formfield %}
+    {% if options|default([]) is iterable and options|length %}
+        {% set urlFragment = urlfragment|default('') ? '#' ~ urlfragment : '' %}
+        <ul>
+            {% for option in options %}
+                {% set cls = (loop.first ? 'first ' : '') ~ (loop.last ? 'last ' : '') ~ (loop.index0 % 2 == 1 ? 'even' : 'odd') ~ (option.class|default('') ? ' ' ~ option.class : '') %}
+                <li class="{{ cls }}">
+                    <a href="{{ option.href }}{{ urlFragment }}" class="{{ cls }}"
+                       data-escargot-ignore rel="nofollow"
+                       title="{{ option.value }}">{{ option.value|raw }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

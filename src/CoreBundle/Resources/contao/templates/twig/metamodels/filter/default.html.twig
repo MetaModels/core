@@ -1,0 +1,17 @@
+{#
+    MetaModels default filter widget - Twig version of mm_filteritem_default.html5.
+#}
+{% block error %}
+    {% for error in errors|default([]) %}
+        <p class="error">{{ error }}</p>
+    {% endfor %}
+{% endblock %}
+
+{% block formlabel %}
+    {% if not hide_label|default(false) %}
+        {{ label|default('')|raw }}
+    {% endif %}
+{% endblock %}
+{% block formfield %}
+    {{ formfield|default('')|raw }}
+{% endblock %}

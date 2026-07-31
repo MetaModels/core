@@ -181,7 +181,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = [
                 'description' => 'all.description',
                 'href'        => 'act=select',
                 'class'       => 'header_edit_all',
-                'attributes'  => 'onclick="Backend.getScrollOffset();"'
+                'attributes'  => 'data-action="contao--scroll-offset#store"'
             ]
         ],
         'operations'        => [
@@ -196,14 +196,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = [
                 'description' => 'cut.description',
                 'href'        => 'act=cut',
                 'icon'        => 'cut.svg',
-                'attributes'  => 'onclick="Backend.getScrollOffset();"'
+                'attributes'  => 'data-action="contao--scroll-offset#store"'
             ],
             'delete' => [
                 'label'       => 'delete.label',
                 'description' => 'delete.description',
                 'href'        => 'act=delete',
                 'icon'        => 'delete.svg',
-                'attributes'  => 'onclick="if (!confirm(this.dataset.msgConfirm)) return false; Backend.getScrollOffset();"',
+                'attributes'  => 'data-action="contao--scroll-offset#store" onclick="if (!confirm(this.dataset.msgConfirm)) return false;"',
             ],
             'show'   => [
                 'label'       => 'show.label',

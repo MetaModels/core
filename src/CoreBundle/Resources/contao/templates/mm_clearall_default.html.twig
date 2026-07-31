@@ -1,0 +1,6 @@
+<!-- indexer::stop -->
+<div class="block clearall {{ class|default('') }}"{{ cssID|default('')|raw }}{% if style|default('') %} style="{{ style }}"{% endif %}>
+    <a title="{{ 'clear_all'|trans([], 'metamodels_filter') }}"
+       href="{{ href|default('') }}{{ metamodel_fef_urlfragment|default('') ? '#' ~ metamodel_fef_urlfragment : '' }}">{{ 'clear_all'|trans([], 'metamodels_filter') }}</a>
+</div>
+<!-- indexer::continue -->

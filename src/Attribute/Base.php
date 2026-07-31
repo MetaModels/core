@@ -639,7 +639,7 @@ abstract class Base implements IAttribute
         if ($objSettings && ($strTemplate = (string) $objSettings->get('template'))) {
             $templateFactory = System::getContainer()->get('metamodels.template_factory');
             assert($templateFactory instanceof TemplateFactory);
-            $objTemplate = $templateFactory->createTemplate($strTemplate);
+            $objTemplate = $templateFactory->createTemplate($strTemplate, 'attribute');
 
             $this->prepareTemplate($objTemplate, $arrRowData, $objSettings);
 
@@ -654,10 +654,19 @@ abstract class Base implements IAttribute
             try {
                 $arrResult['text'] = $objTemplate->parse('text', true);
             } catch (\Exception $e) {
-                // FIXME: this throws when no parent has been set - need to catch!
-                $objSettingsFallback = $this->getDefaultRenderSettings()->setParent($objSettings->getParent());
+                $objSettingsFallback = $this->getDefaultRenderSettings();
 
-                $objTemplate = $templateFactory->createTemplate((string) $objSettingsFallback->get('template'));
+                // The render setting is not required to have a parent - the default render settings never have one.
+                // Inherit it only when it is actually there, otherwise the recovery attempt would mask the very
+                // exception it is supposed to recover from.
+                try {
+                    $objSettingsFallback->setParent($objSettings->getParent());
+                } catch (\RuntimeException) {
+                    // No parent to inherit from, the fallback settings work without one.
+                }
+
+                $objTemplate =
+                    $templateFactory->createTemplate((string) $objSettingsFallback->get('template'), 'attribute');
                 $this->prepareTemplate($objTemplate, $arrRowData, $objSettingsFallback);
 
                 $arrResult['text'] = $objTemplate->parse('text', true);

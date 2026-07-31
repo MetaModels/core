@@ -15,13 +15,13 @@
         <a href="{{ href|raw }}" class="header_back twig" title="{{ backBt }}">{{ backBt }}</a>
     </div>
     <div id="tl_metamodel_autocreate_palette">
-        <form action="{{ action }}" class="tl_form" method="post">
+        <form action="{{ action }}" class="tl_form" method="post" data-controller="contao--check-all">
             <div class="tl_formbody_edit">
                 <input type="hidden" name="REQUEST_TOKEN" value="{{ requestToken }}">
                 <div class="settings">
                     <label for="tl_select_trigger">
                         <input type="checkbox" id="tl_select_trigger"
-                               onclick="Backend.toggleCheckboxes(this)"{% if not hasCheckbox %} disabled{% endif %} />
+                               data-action="contao--check-all#toggleAll"{% if not hasCheckbox %} disabled{% endif %} />
                         {{ selectAll }}
                     </label>
                     <label class="activate" for="activate">
@@ -40,8 +40,12 @@
                         <div class="field {{ field.class }}">
                             {% if field.checkbox %}
                             <label for="attribute_{{ field.attr_id }}">
+                                {# Nur die Attribut-Checkboxen sind Ziele, damit "Alle auswaehlen"
+                                   die Option "activate" oben nicht mitschaltet. #}
                                 <input type="checkbox" id="attribute_{{ field.attr_id }}"
-                                       name="{{ field.name }}"/>
+                                       name="{{ field.name }}"
+                                       data-contao--check-all-target="input"
+                                       data-action="contao--check-all#toggleInput"/>
                                 {{ field.text|raw }}
                             </label>
                             {% else %}

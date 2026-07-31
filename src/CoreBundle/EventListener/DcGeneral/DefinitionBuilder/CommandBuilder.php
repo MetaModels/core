@@ -205,7 +205,7 @@ class CommandBuilder
         assert($this->container instanceof IMetaModelDataDefinition);
         $collection = $view->getModelCommands();
 
-        $scrOffsetAttributes = ['attributes' => 'onclick="Backend.getScrollOffset();"'];
+        $scrOffsetAttributes = ['attributes' => 'data-action="contao--scroll-offset#store"'];
         $this->createCommand($collection, 'edit', ['act' => 'edit'], 'edit.svg');
         $this->createCommand($collection, 'copy', ['act' => 'copy'], 'copy.svg', $scrOffsetAttributes);
         $this->createCommand($collection, 'cut', ['act' => 'cut'], 'cut.svg', $scrOffsetAttributes);
@@ -216,7 +216,8 @@ class CommandBuilder
             'delete.svg',
             [
                 'attributes' =>
-                    'onclick="if (!confirm(this.dataset.msgConfirm)) return false; Backend.getScrollOffset();"',
+                    'data-action="contao--scroll-offset#store"'
+                    . ' onclick="if (!confirm(this.dataset.msgConfirm)) return false;"',
             ]
         );
         $this->createCommand($collection, 'show', ['act' => 'show'], 'show.svg');

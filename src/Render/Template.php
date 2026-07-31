@@ -113,6 +113,28 @@ class Template
     protected $scopeDeterminator;
 
     /**
+     * The Twig surrogate. When set, a matching Twig template takes precedence over the legacy PHP template.
+     *
+     * @var TwigTemplateSurrogate|null
+     */
+    protected $twigSurrogate;
+
+    /**
+     * The Twig template group ("attribute", "filter" or "item") used to build the Twig candidate name
+     * "@Contao/metamodels/&lt;group&gt;/&lt;leaf&gt;.html.twig". Empty disables the Twig surrogate.
+     *
+     * @var string
+     */
+    protected $twigGroup = '';
+
+    /**
+     * The kernel project directory, used to detect legacy template overrides in the project "templates/" folder.
+     *
+     * @var string
+     */
+    protected $projectDir = '';
+
+    /**
      * Template path cache.
      *
      * Storing state of template path detection in a cache array for each template format and custom location.
@@ -145,13 +167,22 @@ class Template
      * @param string                               $strTemplate       The name of the template file.
      * @param Adapter|Adapter<TemplateLoader>|null $templateLoader    Template loader adapter.
      * @param RequestScopeDeterminator|null        $scopeDeterminator Request scope determinator.
+     * @param TwigTemplateSurrogate|null           $twigSurrogate     Twig surrogate (enables Twig precedence).
+     * @param string                               $twigGroup         Twig template group (attribute|filter|item).
+     * @param string                               $projectDir        The kernel project directory.
      */
     public function __construct(
         $strTemplate = '',
         ?Adapter $templateLoader = null,
-        ?RequestScopeDeterminator $scopeDeterminator = null
+        ?RequestScopeDeterminator $scopeDeterminator = null,
+        ?TwigTemplateSurrogate $twigSurrogate = null,
+        string $twigGroup = '',
+        string $projectDir = ''
     ) {
-        $this->strTemplate = $strTemplate;
+        $this->strTemplate   = $strTemplate;
+        $this->twigSurrogate = $twigSurrogate;
+        $this->twigGroup     = $twigGroup;
+        $this->projectDir    = $projectDir;
 
         if (null === $templateLoader) {
             // @codingStandardsIgnoreStart
@@ -418,6 +449,11 @@ class Template
         // HOOK: add custom parse filters.
         $this->callParseTemplateHook();
 
+        // A matching Twig template takes precedence over the legacy PHP template (like Contao core does).
+        if (null !== ($twigResult = $this->renderTwigSurrogate())) {
+            return $twigResult;
+        }
+
         $strBuffer = '';
 
         // Start with the template itself.
@@ -460,26 +496,98 @@ class Template
         // Reset the internal arrays.
         $this->arrBlocks = [];
 
-        // Add start and end markers in debug mode.
+        return $this->addDebugMarkers((string) $strBuffer);
+    }
+
+    /**
+     * Render a matching Twig template, taking precedence over the legacy PHP template, or null to fall back.
+     *
+     * @return string|null The rendered markup or null when no Twig surrogate applies.
+     */
+    protected function renderTwigSurrogate(): ?string
+    {
+        if (null === $this->twigSurrogate) {
+            return null;
+        }
+
+        // Transitional (deprecated, to be removed in 3.0 together with the ".html5" templates): a legacy override of
+        // the flat template name in the project "templates/" directory (or a theme folder) still wins over a bundle
+        // provided Twig template, so existing customisations keep working until they are migrated to
+        // "templates/metamodels/<group>/<leaf>".
+        if ($this->hasLegacyTemplateOverride()) {
+            return null;
+        }
+
+        return $this->twigSurrogate->render(
+            $this->strTemplate,
+            $this->twigGroup,
+            $this->strFormat,
+            $this->arrData
+        );
+    }
+
+    /**
+     * Check whether the flat template name is overridden in the project template directory (or a theme folder).
+     *
+     * Such a legacy override keeps precedence over a bundle provided Twig template for backwards compatibility.
+     *
+     * @return bool
+     *
+     * @deprecated Deprecated since 2.5 and to be removed in 3.0 - migrate overrides to "templates/metamodels/...".
+     */
+    private function hasLegacyTemplateOverride(): bool
+    {
+        if (!\in_array($this->strFormat, ['html5', 'text'], true)) {
+            return false;
+        }
+
+        if ('' === $this->projectDir) {
+            return false;
+        }
+
+        $path = $this->getTemplate($this->strTemplate, $this->strFormat);
+        if (null === $path) {
+            return false;
+        }
+
+        $templatesDir = (\realpath($this->projectDir . '/templates') ?: ($this->projectDir . '/templates'))
+            . \DIRECTORY_SEPARATOR;
+
+        return \str_starts_with((string) (\realpath($path) ?: $path), $templatesDir);
+    }
+
+    /**
+     * Wrap the buffer with template start/end markers when running in debug mode (html5 format only).
+     *
+     * @param string $strBuffer The rendered buffer.
+     *
+     * @return string The buffer, optionally wrapped with debug markers.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    protected function addDebugMarkers(string $strBuffer)
+    {
         $container = System::getContainer();
         if (
-            ($container instanceof ContainerInterface)
-            && true === $container->getParameter('kernel.debug')
-            && ('html5' === $this->strFormat)
+            !($container instanceof ContainerInterface)
+            || true !== $container->getParameter('kernel.debug')
+            || ('html5' !== $this->strFormat)
         ) {
-            $rootDir = $container->getParameter('kernel.project_dir');
-            assert(\is_string($rootDir));
-            $strRelPath =
-                \str_replace($rootDir . '/', '', (string) $this->getTemplate($this->strTemplate, $this->strFormat));
-            $strBuffer  = <<<EOF
+            return $strBuffer;
+        }
+
+        $rootDir = $container->getParameter('kernel.project_dir');
+        assert(\is_string($rootDir));
+        $strRelPath =
+            \str_replace($rootDir . '/', '', (string) $this->getTemplate($this->strTemplate, $this->strFormat));
+
+        return <<<EOF
 <!-- TEMPLATE START: $strRelPath -->
 $strBuffer
 <!-- TEMPLATE END: $strRelPath -->
 
 EOF;
-        }
-
-        return (string) $strBuffer;
     }
 
     /**

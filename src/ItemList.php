@@ -685,7 +685,7 @@ class ItemList
         $templateFactory = System::getContainer()->get('metamodels.template_factory');
         assert($templateFactory instanceof TemplateFactory);
 
-        $this->objTemplate = $templateFactory->createTemplate((string) $this->objView->get('template'));
+        $this->objTemplate = $templateFactory->createTemplate((string) $this->objView->get('template'), 'item');
         /** @psalm-suppress UndefinedMagicPropertyAssignment */
         $this->objTemplate->view = $this->objView;
     }

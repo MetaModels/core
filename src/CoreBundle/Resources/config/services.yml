@@ -80,11 +80,20 @@ services:
           - "%kernel.project_dir%"
           - "@translator"
 
+    metamodels.render.twig_surrogate:
+        class: MetaModels\Render\TwigTemplateSurrogate
+        arguments:
+          - "@twig"
+          - "@contao.twig.filesystem_loader"
+          - "@contao.twig.interop.context_factory"
+
     metamodels.template_factory:
         class: MetaModels\Render\TemplateFactory
         arguments:
           - "@=service('contao.framework').getAdapter('Contao\\\\TemplateLoader')"
           - "@cca.dc-general.scope-matcher"
+          - "@metamodels.render.twig_surrogate"
+          - "%kernel.project_dir%"
         public: true
 
     metamodels.contao_input:
@@ -136,6 +145,7 @@ services:
             - '@database_connection'
             - '@MetaModels\Filter\FilterUrlBuilder'
             - '@translator'
+            - '@metamodels.template_factory'
         public: true
 
     metamodels.controller.abstract.add_all:

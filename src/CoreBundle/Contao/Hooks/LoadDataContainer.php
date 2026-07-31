@@ -194,7 +194,7 @@ class LoadDataContainer
             $parentDCA['list']['operations'][$operationName] = [
                 'href'       => 'table=' . $metaModelTable,
                 'icon'       => $this->iconBuilder->getBackendIcon($inputScreen['meta']['backendicon']),
-                'attributes' => 'onclick="Backend.getScrollOffset()"',
+                'attributes' => 'data-action="contao--scroll-offset#store"',
             ];
 
             // Is the destination table a metamodel with variants?

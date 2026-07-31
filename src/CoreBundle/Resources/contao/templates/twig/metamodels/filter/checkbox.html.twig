@@ -1,0 +1,16 @@
+{% extends "@Contao/metamodels/filter/default.html.twig" %}
+{% block formlabel %}
+    {% if not hide_label|default(false) %}
+        {{ legend|default('')|raw }}
+    {% endif %}
+{% endblock %}
+{% block formfield %}
+    {% if options|default([]) is iterable and options|length %}
+        <fieldset id="ctrl_{{ urlparam }}" class="checkbox_container">
+            {% for option in options %}
+                {% set cls = (loop.first ? 'first ' : '') ~ (loop.last ? 'last ' : '') ~ (loop.index0 % 2 == 1 ? 'even' : 'odd') ~ (option.class|default('') ? ' ' ~ option.class : '') %}
+                <span class="{{ cls }}"><input type="checkbox" name="{{ urlparam }}[]" id="opt_{{ urlparam }}_{{ loop.index0 }}" class="checkbox{% if submit|default(false) %} submitonchange{% endif %}" value="{{ option.key|default('') ? option.key : '--none--' }}"{% if option.active|default(false) %} checked="checked"{% endif %} /> <label id="lbl_{{ urlparam }}_{{ loop.index0 }}" for="opt_{{ urlparam }}_{{ loop.index0 }}">{{ option.value|raw }}</label></span>
+            {% endfor %}
+        </fieldset>
+    {% endif %}
+{% endblock %}
