@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2025 The MetaModels team.
+ * (c) 2012-2026 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2025 The MetaModels team.
+ * @copyright  2012-2026 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -32,7 +32,7 @@ $GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'][] =
     [FilterContentElementCallback::class, 'buildFilterParameterList'];
 
 $GLOBALS['TL_DCA']['tl_content']['palettes']['metamodel_content'] =
-    '{type_legend},type,headline;' .
+    '{type_legend},type,headline,title;' .
     '{mm_config_legend},metamodel,metamodel_use_limit;' .
     '{mm_rendering_legend},metamodel_rendersettings,metamodel_layout,metamodel_noparsing;' .
     '{mm_pagination_legend:hide},perPage,' .
@@ -47,7 +47,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['metamodel_content'] =
     '{invisible_legend:hide},invisible,start,stop';
 
 $GLOBALS['TL_DCA']['tl_content']['palettes']['metamodels_frontendfilter'] =
-    '{type_legend},type,headline;' .
+    '{type_legend},type,headline,title;' .
     '{mm_filter_legend},metamodel,metamodel_filtering,metamodel_fef_template,metamodel_filterparams,' .
     'metamodel_fef_params,metamodel_fef_autosubmit,metamodel_fef_hideclearfilter,metamodel_available_values,' .
     'metamodel_jumpTo,metamodel_fef_id,metamodel_fef_urlfragment;' .
@@ -56,7 +56,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['metamodels_frontendfilter'] =
     '{invisible_legend:hide},invisible,start,stop';
 
 $GLOBALS['TL_DCA']['tl_content']['palettes']['metamodels_frontendclearall'] =
-    '{type_legend},type,headline;' .
+    '{type_legend},type,headline,title;' .
     '{mm_filter_legend},metamodel_fef_template,metamodel_fef_urlfragment;' .
     '{protected_legend:hide},protected;' .
     '{expert_legend:hide},guests,cssID,space;' .
