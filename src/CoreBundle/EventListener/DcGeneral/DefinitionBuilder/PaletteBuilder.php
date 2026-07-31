@@ -121,6 +121,12 @@ class PaletteBuilder
 
             $legendConditions = $this->buildCondition(($legendInfo['condition'] ?? null), $metaModel);
             foreach ($legendInfo['properties'] as $property) {
+                // Input screens may still reference attributes that do not provide a property anymore - internal
+                // attributes for example. Skip them instead of breaking the whole input mask.
+                if (!$properties->hasProperty($property['name'])) {
+                    continue;
+                }
+
                 $legend->addProperty(
                     $this->createProperty(
                         $properties->getProperty($property['name']),
