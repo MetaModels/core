@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2025 The MetaModels team.
+ * (c) 2012-2026 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -21,7 +21,7 @@
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
- * @copyright  2012-2025 The MetaModels team.
+ * @copyright  2012-2026 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -350,9 +350,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = [
                             ->get('contao.intl.locales')
                             ->getLocales(),
                         'eval'             => [
-                            'tl_class' => '',
-                            'style'    => 'width:400px',
-                            'chosen'   => 'true'
+                            'wrapper_style' => 'width:33.333%',
+                            'chosen'        => 'true'
                         ]
                     ],
                     'label'       => [
@@ -361,8 +360,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = [
                         'exclude'     => true,
                         'inputType'   => 'text',
                         'eval'        => [
+                            'wrapper_style'  => 'width:33.333%',
                             'decodeEntities' => true,
-                            'style'          => 'width:100%',
                         ]
                     ],
                     'description' => [
@@ -371,8 +370,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = [
                         'exclude'     => true,
                         'inputType'   => 'text',
                         'eval'        => [
+                            'wrapper_style' => 'width:33.333%',
                             'decodeEntities' => true,
-                            'style'          => 'width:100%',
                         ]
                     ],
                 ],
