@@ -80,6 +80,19 @@ abstract class WithChildren extends Simple implements IWithChildren
      * {@inheritdoc}
      */
     #[\Override]
+    public function getParameterTypes()
+    {
+        $arrTypes = [];
+        foreach ($this->arrChildren as $objSetting) {
+            $arrTypes = array_merge($arrTypes, ParameterTypes::fromSetting($objSetting));
+        }
+        return $arrTypes;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    #[\Override]
     public function getParameterDCA()
     {
         $arrParams = array();
