@@ -417,3 +417,19 @@ services:
 
     metamodels.expression-language:
       class: Symfony\Component\ExpressionLanguage\ExpressionLanguage
+
+    MetaModels\CoreBundle\DcGeneral\RelationJumpBuilder:
+      arguments:
+        - '@metamodels.view_combination'
+        - '@metamodels.assets.icon_builder'
+        - '@router'
+        - '@translator'
+        - '@security.token_storage'
+        # Contao has no generic backend module per table - the ones worth jumping to are listed here.
+        - tl_page: page
+          tl_article: article
+          tl_news: news
+          tl_calendar_events: calendar
+          tl_faq: faq
+          tl_member: member
+          tl_user: user

@@ -41,6 +41,21 @@
         <source>%attribute_name% (%direction%)</source>
         <target>%attribute_name% (%direction%)</target>
       </trans-unit>
+      <trans-unit id="relation_jump.label" resname="relation_jump.label">
+        <source>Relation öffnen</source>
+      </trans-unit>
+      <trans-unit id="relation_jump.title" resname="relation_jump.title">
+        <source>Relationstabelle in einem neuen Tab öffnen.</source>
+      </trans-unit>
+      <trans-unit id="relation_jump.title_locked" resname="relation_jump.title_locked">
+        <source>Das Feld ist schreibgeschützt, die Relation lässt sich von hier nicht öffnen.</source>
+      </trans-unit>
+      <trans-unit id="relation_jump.title_forbidden" resname="relation_jump.title_forbidden">
+        <source>Sie haben keine Berechtigung für die Tabelle „%table%".</source>
+      </trans-unit>
+      <trans-unit id="relation_jump.title_no_module" resname="relation_jump.title_no_module">
+        <source>Für die Tabelle „%table%" ist kein Backend-Modul hinterlegt.</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

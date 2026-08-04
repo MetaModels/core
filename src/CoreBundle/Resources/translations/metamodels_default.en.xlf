@@ -32,6 +32,21 @@
       <trans-unit id="sorting_direction_label" resname="sorting_direction_label">
         <source>%attribute_name% (%direction%)</source>
       </trans-unit>
+      <trans-unit id="relation_jump.label" resname="relation_jump.label">
+        <source>Open relation</source>
+      </trans-unit>
+      <trans-unit id="relation_jump.title" resname="relation_jump.title">
+        <source>Open the relation table in a new tab.</source>
+      </trans-unit>
+      <trans-unit id="relation_jump.title_locked" resname="relation_jump.title_locked">
+        <source>This field is read only, the relation cannot be opened from here.</source>
+      </trans-unit>
+      <trans-unit id="relation_jump.title_forbidden" resname="relation_jump.title_forbidden">
+        <source>You are not allowed to open the table "%table%".</source>
+      </trans-unit>
+      <trans-unit id="relation_jump.title_no_module" resname="relation_jump.title_no_module">
+        <source>No backend module is configured for the table "%table%".</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>
