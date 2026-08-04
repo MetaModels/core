@@ -55,7 +55,7 @@ class BreadcrumbMetaModelListener extends AbstractBreadcrumbListener
         $elements->push(
             $this->generate('metamodels.configuration', []),
             'tl_metamodel',
-            'bundles/metamodelscore/images/backend/logo.png'
+            'bundles/metamodelscore/images/backend/mm_logo_small.svg'
         );
     }
 }
