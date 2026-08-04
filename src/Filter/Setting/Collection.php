@@ -171,6 +171,20 @@ class Collection implements ICollection
      * {@inheritdoc}
      */
     #[\Override]
+    public function getParameterTypes()
+    {
+        $types = [];
+        foreach ($this->arrSettings as $objSetting) {
+            $types[] = ParameterTypes::fromSetting($objSetting);
+        }
+
+        return [] === $types ? [] : \array_merge(...$types);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    #[\Override]
     public function getParameterDCA()
     {
         $parameters = [];

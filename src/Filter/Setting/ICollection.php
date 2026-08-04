@@ -83,6 +83,17 @@ interface ICollection
     public function getParameters();
 
     /**
+     * Retrieve the URL parameter type for all registered parameters from the settings.
+     *
+     * The type determines from where the value of a parameter may get read and how the URL for it has to be built.
+     * Valid types are "slug" (key/value in the URL path), "get" (key=value in the query string) and the deprecated
+     * "slugNget" (both of them).
+     *
+     * @return array<string, string> The parameter types as array. parametername => type
+     */
+    public function getParameterTypes();
+
+    /**
      * Retrieve the names of all parameters for listing in frontend filter configuration.
      *
      * @return array<string, string> the parameters as array. parametername => label

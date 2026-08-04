@@ -50,6 +50,7 @@ use function array_flip;
 use function array_intersect_key;
 use function array_key_exists;
 use function array_keys;
+use function array_fill_keys;
 use function array_map;
 use function array_merge;
 use function array_reduce;
@@ -232,6 +233,20 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
         }
 
         return $arrParams;
+    }
+
+    /**
+     * Retrieve the URL parameter type for all registered parameters from the setting.
+     *
+     * @return array<string, string> The parameter types as array. parametername => type
+     */
+    public function getParameterTypes()
+    {
+        // Legacy settings without a value keep the lenient behaviour of accepting both variants.
+        return array_fill_keys(
+            $this->getParameters(),
+            (string) ($this->get('param_type') ?: ParameterTypes::LEGACY_TYPE)
+        );
     }
 
     /**
