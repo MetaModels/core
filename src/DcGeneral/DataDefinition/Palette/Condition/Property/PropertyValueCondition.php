@@ -131,10 +131,10 @@ class PropertyValueCondition implements PropertyConditionInterface
      */
     #[\Override]
     public function match(
-        ModelInterface $model = null,
-        PropertyValueBag $input = null,
-        PropertyInterface $property = null,
-        LegendInterface $legend = null
+        ?ModelInterface $model = null,
+        ?PropertyValueBag $input = null,
+        ?PropertyInterface $property = null,
+        ?LegendInterface $legend = null
     ) {
         $attribute = $this->metaModel->getAttribute($this->propertyName);
 

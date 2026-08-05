@@ -63,10 +63,10 @@ final class FilterSettingTypeSubPaletteCondition implements PropertyConditionInt
      */
     #[\Override]
     public function match(
-        ModelInterface $model = null,
-        PropertyValueBag $input = null,
-        PropertyInterface $property = null,
-        LegendInterface $legend = null
+        ?ModelInterface $model = null,
+        ?PropertyValueBag $input = null,
+        ?PropertyInterface $property = null,
+        ?LegendInterface $legend = null
     ) {
         if (!$model || !$model->getProperty('attr_id')) {
             return false;

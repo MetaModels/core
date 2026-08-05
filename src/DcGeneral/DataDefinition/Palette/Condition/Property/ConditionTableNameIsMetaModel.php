@@ -111,10 +111,10 @@ class ConditionTableNameIsMetaModel implements PropertyConditionInterface
      */
     #[\Override]
     public function match(
-        ModelInterface $model = null,
-        PropertyValueBag $input = null,
-        PropertyInterface $property = null,
-        LegendInterface $legend = null
+        ?ModelInterface $model = null,
+        ?PropertyValueBag $input = null,
+        ?PropertyInterface $property = null,
+        ?LegendInterface $legend = null
     ) {
         $propertyName = $this->getTablePropertyName();
         if ($input && $input->hasPropertyValue($propertyName)) {

@@ -180,10 +180,10 @@ class PropertyContainAnyOfCondition implements PropertyConditionInterface
      */
     #[\Override]
     public function match(
-        ModelInterface $model = null,
-        PropertyValueBag $input = null,
-        PropertyInterface $property = null,
-        LegendInterface $legend = null
+        ?ModelInterface $model = null,
+        ?PropertyValueBag $input = null,
+        ?PropertyInterface $property = null,
+        ?LegendInterface $legend = null
     ) {
         assert($this->metaModel instanceof IMetaModel);
         if ($this->metaModel instanceof ITranslatedMetaModel) {

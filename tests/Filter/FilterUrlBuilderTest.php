@@ -192,7 +192,7 @@ class FilterUrlBuilderTest extends TestCase
         return $requestStack;
     }
 
-    private function mockPage(array $data, array $rowData = null): PageModel
+    private function mockPage(array $data, ?array $rowData = null): PageModel
     {
         $mock = $this->getMockBuilder(PageModel::class)->disableOriginalConstructor()->getMock();
         $mock->method('__get')->willReturnCallback(

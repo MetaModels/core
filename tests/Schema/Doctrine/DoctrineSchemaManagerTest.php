@@ -233,7 +233,7 @@ class DoctrineSchemaManagerTest extends TestCase
      * @return DoctrineSchemaManager
      */
     private function createSchemaManager(
-        DoctrineSchemaManipulator $manipulator = null
+        ?DoctrineSchemaManipulator $manipulator = null
     ): DoctrineSchemaManager {
         if (null === $manipulator) {
             $manipulator = $this
@@ -252,7 +252,7 @@ class DoctrineSchemaManagerTest extends TestCase
      *
      * @return SchemaInformation
      */
-    private function mockSchemaInformation(DoctrineSchemaInformation $information = null): SchemaInformation
+    private function mockSchemaInformation(?DoctrineSchemaInformation $information = null): SchemaInformation
     {
         /** @var MockObject|SchemaInformation $schemaInformation */
         $schemaInformation = $this->getMockBuilder(SchemaInformation::class)->getMock();

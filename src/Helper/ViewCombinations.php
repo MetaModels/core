@@ -106,7 +106,7 @@ abstract class ViewCombinations
      * @param User                        $user       The current user.
      * @param Connection|null             $connection Database connection.
      */
-    public function __construct(IMetaModelsServiceContainer $container, User $user, Connection $connection = null)
+    public function __construct(IMetaModelsServiceContainer $container, User $user, ?Connection $connection = null)
     {
         $this->container = $container;
         $this->user      = $user;

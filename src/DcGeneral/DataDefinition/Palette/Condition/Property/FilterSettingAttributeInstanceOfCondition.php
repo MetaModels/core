@@ -43,10 +43,10 @@ final readonly class FilterSettingAttributeInstanceOfCondition implements Proper
      */
     #[\Override]
     public function match(
-        ModelInterface $model = null,
-        PropertyValueBag $input = null,
-        PropertyInterface $property = null,
-        LegendInterface $legend = null
+        ?ModelInterface $model = null,
+        ?PropertyValueBag $input = null,
+        ?PropertyInterface $property = null,
+        ?LegendInterface $legend = null
     ) {
         if (!$model) {
             return false;

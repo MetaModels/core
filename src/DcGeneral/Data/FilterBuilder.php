@@ -81,8 +81,11 @@ class FilterBuilder
      * @param ConfigInterface $configuration The data configuration.
      * @param Connection|null $connection    The database connection.
      */
-    public function __construct(IMetaModel $metaModel, ConfigInterface $configuration, Connection $connection = null)
-    {
+    public function __construct(
+        IMetaModel $metaModel,
+        ConfigInterface $configuration,
+        ?Connection $connection = null
+    ) {
         $this->metaModel     = $metaModel;
         $this->configuration = $configuration;
 

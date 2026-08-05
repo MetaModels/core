@@ -67,7 +67,7 @@ class RenderSettingAttributeIs extends AbstractWeightAwarePaletteCondition
      *
      * @param Connection|null $connection    Database connection.
      */
-    public function __construct($attributeType, $weight = 1, Connection $connection = null)
+    public function __construct($attributeType, $weight = 1, ?Connection $connection = null)
     {
         $this->attributeType = $attributeType;
         $this->setWeight($weight);
@@ -145,7 +145,7 @@ class RenderSettingAttributeIs extends AbstractWeightAwarePaletteCondition
      * {@inheritdoc}
      */
     #[\Override]
-    public function getMatchCount(ModelInterface $model = null, PropertyValueBag $input = null)
+    public function getMatchCount(?ModelInterface $model = null, ?PropertyValueBag $input = null)
     {
         $value = null;
         if ($input && $input->hasPropertyValue('attr_id')) {

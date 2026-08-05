@@ -43,7 +43,7 @@ class FilterBuilderTest extends TestCase
      *
      * @return IMetaModel
      */
-    private function mockMetaModel(Connection $connection = null)
+    private function mockMetaModel(?Connection $connection = null)
     {
         if (null === $connection) {
             $connection = $this->getMockBuilder(Connection::class)->disableOriginalConstructor()->getMock();

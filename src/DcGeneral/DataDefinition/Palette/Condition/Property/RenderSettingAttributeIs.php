@@ -42,7 +42,7 @@ class RenderSettingAttributeIs extends AttributeByIdIsOfType
      * @param string          $attributeType The attribute type name.
      * @param Connection|null $connection    Database connection.
      */
-    public function __construct($attributeType, Connection $connection = null)
+    public function __construct($attributeType, ?Connection $connection = null)
     {
         // @codingStandardsIgnoreStart
         @trigger_error(

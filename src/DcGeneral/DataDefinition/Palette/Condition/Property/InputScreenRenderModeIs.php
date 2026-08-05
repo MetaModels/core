@@ -69,7 +69,7 @@ class InputScreenRenderModeIs implements PropertyConditionInterface
      * @param string          $desiredState The desired state.
      * @param Connection|null $connection   Database connection.
      */
-    public function __construct($desiredState, Connection $connection = null)
+    public function __construct($desiredState, ?Connection $connection = null)
     {
         $this->setRenderMode($desiredState);
 
@@ -146,10 +146,10 @@ class InputScreenRenderModeIs implements PropertyConditionInterface
      */
     #[\Override]
     public function match(
-        ModelInterface $model = null,
-        PropertyValueBag $input = null,
-        PropertyInterface $property = null,
-        LegendInterface $legend = null
+        ?ModelInterface $model = null,
+        ?PropertyValueBag $input = null,
+        ?PropertyInterface $property = null,
+        ?LegendInterface $legend = null
     ) {
         if ($input && $input->hasPropertyValue('pid')) {
             $value = $input->getPropertyValue('pid');
