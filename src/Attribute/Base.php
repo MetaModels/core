@@ -627,6 +627,30 @@ abstract class Base implements IAttribute
     }
 
     /**
+     * Build the render setting to retry with when rendering with the passed setting has failed.
+     *
+     * The parent is only carried over when the passed setting has one - render settings created on the fly (see
+     * getDefaultRenderSettings()) do not have a parent and must not let the fallback fail with
+     * "Parent has not been set", which would mask the problem that made the rendering fail in the first place.
+     *
+     * @param ISimpleRenderSetting $objSettings The render setting that failed.
+     *
+     * @return ISimpleRenderSetting
+     */
+    protected function getFallbackRenderSetting($objSettings)
+    {
+        $objSettingsFallback = $this->getDefaultRenderSettings();
+
+        try {
+            $parent = $objSettings->getParent();
+        } catch (\RuntimeException) {
+            return $objSettingsFallback;
+        }
+
+        return $objSettingsFallback->setParent($parent);
+    }
+
+    /**
      * {@inheritdoc}
      */
     #[\Override]
@@ -646,17 +670,21 @@ abstract class Base implements IAttribute
 
             // Text rendering is mandatory, try with the current setting,
             // upon exception, try again with the default settings, as the template name might have changed.
-            // if this fails again, we are definitely out of luck and bail the exception.
+            // if this fails again, we are definitely out of luck and bail the original exception.
             try {
                 $arrResult['text'] = $objTemplate->parse('text', true);
-            } catch (\Exception $e) {
-                // FIXME: this throws when no parent has been set - need to catch!
-                $objSettingsFallback = $this->getDefaultRenderSettings()->setParent($objSettings->getParent());
+            } catch (\Exception $exception) {
+                $objSettingsFallback = $this->getFallbackRenderSetting($objSettings);
 
                 $objTemplate = new Template($objSettingsFallback->get('template') ?? '');
                 $this->prepareTemplate($objTemplate, $arrRowData, $objSettingsFallback);
 
-                $arrResult['text'] = $objTemplate->parse('text', true);
+                try {
+                    $arrResult['text'] = $objTemplate->parse('text', true);
+                } catch (\Exception $fallbackException) {
+                    // Do not mask the real problem with the follow-up error of the fallback rendering.
+                    throw $exception;
+                }
             }
         } else {
             // Text rendering is mandatory, therefore render using default render settings.

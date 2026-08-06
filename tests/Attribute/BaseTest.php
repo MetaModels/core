@@ -22,6 +22,9 @@ namespace MetaModels\Test\Attribute;
 
 use MetaModels\Attribute\Base;
 use MetaModels\IMetaModel;
+use MetaModels\Render\Setting\ICollection;
+use MetaModels\Render\Setting\ISimple;
+use MetaModels\Render\Setting\Simple as RenderSetting;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -190,5 +193,57 @@ class BaseTest extends TestCase
 
         self::assertEquals('some_widget_class', $fieldDefinition['eval']['tl_class']);
         self::assertEquals(true, $fieldDefinition['eval']['readonly']);
+    }
+
+    /**
+     * The fallback render setting must not fail for render settings without parent.
+     *
+     * Settings created on the fly (getDefaultRenderSettings()) have no parent - obtaining it would throw and thereby
+     * mask the problem that made the rendering fail in the first place.
+     *
+     * @return void
+     */
+    public function testGetFallbackRenderSettingWithoutParent()
+    {
+        $attribute = $this->getAttribute();
+
+        $fallback = $this->getFallbackRenderSetting($attribute, new RenderSetting([]));
+
+        self::assertInstanceOf(RenderSetting::class, $fallback);
+        self::assertSame('mm_attr_base', $fallback->get('template'));
+    }
+
+    /**
+     * The parent of the failing render setting is carried over to the fallback when there is one.
+     *
+     * @return void
+     */
+    public function testGetFallbackRenderSettingKeepsParent()
+    {
+        $attribute = $this->getAttribute();
+        $parent    = $this->getMockForAbstractClass(ICollection::class);
+
+        $setting = new RenderSetting([]);
+        $setting->setParent($parent);
+
+        $fallback = $this->getFallbackRenderSetting($attribute, $setting);
+
+        self::assertSame($parent, $fallback->getParent());
+    }
+
+    /**
+     * Call the protected getFallbackRenderSetting method on the passed attribute.
+     *
+     * @param Base    $attribute The attribute to call the method on.
+     * @param ISimple $setting   The render setting that failed.
+     *
+     * @return ISimple
+     */
+    private function getFallbackRenderSetting($attribute, $setting)
+    {
+        $method = new \ReflectionMethod($attribute, 'getFallbackRenderSetting');
+        $method->setAccessible(true);
+
+        return $method->invoke($attribute, $setting);
     }
 }
