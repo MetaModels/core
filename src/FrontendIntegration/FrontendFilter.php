@@ -32,7 +32,6 @@ use Contao\StringUtil;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\RedirectEvent;
 use Contao\CoreBundle\Csrf\ContaoCsrfTokenManager;
-use Contao\CoreBundle\Exception\PageNotFoundException;
 use Contao\CoreBundle\Exception\RedirectResponseException;
 use Contao\FrontendTemplate;
 use Contao\Input;
@@ -435,10 +434,10 @@ class FrontendFilter
         );
 
         // DAMN Contao - we have to "mark" the keys in the Input class as used as we get an 404 otherwise.
+        // This is also done for parameters passed via another URL type than the configured one. Their value is
+        // not used for filtering (see buildParameters()), but they must not end up in a 404 either.
         foreach ($wantedNames as $name) {
-            if ($all->hasSlug($name)) {
-                Input::get($name);
-            }
+            Input::get($name);
         }
 
         $values         = \array_merge($all->getSlugParameters(), $all->getGetParameters());
@@ -449,13 +448,6 @@ class FrontendFilter
             $jumpToInformation,
             $filterOptions
         );
-
-        // 404 if a get-only filter parameter is accessed via slug.
-        foreach ($arrWidgets as $widgetName => $widget) {
-            if ('get' === ($widget['param_type'] ?? 'slug') && $all->hasSlug($widgetName)) {
-                throw new PageNotFoundException();
-            }
-        }
 
         // If we have POST data, we need to redirect now.
         if (Input::post('FORM_SUBMIT') === $this->formId) {

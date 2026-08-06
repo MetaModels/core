@@ -33,7 +33,7 @@ use Contao\Template;
 use MetaModels\Filter\FilterUrl;
 use MetaModels\Filter\FilterUrlBuilder;
 use MetaModels\Filter\Setting\IFilterSettingFactory;
-use MetaModels\FrontendIntegration\FrontendFilterOptions;
+use MetaModels\Filter\Setting\ParameterTypes;
 use MetaModels\Helper\SortingLinkGenerator;
 use MetaModels\IFactory;
 use MetaModels\IItem;
@@ -343,20 +343,21 @@ trait ListControllerTrait
     private function getFilterParameters(FilterUrl $filterUrl, ItemList $itemRenderer): array
     {
         $filterSetting = $itemRenderer->getFilterSettings();
-        /** @var array<string, string> $wantedByType */
-        $wantedByType = [];
-        // FIXME: improve this call - it does too much.
-        foreach (
-            $filterSetting->getParameterFilterWidgets([], [], new FrontendFilterOptions()) as $widgetName => $widget
-        ) {
-            $wantedByType[$widgetName] = (string) ($widget['param_type'] ?? 'slugNget');
-        }
+        // Obtain the types from the filter settings themselves - filter rules without frontend filter widget
+        // (i.e. the usual detail page rules) do not render a widget but still define a parameter type.
+        $wantedByType = ParameterTypes::fromSetting($filterSetting);
 
         $result = [];
         foreach ($filterSetting->getParameters() as $name) {
-            if (null !== $value = $this->tryReadFromSlugOrGet($filterUrl, $name, $wantedByType[$name] ?? 'slugNget')) {
-                $result[$name] = $value;
+            $paramType = $wantedByType[$name] ?? ParameterTypes::LEGACY_TYPE;
+            $value     = $this->tryReadFromSlugOrGet($filterUrl, $name, $paramType);
+            if (null === $value) {
+                // Either not passed at all or passed via another URL type than the configured one - in both cases
+                // the parameter simply stays unused. It has been marked as used in tryReadFromSlugOrGet() so a
+                // slug of the wrong type does not end up in a 404 for unused route arguments.
+                continue;
             }
+            $result[$name] = $value;
         }
 
         return $result;
