@@ -117,15 +117,15 @@ class SimpleParameterTypesTest extends TestCase
             ->getMockBuilder(Simple::class)
             ->setConstructorArgs(
                 [
-                    $this->getMockForAbstractClass(ICollection::class),
+                    $this->createMock(ICollection::class),
                     $properties,
-                    $this->getMockForAbstractClass(EventDispatcherInterface::class),
+                    $this->createMock(EventDispatcherInterface::class),
                     $filterUrlBuilder,
-                    $this->getMockForAbstractClass(TranslatorInterface::class)
+                    $this->createMock(TranslatorInterface::class)
                 ]
             )
-            ->onlyMethods(['getParameters'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['getParameters', 'prepareRules'])
+            ->getMock();
         $setting->method('getParameters')->willReturn($parameters);
 
         return $setting;

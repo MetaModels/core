@@ -83,13 +83,14 @@ class CollectionTest extends TestCase
      */
     public function testGetParameterTypesFallsBackToSlugNgetForLegacySettings(): void
     {
-        $legacySetting = $this->getMockForAbstractClass(ISimple::class);
+        $legacySetting = $this->createMock(ISimple::class);
         $legacySetting->method('getParameters')->willReturn(['legacy_param']);
 
         $collection = new Collection([]);
         $collection->addSetting($legacySetting);
 
-        $previous = set_error_handler(
+        $deprecation = null;
+        set_error_handler(
             static function (int $severity, string $message) use (&$deprecation): bool {
                 unset($severity);
                 $deprecation = $message;
@@ -102,7 +103,7 @@ class CollectionTest extends TestCase
         try {
             $types = $collection->getParameterTypes();
         } finally {
-            set_error_handler($previous);
+            restore_error_handler();
         }
 
         self::assertSame(['legacy_param' => 'slugNget'], $types);
@@ -121,8 +122,8 @@ class CollectionTest extends TestCase
         $setting = $this
             ->getMockBuilder(Simple::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getParameters', 'getParameterTypes'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['getParameters', 'getParameterTypes', 'prepareRules'])
+            ->getMock();
         $setting->method('getParameters')->willReturn(array_keys($types));
         $setting->method('getParameterTypes')->willReturn($types);
 
