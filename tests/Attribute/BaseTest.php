@@ -22,6 +22,8 @@ namespace MetaModels\Test\Attribute;
 
 use MetaModels\Attribute\Base;
 use MetaModels\IMetaModel;
+use MetaModels\Render\Setting\ICollection;
+use MetaModels\Render\Setting\Simple as RenderSetting;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 
@@ -193,5 +195,53 @@ class BaseTest extends TestCase
 
         self::assertEquals('some_widget_class', $fieldDefinition['eval']['tl_class']);
         self::assertEquals(true, $fieldDefinition['eval']['readonly']);
+    }
+
+    /**
+     * Test that the fallback render setting works when the failed setting has no parent.
+     *
+     * @return void
+     */
+    public function testGetFallbackRenderSettingWithoutParent()
+    {
+        $attribute = $this->getAttribute();
+
+        $fallback = $this->getFallbackRenderSetting($attribute, new RenderSetting([]));
+
+        self::assertInstanceOf(RenderSetting::class, $fallback);
+        self::assertSame('mm_attr_base', $fallback->get('template'));
+    }
+
+    /**
+     * Test that the fallback render setting inherits the parent when there is one.
+     *
+     * @return void
+     */
+    public function testGetFallbackRenderSettingKeepsParent()
+    {
+        $attribute = $this->getAttribute();
+        $parent    = $this->createMock(ICollection::class);
+
+        $setting = new RenderSetting([]);
+        $setting->setParent($parent);
+
+        $fallback = $this->getFallbackRenderSetting($attribute, $setting);
+
+        self::assertSame($parent, $fallback->getParent());
+    }
+
+    /**
+     * Invoke the protected fallback factory on the given attribute.
+     *
+     * @param Base          $attribute The attribute under test.
+     * @param RenderSetting $setting   The render setting that failed.
+     *
+     * @return \MetaModels\Render\Setting\ISimple
+     */
+    private function getFallbackRenderSetting($attribute, $setting)
+    {
+        $method = new \ReflectionMethod($attribute, 'getFallbackRenderSetting');
+
+        return $method->invoke($attribute, $setting);
     }
 }

@@ -654,22 +654,18 @@ abstract class Base implements IAttribute
             try {
                 $arrResult['text'] = $objTemplate->parse('text', true);
             } catch (\Exception $e) {
-                $objSettingsFallback = $this->getDefaultRenderSettings();
-
-                // The render setting is not required to have a parent - the default render settings never have one.
-                // Inherit it only when it is actually there, otherwise the recovery attempt would mask the very
-                // exception it is supposed to recover from.
-                try {
-                    $objSettingsFallback->setParent($objSettings->getParent());
-                } catch (\RuntimeException) {
-                    // No parent to inherit from, the fallback settings work without one.
-                }
+                $objSettingsFallback = $this->getFallbackRenderSetting($objSettings);
 
                 $objTemplate =
                     $templateFactory->createTemplate((string) $objSettingsFallback->get('template'), 'attribute');
                 $this->prepareTemplate($objTemplate, $arrRowData, $objSettingsFallback);
 
-                $arrResult['text'] = $objTemplate->parse('text', true);
+                try {
+                    $arrResult['text'] = $objTemplate->parse('text', true);
+                } catch (\Exception $fallbackException) {
+                    // Do not mask the real problem with the follow-up error of the fallback rendering.
+                    throw $e;
+                }
             }
         } else {
             // Text rendering is mandatory, therefore render using default render settings.
@@ -681,6 +677,30 @@ abstract class Base implements IAttribute
         $arrResult = $this->hookAdditionalFormatters($arrResult, $arrRowData, $strOutputFormat, $objSettings);
 
         return $arrResult;
+    }
+
+    /**
+     * Build the render setting to retry with when rendering with the passed setting has failed.
+     *
+     * The parent is only carried over when the passed setting has one - render settings created on the fly (see
+     * getDefaultRenderSettings()) do not have a parent and must not let the fallback fail with
+     * "Parent has not been set", which would mask the problem that made the rendering fail in the first place.
+     *
+     * @param ISimpleRenderSetting $objSettings The render setting that failed.
+     *
+     * @return ISimpleRenderSetting
+     */
+    protected function getFallbackRenderSetting($objSettings)
+    {
+        $objSettingsFallback = $this->getDefaultRenderSettings();
+
+        try {
+            $parent = $objSettings->getParent();
+        } catch (\RuntimeException) {
+            return $objSettingsFallback;
+        }
+
+        return $objSettingsFallback->setParent($parent);
     }
 
     /**
