@@ -31,6 +31,7 @@ use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GetPageDetailsEven
 use MetaModels\Filter\FilterUrl;
 use MetaModels\Filter\FilterUrlBuilder;
 use MetaModels\Filter\Setting\IFilterSettingFactory;
+use MetaModels\Filter\Setting\ParameterTypes;
 use MetaModels\IItem;
 use MetaModels\IMetaModel;
 use MetaModels\ITranslatedMetaModel;
@@ -341,7 +342,7 @@ class Collection implements ICollection
             /** @var \MetaModels\Filter\Setting\ICollection $filterSetting */
             $filterSetting  = $information['filterSetting'];
             $parameterList  = $filterSetting->generateFilterUrlFrom($item, $this);
-            $parameterTypes = $filterSetting->getParameterTypes();
+            $parameterTypes = ParameterTypes::fromSetting($filterSetting);
 
             foreach ($parameterList as $strKey => $strValue) {
                 // Sadly the filter values are currently encoded due to legacy reasons.

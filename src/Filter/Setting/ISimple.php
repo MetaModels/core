@@ -31,15 +31,16 @@ use MetaModels\Render\Setting\ICollection as IRenderSettings;
 /**
  * This interface handles the abstraction for a single filter setting.
  *
- * Implementations should also provide the following method:
- *   public function getParameterTypes(): array<string, string>
- * It returns the URL parameter type for all registered parameters (parametername => type). The type determines from
- * where the value of a parameter may get read and how the URL for it has to be built. Valid types are "slug"
- * (key/value in the URL path), "get" (key=value in the query string) and the deprecated "slugNget" (both of them).
- * See Simple::getParameterTypes() for the default implementation.
+ * "getParameterTypes()" returns the URL parameter type for all registered parameters (parametername => type). The
+ * type determines from where the value of a parameter may get read and how the URL for it has to be built. Valid
+ * types are "slug" (key/value in the URL path), "get" (key=value in the query string) and the deprecated "slugNget"
+ * (both of them). See Simple::getParameterTypes() for the default implementation.
  *
- * The method will become part of this interface in MetaModels 3.0 - until then, implementations not providing it
- * are treated as "slugNget" (the lenient legacy behaviour).
+ * Not implementing "getParameterTypes()" is deprecated, the method will get added to this interface in
+ * MetaModels 3.0. Until then, settings not providing it are treated as "slugNget" (the lenient legacy behaviour),
+ * see ParameterTypes::fromSetting().
+ *
+ * @method array<string, string> getParameterTypes() Retrieve the URL parameter type for all parameters.
  */
 interface ISimple
 {
