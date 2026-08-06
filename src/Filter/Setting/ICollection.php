@@ -31,6 +31,15 @@ use MetaModels\Render\Setting\ICollection as IRenderSettings;
 
 /**
  * This interface handles all filter setting abstraction.
+ *
+ * "getParameterTypes()" returns the URL parameter type for all registered parameters (parametername => type) of all
+ * contained filter settings, see ISimple for the possible types.
+ *
+ * Not implementing "getParameterTypes()" is deprecated, the method will get added to this interface in
+ * MetaModels 3.0. Until then, collections not providing it are treated as "slugNget" (the lenient legacy
+ * behaviour), see ParameterTypes::fromSetting().
+ *
+ * @method array<string, string> getParameterTypes() Retrieve the URL parameter type for all parameters.
  */
 interface ICollection
 {

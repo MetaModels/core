@@ -31,6 +31,7 @@ use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GetPageDetailsEven
 use MetaModels\Filter\FilterUrl;
 use MetaModels\Filter\FilterUrlBuilder;
 use MetaModels\Filter\Setting\IFilterSettingFactory;
+use MetaModels\Filter\Setting\ParameterTypes;
 use MetaModels\IItem;
 use MetaModels\IMetaModel;
 use MetaModels\ITranslatedMetaModel;
@@ -339,18 +340,25 @@ class Collection implements ICollection
 
         if (!empty($information['filterSetting'])) {
             /** @var \MetaModels\Filter\Setting\ICollection $filterSetting */
-            $filterSetting = $information['filterSetting'];
-            $parameterList = $filterSetting->generateFilterUrlFrom($item, $this);
+            $filterSetting  = $information['filterSetting'];
+            $parameterList  = $filterSetting->generateFilterUrlFrom($item, $this);
+            $parameterTypes = ParameterTypes::fromSetting($filterSetting);
 
             foreach ($parameterList as $strKey => $strValue) {
                 // Sadly the filter values are currently encoded due to legacy reasons.
                 // For MetaModels 3, they should be passed around decoded everywhere.
-                $filterUrl->setSlug($strKey, \rawurldecode($strValue))->setGet($strKey, '');
+                $strValue = \rawurldecode($strValue);
+                // Build the URL as configured in the filter setting - "slugNget" and anything else use the slug.
+                if ('get' === ($parameterTypes[$strKey] ?? 'slug')) {
+                    $filterUrl->setGet($strKey, $strValue)->setSlug($strKey, '');
+                    continue;
+                }
+                $filterUrl->setSlug($strKey, $strValue)->setGet($strKey, '');
             }
         }
 
         $result['params'] = $parameterList;
-        $result['deep']   = !empty($filterUrl->getSlugParameters());
+        $result['deep']   = !empty($filterUrl->getSlugParameters()) || !empty($filterUrl->getGetParameters());
 
         $result['url'] = $this->filterUrlBuilder->generate(
             $filterUrl,

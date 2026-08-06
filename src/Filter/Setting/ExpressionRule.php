@@ -125,6 +125,21 @@ final class ExpressionRule implements IWithChildren
         return array_merge(...$parameters);
     }
 
+    /**
+     * Retrieve the URL parameter type for all registered parameters from the setting.
+     *
+     * @return array<string, string> The parameter types as array. parametername => type
+     */
+    public function getParameterTypes(): array
+    {
+        $types = [];
+        foreach ($this->children as $child) {
+            $types[] = ParameterTypes::fromSetting($child);
+        }
+
+        return array_merge([], ...$types);
+    }
+
     #[Override]
     public function getParameterDCA(): array
     {

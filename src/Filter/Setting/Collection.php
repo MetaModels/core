@@ -168,6 +168,21 @@ class Collection implements ICollection
     }
 
     /**
+     * Retrieve the URL parameter type for all registered parameters of all contained settings.
+     *
+     * @return array<string, string> The parameter types as array. parametername => type
+     */
+    public function getParameterTypes()
+    {
+        $types = [];
+        foreach ($this->arrSettings as $objSetting) {
+            $types[] = ParameterTypes::fromSetting($objSetting);
+        }
+
+        return [] === $types ? [] : \array_merge(...$types);
+    }
+
+    /**
      * {@inheritdoc}
      */
     #[\Override]
