@@ -25,10 +25,11 @@ use function array_fill_keys;
 use function method_exists;
 
 /**
- * Helper to obtain the URL parameter types from a filter setting.
+ * Helper to obtain the URL parameter types from a filter setting or a filter setting collection.
  *
- * This provides the backwards compatibility layer for filter settings not (yet) implementing
- * "getParameterTypes()" - the method will become part of ISimple in MetaModels 3.0.
+ * This provides the backwards compatibility layer for implementations not (yet) providing
+ * "getParameterTypes()" - the method will get added to ISimple and ICollection in MetaModels 3.0. Adding it to the
+ * interfaces before would break every implementation out there, therefore it is only announced via "@method" there.
  *
  * @internal
  */
@@ -40,13 +41,13 @@ final class ParameterTypes
     public const LEGACY_TYPE = 'slugNget';
 
     /**
-     * Obtain the URL parameter types of the passed filter setting.
+     * Obtain the URL parameter types of the passed filter setting or filter setting collection.
      *
-     * @param ISimple $setting The filter setting to obtain the types from.
+     * @param ICollection|ISimple $setting The filter setting to obtain the types from.
      *
      * @return array<string, string> The parameter types as array. parametername => type
      */
-    public static function fromSetting(ISimple $setting): array
+    public static function fromSetting(ICollection|ISimple $setting): array
     {
         if (!method_exists($setting, 'getParameterTypes')) {
             // Settings without any parameter can not be affected - stay silent for them.

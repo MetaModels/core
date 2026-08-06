@@ -24,7 +24,6 @@ namespace MetaModels\CoreBundle\Controller;
 
 use Contao\BackendTemplate;
 use Contao\CoreBundle\Csrf\ContaoCsrfTokenManager;
-use Contao\CoreBundle\Exception\PageNotFoundException;
 use Contao\CoreBundle\Routing\ScopeMatcher;
 use Contao\Input;
 use Contao\Model;
@@ -34,7 +33,7 @@ use Contao\Template;
 use MetaModels\Filter\FilterUrl;
 use MetaModels\Filter\FilterUrlBuilder;
 use MetaModels\Filter\Setting\IFilterSettingFactory;
-use MetaModels\FrontendIntegration\FrontendFilterOptions;
+use MetaModels\Filter\Setting\ParameterTypes;
 use MetaModels\Helper\SortingLinkGenerator;
 use MetaModels\IFactory;
 use MetaModels\IItem;
@@ -341,63 +340,28 @@ trait ListControllerTrait
      * @param ItemList  $itemRenderer The list renderer instance to be used.
      *
      * @return string[]
-     *
-     * @throws PageNotFoundException When a parameter is passed via another URL type than the configured one.
      */
     private function getFilterParameters(FilterUrl $filterUrl, ItemList $itemRenderer): array
     {
         $filterSetting = $itemRenderer->getFilterSettings();
         // Obtain the types from the filter settings themselves - filter rules without frontend filter widget
         // (i.e. the usual detail page rules) do not render a widget but still define a parameter type.
-        /** @var array<string, string> $wantedByType */
-        $wantedByType = $filterSetting->getParameterTypes();
+        $wantedByType = ParameterTypes::fromSetting($filterSetting);
 
         $result = [];
-        /** @var list<string>|null $widgetParameters */
-        $widgetParameters = null;
         foreach ($filterSetting->getParameters() as $name) {
-            $paramType = $wantedByType[$name] ?? 'slugNget';
-            if ($this->isParameterTypeMismatch($filterUrl, $name, $paramType)) {
-                // Only filter rules without frontend filter widget are guarded - for widgets the frontend filter
-                // handles the URL and a value of the wrong type simply stays unused.
-                // FIXME: improve this call - it does too much (only performed when a mismatch was detected).
-                $widgetParameters ??= \array_keys(
-                    $filterSetting->getParameterFilterWidgets([], [], new FrontendFilterOptions())
-                );
-                if (!\in_array($name, $widgetParameters, true)) {
-                    throw new PageNotFoundException(
-                        \sprintf('Filter parameter "%s" must get passed as "%s".', $name, $paramType)
-                    );
-                }
+            $paramType = $wantedByType[$name] ?? ParameterTypes::LEGACY_TYPE;
+            $value     = $this->tryReadFromSlugOrGet($filterUrl, $name, $paramType);
+            if (null === $value) {
+                // Either not passed at all or passed via another URL type than the configured one - in both cases
+                // the parameter simply stays unused. It has been marked as used in tryReadFromSlugOrGet() so a
+                // slug of the wrong type does not end up in a 404 for unused route arguments.
+                continue;
             }
-            if (null !== $value = $this->tryReadFromSlugOrGet($filterUrl, $name, $paramType)) {
-                $result[$name] = $value;
-            }
+            $result[$name] = $value;
         }
 
         return $result;
-    }
-
-    /**
-     * Determine if a filter parameter is passed via another URL type than the configured one.
-     *
-     * Values passed via the "wrong" type are not read at all - without the resulting 404 the page would silently
-     * render the unfiltered list under an URL that looks like it is filtered (see #1563).
-     *
-     * @param FilterUrl $filterUrl The filter URL to check.
-     * @param string    $name      The parameter name to check.
-     * @param string    $paramType The configured URL type of the parameter.
-     *
-     * @return bool
-     */
-    private function isParameterTypeMismatch(FilterUrl $filterUrl, string $name, string $paramType): bool
-    {
-        // The deprecated "slugNget" accepts both variants.
-        return match ($paramType) {
-            'get'  => null !== $filterUrl->getSlug($name),
-            'slug' => null !== $filterUrl->getGet($name),
-            default => false,
-        };
     }
 
     /**
