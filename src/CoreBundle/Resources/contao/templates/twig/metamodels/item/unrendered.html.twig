@@ -11,12 +11,18 @@
                     {% for field, attr in items.getItem().getMetaModel().getAttributes() %}
                         {% set value = html5vals[field] is defined ? html5vals[field] : (textvals[field] is defined ? textvals[field] : null) %}
                         {% if value is not null %}
+                            {# Since 2.5 the attribute templates render this block themselves. The option
+                               "legacyAttributeWrapper" keeps it here for render settings that predate the change. #}
+                            {% if view.get('legacyAttributeWrapper') %}
                             <div class="field {{ field }}">
                                 {% if not view.get('hideLabels') %}
                                     <div class="label">{{ 'field_label'|trans({'%field_label%': attr.getName()}, 'metamodels_list') }}</div>
                                 {% endif %}
                                 <div class="value"> {{ value|raw }}</div>
                             </div>
+                            {% else %}
+                                {{ value|raw }}
+                            {% endif %}
                         {% endif %}
                     {% endfor %}
                     {% block actions %}

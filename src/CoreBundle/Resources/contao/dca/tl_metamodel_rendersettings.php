@@ -180,6 +180,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = [
             'expert'     => [
                 'hideEmptyValues',
                 'hideLabels',
+                'legacyAttributeWrapper',
             ],
             'jumpto'     => [
                 'jumpTo'
@@ -229,6 +230,16 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = [
         'hideLabels'      => [
             'label'       => 'hideLabels.label',
             'description' => 'hideLabels.description',
+            'exclude'     => true,
+            'inputType'   => 'checkbox',
+            'eval'        => [
+                'tl_class' => 'w50 cbx'
+            ],
+            'sql'         => "char(1) NOT NULL default ''"
+        ],
+        'legacyAttributeWrapper' => [
+            'label'       => 'legacyAttributeWrapper.label',
+            'description' => 'legacyAttributeWrapper.description',
             'exclude'     => true,
             'inputType'   => 'checkbox',
             'eval'        => [

@@ -88,9 +88,18 @@ class ItemRendererListener
         $renderSetting = $this->renderSettingFactory
             ->createCollection($metaModel, $definition->getMetaModelDefinition()->getActiveRenderSetting());
 
+        // In column mode the item template is skipped entirely and the parsed values become the table cells - a
+        // wrapper around them would repeat the label the column header already carries. The attribute templates
+        // only render the block when "legacyAttributeWrapper" is off, so switching it on for this run keeps the
+        // cells bare. This has to happen before parseValue(), which is where the attribute templates run.
+        $showColumns = $listing->getShowColumns();
+        if ($showColumns) {
+            $renderSetting->set('legacyAttributeWrapper', '1');
+        }
+
         $data = [$nativeItem->parseValue('html5', $renderSetting)];
 
-        if ($listing->getShowColumns()) {
+        if ($showColumns) {
             $event->setArgs($data[0]['html5']);
             return;
         }

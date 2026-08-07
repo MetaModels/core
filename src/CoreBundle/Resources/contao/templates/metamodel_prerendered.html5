@@ -12,12 +12,18 @@ $translator = \Contao\System::getContainer()->get('translator');
                 <?php foreach ($item['attributes'] as $field => $name): ?>
                     <?php if ((null !== ($value = $item[$this->getFormat()][$field] ?? null))
                                || (null !== ($value = $item['text'][$field] ?? null))): ?>
+                        <?php // Since 2.5 the attribute templates render this block themselves. The option
+                              // "legacyAttributeWrapper" keeps it here for render settings that predate the change.
+                              if ($this->view->get('legacyAttributeWrapper')): ?>
                         <div class="field <?= $field ?>">
                             <?php if (!$this->view->get('hideLabels')): ?>
                                 <div class="label"><?= $translator->trans('field_label', ['%field_label%' => $name], 'metamodels_list') ?></div>
                             <?php endif; ?>
                             <div class="value"> <?= $value ?></div>
                         </div>
+                        <?php else: ?>
+                        <?= $value ?>
+                        <?php endif; ?>
                     <?php endif; ?>
                 <?php endforeach; ?>
                 <?php $this->block('actions'); ?>

@@ -30,6 +30,7 @@ use Contao\System;
 use MetaModels\Helper\LocaleUtil;
 use MetaModels\IMetaModel;
 use MetaModels\ITranslatedMetaModel;
+use MetaModels\Render\Setting\ICollection;
 use MetaModels\Render\Setting\ISimple as ISimpleRenderSetting;
 use MetaModels\Render\Setting\Simple;
 use MetaModels\Render\Template;
@@ -268,6 +269,11 @@ abstract class Base implements IAttribute
     /**
      * When rendered via a template, this populates the template with values.
      *
+     * The values "label", "colName", "hideLabels" and "legacyAttributeWrapper" are resolved here on purpose. They
+     * live on the render setting collection, and a template must not walk the object graph to reach them: Twig has
+     * no try/catch, while ISimple::getParent() throws when no parent has been set - which is the case for the
+     * settings created on the fly by getDefaultRenderSettings().
+     *
      * @param Template             $objTemplate The Template instance to populate.
      * @param array                $arrRowData  The row data for the current item.
      * @param ISimpleRenderSetting $objSettings The render settings to use for this attribute.
@@ -277,16 +283,54 @@ abstract class Base implements IAttribute
     protected function prepareTemplate(Template $objTemplate, $arrRowData, $objSettings)
     {
         $additionalClass = (string) $objSettings->get('additional_class');
+        $parent          = $this->getParentRenderSetting($objSettings);
 
         $objTemplate->setData(
             [
-                'attribute'        => $this,
-                'settings'         => $objSettings,
-                'row'              => $arrRowData,
-                'raw'              => ($arrRowData[$this->getColName()] ?? null),
-                'additional_class' => $additionalClass ? ' ' . $additionalClass : ''
+                'attribute'              => $this,
+                'settings'               => $objSettings,
+                'row'                    => $arrRowData,
+                'raw'                    => ($arrRowData[$this->getColName()] ?? null),
+                'additional_class'       => $additionalClass ? ' ' . $additionalClass : '',
+                'label'                  => $this->getName(),
+                'colName'                => $this->getColName(),
+                'hideLabels'             => (bool) $parent?->get('hideLabels'),
+                'legacyAttributeWrapper' => $this->rendersLegacyWrapper($parent),
             ]
         );
+    }
+
+    /**
+     * Retrieve the collection the passed setting belongs to, if there is one.
+     *
+     * @param ISimpleRenderSetting $objSettings The render setting of this attribute.
+     *
+     * @return ICollection|null
+     */
+    private function getParentRenderSetting($objSettings): ?ICollection
+    {
+        try {
+            return $objSettings->getParent();
+        } catch (\RuntimeException) {
+            // Settings created on the fly have no parent - see getDefaultRenderSettings().
+            return null;
+        }
+    }
+
+    /**
+     * Determine whether the item template still renders the enclosing block instead of the attribute template.
+     *
+     * Without a collection the answer is "yes": that path is the recovery after a failed rendering (see
+     * getFallbackRenderSetting()) and the text format, and neither should change the markup on top of the problem
+     * that got us there.
+     *
+     * @param ICollection|null $parent The collection the setting belongs to.
+     *
+     * @return bool
+     */
+    private function rendersLegacyWrapper(?ICollection $parent): bool
+    {
+        return null === $parent || (bool) $parent->get('legacyAttributeWrapper');
     }
 
     /**
