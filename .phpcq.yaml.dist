@@ -50,11 +50,19 @@ phpcq:
   # Schluessel, mit denen diese Phars tatsaechlich signiert sind. Rotiert ein Projekt seinen
   # Signierschluessel, scheitert "phpcq update" sichtbar; dann den neuen Schluessel hier
   # ergaenzen und NICHT per "phpcq update -k" beitreten lassen.
+  # Verifiziert gegen die im August 2026 gepinnten Werkzeugstaende - es sind genau die
+  # Schluessel, mit denen diese Phars tatsaechlich signiert sind. Rotiert ein Projekt seinen
+  # Signierschluessel, scheitert "phpcq update" sichtbar; dann den neuen Schluessel hier
+  # ergaenzen und NICHT per "phpcq update -k" beitreten lassen.
   trusted-keys:
     # phpunit, phpcpd, phploc - sb@sebastian-bergmann.de
     - 4AA394086372C20A
-    # phpcs / phpcbf
+    # phpcs / phpcbf - bis 4.0.1
     - 97B02DD8E5071466
+    # phpcs / phpcbf - ab 4.0.2, neuer Release-Schluessel von Juliette Reinders Folmer.
+    # Fingerabdruck gegen die README von PHPCSStandards/PHP_CodeSniffer geprueft:
+    # 5CB4 F778 BF9B C4FB 67AE 511D 96E9 1A99 2CF2 2FF4
+    - 96E91A992CF22FF4
     # psalm
     - 99BF4D9A33D65E1E
     # phpmd
