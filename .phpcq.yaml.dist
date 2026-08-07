@@ -50,10 +50,6 @@ phpcq:
   # Schluessel, mit denen diese Phars tatsaechlich signiert sind. Rotiert ein Projekt seinen
   # Signierschluessel, scheitert "phpcq update" sichtbar; dann den neuen Schluessel hier
   # ergaenzen und NICHT per "phpcq update -k" beitreten lassen.
-  # Verifiziert gegen die im August 2026 gepinnten Werkzeugstaende - es sind genau die
-  # Schluessel, mit denen diese Phars tatsaechlich signiert sind. Rotiert ein Projekt seinen
-  # Signierschluessel, scheitert "phpcq update" sichtbar; dann den neuen Schluessel hier
-  # ergaenzen und NICHT per "phpcq update -k" beitreten lassen.
   trusted-keys:
     # phpunit, phpcpd, phploc - sb@sebastian-bergmann.de
     - 4AA394086372C20A
