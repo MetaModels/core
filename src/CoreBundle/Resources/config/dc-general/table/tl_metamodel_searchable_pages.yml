@@ -17,6 +17,15 @@ services:
             - name: kernel.event_listener
               event: dc-general.view.contao2backend.build-widget
               method: handle
+    metamodels.listener.table.tl_metamodel_searchable_pages.filter_param_value:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\SearchablePages\FilterParamValueListener
+        arguments:
+            - "@cca.dc-general.scope-matcher"
+            - "@metamodels.filter_setting_factory"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.decode-property-value-for-widget
+              method: handle
     metamodels.listener.table.tl_metamodel_searchable_pages.palette_restrictions:
         class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\SearchablePages\PaletteRestrictionListener
         tags:
