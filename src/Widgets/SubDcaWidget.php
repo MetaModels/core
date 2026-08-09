@@ -293,11 +293,12 @@ class SubDcaWidget extends Widget
      */
     protected function handleLoadCallback($field, $value)
     {
-        // Load callback.
+        // Load callback. The field is passed along so a callback can reach its configuration - PHP allows the
+        // extra argument for callbacks declaring fewer parameters, so existing ones are unaffected.
         if (isset($field['load_callback']) && is_array($field['load_callback'])) {
             foreach ($field['load_callback'] as $callback) {
                 $this->import($callback[0]);
-                $value = $this->{$callback[0]}->{$callback[1]}($value, $this);
+                $value = $this->{$callback[0]}->{$callback[1]}($value, $this, $field);
             }
         }
 

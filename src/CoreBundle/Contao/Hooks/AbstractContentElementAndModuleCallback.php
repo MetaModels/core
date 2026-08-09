@@ -378,13 +378,28 @@ abstract class AbstractContentElementAndModuleCallback
     /**
      * Base64 encode.
      *
-     * @param string|null $value The value.
+     * The value is mapped onto the language currently shown first, if the filter setting supplied a map for it.
+     * Without that a value stored in another language matches no option and the select shows it as an unknown
+     * option - see SimpleLookup::buildAliasMap(). The map is absent when the option keys do not depend on the
+     * language, which is the common case.
+     *
+     * @param string|null   $value  The value.
+     * @param mixed         $widget The widget the value belongs to, unused here.
+     * @param array<mixed>  $field  The field configuration, carrying the map under "aliasMap".
      *
      * @return string|null
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function loadCallback(?string $value = null)
+    public function loadCallback(?string $value = null, $widget = null, array $field = [])
     {
-        return null === $value ? '--null--' : trim(base64_encode($value), '=');
+        if (null === $value) {
+            return '--null--';
+        }
+
+        $value = $field['aliasMap'][$value] ?? $value;
+
+        return trim(base64_encode($value), '=');
     }
 
     /**

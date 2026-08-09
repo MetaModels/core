@@ -246,12 +246,112 @@ class SimpleLookup extends Simple
                 ),
                 'inputType' => 'select',
                 'options'   => $arrOptions,
+                // Maps a value stored in any language onto the one of the language currently shown - see below.
+                'aliasMap'  => $this->buildAliasMap($objAttribute, $arrOptions),
                 'eval'      => [
                     'includeBlankOption' => true,
                     'style'              => 'min-width:450px;width:450px;margin-bottom:16px;margin-right:10px;'
                 ]
             ]
         ];
+    }
+
+    /**
+     * Build a map from the value of every language onto the value of the language currently shown.
+     *
+     * The stored value of a predefined parameter is whatever the option list held when it was picked. With a
+     * translated attribute behind the filter that value is language dependent: an editor working in German stores
+     * "abteilung-b", the same option reads "division-b" in English. The stored value then matches no option and the
+     * select falls back to showing the raw string as an unknown option - the editor cannot tell what is configured,
+     * and touching the field loses the setting.
+     *
+     * The map lets the caller translate the stored value before the widget looks for a matching option, so the
+     * equivalent option of the current language gets selected instead. Both values point at the same record, so
+     * filtering is unaffected either way.
+     *
+     * @param IAttribute            $attribute The attribute behind this filter setting.
+     * @param array<string, string> $options   The options as built for the language currently shown.
+     *
+     * @return array<string, string>
+     */
+    private function buildAliasMap(IAttribute $attribute, array $options): array
+    {
+        if (!$attribute instanceof IAliasConverter || [] === $options) {
+            return [];
+        }
+
+        $languages = $this->determineAllLanguages($this->getMetaModel());
+        if ([] === $languages) {
+            return [];
+        }
+
+        $current = $languages[0];
+        if (($metaModel = $this->getMetaModel()) instanceof ITranslatedMetaModel) {
+            $current = $metaModel->getLanguage();
+        }
+
+        $map = [];
+        foreach (\array_keys($options) as $alias) {
+            $map += $this->aliasesOfOption($attribute, (string) $alias, (string) $current, $languages);
+        }
+
+        return $map;
+    }
+
+    /**
+     * Collect the values of every other language pointing at the same record as the passed one.
+     *
+     * @param IAliasConverter $attribute The attribute behind this filter setting.
+     * @param string          $alias     The value as held by the option list of the language currently shown.
+     * @param string          $current   The language currently shown.
+     * @param list<string>    $languages Every language of the MetaModel.
+     *
+     * @return array<string, string>
+     */
+    private function aliasesOfOption(
+        IAliasConverter $attribute,
+        string $alias,
+        string $current,
+        array $languages
+    ): array {
+        if (null === ($id = $attribute->getIdForAlias($alias, $current))) {
+            return [];
+        }
+
+        $map = [];
+        foreach ($languages as $language) {
+            $foreign = $attribute->getAliasForId($id, $language);
+            if (null !== $foreign && '' !== $foreign && $foreign !== $alias) {
+                $map[$foreign] = $alias;
+            }
+        }
+
+        return $map;
+    }
+
+    /**
+     * Retrieve every language of the MetaModel, regardless of the "all_langs" setting.
+     *
+     * @param IMetaModel $metaModel The MetaModel.
+     *
+     * @return list<string>
+     */
+    private function determineAllLanguages(IMetaModel $metaModel): array
+    {
+        if ($metaModel instanceof ITranslatedMetaModel) {
+            return \array_values(\array_filter($metaModel->getLanguages()));
+        }
+
+        /**
+         * @psalm-suppress DeprecatedMethod
+         * @psalm-suppress TooManyArguments
+         */
+        if ($metaModel->isTranslated(false)) {
+            /** @psalm-suppress DeprecatedMethod */
+            return \array_values(\array_filter($metaModel->getAvailableLanguages() ?? []));
+        }
+
+        return [];
     }
 
     /**

@@ -37,11 +37,16 @@ interface IAliasConverter extends IAttribute
      *
      * @return string|null - When language support for metamodels is given:
      *                          - Return the id for the alias in the given language
-     *                          - Return null if the alias isn't found in the given language
-     *                          - Return null if the given language isn't supported
+     *                          - Fall back to another language when the given one is not supported
+     *                          - Return null if the alias isn't found in any of them
      *                     - When language support for metamodels isn't given:
      *                          - Return the id for the alias, language parameter will be ignored
      *                          - Return null if the alias isn't found, language parameter will be ignored
+     *
+     *                     Which language the fallback picks is up to the implementation and not part of this
+     *                     contract: MetaModelSelect switches to the main language of the referenced MetaModel,
+     *                     TranslatedTags takes the first row it finds. Callers that need a specific language
+     *                     have to compare the result themselves.
      */
     public function getIdForAlias(string $alias, string $language): ?string;
 
@@ -51,8 +56,8 @@ interface IAliasConverter extends IAttribute
      * Returns:
      * - When language support for metamodels is given:
      *      - Return the alias for the id in the given language
+     *      - Fall back to another language when the given one is not supported, see getIdForAlias()
      *      - Return null if the id isn't found
-     *      - Return null if the given language isn't supported
      * - When language support for metamodels isn't given:
      *      - Return the alias for the id, language parameter will be ignored
      *      - Return null if the id isn't found
