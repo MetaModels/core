@@ -43,7 +43,7 @@ class ConditionAndFilterSettingTypeFactory extends AbstractFilterSettingTypeFact
 
         $this
             ->setTypeName('conditionand')
-            ->setTypeIcon('bundles/metamodelscore/images/icons/filter_and.png')
+            ->setTypeIcon('bundles/metamodelscore/images/icons/filter_and.svg')
             ->setTypeClass(ConditionAnd::class)
             ->allowAttributeTypes();
     }

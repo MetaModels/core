@@ -30,7 +30,7 @@ final readonly class ExpressionRuleFilterSettingTypeFactory implements IFilterSe
     #[Override]
     public function getTypeIcon(): string
     {
-        return 'bundles/metamodelscore/images/icons/filter_expression.png';
+        return 'bundles/metamodelscore/images/icons/filter_expression.svg';
     }
 
     #[Override]

@@ -191,7 +191,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
                 'label'       => 'conditions.label',
                 'description' => 'conditions.description',
                 'href'        => 'table=tl_metamodel_dcasetting_condition',
-                'icon'        => '/bundles/metamodelscore/images/icons/dca_condition.png',
+                'icon'        => '/bundles/metamodelscore/images/icons/dca_condition.svg',
                 'idparam'     => 'pid'
             ],
         ]

@@ -126,7 +126,7 @@ class IconBuilder
      *
      * @return string
      */
-    public function getBackendIcon($icon, $defaultIcon = 'bundles/metamodelscore/images/icons/metamodels.png')
+    public function getBackendIcon($icon, $defaultIcon = 'bundles/metamodelscore/images/icons/metamodels.svg')
     {
         $realIcon   = $this->convertValueToPath($icon, $defaultIcon);
         $targetPath = $this->outputPath . '/' . \basename($realIcon);
@@ -166,7 +166,7 @@ class IconBuilder
         $icon,
         $alt = '',
         $attributes = '',
-        $defaultIcon = 'bundles/metamodelscore/images/icons/metamodels.png'
+        $defaultIcon = 'bundles/metamodelscore/images/icons/metamodels.svg'
     ) {
         return $this->image->getHtml($this->getBackendIcon($icon, $defaultIcon), $alt, $attributes);
     }

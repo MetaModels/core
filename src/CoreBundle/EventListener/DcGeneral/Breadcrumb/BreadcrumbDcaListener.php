@@ -77,7 +77,7 @@ class BreadcrumbDcaListener extends AbstractBreadcrumbListener
                 $elements->getLabel('tl_metamodel_dca'),
                 (null !== $modelId) ? $this->getMetaModel($modelId)->getName() : ''
             ),
-            'bundles/metamodelscore/images/icons/dca.png'
+            'bundles/metamodelscore/images/icons/dca.svg'
         );
     }
 }

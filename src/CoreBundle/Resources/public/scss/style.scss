@@ -21,11 +21,13 @@
  */
 
 //urls
-$icon_fields: url('../images/icons/fields.png');
-$icon_dca_add: url('../images/icons/dca_add.png');
+$icon_fields: url('../images/icons/fields.svg');
+$icon_fields_dark: url('../images/icons/fields--dark.svg');
+$icon_dca_add: url('../images/icons/dca_add.svg');
+// Fuer rendersettings_add gibt es noch kein SVG im Icon-Satz.
 $icon_rendersettings_add: url('../images/icons/rendersettings_add.png');
 $icon_pal_open: url('/system/themes/flexible/icons/navcol.svg');
-$icon_locale: url('../images/icons/locale.png');
+$icon_locale: url('../images/icons/locale.svg');
 
 .header_css_fields {
   padding: 2px 0 3px 20px;
@@ -247,4 +249,24 @@ form[id^=mm_] .sort_hint {
 
 .mm-lang-hint--translated {
   background-color: #4a9a3f;
+}
+
+// Dunkelmodus fuer die sechs Bereichsicons.
+//
+// Contaos --dark-Mechanismus greift nur bei Hintergrundbildern, die ueber
+// CSS-Variablen gesetzt werden. Die Operationen der MetaModels-Uebersicht
+// haengen dagegen als <img src="..."> im Markup (ButtonRenderer), und der
+// Dateiname steht dort fest. Ueber content laesst sich die Bildquelle eines
+// <img> ersetzen - das ist der einzige Weg ohne Eingriff in die Ausgabe.
+//
+// Die Klasse am <a> ist der Befehlsname (ButtonRenderer, "class=%s").
+html[data-color-scheme="dark"] {
+  a.fields img { content: url('../images/icons/fields--dark.svg'); }
+  a.rendersettings img { content: url('../images/icons/rendersettings--dark.svg'); }
+  a.dca img { content: url('../images/icons/dca--dark.svg'); }
+  a.searchable_pages img { content: url('../images/icons/searchable_pages--dark.svg'); }
+  a.filter img { content: url('../images/icons/filter--dark.svg'); }
+  a.dca_combine img { content: url('../images/icons/dca_combine--dark.svg'); }
+
+  .header_css_fields { background-image: $icon_fields_dark; }
 }

@@ -148,7 +148,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = [
                 'description' => 'settings.description',
                 'href'        => 'table=tl_metamodel_filtersetting',
                 'idparam'     => 'pid',
-                'icon'        => 'bundles/metamodelscore/images/icons/filter_setting.png',
+                'icon'        => 'bundles/metamodelscore/images/icons/filter_setting.svg',
             ],
         ]
     ],

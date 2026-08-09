@@ -42,7 +42,7 @@ class StaticIdListFilterSettingTypeFactory extends AbstractFilterSettingTypeFact
 
         $this
             ->setTypeName('idlist')
-            ->setTypeIcon('bundles/metamodelscore/images/icons/filter_default.png')
+            ->setTypeIcon('bundles/metamodelscore/images/icons/filter_default.svg')
             ->setTypeClass(IdList::class);
     }
 
