@@ -223,7 +223,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = [
             'exclude'     => true,
             'inputType'   => 'checkbox',
             'eval'        => [
-                'tl_class' => 'w50 cbx'
+                'tl_class' => 'w50 cbx m12'
             ],
             'sql'         => "char(1) NOT NULL default ''"
         ],
@@ -233,7 +233,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = [
             'exclude'     => true,
             'inputType'   => 'checkbox',
             'eval'        => [
-                'tl_class' => 'w50 cbx'
+                'tl_class' => 'w50 cbx m12'
             ],
             'sql'         => "char(1) NOT NULL default ''"
         ],
@@ -243,7 +243,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = [
             'exclude'     => true,
             'inputType'   => 'checkbox',
             'eval'        => [
-                'tl_class' => 'w50 cbx'
+                'tl_class' => 'w50 cbx m12'
             ],
             'sql'         => "char(1) NOT NULL default ''"
         ],
