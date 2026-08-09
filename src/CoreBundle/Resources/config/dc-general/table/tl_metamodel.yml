@@ -7,6 +7,14 @@ services:
             - name: kernel.event_listener
               event: dc-general.view.contao2backend.get-operation-button
               method: handle
+    metamodels.listener.table.tl_metamodel.operation_button_order:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\MetaModel\OperationButtonOrderListener
+        arguments:
+            - "@cca.dc-general.scope-matcher"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-operation-buttons
+              method: handle
     metamodels.listener.table.tl_metamodel.language_options:
         class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\MetaModel\LanguageOptionsListener
         arguments:
