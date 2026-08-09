@@ -35,14 +35,14 @@ class OperationButtonOrderListener extends AbstractAbstainingListener
      *
      * @var list<string>
      */
-    private const VORNE = ['edit'];
+    private const LEADING = ['edit'];
 
     /**
      * The six areas of MetaModels, in the order they belong in.
      *
      * @var list<string>
      */
-    private const BEREICHE = [
+    private const AREAS = [
         'fields',
         'rendersettings',
         'dca',
@@ -59,7 +59,7 @@ class OperationButtonOrderListener extends AbstractAbstainingListener
      *
      * @var list<string>
      */
-    private const HINTEN = ['pasteNew', 'cut', 'delete', 'show', 'pasteafter', 'pasteinto'];
+    private const TRAILING = ['pasteNew', 'cut', 'delete', 'show', 'pasteafter', 'pasteinto'];
 
     /**
      * Reorder the buttons.
@@ -76,34 +76,34 @@ class OperationButtonOrderListener extends AbstractAbstainingListener
 
         $buttons = $event->getButtons();
 
-        $vorne  = $this->pick($buttons, self::VORNE);
-        $hinten = $this->pick($buttons, self::HINTEN);
-        $block  = $this->pick($buttons, self::BEREICHE);
+        $leading  = $this->pick($buttons, self::LEADING);
+        $trailing = $this->pick($buttons, self::TRAILING);
+        $block    = $this->pick($buttons, self::AREAS);
 
-        // Was jetzt noch übrig ist, stammt von einem anderen Bundle - etwa die Merkliste. Solche
-        // Operationen führen ebenfalls in einen Bereich des MetaModels und gehören deshalb an das
-        // Ende des Blocks, nicht hinter das Löschen. Ihre Reihenfolge untereinander bleibt.
-        $event->setButtons(array_merge($vorne, $block, $buttons, $hinten));
+        // Whatever is left comes from another bundle - the note list, for one. Those operations
+        // lead into some area of the MetaModel as well and therefore belong at the end of the
+        // block rather than behind the delete button. Their order among themselves is kept.
+        $event->setButtons(array_merge($leading, $block, $buttons, $trailing));
     }
 
     /**
      * Take the named buttons out of the list, in the order given.
      *
      * @param array<string, string> $buttons The remaining buttons, reduced by what was taken.
-     * @param list<string>          $namen   The names to look for.
+     * @param list<string>          $names   The names to look for.
      *
      * @return array<string, string>
      */
-    private function pick(array &$buttons, array $namen)
+    private function pick(array &$buttons, array $names)
     {
-        $genommen = [];
-        foreach ($namen as $name) {
+        $taken = [];
+        foreach ($names as $name) {
             if (isset($buttons[$name])) {
-                $genommen[$name] = $buttons[$name];
+                $taken[$name] = $buttons[$name];
                 unset($buttons[$name]);
             }
         }
 
-        return $genommen;
+        return $taken;
     }
 }

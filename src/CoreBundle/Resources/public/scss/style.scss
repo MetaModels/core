@@ -24,7 +24,7 @@
 $icon_fields: url('../images/icons/fields.svg');
 $icon_fields_dark: url('../images/icons/fields--dark.svg');
 $icon_dca_add: url('../images/icons/dca_add.svg');
-// Fuer rendersettings_add gibt es noch kein SVG im Icon-Satz.
+// The icon set has no SVG for rendersettings_add yet.
 $icon_rendersettings_add: url('../images/icons/rendersettings_add.png');
 $icon_pal_open: url('/system/themes/flexible/icons/navcol.svg');
 $icon_locale: url('../images/icons/locale.svg');
@@ -251,15 +251,15 @@ form[id^=mm_] .sort_hint {
   background-color: #4a9a3f;
 }
 
-// Dunkelmodus fuer die sechs Bereichsicons.
+// Dark mode for the six area icons.
 //
-// Contaos --dark-Mechanismus greift nur bei Hintergrundbildern, die ueber
-// CSS-Variablen gesetzt werden. Die Operationen der MetaModels-Uebersicht
-// haengen dagegen als <img src="..."> im Markup (ButtonRenderer), und der
-// Dateiname steht dort fest. Ueber content laesst sich die Bildquelle eines
-// <img> ersetzen - das ist der einzige Weg ohne Eingriff in die Ausgabe.
+// Contao resolves its "--dark" icons through CSS variables, and only for
+// background images. The operations of the MetaModels listing hang in the
+// markup as <img src="..."> instead (ButtonRenderer), where the file name is
+// fixed. Replacing the source of an <img> through "content" is the only way
+// that needs no change to the output.
 //
-// Die Klasse am <a> ist der Befehlsname (ButtonRenderer, "class=%s").
+// The class on the <a> is the command name (ButtonRenderer, "class=%s").
 html[data-color-scheme="dark"] {
   a.fields img { content: url('../images/icons/fields--dark.svg'); }
   a.rendersettings img { content: url('../images/icons/rendersettings--dark.svg'); }
