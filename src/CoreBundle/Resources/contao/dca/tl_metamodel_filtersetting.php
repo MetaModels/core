@@ -140,7 +140,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
             'fields'       => ['sorting'],
             'headerFields' => ['type', 'attr_id'],
             'flag'         => 1,
-            'icon'         => 'bundles/metamodelscore/images/icons/filter_and.svg',
+            'icon'         => 'bundles/metamodelscore/images/icons/filter_setting.svg',
         ],
         'label'             => [
             'fields' => [
