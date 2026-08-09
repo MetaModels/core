@@ -270,3 +270,11 @@ html[data-color-scheme="dark"] {
 
   .header_css_fields { background-image: $icon_fields_dark; }
 }
+
+// Contao turns the operations bar into a flex container as soon as a tree checkbox follows it.
+// Flex drops the whitespace between the links, so all that is left between two icons is the one
+// pixel of margin Contao puts on them - they end up almost touching. The gap restores roughly
+// what the whitespace used to contribute.
+.tl_right {
+  gap: 3px;
+}

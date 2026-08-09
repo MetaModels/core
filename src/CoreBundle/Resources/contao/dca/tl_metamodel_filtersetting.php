@@ -178,7 +178,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
                 'label'       => 'copy.label',
                 'description' => 'copy.description',
                 'href'        => 'act=deepcopy',
-                'icon'        => 'copychilds.svg'
+                'icon'        => 'copychildren.svg'
             ],
             'cut'      => [
                 'label'       => 'cut.label',

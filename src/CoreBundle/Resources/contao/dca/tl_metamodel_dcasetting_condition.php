@@ -179,7 +179,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = [
                 'label'       => 'copy.label',
                 'description' => 'copy.description',
                 'href'        => 'act=deepcopy',
-                'icon'        => 'copychilds.svg'
+                'icon'        => 'copychildren.svg'
             ],
             'cut'      => [
                 'label'       => 'cut.label',
