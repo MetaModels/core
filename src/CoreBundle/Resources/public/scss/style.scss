@@ -22,7 +22,6 @@
 
 //urls
 $icon_fields: url('../images/icons/fields.svg');
-$icon_fields_dark: url('../images/icons/fields--dark.svg');
 $icon_dca_add: url('../images/icons/dca_add.svg');
 // The icon set has no SVG for rendersettings_add yet.
 $icon_rendersettings_add: url('../images/icons/rendersettings_add.png');
@@ -161,7 +160,6 @@ form[id*="tl_metamodel_"] .wizard {
   }
 }
 
-
 fieldset.tl_subdca {
   padding: 0;
   margin: 0;
@@ -249,26 +247,6 @@ form[id^=mm_] .sort_hint {
 
 .mm-lang-hint--translated {
   background-color: #4a9a3f;
-}
-
-// Dark mode for the six area icons.
-//
-// Contao resolves its "--dark" icons through CSS variables, and only for
-// background images. The operations of the MetaModels listing hang in the
-// markup as <img src="..."> instead (ButtonRenderer), where the file name is
-// fixed. Replacing the source of an <img> through "content" is the only way
-// that needs no change to the output.
-//
-// The class on the <a> is the command name (ButtonRenderer, "class=%s").
-html[data-color-scheme="dark"] {
-  a.fields img { content: url('../images/icons/fields--dark.svg'); }
-  a.rendersettings img { content: url('../images/icons/rendersettings--dark.svg'); }
-  a.dca img { content: url('../images/icons/dca--dark.svg'); }
-  a.searchable_pages img { content: url('../images/icons/searchable_pages--dark.svg'); }
-  a.filter img { content: url('../images/icons/filter--dark.svg'); }
-  a.dca_combine img { content: url('../images/icons/dca_combine--dark.svg'); }
-
-  .header_css_fields { background-image: $icon_fields_dark; }
 }
 
 // Contao turns the operations bar into a flex container as soon as a tree checkbox follows it.

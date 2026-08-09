@@ -93,7 +93,7 @@ class ModelToLabelListener extends AbstractAbstainingListener
 
         // Keep the previous label.
         $label = \vsprintf($event->getLabel(), $event->getArgs());
-        $image = ((bool) $model->getProperty('translated')) ? 'locale.png' : 'locale_1.png';
+        $image = ((bool) $model->getProperty('translated')) ? 'locale.svg' : 'locale_1.svg';
 
         /** @psalm-suppress InvalidArgument */
         $event
