@@ -31,27 +31,35 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetOp
 class OperationButtonOrderListener extends AbstractAbstainingListener
 {
     /**
-     * The wanted order, given as command names.
-     *
-     * "pasteNew" is not a command - the ButtonRenderer appends it after the commands have been
-     * built. Anything not listed here keeps its relative order and follows at the end, so
-     * operations added by other bundles do not get lost.
+     * What goes in front of the area block.
      *
      * @var list<string>
      */
-    private const REIHENFOLGE = [
-        'edit',
+    private const VORNE = ['edit'];
+
+    /**
+     * The six areas of MetaModels, in the order they belong in.
+     *
+     * @var list<string>
+     */
+    private const BEREICHE = [
         'fields',
         'rendersettings',
         'dca',
         'searchable_pages',
         'filter',
         'dca_combine',
-        'pasteNew',
-        'cut',
-        'delete',
-        'show',
     ];
+
+    /**
+     * What follows the area block.
+     *
+     * "pasteNew" is not a command - the ButtonRenderer appends it after the commands have been
+     * built, as it does with the paste buttons.
+     *
+     * @var list<string>
+     */
+    private const HINTEN = ['pasteNew', 'cut', 'delete', 'show', 'pasteafter', 'pasteinto'];
 
     /**
      * Reorder the buttons.
@@ -67,15 +75,35 @@ class OperationButtonOrderListener extends AbstractAbstainingListener
         }
 
         $buttons = $event->getButtons();
-        $sorted  = [];
 
-        foreach (self::REIHENFOLGE as $name) {
+        $vorne  = $this->pick($buttons, self::VORNE);
+        $hinten = $this->pick($buttons, self::HINTEN);
+        $block  = $this->pick($buttons, self::BEREICHE);
+
+        // Was jetzt noch übrig ist, stammt von einem anderen Bundle - etwa die Merkliste. Solche
+        // Operationen führen ebenfalls in einen Bereich des MetaModels und gehören deshalb an das
+        // Ende des Blocks, nicht hinter das Löschen. Ihre Reihenfolge untereinander bleibt.
+        $event->setButtons(array_merge($vorne, $block, $buttons, $hinten));
+    }
+
+    /**
+     * Take the named buttons out of the list, in the order given.
+     *
+     * @param array<string, string> $buttons The remaining buttons, reduced by what was taken.
+     * @param list<string>          $namen   The names to look for.
+     *
+     * @return array<string, string>
+     */
+    private function pick(array &$buttons, array $namen)
+    {
+        $genommen = [];
+        foreach ($namen as $name) {
             if (isset($buttons[$name])) {
-                $sorted[$name] = $buttons[$name];
+                $genommen[$name] = $buttons[$name];
                 unset($buttons[$name]);
             }
         }
 
-        $event->setButtons(array_merge($sorted, $buttons));
+        return $genommen;
     }
 }
