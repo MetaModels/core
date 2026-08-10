@@ -42,7 +42,7 @@ class SimpleLookupFilterSettingTypeFactory extends AbstractFilterSettingTypeFact
 
         $this
             ->setTypeName('simplelookup')
-            ->setTypeIcon('bundles/metamodelscore/images/icons/filter_default.svg')
+            ->setTypeIcon('bundles/metamodelscore/images/icons/filter_simplelookup.svg')
             ->setTypeClass(SimpleLookup::class)
             ->allowAttributeTypes();
     }

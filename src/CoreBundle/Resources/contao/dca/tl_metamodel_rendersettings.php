@@ -163,7 +163,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = [
                     'label'       => 'settings.label',
                     'description' => 'settings.description',
                     'href'        => 'table=tl_metamodel_rendersetting',
-                    'icon'        => 'bundles/metamodelscore/images/icons/rendersetting.png',
+                    'icon'        => 'bundles/metamodelscore/images/icons/rendersetting.svg',
                     'idparam'     => 'pid'
                 ],
         ]

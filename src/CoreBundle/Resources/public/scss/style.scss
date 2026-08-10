@@ -23,10 +23,14 @@
 //urls
 $icon_fields: url('../images/icons/fields.svg');
 $icon_dca_add: url('../images/icons/dca_add.svg');
-// The icon set has no SVG for rendersettings_add yet.
-$icon_rendersettings_add: url('../images/icons/rendersettings_add.png');
+$icon_rendersettings_add: url('../images/icons/rendersettings_add.svg');
 $icon_pal_open: url('/system/themes/flexible/icons/navcol.svg');
 $icon_locale: url('../images/icons/locale.svg');
+
+// Contao writes both variants into the markup by itself, but only for icons that hang there
+// as <img src>. These two are background images, so the dark variant has to be named here.
+$icon_fields_dark: url('../images/icons/fields--dark.svg');
+$icon_rendersettings_add_dark: url('../images/icons/rendersettings_add--dark.svg');
 
 .header_css_fields {
   padding: 2px 0 3px 20px;
@@ -238,11 +242,15 @@ form[id^=mm_] .sort_hint {
   vertical-align: middle;
   border-radius: 2px;
   cursor: help;
-  color: #fff;
+  // White only reached 3.5:1 on either badge. This is Contaos own text colour and
+  // the lightest grey that holds the 4.5:1 wanted for text of this size.
+  color: #222;
 }
 
 .mm-lang-hint--fallback {
-  background-color: #e6a118;
+  // Same tone as the "A" in the locale icon. The lighter #e6a118 only reached
+  // 2.2:1 against the white label on it.
+  background-color: #b67f13;
 }
 
 .mm-lang-hint--translated {
@@ -255,4 +263,9 @@ form[id^=mm_] .sort_hint {
 // what the whitespace used to contribute.
 .tl_right {
   gap: 3px;
+}
+
+html[data-color-scheme="dark"] {
+  .header_css_fields { background-image: $icon_fields_dark; }
+  .rendersetting_add_all { background-image: $icon_rendersettings_add_dark; }
 }

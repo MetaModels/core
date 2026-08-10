@@ -72,7 +72,7 @@ class BreadcrumbRenderSettingListener extends AbstractBreadcrumbListener
                     'tl_metamodel_rendersettings'
                 )->name : ''
             ),
-            'bundles/metamodelscore/images/icons/rendersetting.png'
+            'bundles/metamodelscore/images/icons/rendersetting.svg'
         );
     }
 }
