@@ -265,6 +265,13 @@ form[id^=mm_] .sort_hint {
   gap: 3px;
 }
 
+// Render settings and input mask settings that are switched off carry "unpublished" on their
+// heading. Striking the column name through states that at a glance, where so far only the
+// operation icons told them apart.
+.field_heading.unpublished strong {
+  text-decoration: line-through;
+}
+
 html[data-color-scheme="dark"] {
   .header_css_fields { background-image: $icon_fields_dark; }
   .rendersetting_add_all { background-image: $icon_rendersettings_add_dark; }
