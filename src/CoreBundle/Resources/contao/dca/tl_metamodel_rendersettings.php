@@ -237,6 +237,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = [
             ],
             'sql'         => "char(1) NOT NULL default ''"
         ],
+        // Keeps the enclosing block in the list template instead of the attribute templates.
+        // Deprecated from the start: it only exists so the output of installations that predate
+        // MetaModels 2.5 stays unchanged, which LegacyAttributeWrapperMigration takes care of.
+        //
+        // It cannot go before MetaModels 3.0 - dropping it changes the output markup, which is a
+        // break. Mind who that hits: not the installations that stayed put, but the ones that
+        // already migrated, since the migration is what switched this on for them. Their own
+        // templates still expect the wrapper where it used to be.
         'legacyAttributeWrapper' => [
             'label'       => 'legacyAttributeWrapper.label',
             'description' => 'legacyAttributeWrapper.description',

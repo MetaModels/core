@@ -29,6 +29,9 @@ use Doctrine\DBAL\Exception;
 /**
  * Adds the column `legacyAttributeWrapper` to `tl_metamodel_rendersettings` and enables it for all existing rows.
  *
+ * Enabling it keeps their output as it was before MetaModels 2.5 moved the enclosing block into the
+ * attribute templates. Both the column and this migration are meant to go with MetaModels 3.0.
+ *
  * Background: since 2.5 the enclosing block (field, label, value) is rendered by the attribute templates instead of
  * the item template. New render settings therefore start with the column disabled. Render settings that already
  * existed keep the old behaviour, because their installations may carry custom attribute templates which do not
