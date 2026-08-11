@@ -27,6 +27,8 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetOp
  * The six area buttons are used constantly, deleting almost never. Grouping them right after the
  * edit button turns them into one closed block instead of leaving them interleaved with Contao's
  * standard operations.
+ *
+ * @final
  */
 class OperationButtonOrderListener extends AbstractAbstainingListener
 {
