@@ -128,7 +128,19 @@ class IconBuilder
      */
     public function getBackendIcon($icon, $defaultIcon = 'bundles/metamodelscore/images/icons/metamodels.svg')
     {
-        $realIcon   = $this->convertValueToPath($icon, $defaultIcon);
+        $realIcon = $this->convertValueToPath($icon, $defaultIcon);
+
+        // An SVG that already ships with a bundle is handed on untouched. Scaling it to 16 pixels
+        // gains nothing - the copy comes out identical apart from an XML declaration - and it
+        // nails down a size that is better left to CSS. Passing the bundle path on also lets
+        // Image::getHtml() find a "--dark" sibling next to it, which the copy would hide.
+        if ($this->isBundleSvg($realIcon)) {
+            // With the leading slash: the value goes straight into a src attribute in places
+            // that do not run it through Image::getHtml(), and a relative path would be looked
+            // up below the current backend route.
+            return '/' . \ltrim($realIcon, '/');
+        }
+
         $targetPath = $this->outputPath . '/' . \basename($realIcon);
 
         if (\file_exists($targetPath)) {
@@ -169,6 +181,22 @@ class IconBuilder
         $defaultIcon = 'bundles/metamodelscore/images/icons/metamodels.svg'
     ) {
         return $this->image->getHtml($this->getBackendIcon($icon, $defaultIcon), $alt, $attributes);
+    }
+
+    /**
+     * Test whether the path points at an SVG that ships with a bundle.
+     *
+     * Only those can be passed on as they are. Icons a user picked from the file manager may well
+     * be raster images and keep going through the image factory.
+     *
+     * @param string $path The path of the icon.
+     *
+     * @return bool
+     */
+    private function isBundleSvg(string $path): bool
+    {
+        return \str_starts_with(\ltrim($path, '/'), 'bundles/')
+               && 'svg' === \strtolower(\pathinfo($path, \PATHINFO_EXTENSION));
     }
 
     /**
