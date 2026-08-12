@@ -64,6 +64,13 @@ class BreadcrumbStore
     private array $idList = [];
 
     /**
+     * Links to the sibling views of the current MetaModel.
+     *
+     * @var array<int, array{url: string, text: string, icon: string}>
+     */
+    private array $shortcuts = [];
+
+    /**
      * The current URI.
      *
      * @var string
@@ -100,6 +107,41 @@ class BreadcrumbStore
             'text' => $this->getLabel($table),
             'icon' => $this->iconBuilder->getBackendIcon($icon)
         ];
+    }
+
+    /**
+     * Push a shortcut to a sibling view of the same MetaModel.
+     *
+     * The label comes from the operation the shortcut stands for, not from the table it leads to:
+     * a table label reads "Attributes of %s" and would name the MetaModel a second time, which is
+     * already spelled out further left in the breadcrumb.
+     *
+     * Operations injected by other bundles put their labels into the same domain as the ones of
+     * the core, so a single domain covers them all.
+     *
+     * @param string $url      The url.
+     * @param string $labelKey The translation key of the operation label.
+     * @param string $icon     The icon.
+     *
+     * @return void
+     */
+    public function pushShortcut($url, $labelKey, $icon)
+    {
+        $this->shortcuts[] = [
+            'url'  => $url,
+            'text' => StringUtil::specialchars($this->translator->trans($labelKey, [], 'tl_metamodel')),
+            'icon' => $this->iconBuilder->getBackendIcon($icon)
+        ];
+    }
+
+    /**
+     * Retrieve the shortcuts.
+     *
+     * @return array
+     */
+    public function getShortcuts(): array
+    {
+        return $this->shortcuts;
     }
 
     /**

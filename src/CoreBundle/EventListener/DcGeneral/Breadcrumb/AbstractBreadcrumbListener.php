@@ -21,6 +21,8 @@
 
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\Breadcrumb;
 
+use Contao\Controller;
+use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\System;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
@@ -87,8 +89,82 @@ abstract class AbstractBreadcrumbListener
 
         $elements = $this->storeFactory->createStore();
         $this->getBreadcrumbElements($environment, $elements);
+        $this->addShortcuts($elements);
         $event->setElements($elements->getElements());
+        $event->setShortcuts($elements->getShortcuts());
         $event->stopPropagation();
+    }
+
+    /**
+     * Add links to the sibling views of the MetaModel the current view belongs to.
+     *
+     * Without them, switching from the filters of a MetaModel to its attributes means going back
+     * out to the list of all MetaModels first and picking the right row again.
+     *
+     * Nothing is added in the list of all MetaModels itself: no single MetaModel is being worked
+     * on there, so the id is absent and there is nothing to link to. This is also why the id is
+     * read rather than the table name - it tells the two cases apart on its own.
+     *
+     * The entries are taken from the operations of tl_metamodel instead of a list of their own,
+     * so that operations other bundles inject - the note list, for one - come along without this
+     * needing to know about them.
+     *
+     * @param BreadcrumbStore $elements The elements generated so far.
+     *
+     * @return void
+     */
+    private function addShortcuts(BreadcrumbStore $elements)
+    {
+        $modelId = $elements->getId('tl_metamodel');
+        if (null === $modelId || '' === $modelId) {
+            return;
+        }
+
+        $serialized = ModelId::fromValues('tl_metamodel', $modelId)->getSerialized();
+
+        foreach ($this->siblingOperations() as $operation) {
+            \parse_str(\str_replace('&amp;', '&', (string) $operation['href']), $parameters);
+
+            $elements->pushShortcut(
+                $this->generate('metamodels.configuration', ['pid' => $serialized] + $parameters),
+                (string) ($operation['label'] ?? ''),
+                (string) ($operation['icon'] ?? '')
+            );
+        }
+    }
+
+    /**
+     * Retrieve the operations of tl_metamodel that lead to a view of their own.
+     *
+     * Operations acting on the record itself - edit, delete and the like - carry an "act" in
+     * their href and are left out; the ones wanted here switch the table.
+     *
+     * @return array<string, array<string, mixed>>
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    private function siblingOperations(): array
+    {
+        $this->framework()->getAdapter(Controller::class)->loadDataContainer('tl_metamodel');
+        System::loadLanguageFile('tl_metamodel');
+
+        /** @psalm-suppress MixedArrayAccess - $GLOBALS['TL_DCA'] is an untyped Contao superglobal. */
+        $operations = $GLOBALS['TL_DCA']['tl_metamodel']['list']['operations'] ?? [];
+        assert(\is_array($operations));
+
+        $wanted = [];
+        foreach ($operations as $name => $operation) {
+            if (!\is_array($operation) || !isset($operation['href'], $operation['icon'])) {
+                continue;
+            }
+            if (!\str_contains((string) $operation['href'], 'table=')) {
+                continue;
+            }
+
+            $wanted[$name] = $operation;
+        }
+
+        return $wanted;
     }
 
     /**
@@ -137,5 +213,22 @@ abstract class AbstractBreadcrumbListener
     {
         // TODO: Add ref & rt from current URL?
         return $this->urlGenerator->generate($route, $parameters);
+    }
+
+    /**
+     * Retrieve the Contao framework.
+     *
+     * Not a constructor argument: every breadcrumb listener is wired by hand in the service
+     * configuration, and one more argument would have to be added to each of them for a
+     * dependency only this method needs.
+     *
+     * @return ContaoFramework
+     */
+    private function framework(): ContaoFramework
+    {
+        $framework = System::getContainer()->get('contao.framework');
+        assert($framework instanceof ContaoFramework);
+
+        return $framework;
     }
 }
