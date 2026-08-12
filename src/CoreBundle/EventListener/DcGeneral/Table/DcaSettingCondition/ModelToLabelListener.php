@@ -36,6 +36,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class ModelToLabelListener extends AbstractListener
 {
     /**
+     * Where the icons of the condition types live.
+     */
+    private const string CONDITION_ICON_PATH = 'bundles/metamodelscore/images/icons/';
+
+    /**
      * The translator.
      *
      * @var TranslatorInterface
@@ -100,10 +105,13 @@ class ModelToLabelListener extends AbstractListener
 
         $params = [
             '%icon%'      => $this->iconBuilder->getBackendIconImageTag(
-                'bundles/metamodelscore/images/icons/filter_default.svg',
+                $this->disabledUnless($model->getProperty('enabled'), $this->iconForCondition($type)),
                 $name,
                 '',
-                'bundles/metamodelscore/images/icons/filter_default.svg'
+                $this->disabledUnless(
+                    $model->getProperty('enabled'),
+                    self::CONDITION_ICON_PATH . 'condition_default.svg'
+                )
             ),
             '%name%'      => $name,
             '%attribute%' => $attribute ? $attribute->getName() : '' . $model->getProperty('attr_id'),
@@ -115,6 +123,48 @@ class ModelToLabelListener extends AbstractListener
         $event
             ->setLabel($this->getLabelText($type, $params))
             ->setArgs(array_values($params));
+    }
+
+    /**
+     * Point an icon at its pale variant while the condition is switched off.
+     *
+     * The suffix "_1" is the same convention DC_General uses for the operation buttons, and the
+     * filter settings mark their disabled rules the same way.
+     *
+     * @param mixed  $enabled Whether the condition is switched on.
+     * @param string $icon    The icon of the active state.
+     *
+     * @return string
+     */
+    private function disabledUnless($enabled, string $icon): string
+    {
+        if ($enabled) {
+            return $icon;
+        }
+
+        return \substr_replace($icon, '_1', (int) \strrpos($icon, '.'), 0);
+    }
+
+    /**
+     * Determine the icon of a condition type.
+     *
+     * Composed from the type rather than looked up in a list, so that a new condition only needs
+     * its icon file to be picked up here. Where none exists the IconBuilder falls back to the
+     * default passed alongside it - which is also what happens for the condition types that do
+     * not carry an icon of their own yet.
+     *
+     * The "condition" the type names itself with is dropped: it is already in the prefix, and
+     * "condition_conditionand.svg" would be a mouthful for no gain.
+     *
+     * @param string $type The type of the condition.
+     *
+     * @return string
+     */
+    private function iconForCondition(string $type): string
+    {
+        $name = \str_starts_with($type, 'condition') ? \substr($type, \strlen('condition')) : $type;
+
+        return self::CONDITION_ICON_PATH . 'condition_' . $name . '.svg';
     }
 
     /**
