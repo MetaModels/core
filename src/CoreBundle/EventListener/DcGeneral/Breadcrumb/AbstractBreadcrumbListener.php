@@ -28,6 +28,8 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBr
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\DcGeneral\InputProviderInterface;
+use MetaModels\Events\GetBreadcrumbShortcutIconEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
@@ -122,13 +124,25 @@ abstract class AbstractBreadcrumbListener
 
         $serialized = ModelId::fromValues('tl_metamodel', $modelId)->getSerialized();
 
-        foreach ($this->siblingOperations() as $operation) {
+        $dispatcher = System::getContainer()->get('event_dispatcher');
+        assert($dispatcher instanceof EventDispatcherInterface);
+
+        foreach ($this->siblingOperations() as $name => $operation) {
             \parse_str(\str_replace('&amp;', '&', (string) $operation['href']), $parameters);
+
+            // The icon of the operation is fixed, while an area may want to say something about
+            // this one MetaModel - the note list fills its sheet where lists are configured.
+            $iconEvent = new GetBreadcrumbShortcutIconEvent(
+                (string) $name,
+                $modelId,
+                (string) ($operation['icon'] ?? '')
+            );
+            $dispatcher->dispatch($iconEvent, GetBreadcrumbShortcutIconEvent::NAME);
 
             $elements->pushShortcut(
                 $this->generate('metamodels.configuration', ['pid' => $serialized] + $parameters),
                 (string) ($operation['label'] ?? ''),
-                (string) ($operation['icon'] ?? '')
+                $iconEvent->getIcon()
             );
         }
     }
