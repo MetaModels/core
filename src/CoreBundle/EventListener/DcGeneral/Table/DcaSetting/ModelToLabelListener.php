@@ -124,13 +124,15 @@ class ModelToLabelListener extends AbstractListener
         assert($metaModel instanceof IMetaModel);
         $attribute = $metaModel->getAttributeById((int) $model->getProperty('attr_id'));
 
+        $published = (bool) $model->getProperty('published');
+
         if ($attribute) {
             $type     = $attribute->get('type');
             $image    = $this->iconBuilder->getBackendIconImageTag(
-                $this->attributeFactory->getIconForType($type),
+                $this->paleUnless($published, $this->attributeFactory->getIconForType($type)),
                 $type,
                 '',
-                '/bundles/metamodelscore/images/icons/fields.svg'
+                $this->paleUnless($published, '/bundles/metamodelscore/images/icons/fields.svg')
             );
             $variant  = ($metaModel->hasVariants() && $attribute->get('isvariant')) ? ', variant' : '';
             $name     = $attribute->getName();
@@ -138,7 +140,9 @@ class ModelToLabelListener extends AbstractListener
             $isUnique = (bool) $attribute->get('isunique');
         } else {
             $type     = 'unknown ID: ' . $model->getProperty('attr_id');
-            $image    = $this->iconBuilder->getBackendIconImageTag('/bundles/metamodelscore/images/icons/fields.svg');
+            $image    = $this->iconBuilder->getBackendIconImageTag(
+                $this->paleUnless($published, '/bundles/metamodelscore/images/icons/fields.svg')
+            );
             $variant  = '';
             $name     = 'unknown attribute';
             $colName  = 'unknown column';
@@ -213,5 +217,25 @@ class ModelToLabelListener extends AbstractListener
     private function trans($key)
     {
         return $this->translator->trans($key, [], 'tl_metamodel_dcasetting');
+    }
+
+    /**
+     * Point an icon at its pale variant while the setting is switched off.
+     *
+     * The suffix "_1" is the convention DC_General uses for the operation buttons, and the
+     * conditions of an input mask mark their disabled rows the same way.
+     *
+     * @param bool   $published Whether the setting is switched on.
+     * @param string $icon      The icon of the active state.
+     *
+     * @return string
+     */
+    private function paleUnless(bool $published, string $icon): string
+    {
+        if ($published) {
+            return $icon;
+        }
+
+        return \substr_replace($icon, '_1', (int) \strrpos($icon, '.'), 0);
     }
 }
