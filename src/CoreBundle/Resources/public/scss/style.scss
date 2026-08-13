@@ -25,6 +25,10 @@ $icon_fields: url('../images/icons/fields.svg');
 $icon_dca_add: url('../images/icons/dca_add.svg');
 $icon_rendersettings_add: url('../images/icons/rendersettings_add.svg');
 $icon_pal_open: url('/system/themes/flexible/icons/navcol.svg');
+// Contao ships no light counterpart for the arrow, and as a background image it never
+// passes through the place where Contao would look for one. On the dark scheme the
+// original holds only 3.1:1, so a copy of it lives next to our own icons.
+$icon_pal_open_dark: url('../images/icons/navcol--dark.svg');
 $icon_locale: url('../images/icons/locale.svg');
 
 // Contao writes both variants into the markup by itself, but only for icons that hang there
@@ -275,4 +279,5 @@ form[id^=mm_] .sort_hint {
 html[data-color-scheme="dark"] {
   .header_css_fields { background-image: $icon_fields_dark; }
   .rendersetting_add_all { background-image: $icon_rendersettings_add_dark; }
+  .dca_palette { background-image: $icon_pal_open_dark; }
 }
