@@ -241,7 +241,13 @@ class CommandBuilder
                 $collection,
                 'edit_' . $tableName,
                 ['table' => $tableName],
-                $this->iconBuilder->getBackendIcon($screen['meta']['backendicon']),
+                // Where the screen brings no icon of its own, do not fall back to the one of
+                // the IconBuilder: that is the MetaModels logo, which says nothing here. The
+                // jump into a child table has an icon of its own.
+                $this->iconBuilder->getBackendIcon(
+                    $screen['meta']['backendicon'],
+                    'bundles/metamodelscore/images/icons/child_table.svg'
+                ),
                 [
                     'label'       => 'metamodel_edit_as_child.' . $tableName . '.' . $screenId . '.label',
                     'description' => 'metamodel_edit_as_child.' . $tableName . '.' . $screenId . '.description',
