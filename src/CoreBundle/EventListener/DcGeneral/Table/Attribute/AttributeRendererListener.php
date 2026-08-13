@@ -24,7 +24,11 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\Attribute;
 use Contao\StringUtil;
 use Contao\System;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\Translator\TranslatorInterface;
+use MetaModels\Attribute\IAttributeFactory;
+use MetaModels\CoreBundle\Assets\IconBuilder;
+use MetaModels\IFactory;
 use MetaModels\ITranslatedMetaModel;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -33,6 +37,32 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 class AttributeRendererListener extends BaseListener
 {
+    /**
+     * The icon builder.
+     *
+     * @var IconBuilder
+     */
+    private IconBuilder $iconBuilder;
+
+    /**
+     * Create a new instance.
+     *
+     * @param RequestScopeDeterminator $scopeDeterminator The request mode determinator.
+     * @param IAttributeFactory        $attributeFactory  The attribute factory.
+     * @param IFactory                 $factory           The MetaModels factory.
+     * @param IconBuilder              $iconBuilder       The icon builder.
+     */
+    public function __construct(
+        RequestScopeDeterminator $scopeDeterminator,
+        IAttributeFactory $attributeFactory,
+        IFactory $factory,
+        IconBuilder $iconBuilder
+    ) {
+        parent::__construct($scopeDeterminator, $attributeFactory, $factory);
+
+        $this->iconBuilder = $iconBuilder;
+    }
+
     /**
      * Draw the attribute in the backend listing.
      *
@@ -48,7 +78,13 @@ class AttributeRendererListener extends BaseListener
 
         $model     = $event->getModel();
         $type      = $model->getProperty('type');
-        $image     = '<img src="' . $this->attributeFactory->getIconForType($type) . '" />';
+        // Through the icon builder rather than assembled by hand: only there does Contao get
+        // to look for a "--dark" companion and hand out both, and only there do the width and
+        // height end up on the tag.
+        $image     = $this->iconBuilder->getBackendIconImageTag(
+            $this->attributeFactory->getIconForType($type),
+            $type
+        );
         $metaModel = $this->getMetaModelByModelPid($model);
         $attribute = $this->attributeFactory->createAttribute($model->getPropertiesAsArray(), $metaModel);
 

@@ -43,6 +43,8 @@ services:
     metamodels.dc_general.table.tl_metamodel_attribute.type_renderer:
         class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\Attribute\AttributeRendererListener
         parent: metamodels.listener.table.tl_metamodel_attribute.listener_base
+        arguments:
+          $iconBuilder: '@metamodels.assets.icon_builder'
         tags:
             - name: kernel.event_listener
               event: dc-general.view.contao2backend.model-to-label
