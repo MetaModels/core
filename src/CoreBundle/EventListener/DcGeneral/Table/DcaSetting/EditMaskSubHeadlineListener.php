@@ -20,9 +20,9 @@
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetEditMaskSubHeadlineEvent;
-use Contao\CoreBundle\String\SimpleTokenParser;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use ContaoCommunityAlliance\DcGeneral\InputProviderInterface;
+use MetaModels\CoreBundle\Backend\ItemLabelRenderer;
 use MetaModels\DcGeneral\DataDefinition\Definition\IMetaModelDefinition;
 use MetaModels\ViewCombination\InputScreenInformationBuilder;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -42,9 +42,9 @@ final class EditMaskSubHeadlineListener
     /**
      * The token parser.
      *
-     * @var SimpleTokenParser
+     * @var ItemLabelRenderer
      */
-    private SimpleTokenParser $tokenParser;
+    private ItemLabelRenderer $labelRenderer;
 
     /**
      * The translator.
@@ -57,17 +57,17 @@ final class EditMaskSubHeadlineListener
      * EditMaskSubHeadlineListener constructor.
      *
      * @param InputScreenInformationBuilder $inputScreens The input screen information builder.
-     * @param SimpleTokenParser             $tokenParser  The token parser.
+     * @param ItemLabelRenderer             $labelRenderer The renderer for the record label.
      * @param TranslatorInterface           $translator   The translator.
      */
     public function __construct(
         InputScreenInformationBuilder $inputScreens,
-        SimpleTokenParser $tokenParser,
+        ItemLabelRenderer $labelRenderer,
         TranslatorInterface $translator
     ) {
-        $this->inputScreens = $inputScreens;
-        $this->tokenParser  = $tokenParser;
-        $this->translator   = $translator;
+        $this->inputScreens  = $inputScreens;
+        $this->labelRenderer = $labelRenderer;
+        $this->translator    = $translator;
     }
 
     /**
@@ -103,44 +103,12 @@ final class EditMaskSubHeadlineListener
             return;
         }
 
-        $tokenData = [];
-        // Get model properties.
-        foreach ($event->getModel()->getPropertiesAsArray() as $keyData => $valueData) {
-            $tokenData['model_' . $keyData] = $valueData;
-        }
-
-        // Replace simple tokens.
-        $headlineAdd = $this->replaceSimpleTokensAtHeadline($headline, $tokenData);
+        $headlineAdd = $this->labelRenderer->render($headline, $event->getModel()->getPropertiesAsArray());
 
         // Translate language key and add headline part.
         $subHeadline =
             $this->translator->trans('editRecord', ['%id%' => $headlineAdd], $metaModelName);
 
         $event->setHeadline($subHeadline);
-    }
-
-    /**
-     * Replace simple tokens at headline parameter.
-     *
-     * @param string $headline  The headline string.
-     * @param array  $tokenData The token data.
-     *
-     * @return string
-     */
-    private function replaceSimpleTokensAtHeadline(string $headline, array $tokenData): string
-    {
-        if (
-            \str_contains($headline, '&#35;&#35;')
-            || \str_contains($headline, '##')
-        ) {
-            $headline =
-                $this->tokenParser->parse(
-                    \str_replace('&#35;', '#', $headline),
-                    $tokenData,
-                    false
-                );
-        }
-
-        return $headline;
     }
 }

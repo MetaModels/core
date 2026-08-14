@@ -140,7 +140,7 @@ services:
   MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\EditMaskSubHeadlineListener:
     arguments:
       - "@metamodels.view_combination.input_screen_information_builder"
-      - "@contao.string.simple_token_parser"
+      - "@metamodels.backend.item_label_renderer"
       - "@translator"
     tags:
       - name: kernel.event_listener
