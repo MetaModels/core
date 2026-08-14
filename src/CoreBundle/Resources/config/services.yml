@@ -9,6 +9,32 @@ services:
     MetaModels\Filter\Setting\IFilterSettingFactory: '@metamodels.filter_setting_factory'
     MetaModels\Render\Setting\IRenderSettingFactory: '@metamodels.render_setting_factory'
     MetaModels\ViewCombination\ViewCombination: '@metamodels.view_combination'
+    # Der Controller loest sein Argument ueber den Klassennamen auf.
+    MetaModels\CoreBundle\Backend\ItemBreadcrumbBuilder: '@metamodels.backend.item_breadcrumb_builder'
+
+    metamodels.backend.item_label_renderer:
+        class: MetaModels\CoreBundle\Backend\ItemLabelRenderer
+        arguments:
+            - "@contao.string.simple_token_parser"
+
+    metamodels.listener.menu.item_breadcrumb:
+        class: MetaModels\CoreBundle\EventListener\Menu\ItemBreadcrumbListener
+        arguments:
+            - "@metamodels.backend.item_breadcrumb_builder"
+            - "@request_stack"
+        tags:
+            - name: kernel.event_listener
+              event: contao.backend_menu_build
+
+    metamodels.backend.item_breadcrumb_builder:
+        class: MetaModels\CoreBundle\Backend\ItemBreadcrumbBuilder
+        public: true
+        arguments:
+            - "@metamodels.view_combination"
+            - "@metamodels.backend.item_label_renderer"
+            - "@database_connection"
+            - "@router"
+            - "@request_stack"
 
     metamodels.assets.icon_builder:
         class: MetaModels\CoreBundle\Assets\IconBuilder
