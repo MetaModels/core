@@ -156,20 +156,29 @@ abstract class MetaModelHybrid extends Hybrid
     /**
      * Create a new instance.
      *
-     * @param Result|TDatabaseResult $objElement The object from the database.
-     * @param string                 $strColumn  The column the element is displayed within.
+     * @param Result|TDatabaseResult $objElement    The object from the database.
+     * @param string                 $strColumn     The column the element is displayed within.
+     * @param string|null            $strTypePrefix The CSS class prefix, if the caller names one.
      */
-    public function __construct($objElement, $strColumn = 'main')
+    public function __construct($objElement, $strColumn = 'main', $strTypePrefix = null)
     {
         /** @psalm-suppress ArgumentTypeCoercion - Contao has incomplete type annotation. */
-        parent::__construct($objElement, $strColumn);
+        parent::__construct($objElement, $strColumn, $strTypePrefix);
 
         $this->arrData = \method_exists($objElement, 'row') ? $objElement->row() : (array) $objElement;
 
         // Get CSS ID and headline from the parent element (!).
         /** @psalm-suppress PropertyTypeCoercion */
         $this->cssID      = StringUtil::deserialize($objElement->cssID, true);
-        $this->typePrefix = $objElement->typePrefix ?? '';
+        // The same order Contao follows in Hybrid, which never gets to decide here: it leaves its
+        // constructor early for want of a table of its own, so everything below that point has to
+        // be repeated. Contao names the prefix through the model for content elements, deprecated
+        // since 5.6, and through the constructor for forms; for modules it names it nowhere and
+        // falls back on the type of the model. That fallback is what went missing, which silently
+        // dropped "mod_" from the class of every module while content elements kept their "ce_".
+        // The declaration of the class stands in for it, and says with certainty what Contao can
+        // only guess - it is what the property is declared for.
+        $this->typePrefix = ($objElement->typePrefix ?? '') ?: ($strTypePrefix ?? $this->typePrefix);
         $this->strKey     = $objElement->type;
         $arrHeadline      = StringUtil::deserialize($objElement->headline);
         $this->headline   = \is_array($arrHeadline) ? $arrHeadline['value'] : $arrHeadline;
