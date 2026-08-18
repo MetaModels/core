@@ -22,7 +22,6 @@
 namespace MetaModels\CoreBundle\EventListener;
 
 use Contao\CoreBundle\Routing\ScopeMatcher;
-use MetaModels\BackendIntegration\Module;
 use MetaModels\ViewCombination\ViewCombination;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolverInterface;
@@ -104,36 +103,15 @@ class UserListener
         }
 
         $localMenu = &$GLOBALS['BE_MOD'];
-        $this->buildBackendModules($localMenu);
+        // The MetaModels themselves are deliberately not registered as back end modules here.
+        // Doing so would keep the permissions in two places at once: as a module right on the
+        // user group, and as the assignment of input screen and render setting to that group
+        // in "tl_metamodel_dca_combine". The latter decides what a user gets to see anyway,
+        // and the controller of the route turns away anyone the combination does not cover.
+        // One place to maintain was preferred over two that can contradict each other.
+        //
+        // Child tables are a different matter - those still need their entry, see below.
         $this->injectChildTables($localMenu);
-    }
-
-    /**
-     * Add the modules to the backend sections.
-     *
-     * @param array $localMenu Reference to the global array.
-     *
-     * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     */
-    private function buildBackendModules(&$localMenu)
-    {
-        return;
-        foreach ($this->viewCombination->getStandalone() as $metaModelName => $screen) {
-            $section = $screen['meta']['backendsection'];
-            if (!isset($localMenu[$section])) {
-                $localMenu[$section] = [];
-            }
-            if (!isset($localMenu[$section]['metamodel_' . $metaModelName])) {
-                $localMenu[$section]['metamodel_' . $metaModelName] = ['tables' => []];
-            }
-            $localMenu[$section]['metamodel_' . $metaModelName]['callback'] = Module::class;
-            \array_unshift($localMenu[$section]['metamodel_' . $metaModelName]['tables'], $metaModelName);
-            $GLOBALS['TL_LANG']['MOD']['metamodel_' . $metaModelName] = [
-                ($screen['label'][$GLOBALS['TL_LANGUAGE']] ?? ($screen['label'][''] ?? ''))
-            ];
-        }
     }
 
     /**
