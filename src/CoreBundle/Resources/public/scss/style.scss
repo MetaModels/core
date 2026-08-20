@@ -35,6 +35,7 @@ $icon_locale: url('../images/icons/locale.svg');
 // as <img src>. These two are background images, so the dark variant has to be named here.
 $icon_fields_dark: url('../images/icons/fields--dark.svg');
 $icon_rendersettings_add_dark: url('../images/icons/rendersettings_add--dark.svg');
+$icon_dca_add_dark: url('../images/icons/dca_add--dark.svg');
 
 .header_css_fields {
   padding: 2px 0 3px 20px;
@@ -278,6 +279,7 @@ form[id^=mm_] .sort_hint {
 
 html[data-color-scheme="dark"] {
   .header_css_fields { background-image: $icon_fields_dark; }
+  .header_add_all { background-image: $icon_dca_add_dark; }
   .rendersetting_add_all { background-image: $icon_rendersettings_add_dark; }
   .dca_palette { background-image: $icon_pal_open_dark; }
 }
