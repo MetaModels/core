@@ -111,14 +111,30 @@ final class ItemBreadcrumbBuilder
         }
 
         $trail = \array_reverse($trail);
-        $base  = $trail[0]['table'];
+
+        // The outermost level is the only one whose own screen was never confirmed while walking
+        // up - every other level only made it into the trail because the loop above resolved its
+        // screen first. It routinely IS a MetaModel with a screen (the common case, a standalone
+        // table). When it is not, that is either a plain Contao table or a MetaModel the current
+        // user has no rights to via tl_metamodel_dca_combine - either way it cannot serve as the
+        // base of the "metamodels.metamodel" route, so the nearest level that still resolves takes
+        // over. The trail always has at least two levels once it is non-empty, see the early return
+        // above.
+        $outer = $trail[0]['table'];
+        $base  = null !== $this->screenOf($outer) ? $outer : ($trail[1]['table'] ?? $outer);
 
         return \array_map(
-            fn(array $level): array => [
-                'table' => $level['table'],
-                'label' => $this->labelOf($level['table'], $level['label'], $level['record']),
-                'url'   => $this->urlOf($base, $level['table'], $level['record']),
-            ],
+            function (array $level) use ($base, $outer): array {
+                $url = ($level['table'] === $outer && null === $this->screenOf($outer))
+                    ? $this->contaoModuleUrlOf($outer)
+                    : $this->urlOf($base, $level['table'], $level['record']);
+
+                return [
+                    'table' => $level['table'],
+                    'label' => $this->labelOf($level['table'], $level['label'], $level['record']),
+                    'url'   => $url,
+                ];
+            },
             $trail
         );
     }
@@ -149,8 +165,11 @@ final class ItemBreadcrumbBuilder
     {
         $screen = $this->screenOf($tableName);
         if (null === $screen) {
-            // No screen at all - the chain ended at a plain Contao table.
-            return $tableName;
+            // No screen resolves for the current user. Two reasons look identical here: the chain
+            // ended at a plain Contao table, or it is a MetaModel this user's groups have no
+            // tl_metamodel_dca_combine entry for - the name of the MetaModel does not depend on
+            // that grant and still names the level correctly in the second case.
+            return $this->metaModelNameOf($tableName) ?? $tableName;
         }
 
         /** @var array<string, string> $labels */
@@ -159,6 +178,28 @@ final class ItemBreadcrumbBuilder
         $language = $this->requestStack->getCurrentRequest()?->getLocale() ?? '';
 
         return $labels[$language] ?? $labels[''] ?? $tableName;
+    }
+
+    /**
+     * Retrieve the name of a MetaModel by its table, independent of whether the current user has
+     * a screen for it.
+     *
+     * @param string $tableName The table.
+     *
+     * @return string|null
+     */
+    private function metaModelNameOf(string $tableName): ?string
+    {
+        $name = $this->connection
+            ->createQueryBuilder()
+            ->select('name')
+            ->from('tl_metamodel')
+            ->where('tableName=:tableName')
+            ->setParameter('tableName', $tableName)
+            ->executeQuery()
+            ->fetchOne();
+
+        return (false === $name || '' === $name) ? null : (string) $name;
     }
 
     /**
@@ -279,15 +320,50 @@ final class ItemBreadcrumbBuilder
     private function parentOfLevel(string $tableName, ?string $recordId): ?string
     {
         $screen = $this->screenOf($tableName);
-        $parent = (string) ($screen['meta']['ptable'] ?? '');
+        if (null === $screen || null === $recordId) {
+            return null;
+        }
 
-        if ('' === $parent || null === $recordId) {
+        $parent = (string) ($screen['meta']['ptable'] ?? '');
+        if ('' === $parent) {
             return null;
         }
 
         $parentId = $this->parentIdOf($tableName, $recordId);
 
         return null === $parentId ? null : $parent . '::' . $parentId;
+    }
+
+    /**
+     * Link a plain Contao table into its own backend module.
+     *
+     * The chain may end at a table with no MetaModels screen at all. When it also is not a
+     * MetaModel by name, it is a genuine Contao table (see the note where this is called from) -
+     * Contao keeps no reverse lookup from a table to the module listing it, so this walks the same
+     * BE_MOD registry Contao populates for its own backend navigation.
+     *
+     * @param string $tableName The table.
+     *
+     * @return string|null
+     */
+    private function contaoModuleUrlOf(string $tableName): ?string
+    {
+        if (null !== $this->metaModelNameOf($tableName)) {
+            // A MetaModel the current user has no rights to - no link, not even into Contao.
+            return null;
+        }
+
+        /** @var array<string, array<string, array{tables?: list<string>}>> $modules */
+        $modules = $GLOBALS['BE_MOD'] ?? [];
+        foreach ($modules as $category) {
+            foreach ($category as $moduleName => $module) {
+                if (\in_array($tableName, $module['tables'] ?? [], true)) {
+                    return $this->urlGenerator->generate('contao_backend', ['do' => $moduleName]);
+                }
+            }
+        }
+
+        return null;
     }
 
     /**
