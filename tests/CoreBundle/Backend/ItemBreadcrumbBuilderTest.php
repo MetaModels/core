@@ -45,6 +45,9 @@ final class ItemBreadcrumbBuilderTest extends TestCase
 
     private ?array $originalBeMod = null;
 
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     protected function setUp(): void
     {
         $this->connection = DriverManager::getConnection(['url' => 'sqlite:///:memory:'], new Configuration());
@@ -58,6 +61,9 @@ final class ItemBreadcrumbBuilderTest extends TestCase
         $GLOBALS['BE_MOD']    = [];
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     protected function tearDown(): void
     {
         if (null === $this->originalBeMod) {
@@ -113,6 +119,9 @@ final class ItemBreadcrumbBuilderTest extends TestCase
         );
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     public function testAContaoTableAtTheEndLinksIntoItsOwnBackendModuleWhenOneListsIt(): void
     {
         $GLOBALS['BE_MOD'] = ['content' => ['unknown_module' => ['tables' => ['tl_unknown']]]];
@@ -124,6 +133,9 @@ final class ItemBreadcrumbBuilderTest extends TestCase
         self::assertSame('contao_backend?do=unknown_module', $trail[0]['url']);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     public function testAMetaModelWithoutRightsIsNamedButStaysUnlinked(): void
     {
         $this->connection->executeStatement(

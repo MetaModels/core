@@ -124,19 +124,35 @@ final class ItemBreadcrumbBuilder
         $base  = null !== $this->screenOf($outer) ? $outer : ($trail[1]['table'] ?? $outer);
 
         return \array_map(
-            function (array $level) use ($base, $outer): array {
-                $url = ($level['table'] === $outer && null === $this->screenOf($outer))
-                    ? $this->contaoModuleUrlOf($outer)
-                    : $this->urlOf($base, $level['table'], $level['record']);
-
-                return [
-                    'table' => $level['table'],
-                    'label' => $this->labelOf($level['table'], $level['label'], $level['record']),
-                    'url'   => $url,
-                ];
-            },
+            fn (array $level): array => $this->finalizeLevel($level, $base, $outer),
             $trail
         );
+    }
+
+    /**
+     * Resolve the url and label of a single trail level.
+     *
+     * @param array{table: string, label: string, record: string|null} $level The level being
+     *                                                                        finalized.
+     * @param string                                                    $base  The table the
+     *                                                                        "metamodels.metamodel"
+     *                                                                        route is built from.
+     * @param string                                                    $outer The outermost table
+     *                                                                        of the trail.
+     *
+     * @return array{table: string, label: string, url: string|null}
+     */
+    private function finalizeLevel(array $level, string $base, string $outer): array
+    {
+        $url = ($level['table'] === $outer && null === $this->screenOf($outer))
+            ? $this->contaoModuleUrlOf($outer)
+            : $this->urlOf($base, $level['table'], $level['record']);
+
+        return [
+            'table' => $level['table'],
+            'label' => $this->labelOf($level['table'], $level['label'], $level['record']),
+            'url'   => $url,
+        ];
     }
 
     /**
@@ -345,6 +361,8 @@ final class ItemBreadcrumbBuilder
      * @param string $tableName The table.
      *
      * @return string|null
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     private function contaoModuleUrlOf(string $tableName): ?string
     {
