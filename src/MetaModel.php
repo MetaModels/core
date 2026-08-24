@@ -1353,6 +1353,70 @@ class MetaModel implements IMetaModel
                 $objAttribute->modelSaved($objItem);
             }
         }
+
+        // updateVariants() just broadcast the new value of a shared attribute to every sibling's
+        // own row - but their own variant attributes (e.g. a combined value or alias built from
+        // that field) never learn "you have been saved" the way $objItem did above. Without this,
+        // a sibling's combined/alias value stays frozen at whatever the base's old value was
+        // until the sibling is edited on its own - see core#657.
+        $this->refreshSiblingDerivedAttributes($objItem, $arrAllIds);
+    }
+
+    /**
+     * Whether the currently dirty attributes of the item include one that is not variant-specific.
+     *
+     * @param IItem $item The item being saved.
+     *
+     * @return bool
+     */
+    private function hasSharedAttributeChange(IItem $item): bool
+    {
+        if (!($item instanceof IDirtyTracking)) {
+            return false;
+        }
+
+        foreach ($this->getAttributes() as $objAttribute) {
+            if (!$objAttribute->get('isvariant') && $item->isDirty($objAttribute->getColName())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Re-run modelSaved() for every sibling of the given item, so their own variant attributes
+     * (combined values, aliases, ...) that depend on a just-changed shared attribute get a chance
+     * to recompute - see hasSharedAttributeChange().
+     *
+     * @param IItem    $item      The item just saved.
+     * @param string[] $arrAllIds The ids of the base and every one of its variants, including $item.
+     *
+     * @return void
+     */
+    private function refreshSiblingDerivedAttributes(IItem $item, array $arrAllIds): void
+    {
+        if (!$this->hasSharedAttributeChange($item)) {
+            return;
+        }
+
+        foreach ($arrAllIds as $strSiblingId) {
+            $strSiblingId = (string) $strSiblingId;
+            if ($strSiblingId === (string) $item->get('id')) {
+                continue;
+            }
+
+            $objSibling = $this->findById($strSiblingId);
+            if (null === $objSibling) {
+                continue;
+            }
+
+            foreach ($this->getAttributes() as $objAttribute) {
+                if ($objSibling->isAttributeSet($objAttribute->getColName())) {
+                    $objAttribute->modelSaved($objSibling);
+                }
+            }
+        }
     }
 
     /**
