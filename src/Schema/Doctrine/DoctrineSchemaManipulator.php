@@ -28,8 +28,10 @@ use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\SchemaDiff;
+use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Types\Types;
+use ReflectionMethod;
 
 use function in_array;
 
@@ -88,38 +90,101 @@ class DoctrineSchemaManipulator
      *
      * @return list<string>
      * @throws Exception
-     *
-     * @psalm-suppress InternalProperty
      */
     private function buildChangeSet(DoctrineSchemaInformation $schemaInformation): array
     {
         $platform = $this->connection->getDatabasePlatform();
         $manager  = $this->connection->createSchemaManager();
         $current  = $manager->introspectSchema();
-        $diff     = $this->diff($current, $schemaInformation->getSchema(), $manager);
+        $desired  = $schemaInformation->getSchema();
 
-        foreach ($diff->changedTables as $changedTable) {
-            foreach ($changedTable->removedColumns as $removedColumn) {
+        // MetaModels never drops tables/columns on its own - carry anything not present in the
+        // desired schema over from $current into $desired *before* diffing, unchanged, warning
+        // about each. That way the comparator never sees them as missing and never proposes a
+        // drop, on any platform - including one that has to rebuild the whole table for an
+        // unrelated change (e.g. SQLite), where a drop suppressed only in the computed diff would
+        // still silently lose the column's data during the rebuild's copy-back step.
+        $this->ignoreUnwantedRemovals($current, $desired);
+
+        $diff = $this->diff($current, $desired, $manager);
+
+        return $platform->getAlterSchemaSQL($diff);
+    }
+
+    /**
+     * Carry tables and columns present in $current but missing from $desired over into $desired
+     * unchanged, warning about each.
+     *
+     * @param Schema $current The introspected (actual) schema.
+     * @param Schema $desired The desired schema, mutated in place.
+     *
+     * @return void
+     */
+    private function ignoreUnwantedRemovals(Schema $current, Schema $desired): void
+    {
+        foreach ($current->getTables() as $table) {
+            if (!$desired->hasTable($table->getName())) {
                 // @codingStandardsIgnoreStart
                 @trigger_error(
-                    'Ignoring drop of column "' . $removedColumn->getName(),
+                    'Ignoring drop of table "' . $table->getName(),
                     E_USER_WARNING
                 );
                 // @codingStandardsIgnoreEnd
+                $this->copyTableInto($desired, $table);
+                continue;
             }
-            $changedTable->removedColumns = [];
-        }
-        foreach ($diff->removedTables as $removedTable) {
-            // @codingStandardsIgnoreStart
-            @trigger_error(
-                'Ignoring drop of table "' . $removedTable->getName(),
-                E_USER_WARNING
-            );
-            // @codingStandardsIgnoreEnd
-        }
-        $diff->removedTables = [];
 
-        return $platform->getAlterSchemaSQL($diff);
+            $desiredTable = $desired->getTable($table->getName());
+            foreach ($table->getColumns() as $column) {
+                if ($desiredTable->hasColumn($column->getName())) {
+                    continue;
+                }
+                // @codingStandardsIgnoreStart
+                @trigger_error(
+                    'Ignoring drop of column "' . $column->getName(),
+                    E_USER_WARNING
+                );
+                // @codingStandardsIgnoreEnd
+                $this->copyColumnInto($desiredTable, $column);
+            }
+        }
+    }
+
+    /**
+     * Add a clone of $table to $desired.
+     *
+     * Schema has no public API for adding an already-built Table instance (only createTable(),
+     * which builds an empty one) - Schema::_addTable() is @internal, but exactly what is needed
+     * here, so this goes through reflection instead of rebuilding the table column by column.
+     *
+     * @param Schema $desired The schema to add the table to.
+     * @param Table  $table   The table to add, taken as-is from the current (actual) schema.
+     *
+     * @return void
+     *
+     * @psalm-suppress InternalMethod
+     */
+    private function copyTableInto(Schema $desired, Table $table): void
+    {
+        (new ReflectionMethod($desired, '_addTable'))->invoke($desired, clone $table);
+    }
+
+    /**
+     * Add a clone of $column to $table.
+     *
+     * Table has no public API for adding an already-built Column instance - Table::_addColumn()
+     * is @internal, but exactly what is needed here, see copyTableInto().
+     *
+     * @param Table  $table  The table to add the column to.
+     * @param Column $column The column to add, taken as-is from the current (actual) schema.
+     *
+     * @return void
+     *
+     * @psalm-suppress InternalMethod
+     */
+    private function copyColumnInto(Table $table, Column $column): void
+    {
+        (new ReflectionMethod($table, '_addColumn'))->invoke($table, clone $column);
     }
 
     private function diff(Schema $current, Schema $desired, AbstractSchemaManager $manager): SchemaDiff
