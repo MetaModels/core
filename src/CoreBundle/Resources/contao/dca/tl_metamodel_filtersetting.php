@@ -609,7 +609,7 @@ WHERE 1 = 1',
                 'tl_class'           => 'w50',
                 'includeBlankOption' => true
             ],
-            'sql'         => ['type' => 'string', 'length' => '24', 'notnull' => false, 'default' => '']
+            'sql'         => ['type' => 'string', 'length' => 24, 'notnull' => false, 'default' => '']
         ],
         'cssID'                => [
             'label'       => 'cssID.label',

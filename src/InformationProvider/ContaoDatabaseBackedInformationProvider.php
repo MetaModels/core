@@ -54,7 +54,7 @@ class ContaoDatabaseBackedInformationProvider implements InformationProviderInte
     #[\Override]
     public function getNames(): array
     {
-        if ($this->connection->createSchemaManager()->tablesExist('tl_metamodel')) {
+        if ($this->connection->createSchemaManager()->tablesExist(['tl_metamodel'])) {
             return $this
                 ->connection
                 ->createQueryBuilder()

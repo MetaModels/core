@@ -29,7 +29,6 @@ use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\PropertyValueBag;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Palette\AbstractWeightAwarePaletteCondition;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\MetaModelsServiceContainer;
 
@@ -116,7 +115,7 @@ class RenderSettingAttributeIs extends AbstractWeightAwarePaletteCondition
      *
      * @return string
      *
-     * @throws Exception When an database error occurs.
+     * @throws \RuntimeException When an database error occurs.
      */
     public function getTypeOfAttribute($value)
     {
@@ -132,7 +131,11 @@ class RenderSettingAttributeIs extends AbstractWeightAwarePaletteCondition
                 ->executeQuery();
 
             if (false === ($result = $statement->fetchAssociative())) {
-                return new Exception('Failed to load attribute for render setting.');
+                // Doctrine\DBAL\Exception became an interface in DBAL 4 and was never meant to be
+                // instantiated by application code anyway - this was also silently returning the
+                // exception instead of throwing it, contradicting both the docblock above and the
+                // declared string return type.
+                throw new \RuntimeException('Failed to load attribute for render setting.');
             }
 
             self::$attributeTypes[$value] = $result['type'];

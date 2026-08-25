@@ -59,6 +59,12 @@ final class DoctrineSchemaListener
         $this->mergeSchema($schema, $contaoSchema);
     }
 
+    /**
+     * @psalm-suppress DeprecatedMethod, InternalMethod - Table::getName()/Column::getName() etc.
+     * are marked internal and deprecated in DBAL 4 in favour of getObjectName(), which returns a
+     * Name value object that does not exist on DBAL 3 - there is no replacement that works across
+     * both. Applies to this method and the four merge*() methods below it.
+     */
     private function mergeSchema(DoctrineSchemaInformation $source, Schema $target): void
     {
         foreach ($source->getSchema()->getTables() as $sourceTable) {
@@ -84,6 +90,7 @@ final class DoctrineSchemaListener
         // NOTE: We are explicitely not copying the property: SchemaConfig|null Table::$_schemaConfig
     }
 
+    /** @psalm-suppress DeprecatedMethod, InternalMethod - see mergeSchema(). */
     private function mergeColumns(Table $sourceTable, Table $targetTable): void
     {
         $registry = Type::getTypeRegistry();
@@ -113,6 +120,7 @@ final class DoctrineSchemaListener
         }
     }
 
+    /** @psalm-suppress DeprecatedMethod, InternalMethod - see mergeSchema(). */
     private function mergeIndexes(Table $sourceTable, Table $targetTable): void
     {
         foreach ($sourceTable->getIndexes() as $source) {
@@ -143,6 +151,7 @@ final class DoctrineSchemaListener
         }
     }
 
+    /** @psalm-suppress DeprecatedMethod, InternalMethod - see mergeSchema(). */
     private function mergeUniqueConstraints(Table $sourceTable, Table $targetTable): void
     {
         foreach ($sourceTable->getUniqueConstraints() as $uniqueConstraint) {
@@ -162,6 +171,7 @@ final class DoctrineSchemaListener
         }
     }
 
+    /** @psalm-suppress DeprecatedMethod, InternalMethod - see mergeSchema(). */
     private function mergeForeignKeyConstraints(Table $sourceTable, Table $targetTable): void
     {
         foreach ($sourceTable->getForeignKeys() as $foreignKey) {
@@ -177,7 +187,13 @@ final class DoctrineSchemaListener
                 $foreignColumns = \array_merge($tmpUniqueConstraint->getForeignColumns(), $foreignColumns);
                 $options        = \array_merge($tmpUniqueConstraint->getOptions(), $options);
             }
-            $targetTable->addForeignKeyConstraint($foreignTable, $localColumns, $foreignColumns, $options, $name);
+            $targetTable->addForeignKeyConstraint(
+                $foreignTable,
+                $localColumns,
+                \array_values($foreignColumns),
+                $options,
+                $name
+            );
         }
     }
 }

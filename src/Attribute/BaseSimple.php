@@ -167,9 +167,9 @@ class BaseSimple extends Base implements ISimple
 
         foreach ($arrValues as $intId => $varData) {
             $this->connection->createQueryBuilder()
-                ->update($strTable, 't')
-                ->where('t.id=:id')
-                ->set('t.' . $strColName, ':' . $strColName)
+                ->update($strTable)
+                ->where('id=:id')
+                ->set($strColName, ':' . $strColName)
                 ->setParameter($strColName, is_array($varData) ? serialize($varData) : $varData)
                 ->setParameter('id', $intId)
                 ->executeQuery();

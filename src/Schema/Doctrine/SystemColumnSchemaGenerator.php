@@ -74,6 +74,10 @@ class SystemColumnSchemaGenerator implements DoctrineSchemaGeneratorInterface
             'default' => 0,
         ]);
 
+        // DBAL 4 deprecates this in favour of addPrimaryKeyConstraint(), a new PrimaryKeyConstraint
+        // value-object API that does not exist on DBAL 3 - there is no replacement that works
+        // across both.
+        /** @psalm-suppress DeprecatedMethod */
         $tableSchema->setPrimaryKey(['id']);
 
         if (

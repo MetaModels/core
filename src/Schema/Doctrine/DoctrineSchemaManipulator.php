@@ -119,6 +119,10 @@ class DoctrineSchemaManipulator
      * @param Schema $desired The desired schema, mutated in place.
      *
      * @return void
+     *
+     * @psalm-suppress DeprecatedMethod, InternalMethod - Table::getName()/Column::getName() are
+     * marked internal and deprecated in DBAL 4 in favour of getObjectName(), which returns a Name
+     * value object that does not exist on DBAL 3 - there is no replacement that works across both.
      */
     private function ignoreUnwantedRemovals(Schema $current, Schema $desired): void
     {
@@ -187,6 +191,9 @@ class DoctrineSchemaManipulator
         (new ReflectionMethod($table, '_addColumn'))->invoke($table, clone $column);
     }
 
+    /**
+     * @psalm-suppress DeprecatedMethod, InternalMethod - see ignoreUnwantedRemovals().
+     */
     private function diff(Schema $current, Schema $desired, AbstractSchemaManager $manager): SchemaDiff
     {
         // We have to "inherit" collation and charset for certain types as doctrine will report them in the current
@@ -220,6 +227,15 @@ class DoctrineSchemaManipulator
         return $manager->createComparator()->compareSchemas($current, $desired);
     }
 
+    /**
+     * @param 'collation'|'charset' $optionName The two callers below only ever pass one of these -
+     *                                          DBAL 4 restricts platform option names to a fixed
+     *                                          set of literals, unlike DBAL 3's plain string.
+     *
+     * @psalm-suppress DeprecatedMethod - no cross-version replacement exists: DBAL 4 only added
+     * getters (getCollation()/getCharset()), no setters, so setPlatformOption() is still the only
+     * way to set either one there too, and DBAL 3 has neither the getters nor the setters.
+     */
     private function inheritPlatformOptionIfNotSet(string $optionName, Column $column, Column $existingColumn): void
     {
         if (!$column->hasPlatformOption($optionName)) {

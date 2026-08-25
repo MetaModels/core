@@ -28,7 +28,6 @@ use Doctrine\DBAL\Connection;
 use function array_intersect;
 use function array_keys;
 use function array_map;
-use function array_values;
 use function count;
 use function in_array;
 
@@ -114,7 +113,7 @@ final class InputScreenModeMigration extends AbstractMigration
     private function tablesExist(array $tableNames): bool
     {
         if ([] === $this->existsCache) {
-            $this->existsCache = array_values($this->connection->createSchemaManager()->listTableNames());
+            $this->existsCache = $this->connection->createSchemaManager()->listTableNames();
         }
 
         return count($tableNames) === count(

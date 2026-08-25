@@ -29,7 +29,6 @@ use function array_intersect;
 use function array_key_exists;
 use function array_keys;
 use function array_map;
-use function array_values;
 use function count;
 use function implode;
 use function strtolower;
@@ -121,7 +120,7 @@ final class JumpToMigration extends AbstractMigration
     private function tablesExist(array $tableNames): bool
     {
         if ([] === $this->existsCache) {
-            $this->existsCache = array_values($this->connection->createSchemaManager()->listTableNames());
+            $this->existsCache = $this->connection->createSchemaManager()->listTableNames();
         }
 
         return count($tableNames) === count(

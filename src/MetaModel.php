@@ -1183,9 +1183,9 @@ class MetaModel implements IMetaModel
         $builder = $this->getConnection()->createQueryBuilder();
 
         $builder
-            ->update($this->getTableName(), 't2')
-            ->set('t2.' . $strColumn, \is_array($varData) ? \serialize($varData) : $varData)
-            ->where($builder->expr()->in('t2.id', ':ids'))
+            ->update($this->getTableName())
+            ->set($strColumn, \is_array($varData) ? \serialize($varData) : $varData)
+            ->where($builder->expr()->in('id', ':ids'))
             ->setParameter('ids', $arrIds, ArrayParameterType::STRING)
             ->executeQuery();
     }

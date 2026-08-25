@@ -78,12 +78,20 @@ class SimpleQuery extends FilterRule
      */
     public static function createFromQueryBuilder(QueryBuilder $builder, $columnName = 'id')
     {
-        /** @psalm-suppress DeprecatedMethod */
+        // QueryBuilder::getConnection() was removed in DBAL 4; falling back to null here is safe -
+        // the constructor already resolves a missing connection from the container (deprecated,
+        // but functionally identical, since it is the very same shared connection service).
+        $connection = null;
+        if (\method_exists($builder, 'getConnection')) {
+            /** @psalm-suppress DeprecatedMethod, UndefinedMethod */
+            $connection = $builder->getConnection();
+        }
+
         return new self(
             $builder->getSQL(),
             $builder->getParameters(),
             $columnName,
-            $builder->getConnection(),
+            $connection,
             $builder->getParameterTypes()
         );
     }

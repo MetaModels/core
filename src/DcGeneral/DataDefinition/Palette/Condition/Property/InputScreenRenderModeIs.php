@@ -31,7 +31,6 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\LegendInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PropertyInterface;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\MetaModelsServiceContainer;
 
@@ -117,7 +116,7 @@ class InputScreenRenderModeIs implements PropertyConditionInterface
      *
      * @return string
      *
-     * @throws Exception
+     * @throws \RuntimeException
      */
     public function getInputScreenRenderMode($value)
     {
@@ -132,7 +131,11 @@ class InputScreenRenderModeIs implements PropertyConditionInterface
                 ->executeQuery();
 
             if (false === ($result = $statement->fetchAssociative())) {
-                return new Exception('Failed to load attribute for input screen setting.');
+                // Doctrine\DBAL\Exception became an interface in DBAL 4 and was never meant to be
+                // instantiated by application code anyway - this was also silently returning the
+                // exception instead of throwing it, contradicting both the docblock above and the
+                // declared string return type.
+                throw new \RuntimeException('Failed to load attribute for input screen setting.');
             }
 
             self::$stateBuffer[$value] = $result['rendermode'];

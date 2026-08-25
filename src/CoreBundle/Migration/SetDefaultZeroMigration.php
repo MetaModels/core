@@ -150,6 +150,12 @@ class SetDefaultZeroMigration extends AbstractMigration
      * @return array<string, array<string, TColumnInformation>>
      * @throws Exception
      */
+    /**
+     * @psalm-suppress DeprecatedMethod, InternalMethod - Column::getName() is marked internal and
+     * deprecated in DBAL 4 in favour of getObjectName(), which returns a Name value object that
+     * does not exist on DBAL 3 - there is no replacement that works across both. Applies to this
+     * method and fetchTableNames() below it.
+     */
     private function fetchNonDefaultZeroColumns(): array
     {
         $tables = $this->fetchTableNames();
@@ -189,6 +195,7 @@ class SetDefaultZeroMigration extends AbstractMigration
      * @return list<string>
      * @throws Exception
      */
+    /** @psalm-suppress DeprecatedMethod, InternalMethod - see fetchNonDefaultZeroColumns(). */
     private function fetchTableNames(): array
     {
         return array_values(
@@ -230,7 +237,7 @@ class SetDefaultZeroMigration extends AbstractMigration
     private function tablesExist(array $tableNames): bool
     {
         if ([] === $this->existsCache) {
-            $this->existsCache = array_values($this->connection->createSchemaManager()->listTableNames());
+            $this->existsCache = $this->connection->createSchemaManager()->listTableNames();
         }
 
         return count($tableNames) === count(array_intersect($tableNames, array_map('strtolower', $this->existsCache)));

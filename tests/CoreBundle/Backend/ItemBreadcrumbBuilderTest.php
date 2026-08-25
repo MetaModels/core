@@ -50,7 +50,10 @@ final class ItemBreadcrumbBuilderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->connection = DriverManager::getConnection(['url' => 'sqlite:///:memory:'], new Configuration());
+        $this->connection = DriverManager::getConnection(
+            ['driver' => 'pdo_sqlite', 'memory' => true],
+            new Configuration()
+        );
         $this->connection->executeStatement(
             'CREATE TABLE tl_metamodel (id INTEGER PRIMARY KEY, tableName TEXT, name TEXT)'
         );
