@@ -139,9 +139,17 @@ abstract class AbstractBreadcrumbListener
             );
             $dispatcher->dispatch($iconEvent, GetBreadcrumbShortcutIconEvent::NAME);
 
+            $label = $operation['label'] ?? '';
+            // Operation labels conventionally follow Contao's [label, title] array format (see e.g.
+            // isotope-bridge's tl_metamodel.php operations.isotope) - only a plain string here would
+            // have worked before, so unwrap the array instead of naively string-casting it.
+            if (\is_array($label)) {
+                $label = $label[0] ?? '';
+            }
+
             $elements->pushShortcut(
                 $this->generate('metamodels.configuration', ['pid' => $serialized] + $parameters),
-                (string) ($operation['label'] ?? ''),
+                (string) $label,
                 $iconEvent->getIcon()
             );
         }
