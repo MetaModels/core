@@ -30,6 +30,7 @@ use Doctrine\DBAL\Exception;
 use MetaModels\Attribute\IInternal;
 use MetaModels\BackendIntegration\TemplateList;
 use MetaModels\CoreBundle\Assets\IconBuilder;
+use MetaModels\CoreBundle\Formatter\SelectAttributeOptionLabelFormatter;
 use MetaModels\Filter\Setting\FilterSettingFactory;
 use MetaModels\IFactory;
 use RuntimeException;
@@ -69,6 +70,7 @@ abstract class AbstractContentElementAndModuleCallback
      * @param TemplateList         $templateList  The template list loader.
      * @param RequestStack         $requestStack  The request stack.
      * @param TranslatorInterface  $translator    The translator.
+     * @param SelectAttributeOptionLabelFormatter $labelFormatter The attribute select option label formatter.
      */
     public function __construct(
         private readonly IconBuilder $iconBuilder,
@@ -79,6 +81,7 @@ abstract class AbstractContentElementAndModuleCallback
         private readonly RequestStack $requestStack,
         private readonly TranslatorInterface $translator,
         private readonly UrlGeneratorInterface $urlGenerator,
+        private readonly SelectAttributeOptionLabelFormatter $labelFormatter,
     ) {
     }
 
@@ -219,12 +222,7 @@ abstract class AbstractContentElementAndModuleCallback
             }
 
             $colName = $attribute->getColName();
-            $result['attributes'][$colName] = sprintf(
-                '%s [%s, "%s"]',
-                $attribute->getName(),
-                $attribute->get('type'),
-                $colName,
-            );
+            $result['attributes'][$colName] = $this->labelFormatter->formatLabel($attribute);
         }
 
         return $result;
@@ -534,12 +532,7 @@ abstract class AbstractContentElementAndModuleCallback
         if ($metaModel = $this->factory->getMetaModel($metaModelName)) {
             foreach ($metaModel->getAttributes() as $attribute) {
                 if (empty($allowedTypes) || in_array($attribute->get('type'), $allowedTypes, true)) {
-                    $attributeNames[$attribute->getColName()] =
-                        sprintf(
-                            '%s [%s]',
-                            $attribute->getName(),
-                            $attribute->getColName()
-                        );
+                    $attributeNames[$attribute->getColName()] = $this->labelFormatter->formatLabel($attribute);
                 }
             }
         }

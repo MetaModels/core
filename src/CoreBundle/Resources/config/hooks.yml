@@ -20,6 +20,7 @@ services:
             - '@request_stack'
             - '@translator'
             - '@router'
+            - '@MetaModels\CoreBundle\Formatter\SelectAttributeOptionLabelFormatter'
         public: true
 
     MetaModels\CoreBundle\Contao\Hooks\ModuleCallback:
@@ -32,6 +33,7 @@ services:
             - '@request_stack'
             - '@translator'
             - '@router'
+            - '@MetaModels\CoreBundle\Formatter\SelectAttributeOptionLabelFormatter'
         public: true
 
     MetaModels\CoreBundle\Contao\Hooks\FilterContentElementCallback:
@@ -44,6 +46,7 @@ services:
         - '@request_stack'
         - '@translator'
         - '@router'
+        - '@MetaModels\CoreBundle\Formatter\SelectAttributeOptionLabelFormatter'
       public: true
 
     MetaModels\CoreBundle\Contao\Hooks\FilterModuleCallback:
@@ -56,6 +59,7 @@ services:
         - '@request_stack'
         - '@translator'
         - '@router'
+        - '@MetaModels\CoreBundle\Formatter\SelectAttributeOptionLabelFormatter'
       public: true
 
     MetaModels\CoreBundle\EventListener\GetSearchablePagesListener:
