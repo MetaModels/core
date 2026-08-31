@@ -99,6 +99,9 @@ interface IItems extends \Iterator, \ArrayAccess
      * @param ICollection|null $objSettings     Optional, defaults to null. The additional settings.
      *
      * @return array the parsed information.
+     *
+     * The "text" and "$strOutputFormat" entries behave like read-only arrays but may be lazy
+     * value objects instead of plain arrays - see \MetaModels\Item::parseValue().
      */
     public function parseValue($strOutputFormat = 'text', $objSettings = null);
 
@@ -109,6 +112,8 @@ interface IItems extends \Iterator, \ArrayAccess
      * @param ICollection|null $objSettings     Optional, defaults to null. The additional settings.
      *
      * @return array the parsed information.
+     *
+     * Each entry is one item's result, in the same shape as parseValue() - see there.
      */
     public function parseAll($strOutputFormat = 'text', $objSettings = null);
 }

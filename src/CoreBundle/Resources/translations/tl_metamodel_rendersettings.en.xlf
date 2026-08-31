@@ -157,6 +157,12 @@
       <trans-unit id="legacyAttributeWrapper.description" resname="legacyAttributeWrapper.description">
         <source>Renders the enclosing block (field, label, value) in the list template as before, instead of in the attribute templates. Enabled for existing render settings so their output stays unchanged; new render settings start without it. The option is removed in MetaModels 3.0.</source>
       </trans-unit>
+      <trans-unit id="legacyEagerRendering.label" resname="legacyEagerRendering.label">
+        <source>Eager rendering of all attributes (legacy, deprecated)</source>
+      </trans-unit>
+      <trans-unit id="legacyEagerRendering.description" resname="legacyEagerRendering.description">
+        <source>Renders every attribute of this render setting immediately, as before, instead of only when it is actually accessed. Enabled for existing render settings so their behaviour stays unchanged; new render settings start without it. The option is removed in MetaModels 3.0.</source>
+      </trans-unit>
       <trans-unit id="additionalCss.label" resname="additionalCss.label">
         <source>Additional css files</source>
       </trans-unit>

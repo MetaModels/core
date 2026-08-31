@@ -22,20 +22,21 @@ declare(strict_types=1);
 namespace MetaModels\CoreBundle\Migration;
 
 /**
- * Adds the column `legacyAttributeWrapper` to `tl_metamodel_rendersettings` and enables it for all existing rows.
+ * Adds the column `legacyEagerRendering` to `tl_metamodel_rendersettings` and enables it for all existing rows.
  *
- * Enabling it keeps their output as it was before MetaModels 2.5 moved the enclosing block into the
- * attribute templates. Both the column and this migration are meant to go with MetaModels 3.0.
+ * Enabling it keeps their output as it was before MetaModels 2.5 started rendering attributes lazily. Both the
+ * column and this migration are meant to go with MetaModels 3.0.
  *
- * Background: since 2.5 the enclosing block (field, label, value) is rendered by the attribute templates instead of
- * the item template. New render settings therefore start with the column disabled. Render settings that already
- * existed keep the old behaviour, because their installations may carry custom attribute templates which do not
- * render the block - those would silently lose their markup otherwise.
+ * Background: since 2.5, Item::parseValue() only renders an attribute's template when that attribute is actually
+ * accessed, instead of rendering every attribute of the render setting upfront. New render settings therefore
+ * start with the column disabled. Render settings that already existed keep the old, eager behaviour, because
+ * their installations may carry custom code that assumes the parsed result is a plain array for every attribute
+ * in the render setting - see LazyAttributeValues.
  *
  * The distinguishing criterion is not a property of the row but its age: ADD COLUMN plus UPDATE in one run catches
  * exactly the rows that existed at upgrade time. Everything created afterwards falls back to the DCA default.
  */
-final class LegacyAttributeWrapperMigration extends AbstractAddRenderSettingsColumnMigration
+final class LegacyEagerRenderingMigration extends AbstractAddRenderSettingsColumnMigration
 {
     /**
      * {@inheritDoc}
@@ -43,7 +44,7 @@ final class LegacyAttributeWrapperMigration extends AbstractAddRenderSettingsCol
     #[\Override]
     public function getName(): string
     {
-        return 'Add column legacyAttributeWrapper to tl_metamodel_rendersettings and enable it for existing rows.';
+        return 'Add column legacyEagerRendering to tl_metamodel_rendersettings and enable it for existing rows.';
     }
 
     /**
@@ -52,6 +53,6 @@ final class LegacyAttributeWrapperMigration extends AbstractAddRenderSettingsCol
     #[\Override]
     protected function column(): string
     {
-        return 'legacyAttributeWrapper';
+        return 'legacyEagerRendering';
     }
 }

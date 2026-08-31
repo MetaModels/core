@@ -181,6 +181,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = [
                 'hideEmptyValues',
                 'hideLabels',
                 'legacyAttributeWrapper',
+                'legacyEagerRendering',
             ],
             'jumpto'     => [
                 'jumpTo'
@@ -248,6 +249,24 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = [
         'legacyAttributeWrapper' => [
             'label'       => 'legacyAttributeWrapper.label',
             'description' => 'legacyAttributeWrapper.description',
+            'exclude'     => true,
+            'inputType'   => 'checkbox',
+            'eval'        => [
+                'tl_class' => 'w50 cbx m12'
+            ],
+            'sql'         => "char(1) NOT NULL default ''"
+        ],
+        // Renders every attribute of the render setting immediately when Item::parseValue() is
+        // called, instead of only when a specific attribute is actually accessed. Deprecated from
+        // the start, for the same reason as legacyAttributeWrapper above: it only exists so the
+        // output of installations that predate MetaModels 2.5 stays unchanged, which
+        // LegacyEagerRenderingMigration takes care of. See .claude/lazy-attribut-rendering.md.
+        //
+        // It cannot go before MetaModels 3.0 - dropping it would surface any custom code that
+        // is not compatible with the lazy result (see the class docblock of LazyAttributeValues).
+        'legacyEagerRendering'   => [
+            'label'       => 'legacyEagerRendering.label',
+            'description' => 'legacyEagerRendering.description',
             'exclude'     => true,
             'inputType'   => 'checkbox',
             'eval'        => [

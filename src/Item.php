@@ -32,6 +32,7 @@ use MetaModels\Attribute\ITranslated;
 use MetaModels\Events\ParseItemEvent;
 use MetaModels\Filter\IFilter;
 use MetaModels\Helper\EmptyTest;
+use MetaModels\Item\LazyAttributeValues;
 use MetaModels\Render\Setting\ICollection;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -40,6 +41,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  *
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Item implements IItem, IDirtyTracking
 {
@@ -476,6 +478,12 @@ class Item implements IItem, IDirtyTracking
      *
      * @return array attribute name => format => value
      *
+     * The "text" and "$strOutputFormat" entries are only plain arrays when the render setting has
+     * "legacyEagerRendering" enabled. Otherwise, they are instances of LazyAttributeValues, which
+     * behaves like a read-only array (ArrayAccess, Countable, IteratorAggregate) but renders each
+     * attribute on first access instead of all of them upfront - see
+     * ".claude/lazy-attribut-rendering.md".
+     *
      * @psalm-suppress InvalidArrayOffset
      */
     #[\Override]
@@ -518,22 +526,23 @@ class Item implements IItem, IDirtyTracking
         // @deprecated usage of array key 'jumpTo' - remove in MM 3.0.
         $arrResult['jumpTo'] = $jumpTo;
 
-        // First, parse the values in the same order as they are in the render settings.
+        // First, collect the attributes in the same order as they are in the render settings - this
+        // is cheap (no rendering) and always done eagerly, lazy or not.
+        $colNames = [];
         foreach ($objSettings->getSettingNames() as $strAttrName) {
             $objAttribute = $this->getMetaModel()->getAttribute($strAttrName);
             if ($objAttribute) {
                 $arrResult['attributes'][$objAttribute->getColName()] = $objAttribute->getName();
-                foreach (
-                    $this->internalParseAttribute(
-                        $objAttribute,
-                        $strOutputFormat,
-                        $objSettings
-                    ) as $strKey => $varValue
-                ) {
-                    $arrResult[$strKey][$objAttribute->getColName()] = $varValue;
-                }
+                $colNames[]                                          = $objAttribute->getColName();
             }
         }
+
+        // "legacyEagerRendering" is the soft-transition switch documented in
+        // ".claude/lazy-attribut-rendering.md": renders every attribute template on the spot
+        // (today's behaviour, deprecated) instead of only when a specific column is accessed.
+        $arrResult = (bool) $objSettings->get('legacyEagerRendering')
+            ? $this->parseAttributesEagerly($colNames, $strOutputFormat, $objSettings, $arrResult)
+            : \array_replace($arrResult, $this->buildLazyAttributeValues($colNames, $strOutputFormat, $objSettings));
 
         // Add css classes, i.e. for the frontend editing list.
         if ($this->getMetaModel()->hasVariants()) {
@@ -545,6 +554,63 @@ class Item implements IItem, IDirtyTracking
         $this->getEventDispatcher()->dispatch($event, MetaModelsEvents::PARSE_ITEM);
 
         return $event->getResult();
+    }
+
+    /**
+     * Render every attribute in $colNames right away and merge the results into $arrResult - the
+     * "legacyEagerRendering" branch of parseValue().
+     *
+     * @param list<string> $colNames        The column names to render, as built by parseValue().
+     * @param string       $strOutputFormat The desired output format.
+     * @param ICollection  $objSettings     The render settings to use.
+     * @param array        $arrResult       The result array to merge the rendered values into.
+     *
+     * @return array
+     */
+    private function parseAttributesEagerly(
+        array $colNames,
+        $strOutputFormat,
+        ICollection $objSettings,
+        array $arrResult
+    ): array {
+        foreach ($colNames as $colName) {
+            $objAttribute = $this->getMetaModel()->getAttribute($colName);
+            assert(null !== $objAttribute);
+            foreach (
+                $this->internalParseAttribute($objAttribute, $strOutputFormat, $objSettings) as $strKey => $varValue
+            ) {
+                $arrResult[$strKey][$colName] = $varValue;
+            }
+        }
+
+        return $arrResult;
+    }
+
+    /**
+     * Build the "text" and "$strOutputFormat" entries as LazyAttributeValues instead of rendering
+     * every attribute in $colNames right away - the default branch of parseValue(), see
+     * ".claude/lazy-attribut-rendering.md".
+     *
+     * @param list<string> $colNames        The column names to expose, as built by parseValue().
+     * @param string       $strOutputFormat The desired output format.
+     * @param ICollection  $objSettings     The render settings to use.
+     *
+     * @return array<string, LazyAttributeValues>
+     */
+    private function buildLazyAttributeValues(array $colNames, $strOutputFormat, ICollection $objSettings): array
+    {
+        [$textValues, $formatValues] = LazyAttributeValues::createPair(
+            function (string $colName) use ($strOutputFormat, $objSettings): array {
+                $objAttribute = $this->getMetaModel()->getAttribute($colName);
+                assert(null !== $objAttribute);
+
+                return $this->internalParseAttribute($objAttribute, $strOutputFormat, $objSettings);
+            },
+            $strOutputFormat,
+            $colNames
+        );
+
+        return ['text' => $textValues, $strOutputFormat => $formatValues];
     }
 
     /**

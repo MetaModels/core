@@ -141,6 +141,9 @@ interface IItem
      * @param ICollection $objSettings     The render settings to use optional (default: null).
      *
      * @return array attribute name => format => value
+     *
+     * The "text" and "$strOutputFormat" entries behave like read-only arrays but may be lazy
+     * value objects instead of plain arrays - see \MetaModels\Item::parseValue().
      */
     public function parseValue($strOutputFormat = 'text', $objSettings = null);
 
