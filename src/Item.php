@@ -26,12 +26,14 @@
 
 namespace MetaModels;
 
+use MetaModels\Attribute\Base as BaseAttribute;
 use MetaModels\Attribute\IAttribute;
 use MetaModels\Attribute\IInternal;
 use MetaModels\Attribute\ITranslated;
 use MetaModels\Events\ParseItemEvent;
 use MetaModels\Filter\IFilter;
 use MetaModels\Helper\EmptyTest;
+use MetaModels\Item\LazyAttributeResultResolver;
 use MetaModels\Item\LazyAttributeValues;
 use MetaModels\Render\Setting\ICollection;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -591,6 +593,10 @@ class Item implements IItem, IDirtyTracking
      * every attribute in $colNames right away - the "lazyAttributeRendering" branch of
      * parseValue(), see ".claude/lazy-attribut-rendering.md".
      *
+     * "text" and "$strOutputFormat" each get their own resolver (unless they are the same format
+     * to begin with), so that a template reading only one of them never pays for rendering the
+     * other - see internalParseAttributeFormat().
+     *
      * @param list<string> $colNames        The column names to expose, as built by parseValue().
      * @param string       $strOutputFormat The desired output format.
      * @param ICollection  $objSettings     The render settings to use.
@@ -599,18 +605,65 @@ class Item implements IItem, IDirtyTracking
      */
     private function buildLazyAttributeValues(array $colNames, $strOutputFormat, ICollection $objSettings): array
     {
-        [$textValues, $formatValues] = LazyAttributeValues::createPair(
-            function (string $colName) use ($strOutputFormat, $objSettings): array {
-                $objAttribute = $this->getMetaModel()->getAttribute($colName);
-                assert(null !== $objAttribute);
+        $textValues = new LazyAttributeValues(
+            new LazyAttributeResultResolver(
+                fn (string $colName): array => $this->internalParseAttributeFormat($colName, 'text', $objSettings)
+            ),
+            'text',
+            $colNames
+        );
 
-                return $this->internalParseAttribute($objAttribute, $strOutputFormat, $objSettings);
-            },
+        if ('text' === $strOutputFormat) {
+            return ['text' => $textValues];
+        }
+
+        $formatValues = new LazyAttributeValues(
+            new LazyAttributeResultResolver(
+                fn (string $colName): array
+                    => $this->internalParseAttributeFormat($colName, $strOutputFormat, $objSettings)
+            ),
             $strOutputFormat,
             $colNames
         );
 
         return ['text' => $textValues, $strOutputFormat => $formatValues];
+    }
+
+    /**
+     * Render exactly one format of one attribute - the per-view resolver callback for
+     * buildLazyAttributeValues().
+     *
+     * Uses IAttribute::parseValueForFormat() (added on Base for this) so that rendering "html5"
+     * does not also force-render "text", unlike internalParseAttribute()/parseValue(). Attribute
+     * types that do not extend Base (in practice none in the shipped packages - see
+     * ".claude/lazy-attribut-rendering.md") fall back to the combined per-attribute render.
+     *
+     * @param string      $colName     The column name of the attribute to render.
+     * @param string      $strFormat   The format to render ("text", the requested output format).
+     * @param ICollection $objSettings The render settings to use.
+     *
+     * @return array
+     */
+    private function internalParseAttributeFormat(string $colName, string $strFormat, ICollection $objSettings): array
+    {
+        $objAttribute = $this->getMetaModel()->getAttribute($colName);
+        assert(null !== $objAttribute);
+
+        if (!$objAttribute instanceof BaseAttribute) {
+            return $this->internalParseAttribute($objAttribute, $strFormat, $objSettings);
+        }
+
+        $arrResult = $objAttribute->parseValueForFormat(
+            $this->arrData,
+            $strFormat,
+            $objSettings->getSetting($colName)
+        );
+
+        if ((bool) $objSettings->get('hideEmptyValues') && EmptyTest::isEmptyValue($arrResult['raw'])) {
+            unset($arrResult[$strFormat]);
+        }
+
+        return $arrResult;
     }
 
     /**

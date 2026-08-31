@@ -25,8 +25,14 @@ namespace MetaModels\Item;
  * A column-name-indexed view onto one output format ("text", "html5", ...) of a parsed item.
  *
  * Stands in for the plain array that Item::parseValue() used to build eagerly for every attribute
- * in the render setting. Accessing a column here renders that one attribute on the spot instead of
- * all of them upfront - see ".claude/lazy-attribut-rendering.md" for the background.
+ * in the render setting. Accessing a column here renders that one attribute, in exactly this one
+ * format, on the spot - see ".claude/lazy-attribut-rendering.md" for the background.
+ *
+ * Each format gets its own resolver, deliberately not shared with sibling views of the same
+ * attribute (an earlier version shared one resolver between the "text" and format views, which
+ * meant accessing either rendered both - defeating the point when a template only ever reads one
+ * of them). Rendering an attribute through more than one view therefore does render it more than
+ * once; that only happens when a template genuinely uses both formats of the same attribute.
  *
  * Read-only by design: offsetSet()/offsetUnset() throw, so that code relying on being able to
  * mutate the result fails loudly instead of silently disagreeing with the cache. Installations
@@ -37,30 +43,6 @@ namespace MetaModels\Item;
  */
 final class LazyAttributeValues implements \ArrayAccess, \Countable, \IteratorAggregate
 {
-    /**
-     * Build the "text" view and the "$subKey" view of one attribute range, sharing one resolver so
-     * that an attribute accessed through both views is still only rendered once.
-     *
-     * Keeps LazyAttributeResultResolver an implementation detail callers do not need to know about
-     * - Item::parseValue() only depends on this class, not on the resolver as well.
-     *
-     * @param \Closure(string): array<string, mixed> $renderer Renders one attribute by column name.
-     * @param string                                  $subKey   The second view's result key ("text"
-     *                                                           itself is always the first view).
-     * @param list<string>                            $colNames The column names known to the render
-     *                                                           setting, in rendering/iteration order.
-     *
-     * @return array{0: self, 1: self} The "text" view, then the "$subKey" view - the same instance
-     *                                  twice when $subKey is "text".
-     */
-    public static function createPair(\Closure $renderer, string $subKey, array $colNames): array
-    {
-        $resolver = new LazyAttributeResultResolver($renderer);
-        $text     = new self($resolver, 'text', $colNames);
-
-        return [$text, 'text' === $subKey ? $text : new self($resolver, $subKey, $colNames)];
-    }
-
     /**
      * Create a new instance.
      *

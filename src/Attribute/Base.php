@@ -724,6 +724,67 @@ abstract class Base implements IAttribute
     }
 
     /**
+     * Render exactly the given format for this attribute value - unlike parseValue(), does not
+     * also force-render "text" when a different format is requested.
+     *
+     * Used by the lazy-attribute-rendering path (see LazyAttributeResultResolver): accessing only
+     * one format of an attribute's value must not pay for rendering the other, which parseValue()
+     * always does ("text rendering is mandatory" above). See ".claude/lazy-attribut-rendering.md".
+     *
+     * @param array                      $arrRowData  The Raw values from the database.
+     * @param string                     $strFormat   The format to render ("text", "html5", ...).
+     * @param ISimpleRenderSetting|null  $objSettings The output format settings.
+     *
+     * @return array
+     */
+    public function parseValueForFormat($arrRowData, $strFormat, $objSettings = null)
+    {
+        $arrResult = ['raw' => ($arrRowData[$this->getColName()] ?? null)];
+
+        if (!$objSettings || !($strTemplate = (string) $objSettings->get('template'))) {
+            return $this->parseValueForFormat($arrRowData, $strFormat, $this->getDefaultRenderSettings());
+        }
+
+        $templateFactory = System::getContainer()->get('metamodels.template_factory');
+        assert($templateFactory instanceof TemplateFactory);
+        $objTemplate = $templateFactory->createTemplate($strTemplate, 'attribute');
+        $this->prepareTemplate($objTemplate, $arrRowData, $objSettings);
+
+        if ('text' === $strFormat) {
+            // Text rendering must succeed, try with the current setting, upon exception try again
+            // with the default settings, as the template name might have changed - mirrors
+            // parseValue() above.
+            try {
+                $arrResult['text'] = $objTemplate->parse('text', true);
+            } catch (\Exception $e) {
+                $objSettingsFallback = $this->getFallbackRenderSetting($objSettings);
+
+                $objTemplate = $templateFactory->createTemplate(
+                    (string) $objSettingsFallback->get('template'),
+                    'attribute'
+                );
+                $this->prepareTemplate($objTemplate, $arrRowData, $objSettingsFallback);
+
+                try {
+                    $arrResult['text'] = $objTemplate->parse('text', true);
+                } catch (\Exception $fallbackException) {
+                    // Do not mask the real problem with the follow-up error of the fallback rendering.
+                    throw $e;
+                }
+            }
+        } else {
+            $strValue = $objTemplate->parse($strFormat, false);
+            if ('' !== $strValue) {
+                $arrResult[$strFormat] = $strValue;
+            }
+        }
+
+        // HOOK: apply additional formatters to attribute.
+        /** @psalm-suppress DeprecatedMethod */
+        return $this->hookAdditionalFormatters($arrResult, $arrRowData, $strFormat, $objSettings);
+    }
+
+    /**
      * Build the render setting to retry with when rendering with the passed setting has failed.
      *
      * The parent is only carried over when the passed setting has one - render settings created on the fly (see
