@@ -478,10 +478,10 @@ class Item implements IItem, IDirtyTracking
      *
      * @return array attribute name => format => value
      *
-     * The "text" and "$strOutputFormat" entries are only plain arrays when the render setting has
-     * "legacyEagerRendering" enabled. Otherwise, they are instances of LazyAttributeValues, which
-     * behaves like a read-only array (ArrayAccess, Countable, IteratorAggregate) but renders each
-     * attribute on first access instead of all of them upfront - see
+     * The "text" and "$strOutputFormat" entries are plain arrays unless the render setting has
+     * "lazyAttributeRendering" enabled, in which case they are instances of LazyAttributeValues,
+     * which behaves like a read-only array (ArrayAccess, Countable, IteratorAggregate) but renders
+     * each attribute on first access instead of all of them upfront - see
      * ".claude/lazy-attribut-rendering.md".
      *
      * @psalm-suppress InvalidArrayOffset
@@ -537,12 +537,12 @@ class Item implements IItem, IDirtyTracking
             }
         }
 
-        // "legacyEagerRendering" is the soft-transition switch documented in
-        // ".claude/lazy-attribut-rendering.md": renders every attribute template on the spot
-        // (today's behaviour, deprecated) instead of only when a specific column is accessed.
-        $arrResult = (bool) $objSettings->get('legacyEagerRendering')
-            ? $this->parseAttributesEagerly($colNames, $strOutputFormat, $objSettings, $arrResult)
-            : \array_replace($arrResult, $this->buildLazyAttributeValues($colNames, $strOutputFormat, $objSettings));
+        // "lazyAttributeRendering" is an opt-in per render setting, documented in
+        // ".claude/lazy-attribut-rendering.md": off (the default) renders every attribute template
+        // on the spot, as always; on, only when a specific column is actually accessed.
+        $arrResult = (bool) $objSettings->get('lazyAttributeRendering')
+            ? \array_replace($arrResult, $this->buildLazyAttributeValues($colNames, $strOutputFormat, $objSettings))
+            : $this->parseAttributesEagerly($colNames, $strOutputFormat, $objSettings, $arrResult);
 
         // Add css classes, i.e. for the frontend editing list.
         if ($this->getMetaModel()->hasVariants()) {
@@ -558,7 +558,7 @@ class Item implements IItem, IDirtyTracking
 
     /**
      * Render every attribute in $colNames right away and merge the results into $arrResult - the
-     * "legacyEagerRendering" branch of parseValue().
+     * default ("lazyAttributeRendering" off) branch of parseValue().
      *
      * @param list<string> $colNames        The column names to render, as built by parseValue().
      * @param string       $strOutputFormat The desired output format.
@@ -588,8 +588,8 @@ class Item implements IItem, IDirtyTracking
 
     /**
      * Build the "text" and "$strOutputFormat" entries as LazyAttributeValues instead of rendering
-     * every attribute in $colNames right away - the default branch of parseValue(), see
-     * ".claude/lazy-attribut-rendering.md".
+     * every attribute in $colNames right away - the "lazyAttributeRendering" branch of
+     * parseValue(), see ".claude/lazy-attribut-rendering.md".
      *
      * @param list<string> $colNames        The column names to expose, as built by parseValue().
      * @param string       $strOutputFormat The desired output format.

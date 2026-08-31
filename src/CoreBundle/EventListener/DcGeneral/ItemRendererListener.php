@@ -100,8 +100,8 @@ class ItemRendererListener
         $data = [$nativeItem->parseValue('html5', $renderSetting)];
 
         if ($showColumns) {
-            // With "legacyEagerRendering" off (the default), $data[0]['html5'] is a LazyAttributeValues
-            // instance, not a plain array - dc-general's FormatModelLabelSubscriber needs a real one
+            // With "lazyAttributeRendering" on, $data[0]['html5'] is a LazyAttributeValues instance,
+            // not a plain array - dc-general's FormatModelLabelSubscriber needs a real one
             // (array|string typehint, vsprintf()). Materializing only here keeps the render setting's
             // lazy/eager choice untouched: lazy still means "rendered on access", and this is the access.
             $html5 = $data[0]['html5'];

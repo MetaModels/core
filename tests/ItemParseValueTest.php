@@ -31,7 +31,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Tests for the "legacyEagerRendering" soft-transition switch in Item::parseValue() - see
+ * Tests for the "lazyAttributeRendering" opt-in switch in Item::parseValue() - see
  * ".claude/lazy-attribut-rendering.md" for the background.
  */
 #[CoversClass(Item::class)]
@@ -77,22 +77,22 @@ class ItemParseValueTest extends TestCase
     /**
      * @param list<string> $colNames
      */
-    private function createRenderSetting(array $colNames, bool $legacyEagerRendering): ICollection
+    private function createRenderSetting(array $colNames, bool $lazy): ICollection
     {
         $settings = $this->createMock(ICollection::class);
         $settings->method('getSettingNames')->willReturn($colNames);
         $settings->method('buildJumpToUrlFor')->willReturn(['url' => '', 'deep' => false, 'label' => '']);
         $settings->method('get')->willReturnCallback(
-            static fn (string $name): mixed => 'legacyEagerRendering' === $name ? $legacyEagerRendering : null
+            static fn (string $name): mixed => 'lazyAttributeRendering' === $name ? $lazy : null
         );
 
         return $settings;
     }
 
-    public function testLazyByDefaultReturnsLazyAttributeValuesForTextAndFormat(): void
+    public function testLazyAttributeRenderingReturnsLazyAttributeValuesForTextAndFormat(): void
     {
         $item     = $this->createItem(['title', 'alias']);
-        $settings = $this->createRenderSetting(['title', 'alias'], legacyEagerRendering: false);
+        $settings = $this->createRenderSetting(['title', 'alias'], lazy: true);
 
         $result = $item->parseValue('html5', $settings);
 
@@ -100,20 +100,20 @@ class ItemParseValueTest extends TestCase
         self::assertInstanceOf(LazyAttributeValues::class, $result['html5']);
     }
 
-    public function testLazyDoesNotRenderAttributesThatAreNeverAccessed(): void
+    public function testLazyAttributeRenderingDoesNotRenderAttributesThatAreNeverAccessed(): void
     {
         $item     = $this->createItem(['title', 'alias'], $renderCalls);
-        $settings = $this->createRenderSetting(['title', 'alias'], legacyEagerRendering: false);
+        $settings = $this->createRenderSetting(['title', 'alias'], lazy: true);
 
         $item->parseValue('html5', $settings);
 
         self::assertSame(['title' => 0, 'alias' => 0], $renderCalls, 'nothing must render before access');
     }
 
-    public function testLazyRendersOnlyTheAccessedAttributeExactlyOnce(): void
+    public function testLazyAttributeRenderingRendersOnlyTheAccessedAttributeExactlyOnce(): void
     {
         $item     = $this->createItem(['title', 'alias'], $renderCalls);
-        $settings = $this->createRenderSetting(['title', 'alias'], legacyEagerRendering: false);
+        $settings = $this->createRenderSetting(['title', 'alias'], lazy: true);
 
         $result = $item->parseValue('html5', $settings);
         self::assertSame('html5:title', $result['html5']['title']);
@@ -123,10 +123,10 @@ class ItemParseValueTest extends TestCase
         self::assertSame(['title' => 1, 'alias' => 0], $renderCalls);
     }
 
-    public function testLazyStillPopulatesAttributesCheaplyWithoutRendering(): void
+    public function testLazyAttributeRenderingStillPopulatesAttributesCheaplyWithoutRendering(): void
     {
         $item     = $this->createItem(['title', 'alias'], $renderCalls);
-        $settings = $this->createRenderSetting(['title', 'alias'], legacyEagerRendering: false);
+        $settings = $this->createRenderSetting(['title', 'alias'], lazy: true);
 
         $result = $item->parseValue('html5', $settings);
 
@@ -134,10 +134,10 @@ class ItemParseValueTest extends TestCase
         self::assertSame(['title' => 0, 'alias' => 0], $renderCalls);
     }
 
-    public function testLegacyEagerRenderingReturnsPlainArraysLikeBeforeTheChange(): void
+    public function testDefaultOffReturnsPlainArraysAndRendersEverythingUpfront(): void
     {
         $item     = $this->createItem(['title', 'alias'], $renderCalls);
-        $settings = $this->createRenderSetting(['title', 'alias'], legacyEagerRendering: true);
+        $settings = $this->createRenderSetting(['title', 'alias'], lazy: false);
 
         $result = $item->parseValue('html5', $settings);
 
@@ -145,13 +145,13 @@ class ItemParseValueTest extends TestCase
         self::assertIsArray($result['html5']);
         self::assertSame(['title' => 'text:title', 'alias' => 'text:alias'], $result['text']);
         self::assertSame(['title' => 'html5:title', 'alias' => 'html5:alias'], $result['html5']);
-        self::assertSame(['title' => 1, 'alias' => 1], $renderCalls, 'eager mode renders every attribute upfront');
+        self::assertSame(['title' => 1, 'alias' => 1], $renderCalls, 'default renders every attribute upfront');
     }
 
     public function testWithoutRenderSettingsStaysEagerRegardlessOfTheAttributeCount(): void
     {
         // Item::parseValue() with $objSettings === null iterates ALL MetaModel attributes, not just
-        // a render setting's - there is no collection to read "legacyEagerRendering" from at all.
+        // a render setting's - there is no collection to read "lazyAttributeRendering" from at all.
         $item = $this->createItem(['title']);
         $item->getMetaModel()->method('getAttributes')->willReturn([]);
 
@@ -164,7 +164,7 @@ class ItemParseValueTest extends TestCase
     public function testATextOutputFormatSharesOneLazyViewInsteadOfTwo(): void
     {
         $item     = $this->createItem(['title']);
-        $settings = $this->createRenderSetting(['title'], legacyEagerRendering: false);
+        $settings = $this->createRenderSetting(['title'], lazy: true);
 
         $result = $item->parseValue('text', $settings);
 

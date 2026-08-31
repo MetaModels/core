@@ -30,7 +30,7 @@ namespace MetaModels\Item;
  *
  * Read-only by design: offsetSet()/offsetUnset() throw, so that code relying on being able to
  * mutate the result fails loudly instead of silently disagreeing with the cache. Installations
- * hitting this should enable "legacyEagerRendering" on the render setting instead.
+ * hitting this should disable "lazyAttributeRendering" on the render setting instead.
  *
  * @implements \ArrayAccess<string, mixed>
  * @implements \IteratorAggregate<string, mixed>
@@ -109,7 +109,7 @@ final class LazyAttributeValues implements \ArrayAccess, \Countable, \IteratorAg
     public function offsetSet(mixed $offset, mixed $value): void
     {
         throw new \LogicException(
-            'LazyAttributeValues is read-only. Enable "legacyEagerRendering" on the render '
+            'LazyAttributeValues is read-only. Disable "lazyAttributeRendering" on the render '
             . 'setting if code needs to write into a parsed item result.'
         );
     }
@@ -123,7 +123,7 @@ final class LazyAttributeValues implements \ArrayAccess, \Countable, \IteratorAg
     public function offsetUnset(mixed $offset): void
     {
         throw new \LogicException(
-            'LazyAttributeValues is read-only. Enable "legacyEagerRendering" on the render '
+            'LazyAttributeValues is read-only. Disable "lazyAttributeRendering" on the render '
             . 'setting if code needs to remove keys from a parsed item result.'
         );
     }

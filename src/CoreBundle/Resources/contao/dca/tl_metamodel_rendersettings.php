@@ -180,8 +180,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = [
             'expert'     => [
                 'hideEmptyValues',
                 'hideLabels',
+                'lazyAttributeRendering',
                 'legacyAttributeWrapper',
-                'legacyEagerRendering',
             ],
             'jumpto'     => [
                 'jumpTo'
@@ -238,6 +238,23 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = [
             ],
             'sql'         => "char(1) NOT NULL default ''"
         ],
+        // Off by default (Item::parseValue() renders every attribute immediately, as always). When
+        // enabled, the "text" and requested output-format entries of the parsed result become
+        // LazyAttributeValues instead of plain arrays, rendering each attribute only when a template
+        // actually accesses it. Not deprecated, not a migration path - a genuine trade-off the admin
+        // picks per render setting: a clear win for templates that only use some of the configured
+        // attributes, a small extra cost (Twig's ArrayAccess handling) for templates that use all of
+        // them - measured in .claude/lazy-attribut-rendering.md. See LazyAttributeValues.
+        'lazyAttributeRendering' => [
+            'label'       => 'lazyAttributeRendering.label',
+            'description' => 'lazyAttributeRendering.description',
+            'exclude'     => true,
+            'inputType'   => 'checkbox',
+            'eval'        => [
+                'tl_class' => 'clr w50 cbx m12'
+            ],
+            'sql'         => "char(1) NOT NULL default ''"
+        ],
         // Keeps the enclosing block in the list template instead of the attribute templates.
         // Deprecated from the start: it only exists so the output of installations that predate
         // MetaModels 2.5 stays unchanged, which LegacyAttributeWrapperMigration takes care of.
@@ -249,24 +266,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = [
         'legacyAttributeWrapper' => [
             'label'       => 'legacyAttributeWrapper.label',
             'description' => 'legacyAttributeWrapper.description',
-            'exclude'     => true,
-            'inputType'   => 'checkbox',
-            'eval'        => [
-                'tl_class' => 'w50 cbx m12'
-            ],
-            'sql'         => "char(1) NOT NULL default ''"
-        ],
-        // Renders every attribute of the render setting immediately when Item::parseValue() is
-        // called, instead of only when a specific attribute is actually accessed. Deprecated from
-        // the start, for the same reason as legacyAttributeWrapper above: it only exists so the
-        // output of installations that predate MetaModels 2.5 stays unchanged, which
-        // LegacyEagerRenderingMigration takes care of. See .claude/lazy-attribut-rendering.md.
-        //
-        // It cannot go before MetaModels 3.0 - dropping it would surface any custom code that
-        // is not compatible with the lazy result (see the class docblock of LazyAttributeValues).
-        'legacyEagerRendering'   => [
-            'label'       => 'legacyEagerRendering.label',
-            'description' => 'legacyEagerRendering.description',
             'exclude'     => true,
             'inputType'   => 'checkbox',
             'eval'        => [
