@@ -69,6 +69,8 @@ class DataProviderBuilder
      * @param IMetaModelDataDefinition $container The data container.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     #[\Override]
     protected function build(IMetaModelDataDefinition $container)
@@ -95,7 +97,9 @@ class DataProviderBuilder
                 ->setTableName($container->getName())
                 ->setClassName(Driver::class)
                 ->setInitializationData(['source' => $container->getName()])
-                ->setVersioningEnabled(false);
+                ->setVersioningEnabled(
+                    (bool) ($GLOBALS['TL_DCA'][$container->getName()]['config']['enableVersioning'] ?? false)
+                );
             // MetaModels\CoreBundle\EventListener\DcGeneral\LogPersistedItemsListener logs items
             // with their rendered label instead - logging both would duplicate every entry under
             // two different wordings. A separate statement, not chained onto the calls above:
