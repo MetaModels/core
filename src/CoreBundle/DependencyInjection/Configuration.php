@@ -91,7 +91,8 @@ class Configuration implements ConfigurationInterface
                     ->cannotBeEmpty()
                     ->defaultValue('/assets/metamodels')
                 ->end()
-                ->append($this->addJumpToPickerNode());
+                ->append($this->addJumpToPickerNode())
+                ->append($this->addBackendSectionsNode());
 
         return $treeBuilder;
     }
@@ -109,6 +110,51 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('render_setting')->cannotBeEmpty()->end()
                         ->integerNode('priority')->defaultValue(0)->end()
                         ->scalarNode('icon')->defaultNull()->end()
+                    ->end()
+                ->end()
+            ->end();
+
+        return $node;
+    }
+
+    /** @psalm-suppress UndefinedMethod */
+    private function addBackendSectionsNode(): NodeDefinition
+    {
+        $treeBuilder = new TreeBuilder('be_sections');
+
+        $node = $treeBuilder->getRootNode();
+        $node
+            ->useAttributeAsKey('alias')
+                ->arrayPrototype()
+                    ->children()
+                        ->arrayNode('name')
+                            ->isRequired()
+                            ->requiresAtLeastOneElement()
+                            ->useAttributeAsKey('locale')
+                            ->scalarPrototype()->cannotBeEmpty()->end()
+                        ->end()
+                        ->arrayNode('tooltip')
+                            ->useAttributeAsKey('locale')
+                            ->scalarPrototype()->cannotBeEmpty()->end()
+                        ->end()
+                        ->scalarNode('icon')->defaultNull()->end()
+                        ->arrayNode('add')
+                            ->isRequired()
+                            ->children()
+                                ->scalarNode('before')->defaultNull()->end()
+                                ->scalarNode('after')->defaultNull()->end()
+                            ->end()
+                            ->validate()
+                                ->ifTrue(
+                                    static fn(array $value): bool =>
+                                        (null === $value['before']) === (null === $value['after'])
+                                )
+                                ->thenInvalid(
+                                    'Exactly one of "before" or "after" must be set for backend sections.'
+                                )
+                            ->end()
+                        ->end()
+                        ->booleanNode('collapsed')->defaultFalse()->end()
                     ->end()
                 ->end()
             ->end();

@@ -26,6 +26,7 @@ namespace MetaModels\CoreBundle\DependencyInjection;
 use MetaModels\CoreBundle\Attribute\DoctrineSchemaProvider;
 use MetaModels\CoreBundle\Contao\Picker\MetaModelsJumpToPickerProvider;
 use MetaModels\CoreBundle\DependencyInjection\CompilerPass\CollectDoctrineSchemaGeneratorsPass;
+use MetaModels\CoreBundle\EventListener\BackendSectionListener;
 use MetaModels\CoreBundle\Migration\TableCollationMigration;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -131,6 +132,8 @@ class MetaModelsCoreExtension extends Extension implements PrependExtensionInter
         if (null !== $jumpToPicker) {
             $this->processJumpToPicker($jumpToPicker, $container);
         }
+
+        $this->processBackendSections($config['be_sections'], $container);
     }
 
     /**
@@ -217,5 +220,35 @@ class MetaModelsCoreExtension extends Extension implements PrependExtensionInter
 
             $container->setDefinition('metamodels_jump_to_picker_' . $metaModelName, $definition);
         }
+    }
+
+    /**
+     * Register the configured backend sections.
+     *
+     * @param array<string, array{
+     *   name: array<string, string>,
+     *   tooltip: array<string, string>,
+     *   icon: string|null,
+     *   add: array{before: string|null, after: string|null},
+     *   collapsed: bool
+     * }>                $sections  The configured backend sections.
+     * @param ContainerBuilder $container The container builder.
+     */
+    private function processBackendSections(array $sections, ContainerBuilder $container): void
+    {
+        if ([] === $sections) {
+            return;
+        }
+
+        $definition = new Definition(BackendSectionListener::class);
+        $definition->setArgument('$sections', $sections);
+        $definition->setArgument('$requestStack', new Reference('request_stack'));
+        // Must run after Contao's BackendMainListener (prio 10, builds the legacy BE_MOD groups
+        // like "design"/"content" that "add.before"/"add.after" may target) but before
+        // MetaModels' own BackendNavigationListener (prio -100), which attaches standalone
+        // MetaModel screens to their configured backend section and needs it to already exist.
+        $definition->addTag('kernel.event_listener', ['priority' => -50]);
+
+        $container->setDefinition('metamodels.event_listener.backend_section', $definition);
     }
 }
