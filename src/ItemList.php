@@ -37,6 +37,7 @@ use Contao\CoreBundle\Routing\ResponseContext\HtmlHeadBag\HtmlHeadBag;
 use Contao\CoreBundle\Routing\ResponseContext\ResponseContext;
 use Contao\CoreBundle\Routing\ScopeMatcher;
 use Contao\CoreBundle\String\HtmlDecoder;
+use Contao\CoreBundle\Twig\FragmentTemplate;
 use Contao\Model;
 use Contao\ModuleModel;
 use Contao\StringUtil;
@@ -607,7 +608,7 @@ class ItemList
      * The list template (ce_ or mod_).
      *
      * @psalm-suppress DeprecatedClass
-     * @var ContaoTemplate|null
+     * @var ContaoTemplate|FragmentTemplate|null
      */
     private $listTemplate = null;
 
@@ -800,11 +801,11 @@ class ItemList
     /**
      * Get the template of the module or content element.
      *
-     * @return ContaoTemplate
+     * @return ContaoTemplate|FragmentTemplate
      *
      * @psalm-suppress DeprecatedClass
      */
-    public function getListTemplate(): ?ContaoTemplate
+    public function getListTemplate(): ContaoTemplate|FragmentTemplate|null
     {
         return $this->listTemplate;
     }
@@ -812,13 +813,13 @@ class ItemList
     /**
      * Set the template of the module or content element.
      *
-     * @param ContaoTemplate $template The template.
+     * @param ContaoTemplate|FragmentTemplate $template The template.
      *
      * @return self
      *
      * @psalm-suppress DeprecatedClass
      */
-    public function setListTemplate(ContaoTemplate $template): self
+    public function setListTemplate(ContaoTemplate|FragmentTemplate $template): self
     {
         $this->listTemplate = $template;
 

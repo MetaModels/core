@@ -24,9 +24,9 @@ namespace MetaModels\CoreBundle\Controller\FrontendModule;
 
 use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
 use Contao\CoreBundle\DependencyInjection\Attribute\AsFrontendModule;
+use Contao\CoreBundle\Twig\FragmentTemplate;
 use Contao\ModuleModel;
 use Contao\PageModel;
-use Contao\Template;
 use MetaModels\CoreBundle\Controller\ListControllerTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -95,16 +95,14 @@ final class ItemListController extends AbstractFrontendModuleController
     /**
      * Generate the response.
      *
-     * @param Template    $template The template.
-     * @param ModuleModel $model    The module model.
-     * @param Request     $request  The request.
+     * @param FragmentTemplate $template The template.
+     * @param ModuleModel      $model    The module model.
+     * @param Request          $request  The request.
      *
      * @return Response The response.
-     *
-     * @psalm-suppress DeprecatedClass
      */
     #[\Override]
-    protected function getResponse(Template $template, ModuleModel $model, Request $request): Response
+    protected function getResponse(FragmentTemplate $template, ModuleModel $model, Request $request): Response
     {
         return $this->getResponseInternal($template, $model, $request);
     }

@@ -25,6 +25,7 @@ namespace MetaModels\CoreBundle\Controller;
 use Contao\BackendTemplate;
 use Contao\CoreBundle\Csrf\ContaoCsrfTokenManager;
 use Contao\CoreBundle\Routing\ScopeMatcher;
+use Contao\CoreBundle\Twig\FragmentTemplate;
 use Contao\Input;
 use Contao\Model;
 use Contao\StringUtil;
@@ -179,9 +180,9 @@ trait ListControllerTrait
     /**
      * Generate the response.
      *
-     * @param Template $template The template.
-     * @param Model    $model    The content model.
-     * @param Request  $request  The request.
+     * @param Template|FragmentTemplate $template The template.
+     * @param Model                     $model    The content model.
+     * @param Request                   $request  The request.
      *
      * @return Response The response.
      *
@@ -189,11 +190,12 @@ trait ListControllerTrait
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     *
-     * @psalm-suppress DeprecatedClass
      */
-    private function getResponseInternal(Template $template, Model $model, Request $request): Response
-    {
+    private function getResponseInternal(
+        Template|FragmentTemplate $template,
+        Model $model,
+        Request $request
+    ): Response {
         /** @psalm-suppress UndefinedMagicPropertyFetch */
         if ('' === ($pageParam = $model->metamodel_page_param)) {
             /** @psalm-suppress UndefinedMagicPropertyFetch */

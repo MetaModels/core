@@ -25,9 +25,9 @@ namespace MetaModels\CoreBundle\Controller\ContentElement;
 use Contao\ContentModel;
 use Contao\CoreBundle\Controller\ContentElement\AbstractContentElementController;
 use Contao\CoreBundle\DependencyInjection\Attribute\AsContentElement;
+use Contao\CoreBundle\Twig\FragmentTemplate;
 use Contao\PageModel;
 use Contao\System;
-use Contao\Template;
 use MetaModels\CoreBundle\Controller\ListControllerTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -76,16 +76,14 @@ final class ItemListController extends AbstractContentElementController
     /**
      * Generate the response.
      *
-     * @param Template     $template The template.
-     * @param ContentModel $model    The content model.
-     * @param Request      $request  The request.
+     * @param FragmentTemplate $template The template.
+     * @param ContentModel     $model    The content model.
+     * @param Request          $request  The request.
      *
      * @return Response The response.
-     *
-     * @psalm-suppress DeprecatedClass
      */
     #[\Override]
-    protected function getResponse(Template $template, ContentModel $model, Request $request): Response
+    protected function getResponse(FragmentTemplate $template, ContentModel $model, Request $request): Response
     {
         $response = $this->getResponseInternal($template, $model, $request);
         $this->addSharedMaxAgeToResponse($response, $model);
