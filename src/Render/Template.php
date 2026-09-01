@@ -26,12 +26,14 @@
 namespace MetaModels\Render;
 
 use Contao\BackendTemplate;
+use Contao\CoreBundle\Config\ResourceFinderInterface;
 use Contao\CoreBundle\Framework\Adapter;
 use Contao\FrontendTemplate;
 use Contao\System;
 use Contao\TemplateLoader;
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use Exception;
+use InvalidArgumentException;
 use MetaModels\Helper\ContaoController;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -380,8 +382,7 @@ class Template
         }
 
         try {
-            /** @psalm-suppress UndefinedMagicMethod */
-            self::$templatePathCache[$strTemplate][$strFormat][$strCustom] = $this->templateLoader->getPath(
+            self::$templatePathCache[$strTemplate][$strFormat][$strCustom] = $this->resolveTemplatePath(
                 $strTemplate,
                 $strFormat,
                 $strCustom
@@ -400,6 +401,51 @@ class Template
         }
 
         return null;
+    }
+
+    /**
+     * Find a template file's path, mirroring the algorithm the (Contao 6 removed) TemplateLoader::getPath() used:
+     * the custom (theme) folder first, then the project's global "templates" folder, then every installed bundle's
+     * "Resources/contao/templates" folder (last match wins, matching Contao's bundle load order/override rules).
+     *
+     * @param string $strTemplate The template name.
+     * @param string $strFormat   The output format (e.g. "html5").
+     * @param string $strCustom   The custom templates folder (defaults to "templates").
+     *
+     * @throws Exception When the template file can not be found.
+     *
+     * @return string
+     */
+    private function resolveTemplatePath(string $strTemplate, string $strFormat, string $strCustom): string
+    {
+        $file = $strTemplate . '.' . $strFormat;
+
+        if (\file_exists($this->projectDir . '/' . $strCustom . '/' . $file)) {
+            return $this->projectDir . '/' . $strCustom . '/' . $file;
+        }
+
+        if ('templates' !== $strCustom && \file_exists($this->projectDir . '/templates/' . $file)) {
+            return $this->projectDir . '/templates/' . $file;
+        }
+
+        $resourceFinder = System::getContainer()->get('contao.resource_finder');
+        \assert($resourceFinder instanceof ResourceFinderInterface);
+
+        $strPath = null;
+        try {
+            foreach ($resourceFinder->findIn('templates')->name($file) as $found) {
+                $strPath = $found->getPathname();
+            }
+        } catch (InvalidArgumentException $exception) {
+            // No bundle ships a "templates" resource directory at all - fall through to the not-found exception.
+            unset($exception);
+        }
+
+        if (null !== $strPath) {
+            return $strPath;
+        }
+
+        throw new Exception('Could not find template "' . $strTemplate . '"');
     }
 
     /**
