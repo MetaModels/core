@@ -104,7 +104,7 @@ class PanelBuilder
         $panelRows = $panel->getRows();
         foreach ($arrRows as $rowNo => $rowElements) {
             // Get the row, if we have one or create a new one.
-            if ($panelRows->getRowCount() < ((int) $rowNo + 1)) {
+            if ($panelRows->getRowCount() < (\intval($rowNo) + 1)) {
                 $panelRow = $panelRows->addRow();
             } else {
                 $panelRow = $panelRows->getRow($rowNo);

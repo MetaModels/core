@@ -137,6 +137,14 @@
         <source>Check if this MetaModel shall support language territory at locale.</source>
         <target>Mit der Checkbox wird die Territory-Angabe bei dem Sprachkey unterstützt.</target>
       </trans-unit>
+      <trans-unit id="enableLogging.label" resname="enableLogging.label">
+        <source>Log changes to the system log</source>
+        <target>Änderungen im Systemlog protokollieren</target>
+      </trans-unit>
+      <trans-unit id="enableLogging.description" resname="enableLogging.description">
+        <source>Writes creating, duplicating and deleting an item of this MetaModel to the Contao system log, the same way Contao does for its own tables. Editing an existing item is not logged, matching Contao - the version history covers that instead.</source>
+        <target>Schreibt Anlegen, Duplizieren und Löschen eines Items dieses MetaModels ins Contao-Systemlog, genauso wie Contao es für seine eigenen Tabellen tut. Das Bearbeiten eines vorhandenen Items wird - wie bei Contao - nicht protokolliert, dafür ist die Versionierung da.</target>
+      </trans-unit>
       <trans-unit id="sorting.label" resname="sorting.label">
         <source>Sorting</source>
         <target>Sortierung</target>
