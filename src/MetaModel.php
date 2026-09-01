@@ -1174,17 +1174,20 @@ class MetaModel implements IMetaModel
      *
      * @return void
      */
+    /** @psalm-suppress DeprecatedMethod - Connection::quoteIdentifier() is marked internal/deprecated in DBAL 4
+     *                                    with no replacement that also works on DBAL 3. */
     protected function saveSimpleColumn($strColumn, $arrIds, $varData)
     {
         if (\is_array($varData)) {
             $varData = \serialize($varData);
         }
 
-        $builder = $this->getConnection()->createQueryBuilder();
+        $connection = $this->getConnection();
+        $builder    = $connection->createQueryBuilder();
 
         $builder
             ->update($this->getTableName())
-            ->set($strColumn, \is_array($varData) ? \serialize($varData) : $varData)
+            ->set($connection->quoteIdentifier($strColumn), \is_array($varData) ? \serialize($varData) : $varData)
             ->where($builder->expr()->in('id', ':ids'))
             ->setParameter('ids', $arrIds, ArrayParameterType::STRING)
             ->executeQuery();
