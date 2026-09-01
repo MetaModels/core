@@ -29,6 +29,7 @@ use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
 use function array_keys;
 use function array_search;
 use function count;
+use function is_file;
 use function ltrim;
 use function preg_match;
 use function sprintf;
@@ -48,6 +49,11 @@ use function str_starts_with;
 class BackendSectionListener
 {
     /**
+     * The icon used when a section does not configure one, or its configured icon file cannot be found.
+     */
+    private const DEFAULT_ICON = '/bundles/metamodelscore/icons/mm_group_icon.svg';
+
+    /**
      * The configured sections, keyed by their alias.
      *
      * @var array<string, TBackendSectionConfig>
@@ -62,15 +68,24 @@ class BackendSectionListener
     private RequestStack $requestStack;
 
     /**
+     * The public/web directory, used to check whether a configured icon file actually exists.
+     *
+     * @var string
+     */
+    private string $webDir;
+
+    /**
      * Create a new instance.
      *
      * @param array<string, TBackendSectionConfig> $sections     The configured sections.
      * @param RequestStack                         $requestStack The request stack.
+     * @param string                                $webDir       The public/web directory.
      */
-    public function __construct(array $sections, RequestStack $requestStack)
+    public function __construct(array $sections, RequestStack $requestStack, string $webDir)
     {
         $this->sections     = $sections;
         $this->requestStack = $requestStack;
+        $this->webDir       = $webDir;
     }
 
     /**
@@ -158,12 +173,10 @@ class BackendSectionListener
             ->setLinkAttribute('aria-expanded', $isCollapsed ? 'false' : 'true')
             ->setChildrenAttribute('id', $alias);
 
-        if (null !== $config['icon']) {
-            $node->setLinkAttribute(
-                'style',
-                sprintf('background: url(%s) 3px 2px no-repeat;', $this->resolveIconPath($config['icon']))
-            );
-        }
+        $node->setLinkAttribute(
+            'style',
+            sprintf('background: url(%s) 3px 2px no-repeat;', $this->resolveIcon($config['icon']))
+        );
 
         if ($isCollapsed) {
             $node->setAttribute('class', 'collapsed');
@@ -199,18 +212,26 @@ class BackendSectionListener
     }
 
     /**
-     * Resolve the web accessible path for an icon.
+     * Resolve the web accessible path for a section's icon, falling back to the default group icon if none is
+     * configured or the configured file does not exist.
      *
-     * @param string $icon The icon path as configured.
+     * @param string|null $icon The icon path as configured.
      *
      * @return string
      */
-    private function resolveIconPath(string $icon): string
+    private function resolveIcon(?string $icon): string
     {
-        if (str_starts_with($icon, '/') || 1 === preg_match('#^https?://#', $icon)) {
-            return $icon;
+        if (null === $icon) {
+            return self::DEFAULT_ICON;
         }
 
-        return '/' . ltrim($icon, '/');
+        $isRemote = 1 === preg_match('#^https?://#', $icon);
+        $webPath  = $isRemote || str_starts_with($icon, '/') ? $icon : '/' . ltrim($icon, '/');
+
+        if (!$isRemote && !is_file($this->webDir . '/' . ltrim($webPath, '/'))) {
+            return self::DEFAULT_ICON;
+        }
+
+        return $webPath;
     }
 }

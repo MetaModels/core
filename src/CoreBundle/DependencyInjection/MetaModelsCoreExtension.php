@@ -243,6 +243,7 @@ class MetaModelsCoreExtension extends Extension implements PrependExtensionInter
         $definition = new Definition(BackendSectionListener::class);
         $definition->setArgument('$sections', $sections);
         $definition->setArgument('$requestStack', new Reference('request_stack'));
+        $definition->setArgument('$webDir', '%contao.web_dir%');
         // Must run after Contao's BackendMainListener (prio 10, builds the legacy BE_MOD groups
         // like "design"/"content" that "add.before"/"add.after" may target) but before
         // MetaModels' own BackendNavigationListener (prio -100), which attaches standalone
