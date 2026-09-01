@@ -159,17 +159,22 @@ class BaseSimple extends Base implements ISimple
      *
      * @throws Exception
      */
+    /**
+     * @psalm-suppress DeprecatedMethod - Connection::quoteIdentifier() is marked internal/deprecated in DBAL 4
+     *                                    with no replacement that also works on DBAL 3.
+     */
     #[\Override]
     public function setDataFor($arrValues)
     {
         $strTable   = $this->getMetaModel()->getTableName();
         $strColName = $this->getColName();
+        $quotedCol  = $this->connection->quoteIdentifier($strColName);
 
         foreach ($arrValues as $intId => $varData) {
             $this->connection->createQueryBuilder()
                 ->update($strTable)
                 ->where('id=:id')
-                ->set($strColName, ':' . $strColName)
+                ->set($quotedCol, ':' . $strColName)
                 ->setParameter($strColName, is_array($varData) ? serialize($varData) : $varData)
                 ->setParameter('id', $intId)
                 ->executeQuery();
