@@ -405,7 +405,8 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = [
             ],
             'advanced'   => [
                 ':hide',
-                'varsupport'
+                'varsupport',
+                'enableLogging'
             ],
         ]
     ],
@@ -531,6 +532,19 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = [
                 'submitOnChange' => true
             ],
             'sql'         => "char(1) NOT NULL default ''"
+        ],
+        // Mirrors what Contao logs for its own tables (create/duplicate/delete) into tl_log - see
+        // .claude/dcg-systemlog.md. Default on, matching Contao's own tables, which cannot be
+        // switched off either.
+        'enableLogging'          => [
+            'label'       => 'enableLogging.label',
+            'description' => 'enableLogging.description',
+            'exclude'     => true,
+            'inputType'   => 'checkbox',
+            'eval'        => [
+                'tl_class' => 'clr w50 cbx m12'
+            ],
+            'sql'         => "char(1) NOT NULL default '1'"
         ],
     ],
 ];

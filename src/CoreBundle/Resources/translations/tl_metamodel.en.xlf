@@ -104,6 +104,12 @@
       <trans-unit id="localeterritorysupport.description" resname="localeterritorysupport.description">
         <source>Check if this MetaModel shall support language territory at locale.</source>
       </trans-unit>
+      <trans-unit id="enableLogging.label" resname="enableLogging.label">
+        <source>Log changes to the system log</source>
+      </trans-unit>
+      <trans-unit id="enableLogging.description" resname="enableLogging.description">
+        <source>Writes creating, duplicating and deleting an item of this MetaModel to the Contao system log, the same way Contao does for its own tables. Editing an existing item is not logged, matching Contao - the version history covers that instead.</source>
+      </trans-unit>
       <trans-unit id="sorting.label" resname="sorting.label">
         <source>Sorting</source>
       </trans-unit>
