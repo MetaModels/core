@@ -38,7 +38,9 @@ use ContaoCommunityAlliance\DcGeneral\Data\DefaultLanguageInformationCollection;
 use ContaoCommunityAlliance\DcGeneral\Data\FilterOptionCollectionInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\MultiLanguageDataProviderInterface;
+use ContaoCommunityAlliance\DcGeneral\Data\VersionModel;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use MetaModels\Attribute\IAttribute;
 use MetaModels\Attribute\IComplex;
 use MetaModels\Attribute\ITranslated;
@@ -159,19 +161,49 @@ class Driver implements MultiLanguageDataProviderInterface
     /**
      * Save a new Version of a record.
      *
+     * Stores the model's properties the same way a normal edit would arrive at them - through
+     * {@see Model::getProperty()}, which already runs every attribute's valueToWidget() - so
+     * restoring later can go back through setProperty()/widgetToValue() and reuse the very same
+     * save path a regular edit takes. This covers complex attributes (tags, table fields, ...)
+     * without any attribute-specific code, at the cost of only covering the currently active
+     * language for translated attributes - see ".claude/dcg-versionierung.md".
+     *
      * @param ModelInterface $model    The model to be saved.
      * @param string         $username The username that creates the new version.
      *
      * @return void
      *
-     * @throws \RuntimeException As this is currently unimplemented, an Exception is thrown.
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws Exception When the database can not be queried.
      */
     #[\Override]
     public function saveVersion(ModelInterface $model, $username)
     {
-        throw new \RuntimeException('Versioning not supported in MetaModels so far.');
+        assert($this->connection instanceof Connection);
+        $fromTable = $this->getMetaModel()->getTableName();
+
+        $count = (int) $this->connection
+            ->createQueryBuilder()
+            ->select('COUNT(*) AS count')
+            ->from('tl_version')
+            ->andWhere('pid = :pid')
+            ->andWhere('fromTable = :fromTable')
+            ->setParameter('pid', $model->getId())
+            ->setParameter('fromTable', $fromTable)
+            ->executeQuery()
+            ->fetchOne();
+
+        $newVersion = $count + 1;
+
+        $this->connection->insert('tl_version', [
+            'pid'       => $model->getId(),
+            'tstamp'    => \time(),
+            'version'   => $newVersion,
+            'fromTable' => $fromTable,
+            'username'  => $username,
+            'data'      => \serialize($model->getPropertiesAsArray()),
+        ]);
+
+        $this->setVersionActive($model->getId(), $newVersion);
     }
 
     /**
@@ -180,16 +212,48 @@ class Driver implements MultiLanguageDataProviderInterface
      * @param mixed $mixID      The ID of record.
      * @param mixed $mixVersion The ID of the version.
      *
-     * @return never-return
+     * @return ModelInterface|null
      *
-     * @throws \RuntimeException As this is currently unimplemented, an Exception is thrown.
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws Exception When the database can not be queried.
      */
     #[\Override]
     public function getVersion($mixID, $mixVersion)
     {
-        throw new \RuntimeException('Versioning not supported in MetaModels so far.');
+        assert($this->connection instanceof Connection);
+
+        $row = $this->connection
+            ->createQueryBuilder()
+            ->select('data')
+            ->from('tl_version')
+            ->andWhere('pid = :pid')
+            ->andWhere('version = :version')
+            ->andWhere('fromTable = :fromTable')
+            ->setParameter('pid', $mixID)
+            ->setParameter('version', $mixVersion)
+            ->setParameter('fromTable', $this->getMetaModel()->getTableName())
+            ->executeQuery()
+            ->fetchAssociative();
+
+        if (false === $row) {
+            return null;
+        }
+
+        $data = \unserialize((string) $row['data']);
+        if (!\is_array($data)) {
+            return null;
+        }
+
+        $model = $this->getEmptyModel();
+        $model->setId($mixID);
+        foreach ($data as $propertyName => $value) {
+            if ('id' === $propertyName) {
+                continue;
+            }
+
+            $model->setProperty((string) $propertyName, $value);
+        }
+
+        return $model;
     }
 
     /**
@@ -200,14 +264,23 @@ class Driver implements MultiLanguageDataProviderInterface
      *
      * @return void
      *
-     * @throws \RuntimeException As this is currently unimplemented, an Exception is thrown.
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws Exception When the database can not be queried.
      */
     #[\Override]
     public function setVersionActive($mixID, $mixVersion)
     {
-        throw new \RuntimeException('Versioning not supported in MetaModels so far.');
+        assert($this->connection instanceof Connection);
+        $fromTable    = $this->getMetaModel()->getTableName();
+        $updateValues = ['pid' => $mixID, 'fromTable' => $fromTable];
+
+        // "active" is a strict tinyint(1), not the char(1) flag most Contao/MetaModels tables use -
+        // an empty string fails under strict SQL mode.
+        $this->connection->update('tl_version', ['active' => 0], $updateValues);
+        $this->connection->update(
+            'tl_version',
+            ['active' => 1],
+            ['pid' => $mixID, 'fromTable' => $fromTable, 'version' => $mixVersion]
+        );
     }
 
     /**
@@ -217,14 +290,27 @@ class Driver implements MultiLanguageDataProviderInterface
      *
      * @return mixed
      *
-     * @throws \RuntimeException As this is currently unimplemented, an Exception is thrown.
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws Exception When the database can not be queried.
      */
     #[\Override]
     public function getActiveVersion($mixID)
     {
-        throw new \RuntimeException('Versioning not supported in MetaModels so far.');
+        assert($this->connection instanceof Connection);
+
+        $version = $this->connection
+            ->createQueryBuilder()
+            ->select('version')
+            ->from('tl_version')
+            ->andWhere('pid = :pid')
+            ->andWhere('fromTable = :fromTable')
+            ->andWhere('active = :active')
+            ->setParameter('pid', $mixID)
+            ->setParameter('fromTable', $this->getMetaModel()->getTableName())
+            ->setParameter('active', '1')
+            ->executeQuery()
+            ->fetchOne();
+
+        return false === $version ? null : $version;
     }
 
     /**
@@ -571,13 +657,48 @@ class Driver implements MultiLanguageDataProviderInterface
      *
      * @return CollectionInterface
      *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws Exception When the database can not be queried.
      */
     #[\Override]
     public function getVersions($mixID, $onlyActive = false)
     {
-        // No version support on MetaModels so far, sorry.
-        return new DefaultCollection();
+        assert($this->connection instanceof Connection);
+
+        $queryBuilder = $this->connection
+            ->createQueryBuilder()
+            ->select('tstamp', 'version', 'username', 'active')
+            ->from('tl_version')
+            ->andWhere('pid = :pid')
+            ->andWhere('fromTable = :fromTable')
+            ->setParameter('pid', $mixID)
+            ->setParameter('fromTable', $this->getMetaModel()->getTableName());
+
+        if ($onlyActive) {
+            $queryBuilder->andWhere('active = :active')->setParameter('active', '1');
+        } else {
+            $queryBuilder->orderBy('version', 'DESC');
+        }
+
+        // A version-list row is metadata about a version (tstamp/version/username/active), not a
+        // MetaModels item - VersionModel (a plain property bag) fits, the full Item/attribute
+        // machinery getEmptyModel() would pull in does not and does not implement
+        // VersionModelInterface, which the edit mask's version drop-down requires.
+        $collection = $this->getEmptyCollection();
+        foreach ($queryBuilder->executeQuery()->fetchAllAssociative() as $row) {
+            $model = new VersionModel();
+            $model->setProviderName($this->getMetaModel()->getTableName());
+            foreach ($row as $propertyName => $value) {
+                $model->setProperty($propertyName, $value);
+            }
+
+            // The template submits this as "version" to restore - the item id stays with $mixID and
+            // is not what identifies a single entry in this list, the version number does.
+            $model->setIdRaw($row['version']);
+
+            $collection->push($model);
+        }
+
+        return $collection;
     }
 
     /**
@@ -761,9 +882,6 @@ class Driver implements MultiLanguageDataProviderInterface
         assert($objNative1 instanceof IItem);
         $objNative2 = $secondModel->getItem();
         assert($objNative2 instanceof IItem);
-        if ($objNative1->getMetaModel() === $objNative2->getMetaModel()) {
-            return true;
-        }
         foreach ($objNative1->getMetaModel()->getAttributes() as $objAttribute) {
             if ($objNative1->get($objAttribute->getColName()) !== $objNative2->get($objAttribute->getColName())) {
                 return false;

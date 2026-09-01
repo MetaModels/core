@@ -69,6 +69,8 @@ class DataProviderBuilder
      * @param IMetaModelDataDefinition $container The data container.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     #[\Override]
     protected function build(IMetaModelDataDefinition $container)
@@ -95,7 +97,9 @@ class DataProviderBuilder
                 ->setTableName($container->getName())
                 ->setClassName(Driver::class)
                 ->setInitializationData(['source' => $container->getName()])
-                ->setVersioningEnabled(false);
+                ->setVersioningEnabled(
+                    (bool) ($GLOBALS['TL_DCA'][$container->getName()]['config']['enableVersioning'] ?? false)
+                );
             $basicDefinition->setDataProvider($container->getName());
         }
 

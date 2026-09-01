@@ -33,7 +33,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = [
     'config'     => [
         'dataContainer'    => General::class,
         'switchToEdit'     => false,
-        'enableVersioning' => false,
+        'enableVersioning' => true,
     ],
     'dca_config' => [
         'data_provider' => [
