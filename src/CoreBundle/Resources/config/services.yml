@@ -36,6 +36,24 @@ services:
             - "@router"
             - "@request_stack"
 
+    metamodels.listener.dcgeneral.log_persisted_items:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\LogPersistedItemsListener
+        arguments:
+            - "@metamodels.factory"
+            - "@metamodels.view_combination"
+            - "@metamodels.backend.item_label_renderer"
+            - "@monolog.logger.contao.general"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.model.post-persist
+              method: onPersist
+            - name: kernel.event_listener
+              event: dc-general.model.post-duplicate
+              method: onDuplicate
+            - name: kernel.event_listener
+              event: dc-general.model.post-delete
+              method: onDelete
+
     metamodels.assets.icon_builder:
         class: MetaModels\CoreBundle\Assets\IconBuilder
         arguments:
