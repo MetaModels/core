@@ -46,7 +46,7 @@ use function str_starts_with;
  *   collapsed: bool
  * }
  */
-class BackendSectionListener
+final class BackendSectionListener
 {
     /**
      * The icon used when a section does not configure one, or its configured icon file cannot be found.
