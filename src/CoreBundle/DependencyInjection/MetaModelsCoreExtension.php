@@ -162,7 +162,13 @@ class MetaModelsCoreExtension extends Extension implements PrependExtensionInter
         if (!$config['enable_cache']) {
             $cache = $container->getDefinition('metamodels.cache_internal');
             $cache->setClass(ArrayAdapter::class);
-            $cache->setArguments([]);
+            // ArrayAdapter deep-clones what it stores by default (Symfony 8's $deepClone,
+            // successor to the old $storeSerialized). The nested input-screen/DCA-setting
+            // arrays MetaModels caches here trip a bug in symfony/polyfill-deepclone
+            // ("malformed payload, hard-ref slot must be of type int, array given") - same
+            // root cause as ContaoCommunityAlliance\DcGeneral\Cache\Factory\DcGeneralFactoryCache,
+            // see https://github.com/contao-community-alliance/dc-general/issues/652. Keep it off.
+            $cache->setArguments(['$deepClone' => false]);
             $container->setParameter('metamodels.cache_dir', null);
 
             return;
