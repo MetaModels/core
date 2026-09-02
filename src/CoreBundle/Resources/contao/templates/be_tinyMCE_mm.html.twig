@@ -1,0 +1,7 @@
+{% extends "@Contao/be_tinyMCE.html.twig" %}
+
+{% block custom %}
+    {% if rows|default %}
+        max_height: {{ rows|e('js') }},
+    {% endif %}
+{% endblock %}
