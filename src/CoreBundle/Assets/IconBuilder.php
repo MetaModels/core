@@ -27,6 +27,7 @@ use Contao\CoreBundle\Framework\Adapter;
 use Contao\CoreBundle\Image\ImageFactoryInterface;
 use Contao\FilesModel;
 use Contao\Image;
+use Contao\System;
 use Contao\Validator;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Path;
@@ -128,6 +129,22 @@ class IconBuilder
      */
     public function getBackendIcon($icon, $defaultIcon = 'bundles/metamodelscore/images/icons/metamodels.svg')
     {
+        // BC: Contao 5.7 exposed a subset of its backend icons under the per-user theme folder
+        // (system/themes/<theme>/icons/...), a folder Contao 6 dropped entirely along with
+        // backend themes. Unlike the bundle-shipped SVGs below, these no longer exist as plain
+        // files under the web root at all - only Image::getHtml()'s own icon manifest (keyed by
+        // bare filename) still knows their current, hashed path. Hand the bare filename off
+        // untouched, but only if that manifest actually has it: an icon Contao 6 also dropped
+        // (e.g. the old "alias.svg") would otherwise resolve to a dead link instead of falling
+        // through to the default icon below, same as it did when the file was merely missing.
+        if (
+            \is_string($icon)
+            && 1 === \preg_match('#^/?system/themes/[^/]+/icons/(.+)$#', $icon, $matches)
+            && isset(System::getContainer()->getParameter('contao.backend.icons')[$matches[1]])
+        ) {
+            return $matches[1];
+        }
+
         $realIcon = $this->convertValueToPath($icon, $defaultIcon);
 
         // An SVG that already ships with a bundle is handed on untouched. Scaling it to 16 pixels

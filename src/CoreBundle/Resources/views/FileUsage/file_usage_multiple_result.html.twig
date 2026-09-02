@@ -17,7 +17,7 @@
   <td class="tl_file_list tl_right_nowrap">
     {% if result.editUrl|default %}
       <a class="edit" href="{{ result.editUrl }}" title="{{ 'single_usage_edit'|trans({'%metaModelName%': metaModelName, '%attribute%': attributeName, '%id%': result.itemId}) }}">
-        <img src="/system/themes/flexible/icons/edit.svg" alt="" width="16" height="16">
+        {{ backend_icon('edit.svg') }}
       </a>
     {% endif %}
   </td>

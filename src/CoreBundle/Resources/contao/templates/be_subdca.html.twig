@@ -1,0 +1,10 @@
+{#
+    SubDcaWidget extends Contao\Widget, not Contao\Template - Contao's own context factory only
+    exposes a "Template" variable for genuine Template instances (ContextFactory::fromContaoTemplate());
+    a Widget goes through fromClass() instead, which exposes its public/protected methods directly as
+    callables (no "Template."/"this." prefix) and its properties directly by name.
+#}
+<fieldset class="tl_subdca">
+    <legend>{{ generateLabel()|raw }}{{ xlabel|default('')|raw }}</legend>
+    {{ generateWithError(true)|raw }}
+</fieldset>
