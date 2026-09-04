@@ -1,0 +1,14 @@
+{#
+    MetaModels prerendered debug list, plain text - Twig version of metamodel_prerendered_debug.text.
+#}
+{% if app.debug %}
+    {{ dump(data) }}
+{% endif %}
+{% if data|default([])|length %}
+    {% for item in data %}
+        {# Include here your output with an echo-equivalent from nodes, e.g. item.text['attribute_name'].
+           Switch on the debug mode and look at the debug output in the toolbar... #}
+    {% endfor %}
+{% else %}
+    {{ noItemsMsg|default('')|raw }}
+{% endif %}

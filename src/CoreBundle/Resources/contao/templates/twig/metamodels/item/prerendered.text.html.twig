@@ -1,0 +1,19 @@
+{#
+    MetaModels prerendered item list, plain text - Twig version of metamodel_prerendered.text.
+#}
+{%- if data|default([])|length -%}
+    {%- for item in data -%}
+        {%- set textvals = item.text|default({}) -%}
+        {%- for field, name in item.attributes -%}
+            {%- set value = textvals[field] is defined ? textvals[field] : null -%}
+            {%- if value is not null -%}
+                {%- if not view.get('hideLabels') -%}{{ (('field_label'|trans({'%field_label%': name}, 'metamodels_list'))|trim) ~ ' ' }}{%- endif -%}{{ value|raw }}{{ "\n" }}
+            {%- endif -%}
+        {%- endfor -%}
+        {%- for action in item.actions -%}
+            {{ action.label }}: {{ action.href }}{{ "\n" }}
+        {%- endfor -%}
+    {%- endfor -%}
+{%- else -%}
+    {{ noItemsMsg|default('')|raw }}
+{%- endif -%}
