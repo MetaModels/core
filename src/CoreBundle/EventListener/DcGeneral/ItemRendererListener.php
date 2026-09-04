@@ -32,12 +32,17 @@ use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\Helper\EmptyTest;
 use MetaModels\IItem;
 use MetaModels\Items;
+use Contao\System;
 use MetaModels\Render\Setting\ICollection;
 use MetaModels\Render\Setting\IRenderSettingFactory;
-use MetaModels\Render\Template;
+use MetaModels\Render\TemplateFactory;
 
 /**
  * Render a MetaModel item in the backend using the render setting attached to the active input screen.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Adding the template factory as a constructor
+ *     dependency (replacing a direct "new Template()" construction that bypassed the Twig
+ *     surrogate entirely) pushed this already-broad listener over the threshold.
  */
 class ItemRendererListener
 {
@@ -49,13 +54,34 @@ class ItemRendererListener
     private IRenderSettingFactory $renderSettingFactory;
 
     /**
+     * The template factory.
+     *
+     * @var TemplateFactory
+     */
+    private TemplateFactory $templateFactory;
+
+    /**
      * Create a new instance.
      *
      * @param IRenderSettingFactory $renderSettingFactory The render setting factory.
+     * @param TemplateFactory|null  $templateFactory      The template factory.
      */
-    public function __construct(IRenderSettingFactory $renderSettingFactory)
+    public function __construct(IRenderSettingFactory $renderSettingFactory, ?TemplateFactory $templateFactory = null)
     {
         $this->renderSettingFactory = $renderSettingFactory;
+
+        if (null === $templateFactory) {
+            // phpcs:disable
+            @trigger_error(
+                'Not passing the template factory as 2nd argument to "' . __METHOD__ . '" is deprecated ' .
+                'and will cause an error in MetaModels 3.0',
+                E_USER_DEPRECATED
+            );
+            // phpcs:enable
+            $templateFactory = System::getContainer()->get('metamodels.template_factory');
+            assert($templateFactory instanceof TemplateFactory);
+        }
+        $this->templateFactory = $templateFactory;
     }
 
     /**
@@ -110,7 +136,10 @@ class ItemRendererListener
             return;
         }
 
-        $template      = new Template($renderSetting->get('template') ?? '');
+        $template      = $this->templateFactory->createTemplate(
+            (string) ($renderSetting->get('template') ?? ''),
+            'item'
+        );
         $renderSetting = self::removeInvariantAttributes($nativeItem, $renderSetting);
 
         $template->setData(
