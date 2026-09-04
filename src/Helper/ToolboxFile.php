@@ -1136,7 +1136,7 @@ class ToolboxFile
         $meta  = $this->metaInformation[dirname($fileName)][$file->basename] ?? [];
         $title = isset($meta['title']) && strlen($meta['title'])
             ? $meta['title']
-            : StringUtil::specialchars($file->basename);
+            : $file->basename;
         if (isset($meta['caption']) && strlen($meta['caption'])) {
             $altText = $meta['caption'];
         } else {
@@ -1154,7 +1154,7 @@ class ToolboxFile
             'extension' => $file->extension,
             'size'      => $file->filesize,
             'sizetext'  => sprintf('(%s)', Controller::getReadableSize($file->filesize, 2)),
-            'url'       => StringUtil::specialchars($this->getDownloadLink($fileName)),
+            'url'       => $this->getDownloadLink($fileName),
             'isPicture' => false,
         ];
 
