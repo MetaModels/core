@@ -145,7 +145,7 @@ class TagsWidget extends Widget
             $this->strName . '_' . $index,                // 3
             $val['value'],                                // 4
             $checked,                                     // 5
-            $this->getAttributes() . $this->strTagEnding, // 6
+            $this->getAttributes(), // 6
             $val['label'],                                // 7
             $this->strName                                // 8
             // @codingStandardsIgnoreEnd

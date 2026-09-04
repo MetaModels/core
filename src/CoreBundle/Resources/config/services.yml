@@ -64,6 +64,7 @@ services:
             - "%metamodels.assets_web%"
             - "@=service('contao.framework').getAdapter('Contao\\\\Image')"
             - "%contao.web_dir%"
+            - "%contao.backend.icons%"
 
     metamodels.cache:
         class: Doctrine\Common\Cache\Psr6\DoctrineProvider
@@ -155,10 +156,6 @@ services:
         factory: ['@MetaModels\CoreBundle\Contao\Compat\ContaoFactory', 'createInstance']
         arguments:
             - 'Contao\Session'
-
-    metamodels.insert_tags:
-        class: Contao\InsertTags
-        factory: ['@MetaModels\CoreBundle\Contao\Compat\ContaoFactory', 'createInsertTags']
 
     metamodels.table_manipulator:
         class: MetaModels\Helper\TableManipulator

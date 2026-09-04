@@ -64,6 +64,19 @@ use Symfony\Component\HttpFoundation\Session\Session;
 class CustomSqlTest extends AutoLoadingTestCase
 {
     /**
+     * Contao\System::setContainer() stores its argument in a process-wide static property with no
+     * public way to unset it - reset it via reflection so the mock container some tests here
+     * install doesn't leak into whatever other test class PHPUnit runs next in the same process.
+     */
+    protected function tearDown(): void
+    {
+        $property = new \ReflectionProperty(System::class, 'objContainer');
+        $property->setValue(null, null);
+
+        parent::tearDown();
+    }
+
+    /**
      * Mock a CustomSql with parseInsertTags disabled.
      *
      * @param array                 $properties The initialization data.

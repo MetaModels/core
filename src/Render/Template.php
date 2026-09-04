@@ -30,7 +30,6 @@ use Contao\CoreBundle\Config\ResourceFinderInterface;
 use Contao\CoreBundle\Framework\Adapter;
 use Contao\FrontendTemplate;
 use Contao\System;
-use Contao\TemplateLoader;
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use Exception;
 use InvalidArgumentException;
@@ -103,7 +102,11 @@ class Template
     /**
      * The template loader.
      *
-     * @var Adapter|Adapter<TemplateLoader> Template loader adapter.
+     * Contao 6 removed Contao\TemplateLoader entirely - this property is never actually read
+     * (resolveTemplatePath() reimplements the lookup itself, see below), so the type is kept as a
+     * bare Adapter rather than referencing a class that no longer exists.
+     *
+     * @var Adapter Template loader adapter.
      */
     protected $templateLoader;
 
@@ -167,7 +170,7 @@ class Template
      * Create a new template instance.
      *
      * @param string                               $strTemplate       The name of the template file.
-     * @param Adapter|Adapter<TemplateLoader>|null $templateLoader    Template loader adapter.
+     * @param Adapter|null                          $templateLoader    Template loader adapter.
      * @param RequestScopeDeterminator|null        $scopeDeterminator Request scope determinator.
      * @param TwigTemplateSurrogate|null           $twigSurrogate     Twig surrogate (enables Twig precedence).
      * @param string                               $twigGroup         Twig template group (attribute|filter|item).
@@ -194,7 +197,10 @@ class Template
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
-            $templateLoader = System::getContainer()->get('contao.framework')->getAdapter(TemplateLoader::class);
+            // Not a class-constant reference: Contao\TemplateLoader no longer exists under Contao 6,
+            // and this adapter is only ever a write-only property (see the class docblock above)
+            // that's never actually invoked, so there's nothing left to autoload here regardless.
+            $templateLoader = System::getContainer()->get('contao.framework')->getAdapter('Contao\TemplateLoader');
             assert($templateLoader instanceof Adapter);
         }
         $this->templateLoader = $templateLoader;

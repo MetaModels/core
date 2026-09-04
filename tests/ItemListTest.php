@@ -40,10 +40,26 @@ use PHPUnit\Framework\Attributes\CoversClass;
 /**
  * Test the base attribute.
  *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) The tearDown() reflection-based container reset
+ *     added a dependency, pushing this already-broad test class over the threshold.
  */
 #[CoversClass(\MetaModels\ItemList::class)]
 final class ItemListTest extends TestCase
 {
+    /**
+     * Contao\System::setContainer() stores its argument in a process-wide static property with no
+     * public way to unset it - reset it via reflection so the mock container this test installs
+     * (whose service map only covers "contao.routing.scope_matcher" and "request_stack") doesn't
+     * leak into whatever other test class PHPUnit runs next in the same process.
+     */
+    protected function tearDown(): void
+    {
+        $property = new \ReflectionProperty(System::class, 'objContainer');
+        $property->setValue(null, null);
+
+        parent::tearDown();
+    }
+
     /** @SuppressWarnings(PHPMD.Superglobals) */
     public function testGetOutputFormat(): void
     {

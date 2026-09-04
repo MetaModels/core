@@ -24,7 +24,6 @@ namespace MetaModels\CoreBundle\Contao\Compat;
 
 use Contao\CoreBundle\Framework\Adapter;
 use Contao\CoreBundle\Framework\ContaoFramework;
-use Contao\InsertTags;
 
 /**
  * This class creates instances of Contao classes that have parent classes in global namespace (All in Contao <=4.4).
@@ -50,19 +49,6 @@ class ContaoFactory
     public function __construct(ContaoFramework $framework)
     {
         $this->framework = $framework;
-    }
-
-    /**
-     * Create an insert tags replacer.
-     *
-     * @return InsertTags
-     */
-    public function createInsertTags()
-    {
-        /** @psalm-suppress InternalMethod - the ContaoFramework class is internal, not the method usage. */
-        $this->framework->initialize();
-
-        return new InsertTags();
     }
 
     /**

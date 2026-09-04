@@ -27,7 +27,6 @@ use Contao\CoreBundle\Framework\Adapter;
 use Contao\CoreBundle\Image\ImageFactoryInterface;
 use Contao\FilesModel;
 use Contao\Image;
-use Contao\System;
 use Contao\Validator;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Path;
@@ -87,6 +86,14 @@ class IconBuilder
     private Adapter $image;
 
     /**
+     * The "contao.backend.icons" container parameter: Contao's manifest of backend icons, keyed by
+     * bare filename.
+     *
+     * @var array<string, mixed>
+     */
+    private array $backendIcons;
+
+    /**
      * Create a new instance.
      *
      * @param Adapter<FilesModel>   $filesAdapter   Adapter to the Contao files model class.
@@ -96,6 +103,7 @@ class IconBuilder
      * @param string                $webPath        The web reachable path for assets.
      * @param Adapter<Image>        $imageAdapter   The image adapter to generate HTML code images.
      * @param string                $projectWebPath The project web reachable path for assets.
+     * @param array<string, mixed> $backendIcons    The "contao.backend.icons" container parameter.
      */
     public function __construct(
         Adapter $filesAdapter,
@@ -104,7 +112,8 @@ class IconBuilder
         $outputPath,
         $webPath,
         Adapter $imageAdapter,
-        $projectWebPath
+        $projectWebPath,
+        array $backendIcons
     ) {
         $this->filesAdapter   = $filesAdapter;
         $this->imageFactory   = $imageFactory;
@@ -113,6 +122,7 @@ class IconBuilder
         $this->webPath        = $webPath;
         $this->projectWebPath = $projectWebPath;
         $this->image          = $imageAdapter;
+        $this->backendIcons   = $backendIcons;
 
         // Ensure output path exists.
         $fileSystem = new Filesystem();
@@ -129,20 +139,8 @@ class IconBuilder
      */
     public function getBackendIcon($icon, $defaultIcon = 'bundles/metamodelscore/images/icons/metamodels.svg')
     {
-        // BC: Contao 5.7 exposed a subset of its backend icons under the per-user theme folder
-        // (system/themes/<theme>/icons/...), a folder Contao 6 dropped entirely along with
-        // backend themes. Unlike the bundle-shipped SVGs below, these no longer exist as plain
-        // files under the web root at all - only Image::getHtml()'s own icon manifest (keyed by
-        // bare filename) still knows their current, hashed path. Hand the bare filename off
-        // untouched, but only if that manifest actually has it: an icon Contao 6 also dropped
-        // (e.g. the old "alias.svg") would otherwise resolve to a dead link instead of falling
-        // through to the default icon below, same as it did when the file was merely missing.
-        if (
-            \is_string($icon)
-            && 1 === \preg_match('#^/?system/themes/[^/]+/icons/(.+)$#', $icon, $matches)
-            && isset(System::getContainer()->getParameter('contao.backend.icons')[$matches[1]])
-        ) {
-            return $matches[1];
+        if (\is_string($icon) && null !== ($themeIcon = $this->resolveLegacyThemeIcon($icon))) {
+            return $themeIcon;
         }
 
         $realIcon = $this->convertValueToPath($icon, $defaultIcon);
@@ -179,6 +177,31 @@ class IconBuilder
         }
 
         return $this->webPath . '/' . \basename($realIcon);
+    }
+
+    /**
+     * Resolve a Contao 5.7-style theme icon path to its Contao 6 replacement, if one exists.
+     *
+     * BC: Contao 5.7 exposed a subset of its backend icons under the per-user theme folder
+     * (system/themes/<theme>/icons/...), a folder Contao 6 dropped entirely along with backend
+     * themes. Unlike the bundle-shipped SVGs handled by the caller, these no longer exist as plain
+     * files under the web root at all - only Image::getHtml()'s own icon manifest (keyed by bare
+     * filename) still knows their current, hashed path. Hand the bare filename off untouched, but
+     * only if that manifest actually has it: an icon Contao 6 also dropped (e.g. the old
+     * "alias.svg") would otherwise resolve to a dead link instead of falling through to the
+     * default icon, same as it did when the file was merely missing.
+     *
+     * @param string $icon The icon path to check.
+     *
+     * @return string|null The bare filename if this is a still-known legacy theme icon, null otherwise.
+     */
+    private function resolveLegacyThemeIcon(string $icon): ?string
+    {
+        if (1 !== \preg_match('#^/?system/themes/[^/]+/icons/(.+)$#', $icon, $matches)) {
+            return null;
+        }
+
+        return isset($this->backendIcons[$matches[1]]) ? $matches[1] : null;
     }
 
     /**

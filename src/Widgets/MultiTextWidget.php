@@ -27,6 +27,8 @@ use Contao\Widget;
 /**
  * Form field with more than 1 input, based on form field by Leo Feyer.
  *
+ * @property int $size The number of input fields to render, set via the "size" DCA eval option.
+ *
  * @psalm-suppress PropertyNotSetInConstructor
  */
 class MultiTextWidget extends Widget
@@ -114,10 +116,9 @@ class MultiTextWidget extends Widget
     public function generate()
     {
         $return = '';
-        /** @psalm-suppress UndefinedThisPropertyFetch */
         for ($i = 0; $i < $this->size; $i++) {
             $return .= \sprintf(
-                '<input type="%s" name="%s[]" id="ctrl_%s_%s" class="text%s%s" value="%s"%s%s',
+                '<input type="%s" name="%s[]" id="ctrl_%s_%s" class="text%s%s" value="%s"%s',
                 'text',
                 $this->strName,
                 $this->strId,
@@ -125,8 +126,7 @@ class MultiTextWidget extends Widget
                 '',
                 (\strlen($this->strClass) ? ' ' . $this->strClass : ''),
                 StringUtil::specialchars($this->varValue[$i] ?? ''),
-                $this->getAttributes(),
-                $this->strTagEnding
+                $this->getAttributes()
             );
         }
 
