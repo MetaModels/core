@@ -147,6 +147,16 @@ abstract class AbstractBreadcrumbListener
                 $label = $label[0] ?? '';
             }
 
+            // The "dca_combine" operation jumps straight into edit mode instead of a list view -
+            // its href never carries an id (it is injected per-row by DcaCombineButtonListener,
+            // reacting to GetOperationButtonEvent, which only fires for the real list-view button).
+            // This code path bypasses that event entirely, so the id has to be added here too, the
+            // same way that listener computes it: tl_metamodel_dca_combine's "record" is identified
+            // by the MetaModel's own id, since TableRowsAsRecordsDataProvider groups its rows by pid.
+            if ('dca_combine' === $name) {
+                $parameters['id'] = ModelId::fromValues('tl_metamodel_dca_combine', $modelId)->getSerialized();
+            }
+
             $elements->pushShortcut(
                 $this->generate('metamodels.configuration', ['pid' => $serialized] + $parameters),
                 (string) $label,
