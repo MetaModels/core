@@ -24,6 +24,7 @@ namespace MetaModels\Test\Filter\Setting;
 use MetaModels\Filter\FilterUrlBuilder;
 use MetaModels\Filter\Setting\ICollection;
 use MetaModels\Filter\Setting\Simple;
+use MetaModels\Helper\WidgetFieldRenderer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -113,6 +114,10 @@ class SimpleParameterTypesTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        // WidgetFieldRenderer is final and thus cannot be doubled by PHPUnit's mock generator; these tests never
+        // invoke it, so an uninitialized instance is sufficient to satisfy the constructor's type check.
+        $widgetFieldRenderer = (new \ReflectionClass(WidgetFieldRenderer::class))->newInstanceWithoutConstructor();
+
         $setting = $this
             ->getMockBuilder(Simple::class)
             ->setConstructorArgs(
@@ -121,7 +126,8 @@ class SimpleParameterTypesTest extends TestCase
                     $properties,
                     $this->createMock(EventDispatcherInterface::class),
                     $filterUrlBuilder,
-                    $this->createMock(TranslatorInterface::class)
+                    $this->createMock(TranslatorInterface::class),
+                    $widgetFieldRenderer
                 ]
             )
             ->onlyMethods(['getParameters', 'prepareRules'])

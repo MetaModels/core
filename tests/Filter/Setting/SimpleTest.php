@@ -26,6 +26,7 @@ use MetaModels\Filter\FilterUrl;
 use MetaModels\Filter\FilterUrlBuilder;
 use MetaModels\Filter\Setting\ICollection;
 use MetaModels\Filter\Setting\Simple;
+use MetaModels\Helper\WidgetFieldRenderer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -66,9 +67,20 @@ class SimpleTest extends TestCase
             $translator = $this->createMock(TranslatorInterface::class);
         }
 
+        // WidgetFieldRenderer is final and thus cannot be doubled by PHPUnit's mock generator; these tests never
+        // invoke it, so an uninitialized instance is sufficient to satisfy the constructor's type check.
+        $widgetFieldRenderer = (new \ReflectionClass(WidgetFieldRenderer::class))->newInstanceWithoutConstructor();
+
         $setting = $this
             ->getMockBuilder(Simple::class)
-            ->setConstructorArgs([$filterSetting, $properties, $eventDispatcher, $filterUrlBuilder, $translator])
+            ->setConstructorArgs([
+                $filterSetting,
+                $properties,
+                $eventDispatcher,
+                $filterUrlBuilder,
+                $translator,
+                $widgetFieldRenderer
+            ])
             ->onlyMethods(['prepareRules'])
             ->getMock();
 

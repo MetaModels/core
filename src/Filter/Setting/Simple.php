@@ -34,6 +34,7 @@ use Contao\Widget;
 use MetaModels\Filter\FilterUrl;
 use MetaModels\Filter\FilterUrlBuilder;
 use MetaModels\FrontendIntegration\FrontendFilterOptions;
+use MetaModels\Helper\WidgetFieldRenderer;
 use MetaModels\IItem;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\Render\Setting\ICollection as IRenderSettings;
@@ -87,20 +88,29 @@ abstract class Simple implements ISimple
     protected TranslatorInterface $translator;
 
     /**
+     * Renders the "field" part of a frontend filter widget.
+     *
+     * @var WidgetFieldRenderer
+     */
+    private WidgetFieldRenderer $widgetFieldRenderer;
+
+    /**
      * Constructor - initialize the object and store the parameters.
      *
-     * @param ICollection                   $collection       The parenting filter settings object.
-     * @param array                         $data             The attributes for this filter setting.
-     * @param EventDispatcherInterface|null $eventDispatcher  The event dispatcher.
-     * @param FilterUrlBuilder|null         $filterUrlBuilder The filter URL builder.
-     * @param TranslatorInterface           $translator       The translator.
+     * @param ICollection                   $collection          The parenting filter settings object.
+     * @param array                         $data                The attributes for this filter setting.
+     * @param EventDispatcherInterface|null $eventDispatcher     The event dispatcher.
+     * @param FilterUrlBuilder|null         $filterUrlBuilder    The filter URL builder.
+     * @param TranslatorInterface           $translator          The translator.
+     * @param WidgetFieldRenderer|null      $widgetFieldRenderer The widget field renderer.
      */
     public function __construct(
         $collection,
         $data,
         ?EventDispatcherInterface $eventDispatcher = null,
         ?FilterUrlBuilder $filterUrlBuilder = null,
-        ?TranslatorInterface $translator = null
+        ?TranslatorInterface $translator = null,
+        ?WidgetFieldRenderer $widgetFieldRenderer = null
     ) {
         $this->collection = $collection;
         $this->data       = $data;
@@ -139,9 +149,21 @@ abstract class Simple implements ISimple
             assert($translator instanceof TranslatorInterface);
         }
 
-        $this->eventDispatcher  = $eventDispatcher;
-        $this->filterUrlBuilder = $filterUrlBuilder;
-        $this->translator       = $translator;
+        if (null === $widgetFieldRenderer) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'WidgetFieldRenderer is missing. It has to be passed in the constructor. Fallback will be dropped.',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            $widgetFieldRenderer = System::getContainer()->get('metamodels.widget_field_renderer');
+            assert($widgetFieldRenderer instanceof WidgetFieldRenderer);
+        }
+
+        $this->eventDispatcher     = $eventDispatcher;
+        $this->filterUrlBuilder    = $filterUrlBuilder;
+        $this->translator          = $translator;
+        $this->widgetFieldRenderer = $widgetFieldRenderer;
     }
 
     /**
@@ -517,7 +539,7 @@ abstract class Simple implements ISimple
         /** @psalm-suppress UnsafeInstantiation */
         $objWidget = new $strClass($event->getResult());
         $this->validateWidget($objWidget, $arrWidget['value']);
-        $strField = $objWidget->generate();
+        $strField = $this->widgetFieldRenderer->renderField($objWidget);
 
         /** @psalm-suppress InvalidArgument - We assume the widget array is fine. */
         return [

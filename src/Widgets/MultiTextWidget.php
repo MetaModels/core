@@ -118,7 +118,7 @@ class MultiTextWidget extends Widget
         $return = '';
         for ($i = 0; $i < $this->size; $i++) {
             $return .= \sprintf(
-                '<input type="%s" name="%s[]" id="ctrl_%s_%s" class="text%s%s" value="%s"%s',
+                '<input type="%s" name="%s[]" id="ctrl_%s_%s" class="text%s%s" value="%s"%s>',
                 'text',
                 $this->strName,
                 $this->strId,

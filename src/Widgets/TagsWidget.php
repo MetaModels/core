@@ -137,7 +137,7 @@ class TagsWidget extends Widget
 
         return \sprintf(
             '<span class="%1$s opt_%2$s">' .
-            '<input type="checkbox" name="%8$s[]" id="opt_%3$s" class="checkbox" value="%4$s"%5$s%6$s ' .
+            '<input type="checkbox" name="%8$s[]" id="opt_%3$s" class="checkbox" value="%4$s"%5$s%6$s> ' .
             '<label id="lbl_%3$s" for="opt_%3$s">%7$s</label></span>',
             // @codingStandardsIgnoreStart - Keep the comments.
             $this->getClassForOption($index),     // 1

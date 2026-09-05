@@ -141,6 +141,13 @@ services:
           - "%kernel.project_dir%"
         public: true
 
+    metamodels.widget_field_renderer:
+        class: MetaModels\Helper\WidgetFieldRenderer
+        arguments:
+          - "@twig"
+          - "@contao.twig.interop.context_factory"
+        public: true
+
     metamodels.contao_input:
         class: Contao\Input
         factory: ['@MetaModels\CoreBundle\Contao\Compat\ContaoFactory', 'getAdapter']
