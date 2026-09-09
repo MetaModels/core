@@ -112,6 +112,7 @@ final class DoctrineSchemaListener
             $platformOptions = $sourceColumn->getPlatformOptions();
             if ($targetTable->hasColumn($name)) {
                 $platformOptions = \array_merge($targetTable->getColumn($name)->getPlatformOptions(), $platformOptions);
+                $targetTable->dropColumn($name);
             }
 
             $targetTable
@@ -132,7 +133,13 @@ final class DoctrineSchemaListener
             $primary = $source->isPrimary();
             if ($targetTable->hasIndex($name)) {
                 $tmpIndex = $targetTable->getIndex($name);
-                $targetTable->dropIndex($name);
+                if ($tmpIndex->isPrimary()) {
+                    // Table::dropIndex() alone does not reset Table::$_primaryKeyName, so a
+                    // later setPrimaryKey() call would still throw "index already exists".
+                    $targetTable->dropPrimaryKey();
+                } else {
+                    $targetTable->dropIndex($name);
+                }
                 $columns = \array_merge($tmpIndex->getColumns(), $columns);
                 $flags   = \array_merge($tmpIndex->getFlags(), $flags);
                 $options = \array_merge($tmpIndex->getOptions(), $options);
