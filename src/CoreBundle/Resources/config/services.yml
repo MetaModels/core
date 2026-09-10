@@ -190,6 +190,8 @@ services:
             - '@MetaModels\Filter\FilterUrlBuilder'
             - '@translator'
             - '@metamodels.template_factory'
+            - '@event_dispatcher'
+            - '@contao.csrf.token_manager'
         public: true
 
     metamodels.controller.abstract.add_all:
