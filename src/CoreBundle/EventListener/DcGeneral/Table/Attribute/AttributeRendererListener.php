@@ -22,7 +22,6 @@
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\Attribute;
 
 use Contao\StringUtil;
-use Contao\System;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\Translator\TranslatorInterface;
@@ -45,22 +44,32 @@ class AttributeRendererListener extends BaseListener
     private IconBuilder $iconBuilder;
 
     /**
+     * The request stack.
+     *
+     * @var RequestStack
+     */
+    private RequestStack $requestStack;
+
+    /**
      * Create a new instance.
      *
      * @param RequestScopeDeterminator $scopeDeterminator The request mode determinator.
      * @param IAttributeFactory        $attributeFactory  The attribute factory.
      * @param IFactory                 $factory           The MetaModels factory.
      * @param IconBuilder              $iconBuilder       The icon builder.
+     * @param RequestStack             $requestStack      The request stack.
      */
     public function __construct(
         RequestScopeDeterminator $scopeDeterminator,
         IAttributeFactory $attributeFactory,
         IFactory $factory,
-        IconBuilder $iconBuilder
+        IconBuilder $iconBuilder,
+        RequestStack $requestStack
     ) {
         parent::__construct($scopeDeterminator, $attributeFactory, $factory);
 
-        $this->iconBuilder = $iconBuilder;
+        $this->iconBuilder  = $iconBuilder;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -118,9 +127,7 @@ class AttributeRendererListener extends BaseListener
         $name           = $attribute->getName();
         $arrDescription = StringUtil::deserialize($attribute->get('description'));
         if (\is_array($arrDescription)) {
-            $requestStack = System::getContainer()->get('request_stack');
-            assert($requestStack instanceof RequestStack);
-            $locale      = (string) $requestStack->getCurrentRequest()?->getLocale();
+            $locale      = (string) $this->requestStack->getCurrentRequest()?->getLocale();
             $description = $arrDescription[$locale] ?? null;
             if (null === $description) {
                 if ($metaModel instanceof ITranslatedMetaModel) {

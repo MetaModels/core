@@ -21,7 +21,7 @@
 
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\MetaModel;
 
-use Contao\System;
+use Contao\CoreBundle\Intl\Locales;
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use MenAtWork\MultiColumnWizardBundle\Event\GetOptionsEvent;
@@ -39,13 +39,22 @@ class LanguageOptionsListener
     private RequestScopeDeterminator $scopeDeterminator;
 
     /**
+     * The locales.
+     *
+     * @var Locales
+     */
+    private Locales $intlLocales;
+
+    /**
      * Create a new instance.
      *
      * @param RequestScopeDeterminator $scopeDeterminator The scope determinator.
+     * @param Locales                  $intlLocales       The locales.
      */
-    public function __construct(RequestScopeDeterminator $scopeDeterminator)
+    public function __construct(RequestScopeDeterminator $scopeDeterminator, Locales $intlLocales)
     {
         $this->scopeDeterminator = $scopeDeterminator;
+        $this->intlLocales       = $intlLocales;
     }
 
     /**
@@ -61,7 +70,7 @@ class LanguageOptionsListener
             return;
         }
 
-        $languages           = System::getContainer()->get('contao.intl.locales')->getLocales();
+        $languages           = $this->intlLocales->getLocales();
         $hasTerritorySupport = (bool) $event->getModel()->getProperty('localeterritorysupport');
         $languageOptions     = [];
 

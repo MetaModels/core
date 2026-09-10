@@ -32,10 +32,12 @@ use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\MultiLanguageDataProviderInterface;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\AbstractEnvironmentAwareEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Factory\DcGeneralFactory;
-use Contao\System;
+use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\IAliasConverter;
 use MetaModels\Attribute\IAttribute;
+use MetaModels\IFactory;
 use MetaModels\IMetaModel;
 use MetaModels\ITranslatedMetaModel;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -51,9 +53,35 @@ use function substr;
  * This handles the rendering of models to labels.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class ValueListener extends AbstractListener
 {
+    /**
+     * The request stack.
+     *
+     * @var RequestStack
+     */
+    private RequestStack $requestStack;
+
+    /**
+     * Create a new instance.
+     *
+     * @param RequestScopeDeterminator $scopeDeterminator The scope determinator.
+     * @param IFactory                 $factory           The MetaModel factory.
+     * @param Connection               $connection        The database connection.
+     * @param RequestStack             $requestStack      The request stack.
+     */
+    public function __construct(
+        RequestScopeDeterminator $scopeDeterminator,
+        IFactory $factory,
+        Connection $connection,
+        RequestStack $requestStack
+    ) {
+        parent::__construct($scopeDeterminator, $factory, $connection);
+        $this->requestStack = $requestStack;
+    }
+
     /**
      * Provide options for the values contained within a certain attribute.
      *
@@ -243,9 +271,7 @@ class ValueListener extends AbstractListener
         assert($dataProvider instanceof DataProviderInterface);
         if ($dataProvider instanceof MultiLanguageDataProviderInterface && $metaModel instanceof ITranslatedMetaModel) {
             // FIXME: check if language supported.
-            $requestStack = System::getContainer()->get('request_stack');
-            assert($requestStack instanceof RequestStack);
-            $locale = $requestStack->getCurrentRequest()?->getLocale();
+            $locale = $this->requestStack->getCurrentRequest()?->getLocale();
             if (null === ($languages = $dataProvider->getLanguages($model->getId()))) {
                 return [];
             }

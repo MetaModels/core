@@ -58,6 +58,7 @@ services:
             - "@cca.dc-general.scope-matcher"
             - "@metamodels.factory"
             - "@database_connection"
+            - "@request_stack"
         tags:
             - name: kernel.event_listener
               event: dc-general.view.contao2backend.get-property-options
