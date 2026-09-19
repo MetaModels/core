@@ -19,25 +19,25 @@ jobs:
         output: [ '-o github-action -o default' ]
     steps:
       - name: Pull source
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Setup PHP with PECL extension
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
       - name: Cache composer cache directory
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         env: { cache-name: composer-cache-dir }
         with:
           path: ~/.cache/composer
           key: ${{ runner.os }}-${{ matrix.php }}-build-${{ env.cache-name }}
       - name: Cache vendor directory
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         env: { cache-name: vendor }
         with:
           path: vendor
           key: ${{ runner.os }}-${{ matrix.php }}-${{ matrix.contao }}-build-${{ env.cache-name }}-${{ hashFiles('**/composer.lock') }}
       - name: Cache phpcq directory
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         env: { cache-name: phpcq }
         with:
           path: .phpcq
