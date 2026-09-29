@@ -18,6 +18,7 @@ services:
             - "@metamodels.factory"
             - "@database_connection"
             - "@translator"
+            - "@contao.intl.locales"
         tags:
             - name: kernel.event_listener
               event: dc-general.view.contao2backend.build-widget

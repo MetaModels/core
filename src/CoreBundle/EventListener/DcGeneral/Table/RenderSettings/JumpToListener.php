@@ -23,7 +23,6 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\RenderSettings;
 
 use Contao\CoreBundle\Intl\Locales;
 use Contao\StringUtil;
-use Contao\System;
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\BuildWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
@@ -88,23 +87,33 @@ class JumpToListener extends AbstractAbstainingListener
     private TranslatorInterface $translator;
 
     /**
+     * The locales.
+     *
+     * @var Locales
+     */
+    private Locales $intlLocales;
+
+    /**
      * Create a new instance.
      *
      * @param RequestScopeDeterminator $scopeDeterminator The scope determinator.
      * @param IFactory                 $factory           The factory.
      * @param Connection               $connection        The database connection.
      * @param TranslatorInterface      $translator        The translator.
+     * @param Locales                  $intlLocales       The locales.
      */
     public function __construct(
         RequestScopeDeterminator $scopeDeterminator,
         IFactory $factory,
         Connection $connection,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        Locales $intlLocales
     ) {
         parent::__construct($scopeDeterminator);
-        $this->factory    = $factory;
-        $this->connection = $connection;
-        $this->translator = $translator;
+        $this->factory     = $factory;
+        $this->connection  = $connection;
+        $this->translator  = $translator;
+        $this->intlLocales = $intlLocales;
     }
 
     /**
@@ -227,9 +236,7 @@ class JumpToListener extends AbstractAbstainingListener
 
             $arrLanguages = [];
             $rowClasses   = [];
-            $intlLocales  = System::getContainer()->get('contao.intl.locales');
-            assert($intlLocales instanceof Locales);
-            $labels = $intlLocales->getLocales();
+            $labels       = $this->intlLocales->getLocales();
             /** @psalm-suppress DeprecatedMethod */
             foreach ((array) $metaModel->getAvailableLanguages() as $strLangCode) {
                 $arrLanguages[$strLangCode] = $labels[$strLangCode];

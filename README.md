@@ -24,6 +24,12 @@ can be nested (AND/OR conditions i.e.) and be of various nature.
 Before you start it is helpful to look at the [MetaModels manual](http://metamodels.readthedocs.org/de/latest/index.html).
 There you will find actual information about the usage and the installation.
 
+## Versions
+
+* MM 2.5 for Contao 5.7 (EAP) - [See manual for notes](https://metamodels.readthedocs.io/en/latest/manual/new-in-mm-25.html)
+* MM 2.4 for Contao 5.3 (EAP) - [See manual for notes](https://metamodels.readthedocs.io/en/latest/manual/new-in-mm-24.html)
+* [More...](https://metamodels.readthedocs.io/en/latest/manual/install.html#version-overview)
+
 ## Install
 
 You can install MetaModels core with Contao Manager - search "metamodels/core" - or you can use composer
@@ -97,6 +103,12 @@ ein sehr komplexes Thema, da sie verschachtelt (z.B. AND/OR-Bedingungen) und von
 
 Vor dem Start ist es hilfreich, einen Blick in das [MetaModels Handbuch](http://metamodels.readthedocs.org/de/latest/index.html)
 zu werfen. Dort findet man aktuelle Informationen über die Verwendung, Installation und Tipps&Tricks.
+
+## Versionen
+
+* MM 2.5 für Contao 5.7 (EAP) - [Hinweise siehe Handbuch](https://metamodels.readthedocs.io/de/latest/manual/new-in-mm-25.html)
+* MM 2.4 für Contao 5.3 (EAP) - [Hinweise siehe Handbuch](https://metamodels.readthedocs.io/de/latest/manual/new-in-mm-24.html)
+* [Mehr...](https://metamodels.readthedocs.io/de/latest/manual/install.html#ubersicht-der-versionen)
 
 ## Installation
 

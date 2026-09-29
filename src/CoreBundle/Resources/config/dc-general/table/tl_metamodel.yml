@@ -19,6 +19,7 @@ services:
         class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\MetaModel\LanguageOptionsListener
         arguments:
             - "@cca.dc-general.scope-matcher"
+            - "@contao.intl.locales"
         tags:
             - name: kernel.event_listener
               event: men-at-work.multi-column-wizard-bundle.get-options

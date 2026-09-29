@@ -8,6 +8,9 @@ services:
             - '@metamodels.view_combination'
             - "@=service('contao.framework').getAdapter('Contao\\\\Controller')"
             - '@metamodels.assets.icon_builder'
+            - '@cca.dc-general.scope-matcher'
+            - '@database_connection'
+            - '@translator'
         public: true
 
     MetaModels\CoreBundle\Contao\Hooks\ContentElementCallback:

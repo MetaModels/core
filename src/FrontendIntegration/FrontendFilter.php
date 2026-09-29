@@ -99,18 +99,36 @@ class FrontendFilter
     private TemplateFactory $templateFactory;
 
     /**
+     * The event dispatcher.
+     *
+     * @var EventDispatcherInterface
+     */
+    private EventDispatcherInterface $dispatcher;
+
+    /**
+     * The CSRF token manager.
+     *
+     * @var ContaoCsrfTokenManager
+     */
+    private ContaoCsrfTokenManager $tokenManager;
+
+    /**
      * FrontendFilter constructor.
      *
-     * @param Connection|null          $connection       Database connection.
-     * @param FilterUrlBuilder|null    $filterUrlBuilder The filter URL builder.
-     * @param TranslatorInterface|null $translator       The translator.
-     * @param TemplateFactory|null     $templateFactory  The template factory.
+     * @param Connection|null                $connection       Database connection.
+     * @param FilterUrlBuilder|null          $filterUrlBuilder The filter URL builder.
+     * @param TranslatorInterface|null       $translator       The translator.
+     * @param TemplateFactory|null           $templateFactory  The template factory.
+     * @param EventDispatcherInterface|null  $dispatcher       The event dispatcher.
+     * @param ContaoCsrfTokenManager|null    $tokenManager     The CSRF token manager.
      */
     public function __construct(
         ?Connection $connection = null,
         ?FilterUrlBuilder $filterUrlBuilder = null,
         ?TranslatorInterface $translator = null,
-        ?TemplateFactory $templateFactory = null
+        ?TemplateFactory $templateFactory = null,
+        ?EventDispatcherInterface $dispatcher = null,
+        ?ContaoCsrfTokenManager $tokenManager = null
     ) {
         if (null === $connection) {
             // @codingStandardsIgnoreStart
@@ -159,6 +177,32 @@ class FrontendFilter
             assert($templateFactory instanceof TemplateFactory);
         }
         $this->templateFactory = $templateFactory;
+
+        if (null === $dispatcher) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'EventDispatcherInterface is missing. It has to be passed in the constructor. Fallback will be ' .
+                'dropped.',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            $dispatcher = System::getContainer()->get('event_dispatcher');
+            assert($dispatcher instanceof EventDispatcherInterface);
+        }
+        $this->dispatcher = $dispatcher;
+
+        if (null === $tokenManager) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'ContaoCsrfTokenManager is missing. It has to be passed in the constructor. Fallback will be ' .
+                'dropped.',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            $tokenManager = System::getContainer()->get('contao.csrf.token_manager');
+            assert($tokenManager instanceof ContaoCsrfTokenManager);
+        }
+        $this->tokenManager = $tokenManager;
     }
 
     /**
@@ -168,10 +212,7 @@ class FrontendFilter
      */
     protected function getDispatcher()
     {
-        $dispatcher = System::getContainer()->get('event_dispatcher');
-        assert($dispatcher instanceof EventDispatcherInterface);
-
-        return $dispatcher;
+        return $this->dispatcher;
     }
 
     /**
@@ -500,12 +541,9 @@ class FrontendFilter
             }
         }
 
-        $tokenManager = System::getContainer()->get('contao.csrf.token_manager');
-        assert($tokenManager instanceof ContaoCsrfTokenManager);
-
         // Return filter data.
         return [
-            'requestToken' => $tokenManager->getDefaultTokenValue(),
+            'requestToken' => $this->tokenManager->getDefaultTokenValue(),
             'action'       => $this->filterUrlBuilder->generate($other)
                               . ($this->objFilterConfig->metamodel_fef_urlfragment
                     ? '#' . $this->objFilterConfig->metamodel_fef_urlfragment

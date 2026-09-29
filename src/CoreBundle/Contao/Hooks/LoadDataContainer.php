@@ -24,7 +24,6 @@ namespace MetaModels\CoreBundle\Contao\Hooks;
 use Contao\Controller;
 use Contao\CoreBundle\Framework\Adapter;
 use Contao\StringUtil;
-use Contao\System;
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\DC\General;
@@ -70,23 +69,54 @@ class LoadDataContainer
     private IconBuilder $iconBuilder;
 
     /**
+     * The request scope determinator.
+     *
+     * @var RequestScopeDeterminator
+     */
+    private RequestScopeDeterminator $scopeMatcher;
+
+    /**
+     * The database connection.
+     *
+     * @var Connection
+     */
+    private Connection $connection;
+
+    /**
+     * The translator.
+     *
+     * @var TranslatorInterface
+     */
+    private TranslatorInterface $translator;
+
+    /**
      * Create a new instance.
      *
-     * @param IFactory        $factory           The MetaModels factory.
-     * @param ViewCombination $combination       The view combination provider.
-     * @param Adapter         $controllerAdapter The controller adapter to load languages and data containers.
-     * @param IconBuilder     $iconBuilder       The icon builder.
+     * @param IFactory                 $factory           The MetaModels factory.
+     * @param ViewCombination          $combination       The view combination provider.
+     * @param Adapter                  $controllerAdapter The controller adapter to load languages and data
+     *                                                     containers.
+     * @param IconBuilder              $iconBuilder       The icon builder.
+     * @param RequestScopeDeterminator $scopeMatcher      The request scope determinator.
+     * @param Connection               $connection        The database connection.
+     * @param TranslatorInterface      $translator        The translator.
      */
     public function __construct(
         IFactory $factory,
         ViewCombination $combination,
         Adapter $controllerAdapter,
-        IconBuilder $iconBuilder
+        IconBuilder $iconBuilder,
+        RequestScopeDeterminator $scopeMatcher,
+        Connection $connection,
+        TranslatorInterface $translator
     ) {
-        $this->factory     = $factory;
-        $this->combination = $combination;
-        $this->controller  = $controllerAdapter;
-        $this->iconBuilder = $iconBuilder;
+        $this->factory      = $factory;
+        $this->combination  = $combination;
+        $this->controller   = $controllerAdapter;
+        $this->iconBuilder  = $iconBuilder;
+        $this->scopeMatcher = $scopeMatcher;
+        $this->connection   = $connection;
+        $this->translator   = $translator;
     }
 
     /**
@@ -98,18 +128,14 @@ class LoadDataContainer
      */
     public function onLoadDataContainer($tableName): void
     {
-        $scopeMatcher = System::getContainer()->get('cca.dc-general.scope-matcher');
-        if (!($scopeMatcher instanceof RequestScopeDeterminator) || !$scopeMatcher->currentScopeIsBackend()) {
+        if (!$this->scopeMatcher->currentScopeIsBackend()) {
             return;
         }
 
         static $tableExists;
         // Test that the tables have been created.
         if (null === $tableExists) {
-            if (!(($connection = System::getContainer()->get('database_connection')) instanceof Connection)) {
-                return;
-            }
-            $tableExists = $connection->createSchemaManager()->tablesExist(['tl_metamodel']);
+            $tableExists = $this->connection->createSchemaManager()->tablesExist(['tl_metamodel']);
         }
         if (false === $tableExists) {
             return;
@@ -285,15 +311,12 @@ class LoadDataContainer
             $url = \preg_replace('#(&amp;)id=(?:&amp;)?#', '$1', $url);
         }
 
-        $translator = System::getContainer()->get('translator');
-        assert($translator instanceof TranslatorInterface);
-
-        $label = $translator->trans(
+        $label = $this->translator->trans(
             $transPrefix . '.label',
             ['%id%' => $itemId],
             $table
         );
-        $title = $translator->trans(
+        $title = $this->translator->trans(
             $transPrefix . '.description',
             ['%id%' => $itemId],
             $table

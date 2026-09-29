@@ -194,6 +194,8 @@ services:
             - '@MetaModels\Filter\FilterUrlBuilder'
             - '@translator'
             - '@metamodels.template_factory'
+            - '@event_dispatcher'
+            - '@contao.csrf.token_manager'
         public: true
 
     metamodels.controller.abstract.add_all:
@@ -257,6 +259,20 @@ services:
             - "@security.token_storage"
             - "@metamodels.view_combination.builder"
             - "@metamodels.view_combination.input_screen_information_builder"
+
+    MetaModels\CoreBundle\Search\Backend\ItemProvider:
+      public: true
+      arguments:
+        $factory: '@metamodels.factory'
+        $viewCombination: '@metamodels.view_combination'
+        $labelRenderer: '@metamodels.backend.item_label_renderer'
+        $connection: '@database_connection'
+        $urlGenerator: '@router'
+        $requestStack: '@request_stack'
+        $csrfTokenManager: '@contao.csrf.token_manager'
+        $csrfTokenName: '%contao.csrf_token_name%'
+      tags:
+        - { name: contao.backend_search_provider }
 
     MetaModels\MetaModelsServiceContainer:
         deprecated:
