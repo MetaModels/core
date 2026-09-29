@@ -52,6 +52,9 @@ class DoctrineSchemaInformation implements SchemaInformationInterface
      * Create a new instance.
      *
      * @param Schema|null $schema The contained doctrine schema.
+     *
+     * @psalm-suppress InternalMethod DBAL 4.5 flags the Schema constructor as internal, but there is no other way to
+     *                                create an empty schema here.
      */
     public function __construct(?Schema $schema = null)
     {
