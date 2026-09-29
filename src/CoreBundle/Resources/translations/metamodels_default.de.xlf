@@ -42,19 +42,24 @@
         <target>%attribute_name% (%direction%)</target>
       </trans-unit>
       <trans-unit id="relation_jump.label" resname="relation_jump.label">
-        <source>Relation öffnen</source>
+        <source>Open relation</source>
+        <target>Relation öffnen</target>
       </trans-unit>
       <trans-unit id="relation_jump.title" resname="relation_jump.title">
-        <source>Relationstabelle in einem neuen Tab öffnen.</source>
+        <source>Open the relation table in a new tab.</source>
+        <target>Relationstabelle in einem neuen Tab öffnen.</target>
       </trans-unit>
       <trans-unit id="relation_jump.title_locked" resname="relation_jump.title_locked">
-        <source>Das Feld ist schreibgeschützt, die Relation lässt sich von hier nicht öffnen.</source>
+        <source>This field is read only, the relation cannot be opened from here.</source>
+        <target>Das Feld ist schreibgeschützt, die Relation lässt sich von hier nicht öffnen.</target>
       </trans-unit>
       <trans-unit id="relation_jump.title_forbidden" resname="relation_jump.title_forbidden">
-        <source>Sie haben keine Berechtigung für die Tabelle „%table%".</source>
+        <source>You are not allowed to open the table &quot;%table%&quot;.</source>
+        <target>Sie haben keine Berechtigung für die Tabelle „%table%“.</target>
       </trans-unit>
       <trans-unit id="relation_jump.title_no_module" resname="relation_jump.title_no_module">
-        <source>Für die Tabelle „%table%" ist kein Backend-Modul hinterlegt.</source>
+        <source>No backend module is configured for the table &quot;%table%&quot;.</source>
+        <target>Für die Tabelle „%table%“ ist kein Backend-Modul hinterlegt.</target>
       </trans-unit>
     </body>
   </file>
