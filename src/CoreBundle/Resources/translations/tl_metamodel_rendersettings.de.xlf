@@ -210,7 +210,7 @@
         <target>Attribute nur bei Bedarf rendern (Lazy)</target>
       </trans-unit>
       <trans-unit id="lazyAttributeRendering.description" resname="lazyAttributeRendering.description">
-        <source>Renders an attribute of this render setting only when a template actually accesses it, instead of rendering every attribute immediately. Worthwhile when a template only uses some of the configured attributes; a small extra cost otherwise, since PHP's generic object handling in Twig is a bit slower than a plain array. Off by default; pick it per render setting based on the templates that use it.</source>
+        <source>Renders an attribute of this render setting only when a template actually accesses it, instead of rendering every attribute immediately. Worthwhile when a template only uses some of the configured attributes; a small extra cost otherwise, since PHP&apos;s generic object handling in Twig is a bit slower than a plain array. Off by default; pick it per render setting based on the templates that use it.</source>
         <target>Rendert ein Attribut dieser Render-Einstellung erst bei tatsächlichem Zugriff durch ein Template, statt sofort jedes Attribut zu rendern. Lohnt sich, wenn ein Template nur einen Teil der konfigurierten Attribute nutzt; ansonsten ein kleiner Mehraufwand, da Twigs allgemeiner Objekt-Zugriff etwas langsamer ist als ein reines Array. Standardmäßig aus; je Render-Einstellung passend zu den genutzten Templates einzeln wählbar.</target>
       </trans-unit>
       <trans-unit id="additionalCss.label" resname="additionalCss.label">
