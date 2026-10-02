@@ -1,9 +1,8 @@
 {#
     MetaModels prerendered debug list - Twig version of metamodel_prerendered_debug.html5.
 #}
-{% if app.debug %}
-    {{ dump(data) }}
-{% endif %}
+{# The dump tag sends the output to the Symfony toolbar, the dump() function would print it into the page. #}
+{% dump data %}
 {% if data|default([])|length %}
     {% for item in data %}
         {# Include here your output, e.g. item.html5['attribute_name'] or item.text['attribute_name']. #}
