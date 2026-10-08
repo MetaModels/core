@@ -194,8 +194,11 @@ class TranslatedMetaModel extends MetaModel implements ITranslatedMetaModel
                 ? $allIds
                 : [$item->get('id')];
 
+            // Untranslated attributes share one value among all languages - clearing it would delete the value of
+            // the main language as well.
             if (
                 !$attribute->get('skip_fallback')
+                && $this->isTranslatedAttribute($attribute)
                 && $this->hasSameFallbackValue($item, $attribute, $attributeName, $fallbackItem)
             ) {
                 $this->clearAttribute($attribute, $idList, $activeLanguage);
