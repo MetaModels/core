@@ -28,10 +28,15 @@ namespace MetaModels\DcGeneral\Data;
 final class VersionData
 {
     /**
-     * The keys of the stored envelope - the '#' can not occur in an attribute column name.
+     * The key of the language beside the property values - the '#' can not occur in an attribute column name.
+     *
+     * It has to stay a flat entry: the Contao version comparison treats every top level entry as a field.
      */
     private const string KEY_LANGUAGE = '#language';
 
+    /**
+     * Key of the nested form which has been written by early development versions only.
+     */
     private const string KEY_PROPERTIES = '#properties';
 
     /**
@@ -53,7 +58,7 @@ final class VersionData
      */
     public function serialize(): string
     {
-        return \serialize([self::KEY_LANGUAGE => $this->language, self::KEY_PROPERTIES => $this->properties]);
+        return \serialize([self::KEY_LANGUAGE => $this->language] + $this->properties);
     }
 
     /**
@@ -71,14 +76,18 @@ final class VersionData
             return null;
         }
 
-        // Those versions are a plain property list.
-        if (!\is_array($values[self::KEY_PROPERTIES] ?? null)) {
-            return new self($fallbackLanguage, $values);
+        // The nested form of early development versions.
+        if (\is_array($values[self::KEY_PROPERTIES] ?? null)) {
+            $properties = $values[self::KEY_PROPERTIES];
+        } else {
+            // Versions written before the language was stored have none and are a plain property list.
+            $properties = $values;
         }
+        unset($properties[self::KEY_LANGUAGE]);
 
         $language = $values[self::KEY_LANGUAGE] ?? null;
 
-        return new self(\is_string($language) ? $language : $fallbackLanguage, $values[self::KEY_PROPERTIES]);
+        return new self(\is_string($language) ? $language : $fallbackLanguage, $properties);
     }
 
     /**

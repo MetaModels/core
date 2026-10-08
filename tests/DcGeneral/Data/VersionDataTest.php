@@ -47,9 +47,27 @@ class VersionDataTest extends TestCase
         self::assertSame(['id' => 28, 'title' => 'Bertram'], $restored->properties);
     }
 
+    public function testStoresTheLanguageBesideThePropertiesForTheContaoComparison(): void
+    {
+        $values = \unserialize((new VersionData('nl', ['title' => 'Bertram', 'tags' => ['2']]))->serialize());
+
+        self::assertSame(['#language' => 'nl', 'title' => 'Bertram', 'tags' => ['2']], $values);
+    }
+
+    public function testReadsTheNestedFormOfEarlyDevelopmentVersions(): void
+    {
+        $restored = VersionData::fromSerialized(
+            \serialize(['#language' => 'nl', '#properties' => ['title' => 'Bertram']]),
+            'de'
+        );
+
+        self::assertSame('nl', $restored?->language);
+        self::assertSame(['title' => 'Bertram'], $restored->properties);
+    }
+
     public function testUsesTheFallbackLanguageWhenTheStoredOneIsInvalid(): void
     {
-        $data = \serialize(['#language' => ['nl'], '#properties' => ['title' => 'Bertram']]);
+        $data = \serialize(['#language' => ['nl'], 'title' => 'Bertram']);
 
         self::assertSame('de', VersionData::fromSerialized($data, 'de')?->language);
     }
