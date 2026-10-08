@@ -85,7 +85,7 @@ class DriverVersionLanguageTest extends TestCase
 
         $data = $this->storedData();
         self::assertSame('nl', $data['#language']);
-        self::assertSame(['2', '3'], $data['#properties']['tags']);
+        self::assertSame(['2', '3'], $data['tags']);
         // The widget values must have been created in the language of the model, not the one of the provider.
         self::assertSame(['nl'], $this->convertedIn);
         // ... and the language is handed back afterwards.
@@ -104,7 +104,7 @@ class DriverVersionLanguageTest extends TestCase
 
     public function testGetVersionRestoresTheStoredLanguage(): void
     {
-        $driver = $this->createDriver(['#language' => 'nl', '#properties' => ['id' => 28, 'tags' => ['3', '2']]]);
+        $driver = $this->createDriver(['#language' => 'nl', 'id' => 28, 'tags' => ['3', '2']]);
 
         $model = $driver->getVersion('28', 1);
 
@@ -155,7 +155,7 @@ class DriverVersionLanguageTest extends TestCase
 
         $driver->saveVersion($model, 'admin');
 
-        $properties = $this->storedData()['#properties'];
+        $properties = $this->storedData();
         self::assertSame(['2'], $properties['tags']);
         self::assertArrayNotHasKey('elements', $properties);
     }
