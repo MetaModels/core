@@ -96,6 +96,12 @@ class Driver implements MultiLanguageDataProviderInterface
     protected string $strCurrentLanguage = '';
 
     /**
+     * Keys of the version envelope - the '#' can not occur in an attribute column name.
+     */
+    private const VERSION_KEY_LANGUAGE   = '#language';
+    private const VERSION_KEY_PROPERTIES = '#properties';
+
+    /**
      * The database connection.
      *
      * @var Connection|null
@@ -194,13 +200,26 @@ class Driver implements MultiLanguageDataProviderInterface
 
         $newVersion = $count + 1;
 
+        // Translated attributes (e.g. tags are sorted by label) yield language dependent widget values - keep the
+        // language of the edit mask, otherwise getVersion() can not reproduce them.
+        $language       = ($model instanceof Model ? $model->getLanguage() : null) ?? $this->getCurrentLanguage();
+        $backupLanguage = $this->setLanguage($language);
+        try {
+            $properties = \array_filter($model->getPropertiesAsArray(), $this->isVersionable(...));
+        } finally {
+            $this->setLanguage($backupLanguage);
+        }
+
         $this->connection->insert('tl_version', [
             'pid'       => $model->getId(),
             'tstamp'    => \time(),
             'version'   => $newVersion,
             'fromTable' => $fromTable,
             'username'  => $username,
-            'data'      => \serialize($model->getPropertiesAsArray()),
+            'data'      => \serialize([
+                self::VERSION_KEY_LANGUAGE   => $language,
+                self::VERSION_KEY_PROPERTIES => $properties,
+            ]),
         ]);
 
         $this->setVersionActive($model->getId(), $newVersion);
@@ -220,7 +239,6 @@ class Driver implements MultiLanguageDataProviderInterface
     public function getVersion($mixID, $mixVersion)
     {
         assert($this->connection instanceof Connection);
-
         $row = $this->connection
             ->createQueryBuilder()
             ->select('data')
@@ -238,12 +256,21 @@ class Driver implements MultiLanguageDataProviderInterface
             return null;
         }
 
-        $data = \unserialize((string) $row['data']);
+        $data = \unserialize((string) $row['data'], ['allowed_classes' => false]);
         if (!\is_array($data)) {
             return null;
         }
 
-        $model = $this->getEmptyModel();
+        // Versions written before the language was stored are a plain property list.
+        $language = $this->getCurrentLanguage();
+        if (isset($data[self::VERSION_KEY_PROPERTIES]) && \is_array($data[self::VERSION_KEY_PROPERTIES])) {
+            $language = \is_string($data[self::VERSION_KEY_LANGUAGE] ?? null)
+                ? $data[self::VERSION_KEY_LANGUAGE]
+                : $language;
+            $data     = $data[self::VERSION_KEY_PROPERTIES];
+        }
+
+        $model = new Model(new Item($this->getMetaModel(), null, $this->dispatcher), $language);
         $model->setId($mixID);
         foreach ($data as $propertyName => $value) {
             if ('id' === $propertyName) {
@@ -804,7 +831,8 @@ class Driver implements MultiLanguageDataProviderInterface
         }
 
         if ($item instanceof Model) {
-            $backupLanguage = $this->setLanguage($this->getCurrentLanguage());
+            // A restored version carries its own language, which must win over the one of the provider.
+            $backupLanguage = $this->setLanguage($item->getLanguage() ?? $this->getCurrentLanguage());
 
             $mmItem = $item->getItem();
             assert($mmItem instanceof IItem);
@@ -878,17 +906,70 @@ class Driver implements MultiLanguageDataProviderInterface
             throw new \InvalidArgumentException('Passed models are not valid.');
         }
 
-        $objNative1 = $firstModel->getItem();
-        assert($objNative1 instanceof IItem);
-        $objNative2 = $secondModel->getItem();
-        assert($objNative2 instanceof IItem);
-        foreach ($objNative1->getMetaModel()->getAttributes() as $objAttribute) {
-            if ($objNative1->get($objAttribute->getColName()) !== $objNative2->get($objAttribute->getColName())) {
+        // The internal values of a saved item (raw rows) and of one rebuilt from a version (output of widgetToValue())
+        // differ in ids and timestamps although both show the same - so compare what the edit mask shows.
+        $firstValues  = $this->getWidgetValues($firstModel);
+        $secondValues = $this->getWidgetValues($secondModel);
+
+        foreach (\array_keys($firstValues) as $colName) {
+            if ($firstValues[$colName] !== ($secondValues[$colName] ?? null)) {
                 return false;
             }
         }
 
         return true;
+    }
+
+    /**
+     * Check that a value is plain data. Attributes handing out objects (e.g. content elements, which are kept in
+     * tl_content and versioned there) can neither be stored in a version nor be compared with a restored one.
+     *
+     * @param mixed $value The widget value.
+     *
+     * @return bool
+     */
+    private function isVersionable(mixed $value): bool
+    {
+        if (\is_object($value)) {
+            return false;
+        }
+        if (\is_array($value)) {
+            foreach ($value as $entry) {
+                if (!$this->isVersionable($entry)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Retrieve the values of all attributes as the edit mask shows them, in the language of the model.
+     *
+     * @param Model $model The model to read.
+     *
+     * @return array<string, mixed>
+     */
+    private function getWidgetValues(Model $model): array
+    {
+        $item = $model->getItem();
+        assert($item instanceof IItem);
+
+        $backupLanguage = $this->setLanguage($model->getLanguage() ?? $this->getCurrentLanguage());
+        try {
+            $values = [];
+            foreach ($item->getMetaModel()->getAttributes() as $attribute) {
+                $value = $attribute->valueToWidget($item->get($attribute->getColName()));
+                if ($this->isVersionable($value)) {
+                    $values[$attribute->getColName()] = $value;
+                }
+            }
+        } finally {
+            $this->setLanguage($backupLanguage);
+        }
+
+        return $values;
     }
 
     /**

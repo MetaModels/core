@@ -99,6 +99,16 @@ class Model implements ModelInterface
     }
 
     /**
+     * Retrieve the language the contained data belongs to.
+     *
+     * @return string|null
+     */
+    public function getLanguage(): ?string
+    {
+        return $this->language;
+    }
+
+    /**
      * {@inheritDoc}
      */
     #[\Override]
