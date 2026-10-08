@@ -31,6 +31,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Whether a version is a new one is decided by what the edit mask shows, not by the internal item values.
+ *
+ * @SuppressWarnings(PHPMD.Superglobals)
  */
 #[CoversClass(Driver::class)]
 class DriverSameModelsTest extends TestCase

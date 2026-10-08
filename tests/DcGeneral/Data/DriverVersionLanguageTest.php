@@ -36,6 +36,9 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 /**
  * A version has to remember the language of the edit mask - translated attributes yield language dependent widget
  * values (e.g. tags sorted by label), which are checked against each other when the version is loaded.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.Superglobals)
  */
 #[CoversClass(Driver::class)]
 #[CoversClass(Model::class)]
