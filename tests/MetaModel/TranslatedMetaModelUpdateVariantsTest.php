@@ -32,6 +32,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Saving a non-main language must only drop the values of translated attributes that equal the fallback.
+ *
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 #[CoversClass(TranslatedMetaModel::class)]
 class TranslatedMetaModelUpdateVariantsTest extends TestCase

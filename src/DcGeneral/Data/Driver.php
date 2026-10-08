@@ -96,12 +96,6 @@ class Driver implements MultiLanguageDataProviderInterface
     protected string $strCurrentLanguage = '';
 
     /**
-     * Keys of the version envelope - the '#' can not occur in an attribute column name.
-     */
-    private const VERSION_KEY_LANGUAGE   = '#language';
-    private const VERSION_KEY_PROPERTIES = '#properties';
-
-    /**
      * The database connection.
      *
      * @var Connection|null
@@ -205,7 +199,7 @@ class Driver implements MultiLanguageDataProviderInterface
         $language       = ($model instanceof Model ? $model->getLanguage() : null) ?? $this->getCurrentLanguage();
         $backupLanguage = $this->setLanguage($language);
         try {
-            $properties = \array_filter($model->getPropertiesAsArray(), $this->isVersionable(...));
+            $properties = \array_filter($model->getPropertiesAsArray(), VersionData::isVersionable(...));
         } finally {
             $this->setLanguage($backupLanguage);
         }
@@ -216,10 +210,7 @@ class Driver implements MultiLanguageDataProviderInterface
             'version'   => $newVersion,
             'fromTable' => $fromTable,
             'username'  => $username,
-            'data'      => \serialize([
-                self::VERSION_KEY_LANGUAGE   => $language,
-                self::VERSION_KEY_PROPERTIES => $properties,
-            ]),
+            'data'      => (new VersionData($language, $properties))->serialize(),
         ]);
 
         $this->setVersionActive($model->getId(), $newVersion);
@@ -256,23 +247,14 @@ class Driver implements MultiLanguageDataProviderInterface
             return null;
         }
 
-        $data = \unserialize((string) $row['data'], ['allowed_classes' => false]);
-        if (!\is_array($data)) {
+        $version = VersionData::fromSerialized((string) $row['data'], $this->getCurrentLanguage());
+        if (null === $version) {
             return null;
         }
 
-        // Versions written before the language was stored are a plain property list.
-        $language = $this->getCurrentLanguage();
-        if (isset($data[self::VERSION_KEY_PROPERTIES]) && \is_array($data[self::VERSION_KEY_PROPERTIES])) {
-            $language = \is_string($data[self::VERSION_KEY_LANGUAGE] ?? null)
-                ? $data[self::VERSION_KEY_LANGUAGE]
-                : $language;
-            $data     = $data[self::VERSION_KEY_PROPERTIES];
-        }
-
-        $model = new Model(new Item($this->getMetaModel(), null, $this->dispatcher), $language);
+        $model = new Model(new Item($this->getMetaModel(), null, $this->dispatcher), $version->language);
         $model->setId($mixID);
-        foreach ($data as $propertyName => $value) {
+        foreach ($version->properties as $propertyName => $value) {
             if ('id' === $propertyName) {
                 continue;
             }
@@ -921,30 +903,6 @@ class Driver implements MultiLanguageDataProviderInterface
     }
 
     /**
-     * Check that a value is plain data. Attributes handing out objects (e.g. content elements, which are kept in
-     * tl_content and versioned there) can neither be stored in a version nor be compared with a restored one.
-     *
-     * @param mixed $value The widget value.
-     *
-     * @return bool
-     */
-    private function isVersionable(mixed $value): bool
-    {
-        if (\is_object($value)) {
-            return false;
-        }
-        if (\is_array($value)) {
-            foreach ($value as $entry) {
-                if (!$this->isVersionable($entry)) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-    /**
      * Retrieve the values of all attributes as the edit mask shows them, in the language of the model.
      *
      * @param Model $model The model to read.
@@ -961,7 +919,7 @@ class Driver implements MultiLanguageDataProviderInterface
             $values = [];
             foreach ($item->getMetaModel()->getAttributes() as $attribute) {
                 $value = $attribute->valueToWidget($item->get($attribute->getColName()));
-                if ($this->isVersionable($value)) {
+                if (VersionData::isVersionable($value)) {
                     $values[$attribute->getColName()] = $value;
                 }
             }
