@@ -38,6 +38,7 @@ use MetaModels\ViewCombination\ViewCombination;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Makes MetaModels items findable through Contao's back end search (5.5+).
@@ -164,12 +165,17 @@ final class ItemProvider implements ProviderInterface
     }
 
     /**
+     * Contao 5.7.15 changed the first argument from the token to the user within the 5.7 series. The union keeps
+     * the declaration compatible with both interface versions. The name differs between them ($token / $user), but
+     * Contao passes it positionally.
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @psalm-suppress ParamNameMismatch
      */
     #[\Override]
-    public function isDocumentGranted(TokenInterface $token, Document $document): bool
+    public function isDocumentGranted(TokenInterface|UserInterface $tokenOrUser, Document $document): bool
     {
-        // The token argument is intentionally unused. MetaModels' permission model
+        // The token/user argument is intentionally unused. MetaModels' permission model
         // (tl_metamodel_dca_combine, resolved through ViewCombination) is only wired up for the
         // currently authenticated user via Symfony's token storage, not for an arbitrary token -
         // there is no per-table alexf permission to fall back to, MetaModels deliberately does
