@@ -5,6 +5,6 @@
     callables (no "Template."/"this." prefix) and its properties directly by name.
 #}
 <fieldset class="tl_subdca">
-    <legend>{{ generateLabel()|raw }}{{ xlabel|default('')|raw }}</legend>
-    {{ generateWithError(true)|raw }}
+    <legend>{{ generateLabel.invoke()|raw }}{{ xlabel|default('')|raw }}</legend>
+    {{ generateWithError.invoke(true)|raw }}
 </fieldset>
