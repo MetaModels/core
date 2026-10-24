@@ -74,7 +74,12 @@ class ContentElementCallback extends AbstractContentElementAndModuleCallback
     public function getTemplates(DC_Table $objDC)
     {
         /** @psalm-suppress UndefinedMagicPropertyFetch */
-        assert(null !== $objDC->activeRecord);
+        // The API schema generation calls the options callbacks without a record. Without a record there is
+        // nothing to select from, an empty list leaves the options unrestricted.
+        if (null === $objDC->activeRecord) {
+            return [];
+        }
+
         $type = $objDC->activeRecord->type;
         if ($type === 'metamodel_content') {
             $type = 'metamodel_list';

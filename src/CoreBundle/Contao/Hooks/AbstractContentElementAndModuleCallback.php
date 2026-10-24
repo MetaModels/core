@@ -194,7 +194,11 @@ abstract class AbstractContentElementAndModuleCallback
     public function getAttributeNames(DC_Table $objDc)
     {
         /** @psalm-suppress UndefinedMagicPropertyFetch */
-        assert(null !== $objDc->activeRecord);
+        // The API schema generation calls the options callbacks without a record. Without a record there is
+        // nothing to select from, an empty list leaves the options unrestricted.
+        if (null === $objDc->activeRecord) {
+            return [];
+        }
 
         try {
             $metaModelName = $this->factory->translateIdToMetaModelName($objDc->activeRecord->metamodel);
@@ -238,7 +242,11 @@ abstract class AbstractContentElementAndModuleCallback
     public function getFilterSettings(DC_Table $objDC)
     {
         /** @psalm-suppress UndefinedMagicPropertyFetch */
-        assert(null !== $objDC->activeRecord);
+        // The API schema generation calls the options callbacks without a record. Without a record there is
+        // nothing to select from, an empty list leaves the options unrestricted.
+        if (null === $objDC->activeRecord) {
+            return [];
+        }
 
         $filterSettings = $this->connection->createQueryBuilder()
             ->select('f.id', 'f.name')
@@ -272,7 +280,11 @@ abstract class AbstractContentElementAndModuleCallback
     public function getMetaTitleAttributes(DC_Table $objDC)
     {
         /** @psalm-suppress UndefinedMagicPropertyFetch */
-        assert(null !== $objDC->activeRecord);
+        // The API schema generation calls the options callbacks without a record. Without a record there is
+        // nothing to select from, an empty list leaves the options unrestricted.
+        if (null === $objDC->activeRecord) {
+            return [];
+        }
 
         /** @psalm-suppress ArgumentTypeCoercion - We HOPE there is a list of strings. */
         return $this->getFilteredAttributeNames(
@@ -294,7 +306,11 @@ abstract class AbstractContentElementAndModuleCallback
     public function getMetaDescriptionAttributes(DC_Table $objDC)
     {
         /** @psalm-suppress UndefinedMagicPropertyFetch */
-        assert(null !== $objDC->activeRecord);
+        // The API schema generation calls the options callbacks without a record. Without a record there is
+        // nothing to select from, an empty list leaves the options unrestricted.
+        if (null === $objDC->activeRecord) {
+            return [];
+        }
 
         /** @psalm-suppress ArgumentTypeCoercion - We HOPE there is a list of strings. */
         return $this->getFilteredAttributeNames(
@@ -410,7 +426,11 @@ abstract class AbstractContentElementAndModuleCallback
     public function getFilterParameterNames(DC_Table $objDc)
     {
         /** @psalm-suppress UndefinedMagicPropertyFetch */
-        assert(null !== $objDc->activeRecord);
+        // The API schema generation calls the options callbacks without a record. Without a record there is
+        // nothing to select from, an empty list leaves the options unrestricted.
+        if (null === $objDc->activeRecord) {
+            return [];
+        }
 
         $return = [];
         $filter = $objDc->activeRecord->metamodel_filtering;
@@ -432,7 +452,11 @@ abstract class AbstractContentElementAndModuleCallback
     public function getFilterTemplates(DC_Table $dcTable)
     {
         /** @psalm-suppress UndefinedMagicPropertyFetch */
-        assert(null !== $dcTable->activeRecord);
+        // The API schema generation calls the options callbacks without a record. Without a record there is
+        // nothing to select from, an empty list leaves the options unrestricted.
+        if (null === $dcTable->activeRecord) {
+            return [];
+        }
 
         if ($dcTable->activeRecord->type === 'metamodels_frontendclearall') {
             return $this->templateList->getTemplatesForBase('mm_clearall_');
@@ -463,7 +487,11 @@ abstract class AbstractContentElementAndModuleCallback
     public function getRenderSettings(DC_Table $objDC)
     {
         /** @psalm-suppress UndefinedMagicPropertyFetch */
-        assert(null !== $objDC->activeRecord);
+        // The API schema generation calls the options callbacks without a record. Without a record there is
+        // nothing to select from, an empty list leaves the options unrestricted.
+        if (null === $objDC->activeRecord) {
+            return [];
+        }
 
         $filterSettings = $this->connection->createQueryBuilder()
             ->select('r.id', 'r.name')
