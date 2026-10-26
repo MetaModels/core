@@ -97,23 +97,13 @@ abstract class AbstractContentElementAndModuleCallback
      */
     public function editMetaModelButton(DC_Table $dataContainer)
     {
-        if ($dataContainer->value < 1) {
-            return '';
-        }
-
-        return $this->renderEditButton(
-            $this->translator->trans('editmetamodel.label', [], static::$tableName),
-            StringUtil::specialchars(
-                $this->translator->trans(
-                    'editmetamodel.description',
-                    ['%id%' => $dataContainer->value],
-                    static::$tableName
-                )
-            ),
-            $this->generate('metamodels.configuration', [
+        return $this->renderEditButtonFor(
+            $dataContainer,
+            'editmetamodel',
+            static fn (mixed $value): array => [
                 'act' => 'edit',
-                'id' => ModelId::fromValues('tl_metamodel', $dataContainer->value)->getSerialized(),
-            ]),
+                'id' => ModelId::fromValues('tl_metamodel', $value)->getSerialized(),
+            ]
         );
     }
 
@@ -129,23 +119,13 @@ abstract class AbstractContentElementAndModuleCallback
      */
     public function editFilterSettingButton(DC_Table $dataContainer)
     {
-        if ($dataContainer->value < 1) {
-            return '';
-        }
-
-        return $this->renderEditButton(
-            $this->translator->trans('editfiltersetting.label', [], static::$tableName),
-            StringUtil::specialchars(
-                $this->translator->trans(
-                    'editfiltersetting.description',
-                    ['%id%' => $dataContainer->value],
-                    static::$tableName
-                )
-            ),
-            $this->generate('metamodels.configuration', [
+        return $this->renderEditButtonFor(
+            $dataContainer,
+            'editfiltersetting',
+            static fn (mixed $value): array => [
                 'table' => 'tl_metamodel_filtersetting',
-                'pid' => ModelId::fromValues('tl_metamodel_filter', $dataContainer->value)->getSerialized(),
-            ]),
+                'pid' => ModelId::fromValues('tl_metamodel_filter', $value)->getSerialized(),
+            ]
         );
     }
 
@@ -161,23 +141,13 @@ abstract class AbstractContentElementAndModuleCallback
      */
     public function editRenderSettingButton(DC_Table $dataContainer)
     {
-        if ($dataContainer->value < 1) {
-            return '';
-        }
-
-        return $this->renderEditButton(
-            $this->translator->trans('editrendersetting.label', [], static::$tableName),
-            StringUtil::specialchars(
-                $this->translator->trans(
-                    'editrendersetting.description',
-                    ['%id%' => $dataContainer->value],
-                    static::$tableName
-                ),
-            ),
-            $this->generate('metamodels.configuration', [
+        return $this->renderEditButtonFor(
+            $dataContainer,
+            'editrendersetting',
+            static fn (mixed $value): array => [
                 'table' => 'tl_metamodel_rendersetting',
-                'pid' => ModelId::fromValues('tl_metamodel_rendersettings', $dataContainer->value)->getSerialized(),
-            ]),
+                'pid' => ModelId::fromValues('tl_metamodel_rendersettings', $value)->getSerialized(),
+            ]
         );
     }
 
@@ -241,30 +211,7 @@ abstract class AbstractContentElementAndModuleCallback
      */
     public function getFilterSettings(DC_Table $objDC)
     {
-        /** @psalm-suppress UndefinedMagicPropertyFetch */
-        // The API schema generation calls the options callbacks without a record. Without a record there is
-        // nothing to select from, an empty list leaves the options unrestricted.
-        if (null === $objDC->activeRecord) {
-            return [];
-        }
-
-        $filterSettings = $this->connection->createQueryBuilder()
-            ->select('f.id', 'f.name')
-            ->from('tl_metamodel_filter', 'f')
-            ->where('f.pid=:id')
-            ->setParameter('id', $objDC->activeRecord->metamodel)
-            ->executeQuery()
-            ->fetchAllAssociative();
-
-        $result = [];
-        foreach ($filterSettings as $filterSetting) {
-            $result[$filterSetting['id']] = $filterSetting['name'];
-        }
-
-        // Sort the filter settings.
-        asort($result);
-
-        return $result;
+        return $this->getSettingNames($objDC, 'tl_metamodel_filter');
     }
 
     /**
@@ -279,18 +226,7 @@ abstract class AbstractContentElementAndModuleCallback
      */
     public function getMetaTitleAttributes(DC_Table $objDC)
     {
-        /** @psalm-suppress UndefinedMagicPropertyFetch */
-        // The API schema generation calls the options callbacks without a record. Without a record there is
-        // nothing to select from, an empty list leaves the options unrestricted.
-        if (null === $objDC->activeRecord) {
-            return [];
-        }
-
-        /** @psalm-suppress ArgumentTypeCoercion - We HOPE there is a list of strings. */
-        return $this->getFilteredAttributeNames(
-            $objDC->activeRecord->metamodel,
-            (array) $GLOBALS['METAMODELS']['metainformation']['allowedTitle']
-        );
+        return $this->getMetaAttributeNames($objDC, 'allowedTitle');
     }
 
     /**
@@ -305,18 +241,7 @@ abstract class AbstractContentElementAndModuleCallback
      */
     public function getMetaDescriptionAttributes(DC_Table $objDC)
     {
-        /** @psalm-suppress UndefinedMagicPropertyFetch */
-        // The API schema generation calls the options callbacks without a record. Without a record there is
-        // nothing to select from, an empty list leaves the options unrestricted.
-        if (null === $objDC->activeRecord) {
-            return [];
-        }
-
-        /** @psalm-suppress ArgumentTypeCoercion - We HOPE there is a list of strings. */
-        return $this->getFilteredAttributeNames(
-            $objDC->activeRecord->metamodel,
-            (array) $GLOBALS['METAMODELS']['metainformation']['allowedDescription']
-        );
+        return $this->getMetaAttributeNames($objDC, 'allowedDescription');
     }
 
     /**
@@ -486,6 +411,22 @@ abstract class AbstractContentElementAndModuleCallback
      */
     public function getRenderSettings(DC_Table $objDC)
     {
+        return $this->getSettingNames($objDC, 'tl_metamodel_rendersettings');
+    }
+
+    /**
+     * Get a list with the attributes that are allowed for a meta information.
+     *
+     * @param DC_Table $objDC The data container calling this method.
+     * @param string   $key   The key below $GLOBALS['METAMODELS']['metainformation'] with the allowed types.
+     *
+     * @return array A list with all found attributes.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    private function getMetaAttributeNames(DC_Table $objDC, string $key): array
+    {
         /** @psalm-suppress UndefinedMagicPropertyFetch */
         // The API schema generation calls the options callbacks without a record. Without a record there is
         // nothing to select from, an empty list leaves the options unrestricted.
@@ -493,23 +434,74 @@ abstract class AbstractContentElementAndModuleCallback
             return [];
         }
 
-        $filterSettings = $this->connection->createQueryBuilder()
-            ->select('r.id', 'r.name')
-            ->from('tl_metamodel_rendersettings', 'r')
-            ->where('r.pid=:id')
+        /** @psalm-suppress ArgumentTypeCoercion - We HOPE there is a list of strings. */
+        return $this->getFilteredAttributeNames(
+            $objDC->activeRecord->metamodel,
+            (array) $GLOBALS['METAMODELS']['metainformation'][$key]
+        );
+    }
+
+    /**
+     * Fetch the names of the settings of the current MetaModel, sorted by name.
+     *
+     * @param DC_Table $objDC The data container calling this method.
+     * @param string   $table The table that holds the settings, with the MetaModel in its "pid".
+     *
+     * @return string[] array of all settings as id => human name
+     */
+    private function getSettingNames(DC_Table $objDC, string $table): array
+    {
+        /** @psalm-suppress UndefinedMagicPropertyFetch */
+        // The API schema generation calls the options callbacks without a record. Without a record there is
+        // nothing to select from, an empty list leaves the options unrestricted.
+        if (null === $objDC->activeRecord) {
+            return [];
+        }
+
+        $settings = $this->connection->createQueryBuilder()
+            ->select('s.id', 's.name')
+            ->from($table, 's')
+            ->where('s.pid=:id')
             ->setParameter('id', $objDC->activeRecord->metamodel)
             ->executeQuery()
             ->fetchAllAssociative();
 
         $result = [];
-        foreach ($filterSettings as $filterSetting) {
-            $result[$filterSetting['id']] = $filterSetting['name'];
+        foreach ($settings as $setting) {
+            $result[$setting['id']] = $setting['name'];
         }
 
-        // Sort the filter settings.
         asort($result);
 
         return $result;
+    }
+
+    /**
+     * Render the edit button for the selected value, nothing without a selection.
+     *
+     * @param DC_Table                        $dataContainer The data container.
+     * @param string                          $name          The prefix of the translation keys.
+     * @param callable(mixed): array<string, string> $parameters    Builds the route parameters from the value.
+     *
+     * @return string
+     */
+    private function renderEditButtonFor(DC_Table $dataContainer, string $name, callable $parameters): string
+    {
+        if ($dataContainer->value < 1) {
+            return '';
+        }
+
+        return $this->renderEditButton(
+            $this->translator->trans($name . '.label', [], static::$tableName),
+            StringUtil::specialchars(
+                $this->translator->trans(
+                    $name . '.description',
+                    ['%id%' => $dataContainer->value],
+                    static::$tableName
+                )
+            ),
+            $this->generate('metamodels.configuration', $parameters($dataContainer->value)),
+        );
     }
 
     /**
