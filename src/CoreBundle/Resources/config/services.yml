@@ -124,6 +124,7 @@ services:
           - "%contao.resources_paths%"
           - "%kernel.project_dir%"
           - "@translator"
+          - "@contao.twig.filesystem_loader"
 
     metamodels.render.twig_surrogate:
         class: MetaModels\Render\TwigTemplateSurrogate

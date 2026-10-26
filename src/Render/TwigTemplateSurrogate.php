@@ -73,7 +73,7 @@ final readonly class TwigTemplateSurrogate
             return null;
         }
 
-        if (null === ($identifier = $this->getIdentifier($templateName, $group))) {
+        if (null === ($identifier = TwigTemplateNames::identifier($templateName, $group))) {
             return null;
         }
 
@@ -93,41 +93,5 @@ final readonly class TwigTemplateSurrogate
         }
 
         return $this->twig->render($candidate, $this->contextFactory->fromData($data));
-    }
-
-    /**
-     * Build the Twig template identifier ("metamodels/&lt;group&gt;/&lt;leaf&gt;") for a legacy template name.
-     *
-     * The group comes from the render context (attribute, filter or item); the leaf is the configured template name
-     * with the conventional legacy prefix removed - e.g. "mm_attr_text" in the "attribute" group becomes
-     * "metamodels/attribute/text".
-     *
-     * @param string $templateName The legacy template name.
-     * @param string $group        The Twig group.
-     *
-     * @return string|null The identifier or null when no Twig group is set.
-     */
-    private function getIdentifier(string $templateName, string $group): ?string
-    {
-        if ('' === $group || '' === $templateName) {
-            return null;
-        }
-
-        $prefixes = match ($group) {
-            'attribute' => ['mm_attr_'],
-            'filter'    => ['mm_filteritem_', 'mm_filter_', 'mm_clearall_'],
-            'item'      => ['metamodel_', 'mm_'],
-            default     => [],
-        };
-
-        $leaf = $templateName;
-        foreach ($prefixes as $prefix) {
-            if (\str_starts_with($leaf, $prefix)) {
-                $leaf = \substr($leaf, \strlen($prefix));
-                break;
-            }
-        }
-
-        return 'metamodels/' . $group . '/' . $leaf;
     }
 }
