@@ -21,11 +21,15 @@
 
 namespace MetaModels\BackendIntegration;
 
+use Contao\CoreBundle\Twig\Loader\ContaoFilesystemLoader;
 use Doctrine\DBAL\Connection;
+use MetaModels\Render\TwigTemplateNames;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+use function array_keys;
+use function array_map;
 use function array_replace_recursive;
 use function array_unique;
 use function implode;
@@ -66,19 +70,33 @@ class TemplateList
     private TranslatorInterface $translator;
 
     /**
+     * The Twig loader, to find the Twig templates that stand in for legacy templates.
+     *
+     * @var ContaoFilesystemLoader|null
+     */
+    private ?ContaoFilesystemLoader $twigLoader;
+
+    /**
      * Create a new instance.
      *
      * @param Connection          $database     The database connection.
      * @param string[]            $resourceDirs The resource directories.
      * @param string              $rootDir      The root directory.
      * @param TranslatorInterface $translator   The translator.
+     * @param ContaoFilesystemLoader|null $twigLoader The Twig loader.
      */
-    public function __construct(Connection $database, $resourceDirs, $rootDir, TranslatorInterface $translator)
-    {
+    public function __construct(
+        Connection $database,
+        $resourceDirs,
+        $rootDir,
+        TranslatorInterface $translator,
+        ?ContaoFilesystemLoader $twigLoader = null
+    ) {
         $this->database     = $database;
         $this->resourceDirs = $resourceDirs;
         $this->rootDir      = $rootDir;
         $this->translator   = $translator;
+        $this->twigLoader   = $twigLoader;
     }
 
     /**
@@ -96,7 +114,8 @@ class TemplateList
         $allTemplates = array_replace_recursive(
             $this->fetchTemplatesFromThemes($templateBaseName),
             $this->fetchRootTemplates($templateBaseName),
-            $this->fetchTemplatesFromResourceDirectories($templateBaseName)
+            $this->fetchTemplatesFromResourceDirectories($templateBaseName),
+            $this->fetchTwigTemplates($templateBaseName)
         );
 
         $templateList = [];
@@ -203,6 +222,35 @@ class TemplateList
         }
 
         return $allTemplates;
+    }
+
+    /**
+     * Fetch the Twig templates that stand in for legacy templates ("metamodels/attribute/text" for "mm_attr_text").
+     *
+     * They are not found by their file name, the legacy name is what gets stored.
+     *
+     * @param string $templateBaseName The base name for the templates to retrieve.
+     *
+     * @return array
+     */
+    private function fetchTwigTemplates($templateBaseName)
+    {
+        if (null === $this->twigLoader) {
+            return [];
+        }
+
+        $themeName = trim($this->getNoThemeMessage());
+        $templates = [];
+        foreach (
+            TwigTemplateNames::legacyNames(
+                array_map('strval', array_keys($this->twigLoader->getInheritanceChains())),
+                $templateBaseName
+            ) as $name
+        ) {
+            $templates[$name] = [$themeName => $themeName];
+        }
+
+        return $templates;
     }
 
     /**
