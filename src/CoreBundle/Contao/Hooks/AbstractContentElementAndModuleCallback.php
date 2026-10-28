@@ -241,30 +241,7 @@ abstract class AbstractContentElementAndModuleCallback
      */
     public function getFilterSettings(DC_Table $objDC)
     {
-        /** @psalm-suppress UndefinedMagicPropertyFetch */
-        // The API schema generation calls the options callbacks without a record. Without a record there is
-        // nothing to select from, an empty list leaves the options unrestricted.
-        if (null === $objDC->activeRecord) {
-            return [];
-        }
-
-        $filterSettings = $this->connection->createQueryBuilder()
-            ->select('f.id', 'f.name')
-            ->from('tl_metamodel_filter', 'f')
-            ->where('f.pid=:id')
-            ->setParameter('id', $objDC->activeRecord->metamodel)
-            ->executeQuery()
-            ->fetchAllAssociative();
-
-        $result = [];
-        foreach ($filterSettings as $filterSetting) {
-            $result[$filterSetting['id']] = $filterSetting['name'];
-        }
-
-        // Sort the filter settings.
-        asort($result);
-
-        return $result;
+        return $this->getSettingsOfMetaModel($objDC, 'tl_metamodel_filter');
     }
 
     /**
@@ -425,18 +402,13 @@ abstract class AbstractContentElementAndModuleCallback
      */
     public function getFilterParameterNames(DC_Table $objDc)
     {
-        /** @psalm-suppress UndefinedMagicPropertyFetch */
         // The API schema generation calls the options callbacks without a record. Without a record there is
         // nothing to select from, an empty list leaves the options unrestricted.
-        if (null === $objDc->activeRecord) {
-            return [];
-        }
-
-        $return = [];
-        $filter = $objDc->activeRecord->metamodel_filtering;
+        /** @psalm-suppress UndefinedMagicPropertyFetch */
+        $filter = $objDc->activeRecord?->metamodel_filtering;
 
         if (!$filter) {
-            return $return;
+            return [];
         }
 
         return $this->filterFactory->createCollection($filter)->getParameterFilterNames();
@@ -486,6 +458,19 @@ abstract class AbstractContentElementAndModuleCallback
      */
     public function getRenderSettings(DC_Table $objDC)
     {
+        return $this->getSettingsOfMetaModel($objDC, 'tl_metamodel_rendersettings');
+    }
+
+    /**
+     * Fetch the names of all entries of a settings table belonging to the current MetaModel.
+     *
+     * @param DC_Table $objDC The data container calling this method.
+     * @param string   $table The settings table, having the columns "id", "name" and "pid".
+     *
+     * @return string[] array of all entries as id => human name
+     */
+    private function getSettingsOfMetaModel(DC_Table $objDC, string $table): array
+    {
         /** @psalm-suppress UndefinedMagicPropertyFetch */
         // The API schema generation calls the options callbacks without a record. Without a record there is
         // nothing to select from, an empty list leaves the options unrestricted.
@@ -493,20 +478,19 @@ abstract class AbstractContentElementAndModuleCallback
             return [];
         }
 
-        $filterSettings = $this->connection->createQueryBuilder()
-            ->select('r.id', 'r.name')
-            ->from('tl_metamodel_rendersettings', 'r')
-            ->where('r.pid=:id')
+        $settings = $this->connection->createQueryBuilder()
+            ->select('s.id', 's.name')
+            ->from($table, 's')
+            ->where('s.pid=:id')
             ->setParameter('id', $objDC->activeRecord->metamodel)
             ->executeQuery()
             ->fetchAllAssociative();
 
         $result = [];
-        foreach ($filterSettings as $filterSetting) {
-            $result[$filterSetting['id']] = $filterSetting['name'];
+        foreach ($settings as $setting) {
+            $result[$setting['id']] = $setting['name'];
         }
 
-        // Sort the filter settings.
         asort($result);
 
         return $result;
