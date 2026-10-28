@@ -1,14 +1,22 @@
 {% set fragment = paginationFragment|default('') ? '#' ~ paginationFragment : '' %}
 <!-- indexer::stop -->
+{% block nav %}
 <nav class="pagination block" aria-label="{{ 'MSC.pagination'|trans([], 'contao_default') }}">
+    {% block info %}
     <p>{{ ('MSC.totalPages'|trans([], 'contao_default'))|format(page, totalPages) }}</p>
+    {% endblock %}
     <ul>
+        {% block first %}
         {% if hasFirst|default(false) %}
             <li class="first"><a href="{{ first }}{{ fragment }}" class="first" title="{{ 'MSC.goToPage'|trans({'%s': 1}, 'contao_default') }}">{{ 'MSC.first'|trans([], 'contao_default') }}</a></li>
         {% endif %}
+        {% endblock %}
+        {% block previous %}
         {% if hasPrevious|default(false) %}
             <li class="previous"><a href="{{ previous }}{{ fragment }}" class="previous" title="{{ 'MSC.goToPage'|trans({'%s': page - 1}, 'contao_default') }}">{{ 'MSC.previous'|trans([], 'contao_default') }}</a></li>
         {% endif %}
+        {% endblock %}
+        {% block pages %}
         {% for entry in pages|default([]) %}
             {% if entry.href is null %}
                 <li><strong class="active">{{ entry.page }}</strong></li>
@@ -16,12 +24,18 @@
                 <li><a href="{{ entry.href }}{{ fragment }}" class="link" title="{{ 'MSC.goToPage'|trans({'%s': entry.page}, 'contao_default') }}">{{ entry.page }}</a></li>
             {% endif %}
         {% endfor %}
+        {% endblock %}
+        {% block next %}
         {% if hasNext|default(false) %}
             <li class="next"><a href="{{ next }}{{ fragment }}" class="next" title="{{ 'MSC.goToPage'|trans({'%s': page + 1}, 'contao_default') }}">{{ 'MSC.next'|trans([], 'contao_default') }}</a></li>
         {% endif %}
+        {% endblock %}
+        {% block last %}
         {% if hasLast|default(false) %}
             <li class="last"><a href="{{ last }}{{ fragment }}" class="last" title="{{ 'MSC.goToPage'|trans({'%s': totalPages}, 'contao_default') }}">{{ 'MSC.last'|trans([], 'contao_default') }}</a></li>
         {% endif %}
+        {% endblock %}
     </ul>
 </nav>
+{% endblock %}
 <!-- indexer::continue -->
