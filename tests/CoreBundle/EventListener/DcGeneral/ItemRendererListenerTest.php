@@ -22,6 +22,7 @@ declare(strict_types=1);
 namespace MetaModels\CoreBundle\Test\EventListener\DcGeneral;
 
 use MetaModels\CoreBundle\EventListener\DcGeneral\ItemRendererListener;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionMethod;
@@ -29,9 +30,7 @@ use ReflectionProperty;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-/**
- * @covers \MetaModels\CoreBundle\EventListener\DcGeneral\ItemRendererListener
- */
+#[CoversClass(ItemRendererListener::class)]
 class ItemRendererListenerTest extends TestCase
 {
     /**
@@ -85,7 +84,7 @@ class ItemRendererListenerTest extends TestCase
     public function testPrefixesTheBasePathOfTheRequest(): void
     {
         $stack   = new RequestStack();
-        $request = $this->createMock(Request::class);
+        $request = $this->createStub(Request::class);
         $request->method('getBasePath')->willReturn('/sub');
         $stack->push($request);
 
