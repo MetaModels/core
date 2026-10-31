@@ -28,6 +28,7 @@ use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\PostDeleteModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PostDuplicateModelEvent;
+use ContaoCommunityAlliance\DcGeneral\Event\PostPasteModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PostPersistModelEvent;
 use MetaModels\CoreBundle\EventListener\DcGeneral\UpdateSearchIndexListener;
 use MetaModels\CoreBundle\Search\Backend\ItemIndexer;
@@ -96,6 +97,17 @@ final class UpdateSearchIndexListenerTest extends TestCase
         ));
     }
 
+    public function testIndexesAnItemThatWasPasted(): void
+    {
+        $search = $this->createMock(BackendSearch::class);
+        $search->expects(self::once())->method('reindex')->with(self::callback($this->reindexOf('9')));
+
+        $this->listener($search)->onPaste(new PostPasteModelEvent(
+            $this->createStub(EnvironmentInterface::class),
+            $this->model('mm_event', '9')
+        ));
+    }
+
     public function testRemovesAnItemThatWasDeleted(): void
     {
         $search = $this->createMock(BackendSearch::class);
@@ -122,6 +134,7 @@ final class UpdateSearchIndexListenerTest extends TestCase
 
         $listener->onPersist(new PostPersistModelEvent($environment, $this->model('tl_content', '7'), null));
         $listener->onPersist(new PostPersistModelEvent($environment, $this->model('mm_event', null), null));
+        $listener->onPaste(new PostPasteModelEvent($environment, $this->model('mm_event', null)));
         $listener->onDelete(new PostDeleteModelEvent($environment, $this->model('tl_content', '7')));
     }
 }

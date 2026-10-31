@@ -24,13 +24,14 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\PostDeleteModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PostDuplicateModelEvent;
+use ContaoCommunityAlliance\DcGeneral\Event\PostPasteModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PostPersistModelEvent;
 use MetaModels\CoreBundle\Search\Backend\ItemIndexer;
 use MetaModels\IFactory;
 use MetaModels\IMetaModel;
 
 /**
- * Updates the backend search index when an item is saved, duplicated or deleted in the backend.
+ * Updates the backend search index when an item is saved, duplicated, pasted or deleted in the backend.
  */
 final class UpdateSearchIndexListener
 {
@@ -46,6 +47,15 @@ final class UpdateSearchIndexListener
     }
 
     public function onDuplicate(PostDuplicateModelEvent $event): void
+    {
+        $this->update($event->getModel());
+    }
+
+    /**
+     * Pasting from the clipboard clones the item without an id and saves it afterwards, without telling about it
+     * otherwise: the duplicate event comes too early and no persist event follows.
+     */
+    public function onPaste(PostPasteModelEvent $event): void
     {
         $this->update($event->getModel());
     }
