@@ -36,6 +36,7 @@ use Contao\System;
 use MetaModels\Render\Setting\ICollection;
 use MetaModels\Render\Setting\IRenderSettingFactory;
 use MetaModels\Render\TemplateFactory;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Render a MetaModel item in the backend using the render setting attached to the active input screen.
@@ -61,14 +62,24 @@ class ItemRendererListener
     private TemplateFactory $templateFactory;
 
     /**
+     * The request stack, for the base path of the backend.
+     */
+    private ?RequestStack $requestStack;
+
+    /**
      * Create a new instance.
      *
      * @param IRenderSettingFactory $renderSettingFactory The render setting factory.
      * @param TemplateFactory|null  $templateFactory      The template factory.
+     * @param RequestStack|null     $requestStack         The request stack.
      */
-    public function __construct(IRenderSettingFactory $renderSettingFactory, ?TemplateFactory $templateFactory = null)
-    {
+    public function __construct(
+        IRenderSettingFactory $renderSettingFactory,
+        ?TemplateFactory $templateFactory = null,
+        ?RequestStack $requestStack = null
+    ) {
         $this->renderSettingFactory = $renderSettingFactory;
+        $this->requestStack         = $requestStack;
 
         if (null === $templateFactory) {
             // phpcs:disable
@@ -132,7 +143,7 @@ class ItemRendererListener
             // lazy/eager choice untouched: lazy still means "rendered on access", and this is the access.
             $html5 = $data[0]['html5'];
             /** @psalm-suppress MixedArgument, MixedArgumentTypeCoercion */
-            $event->setArgs(\is_array($html5) ? $html5 : \iterator_to_array($html5));
+            $event->setArgs($this->makeSourcesRootRelative(\is_array($html5) ? $html5 : \iterator_to_array($html5)));
             return;
         }
 
@@ -152,7 +163,33 @@ class ItemRendererListener
         );
 
         /** @psalm-suppress InvalidArgument */
-        $event->setLabel('%s')->setArgs([$template->parse('html5')]);
+        $event->setLabel('%s')->setArgs($this->makeSourcesRootRelative([$template->parse('html5')]));
+    }
+
+    /**
+     * Make the image sources of the rendered values work in the backend.
+     *
+     * The attribute templates give the sources relative to the project and rely on the base tag of the frontend page.
+     * The backend pages have none, the browser would look the images up below the route of the backend.
+     *
+     * @param array<array-key, mixed> $values The rendered values.
+     *
+     * @return array<array-key, mixed>
+     */
+    private function makeSourcesRootRelative(array $values): array
+    {
+        $prefix = ($this->requestStack?->getCurrentRequest()?->getBasePath() ?? '') . '/';
+
+        return \array_map(
+            static fn (mixed $value): mixed => \is_string($value)
+                ? \preg_replace(
+                    '#(<img\b[^>]*?\ssrc=")(?![a-z][a-z0-9+.-]*:|/|\#)#i',
+                    '$1' . $prefix,
+                    $value
+                ) ?? $value
+                : $value,
+            $values
+        );
     }
 
     /**

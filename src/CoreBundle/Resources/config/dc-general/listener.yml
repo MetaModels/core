@@ -4,6 +4,7 @@ services:
         arguments:
             - "@metamodels.render_setting_factory"
             - "@metamodels.template_factory"
+            - "@request_stack"
         tags:
             -   name: kernel.event_listener
                 event: dc-general.view.contao2backend.model-to-label
