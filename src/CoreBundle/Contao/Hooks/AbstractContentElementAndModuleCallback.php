@@ -194,7 +194,11 @@ abstract class AbstractContentElementAndModuleCallback
     public function getAttributeNames(DC_Table $objDc)
     {
         /** @psalm-suppress UndefinedMagicPropertyFetch */
-        assert(null !== $objDc->activeRecord);
+        // The API schema generation calls the options callbacks without a record. Without a record there is
+        // nothing to select from, an empty list leaves the options unrestricted.
+        if (null === $objDc->activeRecord) {
+            return [];
+        }
 
         try {
             $metaModelName = $this->factory->translateIdToMetaModelName($objDc->activeRecord->metamodel);
@@ -237,26 +241,7 @@ abstract class AbstractContentElementAndModuleCallback
      */
     public function getFilterSettings(DC_Table $objDC)
     {
-        /** @psalm-suppress UndefinedMagicPropertyFetch */
-        assert(null !== $objDC->activeRecord);
-
-        $filterSettings = $this->connection->createQueryBuilder()
-            ->select('f.id', 'f.name')
-            ->from('tl_metamodel_filter', 'f')
-            ->where('f.pid=:id')
-            ->setParameter('id', $objDC->activeRecord->metamodel)
-            ->executeQuery()
-            ->fetchAllAssociative();
-
-        $result = [];
-        foreach ($filterSettings as $filterSetting) {
-            $result[$filterSetting['id']] = $filterSetting['name'];
-        }
-
-        // Sort the filter settings.
-        asort($result);
-
-        return $result;
+        return $this->getSettingsOfMetaModel($objDC, 'tl_metamodel_filter');
     }
 
     /**
@@ -272,7 +257,11 @@ abstract class AbstractContentElementAndModuleCallback
     public function getMetaTitleAttributes(DC_Table $objDC)
     {
         /** @psalm-suppress UndefinedMagicPropertyFetch */
-        assert(null !== $objDC->activeRecord);
+        // The API schema generation calls the options callbacks without a record. Without a record there is
+        // nothing to select from, an empty list leaves the options unrestricted.
+        if (null === $objDC->activeRecord) {
+            return [];
+        }
 
         /** @psalm-suppress ArgumentTypeCoercion - We HOPE there is a list of strings. */
         return $this->getFilteredAttributeNames(
@@ -294,7 +283,11 @@ abstract class AbstractContentElementAndModuleCallback
     public function getMetaDescriptionAttributes(DC_Table $objDC)
     {
         /** @psalm-suppress UndefinedMagicPropertyFetch */
-        assert(null !== $objDC->activeRecord);
+        // The API schema generation calls the options callbacks without a record. Without a record there is
+        // nothing to select from, an empty list leaves the options unrestricted.
+        if (null === $objDC->activeRecord) {
+            return [];
+        }
 
         /** @psalm-suppress ArgumentTypeCoercion - We HOPE there is a list of strings. */
         return $this->getFilteredAttributeNames(
@@ -409,14 +402,13 @@ abstract class AbstractContentElementAndModuleCallback
      */
     public function getFilterParameterNames(DC_Table $objDc)
     {
+        // The API schema generation calls the options callbacks without a record. Without a record there is
+        // nothing to select from, an empty list leaves the options unrestricted.
         /** @psalm-suppress UndefinedMagicPropertyFetch */
-        assert(null !== $objDc->activeRecord);
-
-        $return = [];
-        $filter = $objDc->activeRecord->metamodel_filtering;
+        $filter = $objDc->activeRecord?->metamodel_filtering;
 
         if (!$filter) {
-            return $return;
+            return [];
         }
 
         return $this->filterFactory->createCollection($filter)->getParameterFilterNames();
@@ -432,7 +424,11 @@ abstract class AbstractContentElementAndModuleCallback
     public function getFilterTemplates(DC_Table $dcTable)
     {
         /** @psalm-suppress UndefinedMagicPropertyFetch */
-        assert(null !== $dcTable->activeRecord);
+        // The API schema generation calls the options callbacks without a record. Without a record there is
+        // nothing to select from, an empty list leaves the options unrestricted.
+        if (null === $dcTable->activeRecord) {
+            return [];
+        }
 
         if ($dcTable->activeRecord->type === 'metamodels_frontendclearall') {
             return $this->templateList->getTemplatesForBase('mm_clearall_');
@@ -462,23 +458,39 @@ abstract class AbstractContentElementAndModuleCallback
      */
     public function getRenderSettings(DC_Table $objDC)
     {
-        /** @psalm-suppress UndefinedMagicPropertyFetch */
-        assert(null !== $objDC->activeRecord);
+        return $this->getSettingsOfMetaModel($objDC, 'tl_metamodel_rendersettings');
+    }
 
-        $filterSettings = $this->connection->createQueryBuilder()
-            ->select('r.id', 'r.name')
-            ->from('tl_metamodel_rendersettings', 'r')
-            ->where('r.pid=:id')
+    /**
+     * Fetch the names of all entries of a settings table belonging to the current MetaModel.
+     *
+     * @param DC_Table $objDC The data container calling this method.
+     * @param string   $table The settings table, having the columns "id", "name" and "pid".
+     *
+     * @return string[] array of all entries as id => human name
+     */
+    private function getSettingsOfMetaModel(DC_Table $objDC, string $table): array
+    {
+        /** @psalm-suppress UndefinedMagicPropertyFetch */
+        // The API schema generation calls the options callbacks without a record. Without a record there is
+        // nothing to select from, an empty list leaves the options unrestricted.
+        if (null === $objDC->activeRecord) {
+            return [];
+        }
+
+        $settings = $this->connection->createQueryBuilder()
+            ->select('s.id', 's.name')
+            ->from($table, 's')
+            ->where('s.pid=:id')
             ->setParameter('id', $objDC->activeRecord->metamodel)
             ->executeQuery()
             ->fetchAllAssociative();
 
         $result = [];
-        foreach ($filterSettings as $filterSetting) {
-            $result[$filterSetting['id']] = $filterSetting['name'];
+        foreach ($settings as $setting) {
+            $result[$setting['id']] = $setting['name'];
         }
 
-        // Sort the filter settings.
         asort($result);
 
         return $result;
@@ -487,7 +499,7 @@ abstract class AbstractContentElementAndModuleCallback
     /**
      * Render an edit button.
      *
-     * @param string $caption The caption (alt attribute of the image).
+     * @param string $caption The caption (aria-label attribute of the <a> tag).
      * @param string $title   The title (title attribute of the <a> tag).
      * @param string $url     The URL for the button.
      *
@@ -495,16 +507,20 @@ abstract class AbstractContentElementAndModuleCallback
      */
     private function renderEditButton(string $caption, string $title, string $url): string
     {
+        // Contao shows the alt text of an image inside a link as a tooltip of its own, and hovering the image would
+        // hide the title tooltip of the link. Therefore the alt text stays empty (the link carries the accessible
+        // name) and the image is transparent to the pointer, so the link is always the tooltip target.
         $icon = $this->iconBuilder->getBackendIconImageTag(
             'system/themes/flexible/icons/alias.svg',
-            $caption,
-            'style="vertical-align:middle;height:24px;"'
+            '',
+            'style="vertical-align:middle;height:24px;pointer-events:none"'
         );
 
         return sprintf(
-            '<a href="%s" title="%s" target="_blank" style="padding-left:3px">%s</a>',
+            '<a href="%s" title="%s" aria-label="%s" target="_blank" style="padding-left:3px">%s</a>',
             $url,
             $title,
+            htmlspecialchars($caption, ENT_QUOTES),
             $icon
         );
     }

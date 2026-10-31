@@ -142,9 +142,10 @@ final class RelationJumpBuilder
     private function renderLink(string $url): string
     {
         return \sprintf(
-            '<a href="%s" title="%s" target="_blank" style="padding-left:3px">%s</a>',
+            '<a href="%s" title="%s" aria-label="%s" target="_blank" style="padding-left:3px">%s</a>',
             $url,
             $this->escape($this->trans('relation_jump.title')),
+            $this->escape($this->trans('relation_jump.label')),
             $this->icon()
         );
     }
@@ -167,10 +168,13 @@ final class RelationJumpBuilder
         // No forced height: the button sits inside the field header, whose line box is 14px high. Blowing the icon
         // up to the 24px the content element wizard uses makes it hang over the edge, crowd the field below and cut
         // off the descenders of the label. The icon's own size fits the line.
+        // Contao shows the alt text of an image inside a link as a tooltip of its own, and hovering the image would
+        // hide the title tooltip of the link. Therefore the alt text stays empty (the link carries the accessible
+        // name) and the image is transparent to the pointer, so the link is always the tooltip target.
         return $this->iconBuilder->getBackendIconImageTag(
             'system/themes/flexible/icons/alias.svg',
-            $this->trans('relation_jump.label'),
-            'style="vertical-align:text-bottom"'
+            '',
+            'style="vertical-align:text-bottom;pointer-events:none"'
         );
     }
 

@@ -1,23 +1,38 @@
 <!-- indexer::stop -->
+{% block section %}
 <section class="{{ class|default('') }} block"{{ cssID|default('')|raw }}{% if style|default('') %} style="{{ style }}"{% endif %}>
-    {% if headline|default('') %}
-        <{{ hl }}>{{ headline|raw }}</{{ hl }}>
-    {% endif %}
+    {% block headline %}
+        {% if headline|default('') %}
+            <{{ hl }}>{{ headline|raw }}</{{ hl }}>
+        {% endif %}
+    {% endblock %}
+    {% block form %}
     <form{% if action|default('') %} action="{{ action }}"{% endif %} method="post">
-        <input name="REQUEST_TOKEN" type="hidden" value="{{ requestToken|default('') }}"/>
-        <input type="hidden" name="FORM_SUBMIT" value="{{ formid|default('') }}">
+        {# Required for submitting the form - override only deliberately. #}
+        {% block form_hidden %}
+            <input name="REQUEST_TOKEN" type="hidden" value="{{ requestToken|default('') }}"/>
+            <input type="hidden" name="FORM_SUBMIT" value="{{ formid|default('') }}">
+        {% endblock %}
         <div class="formbody">
-            {% for filter in filters|default([]) %}
-                <div class="widget {{ filter.class|default('') }}"{{ filter.cssID|default('')|raw }}>
-                    {{ filter.value|raw }}
-                </div>
-            {% endfor %}
-            {% if submit|default('') %}
-                <div class="submit_container">
-                    <input type="submit" class="submit" value="{{ submit }}">
-                </div>
-            {% endif %}
+            {% block filters %}
+                {% for filter in filters|default([]) %}
+                    {% block filter %}
+                        <div class="widget {{ filter.class|default('') }}"{{ filter.cssID|default('')|raw }}>
+                            {{ filter.value|raw }}
+                        </div>
+                    {% endblock %}
+                {% endfor %}
+            {% endblock %}
+            {% block submit %}
+                {% if submit|default('') %}
+                    <div class="submit_container">
+                        <input type="submit" class="submit" value="{{ submit }}">
+                    </div>
+                {% endif %}
+            {% endblock %}
         </div>
     </form>
+    {% endblock %}
 </section>
+{% endblock %}
 <!-- indexer::continue -->
