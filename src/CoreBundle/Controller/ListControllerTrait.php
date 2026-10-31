@@ -322,10 +322,14 @@ trait ListControllerTrait
         /** @var \Iterator<int, IItem> $items */
         $items = $itemRenderer->getItems();
 
-        $responseTags = \array_map(
-            static fn (IItem $item): string
-                => \sprintf('contao.db.%s.%d', $item->getMetaModel()->getTableName(), $item->get('id')),
-            \iterator_to_array($items, false)
+        // The table tag makes new items, items that start to match the filter and empty lists expire as well.
+        $responseTags = \array_merge(
+            [\sprintf('contao.db.%s', $itemRenderer->getMetaModel()->getTableName())],
+            \array_map(
+                static fn (IItem $item): string
+                    => \sprintf('contao.db.%s.%d', $item->getMetaModel()->getTableName(), $item->get('id')),
+                \iterator_to_array($items, false)
+            )
         );
 
         $response = $template->getResponse();
