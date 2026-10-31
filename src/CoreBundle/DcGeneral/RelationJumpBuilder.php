@@ -172,7 +172,7 @@ final class RelationJumpBuilder
         // hide the title tooltip of the link. Therefore the alt text stays empty (the link carries the accessible
         // name) and the image is transparent to the pointer, so the link is always the tooltip target.
         return $this->iconBuilder->getBackendIconImageTag(
-            'system/themes/flexible/icons/alias.svg',
+            'system/themes/flexible/icons/edit.svg',
             '',
             'style="vertical-align:text-bottom;pointer-events:none"'
         );

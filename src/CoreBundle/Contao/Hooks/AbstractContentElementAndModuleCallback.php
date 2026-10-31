@@ -519,7 +519,7 @@ abstract class AbstractContentElementAndModuleCallback
         // hide the title tooltip of the link. Therefore the alt text stays empty (the link carries the accessible
         // name) and the image is transparent to the pointer, so the link is always the tooltip target.
         $icon = $this->iconBuilder->getBackendIconImageTag(
-            'system/themes/flexible/icons/alias.svg',
+            'system/themes/flexible/icons/edit.svg',
             '',
             'style="vertical-align:middle;height:24px;pointer-events:none"'
         );
