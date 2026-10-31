@@ -54,6 +54,28 @@ services:
               event: dc-general.model.post-delete
               method: onDelete
 
+    MetaModels\CoreBundle\Search\Backend\ItemIndexer:
+        arguments:
+            # The backend search exists only if it is switched on.
+            $backendSearch: '@?contao.search.backend'
+            $logger: '@?monolog.logger.contao.error'
+
+    metamodels.listener.dcgeneral.update_search_index:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\UpdateSearchIndexListener
+        arguments:
+            - "@metamodels.factory"
+            - '@MetaModels\CoreBundle\Search\Backend\ItemIndexer'
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.model.post-persist
+              method: onPersist
+            - name: kernel.event_listener
+              event: dc-general.model.post-duplicate
+              method: onDuplicate
+            - name: kernel.event_listener
+              event: dc-general.model.post-delete
+              method: onDelete
+
     metamodels.assets.icon_builder:
         class: MetaModels\CoreBundle\Assets\IconBuilder
         arguments:
