@@ -507,7 +507,7 @@ abstract class AbstractContentElementAndModuleCallback
     /**
      * Render an edit button.
      *
-     * @param string $caption The caption (alt attribute of the image).
+     * @param string $caption The caption (aria-label attribute of the <a> tag).
      * @param string $title   The title (title attribute of the <a> tag).
      * @param string $url     The URL for the button.
      *
@@ -515,16 +515,20 @@ abstract class AbstractContentElementAndModuleCallback
      */
     private function renderEditButton(string $caption, string $title, string $url): string
     {
+        // Contao shows the alt text of an image inside a link as a tooltip of its own, and hovering the image would
+        // hide the title tooltip of the link. Therefore the alt text stays empty (the link carries the accessible
+        // name) and the image is transparent to the pointer, so the link is always the tooltip target.
         $icon = $this->iconBuilder->getBackendIconImageTag(
             'system/themes/flexible/icons/alias.svg',
-            $caption,
-            'style="vertical-align:middle;height:24px;"'
+            '',
+            'style="vertical-align:middle;height:24px;pointer-events:none"'
         );
 
         return sprintf(
-            '<a href="%s" title="%s" target="_blank" style="padding-left:3px">%s</a>',
+            '<a href="%s" title="%s" aria-label="%s" target="_blank" style="padding-left:3px">%s</a>',
             $url,
             $title,
+            htmlspecialchars($caption, ENT_QUOTES),
             $icon
         );
     }
