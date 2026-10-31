@@ -393,7 +393,8 @@ class PaginationLimitCalculator
     public function getMaxPaginationLinks(): int
     {
         if (!$this->maxPaginationLinks) {
-            $this->setMaxPaginationLinks(Config::get('maxPaginationLinks'));
+            // Contao 6 has no such setting anymore, it returns null. 7 is the default range of Contao.
+            $this->setMaxPaginationLinks((int) (Config::get('maxPaginationLinks') ?? 7));
         }
 
         return $this->maxPaginationLinks;
