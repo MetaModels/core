@@ -73,6 +73,9 @@ services:
               event: dc-general.model.post-duplicate
               method: onDuplicate
             - name: kernel.event_listener
+              event: dc-general.model.post-paste
+              method: onPaste
+            - name: kernel.event_listener
               event: dc-general.model.post-delete
               method: onDelete
 

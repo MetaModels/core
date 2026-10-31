@@ -24,6 +24,7 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\PostDeleteModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PostDuplicateModelEvent;
+use ContaoCommunityAlliance\DcGeneral\Event\PostPasteModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PostPersistModelEvent;
 use MetaModels\CoreBundle\Search\Backend\ItemIndexer;
 use MetaModels\IFactory;
@@ -46,6 +47,14 @@ final class UpdateSearchIndexListener
     }
 
     public function onDuplicate(PostDuplicateModelEvent $event): void
+    {
+        $this->update($event->getModel());
+    }
+
+    /**
+     * Pasting a copy from the clipboard dispatches the duplicate event before the clone is stored: no id yet.
+     */
+    public function onPaste(PostPasteModelEvent $event): void
     {
         $this->update($event->getModel());
     }
