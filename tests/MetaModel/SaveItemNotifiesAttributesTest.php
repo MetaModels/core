@@ -33,6 +33,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 /**
  * Attributes that build their value from others (alias, combined values) are told about a saved item, whether or not
  * the value was given.
+ *
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter) The methods of the MetaModel that are replaced keep their signature.
  */
 #[CoversClass(MetaModel::class)]
 class SaveItemNotifiesAttributesTest extends TestCase
