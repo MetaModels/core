@@ -69,9 +69,10 @@ final class TwigTemplateNames
     /**
      * Derive the legacy template names of the Twig templates that start with the given base.
      *
-     * Only the visual templates of the groups "attribute" and "item" are considered, the plain text variants
-     * ("<leaf>.text") have no choice of their own. The filter group is left out as its legacy names do not tell which
-     * prefix they belong to.
+     * Only the visual templates of the groups "attribute", "item" and "filter" are considered, the plain text variants
+     * ("<leaf>.text") have no choice of their own. The legacy name is built with the first prefix of the group, which
+     * is "mm_filteritem_" for the filter widgets. The wrappers ("mm_filter_", "mm_clearall_") are flat templates and
+     * not part of the group, so a request for their base name finds nothing.
      *
      * @param list<string> $identifiers The identifiers known to the Twig loader.
      * @param string       $base        The legacy base name, e.g. "mm_attr_text".
@@ -82,7 +83,7 @@ final class TwigTemplateNames
     {
         $names = [];
         foreach ($identifiers as $identifier) {
-            if (1 !== preg_match('#^metamodels/(attribute|item)/([^/.]+)$#', $identifier, $matches)) {
+            if (1 !== preg_match('#^metamodels/(attribute|item|filter)/([^/.]+)$#', $identifier, $matches)) {
                 continue;
             }
 
