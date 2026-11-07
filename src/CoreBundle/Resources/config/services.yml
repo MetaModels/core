@@ -5,6 +5,14 @@ services:
       bind:
         $translator: '@cca.translator.contao_translator'
 
+    # The operations of the Template Studio get their service locator like the ones of Contao.
+    _instanceof:
+        Contao\CoreBundle\Twig\Studio\Operation\AbstractOperation:
+            calls:
+                - [setContainer, ['@Psr\Container\ContainerInterface']]
+            tags:
+                - { name: container.service_subscriber, id: contao.twig.studio.cache_invalidator }
+
     MetaModels\IFactory: '@metamodels.factory'
     MetaModels\Filter\Setting\IFilterSettingFactory: '@metamodels.filter_setting_factory'
     MetaModels\Render\Setting\IRenderSettingFactory: '@metamodels.render_setting_factory'
@@ -149,6 +157,12 @@ services:
           - "%kernel.project_dir%"
           - "@translator"
           - "@contao.twig.filesystem_loader"
+
+    # Template Studio: create, rename and delete variants of the Twig templates (needs the studio of Contao).
+    MetaModels\CoreBundle\Twig\Studio\:
+        resource: '../../Twig/Studio/*Operation.php'
+        exclude: '../../Twig/Studio/Abstract*.php'
+        autoconfigure: true
 
     metamodels.render.twig_surrogate:
         class: MetaModels\Render\TwigTemplateSurrogate
