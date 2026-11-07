@@ -69,7 +69,8 @@ abstract class AbstractRenameVariantOperation extends CoreAbstractRenameVariantO
 
         // Only when the file has really been moved, the base class refuses to overwrite an existing variant.
         $fragment = $request->request->getString('identifier_fragment');
-        if ('' !== $fragment && !$this->getUserTemplatesStorage()->fileExists($context->getUserTemplatesStoragePath())) {
+        $moved    = !$this->getUserTemplatesStorage()->fileExists($context->getUserTemplatesStoragePath());
+        if ('' !== $fragment && $moved) {
             $this->migrateLegacyNames(
                 $context->getIdentifier(),
                 (string) preg_replace('%/[^/]+$%', '/' . $fragment, $context->getIdentifier())
