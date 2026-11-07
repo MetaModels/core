@@ -29,7 +29,6 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-use function explode;
 use function preg_match;
 use function preg_quote;
 use function preg_replace;
@@ -46,7 +45,7 @@ use function preg_replace;
 abstract class AbstractRenameVariantOperation extends CoreAbstractRenameVariantOperation
 {
     /**
-     * The "<table>.<field>" columns that store the legacy template name.
+     * The columns ("table" => "field") that store the legacy template name.
      */
     protected const DATABASE_REFERENCES = [];
 
@@ -82,18 +81,16 @@ abstract class AbstractRenameVariantOperation extends CoreAbstractRenameVariantO
 
     private function migrateLegacyNames(string $fromIdentifier, string $toIdentifier): void
     {
-        $from = TwigTemplateNames::legacyName($fromIdentifier);
-        $to   = TwigTemplateNames::legacyName($toIdentifier);
-        if (null === $from || null === $to) {
+        $source = TwigTemplateNames::legacyName($fromIdentifier);
+        $target = TwigTemplateNames::legacyName($toIdentifier);
+        if (null === $source || null === $target) {
             return;
         }
 
         /** @var Connection $connection */
         $connection = $this->container->get('database_connection');
-        foreach (static::DATABASE_REFERENCES as $reference) {
-            [$table, $field] = explode('.', $reference, 2);
-
-            $connection->update($table, [$field => $to], [$field => $from]);
+        foreach (static::DATABASE_REFERENCES as $table => $field) {
+            $connection->update($table, [$field => $target], [$field => $source]);
         }
     }
 }

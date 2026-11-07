@@ -34,6 +34,11 @@ use function substr;
 final class TwigTemplateNames
 {
     /**
+     * Matches "metamodels/<group>/<leaf>" and a variant of it ("metamodels/<group>/<leaf>/<variant>").
+     */
+    private const IDENTIFIER_PATTERN = '#^metamodels/(attribute|item|filter)/([^/.]+(?:/[^/.]+)?)$#';
+
+    /**
      * The legacy name prefixes by Twig group. The first one is used to build a legacy name from an identifier.
      */
     private const PREFIXES = [
@@ -67,7 +72,8 @@ final class TwigTemplateNames
     }
 
     /**
-     * Build the legacy template name ("mm_attr_file/variant") for a Twig identifier ("metamodels/attribute/file/variant").
+     * Build the legacy template name ("mm_attr_file/variant") for the Twig identifier
+     * ("metamodels/attribute/file/variant").
      *
      * This is the value MetaModels stores for a selected template. It is the counterpart of identifier().
      *
@@ -75,7 +81,7 @@ final class TwigTemplateNames
      */
     public static function legacyName(string $identifier): ?string
     {
-        if (1 !== preg_match('#^metamodels/(attribute|item|filter)/([^/.]+(?:/[^/.]+)?)$#', $identifier, $matches)) {
+        if (1 !== preg_match(self::IDENTIFIER_PATTERN, $identifier, $matches)) {
             return null;
         }
 
@@ -99,7 +105,7 @@ final class TwigTemplateNames
     {
         $names = [];
         foreach ($identifiers as $identifier) {
-            if (1 !== preg_match('#^metamodels/(attribute|item|filter)/([^/.]+(?:/[^/.]+)?)$#', $identifier, $matches)) {
+            if (1 !== preg_match(self::IDENTIFIER_PATTERN, $identifier, $matches)) {
                 continue;
             }
 

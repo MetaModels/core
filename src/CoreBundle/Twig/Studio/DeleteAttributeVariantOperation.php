@@ -31,8 +31,9 @@ use Contao\CoreBundle\DependencyInjection\Attribute\AsOperationForTemplateStudio
 #[AsOperationForTemplateStudioElement(name: 'delete', priority: -1)]
 final class DeleteAttributeVariantOperation extends AbstractDeleteVariantOperation
 {
-    protected const DATABASE_REFERENCES = ['tl_metamodel_rendersetting.template'];
+    protected const DATABASE_REFERENCES = ['tl_metamodel_rendersetting' => 'template'];
 
+    #[\Override]
     protected function getPrefix(): string
     {
         return 'metamodels/attribute';

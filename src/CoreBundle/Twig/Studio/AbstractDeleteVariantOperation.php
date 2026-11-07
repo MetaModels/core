@@ -29,7 +29,6 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-use function explode;
 use function preg_match;
 use function preg_quote;
 use function preg_replace;
@@ -46,7 +45,7 @@ use function preg_replace;
 abstract class AbstractDeleteVariantOperation extends CoreAbstractDeleteVariantOperation
 {
     /**
-     * The "<table>.<field>" columns that store the legacy template name.
+     * The columns ("table" => "field") that store the legacy template name.
      */
     protected const DATABASE_REFERENCES = [];
 
@@ -77,18 +76,16 @@ abstract class AbstractDeleteVariantOperation extends CoreAbstractDeleteVariantO
 
     private function fallBackToBaseTemplate(string $identifier): void
     {
-        $from = TwigTemplateNames::legacyName($identifier);
-        $to   = TwigTemplateNames::legacyName((string) preg_replace('%/[^/]+$%', '', $identifier));
-        if (null === $from || null === $to) {
+        $source = TwigTemplateNames::legacyName($identifier);
+        $target = TwigTemplateNames::legacyName((string) preg_replace('%/[^/]+$%', '', $identifier));
+        if (null === $source || null === $target) {
             return;
         }
 
         /** @var Connection $connection */
         $connection = $this->container->get('database_connection');
-        foreach (static::DATABASE_REFERENCES as $reference) {
-            [$table, $field] = explode('.', $reference, 2);
-
-            $connection->update($table, [$field => $to], [$field => $from]);
+        foreach (static::DATABASE_REFERENCES as $table => $field) {
+            $connection->update($table, [$field => $target], [$field => $source]);
         }
     }
 }

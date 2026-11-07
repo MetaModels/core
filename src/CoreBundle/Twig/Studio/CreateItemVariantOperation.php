@@ -31,6 +31,7 @@ use Contao\CoreBundle\DependencyInjection\Attribute\AsOperationForTemplateStudio
 #[AsOperationForTemplateStudioElement]
 final class CreateItemVariantOperation extends AbstractCreateVariantOperation
 {
+    #[\Override]
     protected function getPrefix(): string
     {
         return 'metamodels/item';
