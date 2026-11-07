@@ -67,6 +67,22 @@ final class TwigTemplateNames
     }
 
     /**
+     * Build the legacy template name ("mm_attr_file/variant") for a Twig identifier ("metamodels/attribute/file/variant").
+     *
+     * This is the value MetaModels stores for a selected template. It is the counterpart of identifier().
+     *
+     * @return string|null The name or null when the identifier is not a template of a MetaModels group.
+     */
+    public static function legacyName(string $identifier): ?string
+    {
+        if (1 !== preg_match('#^metamodels/(attribute|item|filter)/([^/.]+(?:/[^/.]+)?)$#', $identifier, $matches)) {
+            return null;
+        }
+
+        return self::PREFIXES[$matches[1]][0] . $matches[2];
+    }
+
+    /**
      * Derive the legacy template names of the Twig templates that start with the given base.
      *
      * Only the visual templates of the groups "attribute", "item" and "filter" are considered, the plain text variants
@@ -83,7 +99,7 @@ final class TwigTemplateNames
     {
         $names = [];
         foreach ($identifiers as $identifier) {
-            if (1 !== preg_match('#^metamodels/(attribute|item|filter)/([^/.]+)$#', $identifier, $matches)) {
+            if (1 !== preg_match('#^metamodels/(attribute|item|filter)/([^/.]+(?:/[^/.]+)?)$#', $identifier, $matches)) {
                 continue;
             }
 

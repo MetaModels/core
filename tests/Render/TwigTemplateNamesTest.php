@@ -64,4 +64,23 @@ final class TwigTemplateNamesTest extends TestCase
         // The wrappers are flat templates, their base name must not pick up filter widgets.
         self::assertSame([], TwigTemplateNames::legacyNames($identifiers, 'mm_filter_'));
     }
+
+    public function testVariantsInTheContaoSchemaAreMapped(): void
+    {
+        self::assertSame(
+            'metamodels/attribute/file/special',
+            TwigTemplateNames::identifier('mm_attr_file/special', 'attribute')
+        );
+        self::assertSame('mm_attr_file/special', TwigTemplateNames::legacyName('metamodels/attribute/file/special'));
+        self::assertSame('metamodel_prerendered', TwigTemplateNames::legacyName('metamodels/item/prerendered'));
+        self::assertSame('mm_filteritem_default/x', TwigTemplateNames::legacyName('metamodels/filter/default/x'));
+        self::assertNull(TwigTemplateNames::legacyName('content_element/text'));
+        self::assertNull(TwigTemplateNames::legacyName('metamodels/attribute/text.text'));
+
+        $identifiers = ['metamodels/attribute/file', 'metamodels/attribute/file/special', 'metamodels/attribute/text'];
+        self::assertSame(
+            ['mm_attr_file', 'mm_attr_file/special'],
+            TwigTemplateNames::legacyNames($identifiers, 'mm_attr_file')
+        );
+    }
 }
