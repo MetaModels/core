@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/cs02/xliff-core-1.2-strict.xsd">
+  <file datatype="plaintext" original="contao/languages/en/template_studio.xlf" source-language="en">
+    <body>
+      <trans-unit id="template_studio.operation.create_attribute_variant.0">
+        <source>Create variant</source>
+      </trans-unit>
+      <trans-unit id="template_studio.operation.create_attribute_variant.1">
+        <source>Create a new variant template for this attribute type.</source>
+      </trans-unit>
+      <trans-unit id="template_studio.operation.rename_attribute_variant.0">
+        <source>Rename variant</source>
+      </trans-unit>
+      <trans-unit id="template_studio.operation.rename_attribute_variant.1">
+        <source>Rename the %s variant template</source>
+      </trans-unit>
+      <trans-unit id="template_studio.operation.create_item_variant.0">
+        <source>Create variant</source>
+      </trans-unit>
+      <trans-unit id="template_studio.operation.create_item_variant.1">
+        <source>Create a new variant template for this item list template.</source>
+      </trans-unit>
+      <trans-unit id="template_studio.operation.rename_item_variant.0">
+        <source>Rename variant</source>
+      </trans-unit>
+      <trans-unit id="template_studio.operation.rename_item_variant.1">
+        <source>Rename the %s variant template</source>
+      </trans-unit>
+      <trans-unit id="template_studio.operation.create_filter_variant.0">
+        <source>Create variant</source>
+      </trans-unit>
+      <trans-unit id="template_studio.operation.create_filter_variant.1">
+        <source>Create a new variant template for this filter widget.</source>
+      </trans-unit>
+      <trans-unit id="template_studio.operation.rename_filter_variant.0">
+        <source>Rename variant</source>
+      </trans-unit>
+      <trans-unit id="template_studio.operation.rename_filter_variant.1">
+        <source>Rename the %s variant template</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

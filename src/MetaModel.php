@@ -1350,12 +1350,7 @@ class MetaModel implements IMetaModel
 
         $this->updateVariants($objItem, $strActiveLanguage, $arrAllIds, $baseAttributes);
 
-        // Tell all attributes that the model has been saved. Useful for alias fields, edit counters etc.
-        foreach ($this->getAttributes() as $objAttribute) {
-            if ($objItem->isAttributeSet($objAttribute->getColName())) {
-                $objAttribute->modelSaved($objItem);
-            }
-        }
+        $this->notifyAttributesSaved($objItem, $baseAttributes);
 
         // updateVariants() just broadcast the new value of a shared attribute to every sibling's
         // own row - but their own variant attributes (e.g. a combined value or alias built from
@@ -1363,6 +1358,27 @@ class MetaModel implements IMetaModel
         // a sibling's combined/alias value stays frozen at whatever the base's old value was
         // until the sibling is edited on its own - see core#657.
         $this->refreshSiblingDerivedAttributes($objItem, $arrAllIds);
+    }
+
+    /**
+     * Tell the attributes that the model has been saved. Useful for alias fields, edit counters etc.
+     *
+     * A new item only has the values it was given, but the attributes that build their value from the others (alias,
+     * combined values, token, search index) have to run for it as well: the backend form always sends them, a script
+     * that creates an item does not.
+     *
+     * @param IItem $item  The item just saved.
+     * @param bool  $isNew If the item has been created by the save.
+     *
+     * @return void
+     */
+    private function notifyAttributesSaved(IItem $item, bool $isNew): void
+    {
+        foreach ($this->getAttributes() as $attribute) {
+            if ($isNew || $item->isAttributeSet($attribute->getColName())) {
+                $attribute->modelSaved($item);
+            }
+        }
     }
 
     /**
