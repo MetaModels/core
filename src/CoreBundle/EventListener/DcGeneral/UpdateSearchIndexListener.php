@@ -31,7 +31,7 @@ use MetaModels\IFactory;
 use MetaModels\IMetaModel;
 
 /**
- * Updates the backend search index when an item is saved, duplicated or deleted in the backend.
+ * Updates the backend search index when an item is saved, duplicated, pasted or deleted in the backend.
  */
 final class UpdateSearchIndexListener
 {
@@ -52,7 +52,8 @@ final class UpdateSearchIndexListener
     }
 
     /**
-     * Pasting a copy from the clipboard dispatches the duplicate event before the clone is stored: no id yet.
+     * Pasting from the clipboard clones the item without an id and saves it afterwards, without telling about it
+     * otherwise: the duplicate event comes too early and no persist event follows.
      */
     public function onPaste(PostPasteModelEvent $event): void
     {

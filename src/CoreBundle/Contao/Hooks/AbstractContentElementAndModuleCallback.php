@@ -357,11 +357,10 @@ abstract class AbstractContentElementAndModuleCallback
             return [];
         }
 
-        $return = [];
         $filter = $objDc->activeRecord->metamodel_filtering;
 
         if (!$filter) {
-            return $return;
+            return [];
         }
 
         return $this->filterFactory->createCollection($filter)->getParameterFilterNames();

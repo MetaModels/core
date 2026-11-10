@@ -34,6 +34,11 @@ use function substr;
 final class TwigTemplateNames
 {
     /**
+     * Matches "metamodels/<group>/<leaf>" and a variant of it ("metamodels/<group>/<leaf>/<variant>").
+     */
+    private const IDENTIFIER_PATTERN = '#^metamodels/(attribute|item|filter)/([^/.]+(?:/[^/.]+)?)$#';
+
+    /**
      * The legacy name prefixes by Twig group. The first one is used to build a legacy name from an identifier.
      */
     private const PREFIXES = [
@@ -67,11 +72,29 @@ final class TwigTemplateNames
     }
 
     /**
+     * Build the legacy template name ("mm_attr_file/variant") for the Twig identifier
+     * ("metamodels/attribute/file/variant").
+     *
+     * This is the value MetaModels stores for a selected template. It is the counterpart of identifier().
+     *
+     * @return string|null The name or null when the identifier is not a template of a MetaModels group.
+     */
+    public static function legacyName(string $identifier): ?string
+    {
+        if (1 !== preg_match(self::IDENTIFIER_PATTERN, $identifier, $matches)) {
+            return null;
+        }
+
+        return self::PREFIXES[$matches[1]][0] . $matches[2];
+    }
+
+    /**
      * Derive the legacy template names of the Twig templates that start with the given base.
      *
-     * Only the visual templates of the groups "attribute" and "item" are considered, the plain text variants
-     * ("<leaf>.text") have no choice of their own. The filter group is left out as its legacy names do not tell which
-     * prefix they belong to.
+     * Only the visual templates of the groups "attribute", "item" and "filter" are considered, the plain text variants
+     * ("<leaf>.text") have no choice of their own. The legacy name is built with the first prefix of the group, which
+     * is "mm_filteritem_" for the filter widgets. The wrappers ("mm_filter_", "mm_clearall_") are flat templates and
+     * not part of the group, so a request for their base name finds nothing.
      *
      * @param list<string> $identifiers The identifiers known to the Twig loader.
      * @param string       $base        The legacy base name, e.g. "mm_attr_text".
@@ -82,7 +105,7 @@ final class TwigTemplateNames
     {
         $names = [];
         foreach ($identifiers as $identifier) {
-            if (1 !== preg_match('#^metamodels/(attribute|item)/([^/.]+)$#', $identifier, $matches)) {
+            if (1 !== preg_match(self::IDENTIFIER_PATTERN, $identifier, $matches)) {
                 continue;
             }
 

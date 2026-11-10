@@ -46,12 +46,41 @@ final class TwigTemplateNamesTest extends TestCase
             'metamodels/attribute/checkbox_icon',
             'metamodels/item/prerendered',
             'metamodels/filter/default',
+            'metamodels/filter/checkbox_dropdown',
             'mm_filter_default',
         ];
 
         self::assertSame(['mm_attr_text'], TwigTemplateNames::legacyNames($identifiers, 'mm_attr_text'));
         self::assertSame(['mm_attr_checkbox_icon'], TwigTemplateNames::legacyNames($identifiers, 'mm_attr_checkbox'));
         self::assertSame(['metamodel_prerendered'], TwigTemplateNames::legacyNames($identifiers, 'metamodel_'));
+        self::assertSame(
+            ['mm_filteritem_default', 'mm_filteritem_checkbox_dropdown'],
+            TwigTemplateNames::legacyNames($identifiers, 'mm_filteritem_')
+        );
+        self::assertSame(
+            ['mm_filteritem_checkbox_dropdown'],
+            TwigTemplateNames::legacyNames($identifiers, 'mm_filteritem_checkbox')
+        );
+        // The wrappers are flat templates, their base name must not pick up filter widgets.
         self::assertSame([], TwigTemplateNames::legacyNames($identifiers, 'mm_filter_'));
+    }
+
+    public function testVariantsInTheContaoSchemaAreMapped(): void
+    {
+        self::assertSame(
+            'metamodels/attribute/file/special',
+            TwigTemplateNames::identifier('mm_attr_file/special', 'attribute')
+        );
+        self::assertSame('mm_attr_file/special', TwigTemplateNames::legacyName('metamodels/attribute/file/special'));
+        self::assertSame('metamodel_prerendered', TwigTemplateNames::legacyName('metamodels/item/prerendered'));
+        self::assertSame('mm_filteritem_default/x', TwigTemplateNames::legacyName('metamodels/filter/default/x'));
+        self::assertNull(TwigTemplateNames::legacyName('content_element/text'));
+        self::assertNull(TwigTemplateNames::legacyName('metamodels/attribute/text.text'));
+
+        $identifiers = ['metamodels/attribute/file', 'metamodels/attribute/file/special', 'metamodels/attribute/text'];
+        self::assertSame(
+            ['mm_attr_file', 'mm_attr_file/special'],
+            TwigTemplateNames::legacyNames($identifiers, 'mm_attr_file')
+        );
     }
 }
