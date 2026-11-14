@@ -44,9 +44,10 @@ final class ClearAllPlaceholderListener
         }
 
         $response = $event->getResponse();
-        $content  = $response->getContent();
+        // The content is false for streamed responses, which cannot contain the placeholder anyway.
+        $content = (string) $response->getContent();
 
-        if (!\is_string($content) || !\str_contains($content, self::PLACEHOLDER)) {
+        if (!\str_contains($content, self::PLACEHOLDER)) {
             return;
         }
 
