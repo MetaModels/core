@@ -679,32 +679,45 @@ class FrontendFilter
     public function generateClearAll($strContent, $strTemplate)
     {
         if (\str_starts_with($strTemplate, 'fe_')) {
-            if (
-                (bool) \preg_match_all(
-                    '#\[\[\[metamodelfrontendfilterclearall::(ce|mod)::([^\]]*)\]\]\]#',
-                    $strContent,
-                    $arrMatches,
-                    PREG_SET_ORDER
-                )
-            ) {
-                foreach ($arrMatches as $arrMatch) {
-                    switch ($arrMatch[1]) {
-                        case 'ce':
-                            $strContent = $this->generateContentElement($strContent, $arrMatch[0], (int) $arrMatch[2]);
-                            break;
-
-                        case 'mod':
-                            $strContent = $this->generateModule($strContent, $arrMatch[0], (int) $arrMatch[2]);
-                            break;
-
-                        default:
-                            throw new RuntimeException('Unexpected element determinator encountered: ' . $arrMatch[1]);
-                    }
-                }
-            }
+            return $this->replaceClearAllPlaceholders($strContent);
         }
 
         return $strContent;
+    }
+
+    /**
+     * Replace all "clear all" placeholders within the given page content.
+     *
+     * Shared by the legacy hook and the response listener, as modern (Twig based) page layouts never call the hook.
+     *
+     * @param string $content The whole page content.
+     *
+     * @return string
+     *
+     * @throws RuntimeException When an invalid selector has been used (different than "ce" or "mod").
+     */
+    public function replaceClearAllPlaceholders(string $content): string
+    {
+        if (
+            !(bool) \preg_match_all(
+                '#\[\[\[metamodelfrontendfilterclearall::(ce|mod)::([^\]]*)\]\]\]#',
+                $content,
+                $matches,
+                PREG_SET_ORDER
+            )
+        ) {
+            return $content;
+        }
+
+        foreach ($matches as $match) {
+            $content = match ($match[1]) {
+                'ce'    => $this->generateContentElement($content, $match[0], (int) $match[2]),
+                'mod'   => $this->generateModule($content, $match[0], (int) $match[2]),
+                default => throw new RuntimeException('Unexpected element determinator encountered: ' . $match[1]),
+            };
+        }
+
+        return $content;
     }
 
     private function getBaseParameters(array $values): array
