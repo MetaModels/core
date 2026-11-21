@@ -96,8 +96,8 @@ class PanelBuilder
             return;
         }
 
-        // Get the layout from the dca.
-        $arrRows = StringUtil::trimsplit(';', $panelLayout);
+        // Get the layout from the dca - re-indexed, so the row number is a plain int for static analysis.
+        $arrRows = \array_values(StringUtil::trimsplit(';', $panelLayout));
 
         // Create a new panel container.
         $panel     = $view->getPanelLayout();
