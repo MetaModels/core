@@ -986,18 +986,6 @@ class MetaModel implements IMetaModel
     }
 
     /**
-     * The direction ends up in the SQL ORDER BY, so never trust the caller to pass only ASC or DESC.
-     *
-     * @param string $sortOrder The requested direction.
-     *
-     * @return 'ASC'|'DESC'
-     */
-    private function normalizeSortOrder(string $sortOrder): string
-    {
-        return ('DESC' === \strtoupper($sortOrder)) ? 'DESC' : 'ASC';
-    }
-
-    /**
      * {@inheritdoc}
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -1009,7 +997,8 @@ class MetaModel implements IMetaModel
             return [];
         }
 
-        $strSortOrder = $this->normalizeSortOrder($strSortOrder);
+        // The direction ends up in the SQL ORDER BY, so only ever pass ASC or DESC on.
+        $strSortOrder = ['DESC' => 'DESC'][\strtoupper($strSortOrder)] ?? 'ASC';
 
         // If desired, sort the entries.
         if ('' !== $strSortBy) {
