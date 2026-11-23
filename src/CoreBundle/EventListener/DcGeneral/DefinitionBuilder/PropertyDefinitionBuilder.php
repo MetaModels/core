@@ -111,8 +111,9 @@ class PropertyDefinitionBuilder
         // If the current metamodel has variants add the varbase and vargroup to the definition.
         if ($metaModel->hasVariants()) {
             // These are not properties yet, therefore we have to work around.
-            $this->getOrCreateProperty($definition, 'varbase');
-            $this->getOrCreateProperty($definition, 'vargroup');
+            // The label is needed by the "show" view of DC General, which throws on an empty one.
+            $this->setLabel($this->getOrCreateProperty($definition, 'varbase'));
+            $this->setLabel($this->getOrCreateProperty($definition, 'vargroup'));
         }
 
         $properties = [];

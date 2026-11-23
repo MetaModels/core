@@ -124,6 +124,14 @@ services:
               event: kernel.request
               priority: -500
 
+    MetaModels\CoreBundle\EventListener\ClearAllPlaceholderListener:
+        arguments:
+            - '@MetaModels\FrontendIntegration\FrontendFilter'
+        tags:
+            - name: kernel.event_listener
+              event: kernel.response
+              priority: -10
+
     MetaModels\CoreBundle\EventListener\SetLocaleInMetaModelListener:
         tags:
             - name: kernel.event_listener
