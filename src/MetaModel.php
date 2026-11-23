@@ -986,6 +986,18 @@ class MetaModel implements IMetaModel
     }
 
     /**
+     * The direction ends up in the SQL ORDER BY, so never trust the caller to pass only ASC or DESC.
+     *
+     * @param string $sortOrder The requested direction.
+     *
+     * @return 'ASC'|'DESC'
+     */
+    private function normalizeSortOrder(string $sortOrder): string
+    {
+        return ('DESC' === \strtoupper($sortOrder)) ? 'DESC' : 'ASC';
+    }
+
+    /**
      * {@inheritdoc}
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -996,6 +1008,8 @@ class MetaModel implements IMetaModel
         if ([] === $arrFilteredIds = \array_values(\array_filter($this->getMatchingIds($objFilter)))) {
             return [];
         }
+
+        $strSortOrder = $this->normalizeSortOrder($strSortOrder);
 
         // If desired, sort the entries.
         if ('' !== $strSortBy) {
@@ -1031,12 +1045,16 @@ class MetaModel implements IMetaModel
                 // Sort by database values.
                 $builder = $this->getConnection()->createQueryBuilder();
 
+                // Only the whitelisted system columns of the in_array() above can reach this point.
+                /** @psalm-taint-escape sql */
+                $sortColumn = $strSortBy;
+
                 $arrSortedFilteredIds = $builder
                     ->select('t.id')
                     ->from($this->getTableName(), 't')
                     ->where($builder->expr()->in('t.id', ':values'))
                     ->setParameter('values', $arrFilteredIds, ArrayParameterType::STRING)
-                    ->orderBy($strSortBy, $strSortOrder)
+                    ->orderBy($sortColumn, $strSortOrder)
                     ->executeQuery()
                     ->fetchFirstColumn();
 

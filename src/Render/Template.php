@@ -313,7 +313,7 @@ class Template
     {
         echo "<pre>\n";
         // @codingStandardsIgnoreStart - We really want to keep this debug function here.
-        \print_r($this->arrData);
+        echo \htmlspecialchars(\print_r($this->arrData, true));
         // @codingStandardsIgnoreEnd
         echo "</pre>\n";
     }
@@ -331,7 +331,9 @@ class Template
     {
         echo "<pre>\n";
         // @codingStandardsIgnoreStart - We really want to keep this debug function here.
+        \ob_start();
         \var_dump($this->arrData);
+        echo \htmlspecialchars((string) \ob_get_clean());
         // @codingStandardsIgnoreEnd
         echo "</pre>\n";
     }
