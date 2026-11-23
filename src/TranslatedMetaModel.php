@@ -152,6 +152,10 @@ class TranslatedMetaModel extends MetaModel implements ITranslatedMetaModel
 
         try {
             $attributeData = $attribute->getTranslatedDataFor($ids, $this->getLanguage());
+            // Respect "skip_fallback", otherwise the form shows main language values that are not stored.
+            if ((bool) $attribute->get('skip_fallback')) {
+                return $attributeData;
+            }
             // Second round, fetch missing data from main language.
             if ([] !== $missing = \array_values(\array_diff($ids, \array_keys($attributeData)))) {
                 $attributeData += $attribute->getTranslatedDataFor($missing, $this->getMainLanguage());

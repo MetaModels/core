@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<psalm
+        errorLevel="1"
+        resolveFromConfigFile="true"
+        findUnusedCode="false"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="https://getpsalm.org/schema/config"
+        xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+>
+  <projectFiles>
+    <directory name="src" />
+    <ignoreFiles>
+      <directory name="src/CoreBundle/Resources/contao/config"/>
+      <directory name="src/CoreBundle/Resources/contao/dca"/>
+      <directory name="src/CoreBundle/Resources/contao/languages"/>
+      <directory name="vendor/contao/core-bundle"/>
+      <directory name="vendor/symfony/console"/>
+      <directory name="vendor/symfony/dependency-injection"/>
+      <file name="src/Helper/ViewCombinations.php"/>
+    </ignoreFiles>
+  </projectFiles>
+  <issueHandlers>
+    <!-- Psalm treats print_r()/var_dump() themselves as sinks; the output of both debug helpers is escaped. -->
+    <TaintedHtml>
+      <errorLevel type="suppress">
+        <file name="src/Render/Template.php"/>
+      </errorLevel>
+    </TaintedHtml>
+  </issueHandlers>
+  <stubs>
+    <file name="psalm-taint-stubs.php"/>
+  </stubs>
+</psalm>
