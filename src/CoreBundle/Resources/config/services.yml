@@ -452,6 +452,37 @@ services:
         tags:
             - name: contao.migration
 
+    MetaModels\CoreBundle\Migration\OutputEncodingMigration:
+        arguments:
+            $connection: '@database_connection'
+            # Attribute types with text in the MetaModel table. Contao 6 stores values as entered, older ones are encoded.
+            $attributeTypes:
+                text: fullyEncoded
+                alias: fullyEncoded
+                combinedvalues: fullyEncoded
+                url: fullyEncoded
+                longtext: decodeEntities
+            # Value tables shared by all attributes of a type.
+            $tables:
+                tl_metamodel_translatedtext:
+                    value: fullyEncoded
+                tl_metamodel_translatedlongtext:
+                    value: decodeEntities
+                tl_metamodel_translatedtabletext:
+                    value: fullyEncoded
+                tl_metamodel_translatedtablemulti:
+                    value: fullyEncoded
+                tl_metamodel_tabletext:
+                    value: fullyEncoded
+                tl_metamodel_tablemulti:
+                    value: fullyEncoded
+                tl_metamodel_translatedurl:
+                    href: fullyEncoded
+                    title: fullyEncoded
+        tags:
+            # Must run before the output encoding migration of Contao, which has the priority 1.
+            - { name: contao.migration, priority: 10 }
+
     MetaModels\CoreBundle\Migration\InputScreenModeMigration:
         arguments:
             $connection: '@database_connection'
