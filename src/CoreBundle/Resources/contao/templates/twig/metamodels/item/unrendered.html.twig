@@ -9,7 +9,8 @@
                 {% set textvals = item.text|default({}) %}
                 <div class="item {{ item.class }}">
                     {% for field, attr in items.getItem().getMetaModel().getAttributes() %}
-                        {% set value = html5vals[field] is defined ? html5vals[field] : (textvals[field] is defined ? textvals[field] : null) %}
+                        {# The plain text variant is no HTML, it must be escaped when it is used instead of the HTML variant. #}
+                        {% set value = html5vals[field] is defined ? html5vals[field] : (textvals[field] is defined ? textvals[field]|e : null) %}
                         {% if value is not null %}
                             {# Since 2.5 the attribute templates render this block themselves. The option
                                "legacyAttributeWrapper" keeps it here for render settings that predate the change. #}
