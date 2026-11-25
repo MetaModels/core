@@ -371,7 +371,7 @@ abstract class Base implements IAttribute
     {
         if (in_array($strKey, $this->getAttributeSettingNames())) {
             if (null !== $varValue && !\is_array($varValue) && (\str_starts_with($varValue, 'a:'))) {
-                $unSerialized = \unserialize($varValue, ['allowed_classes' => true]);
+                $unSerialized = \unserialize($varValue, ['allowed_classes' => false]);
             }
 
             if (isset($unSerialized) && is_array($unSerialized)) {
