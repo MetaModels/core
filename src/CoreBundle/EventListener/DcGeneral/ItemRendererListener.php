@@ -22,6 +22,7 @@
 
 namespace MetaModels\CoreBundle\EventListener\DcGeneral;
 
+use Contao\StringUtil;
 use ContaoCommunityAlliance\DcGeneral\Contao\DataDefinition\Definition\Contao2BackendViewDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetParentHeaderEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
@@ -243,7 +244,25 @@ class ItemRendererListener
             return;
         }
 
-        $event->setRendered($result['text']);
+        $type = (string) $nativeItem->getAttribute($propName)?->get('type');
+        $event->setRendered($this->escapeUnlessRichText($type, $result['text']));
+    }
+
+    /**
+     * The text variant of an attribute is plain text, but the consumers of the readable value (show view, group
+     * header) print it as HTML. Contao 6 stores texts as entered, so it has to be escaped. Rich text has been
+     * cleaned of active content when it was saved and is meant to be shown as HTML.
+     *
+     * @param string $type The attribute type.
+     * @param mixed  $text The text variant.
+     */
+    private function escapeUnlessRichText(string $type, mixed $text): mixed
+    {
+        if (!\is_string($text) || \in_array($type, ['longtext', 'translatedlongtext'], true)) {
+            return $text;
+        }
+
+        return StringUtil::specialchars($text);
     }
 
     /**
