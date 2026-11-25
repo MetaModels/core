@@ -28,6 +28,8 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 use function array_map;
+use function serialize;
+use function unserialize;
 
 /**
  * Tests the registration of the MetaModels columns for the output encoding migration of Contao.
@@ -76,12 +78,15 @@ final class OutputEncodingMigrationTest extends TestCase
         );
     }
 
-    private function migration(): OutputEncodingMigration
+    /**
+     * @param array<string, array<string, string>>|null $tables
+     */
+    private function migration(?array $tables = null): OutputEncodingMigration
     {
         return new OutputEncodingMigration(
             $this->connection,
             ['text' => 'fullyEncoded', 'longtext' => 'decodeEntities'],
-            [
+            $tables ?? [
                 'tl_metamodel_translatedtext' => ['value' => 'fullyEncoded'],
                 'tl_metamodel_gone'           => ['value' => 'fullyEncoded'],
             ]
@@ -167,6 +172,96 @@ final class OutputEncodingMigrationTest extends TestCase
                 ['tl_metamodel_translatedtext', 'value', '["fullyEncoded"]'],
             ],
             $this->registered()
+        );
+    }
+
+    private function addKeywordAttribute(): void
+    {
+        $this->connection->insert(
+            'tl_metamodel_attribute',
+            ['id' => 4, 'pid' => 1, 'colname' => 'select', 'type' => 'text']
+        );
+    }
+
+    private function insertPerson(int $id, string $keywordValue): void
+    {
+        $this->connection->executeStatement(
+            'INSERT INTO mm_people (id, name, "select") VALUES (?, ?, ?)',
+            [$id, 'person', $keywordValue]
+        );
+    }
+
+    public function testConvertsColumnsNamedLikeKeywordsItself(): void
+    {
+        $this->createRegistry(0);
+        $this->connection->executeStatement('ALTER TABLE mm_people ADD COLUMN "select" TEXT');
+        $this->addKeywordAttribute();
+        $this->insertPerson(1, 'A &#38; B &#60;b&#62;');
+        $this->insertPerson(2, '');
+
+        $this->migration([])->run();
+
+        self::assertSame('A & B <b>', $this->connection->fetchOne('SELECT "select" FROM mm_people WHERE id = 1'));
+        self::assertSame('', $this->connection->fetchOne('SELECT "select" FROM mm_people WHERE id = 2'));
+        self::assertSame(
+            '1',
+            (string) $this->connection->fetchOne(
+                "SELECT performed_migration FROM prepare_for_output_encoding WHERE column_name = 'select'"
+            )
+        );
+        // The columns Contao can handle stay registered for its own migration.
+        self::assertSame(
+            '0',
+            (string) $this->connection->fetchOne(
+                "SELECT performed_migration FROM prepare_for_output_encoding WHERE column_name = 'name'"
+            )
+        );
+    }
+
+    public function testConvertsTablesWithoutAnIdItself(): void
+    {
+        $this->createRegistry(0);
+        $this->connection->executeStatement(
+            'CREATE TABLE tl_metamodel_translatedurl '
+            . '(att_id INTEGER, item_id INTEGER, langcode TEXT, href TEXT, title TEXT)'
+        );
+        $this->connection->insert(
+            'tl_metamodel_translatedurl',
+            [
+                'att_id'   => 1,
+                'item_id'  => 1,
+                'langcode' => 'de',
+                'href'     => 'a?x&#61;1&#38;y&#61;2',
+                'title'    => 'T &#60;b&#62;',
+            ]
+        );
+        $this->connection->insert(
+            'tl_metamodel_translatedurl',
+            ['att_id' => 1, 'item_id' => 2, 'langcode' => 'de', 'href' => 'plain', 'title' => null]
+        );
+
+        $this->migration(
+            ['tl_metamodel_translatedurl' => ['href' => 'fullyEncoded', 'title' => 'fullyEncoded']]
+        )->run();
+
+        self::assertSame(
+            [['a?x=1&y=2', 'T <b>'], ['plain', null]],
+            $this->connection->fetchAllNumeric('SELECT href, title FROM tl_metamodel_translatedurl ORDER BY item_id')
+        );
+    }
+
+    public function testSerializedValuesAreDecodedPerEntry(): void
+    {
+        $this->createRegistry(0);
+        $this->connection->executeStatement('ALTER TABLE mm_people ADD COLUMN "select" TEXT');
+        $this->addKeywordAttribute();
+        $this->insertPerson(1, serialize(['A &#38; B', 'k' => 'x &#60; y']));
+
+        $this->migration([])->run();
+
+        self::assertSame(
+            ['A & B', 'k' => 'x < y'],
+            unserialize((string) $this->connection->fetchOne('SELECT "select" FROM mm_people WHERE id = 1'))
         );
     }
 }

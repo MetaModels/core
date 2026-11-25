@@ -23,13 +23,24 @@ namespace MetaModels\CoreBundle\Migration;
 
 use Contao\CoreBundle\Migration\AbstractMigration;
 use Contao\CoreBundle\Migration\MigrationResult;
+use Contao\StringUtil;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception as DbalException;
 
+use function array_key_exists;
 use function array_keys;
 use function array_unique;
+use function array_walk_recursive;
 use function count;
+use function html_entity_decode;
+use function implode;
+use function is_array;
+use function is_string;
 use function json_encode;
+use function json_validate;
+use function serialize;
+use function str_replace;
 use function strtolower;
 
 use const JSON_THROW_ON_ERROR;
@@ -45,6 +56,10 @@ use const JSON_THROW_ON_ERROR;
  * This migration adds them so that the migration of Contao converts them as well. It runs before the one of Contao
  * and only as long as Contao still has columns waiting for the conversion - without such columns the data is either
  * new or has been converted already and must not be decoded a second time.
+ *
+ * Contao puts the column names into its queries without quoting them and identifies the rows by the column "id". A
+ * column named like an SQL keyword (an attribute with the column name "longtext" is common) or a table without that
+ * column (the URL values) would abort the whole migration, so these columns are converted here and registered as done.
  */
 final class OutputEncodingMigration extends AbstractMigration
 {
@@ -90,21 +105,123 @@ final class OutputEncodingMigration extends AbstractMigration
     {
         $missing = $this->missing();
         foreach ($missing as [$table, $column, $encoding]) {
-            $this->connection->insert(
-                self::REGISTRY,
-                [
-                    'table_name'          => $table,
-                    'column_name'         => $column,
-                    'virtual_target_name' => null,
-                    'encoding_options'    => json_encode([$encoding], JSON_THROW_ON_ERROR),
-                    'performed_migration' => 0,
-                ]
-            );
+            $this->connection->transactional(function () use ($table, $column, $encoding): void {
+                $convertHere = !$this->canContaoConvert($table, $column);
+                if ($convertHere) {
+                    $this->convert($table, $column, $encoding);
+                }
+
+                $this->connection->insert(
+                    self::REGISTRY,
+                    [
+                        'table_name'          => $table,
+                        'column_name'         => $column,
+                        'virtual_target_name' => null,
+                        'encoding_options'    => json_encode([$encoding], JSON_THROW_ON_ERROR),
+                        'performed_migration' => $convertHere ? 1 : 0,
+                    ]
+                );
+            });
         }
 
         return new MigrationResult(
             true,
             'Registered ' . count($missing) . ' MetaModels columns for the output encoding migration.'
+        );
+    }
+
+    /**
+     * Whether the query of Contao works: it selects the id and the column by their plain names.
+     */
+    private function canContaoConvert(string $table, string $column): bool
+    {
+        try {
+            $this->connection->executeQuery('SELECT id, ' . $column . ' FROM ' . $table . ' LIMIT 0');
+        } catch (DbalException) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Converts a column like the migration of Contao does, but with quoted names. A table without the column "id" is
+     * addressed by the other columns of the row.
+     */
+    private function convert(string $table, string $column, string $encoding): void
+    {
+        $quotedTable = $this->connection->quoteSingleIdentifier($table);
+        $rows        = $this->connection->fetchAllAssociative('SELECT * FROM ' . $quotedTable);
+
+        foreach ($rows as $row) {
+            $value = $row[$column] ?? null;
+            if (!is_string($value) || '' === $value) {
+                continue;
+            }
+
+            $converted = $this->convertValue($value, $encoding);
+            if ($converted === $value) {
+                continue;
+            }
+
+            unset($row[$column]);
+            $identity = array_key_exists('id', $row) ? ['id' => $row['id']] : $row;
+            $where    = [];
+            $params   = [$converted];
+            foreach ($identity as $name => $key) {
+                $quotedName = $this->connection->quoteSingleIdentifier($name);
+                $where[]    = null === $key ? $quotedName . ' IS NULL' : $quotedName . ' = ?';
+                if (null !== $key) {
+                    $params[] = $key;
+                }
+            }
+
+            $this->connection->executeStatement(
+                'UPDATE ' . $quotedTable . ' SET ' . $this->connection->quoteSingleIdentifier($column)
+                . ' = ? WHERE ' . implode(' AND ', $where),
+                $params
+            );
+        }
+    }
+
+    private function convertValue(string $value, string $encoding): string
+    {
+        $plain = StringUtil::deserialize($value);
+        if (is_string($plain)) {
+            return $this->decode($plain, $encoding);
+        }
+
+        if (!is_array($plain)) {
+            return $value;
+        }
+
+        array_walk_recursive(
+            $plain,
+            function (mixed &$entry) use ($encoding): void {
+                if (is_string($entry)) {
+                    $entry = $this->decode($entry, $encoding);
+                }
+            }
+        );
+
+        return serialize($plain);
+    }
+
+    private function decode(string $value, string $encoding): string
+    {
+        if ('decodeEntities' === $encoding) {
+            return str_replace(['&#60;', '&#92;0'], ['<', '\\0'], $value);
+        }
+
+        // Decoding JSON potentially breaks the JSON structure.
+        if (json_validate($value)) {
+            return $value;
+        }
+
+        return html_entity_decode(
+            str_replace(['&#123;&#123;', '&#125;&#125;'], ['[{]', '[}]'], $value),
+            ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5,
+            'UTF-8'
         );
     }
 
