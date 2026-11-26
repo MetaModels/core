@@ -22,12 +22,15 @@
 
 namespace MetaModels\Test\Filter\Setting;
 
+use Contao\CoreBundle\InsertTag\InsertTagParser;
+use Contao\System;
 use MetaModels\Filter\FilterUrl;
 use MetaModels\Filter\FilterUrlBuilder;
 use MetaModels\Filter\Setting\ICollection;
 use MetaModels\Filter\Setting\Simple;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -360,5 +363,41 @@ class SimpleTest extends TestCase
                 "param_type={$paramType}: blank option must not set GET"
             );
         }
+    }
+
+    /**
+     * Insert tags must be resolved in label, placeholder and blank option label, other texts stay untouched.
+     */
+    public function testReplaceInsertTagsInTexts(): void
+    {
+        $parser = $this->createMock(InsertTagParser::class);
+        $parser
+            ->method('replaceInline')
+            ->willReturnCallback(static fn (string $text): string => \str_replace('{{tag}}', 'resolved', $text));
+
+        $container = new ContainerBuilder();
+        $container->set('contao.insert_tag.parser', $parser);
+        $previous = System::getContainer();
+        System::setContainer($container);
+
+        try {
+            $setting    = $this->mockSimpleFilterSetting();
+            $reflection = new \ReflectionMethod($setting, 'replaceInsertTagsInTexts');
+            $reflection->setAccessible(true);
+            $result = $reflection->invoke($setting, [
+                'label' => ['Label {{tag}}', 'GET: param'],
+                'eval'  => ['placeholder' => 'Hint {{tag}}', 'blankOptionLabel' => '{{tag}}', 'urlparam' => '{{tag}}'],
+            ]);
+        } finally {
+            if (null !== $previous) {
+                System::setContainer($previous);
+            }
+        }
+
+        self::assertSame('Label resolved', $result['label'][0]);
+        self::assertSame('GET: param', $result['label'][1]);
+        self::assertSame('Hint resolved', $result['eval']['placeholder']);
+        self::assertSame('resolved', $result['eval']['blankOptionLabel']);
+        self::assertSame('{{tag}}', $result['eval']['urlparam']);
     }
 }

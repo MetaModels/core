@@ -27,6 +27,7 @@ namespace MetaModels\Filter\Setting;
 
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Widget\GetAttributesFromDcaEvent;
+use Contao\CoreBundle\InsertTag\InsertTagParser;
 use Contao\CoreBundle\Routing\ScopeMatcher;
 use Contao\StringUtil;
 use Contao\System;
@@ -484,6 +485,8 @@ abstract class Simple implements ISimple
             return [];
         }
 
+        $arrWidget = $this->replaceInsertTagsInTexts($arrWidget);
+
         // Determine current value.
         $arrWidget['value'] = (
             $arrFilterUrl[$arrWidget['eval']['urlparam']]
@@ -647,6 +650,30 @@ abstract class Simple implements ISimple
             return $value;
         });
         $widget->validate();
+    }
+
+    /**
+     * Resolve insert tags in the texts shown to the visitor.
+     *
+     * Done here so every filter type and every template gets the resolved texts.
+     *
+     * @param array $arrWidget The widget information.
+     *
+     * @return array
+     */
+    private function replaceInsertTagsInTexts(array $arrWidget): array
+    {
+        $parser = System::getContainer()->get('contao.insert_tag.parser');
+        assert($parser instanceof InsertTagParser);
+
+        foreach ([['label', 0], ['eval', 'placeholder'], ['eval', 'blankOptionLabel']] as [$group, $key]) {
+            $text = $arrWidget[$group][$key] ?? null;
+            if (\is_string($text) && '' !== $text) {
+                $arrWidget[$group][$key] = $parser->replaceInline($text);
+            }
+        }
+
+        return $arrWidget;
     }
 
     /**
